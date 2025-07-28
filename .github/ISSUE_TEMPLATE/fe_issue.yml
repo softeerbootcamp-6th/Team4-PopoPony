@@ -1,12 +1,12 @@
-name: "프론트엔드 이슈"
-description: 프론트엔드 작업용 Issue 작성 기본 양식입니다.
+name: "FE SUB-ISSUE"
+description: 프론트엔드 작업용 서브 이슈 작성 양식입니다.
 labels: ["Part: 🌐 FE"]
-title: "[FE] {도메인} > {작업내용}"
+title: "[FE] [SUB] {도메인} > {작업내용}"
 body:
   - type: markdown
     attributes:
       value: |
-        작성 예시 : "[feat] 버튼 컴포넌트 만들기"
+        작성 예시 : "[FE] [SUB] Login: 소셜 로그인 버튼 생성"
   - type: textarea
     id: feature-description
     attributes:
