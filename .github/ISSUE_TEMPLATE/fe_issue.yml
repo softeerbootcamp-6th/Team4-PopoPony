@@ -1,7 +1,7 @@
 name: "프론트엔드 이슈"
 description: 프론트엔드 작업용 Issue 작성 기본 양식입니다.
-labels: ["🛠 FE"]
-title: "[fe] "
+labels: ["Part: 🌐 FE"]
+title: "[FE] {도메인} > {작업내용}"
 body:
   - type: markdown
     attributes:
