@@ -24,7 +24,7 @@
     "baseUrl": ".",
     "paths": {
       "@apis": ["src/apis"],
-      "@svg": ["src/assets/svg"],
+      "@icons": ["src/assets/icons"],
       "@image": ["public/image"],
       "@components": ["src/components/common"],
       "@contexts/*": ["src/contexts/*"],
