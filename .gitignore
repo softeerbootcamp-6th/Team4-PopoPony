@@ -1,0 +1,59 @@
+# ------------------------------------------------------------
+# 🔧 Gradle
+.gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+# ------------------------------------------------------------
+# 📦 IDE
+## IntelliJ
+.idea/
+*.iml
+*.ipr
+*.iws
+out/
+!**/src/main/**/out/
+!**/src/test/**/out/
+
+## Eclipse / STS
+.classpath
+.project
+.settings/
+.apt_generated
+.factorypath
+.springBeans
+bin/
+!**/src/main/**/bin/
+!**/src/test/**/bin/
+
+## VSCode
+.vscode/
+
+# ------------------------------------------------------------
+# Test Logs
+*.log
+*.tmp
+
+# ------------------------------------------------------------
+# OS-specific
+.DS_Store
+Thumbs.db
+
+# ------------------------------------------------------------
+# 환경 파일
+.env
+.env.*
+
+# ------------------------------------------------------------
+# 📜 Swagger generated
+swagger-ui.html
+/v3/api-docs/**
+
+# ------------------------------------------------------------
+/secrets/
+/credentials/
+
+# ------------------------------------------------------------
+!gradle/wrapper/gradle-wrapper.jar
+!gradle/wrapper/gradle-wrapper.properties
