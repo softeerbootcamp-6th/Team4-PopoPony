@@ -1,0 +1,42 @@
+name: '백엔드 이슈'
+description: Backend 작업용 Issue 작성 기본 양식입니다.
+labels: ['🛠 BE']
+title: '[be] '
+body:
+  - type: markdown
+    attributes:
+      value: |
+        작성 예시 : "[be] 인증 API 구현"
+
+  - type: textarea
+    id: main-content
+    attributes:
+      label: 📌 주요 내용
+      description: 이슈의 주요 내용을 간략하게 설명해 주세요.
+      placeholder: |
+        - [ ] ✨ 기능 구현:
+        - [ ]
+        - [ ]
+        - [ ]
+    validations:
+      required: true
+
+  - type: textarea
+    id: dependencies
+    attributes:
+      label: 🔗 선행되어야 할 이슈
+      description: 선행되어야 할 이슈가 있다면 아래에 태그를 걸어주세요.
+      placeholder: |
+        - #123
+        - #456
+    validations:
+      required: false
+
+  - type: textarea
+    id: references
+    attributes:
+      label: 💬 기타 참고사항
+      description: 참고할 사항이나 관련 문서, 스크린샷 등을 첨부해 주세요.
+      placeholder: 관련 문서나 링크를 첨부해주세요.
+    validations:
+      required: false

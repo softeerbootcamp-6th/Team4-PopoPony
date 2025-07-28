@@ -1,7 +1,7 @@
-name: '기능 추가'
-description: 기능 추가 Issue 작성 양식입니다.
-labels: ['✨ Feature']
-title: '[feat] '
+name: "프론트엔드 이슈"
+description: 프론트엔드 작업용 Issue 작성 기본 양식입니다.
+labels: ["🛠 FE"]
+title: "[fe] "
 body:
   - type: markdown
     attributes:
