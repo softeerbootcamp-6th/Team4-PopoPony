@@ -1,11 +1,10 @@
+import pluginQuery from '@tanstack/eslint-plugin-query';
 import ts from '@typescript-eslint/eslint-plugin';
 import tsParser from '@typescript-eslint/parser';
+import prettierConfig from 'eslint-config-prettier';
+import prettier from 'eslint-plugin-prettier';
 import react from 'eslint-plugin-react';
 import reactHooks from 'eslint-plugin-react-hooks';
-import importPlugin from 'eslint-plugin-import';
-import prettier from 'eslint-plugin-prettier';
-import prettierConfig from 'eslint-config-prettier';
-import pluginQuery from '@tanstack/eslint-plugin-query';
 
 /** @type {import("eslint").FlatConfig[]} */
 export default [
@@ -23,7 +22,6 @@ export default [
       '@typescript-eslint': ts,
       react,
       'react-hooks': reactHooks,
-      import: importPlugin,
       prettier,
       '@tanstack/query': pluginQuery,
     },
@@ -32,13 +30,7 @@ export default [
       ...prettierConfig.rules,
 
       'prettier/prettier': 'error',
-      'import/order': [
-        'error',
-        {
-          groups: ['builtin', 'external', 'internal', 'parent', 'sibling', 'index'],
-          'newlines-between': 'always',
-        },
-      ],
+
       '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }], // 사용하지 않는 변수 경고
       ...pluginQuery.configs.recommended.rules,
     },
