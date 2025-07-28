@@ -1,15 +1,72 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
-body {
-  @apply m-0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+/* ========================= */
+/*        FONT STYLES        */
+/* ========================= */
+@font-face {
+  font-family: 'Pretendard';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url('/frontend/src/assets/fonts/PretendardVariable.woff2')
+    format('woff2-variations');
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
+/* ========================= */
+/*        THEME STYLES       */
+/* ========================= */
+@theme {
+  /* fonts */
+  --font-pretendard: Pretendard, sans-serif;
+}
+
+/* ========================= */
+/*        BASE STYLES        */
+/* ========================= */
+@layer base {
+  html {
+    font-size: 62.5%;
+    font-family: var(--font-pretendard);
+    overscroll-behavior: none;
+    background-color: var(--color-background);
+  }
+
+  body {
+    width: 100%;
+    min-height: 100dvh;
+    font-family: var(--font-pretendard);
+    scroll-behavior: smooth;
+  }
+
+  p {
+    word-break: keep-all;
+    white-space: pre-line;
+  }
+
+  button {
+    cursor: pointer;
+  }
+
+  input:disabled {
+    cursor: not-allowed;
+  }
+
+  #app {
+    width: 100%;
+    min-width: 375px;
+    max-width: 600px;
+    min-height: 100dvh;
+    background-color: #fff;
+    margin: 0 auto;
+  }
+
+  ::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* ========================= */
+/*      TYPOGRAPHY STYLES    */
+/* ========================= */
+@layer components {
 }
