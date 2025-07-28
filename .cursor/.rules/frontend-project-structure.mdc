@@ -1,0 +1,5 @@
+---
+description: "프론트엔드 개발 시, 폴더 구조 및 각 폴더의 역할을 설명하는 룰입니다."
+globs: : "frontend/**"
+alwaysApply: false
+---
