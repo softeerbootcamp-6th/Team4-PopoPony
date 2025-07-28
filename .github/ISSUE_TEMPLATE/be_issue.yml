@@ -1,7 +1,7 @@
-name: '백엔드 이슈'
+name: "백엔드 이슈"
 description: Backend 작업용 Issue 작성 기본 양식입니다.
-labels: ['🛠 BE']
-title: '[be] '
+labels: ["Part: 🛠 BE"]
+title: "[BE] {도메인} > {작업내용}"
 body:
   - type: markdown
     attributes:
