@@ -23,18 +23,7 @@
     "noUncheckedSideEffectImports": true,
     "baseUrl": ".",
     "paths": {
-      "@apis": ["src/apis"],
       "@icons": ["src/assets/icons"],
-      "@image": ["public/image"],
-      "@components": ["src/components/common"],
-      "@contexts/*": ["src/contexts/*"],
-      "@constants": ["src/constants"],
-      "@hooks": ["src/hooks"],
-      "@layouts": ["src/layouts"],
-      "@schema": ["src/types/api/schema.d.ts"],
-      "@styles/*": ["src/styles/*"],
-      "@types": ["src/types"],
-      "@utils": ["src/utils"],
       "@/*": ["src/*"]
     }
   }
