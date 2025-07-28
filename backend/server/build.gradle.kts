@@ -13,7 +13,7 @@ java {
 	}
 }
 
-val querydslVersion = "4.4.0"
+val querydslVersion = "5.0.0"
 
 configurations {
 	compileOnly {
@@ -42,8 +42,10 @@ dependencies {
 	annotationProcessor("org.projectlombok:lombok")
 
 	// ✅ QueryDSL (jakarta 버전)
-	implementation("com.querydsl:querydsl-jpa:$querydslVersion")
-	annotationProcessor("com.querydsl:querydsl-apt:$querydslVersion:jpa")
+	implementation("com.querydsl:querydsl-jpa:${dependencyManagement.importedProperties["querydsl.version"]}:jakarta")
+	annotationProcessor("com.querydsl:querydsl-apt:${dependencyManagement.importedProperties["querydsl.version"]}:jakarta")
+	annotationProcessor("jakarta.persistence:jakarta.persistence-api")
+	annotationProcessor("jakarta.annotation:jakarta.annotation-api")
 
 	// ✅ JUnit5
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
@@ -51,6 +53,7 @@ dependencies {
 
 	// ✅ Swagger
 	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.9")
+	implementation("org.apache.commons:commons-lang3:3.14.0")
 }
 
 val querydslDir = layout.buildDirectory.dir("generated/querydsl")
