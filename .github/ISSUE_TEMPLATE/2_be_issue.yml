@@ -1,12 +1,12 @@
-name: "백엔드 이슈"
-description: Backend 작업용 Issue 작성 기본 양식입니다.
+name: "BE SUB-ISSUE"
+description: 백엔드 작업용 서브 이슈 작성 양식입니다.
 labels: ["Part: 🛠 BE"]
-title: "[BE] {도메인} > {작업내용}"
+title: "[BE] [SUB] {도메인} > {작업내용}"
 body:
   - type: markdown
     attributes:
       value: |
-        작성 예시 : "[be] 인증 API 구현"
+        작성 예시 : "[BE] [SUB] Auth: Refresh Token 로직 구현"
 
   - type: textarea
     id: main-content
