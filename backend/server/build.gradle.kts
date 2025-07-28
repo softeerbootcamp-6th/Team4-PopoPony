@@ -48,6 +48,9 @@ dependencies {
 	// ✅ JUnit5
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+
+	// ✅ Swagger
+	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.9")
 }
 
 val querydslDir = layout.buildDirectory.dir("generated/querydsl")
