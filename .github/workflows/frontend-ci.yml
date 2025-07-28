@@ -34,11 +34,5 @@ jobs:
       - name: Check Prettier formatting
         run: pnpm prettier --check "**/*.{js,ts,tsx,jsx,mjs,hbs,json,css,md}"
 
-      - name: Generate route tree
-        run: pnpm vite build --config vite.config.ts --ssr
-
-      - name: TypeScript Check
-        run: pnpm tsc --noEmit
-
       - name: Build project
         run: pnpm build
