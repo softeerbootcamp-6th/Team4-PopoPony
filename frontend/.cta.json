@@ -1,0 +1,14 @@
+{
+  "projectName": "todak",
+  "mode": "file-router",
+  "typescript": true,
+  "tailwind": true,
+  "packageManager": "pnpm",
+  "git": true,
+  "version": 1,
+  "framework": "react-cra",
+  "chosenAddOns": [
+    "eslint",
+    "tanstack-query"
+  ]
+}
