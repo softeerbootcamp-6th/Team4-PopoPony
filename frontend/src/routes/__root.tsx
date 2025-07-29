@@ -1,5 +1,5 @@
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
-import { Outlet, createRootRouteWithContext } from '@tanstack/react-router';
+import { Outlet, createRootRouteWithContext, redirect } from '@tanstack/react-router';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import type { QueryClient } from '@tanstack/react-query';
 
@@ -8,6 +8,19 @@ interface MyRouterContext {
 }
 
 export const Route = createRootRouteWithContext<MyRouterContext>()({
+  beforeLoad: async ({ location }) => {
+    if (location.pathname === '/login') {
+      return;
+    }
+
+    const isLoggedIn = true;
+    if (!isLoggedIn) {
+      throw redirect({
+        to: '/login',
+      });
+    }
+  },
+
   component: () => (
     <>
       <Outlet />
