@@ -4,9 +4,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite --port 3000",
-    "build": "vite build && tsc",
     "lint": "eslint",
-    "format": "prettier --write \"**/*.{js,ts,tsx,jsx,mjs,hbs,json,css,md}\""
+    "format": "prettier --write \"**/*.{js,ts,tsx,jsx,mjs,hbs,json,css,md}\"",
+    "build": "vite build && tsc",
+    "check": "pnpm lint && pnpm format && pnpm build"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.0.6",
