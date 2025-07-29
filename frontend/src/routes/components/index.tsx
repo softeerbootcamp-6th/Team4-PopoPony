@@ -1,6 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { Button, LabeledSection, TwoOptionSelector } from '@components';
 import { useForm, FormProvider, type SubmitHandler } from 'react-hook-form';
+import type { HTMLAttributes } from 'react';
 
 export const Route = createFileRoute('/components/')({
   component: RouteComponent,
@@ -16,48 +17,63 @@ function RouteComponent() {
     console.log('Final Data:', data);
   };
 
-  return (
-    <div className='p-[4rem]'>
-      <h3 className='text-neutral-90 title-20-bold mb-[1.6rem]'>Button</h3>
-      <div className='flex w-[16rem] flex-col gap-[1.6rem]'>
-        <Button variant='primary' size='sm'>
-          primary sm
-        </Button>
-        <Button variant='primary' size='md'>
-          primary md
-        </Button>
-        <Button variant='primary' size='lg'>
-          primary lg
-        </Button>
-        <Button variant='secondary' size='sm'>
-          secondary sm
-        </Button>
-        <Button variant='secondary' size='md'>
-          secondary md
-        </Button>
-        <Button variant='secondary' size='lg'>
-          secondary lg
-        </Button>
-        <Button variant='assistive' size='sm'>
-          assistive sm
-        </Button>
-        <Button variant='assistive' size='md'>
-          assistive md
-        </Button>
-        <Button variant='assistive' size='lg'>
-          assistive lg
-        </Button>
-        <Button variant='primary' size='sm' isLoading>
-          primary sm
-        </Button>
-        <Button variant='secondary' size='md' isLoading>
-          secondary md
-        </Button>
-        <Button variant='secondary' size='lg' isLoading>
-          secondary lg
-        </Button>
+  interface SectionProps extends HTMLAttributes<HTMLDivElement> {
+    title: string;
+  }
+
+  const Section = ({ title, children, className }: SectionProps) => {
+    return (
+      <div className={`flex w-[33.5rem] flex-col gap-[1.6rem] ${className}`}>
+        <h3 className='text-neutral-90 title-20-bold mb-[1.6rem]'>{title}</h3>
+        {children}
       </div>
-      <div className='flex w-[33.5rem] flex-col gap-[1.6rem]'>
+    );
+  };
+
+  return (
+    <div className='absolute inset-0 flex flex-wrap gap-[4rem] p-[4rem]'>
+      <Section title='Button'>
+        <div className='flex flex-col gap-[1.6rem]'>
+          <Button variant='primary' size='sm'>
+            primary sm
+          </Button>
+          <Button variant='primary' size='md'>
+            primary md
+          </Button>
+          <Button variant='primary' size='lg'>
+            primary lg
+          </Button>
+          <Button variant='secondary' size='sm'>
+            secondary sm
+          </Button>
+          <Button variant='secondary' size='md'>
+            secondary md
+          </Button>
+          <Button variant='secondary' size='lg'>
+            secondary lg
+          </Button>
+          <Button variant='assistive' size='sm'>
+            assistive sm
+          </Button>
+          <Button variant='assistive' size='md'>
+            assistive md
+          </Button>
+          <Button variant='assistive' size='lg'>
+            assistive lg
+          </Button>
+          <Button variant='primary' size='sm' isLoading>
+            primary sm
+          </Button>
+          <Button variant='secondary' size='md' isLoading>
+            secondary md
+          </Button>
+          <Button variant='secondary' size='lg' isLoading>
+            secondary lg
+          </Button>
+        </div>
+      </Section>
+
+      <Section title='LabeledSection/TwoOptionSelector'>
         <FormProvider {...methods}>
           <LabeledSection label='인지능력' isChecked={!!methods.watch('cognitive')}>
             <TwoOptionSelector
@@ -70,7 +86,7 @@ function RouteComponent() {
             <Button type='submit'>Submit</Button>
           </form>
         </FormProvider>
-      </div>
+      </Section>
     </div>
   );
 }
