@@ -16,7 +16,7 @@ const Button = ({
   children,
   ...props
 }: Props) => {
-  const baseStyle = `w-full flex items-center justify-center`;
+  const baseStyle = `w-full flex-center`;
 
   const variantStyle = {
     primary: 'bg-mint-50 text-neutral-0',
@@ -37,9 +37,9 @@ const Button = ({
   };
 
   const spinnerSize = {
-    sm: '16',
-    md: '24',
-    lg: '24',
+    sm: '16px',
+    md: '24px',
+    lg: '24px',
   };
 
   const spinnerColor = {
