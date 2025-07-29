@@ -12,9 +12,9 @@ const TwoOptionSelector = ({ name, leftOption, rightOption }: Props) => {
   const options = [leftOption, rightOption];
 
   return (
-    <div className='body1-16-medium text-neutral-90 flex gap-[2rem]'>
+    <div className='body1-16-medium text-neutral-90 flex-between gap-[2rem]'>
       {options.map((option) => (
-        <div key={option.value} className='flex w-full'>
+        <div key={option.value} className='w-full'>
           <input
             type='radio'
             id={option.value}
@@ -24,7 +24,7 @@ const TwoOptionSelector = ({ name, leftOption, rightOption }: Props) => {
           />
           <label
             htmlFor={option.value}
-            className='border-neutral-20 peer-checked:border-mint-60 peer-checked:bg-mint-5 peer-checked:text-mint-70 flex h-[4.8rem] w-full cursor-pointer items-center justify-center rounded-[0.4rem] border'>
+            className='border-neutral-20 peer-checked:border-mint-60 peer-checked:bg-mint-5 peer-checked:text-mint-70 flex-center h-[4.8rem] w-full cursor-pointer rounded-[0.4rem] border'>
             {option.label}
           </label>
         </div>
