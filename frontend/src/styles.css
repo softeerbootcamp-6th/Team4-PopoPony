@@ -1,15 +1,229 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
-body {
-  @apply m-0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+/* ========================= */
+/*        FONT STYLES        */
+/* ========================= */
+@font-face {
+  font-family: 'Pretendard';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url('/fonts/PretendardVariable.woff2') format('woff2-variations');
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
+/* ========================= */
+/*        THEME STYLES       */
+/* ========================= */
+@theme {
+  /* fonts */
+  --font-pretendard: Pretendard, sans-serif;
+
+  /* Neutral */
+  --color-neutral-0: #ffffff;
+  --color-neutral-5: #fcfcfc;
+  --color-neutral-10: #f3f5f7;
+  --color-neutral-15: #e9ecf0;
+  --color-neutral-20: #e0e2e6;
+  --color-neutral-30: #d2d5da;
+  --color-neutral-40: #c1c5cd;
+  --color-neutral-50: #a0a5b1;
+  --color-neutral-60: #7e8695;
+  --color-neutral-70: #636a79;
+  --color-neutral-80: #494f5a;
+  --color-neutral-90: #32363e;
+  --color-neutral-100: #1c1e22;
+
+  /* Mint */
+  --color-mint-5: #e6faf5;
+  --color-mint-10: #b0eee0;
+  --color-mint-20: #8ae6d1;
+  --color-mint-30: #54dabb;
+  --color-mint-40: #33d3ae;
+  --color-mint-50: #00c89a;
+  --color-mint-60: #00b68c;
+  --color-mint-70: #008e6d;
+  --color-mint-80: #006e55;
+  --color-mint-90: #005441;
+
+  /* Yellow */
+  --color-yellow-5: #fffcef;
+  --color-yellow-10: #fff6ce;
+  --color-yellow-20: #fff2b6;
+  --color-yellow-30: #ffec95;
+  --color-yellow-40: #ffe881;
+  --color-yellow-50: #ffe261;
+  --color-yellow-60: #e8ce58;
+  --color-yellow-70: #b5a045;
+  --color-yellow-80: #8c7c35;
+  --color-yellow-90: #6b5f29;
+
+  /* Blue */
+  --color-blue-5: #ebf8fd;
+  --color-blue-10: #c2ebf8;
+  --color-blue-20: #a4e1f5;
+  --color-blue-30: #7ad3f1;
+  --color-blue-40: #61caee;
+  --color-blue-50: #39bdea;
+  --color-blue-60: #34acd5;
+  --color-blue-70: #2886a6;
+  --color-blue-80: #1f6881;
+  --color-blue-90: #184f62;
+
+  /* Black Opacity (Base: #1C1E22) */
+  --color-black-opacity-10: rgba(28, 30, 34, 0.1);
+  --color-black-opacity-20: rgba(28, 30, 34, 0.2);
+  --color-black-opacity-40: rgba(28, 30, 34, 0.4);
+  --color-black-opacity-60: rgba(28, 30, 34, 0.6);
+
+  /* White Opacity (Base: #FFFFFF) */
+  --color-white-opacity-10: rgba(255, 255, 255, 0.1);
+  --color-white-opacity-20: rgba(255, 255, 255, 0.2);
+  --color-white-opacity-40: rgba(255, 255, 255, 0.4);
+  --color-white-opacity-80: rgba(255, 255, 255, 0.8);
+
+  /* Red */
+  --color-red-10: #ffedee;
+  --color-red-50: #f36975;
+  --color-red-60: #f04452;
+
+  /* Dimmed */
+  --color-dimmed-50: rgba(0, 0, 0, 0.5);
+}
+
+/* ========================= */
+/*        BASE STYLES        */
+/* ========================= */
+@layer base {
+  html {
+    font-size: 62.5%;
+    font-family: var(--font-pretendard);
+    overscroll-behavior: none;
+    background-color: var(--color-background);
+  }
+
+  body {
+    width: 100%;
+    min-height: 100dvh;
+    font-family: var(--font-pretendard);
+    scroll-behavior: smooth;
+  }
+
+  p {
+    word-break: keep-all;
+    white-space: pre-line;
+  }
+
+  button {
+    cursor: pointer;
+  }
+
+  input:disabled {
+    cursor: not-allowed;
+  }
+
+  #app {
+    width: 100%;
+    min-width: 375px;
+    max-width: 600px;
+    min-height: 100dvh;
+    background-color: #fff;
+    margin: 0 auto;
+  }
+
+  ::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* ========================= */
+/*      TYPOGRAPHY STYLES    */
+/* ========================= */
+@layer components {
+  .display-40-bold {
+    @apply font-pretendard text-[4rem] leading-[135%] font-bold tracking-[0%];
+  }
+
+  .headline-24-bold {
+    @apply font-pretendard text-[2.4rem] leading-[135%] font-bold tracking-[0%];
+  }
+
+  .title-20-bold {
+    @apply font-pretendard text-[2rem] leading-[120%] font-bold tracking-[0%];
+  }
+
+  .title-20-medium {
+    @apply font-pretendard text-[2rem] leading-[135%] font-medium tracking-[0%];
+  }
+
+  .subtitle-16-bold {
+    @apply font-pretendard text-[1.6rem] leading-[135%] font-bold tracking-[-0.02em];
+  }
+
+  .subtitle-16-medium {
+    @apply font-pretendard text-[1.6rem] leading-[135%] font-medium tracking-[-0.02em];
+  }
+
+  .body1-16-bold {
+    @apply font-pretendard text-[1.6rem] leading-[150%] font-bold tracking-[0%];
+  }
+
+  .body1-16-medium {
+    @apply font-pretendard text-[1.6rem] leading-[150%] font-medium tracking-[0%];
+  }
+
+  .body2-14-bold {
+    @apply font-pretendard text-[1.4rem] leading-[150%] font-bold tracking-[-0.02em];
+  }
+
+  .body2-14-medium {
+    @apply font-pretendard text-[1.4rem] leading-[150%] font-medium tracking-[-0.02em];
+  }
+
+  .label1-16-bold {
+    @apply font-pretendard text-[1.6rem] leading-[135%] font-bold tracking-[-0.02em];
+  }
+
+  .label1-16-medium {
+    @apply font-pretendard text-[1.6rem] leading-[135%] font-medium tracking-[-0.02em];
+  }
+
+  .label2-14-bold {
+    @apply font-pretendard text-[1.4rem] leading-[135%] font-bold tracking-[-0.02em];
+  }
+
+  .label2-14-medium {
+    @apply font-pretendard text-[1.4rem] leading-[135%] font-medium tracking-[-0.02em];
+  }
+
+  .label3-12-bold {
+    @apply font-pretendard text-[1.2rem] leading-[135%] font-bold tracking-[-0.02em];
+  }
+
+  .label3-12-medium {
+    @apply font-pretendard text-[1.2rem] leading-[135%] font-medium tracking-[-0.02em];
+  }
+
+  .label4-10-bold {
+    @apply font-pretendard text-[1rem] leading-[135%] font-bold tracking-[0%];
+  }
+
+  .label4-10-medium {
+    @apply font-pretendard text-[1rem] leading-[135%] font-medium tracking-[0%];
+  }
+
+  .caption1-12-bold {
+    @apply font-pretendard text-[1.2rem] leading-[135%] font-bold tracking-[-0.04em];
+  }
+
+  .caption1-12-medium {
+    @apply font-pretendard text-[1.2rem] leading-[150%] font-medium tracking-[-0.04em];
+  }
+
+  .caption2-10-medium {
+    @apply font-pretendard text-[1rem] leading-[135%] font-medium tracking-[-0.02em];
+  }
+
+  .caption2-10-bold {
+    @apply font-pretendard text-[1rem] leading-[135%] font-bold tracking-[0%];
+  }
 }

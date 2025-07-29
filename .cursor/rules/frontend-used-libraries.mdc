@@ -1,0 +1,45 @@
+---
+description: "프론트엔드 프로젝트에 쓰인 라이브러리, 그리고 각 라이브러리의 사용 범위를 나타내는 룰입니다."
+globs: "frontend/**"
+alwaysApply: false
+---
+
+## 핵심 라이브러리
+
+-   **React 19** + **Vite**: 기본 프레임워크 및 빌드 도구
+-   **TypeScript**: 타입 안전성 및 개발 경험 향상
+-   **@tanstack/react-query**: 서버 상태 관리 및 데이터 페칭
+-   **@tanstack/react-router**: 클라이언트 사이드 라우팅
+-   **tailwindcss**: 유틸리티 기반 CSS 프레임워크
+
+## 개발 도구
+
+-   **@tanstack/react-query-devtools**: React Query 개발자 도구
+-   **@tanstack/react-router-devtools**: React Router 개발자 도구
+-   **@tanstack/router-plugin**: React Router 플러그인
+-   **eslint + prettier**: 코드 품질 및 포맷팅
+-   **@tanstack/eslint-config**: Tanstack ESLint 설정
+
+## 테스팅
+
+-   **vitest**: Vite 기반 테스팅 프레임워크
+-   **@testing-library/react**: React 컴포넌트 테스팅
+-   **@testing-library/dom**: DOM 테스팅 유틸리티
+-   **jsdom**: Node.js 환경에서 DOM 시뮬레이션
+
+## 성능 모니터링
+
+-   **web-vitals**: 웹 성능 지표 측정
+
+## 패키지 관리
+
+-   **pnpm**: 빠르고 효율적인 패키지 매니저
+
+## 향후 추가 예정 라이브러리
+
+-   **openapi-fetch**: 타입 안전한 API 클라이언트
+-   **openapi-react-query**: React Query와 OpenAPI 통합
+-   **playwright**: E2E 테스팅
+-   **Zustand**: 경량 전역 상태 관리
+-   **react-hook-form**: 폼 상태 관리
+-   **zod**: 런타임 스키마 검증
