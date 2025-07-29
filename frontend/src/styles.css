@@ -156,11 +156,15 @@
   }
 
   .subtitle-16-bold {
-    @apply font-pretendard text-[1.6rem] leading-[135%] font-bold tracking-[-0.02em];
+    @apply font-pretendard text-[1.6rem] leading-[135%] font-bold tracking-[-0.02rem];
+  }
+
+  .subtitle-18-bold {
+    @apply font-pretendard text-[1.8rem] leading-[135%] font-bold tracking-[-0.02rem];
   }
 
   .subtitle-16-medium {
-    @apply font-pretendard text-[1.6rem] leading-[135%] font-medium tracking-[-0.02em];
+    @apply font-pretendard text-[1.6rem] leading-[135%] font-medium tracking-[-0.02rem];
   }
 
   .body1-16-bold {
@@ -172,35 +176,35 @@
   }
 
   .body2-14-bold {
-    @apply font-pretendard text-[1.4rem] leading-[150%] font-bold tracking-[-0.02em];
+    @apply font-pretendard text-[1.4rem] leading-[150%] font-bold tracking-[-0.02rem];
   }
 
   .body2-14-medium {
-    @apply font-pretendard text-[1.4rem] leading-[150%] font-medium tracking-[-0.02em];
+    @apply font-pretendard text-[1.4rem] leading-[150%] font-medium tracking-[-0.02rem];
   }
 
   .label1-16-bold {
-    @apply font-pretendard text-[1.6rem] leading-[135%] font-bold tracking-[-0.02em];
+    @apply font-pretendard text-[1.6rem] leading-[135%] font-bold tracking-[-0.02rem];
   }
 
   .label1-16-medium {
-    @apply font-pretendard text-[1.6rem] leading-[135%] font-medium tracking-[-0.02em];
+    @apply font-pretendard text-[1.6rem] leading-[135%] font-medium tracking-[-0.02rem];
   }
 
   .label2-14-bold {
-    @apply font-pretendard text-[1.4rem] leading-[135%] font-bold tracking-[-0.02em];
+    @apply font-pretendard text-[1.4rem] leading-[135%] font-bold tracking-[-0.02rem];
   }
 
   .label2-14-medium {
-    @apply font-pretendard text-[1.4rem] leading-[135%] font-medium tracking-[-0.02em];
+    @apply font-pretendard text-[1.4rem] leading-[135%] font-medium tracking-[-0.02rem];
   }
 
   .label3-12-bold {
-    @apply font-pretendard text-[1.2rem] leading-[135%] font-bold tracking-[-0.02em];
+    @apply font-pretendard text-[1.2rem] leading-[135%] font-bold tracking-[-0.02rem];
   }
 
   .label3-12-medium {
-    @apply font-pretendard text-[1.2rem] leading-[135%] font-medium tracking-[-0.02em];
+    @apply font-pretendard text-[1.2rem] leading-[135%] font-medium tracking-[-0.02rem];
   }
 
   .label4-10-bold {
@@ -212,15 +216,15 @@
   }
 
   .caption1-12-bold {
-    @apply font-pretendard text-[1.2rem] leading-[135%] font-bold tracking-[-0.04em];
+    @apply font-pretendard text-[1.2rem] leading-[135%] font-bold tracking-[-0.04rem];
   }
 
   .caption1-12-medium {
-    @apply font-pretendard text-[1.2rem] leading-[150%] font-medium tracking-[-0.04em];
+    @apply font-pretendard text-[1.2rem] leading-[150%] font-medium tracking-[-0.04rem];
   }
 
   .caption2-10-medium {
-    @apply font-pretendard text-[1rem] leading-[135%] font-medium tracking-[-0.02em];
+    @apply font-pretendard text-[1rem] leading-[135%] font-medium tracking-[-0.02rem];
   }
 
   .caption2-10-bold {
