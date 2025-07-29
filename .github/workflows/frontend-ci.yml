@@ -1,0 +1,38 @@
+name: Frontend CI
+description: Runs lint, prettier check, type check, and build for frontend code on PR to develop branch.
+on:
+  pull_request:
+    branches:
+      - develop
+    paths:
+      - "frontend/**"
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./frontend
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "22"
+
+      - name: Install pnpm
+        run: npm install -g pnpm
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Run Lint
+        run: pnpm lint
+
+      - name: Check Prettier formatting
+        run: pnpm prettier --check "**/*.{js,ts,tsx,jsx,mjs,hbs,json,css,md}"
+
+      - name: Build project
+        run: pnpm build
