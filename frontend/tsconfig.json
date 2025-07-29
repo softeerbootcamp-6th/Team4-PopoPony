@@ -24,6 +24,15 @@
     "baseUrl": ".",
     "paths": {
       "@icons": ["src/assets/icons"],
+      "@apis": ["src/shared/apis"],
+      "@components": ["src/shared/components"],
+      "@hooks": ["src/shared/hooks"],
+      "@types": ["src/shared/types"],
+      "@utils": ["src/shared/utils"],
+      "@auth/*": ["src/features/auth/*"],
+      "@customer/*": ["src/features/customer/*"],
+      "@dashboard/*": ["src/features/dashboard/*"],
+      "@helper/*": ["src/features/helper/*"],
       "@/*": ["src/*"]
     }
   }
