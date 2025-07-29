@@ -1,0 +1,35 @@
+spring:
+  profiles:
+    active: local
+
+springdoc:
+  api-docs:
+    enabled: true                   # API 문서(`/v3/api-docs`) 활성화 여부
+    path: /v3/api-docs              # API 문서 엔드포인트
+    groups:
+      enabled: true                 # API 그룹 지원 여부
+
+  swagger-ui:
+    enabled: true                   # Swagger UI 활성화
+    path: /swagger-ui.html          # 접속 경로
+    operationsSorter: method        # API 정렬 기준
+    tagsSorter: alpha               # 태그 정렬 기준
+    display-request-duration: true  # 실행시간이 UI에 표시
+    doc-expansion: none             # 설명 펼침 여부 반영
+    persistAuthorization: true      # 새로고침 후 인증 유지 여부 반영
+    defaultModelsExpandDepth: -1    # 모델 깊이 반영됨
+
+  paths-to-match:
+    - /api/**
+    - /admin/**
+
+  cache:
+    disabled: true
+
+  show-actuator: false
+
+  servers:
+    - url: http://localhost:8080
+      description: "Local 개발 환경"
+    - url: https://api.example.com
+      description: "Production 서버"
