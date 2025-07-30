@@ -1,0 +1,24 @@
+package com.todoc.server.domain.helper.entity;
+
+import com.todoc.server.common.entity.BaseEntity;
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+
+@Entity
+@Getter
+@Setter
+public class Certificate extends BaseEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "helper_id")
+    private Helper helper;
+
+    private String type;
+
+    @Column(name = "image_url")
+    private String imageUrl;
+}
