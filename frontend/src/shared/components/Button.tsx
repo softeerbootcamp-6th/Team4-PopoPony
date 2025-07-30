@@ -50,6 +50,7 @@ const Button = ({
 
   return (
     <button
+      type='button'
       className={`${baseStyle} ${disabled ? disabledVariantStyle[variant] : variantStyle[variant]} ${sizeStyle[size]}`}
       {...props}>
       {isLoading ? (
