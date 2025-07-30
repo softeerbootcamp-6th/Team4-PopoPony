@@ -199,31 +199,28 @@
 /*      TYPOGRAPHY STYLES    */
 /* ========================= */
 @layer components {
-  .display-40-bold {
-    @apply font-pretendard text-[4rem] leading-[135%] font-bold tracking-[0%];
+  /* Typography */
+  .display-32-bold {
+    @apply font-pretendard text-[3.2rem] leading-[135%] font-bold tracking-[0%];
   }
 
   .headline-24-bold {
-    @apply font-pretendard text-[2.4rem] leading-[135%] font-bold tracking-[0%];
+    @apply font-pretendard text-[2.4rem] leading-[130%] font-bold tracking-[0%];
   }
 
   .title-20-bold {
-    @apply font-pretendard text-[2rem] leading-[120%] font-bold tracking-[0%];
+    @apply font-pretendard text-[2rem] leading-[130%] font-bold tracking-[0%];
   }
 
   .title-20-medium {
     @apply font-pretendard text-[2rem] leading-[135%] font-medium tracking-[0%];
   }
 
-  .subtitle-16-bold {
-    @apply font-pretendard text-[1.6rem] leading-[135%] font-bold tracking-[-0.02rem];
-  }
-
   .subtitle-18-bold {
     @apply font-pretendard text-[1.8rem] leading-[135%] font-bold tracking-[-0.02rem];
   }
 
-  .subtitle-16-medium {
+  .subtitle-18-medium {
     @apply font-pretendard text-[1.6rem] leading-[135%] font-medium tracking-[-0.02rem];
   }
 
@@ -232,6 +229,10 @@
   }
 
   .body1-16-medium {
+    @apply font-pretendard text-[1.6rem] leading-[150%] font-medium tracking-[0%];
+  }
+
+  .body1-18-medium-pc {
     @apply font-pretendard text-[1.6rem] leading-[150%] font-medium tracking-[0%];
   }
 
