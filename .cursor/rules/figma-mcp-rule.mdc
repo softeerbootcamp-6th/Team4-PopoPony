@@ -3,9 +3,13 @@ description: "figma mcp를 이용해 컴포넌트를 생성할 때, 지켜야 �
 globs: "frontend/**"
 alwaysApply: false
 ---
-### 유저가 figma mcp를 이용해 컴포넌트를 생성해달라고 했을 때, 바로 생성하지 말고 유저에게 다음 사항을 물어봅니다.
+### 유저가 figma mcp를 이용해 컴포넌트를 생성해달라고 했을 때, 언급한 파일에 interface, type이 있다면 해당 타입을 사용합니다.
+만약 유저가 지정한 타입이 없다면, 바로 생성하지 말고 유저에게 다음 사항을 물어봅니다.
 - component의 variants가 있나요? ex: 색상(primary, secondary..), 크기
 ### calling code, image를 통해 컴포넌트를 불러왔을 때, 다음과 같은 상황이 발생한다면 유저에게 질문해주세요
 1. component 내부가 group-{}, frame={} 등으로 명시되어 해당 컴포넌트의 div 구조를 명확히 명시하기 힘들 때
 ### 질문 후, 유저에게 생성할 컴포넌트의 내부구조, 반응형, type등을 최종적으로 확인받고 작업합니다.
 
+### icon은, `src/assets/icon/index.ts`에서 import하여 사용합니다. 
+
+### 컴포넌트 생성 후, 가능한 variant를 모두, `frontend/src/routes/components/index.tsx`경로에 추가하여 웹뷰로 볼 수 있도록 합니다.
