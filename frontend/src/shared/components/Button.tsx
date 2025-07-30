@@ -53,11 +53,8 @@ const Button = ({
       type='button'
       className={`${baseStyle} ${disabled ? disabledVariantStyle[variant] : variantStyle[variant]} ${sizeStyle[size]}`}
       {...props}>
-      {isLoading ? (
-        <Spinner size={spinnerSize[size]} color={spinnerColor[variant]} />
-      ) : (
-        <div>{children}</div>
-      )}
+      <Spinner size={spinnerSize[size]} color={spinnerColor[variant]} isLoading={isLoading} />
+      {!isLoading && <div>{children}</div>}
     </button>
   );
 };
