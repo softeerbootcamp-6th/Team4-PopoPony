@@ -99,7 +99,7 @@ const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
     };
 
     return (
-      <div className='flex w-full flex-col gap-1'>
+      <div className={`flex w-full flex-col gap-1 ${className}`}>
         {/* Label */}
         {label && (
           <label className="font-['Pretendard'] text-[1.4rem] leading-[1.5] font-medium tracking-[-0.028rem] text-[#636a79]">

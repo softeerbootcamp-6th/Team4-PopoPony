@@ -1,5 +1,5 @@
 import type { ButtonHTMLAttributes } from 'react';
-import { MoonLoader } from 'react-spinners';
+import Spinner from './Spinner';
 
 interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
   disabled?: boolean;
@@ -16,7 +16,7 @@ const Button = ({
   children,
   ...props
 }: Props) => {
-  const baseStyle = `w-full flex items-center justify-center`;
+  const baseStyle = `w-full flex-center`;
 
   const variantStyle = {
     primary: 'bg-mint-50 text-neutral-0',
@@ -42,21 +42,19 @@ const Button = ({
     lg: '24',
   };
 
-  const spinnerColor = {
-    primary: 'var(--color-neutral-0)',
-    secondary: 'var(--color-neutral-90)',
-    assistive: 'var(--color-neutral-90)',
+  const spinnerColor: Record<'primary' | 'secondary' | 'assistive', 'white' | 'black'> = {
+    primary: 'white',
+    secondary: 'black',
+    assistive: 'black',
   };
 
   return (
     <button
+      type='button'
       className={`${baseStyle} ${disabled ? disabledVariantStyle[variant] : variantStyle[variant]} ${sizeStyle[size]}`}
       {...props}>
-      {isLoading ? (
-        <MoonLoader speedMultiplier={0.5} size={spinnerSize[size]} color={spinnerColor[variant]} />
-      ) : (
-        <div>{children}</div>
-      )}
+      <Spinner size={spinnerSize[size]} color={spinnerColor[variant]} isLoading={isLoading} />
+      {!isLoading && <div>{children}</div>}
     </button>
   );
 };
