@@ -1,7 +1,7 @@
 const Landing = () => {
   return (
     <div className='relative mt-[15dvh] h-[50rem] w-[50rem] max-[1200px]:hidden'>
-      <img src='/images/logo-text.svg' alt='landing' className='ml-[6.6rem] w-[11rem]' />
+      <img src='/images/logo-text.svg' alt='logo-text' className='ml-[6.6rem] w-[11rem]' />
       <img src='/images/landing.png' alt='landing' className='mt-[3rem] w-[46rem]' />
       <div className='absolute bottom-[-11rem] left-[6.6rem]'>
         <h2 className='display-32-bold text-neutral-100'>토닥과 함께, 투-닥터</h2>
