@@ -1,7 +1,7 @@
 ---
 description: "프론트엔드 프로젝트에 쓰인 라이브러리, 그리고 각 라이브러리의 사용 범위를 나타내는 룰입니다."
 globs: "frontend/**"
-alwaysApply: false
+alwaysApply: true
 ---
 
 ## 핵심 라이브러리
