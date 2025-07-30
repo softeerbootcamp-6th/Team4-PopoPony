@@ -291,6 +291,27 @@
   .caption2-10-bold {
     @apply font-pretendard text-[1rem] leading-[135%] font-bold tracking-[0%];
   }
+
+  /* Shadow */
+  .shadow-bottom-sheet {
+    @apply shadow-[28px_30px_34px_rgba(0,0,0,0.10),_0_-3px_0_rgba(0,0,0,0)] blur-[4px];
+  }
+
+  .shadow-card {
+    @apply shadow-[0_0_0_0.08px_rgba(0,0,0,0.10)] blur-[4px];
+  }
+
+  .shadow-button {
+    @apply shadow-[0_0_0_0.10px_rgba(0,0,0,0.10)] blur-[6.4px];
+  }
+
+  .shadow-cta {
+    @apply shadow-[0_0_0_0.05px_rgba(0,0,0,0.10),_0_-4px_0_rgba(0,0,0,0)] blur-[8px];
+  }
+
+  .shadow-map-tag {
+    @apply shadow-[0_0_0_0.15px_rgba(0,0,0,0.10),_0_4px_0_rgba(0,0,0,0)] blur-[2px];
+  }
 }
 
 /* ========================= */
