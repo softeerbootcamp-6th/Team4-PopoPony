@@ -11,12 +11,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class ExceptionTestController {
 
     @GetMapping("")
-    public void error() {
+    public void throwRuntimeException() {
         throw new RuntimeException();
     }
 
     @GetMapping("/auth")
-    public void errorAuth() {
+    public void throwAuthNotFound() {
         throw new AuthException(AuthErrorCode.NOT_FOUND);
     }
 }
