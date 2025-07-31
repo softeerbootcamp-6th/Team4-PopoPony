@@ -3,7 +3,7 @@ import { Outlet, createRootRouteWithContext, redirect } from '@tanstack/react-ro
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import type { QueryClient } from '@tanstack/react-query';
 import { Landing } from '@components';
-import RootLayout from './_layout';
+import { RootLayout } from '@layouts';
 
 interface MyRouterContext {
   queryClient: QueryClient;
@@ -27,9 +27,7 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
     <>
       <RootLayout>
         <Landing />
-        <div className='relative h-[100dvh] min-h-[100dvh] w-full max-w-[500px] min-w-[375px]'>
-          <Outlet />
-        </div>
+        <Outlet />
       </RootLayout>
       <div className='text-[16px]'>
         <TanStackRouterDevtools />
