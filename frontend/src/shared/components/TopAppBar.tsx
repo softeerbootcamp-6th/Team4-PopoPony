@@ -28,8 +28,7 @@ const TopAppBar = ({
     : 'bg-transparent';
 
   return (
-    <header
-      className={`flex h-[4.8rem] w-full items-center justify-between px-[2rem] ${backgroundClass} ${className}`}>
+    <header className={`flex-between h-[4.8rem] w-full px-[2rem] ${backgroundClass} ${className}`}>
       {/* Left - Back Button */}
       <div className='flex h-[4rem] w-[4rem] items-center justify-start'>
         {showBack && (
