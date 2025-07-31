@@ -27,7 +27,7 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
     <>
       <RootLayout>
         <Landing />
-        <div className='h-[100dvh] min-h-[100dvh] w-full max-w-[500px] min-w-[375px]'>
+        <div className='relative h-[100dvh] min-h-[100dvh] w-full max-w-[500px] min-w-[375px]'>
           <Outlet />
         </div>
       </RootLayout>
