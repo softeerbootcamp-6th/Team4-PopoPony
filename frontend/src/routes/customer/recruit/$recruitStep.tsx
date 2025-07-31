@@ -1,9 +1,9 @@
-import { TwoOptionSelector } from '@components';
+import { TwoOptionSelector, TopAppBar } from '@components';
 import { useFunnel } from '@hooks';
 import { createFileRoute } from '@tanstack/react-router';
 import { FormProvider, useForm, type SubmitHandler } from 'react-hook-form';
 
-export const Route = createFileRoute('/customer/recruit/$recruitStep/')({
+export const Route = createFileRoute('/customer/recruit/$recruitStep')({
   component: RouteComponent,
 });
 
@@ -25,12 +25,11 @@ function RouteComponent() {
   const { Funnel, Step, nextStep, currrendStep } = useFunnel(
     'step1',
     'customer/recruit',
-    '/customer/recruit/$recruitStep/'
+    '/customer/recruit/$recruitStep'
   );
 
   return (
-    <div>
-      <h1>앱바/프로그래스바</h1>
+    <>
       <h2>{`프로그래스 바 ${stepList.indexOf(currrendStep) + 1} / ${stepList.length}`} </h2>
       <FormProvider {...methods}>
         <Funnel>
@@ -69,6 +68,6 @@ function RouteComponent() {
           </Step>
         </Funnel>
       </FormProvider>
-    </div>
+    </>
   );
 }
