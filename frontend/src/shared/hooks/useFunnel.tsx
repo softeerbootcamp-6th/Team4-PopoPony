@@ -12,7 +12,7 @@ export interface FunnelProps {
 export const useFunnel = (
   defaultStep: string,
   basePath: string,
-  paramPath: '/customer/recruit/$recruitStep/'
+  paramPath: '/customer/recruit/$recruitStep'
 ) => {
   const [step, setStep] = useState(defaultStep);
   const navigate = useNavigate();
