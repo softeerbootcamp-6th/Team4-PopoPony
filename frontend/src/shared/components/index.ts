@@ -1,4 +1,5 @@
 import Button from './Button';
+import ButtonCTA from './ButtonCTA';
 
 import LabeledSection from './LabeledSection';
 import Spinner from './Spinner';
@@ -7,4 +8,13 @@ import TwoOptionSelector from './TwoOptionSelector';
 import TextField from './TextField/TextField_S';
 import ProgressBar from './ProgressBar';
 
-export { Button, LabeledSection, Spinner, TopAppBar, TwoOptionSelector, TextField, ProgressBar };
+export {
+  Button,
+  ButtonCTA,
+  LabeledSection,
+  Spinner,
+  TopAppBar,
+  TwoOptionSelector,
+  TextField,
+  ProgressBar,
+};

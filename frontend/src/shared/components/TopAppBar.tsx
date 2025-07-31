@@ -7,6 +7,7 @@ interface TopAppBarProps {
   showClose?: boolean;
   background?: boolean;
   onClose?: () => void;
+  className?: string;
 }
 
 const TopAppBar = ({
@@ -15,6 +16,7 @@ const TopAppBar = ({
   showClose = false,
   background = true,
   onClose,
+  className = '',
 }: TopAppBarProps) => {
   const router = useRouter();
   const handleBack = () => {
@@ -27,7 +29,7 @@ const TopAppBar = ({
 
   return (
     <header
-      className={`fixed top-0 left-1/2 z-50 flex h-[6rem] w-full max-w-[600px] min-w-[375px] -translate-x-1/2 items-center justify-between px-[2rem] ${backgroundClass}`}>
+      className={`flex h-[6rem] w-full items-center justify-between px-[2rem] ${backgroundClass} ${className}`}>
       {/* Left - Back Button */}
       <div className='flex h-[4rem] w-[4rem] items-center justify-start'>
         {showBack && (
