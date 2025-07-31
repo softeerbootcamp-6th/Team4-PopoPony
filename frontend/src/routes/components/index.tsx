@@ -38,7 +38,7 @@ function RouteComponent() {
   };
 
   return (
-    <div className='absolute inset-0 flex flex-wrap gap-[4rem] p-[4rem]'>
+    <div className='bg-background-default-white absolute inset-0 flex h-fit flex-wrap gap-[4rem] p-[4rem]'>
       <Section title='Button'>
         <div className='flex flex-col gap-[1.6rem]'>
           <Button variant='primary' size='sm'>
