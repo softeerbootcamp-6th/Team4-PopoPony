@@ -11,7 +11,7 @@ const ProgressBar = ({ maxStep, currentStep }: ProgressBarProps) => {
   const steps = Array.from({ length: maxStep }, (_, index) => index + 1);
 
   return (
-    <div className='flex w-full items-center gap-[1rem]'>
+    <div className='flex-center w-full gap-[0.4rem]'>
       {steps.map((step) => (
         <ProgressBarItem key={step} filled={step <= currentStep} />
       ))}
