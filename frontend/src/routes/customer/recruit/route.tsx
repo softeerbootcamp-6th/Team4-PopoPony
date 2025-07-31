@@ -1,6 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { Outlet } from '@tanstack/react-router';
-import { TopAppBar, ButtonCTA } from '@components';
 import { PageLayout } from '@layouts';
 export const Route = createFileRoute('/customer/recruit')({
   component: RouteComponent,

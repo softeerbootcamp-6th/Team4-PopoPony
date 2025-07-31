@@ -1,4 +1,4 @@
-import { TwoOptionSelector, TopAppBar, ProgressBar } from '@components';
+import { TwoOptionSelector, ProgressBar } from '@components';
 import { useFunnel } from '@hooks';
 import { createFileRoute } from '@tanstack/react-router';
 import { FormProvider, useForm, type SubmitHandler } from 'react-hook-form';

@@ -79,7 +79,7 @@ const SlideButton = ({
 }: { text: string } & Pick<ButtonHTMLAttributes<HTMLButtonElement>, 'onClick' | 'disabled'>) => {
   const [slideProgress, setSlideProgress] = useState(0); // 0-100 percentage
   const [isDragging, setIsDragging] = useState(false);
-  const [isCompleted, setIsCompleted] = useState(false);
+  //   const [isCompleted, setIsCompleted] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const startPositionRef = useRef<number>(0);
 
@@ -102,12 +102,12 @@ const SlideButton = ({
       const progress = Math.max(0, Math.min((deltaX / maxWidth) * 100, 100));
       setSlideProgress(progress);
 
-      // 80% 이상 슬라이드하면 완료 상태로 변경
-      if (progress >= 80) {
-        setIsCompleted(true);
-      } else {
-        setIsCompleted(false);
-      }
+      //   // 80% 이상 슬라이드하면 완료 상태로 변경
+      //   if (progress >= 80) {
+      //     setIsCompleted(true);
+      //   } else {
+      //     setIsCompleted(false);
+      //   }
     },
     [isDragging]
   );
@@ -116,14 +116,14 @@ const SlideButton = ({
     if (slideProgress >= 80) {
       // 완료 - 100%로 설정하고 콜백 실행
       setSlideProgress(100);
-      setIsCompleted(true);
+      //   setIsCompleted(true);
       setTimeout(() => {
         onClick?.(new MouseEvent('click') as unknown as React.MouseEvent<HTMLButtonElement>);
       }, 200);
     } else {
       // 복귀
       setSlideProgress(0);
-      setIsCompleted(false);
+      //   setIsCompleted(false);
     }
     setIsDragging(false);
   }, [slideProgress, onClick]);
