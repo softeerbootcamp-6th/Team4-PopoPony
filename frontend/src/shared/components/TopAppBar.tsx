@@ -35,7 +35,7 @@ const TopAppBar = ({
           <button
             type='button'
             onClick={handleBack}
-            className='flex-center h-[4rem] w-[4rem] text-[var(--color-icon-neutral-primary)]'
+            className='flex-center text-[var(--color-icon-neutral-primary)]'
             aria-label='뒤로 가기'>
             <IcArrowLeft className='h-[2.4rem] w-[2.4rem]' />
           </button>
@@ -57,7 +57,7 @@ const TopAppBar = ({
           <button
             type='button'
             onClick={onClose}
-            className='flex-center h-[4rem] w-[4rem] text-[var(--color-icon-neutral-primary)]'
+            className='flex-center text-[var(--color-icon-neutral-primary)]'
             aria-label='닫기'>
             <IcCloseM />
           </button>
