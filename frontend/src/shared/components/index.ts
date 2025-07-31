@@ -1,6 +1,6 @@
 import Button from './Button';
 import ButtonCTA from './ButtonCTA';
-
+import ProgressBar from './ProgressBar';
 import LabeledSection from './LabeledSection';
 import Spinner from './Spinner';
 import TopAppBar from './TopAppBar';
@@ -15,6 +15,7 @@ export {
   Spinner,
   TopAppBar,
   TwoOptionSelector,
-  TextField, Landing,
+  TextField,
+  Landing,
   ProgressBar,
 };
