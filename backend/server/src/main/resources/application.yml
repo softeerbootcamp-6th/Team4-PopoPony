@@ -28,8 +28,11 @@ springdoc:
 
   show-actuator: false
 
-  servers:
-    - url: http://localhost:8080
-      description: "Local 개발 환경"
-    - url: https://api.example.com
-      description: "Production 서버"
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: never

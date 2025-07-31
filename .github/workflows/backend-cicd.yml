@@ -1,0 +1,59 @@
+name: Backend CI/CD
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "backend/**"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Build with Gradle
+        run: |
+          cd backend/server
+          ./gradlew clean build
+
+      - name: Package for deployment
+        run: |
+          mkdir -p deploy/
+          cp backend/server/cicd/appspec.yml deploy/
+          cp backend/server/cicd/*.sh deploy/
+          cp backend/server/build/libs/server-0.0.1-SNAPSHOT.jar deploy/
+          cp backend/server/cicd/Dockerfile deploy/
+          cp backend/server/cicd/docker-compose.yml deploy/
+          cd deploy
+          zip -r deployment-package.zip *
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-northeast-2
+
+      - name: Upload to S3
+        run: |
+          aws s3 cp ./deploy/deployment-package.zip s3://todoc-s3-bucket/deployment-package.zip
+
+      - name: Deploy to EC2 with CodeDeploy
+        run: |
+          aws deploy create-deployment \
+            --application-name todoc-codedeploy \
+            --deployment-group-name ToDocAppCodeDeploy \
+            --deployment-config-name CodeDeployDefault.OneAtATime \
+            --s3-location bucket=todoc-s3-bucket,bundleType=zip,key=deployment-package.zip \
+            --region ap-northeast-2
+
