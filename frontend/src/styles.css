@@ -279,23 +279,23 @@
 
   /* Shadow */
   .shadow-bottom-sheet {
-    @apply shadow-[28px_30px_34px_rgba(0,0,0,0.10),_0_-3px_0_rgba(0,0,0,0)] blur-[4px];
+    @apply shadow-[0px_-3px_4px_0px_rgba(28,30,34,0.1)];
   }
 
   .shadow-card {
-    @apply shadow-[0_0_0_0.08px_rgba(0,0,0,0.10)] blur-[4px];
+    @apply shadow-[0px_0px_4px_0px_rgba(0,0,0,0.08)];
   }
 
   .shadow-button {
-    @apply shadow-[0_0_0_0.10px_rgba(0,0,0,0.10)] blur-[6.4px];
+    @apply shadow-[0px_0px_6.4px_0px_rgba(0,0,0,0.1)];
   }
 
   .shadow-cta {
-    @apply shadow-[0_0_0_0.05px_rgba(0,0,0,0.10),_0_-4px_0_rgba(0,0,0,0)] blur-[8px];
+    @apply shadow-[0px_-4px_8px_0px_rgba(0,0,0,0.05)];
   }
 
   .shadow-map-tag {
-    @apply shadow-[0_0_0_0.15px_rgba(0,0,0,0.10),_0_4px_0_rgba(0,0,0,0)] blur-[2px];
+    @apply shadow-[0px_4px_2px_0px_rgba(0,0,0,0.15)];
   }
 }
 
