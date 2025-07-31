@@ -1,25 +1,31 @@
 package com.todoc.server.domain.auth.exception;
 
-import com.todoc.server.common.exception.ErrorCode;
+import com.todoc.server.common.exception.base.ResponseCode;
 import org.springframework.http.HttpStatus;
 
-public enum AuthErrorCode implements ErrorCode {
-    AUTH_NOT_FOUND(HttpStatus.NOT_FOUND, "회원을 찾을 수 없습니다."),
+public enum AuthErrorCode implements ResponseCode {
 
-    // 서버 에러
-    AUTH_FIELD_NULL(HttpStatus.INTERNAL_SERVER_ERROR, "리소스 접근 오류")
+    // 사용자(auth)
+    NOT_FOUND(11001, HttpStatus.NOT_FOUND.value(), "유저가 존재하지 않습니다.")
     ;
 
-    private final HttpStatus status;
+    private final int code;
+    private final int status;
     private final String message;
 
-    AuthErrorCode(HttpStatus status, String message) {
+    AuthErrorCode(int code, int status, String message) {
+        this.code = code;
         this.status = status;
         this.message = message;
     }
 
     @Override
-    public HttpStatus getStatus() {
+    public int getCode() {
+        return code;
+    }
+
+    @Override
+    public int getStatus() {
         return status;
     }
 
