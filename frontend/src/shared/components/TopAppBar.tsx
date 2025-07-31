@@ -29,35 +29,32 @@ const TopAppBar = ({
 
   return (
     <header className={`flex-between h-[4.8rem] w-full px-[2rem] ${backgroundClass} ${className}`}>
-      {/* Left - Back Button */}
       <div className='flex h-[4rem] w-[4rem] items-center justify-start'>
         {showBack && (
           <button
             type='button'
             onClick={handleBack}
-            className='flex-center text-[var(--color-icon-neutral-primary)]'
+            className='flex-center text-text-neutral-primary'
             aria-label='뒤로 가기'>
             <IcArrowLeft className='h-[2.4rem] w-[2.4rem]' />
           </button>
         )}
       </div>
 
-      {/* Center - Title */}
       <div className='flex-center flex-1'>
         {title && (
-          <h1 className='subtitle-18-bold cursor-default text-center text-[var(--color-text-neutral-primary)]'>
+          <h1 className='subtitle-18-bold text-text-neutral-primary cursor-default text-center'>
             {title}
           </h1>
         )}
       </div>
 
-      {/* Right - Close Button */}
       <div className='flex h-[4rem] w-[4rem] items-center justify-end'>
         {showClose && (
           <button
             type='button'
             onClick={onClose}
-            className='flex-center text-[var(--color-icon-neutral-primary)]'
+            className='flex-center text-text-neutral-primary'
             aria-label='닫기'>
             <IcCloseM />
           </button>
