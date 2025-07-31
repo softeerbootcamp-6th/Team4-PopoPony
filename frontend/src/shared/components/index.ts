@@ -5,5 +5,6 @@ import Spinner from './Spinner';
 import TopAppBar from './TopAppBar';
 import TwoOptionSelector from './TwoOptionSelector';
 import TextField from './TextField/TextField_S';
+import ProgressBar from './ProgressBar';
 
-export { Button, LabeledSection, Spinner, TopAppBar, TwoOptionSelector, TextField };
+export { Button, LabeledSection, Spinner, TopAppBar, TwoOptionSelector, TextField, ProgressBar };
