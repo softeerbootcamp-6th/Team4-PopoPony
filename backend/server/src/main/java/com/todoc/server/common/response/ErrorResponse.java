@@ -1,6 +1,7 @@
 package com.todoc.server.common.response;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.todoc.server.common.exception.base.ResponseCode;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
@@ -20,15 +21,15 @@ public class ErrorResponse {
         this.timestamp = LocalDateTime.now();
     }
 
-    public static ErrorResponse from(ResponseStatus status) {
-        return new ErrorResponse(status.getCode(), status.getStatus(), status.getMessage());
+    public static ErrorResponse from(ResponseCode responseCode) {
+        return new ErrorResponse(responseCode.getCode(), responseCode.getStatus(), responseCode.getMessage());
     }
 
-    public static ErrorResponse from(ResponseStatus status, String message) {
+    public static ErrorResponse from(ResponseCode status, String message) {
         return new ErrorResponse(status.getCode(), status.getStatus(), message);
     }
 
-    public static ErrorResponse from(ResponseStatus status, RuntimeException e) {
+    public static ErrorResponse from(ResponseCode status, RuntimeException e) {
         return new ErrorResponse(status.getCode(), status.getStatus(), e.getMessage());
     }
 }

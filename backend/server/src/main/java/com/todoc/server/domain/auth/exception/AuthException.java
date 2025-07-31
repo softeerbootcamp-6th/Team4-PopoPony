@@ -1,10 +1,9 @@
 package com.todoc.server.domain.auth.exception;
 
-import com.todoc.server.common.exception.CustomException;
-import com.todoc.server.common.exception.ErrorCode;
+import com.todoc.server.common.exception.base.CustomException;
 
 public class AuthException extends CustomException {
-    public AuthException(ErrorCode errorCode) {
-        super(errorCode);
+    public AuthException(AuthErrorCode authErrorCode) {
+        super(authErrorCode);
     }
 }

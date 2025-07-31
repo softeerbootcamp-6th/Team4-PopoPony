@@ -17,6 +17,6 @@ public class ExceptionTestController {
 
     @GetMapping("/auth")
     public void errorAuth() {
-        throw new AuthException(AuthErrorCode.AUTH_NOT_FOUND);
+        throw new AuthException(AuthErrorCode.NOT_FOUND);
     }
 }

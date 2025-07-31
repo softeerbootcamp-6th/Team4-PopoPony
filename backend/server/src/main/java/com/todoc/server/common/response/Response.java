@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.Getter;
 
-import static com.todoc.server.common.response.ResponseStatus.SUCCESS;
+import static com.todoc.server.common.exception.global.CommonResponseCode.SUCCESS;
 
 @Getter
 @JsonPropertyOrder({"code", "status", "message", "data"})
