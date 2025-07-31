@@ -29,7 +29,7 @@ const TopAppBar = ({
 
   return (
     <header className={`flex-between h-[4.8rem] w-full px-[2rem] ${backgroundClass} ${className}`}>
-      <div className='flex h-[4rem] w-[4rem] items-center justify-start'>
+      <div className='flex-start h-[4rem] w-[4rem]'>
         {showBack && (
           <button
             type='button'
@@ -49,7 +49,7 @@ const TopAppBar = ({
         )}
       </div>
 
-      <div className='flex h-[4rem] w-[4rem] items-center justify-end'>
+      <div className='flex-end h-[4rem] w-[4rem]'>
         {showClose && (
           <button
             type='button'
