@@ -22,6 +22,7 @@ import IcClockFill from './clock-fill.svg?react';
 import IcClockS from './clock-S.svg?react';
 import IcCloseL from './close-L.svg?react';
 import IcCloseM from './close-M.svg?react';
+import IcCloseS from './close-S.svg?react';
 import IcDownArrow from './down-arrow.svg?react';
 
 // Transportation Icons
@@ -81,6 +82,7 @@ export {
   IcClockS,
   IcCloseL,
   IcCloseM,
+  IcCloseS,
   IcDownArrow,
 
   // Transportation Icons

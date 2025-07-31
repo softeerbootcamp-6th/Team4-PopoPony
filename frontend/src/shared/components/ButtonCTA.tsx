@@ -24,7 +24,11 @@ const ButtonCTA = ({ variant, text, className = '', ...props }: ButtonCTAProps) 
     }
   };
 
-  return <div className={`bg-white px-[2rem] py-[1.2rem] ${className}`}>{renderContent()}</div>;
+  return (
+    <div className={`bg-white px-[2rem] pt-[1.2rem] pb-[1.6rem] ${className}`}>
+      {renderContent()}
+    </div>
+  );
 };
 
 const SingleButton = ({

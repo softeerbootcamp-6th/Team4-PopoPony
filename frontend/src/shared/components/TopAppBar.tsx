@@ -1,7 +1,7 @@
 import { useRouter } from '@tanstack/react-router';
-import { IcArrowLeft, IcCloseL } from '@icons';
+import { IcArrowLeft, IcCloseM } from '@icons';
 
-interface TopAppBarProps {
+export interface TopAppBarProps {
   title?: string;
   showBack?: boolean;
   showClose?: boolean;
@@ -60,7 +60,7 @@ const TopAppBar = ({
             onClick={onClose}
             className='flex-center h-[4rem] w-[4rem] text-[var(--color-icon-neutral-primary)]'
             aria-label='닫기'>
-            <IcCloseL className='h-[2.4rem] w-[2.4rem]' />
+            <IcCloseM />
           </button>
         )}
       </div>
