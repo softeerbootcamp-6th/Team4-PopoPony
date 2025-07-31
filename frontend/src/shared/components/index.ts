@@ -6,7 +6,7 @@ import Spinner from './Spinner';
 import TopAppBar from './TopAppBar';
 import TwoOptionSelector from './TwoOptionSelector';
 import TextField from './TextField/TextField_S';
-import ProgressBar from './ProgressBar';
+import Landing from './Landing';
 
 export {
   Button,
@@ -15,6 +15,6 @@ export {
   Spinner,
   TopAppBar,
   TwoOptionSelector,
-  TextField,
+  TextField, Landing,
   ProgressBar,
 };
