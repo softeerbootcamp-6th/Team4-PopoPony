@@ -3,7 +3,7 @@ import { useFunnel } from '@hooks';
 import { createFileRoute } from '@tanstack/react-router';
 import { FormProvider, useForm, type SubmitHandler } from 'react-hook-form';
 
-export const Route = createFileRoute('/customer/recruit/$recruitStep')({
+export const Route = createFileRoute('/customer/recruit/$step')({
   component: RouteComponent,
 });
 
@@ -22,15 +22,15 @@ function RouteComponent() {
     console.log('Final Data:', data);
   };
 
-  const { Funnel, Step, nextStep, currrendStep } = useFunnel(
+  const { Funnel, Step, nextStep, currrentStep } = useFunnel(
     'step1',
     'customer/recruit',
-    '/customer/recruit/$recruitStep'
+    '/customer/recruit/$step'
   );
 
   return (
     <>
-      <ProgressBar maxStep={stepList.length} currentStep={stepList.indexOf(currrendStep) + 1} />
+      <ProgressBar maxStep={stepList.length} currentStep={stepList.indexOf(currrentStep) + 1} />
       <FormProvider {...methods}>
         <Funnel>
           <Step name='step1'>
