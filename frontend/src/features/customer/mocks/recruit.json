@@ -13,7 +13,15 @@
     "cognitiveAbility": "bad",
     "cognitiveIssues": ["판단에 도움이 필요해요", "기억하거나 이해하는 것이 어려워요"],
     "communicationAbility": "good",
-    "communicationHelp": null
+    "communicationHelp": null,
+    "departureName": "하늘채 아파트",
+    "departureAddress": "서울특별시 강남구 테헤란로 123",
+    "departureDetailAddress": "103동 402호 현관 앞",
+    "hospitalAddress": "서울특별시 송파구 올림픽로 43길 88",
+    "hospitalDepartment": "내과",
+    "destinationName": "하늘채 아파트",
+    "destinationAddress": "서울특별시 강남구 테헤란로 123",
+    "destinationDetailAddress": "103동 402호 현관 앞"
   },
   {
     "id": 2,
@@ -29,7 +37,15 @@
     "cognitiveAbility": "good",
     "cognitiveIssues": [],
     "communicationAbility": "bad",
-    "communicationHelp": "청력이 좋지 않아서 큰 소리로 말하거나 글로 소통해야 합니다."
+    "communicationHelp": "청력이 좋지 않아서 큰 소리로 말하거나 글로 소통해야 합니다.",
+    "departureName": "푸르지오 아파트",
+    "departureAddress": "서울특별시 서초구 서초대로 396",
+    "departureDetailAddress": "201동 1501호 엘리베이터 앞",
+    "hospitalAddress": "서울특별시 서대문구 연세로 50-1",
+    "hospitalDepartment": "정형외과",
+    "destinationName": "푸르지오 아파트",
+    "destinationAddress": "서울특별시 서초구 서초대로 396",
+    "destinationDetailAddress": "201동 1501호 엘리베이터 앞"
   },
   {
     "id": 3,
@@ -45,7 +61,15 @@
     "cognitiveAbility": "bad",
     "cognitiveIssues": ["상황 파악에 도움이 필요해요"],
     "communicationAbility": "bad",
-    "communicationHelp": "단순하고 짧은 문장으로 천천히 말해주셔야 이해할 수 있습니다."
+    "communicationHelp": "단순하고 짧은 문장으로 천천히 말해주셔야 이해할 수 있습니다.",
+    "departureName": "래미안 아파트",
+    "departureAddress": "서울특별시 강남구 삼성로 86",
+    "departureDetailAddress": "105동 802호 현관 앞",
+    "hospitalAddress": "서울특별시 강남구 일원로 81",
+    "hospitalDepartment": "신경과",
+    "destinationName": "래미안 아파트",
+    "destinationAddress": "서울특별시 강남구 삼성로 86",
+    "destinationDetailAddress": "105동 802호 현관 앞"
   },
   {
     "id": 4,
@@ -61,7 +85,15 @@
     "cognitiveAbility": "good",
     "cognitiveIssues": [],
     "communicationAbility": "good",
-    "communicationHelp": null
+    "communicationHelp": null,
+    "departureName": "롯데캐슬 아파트",
+    "departureAddress": "서울특별시 종로구 종로 1",
+    "departureDetailAddress": "301동 1201호 현관 앞",
+    "hospitalAddress": "서울특별시 종로구 대학로 101",
+    "hospitalDepartment": "피부과",
+    "destinationName": "롯데캐슬 아파트",
+    "destinationAddress": "서울특별시 종로구 종로 1",
+    "destinationDetailAddress": "301동 1201호 현관 앞"
   },
   {
     "id": 5,
@@ -81,6 +113,14 @@
       "기억하거나 이해하는 것이 어려워요"
     ],
     "communicationAbility": "bad",
-    "communicationHelp": "실어증이 있어서 간단한 단어나 몸짓으로 소통해야 합니다."
+    "communicationHelp": "실어증이 있어서 간단한 단어나 몸짓으로 소통해야 합니다.",
+    "departureName": "e편한세상 아파트",
+    "departureAddress": "서울특별시 구로구 구로동로 58",
+    "departureDetailAddress": "401동 901호 현관 앞",
+    "hospitalAddress": "서울특별시 구로구 구로동로 148",
+    "hospitalDepartment": "재활의학과",
+    "destinationName": "e편한세상 아파트",
+    "destinationAddress": "서울특별시 구로구 구로동로 58",
+    "destinationDetailAddress": "401동 901호 현관 앞"
   }
 ]
