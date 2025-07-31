@@ -54,6 +54,9 @@ dependencies {
 	// ✅ Swagger
 	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.9")
 	implementation("org.apache.commons:commons-lang3:3.14.0")
+
+	// ✅ for health-check + 애플리케이션의 운영 및 모니터링 기능
+	implementation("org.springframework.boot:spring-boot-starter-actuator")
 }
 
 val querydslDir = layout.buildDirectory.dir("generated/querydsl")
