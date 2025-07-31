@@ -1,4 +1,4 @@
-import { TwoOptionSelector, TopAppBar } from '@components';
+import { TwoOptionSelector, TopAppBar, ProgressBar } from '@components';
 import { useFunnel } from '@hooks';
 import { createFileRoute } from '@tanstack/react-router';
 import { FormProvider, useForm, type SubmitHandler } from 'react-hook-form';
@@ -30,7 +30,7 @@ function RouteComponent() {
 
   return (
     <>
-      <h2>{`프로그래스 바 ${stepList.indexOf(currrendStep) + 1} / ${stepList.length}`} </h2>
+      <ProgressBar maxStep={stepList.length} currentStep={stepList.indexOf(currrendStep) + 1} />
       <FormProvider {...methods}>
         <Funnel>
           <Step name='step1'>

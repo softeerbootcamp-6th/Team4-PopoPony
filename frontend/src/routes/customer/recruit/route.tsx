@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { Outlet } from '@tanstack/react-router';
-import { TopAppBar } from '@components';
+import { TopAppBar, ButtonCTA } from '@components';
 export const Route = createFileRoute('/customer/recruit')({
   component: RouteComponent,
 });
@@ -12,6 +12,7 @@ function RouteComponent() {
       <main className='mt-[6rem]'>
         <Outlet />
       </main>
+      <ButtonCTA variant='single' text='확인' onClick={() => alert('Single 버튼 클릭됨')} />
     </>
   );
 }
