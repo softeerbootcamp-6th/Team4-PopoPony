@@ -22,7 +22,7 @@ function RouteComponent() {
     console.log('Final Data:', data);
   };
 
-  const { Funnel, Step, nextStep, currrentStep } = useFunnel({
+  const { Funnel, Step, nextStep, currentStep } = useFunnel({
     defaultStep: 'step1',
     basePath: 'customer/recruit',
     paramPath: '/customer/recruit/$step',
@@ -30,7 +30,7 @@ function RouteComponent() {
 
   return (
     <>
-      <ProgressBar maxStep={stepList.length} currentStep={stepList.indexOf(currrentStep) + 1} />
+      <ProgressBar maxStep={stepList.length} currentStep={stepList.indexOf(currentStep) + 1} />
       <FormProvider {...methods}>
         <Funnel>
           <Step name='step1'>
