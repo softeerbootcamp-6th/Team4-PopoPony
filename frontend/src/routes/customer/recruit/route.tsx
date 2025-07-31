@@ -1,6 +1,8 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { Outlet } from '@tanstack/react-router';
 import { PageLayout } from '@layouts';
+import { Button } from '@components';
+
 export const Route = createFileRoute('/customer/recruit')({
   component: RouteComponent,
 });
@@ -13,7 +15,11 @@ function RouteComponent() {
         <Outlet />
         <div className='h-[100dvh]'></div>
       </PageLayout.Content>
-      <PageLayout.Footer variant='single' text='확인' onClick={() => alert('Single 버튼 클릭됨')} />
+      <PageLayout.Footer>
+        <Button variant='primary' onClick={() => alert('Single 버튼 클릭됨')}>
+          확인
+        </Button>
+      </PageLayout.Footer>
     </PageLayout>
   );
 }

@@ -1,12 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router';
-import {
-  Button,
-  ButtonCTA,
-  LabeledSection,
-  TwoOptionSelector,
-  TextField,
-  ProgressBar,
-} from '@components';
+import { Button, LabeledSection, TwoOptionSelector, TextField, ProgressBar } from '@components';
 import { useForm, FormProvider, type SubmitHandler } from 'react-hook-form';
 import type { HTMLAttributes } from 'react';
 
@@ -174,33 +167,6 @@ function RouteComponent() {
               label='비활성화'
               placeholder='비활성화된 입력'
               disabled
-            />
-          </div>
-        </div>
-      </Section>
-
-      {/* ButtonCTA Section */}
-      <Section title='ButtonCTA' className='relative w-full max-w-[60rem]'>
-        <div className='flex flex-col gap-[3rem]'>
-          {/* Single Button */}
-          <div className='space-y-[1.2rem]'>
-            <h4 className='text-neutral-80 body1-16-medium'>Single Button</h4>
-            <ButtonCTA variant='single' text='확인' onClick={() => alert('Single 버튼 클릭됨')} />
-          </div>
-
-          {/* Double Button */}
-          <div className='space-y-[1.2rem]'>
-            <h4 className='text-neutral-80 body1-16-medium'>Double Button</h4>
-            <ButtonCTA variant='double' text='다음' onClick={() => alert('Double 버튼 클릭됨')} />
-          </div>
-
-          {/* Slide Button */}
-          <div className='space-y-[1.2rem]'>
-            <h4 className='text-neutral-80 body1-16-medium'>Slide Button</h4>
-            <ButtonCTA
-              variant='slide'
-              text='밀어서 동행 시작'
-              onClick={() => alert('슬라이드 완료! 동행을 시작합니다.')}
             />
           </div>
         </div>

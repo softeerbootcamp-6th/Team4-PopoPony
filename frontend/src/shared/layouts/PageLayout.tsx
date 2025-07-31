@@ -1,6 +1,6 @@
-import { TopAppBar, ButtonCTA } from '@components';
+import { TopAppBar, BottomCTA } from '@components';
 import type { TopAppBarProps } from '../components/TopAppBar';
-import type { ButtonCTAProps } from '../components/ButtonCTA';
+import type { BottomCTAProps } from '../components/BottomCTA';
 
 interface PageLayoutProps {
   children: React.ReactNode;
@@ -31,8 +31,8 @@ const PageLayoutContent = ({ children }: PageLayoutProps) => {
   return <div className='flex-1 overflow-y-auto'>{children}</div>;
 };
 
-const Footer = ({ variant, text, className, ...props }: ButtonCTAProps) => {
-  return <ButtonCTA variant={variant} text={text} className={className} {...props} />;
+const Footer = ({ children }: BottomCTAProps) => {
+  return <BottomCTA>{children}</BottomCTA>;
 };
 
 PageLayout.Header = Header;

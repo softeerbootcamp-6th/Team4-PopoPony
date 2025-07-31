@@ -22,11 +22,11 @@ function RouteComponent() {
     console.log('Final Data:', data);
   };
 
-  const { Funnel, Step, nextStep, currrentStep } = useFunnel(
-    'step1',
-    'customer/recruit',
-    '/customer/recruit/$step'
-  );
+  const { Funnel, Step, nextStep, currrentStep } = useFunnel({
+    defaultStep: 'step1',
+    basePath: 'customer/recruit',
+    paramPath: '/customer/recruit/$step',
+  });
 
   return (
     <>

@@ -1,5 +1,5 @@
 import Button from './Button';
-import ButtonCTA from './ButtonCTA';
+import BottomCTA from './BottomCTA';
 import ProgressBar from './ProgressBar';
 import LabeledSection from './LabeledSection';
 import Spinner from './Spinner';
@@ -10,7 +10,7 @@ import Landing from './Landing';
 
 export {
   Button,
-  ButtonCTA,
+  BottomCTA,
   LabeledSection,
   Spinner,
   TopAppBar,
