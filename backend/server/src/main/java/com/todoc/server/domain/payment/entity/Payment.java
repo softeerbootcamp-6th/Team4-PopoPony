@@ -1,7 +1,7 @@
 package com.todoc.server.domain.payment.entity;
 
 import com.todoc.server.common.entity.BaseEntity;
-import com.todoc.server.domain.escort.entity.Escort;
+import com.todoc.server.domain.report.entity.Report;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,14 +15,17 @@ public class Payment extends BaseEntity {
     private Long id;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "escort_id")
-    private Escort escort;
+    @JoinColumn(name = "report_id")
+    private Report report;
 
     @Column(name = "base_fee")
     private Integer baseFee;
 
-    @Column(name = "extra_fee")
-    private Integer extraFee;
+    @Column(name = "extra_time_fee")
+    private Integer extraTimeFee;
+
+    @Column(name = "taxi_fee")
+    private Integer taxiFee;
 
     private String status;
 }

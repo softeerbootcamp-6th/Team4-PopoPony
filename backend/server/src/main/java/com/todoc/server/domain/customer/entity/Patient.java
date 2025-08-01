@@ -2,6 +2,7 @@ package com.todoc.server.domain.customer.entity;
 
 import com.todoc.server.common.enumeration.Gender;
 import com.todoc.server.common.entity.BaseEntity;
+import com.todoc.server.domain.auth.entity.Auth;
 import com.todoc.server.domain.latestlocation.entity.LatestLocation;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -17,7 +18,7 @@ public class Patient extends BaseEntity {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id")
-    private Customer customer;
+    private Auth customer;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "latest_location_id")
@@ -40,9 +41,6 @@ public class Patient extends BaseEntity {
 
     @Column(name = "uses_wheelchair")
     private Boolean usesWheelchair;
-
-    @Column(name = "needs_toilet_escort")
-    private Boolean needsToiletEscort;
 
     @Column(name = "has_cognitive_issue")
     private Boolean hasCognitiveIssue;

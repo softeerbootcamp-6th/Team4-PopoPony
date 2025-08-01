@@ -15,8 +15,8 @@ public class PositiveFeedbackChoice extends BaseEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "helper_id")
-    private Helper helper;
+    @JoinColumn(name = "review_id")
+    private Review review;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "positive_feedback_id")

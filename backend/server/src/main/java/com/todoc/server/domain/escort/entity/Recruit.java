@@ -1,7 +1,8 @@
 package com.todoc.server.domain.escort.entity;
 
 import com.todoc.server.common.entity.BaseEntity;
-import com.todoc.server.domain.customer.entity.Customer;
+import com.todoc.server.common.enumeration.RecruitStatus;
+import com.todoc.server.domain.auth.entity.Auth;
 import com.todoc.server.domain.customer.entity.Patient;
 import com.todoc.server.domain.route.entity.Route;
 import jakarta.persistence.*;
@@ -21,7 +22,7 @@ public class Recruit extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id")
-    private Customer customer;
+    private Auth customer;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "patient_id")
@@ -48,5 +49,6 @@ public class Recruit extends BaseEntity {
     @Column(name = "estimated_fee")
     private Integer estimatedFee;
 
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private RecruitStatus status;
 }
