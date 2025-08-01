@@ -17,11 +17,12 @@ export const Route = createFileRoute('/components/')({
 });
 
 type FormValues = {
-  cognitive: string;
   name: string;
-  memo: string;
+  quantity: string;
   price: string;
   birthDate: string;
+  time: string;
+  phone: string;
 };
 
 function RouteComponent() {
@@ -107,38 +108,20 @@ function RouteComponent() {
 
       <Section title='LabeledSection/TwoOptionSelector'>
         <FormProvider {...methods}>
-          {/* 체크 기능이 있는 일반 input */}
-          <FormInput>
-            <FormInput.Label text='이름' name='name' doCheck={true} required />
-            <FormInput.Input name='name' type='text' placeholder='이름을 입력하세요' />
-          </FormInput>
+          {/* 일반 텍스트 입력 */}
+          <FormInput name='name' type='text' size='M' placeholder='텍스트를 입력하세요' />
 
-          {/* 체크 기능 없는 단순 제목 */}
-          <FormInput>
-            <FormInput.Label text='메모' doCheck={false} />
-            <FormInput.Input name='memo' type='text' placeholder='메모를 입력하세요' />
-          </FormInput>
-
-          {/* TwoOptionSelector와 함께 사용 */}
-          <LabeledSection label='인지능력' isChecked={!!methods.watch('cognitive')}>
-            <TwoOptionSelector
-              name='cognitive'
-              leftOption={{ label: '괜찮아요', value: 'ok' }}
-              rightOption={{ label: '도움이 필요해요', value: 'help' }}
-            />
-          </LabeledSection>
-
-          {/* 가격 입력 */}
-          <FormInput>
-            <FormInput.Label text='가격 정보' name='price' doCheck={true} />
-            <FormInput.Input name='price' type='cost' placeholder='가격을 입력하세요' />
-          </FormInput>
-
-          {/* 날짜 선택 */}
-          <FormInput>
-            <FormInput.Label text='생년월일' name='birthDate' doCheck={true} />
-            <FormInput.Input name='birthDate' type='date' placeholder='날짜를 선택하세요' />
-          </FormInput>
+          <FormInput
+            name='quantity'
+            type='number'
+            size='M'
+            description='개'
+            placeholder='수량을 입력하세요'
+          />
+          <FormInput name='price' type='cost' size='M' placeholder='가격을 입력하세요' />
+          <FormInput name='birthDate' type='date' size='M' placeholder='날짜를 선택하세요' />
+          <FormInput name='time' type='time' size='M' placeholder='시간을 선택하세요' />
+          <FormInput name='phone' type='contact' size='M' placeholder='연락처를 입력하세요' />
         </FormProvider>
       </Section>
 

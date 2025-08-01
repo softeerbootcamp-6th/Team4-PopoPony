@@ -1,162 +1,100 @@
 import { useFormContext } from 'react-hook-form';
-import { type InputHTMLAttributes, useState, createContext, useContext } from 'react';
-import { IcChevronDown, IcChevronUp, IcCheck } from '@icons';
+import { type InputHTMLAttributes, useState, useCallback } from 'react';
+import { IcChevronDown, IcChevronUp } from '@icons';
 
-// FormInput 컨텍스트 (Label에서 설정한 name을 Input에서 사용하기 위해)
-const FormInputContext = createContext<{ name?: string }>({});
-
-const FormInput = ({ children }: { children: React.ReactNode }) => {
-  return <section className='flex flex-col gap-2'>{children}</section>;
-};
-
-interface FormInputLabelProps {
-  text: string;
-  name?: string; // doCheck가 true일 때 필요
-  doCheck?: boolean;
-  required?: boolean;
-}
-
-const FormInputLabel = ({ text, name, doCheck = false, required = false }: FormInputLabelProps) => {
-  const formContext = useFormContext();
-
-  // 체크 상태 계산 (더 정확한 로직)
-  const getIsChecked = (): boolean => {
-    if (!doCheck || !name || !formContext) return false;
-
-    const { watch } = formContext;
-    const fieldValue = watch(name);
-
-    if (fieldValue === undefined || fieldValue === null || fieldValue === '') {
-      return false;
-    }
-
-    // 배열인 경우 길이 체크
-    if (Array.isArray(fieldValue)) {
-      return fieldValue.length > 0;
-    }
-
-    // 문자열인 경우 trim 후 길이 체크
-    if (typeof fieldValue === 'string') {
-      return fieldValue.trim().length > 0;
-    }
-
-    // 그 외의 경우 truthy 체크
-    return Boolean(fieldValue);
-  };
-
-  const isChecked = getIsChecked();
-
-  return (
-    <FormInputContext.Provider value={{ name }}>
-      <div className='flex items-center gap-2'>
-        <h6 className='body1-16-bold text-neutral-90'>
-          {text}
-          {required && <span className='ml-1 text-red-50'>*</span>}
-        </h6>
-        {doCheck && (
-          <IcCheck
-            className={`${isChecked ? '[&_path]:stroke-mint-50' : '[&_path]:stroke-neutral-90'}`}
-          />
-        )}
-      </div>
-    </FormInputContext.Provider>
-  );
-};
-
-interface FormInputInputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'size'> {
+interface FormInputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'size' | 'type'> {
   name: string;
   size?: 'S' | 'M';
   type: 'date' | 'time' | 'cost' | 'number' | 'text' | 'contact';
   description?: string;
   placeholder?: string;
-  label?: string; // input 내부 라벨 (선택적)
 }
 
-const FormInputInput = ({
+const FormInput = ({
   name,
   size = 'M',
   type,
   description,
   placeholder,
-  label,
   ...props
-}: FormInputInputProps) => {
+}: FormInputProps) => {
   const formContext = useFormContext();
 
   if (!formContext) {
-    console.warn('FormInputInput must be used within FormProvider');
+    console.warn('FormInput must be used within FormProvider');
+    return null;
   }
 
   const {
     register,
     formState: { errors },
-  } = formContext || {};
+    watch,
+  } = formContext;
 
-  const error = errors?.[name]?.message as string | undefined;
-  const registeredProps = register?.(name) || {};
+  const error = errors[name]?.message as string | undefined;
+  const registeredProps = register(name);
+  const currentValue = watch(name); // 현재 값 감시
 
+  // 날짜/시간 타입은 DropdownInput 사용
+  if (type === 'date' || type === 'time') {
+    return (
+      <DropdownInput
+        type={type}
+        placeholder={placeholder}
+        error={error}
+        currentValue={currentValue}
+        {...registeredProps}
+        {...props}
+      />
+    );
+  }
+
+  // 나머지 타입은 Input 사용
   return (
-    <div className='flex flex-col gap-[0.4rem]'>
-      {/* Optional Internal Label */}
-      {label && <div className='body2-14-medium text-text-neutral-secondary'>{label}</div>}
-
-      {/* Input Component */}
-      {type === 'date' || type === 'time' ? (
-        <DropdownInput
-          type={type}
-          placeholder={placeholder}
-          error={error}
-          {...registeredProps}
-          {...props}
-        />
-      ) : (
-        <Input
-          size={size}
-          type={type}
-          description={description}
-          placeholder={placeholder}
-          error={error}
-          {...registeredProps}
-          {...props}
-        />
-      )}
-
-      {/* Error Message */}
-      {error && <div className='body2-14-medium text-red-50'>{error}</div>}
-    </div>
+    <Input
+      name={name}
+      size={size}
+      type={type}
+      description={description}
+      placeholder={placeholder}
+      error={error}
+      register={register}
+      {...props}
+    />
   );
-};
-
-// FormInput 내부에서 사용되는 다른 컴포넌트들을 위한 래퍼
-const FormInputContent = ({ children }: { children: React.ReactNode }) => {
-  return <div>{children}</div>;
 };
 
 const DropdownInput = ({
   type,
   placeholder,
   error,
+  currentValue,
   onBlur,
   ...props
 }: {
   type: 'date' | 'time';
   placeholder?: string;
   error?: string;
+  currentValue?: string;
   onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
-} & Omit<InputHTMLAttributes<HTMLInputElement>, 'size'>) => {
+} & Omit<InputHTMLAttributes<HTMLInputElement>, 'size' | 'type'>) => {
   const [isFocused, setIsFocused] = useState(false);
 
+  // 값이 있는지 확인 (빈 문자열이 아닌 실제 값)
+  const hasValue = Boolean(currentValue && currentValue.trim() !== '');
+
+  // 동적 클래스명 생성 - 값이 없을 때만 텍스트를 투명하게
+  const inputClassName = `body1-16-medium flex-1 bg-transparent outline-none disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:top-0 [&::-webkit-calendar-picker-indicator]:left-0 [&::-webkit-calendar-picker-indicator]:h-full [&::-webkit-calendar-picker-indicator]:w-full [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:opacity-0 ${
+    hasValue || isFocused
+      ? 'text-text-neutral-primary [&::-webkit-datetime-edit]:text-text-neutral-primary [&::-webkit-datetime-edit-text]:text-text-neutral-primary [&::-webkit-datetime-edit-month-field]:text-text-neutral-primary [&::-webkit-datetime-edit-day-field]:text-text-neutral-primary [&::-webkit-datetime-edit-year-field]:text-text-neutral-primary [&::-webkit-datetime-edit-hour-field]:text-text-neutral-primary [&::-webkit-datetime-edit-minute-field]:text-text-neutral-primary [&::-webkit-datetime-edit-second-field]:text-text-neutral-primary [&::-webkit-datetime-edit-millisecond-field]:text-text-neutral-primary [&::-webkit-datetime-edit-meridiem-field]:text-text-neutral-primary'
+      : 'text-transparent [&::-webkit-datetime-edit]:text-transparent [&::-webkit-datetime-edit-text]:text-transparent [&::-webkit-datetime-edit-month-field]:text-transparent [&::-webkit-datetime-edit-day-field]:text-transparent [&::-webkit-datetime-edit-year-field]:text-transparent [&::-webkit-datetime-edit-hour-field]:text-transparent [&::-webkit-datetime-edit-minute-field]:text-transparent [&::-webkit-datetime-edit-second-field]:text-transparent [&::-webkit-datetime-edit-millisecond-field]:text-transparent [&::-webkit-datetime-edit-meridiem-field]:text-transparent'
+  }`;
+
   return (
-    <div
-      className={`relative flex h-[5.1rem] w-full items-center rounded-[0.8rem] border px-[1.6rem] transition-[color,box-shadow] ${
-        error
-          ? 'focus-within:ring-red-10 border-red-50 focus-within:border-red-50'
-          : 'border-stroke-neutral-dark bg-background-default-white focus-within:border-stroke-mint focus-within:ring-stroke-mint/20'
-      }`}>
+    <div className='relative flex h-[5.1rem] w-full items-center border-b px-[1.6rem] transition-[color,box-shadow]'>
       <input
         type={type}
-        className='text-text-neutral-primary placeholder:text-text-neutral-assistive flex-1 bg-transparent outline-none disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50'
-        placeholder={placeholder}
+        className={inputClassName}
         onFocus={() => setIsFocused(true)}
         onBlur={(e) => {
           setIsFocused(false);
@@ -165,7 +103,16 @@ const DropdownInput = ({
         aria-invalid={!!error}
         {...props}
       />
-      <div className='text-icon-neutral-primary flex-center ml-[0.8rem] h-[2.4rem] w-[2.4rem] transition-transform duration-200'>
+
+      {/* 커스텀 placeholder - 값이 없고 포커스되지 않았을 때만 표시 */}
+      {!hasValue && !isFocused && placeholder && (
+        <div className='body1-16-medium text-text-neutral-assistive pointer-events-none absolute left-[1.6rem] select-none'>
+          {placeholder}
+        </div>
+      )}
+
+      {/* 아이콘 - 순수 스타일링용 */}
+      <div className='text-icon-neutral-primary flex-center pointer-events-none ml-[0.8rem] h-[2.4rem] w-[2.4rem] transition-transform duration-200'>
         {isFocused ? (
           <IcChevronUp className='h-[2.4rem] w-[2.4rem]' />
         ) : (
@@ -177,75 +124,92 @@ const DropdownInput = ({
 };
 
 const Input = ({
+  name,
   size = 'M',
   type,
   description,
   placeholder,
   error,
-  onChange,
-  value,
+  register,
   ...props
 }: {
+  name: string;
   size?: 'S' | 'M';
   type: 'cost' | 'number' | 'text' | 'contact';
   description?: string;
   placeholder?: string;
   error?: string;
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  value?: string;
-} & Omit<InputHTMLAttributes<HTMLInputElement>, 'size' | 'type' | 'value' | 'onChange'>) => {
+  register: ReturnType<typeof useFormContext>['register'];
+} & Omit<InputHTMLAttributes<HTMLInputElement>, 'size' | 'type'>) => {
   const sizeStyles = {
     S: 'h-[4.4rem]',
     M: 'h-[5.1rem]',
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let inputValue = e.target.value;
+  // 포맷팅 함수들 (UI 표시용)
+  const formatContact = useCallback((value: string): string => {
+    const numbers = value.replace(/[^0-9]/g, '');
+    if (numbers.length <= 3) return numbers;
+    if (numbers.length <= 7) return `${numbers.slice(0, 3)}-${numbers.slice(3)}`;
+    return `${numbers.slice(0, 3)}-${numbers.slice(3, 7)}-${numbers.slice(7, 11)}`;
+  }, []);
 
-    // 숫자만 입력 가능하도록 제한 (cost, number, contact)
-    if (type === 'cost' || type === 'number' || type === 'contact') {
-      inputValue = inputValue.replace(/[^0-9]/g, '');
-    }
+  const formatCost = useCallback((value: string): string => {
+    const numbers = value.replace(/[^0-9]/g, '');
+    if (numbers === '') return '';
+    const numericValue = parseInt(numbers, 10);
+    return isNaN(numericValue) ? '' : numericValue.toLocaleString();
+  }, []);
 
-    // contact 타입: 000-0000-0000 형태로 포맷팅
-    if (type === 'contact' && inputValue.length > 0) {
-      if (inputValue.length <= 3) {
-        inputValue = inputValue;
-      } else if (inputValue.length <= 7) {
-        inputValue = `${inputValue.slice(0, 3)}-${inputValue.slice(3)}`;
-      } else {
-        inputValue = `${inputValue.slice(0, 3)}-${inputValue.slice(3, 7)}-${inputValue.slice(7, 11)}`;
+  const formatNumber = useCallback((value: string): string => {
+    return value.replace(/[^0-9]/g, '');
+  }, []);
+
+  // 표시용 값 state (포맷팅된 값)
+  const [displayValue, setDisplayValue] = useState('');
+
+  // React Hook Form의 register 분해
+  const { onChange, onBlur, ref } = register(name);
+
+  const handleInputChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      let inputValue = e.target.value;
+      let formattedValue = inputValue;
+
+      // 타입별 포맷팅 적용 (UI 표시용)
+      switch (type) {
+        case 'contact':
+          formattedValue = formatContact(inputValue);
+          break;
+        case 'cost':
+          formattedValue = formatCost(inputValue);
+          break;
+        case 'number':
+          formattedValue = formatNumber(inputValue);
+          break;
+        default:
+          formattedValue = inputValue;
       }
-    }
 
-    // cost 타입: toLocaleString 적용 (빈 값 처리 개선)
-    if (type === 'cost' && inputValue.length > 0) {
-      const numericValue = parseInt(inputValue, 10);
-      if (!isNaN(numericValue)) {
-        inputValue = numericValue.toLocaleString();
-      }
-    }
+      // UI에 표시될 값 업데이트
+      setDisplayValue(formattedValue);
 
-    // number 타입: 숫자만 허용
-    if (type === 'number' && inputValue.length > 0) {
-      const numericValue = parseInt(inputValue, 10);
-      if (!isNaN(numericValue)) {
-        inputValue = numericValue.toString();
-      }
-    }
+      // React Hook Form에는 원본 숫자 값 저장 (포맷팅 제거)
+      const rawValue =
+        type === 'contact' || type === 'cost' || type === 'number'
+          ? formattedValue.replace(/[^0-9]/g, '')
+          : formattedValue;
 
-    // 원본 onChange 이벤트 호출
-    if (onChange) {
-      const syntheticEvent = {
-        ...e,
+      // React Hook Form의 onChange 호출
+      onChange({
         target: {
-          ...e.target,
-          value: inputValue,
+          name,
+          value: rawValue,
         },
-      };
-      onChange(syntheticEvent);
-    }
-  };
+      });
+    },
+    [type, formatContact, formatCost, formatNumber, onChange, name]
+  );
 
   // cost 타입일 때 description 기본값 설정
   const finalDescription = type === 'cost' ? '원' : description;
@@ -259,25 +223,22 @@ const Input = ({
       }`}>
       <input
         type='text'
-        className='text-text-neutral-primary placeholder:text-text-neutral-assistive flex-1 bg-transparent outline-none disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50'
+        className='body1-16-medium text-text-neutral-primary placeholder:text-text-neutral-assistive flex-1 bg-transparent outline-none disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50'
         placeholder={placeholder}
-        value={value}
+        value={displayValue}
         onChange={handleInputChange}
+        onBlur={onBlur}
+        ref={ref}
         aria-invalid={!!error}
         {...props}
       />
       {finalDescription && (
-        <div className='text-text-neutral-assistive ml-[0.8rem] select-none'>
+        <div className='body1-16-medium text-text-neutral-assistive ml-[0.8rem] select-none'>
           {finalDescription}
         </div>
       )}
     </div>
   );
 };
-
-// Compound Component Export
-FormInput.Label = FormInputLabel;
-FormInput.Input = FormInputInput;
-FormInput.Content = FormInputContent;
 
 export default FormInput;
