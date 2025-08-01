@@ -1,6 +1,7 @@
 package com.todoc.server.domain.escort.entity;
 
 import com.todoc.server.common.entity.BaseEntity;
+import com.todoc.server.common.enumeration.EscortStatus;
 import com.todoc.server.domain.auth.entity.Auth;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -28,5 +29,6 @@ public class Escort extends BaseEntity {
 
     private String memo;
 
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private EscortStatus status;
 }
