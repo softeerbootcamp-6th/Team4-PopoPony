@@ -54,7 +54,7 @@ const Button = ({
       className={`${baseStyle} ${disabled ? disabledVariantStyle[variant] : variantStyle[variant]} ${sizeStyle[size]}`}
       {...props}>
       <Spinner size={spinnerSize[size]} color={spinnerColor[variant]} isLoading={isLoading} />
-      {!isLoading && <div>{children}</div>}
+      {!isLoading && <>{children}</>}
     </button>
   );
 };
