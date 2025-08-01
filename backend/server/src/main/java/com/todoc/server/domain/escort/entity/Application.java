@@ -1,7 +1,7 @@
 package com.todoc.server.domain.escort.entity;
 
 import com.todoc.server.common.entity.BaseEntity;
-import com.todoc.server.domain.helper.entity.Helper;
+import com.todoc.server.domain.auth.entity.Auth;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,7 +21,7 @@ public class Application extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "helper_id")
-    private Helper helper;
+    private Auth helper;
 
     private String status;
 }
