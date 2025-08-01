@@ -2,6 +2,7 @@ package com.todoc.server.domain.review.entity;
 
 import com.todoc.server.common.enumeration.SatisfactionLevel;
 import com.todoc.server.common.entity.BaseEntity;
+import com.todoc.server.domain.auth.entity.Auth;
 import com.todoc.server.domain.escort.entity.Escort;
 import com.todoc.server.domain.helper.entity.Helper;
 import jakarta.persistence.*;
@@ -21,8 +22,12 @@ public class Review extends BaseEntity {
     private Escort escort;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "customer_id")
+    private Auth customer;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "helper_id")
-    private Helper helper;
+    private Auth helper;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "satisfaction_level")
