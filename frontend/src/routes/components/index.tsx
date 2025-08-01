@@ -1,7 +1,15 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { Button, LabeledSection, TwoOptionSelector, TextField, ProgressBar } from '@components';
+import {
+  Button,
+  LabeledSection,
+  TwoOptionSelector,
+  TextField,
+  ProgressBar,
+  Modal,
+} from '@components';
 import { useForm, FormProvider, type SubmitHandler } from 'react-hook-form';
 import type { HTMLAttributes } from 'react';
+import { useModal } from '@hooks';
 
 export const Route = createFileRoute('/components/')({
   component: RouteComponent,
@@ -16,6 +24,22 @@ function RouteComponent() {
   const onSubmit: SubmitHandler<FormValues> = (data) => {
     console.log('Final Data:', data);
   };
+  // Modal hooks
+  const {
+    modalRef: singleModalRef,
+    openModal: openSingleModal,
+    closeModal: closeSingleModal,
+  } = useModal();
+  const {
+    modalRef: doubleModalRef,
+    openModal: openDoubleModal,
+    closeModal: closeDoubleModal,
+  } = useModal();
+  const {
+    modalRef: confirmModalRef,
+    openModal: openConfirmModal,
+    closeModal: closeConfirmModal,
+  } = useModal();
 
   interface SectionProps extends HTMLAttributes<HTMLDivElement> {
     title: string;
@@ -171,6 +195,66 @@ function RouteComponent() {
           </div>
         </div>
       </Section>
+      <Section title='Modal'>
+        <div className='flex flex-col gap-[1.6rem]'>
+          <Button variant='primary' size='md' onClick={openSingleModal}>
+            단일 버튼 모달
+          </Button>
+          <Button variant='secondary' size='md' onClick={openDoubleModal}>
+            이중 버튼 모달
+          </Button>
+          <Button variant='assistive' size='md' onClick={openConfirmModal}>
+            확인 모달
+          </Button>
+        </div>
+      </Section>
+      {/* Modal components */}
+      <Modal ref={singleModalRef}>
+        <Modal.Title>알림</Modal.Title>
+        <Modal.Content>
+          정말로 삭제하시겠습니까?
+          <br />
+          삭제된 데이터는 복구할 수 없습니다.
+        </Modal.Content>
+        <Modal.ButtonContainer>
+          <Modal.ConfirmButton onClick={closeSingleModal}>확인</Modal.ConfirmButton>
+        </Modal.ButtonContainer>
+      </Modal>
+      {/* 이중 버튼 모달 */}
+      <Modal ref={doubleModalRef}>
+        <Modal.Title>동행 신청 완료</Modal.Title>
+        <Modal.Content>
+          동행 신청이 성공적으로 완료되었습니다.
+          <br />
+          신청 내역은 마이페이지에서 확인하실 수 있습니다.
+        </Modal.Content>
+        <Modal.ButtonContainer>
+          <Modal.CloseButton onClick={closeDoubleModal}>취소</Modal.CloseButton>
+          <Modal.ConfirmButton
+            onClick={() => {
+              alert('확인 버튼 클릭됨!');
+              closeDoubleModal();
+            }}>
+            확인
+          </Modal.ConfirmButton>
+        </Modal.ButtonContainer>
+      </Modal>
+      {/* 확인 모달 */}
+      <Modal ref={confirmModalRef}>
+        <Modal.Title>주의사항</Modal.Title>
+        <Modal.Content>
+          동행 서비스를 이용하기 전에 다음 사항을 확인해주세요:
+          <br />
+          <br />
+          • 환자의 건강 상태가 안정적인지 확인
+          <br />
+          • 필요한 의료용품을 준비
+          <br />• 병원 예약 시간을 확인
+        </Modal.Content>
+        <Modal.ButtonContainer>
+          <Modal.ConfirmButton onClick={closeConfirmModal}>이해했습니다</Modal.ConfirmButton>
+        </Modal.ButtonContainer>
+      </Modal>
     </div>
   );
 }

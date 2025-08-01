@@ -1,3 +1,4 @@
 import { useFunnel } from './useFunnel';
+import useModal from './useModal';
 
-export { useFunnel };
+export { useFunnel, useModal };
