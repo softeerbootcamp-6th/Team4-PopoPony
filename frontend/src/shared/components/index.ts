@@ -5,9 +5,10 @@ import LabeledSection from './LabeledSection';
 import Spinner from './Spinner';
 import TopAppBar from './TopAppBar';
 import TwoOptionSelector from './TwoOptionSelector';
-import TextField from './TextField/TextField_S';
+import FormInput from './TextField/FormInput';
 import Landing from './Landing';
 import Modal from './modal/Modal';
+import BottomSheet from './modal/BottomSheet';
 
 export {
   Button,
@@ -16,8 +17,9 @@ export {
   Spinner,
   TopAppBar,
   TwoOptionSelector,
-  TextField,
+  FormInput,
   Landing,
   ProgressBar,
   Modal,
+  BottomSheet,
 };

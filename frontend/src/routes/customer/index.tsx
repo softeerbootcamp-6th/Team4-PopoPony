@@ -1,6 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { PageLayout } from '@layouts';
-import { Button } from '@components';
+import { Button, Modal } from '@components';
+import { useModal } from '@hooks';
 import { IcPlusSideLeft } from '@icons';
 
 export const Route = createFileRoute('/customer/')({
@@ -8,6 +9,7 @@ export const Route = createFileRoute('/customer/')({
 });
 
 function RouteComponent() {
+  const { modalRef, isOpen, openModal, closeModal } = useModal();
   return (
     <PageLayout>
       <PageLayout.Content>
@@ -18,7 +20,7 @@ function RouteComponent() {
               토닥과 함께 <br />
               안전하게 동행하세요!
             </h2>
-            <Button variant='assistive' size='md'>
+            <Button variant='assistive' size='md' onClick={openModal}>
               <IcPlusSideLeft />
               <span className='text-text-neutral-primary'>새로운 동행 신청하기</span>
             </Button>
@@ -29,6 +31,17 @@ function RouteComponent() {
             className='absolute top-[-4.4rem] right-0 w-[24.8rem]'
           />
         </div>
+        <Modal ref={modalRef} isOpen={isOpen} onClose={closeModal}>
+          <Modal.Title>알림</Modal.Title>
+          <Modal.Content>
+            정말로 삭제하시겠습니까?
+            <br />
+            삭제된 데이터는 복구할 수 없습니다.
+          </Modal.Content>
+          <Modal.ButtonContainer>
+            <Modal.ConfirmButton onClick={closeModal}>확인</Modal.ConfirmButton>
+          </Modal.ButtonContainer>
+        </Modal>
       </PageLayout.Content>
     </PageLayout>
   );

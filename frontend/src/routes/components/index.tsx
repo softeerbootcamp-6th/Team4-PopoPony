@@ -3,9 +3,10 @@ import {
   Button,
   LabeledSection,
   TwoOptionSelector,
-  TextField,
+  FormInput,
   ProgressBar,
   Modal,
+  BottomSheet,
 } from '@components';
 import { useForm, FormProvider, type SubmitHandler } from 'react-hook-form';
 import type { HTMLAttributes } from 'react';
@@ -17,6 +18,10 @@ export const Route = createFileRoute('/components/')({
 
 type FormValues = {
   cognitive: string;
+  name: string;
+  memo: string;
+  price: string;
+  birthDate: string;
 };
 
 function RouteComponent() {
@@ -27,16 +32,19 @@ function RouteComponent() {
   // Modal hooks
   const {
     modalRef: singleModalRef,
+    isOpen: isSingleModalOpen,
     openModal: openSingleModal,
     closeModal: closeSingleModal,
   } = useModal();
   const {
     modalRef: doubleModalRef,
+    isOpen: isDoubleModalOpen,
     openModal: openDoubleModal,
     closeModal: closeDoubleModal,
   } = useModal();
   const {
     modalRef: confirmModalRef,
+    isOpen: isConfirmModalOpen,
     openModal: openConfirmModal,
     closeModal: closeConfirmModal,
   } = useModal();
@@ -99,6 +107,19 @@ function RouteComponent() {
 
       <Section title='LabeledSection/TwoOptionSelector'>
         <FormProvider {...methods}>
+          {/* 체크 기능이 있는 일반 input */}
+          <FormInput>
+            <FormInput.Label text='이름' name='name' doCheck={true} required />
+            <FormInput.Input name='name' type='text' placeholder='이름을 입력하세요' />
+          </FormInput>
+
+          {/* 체크 기능 없는 단순 제목 */}
+          <FormInput>
+            <FormInput.Label text='메모' doCheck={false} />
+            <FormInput.Input name='memo' type='text' placeholder='메모를 입력하세요' />
+          </FormInput>
+
+          {/* TwoOptionSelector와 함께 사용 */}
           <LabeledSection label='인지능력' isChecked={!!methods.watch('cognitive')}>
             <TwoOptionSelector
               name='cognitive'
@@ -106,9 +127,18 @@ function RouteComponent() {
               rightOption={{ label: '도움이 필요해요', value: 'help' }}
             />
           </LabeledSection>
-          <form onSubmit={methods.handleSubmit(onSubmit)}>
-            <Button type='submit'>Submit</Button>
-          </form>
+
+          {/* 가격 입력 */}
+          <FormInput>
+            <FormInput.Label text='가격 정보' name='price' doCheck={true} />
+            <FormInput.Input name='price' type='cost' placeholder='가격을 입력하세요' />
+          </FormInput>
+
+          {/* 날짜 선택 */}
+          <FormInput>
+            <FormInput.Label text='생년월일' name='birthDate' doCheck={true} />
+            <FormInput.Input name='birthDate' type='date' placeholder='날짜를 선택하세요' />
+          </FormInput>
         </FormProvider>
       </Section>
 
@@ -119,83 +149,7 @@ function RouteComponent() {
         <ProgressBar maxStep={4} currentStep={1} />
       </Section>
 
-      {/* TextField Section */}
-      <Section title='TextField'>
-        <div className='flex w-[32rem] flex-col gap-[2.4rem]'>
-          {/* Text Type - Size Variants */}
-          <div className='space-y-[1.2rem]'>
-            <h4 className='text-neutral-80 body-16-medium'>Text Type</h4>
-            <TextField
-              size='S'
-              type='text'
-              label='환자 나이 (Size S)'
-              placeholder='나이를 입력하세요'
-            />
-            <TextField
-              size='M'
-              type='text'
-              label='환자 나이 (Size M)'
-              placeholder='나이를 입력하세요'
-            />
-            <TextField size='M' type='text' label='입력된 상태' value='입력된 텍스트' />
-          </div>
-
-          {/* Unit Type */}
-          <div className='space-y-[1.2rem]'>
-            <h4 className='text-neutral-80 body-16-medium'>Unit Type</h4>
-            <TextField size='S' type='unit' unit='세' label='나이 (세 단위)' placeholder='0' />
-            <TextField size='M' type='unit' unit='세' label='나이 (세 단위)' value='25' />
-            <TextField size='S' type='unit' unit='원' label='금액 (원 단위)' placeholder='0' />
-            <TextField size='M' type='unit' unit='원' label='금액 (원 단위)' value='150000' />
-          </div>
-
-          {/* File Type */}
-          <div className='space-y-[1.2rem]'>
-            <h4 className='text-neutral-80 body-16-medium'>File Type</h4>
-            <TextField
-              size='S'
-              type='file'
-              label='첨부파일 (Size S)'
-              placeholder='파일을 선택하세요'
-              onFileSelect={() => alert('파일 선택 클릭됨')}
-            />
-            <TextField
-              size='M'
-              type='file'
-              label='첨부파일 (Size M)'
-              placeholder='파일을 선택하세요'
-              onFileSelect={() => alert('파일 선택 클릭됨')}
-            />
-            <TextField
-              size='M'
-              type='file'
-              label='업로드된 파일'
-              value='자격증.jpg'
-              onFileSelect={() => alert('파일 재선택 클릭됨')}
-            />
-          </div>
-
-          {/* Combined Examples */}
-          <div className='space-y-[1.2rem]'>
-            <h4 className='text-neutral-80 body-16-medium'>Various States</h4>
-            <TextField
-              size='M'
-              type='text'
-              label='읽기 전용'
-              value='수정할 수 없는 텍스트'
-              readOnly
-            />
-            <TextField
-              size='M'
-              type='text'
-              label='비활성화'
-              placeholder='비활성화된 입력'
-              disabled
-            />
-          </div>
-        </div>
-      </Section>
-      <Section title='Modal'>
+      <Section title='Modal은 작동 안해요!! PageLayout 안에 있어야 해요!!'>
         <div className='flex flex-col gap-[1.6rem]'>
           <Button variant='primary' size='md' onClick={openSingleModal}>
             단일 버튼 모달
@@ -209,7 +163,7 @@ function RouteComponent() {
         </div>
       </Section>
       {/* Modal components */}
-      <Modal ref={singleModalRef}>
+      <Modal ref={singleModalRef} isOpen={isSingleModalOpen} onClose={closeSingleModal}>
         <Modal.Title>알림</Modal.Title>
         <Modal.Content>
           정말로 삭제하시겠습니까?
@@ -221,7 +175,7 @@ function RouteComponent() {
         </Modal.ButtonContainer>
       </Modal>
       {/* 이중 버튼 모달 */}
-      <Modal ref={doubleModalRef}>
+      <Modal ref={doubleModalRef} isOpen={isDoubleModalOpen} onClose={closeDoubleModal}>
         <Modal.Title>동행 신청 완료</Modal.Title>
         <Modal.Content>
           동행 신청이 성공적으로 완료되었습니다.
@@ -240,7 +194,7 @@ function RouteComponent() {
         </Modal.ButtonContainer>
       </Modal>
       {/* 확인 모달 */}
-      <Modal ref={confirmModalRef}>
+      <Modal ref={confirmModalRef} isOpen={isConfirmModalOpen} onClose={closeConfirmModal}>
         <Modal.Title>주의사항</Modal.Title>
         <Modal.Content>
           동행 서비스를 이용하기 전에 다음 사항을 확인해주세요:

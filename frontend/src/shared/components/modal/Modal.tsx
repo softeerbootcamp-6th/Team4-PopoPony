@@ -1,4 +1,5 @@
-import React, { type ReactNode } from 'react';
+import { type ReactNode } from 'react';
+import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { Button } from '@components';
 import type { ButtonProps } from '../Button';
@@ -6,29 +7,45 @@ import type { ButtonProps } from '../Button';
 // Main Modal Component
 interface ModalProps {
   children: ReactNode;
-  ref?: React.RefObject<HTMLDialogElement | null>;
+  ref?: React.RefObject<HTMLDivElement | null>;
+  isOpen?: boolean;
+  onClose?: () => void;
 }
 
-const Modal = ({ children, ref }: ModalProps) => {
-  const modalRoot = document.getElementById('modal');
-  if (!modalRoot) return null;
+const Modal = ({ children, ref, isOpen = false, onClose }: ModalProps) => {
+  const [container, setContainer] = useState<HTMLElement | null>(null);
+
+  useEffect(() => {
+    const containerElement = document.getElementById('page-layout-container');
+    setContainer(containerElement);
+  }, []);
+
+  if (!container || !isOpen) return null;
+
+  const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    // 클릭된 요소가 backdrop이라면
+    if (e.target === e.currentTarget) {
+      onClose?.();
+    }
+  };
 
   return createPortal(
-    <dialog
-      ref={ref}
-      className='bg-background-default-white backdrop:bg-black-opacity-40 top-[50%] left-[50%] w-[30rem] -translate-x-1/2 -translate-y-1/2 rounded-[1.2rem] border-none focus:outline-none'
-      onClick={() => {
-        ref?.current?.close();
-      }}>
-      <div
-        className='flex flex-col p-[2rem]'
-        onClick={(e) => {
-          e.stopPropagation();
-        }}>
-        {children}
+    <>
+      {/* Backdrop */}
+      <div className='bg-black-opacity-40 absolute inset-0 z-40' onClick={handleBackdropClick} />
+
+      {/* Modal Content */}
+      <div className='pointer-events-none absolute inset-0 z-50 flex items-center justify-center'>
+        <div
+          ref={ref as React.RefObject<HTMLDivElement>}
+          className='pointer-events-auto relative w-[30rem] rounded-[1.2rem] bg-[var(--color-background-default-white)] p-[2rem] focus:outline-none'
+          role='dialog'
+          aria-modal='true'>
+          {children}
+        </div>
       </div>
-    </dialog>,
-    modalRoot
+    </>,
+    container
   );
 };
 
@@ -75,7 +92,7 @@ const ModalButton = ({ children, onClick, variant = 'primary', disabled = false 
   );
 };
 
-// Confirm Button (Primary)
+// 확인버튼 (Primary)
 const ModalConfirmButton = ({ children, onClick, disabled }: ButtonProps) => {
   return (
     <ModalButton variant='primary' onClick={onClick} disabled={disabled}>
