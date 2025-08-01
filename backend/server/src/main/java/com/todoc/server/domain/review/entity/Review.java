@@ -33,10 +33,6 @@ public class Review extends BaseEntity {
     @Column(name = "satisfaction_level")
     private SatisfactionLevel satisfactionLevel;
 
-    @Column(columnDefinition = "json",
-            name = "positive_feedback")
-    private String positiveFeedback;
-
     @Column(name = "negative_feedback")
     private String negativeFeedback;
 
