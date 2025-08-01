@@ -7,6 +7,7 @@ import TopAppBar from './TopAppBar';
 import TwoOptionSelector from './TwoOptionSelector';
 import TextField from './TextField/TextField_S';
 import Landing from './Landing';
+import Tabs from './Tabs';
 
 export {
   Button,
@@ -18,4 +19,5 @@ export {
   TextField,
   Landing,
   ProgressBar,
+  Tabs,
 };
