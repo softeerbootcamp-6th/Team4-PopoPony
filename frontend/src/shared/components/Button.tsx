@@ -1,7 +1,7 @@
 import type { ButtonHTMLAttributes } from 'react';
 import Spinner from './Spinner';
 
-interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
+export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   disabled?: boolean;
   variant?: 'primary' | 'secondary' | 'assistive';
   size?: 'sm' | 'md' | 'lg';
@@ -15,8 +15,8 @@ const Button = ({
   isLoading,
   children,
   ...props
-}: Props) => {
-  const baseStyle = `w-full flex-center`;
+}: ButtonProps) => {
+  const baseStyle = `w-full flex-center focus:outline-none`;
 
   const variantStyle = {
     primary: 'bg-mint-50 text-neutral-0',
@@ -54,7 +54,7 @@ const Button = ({
       className={`${baseStyle} ${disabled ? disabledVariantStyle[variant] : variantStyle[variant]} ${sizeStyle[size]}`}
       {...props}>
       <Spinner size={spinnerSize[size]} color={spinnerColor[variant]} isLoading={isLoading} />
-      {!isLoading && <div>{children}</div>}
+      {!isLoading && <>{children}</>}
     </button>
   );
 };
