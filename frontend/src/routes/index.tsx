@@ -27,7 +27,7 @@ function App() {
         <h2 className='title-20-bold text-text-neutral-secondary'>토닥과 함께, 투-닥터</h2>
       </div>
 
-      <div className='flex-col-center mt-[4rem] cursor-pointer gap-[1.6rem]'>
+      <div className='flex-col-center mt-[4rem] cursor-pointer gap-[0.8rem]'>
         {landingButtonData.map((data) => (
           <Link
             key={data.title}
