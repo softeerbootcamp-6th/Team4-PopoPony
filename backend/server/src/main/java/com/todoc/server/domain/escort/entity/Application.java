@@ -22,6 +22,4 @@ public class Application extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "helper_id")
     private Auth helper;
-
-    private String status;
 }
