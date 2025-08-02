@@ -1,0 +1,79 @@
+import type { ReactNode } from 'react';
+import { StatusTag, StrengthTag } from '@components';
+import { IcChevronRightSecondary, IcClockFill, IcCoinFill, IcMarkFill } from '@icons';
+
+type Props = {
+  children: React.ReactNode;
+};
+
+const EscortCard = ({ children }: Props) => {
+  return (
+    // TODO: 그림자 추가
+    <div className='bg-background-default-white border-stroke-neutral-dark flex w-full flex-col gap-[1.2rem] rounded-[0.8rem] border p-[1.6rem]'>
+      {children}
+    </div>
+  );
+};
+
+interface CardStatusHeaderProps {
+  status?: 'matching' | 'matching-confirmed' | 'escort' | 'escort-completed';
+  text: string;
+  title: string;
+}
+
+const CardStatusHeader = ({ status, text, title }: CardStatusHeaderProps) => {
+  return (
+    <>
+      <div className='flex-start gap-[0.4rem]'>
+        {status && <StatusTag status={status} />}
+        <span className='label2-14-medium text-text-neutral-secondary'>{text}</span>
+      </div>
+      <div className='flex-between mt-[0.6rem]'>
+        <h3 className='subtitle-18-bold text-text-neutral-primary'>{title}</h3>
+        <IcChevronRightSecondary color='text-text-neutral-secondary' />
+      </div>
+    </>
+  );
+};
+
+const CardDivider = () => {
+  return <div className='bg-stroke-neutral-light h-[0.1rem] w-full' />;
+};
+
+const InfoSection = ({ children }: { children: ReactNode }) => {
+  return <div className='flex flex-col gap-[0.4rem]'>{children}</div>;
+};
+
+interface CardInfoProps {
+  type: 'time' | 'location' | 'price';
+  text: string;
+}
+
+const CardInfo = ({ type, text }: CardInfoProps) => {
+  return (
+    <div className='flex-start gap-[0.8rem]'>
+      {type === 'time' && <IcClockFill />}
+      {type === 'location' && <IcMarkFill />}
+      {type === 'price' && <IcCoinFill />}
+      <span className='label2-14-medium text-text-neutral-primary'>{text}</span>
+    </div>
+  );
+};
+
+const CardTags = ({ tags }: { tags: ('safety' | 'wheelchair' | 'care')[] }) => {
+  return (
+    <div className='flex-start gap-[0.4rem]'>
+      {tags.map((tag) => (
+        <StrengthTag key={tag} type={tag} />
+      ))}
+    </div>
+  );
+};
+
+EscortCard.Divider = CardDivider;
+EscortCard.StatusHeader = CardStatusHeader;
+EscortCard.InfoSection = InfoSection;
+EscortCard.Info = CardInfo;
+EscortCard.Tag = CardTags;
+
+export default EscortCard;

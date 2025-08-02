@@ -8,6 +8,10 @@ import TwoOptionSelector from './TwoOptionSelector';
 import TextField from './TextField/TextField_S';
 import Landing from './Landing';
 import Tabs from './Tabs';
+import EscortCard from './EscortCard';
+import StatusTag from './StatusTag';
+import Tag from './Tag';
+import StrengthTag from './StrengthTag';
 
 export {
   Button,
@@ -20,4 +24,8 @@ export {
   Landing,
   ProgressBar,
   Tabs,
+  EscortCard,
+  StatusTag,
+  Tag,
+  StrengthTag,
 };
