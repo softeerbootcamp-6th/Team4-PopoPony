@@ -1,15 +1,18 @@
 package com.todoc.server.domain.escort.web.controller;
 
 import com.todoc.server.common.response.Response;
+import com.todoc.server.domain.escort.web.dto.request.RecruitCreateRequest;
 import com.todoc.server.domain.escort.web.dto.response.RecruitListResponse;
 import com.todoc.server.domain.escort.web.dto.response.RecruitSimpleResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,9 +27,6 @@ import java.util.List;
 @RequestMapping("api/escorts")
 public class RecruitController {
 
-    /**
-     * "고객으로서" 동행 목록 조회하는 API
-     */
     @Operation(
             summary = "고객의 동행 목록 조회",
             description = "로그인한 고객이 신청한 동행 목록(진행중/완료)을 조회합니다.")
@@ -38,7 +38,7 @@ public class RecruitController {
                     schema = @Schema(implementation = Response.class)
             ))
     @GetMapping("/customer")
-    public Response<RecruitListResponse> getEscortListAsCustomer() {
+    public Response<RecruitListResponse> getRecruitListAsCustomer() {
         // TODO :: 원래라면 jwt 혹은 sessionId로부터 유저 정보를 조회해야 함
         // 현재는 우선 userId = 1로 고정
 
@@ -63,6 +63,28 @@ public class RecruitController {
                 .inProgressList(list).build();
 
         return Response.from(mock);
+    }
+
+    @Operation(
+            summary = "고객의 동행 신청",
+            description = "로그인한 고객이 동행을 신청합니다.")
+    @ApiResponse(
+            responseCode = "200",
+            description = "동행 목록 신청 성공",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = Response.class)
+            ))
+    @PostMapping("")
+    public Response<Void> createRecruit(@RequestBody RecruitCreateRequest requestDto) {
+        // TODO :: 원래라면 jwt 혹은 sessionId로부터 유저 정보를 조회해야 함
+        // 현재는 우선 userId = 1로 고정
+
+
+        // 각종 엔티티 생성
+
+
+        return Response.from();
 
     }
 }
