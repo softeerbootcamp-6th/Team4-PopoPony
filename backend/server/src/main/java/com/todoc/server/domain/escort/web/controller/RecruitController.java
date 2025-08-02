@@ -13,11 +13,7 @@ import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -42,8 +38,8 @@ public class RecruitController {
                     mediaType = "application/json",
                     schema = @Schema(implementation = Response.class)
             ))
-    @GetMapping("/customer")
-    public Response<RecruitListResponse> getRecruitListAsCustomer(@RequestParam(name = "userId") Long userId) {
+    @GetMapping("/customers/{userId}")
+    public Response<RecruitListResponse> getRecruitListAsCustomer(@PathVariable(name = "userId") Long userId) {
         // TODO :: 원래라면 jwt 혹은 sessionId로부터 유저 정보를 조회해야 함
         // 현재는 우선 userId = 1로 고정
 
