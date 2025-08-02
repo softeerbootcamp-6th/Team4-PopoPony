@@ -12,14 +12,14 @@ import java.time.LocalTime;
 @Schema(description = "동행 신청 요청 DTO")
 public class RecruitCreateRequest {
     
-    @Schema(description = "환자 이미지 URL")
+    @Schema(description = "환자 이미지 URL", example = "https://example.com/patient.png")
     private String imageUrl;
 
-    @Schema(description = "환자 이름")
+    @Schema(description = "환자 이름", example = "홍길동")
     private String patientName;
     
-    @Schema(description = "환자 나이")
-    private String patientAge;
+    @Schema(description = "환자 나이", example = "81")
+    private Integer patientAge;
 
     @Schema(description = "환자 성별", example = "GENDER.MALE")
     private Gender patientGender;
@@ -42,7 +42,7 @@ public class RecruitCreateRequest {
     @Schema(description = "의사소통 이슈가 있는지", example = "true")
     private boolean hasCommunicationIssue;
 
-    @Schema(description = "의사소통 이슈가 있다면, 디테일 설명")
+    @Schema(description = "의사소통 이슈가 있다면, 디테일 설명", example = "이가 많이 없으셔서.. 천천히 이야기 들어주세요")
     private boolean communicationIssueDetail;
 
     @Schema(description = "동행 날짜", example = "2025-08-01")
@@ -72,14 +72,14 @@ public class RecruitCreateRequest {
     @Schema(description = "복귀 장소에 대한 추가 정보", example = "103동 402호 현관 앞")
     private String returnLocationDetail;
 
-    @Schema(description = "동행 목적")
+    @Schema(description = "동행 목적", example = "정기 진료")
     private String purpose;
 
-    @Schema(description = "기타 요청사항")
+    @Schema(description = "기타 요청사항", example = "약 수령도 대신 부탁드립니다.")
     private String otherRequestDetail;
 
     @Builder
-    public RecruitCreateRequest(String imageUrl, String patientName, String patientAge, Gender patientGender,
+    public RecruitCreateRequest(String imageUrl, String patientName, Integer patientAge, Gender patientGender,
                                 String patientPhoneNumber, boolean needsHelping, boolean usesWheelchair, boolean hasCognitiveIssue,
                                 boolean cognitiveIssueDetail, boolean hasCommunicationIssue, boolean communicationIssueDetail,
                                 LocalDate escortDate, LocalTime estimatedMeetingTime, LocalTime estimatedReturnTime, String departureLocation,
