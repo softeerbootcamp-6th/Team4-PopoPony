@@ -1,5 +1,6 @@
 package com.todoc.server.domain.escort.web.dto.response;
 
+import com.todoc.server.common.enumeration.RecruitStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,14 +13,14 @@ import java.time.LocalTime;
 public class RecruitSimpleResponse {
 
     @Schema(description = "동행 신청 ID")
-    private Long escortId;
+    private Long recruitId;
 
     // 매칭중, 매칭완료, 동행중
     @Schema(description = "동행 신청의 진행 상태", allowableValues = {"MATCHING", "COMPLETED", "IN_PROGRESS", "DONE"})
-    private String status;
+    private RecruitStatus status;
 
     @Schema(description = "지원한 도우미 수")
-    private Integer numberOfApplication;
+    private Long numberOfApplication;
 
     @Schema(description = "동행 날짜", example = "2025-08-01")
     private LocalDate escortDate;
@@ -37,8 +38,8 @@ public class RecruitSimpleResponse {
     private String destination;
 
     @Builder
-    public RecruitSimpleResponse(Long escortId, String status, Integer numberOfApplication, LocalDate escortDate, LocalTime estimatedMeetingTime, LocalTime estimatedReturnTime, String departureLocation, String destination) {
-        this.escortId = escortId;
+    public RecruitSimpleResponse(Long recruitId, RecruitStatus status, Long numberOfApplication, LocalDate escortDate, LocalTime estimatedMeetingTime, LocalTime estimatedReturnTime, String departureLocation, String destination) {
+        this.recruitId = recruitId;
         this.status = status;
         this.numberOfApplication = numberOfApplication;
         this.escortDate = escortDate;
