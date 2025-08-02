@@ -60,7 +60,7 @@ public class HelperController {
         return Response.from(mock);
     }
 
-        @Operation(
+    @Operation(
             summary = "도우미 상세 조회",
             description = "userId에 해당하는 도우미의 상세 정보를 조회합니다.")
     @ApiResponse(
