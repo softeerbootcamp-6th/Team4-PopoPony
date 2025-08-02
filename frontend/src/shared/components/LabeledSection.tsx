@@ -8,8 +8,8 @@ interface Props {
 
 const LabeledSection = ({ label, isChecked = false, children }: Props) => {
   return (
-    <section className='flex flex-col gap-2'>
-      <div className='flex items-center gap-2'>
+    <section className='flex flex-col gap-[0.8rem]'>
+      <div className='flex items-center'>
         <h6 className='body1-16-bold text-neutral-90'>{label}</h6>
         <IcCheck
           className={`${isChecked ? '[&_path]:stroke-mint-50' : '[&_path]:stroke-neutral-90'}`}
