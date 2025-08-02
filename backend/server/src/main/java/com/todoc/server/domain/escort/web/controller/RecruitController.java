@@ -1,6 +1,8 @@
 package com.todoc.server.domain.escort.web.controller;
 
+import com.todoc.server.common.enumeration.RecruitStatus;
 import com.todoc.server.common.response.Response;
+import com.todoc.server.domain.escort.service.RecruitService;
 import com.todoc.server.domain.escort.web.dto.request.RecruitCreateRequest;
 import com.todoc.server.domain.escort.web.dto.response.RecruitListResponse;
 import com.todoc.server.domain.escort.web.dto.response.RecruitSimpleResponse;
@@ -14,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
@@ -21,11 +24,13 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Tag(name = "escorts", description = "동행 관련 API")
+@Tag(name = "recruits", description = "동행 신청 관련 API")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("api/escorts")
+@RequestMapping("api/recruits")
 public class RecruitController {
+
+    private final RecruitService recruitService;
 
     @Operation(
             summary = "고객의 동행 목록 조회",
@@ -38,15 +43,14 @@ public class RecruitController {
                     schema = @Schema(implementation = Response.class)
             ))
     @GetMapping("/customer")
-    public Response<RecruitListResponse> getRecruitListAsCustomer() {
+    public Response<RecruitListResponse> getRecruitListAsCustomer(@RequestParam(name = "userId") Long userId) {
         // TODO :: 원래라면 jwt 혹은 sessionId로부터 유저 정보를 조회해야 함
         // 현재는 우선 userId = 1로 고정
 
-
         RecruitSimpleResponse dto = RecruitSimpleResponse.builder()
-                .escortId(1L)
-                .status("MATCHING")
-                .numberOfApplication(3)
+                .recruitId(1L)
+                .status(RecruitStatus.MATCHING)
+                .numberOfApplication(3L)
                 .destination("서울아산병원")
                 .departureLocation("꿈에그린아파트")
                 .escortDate(LocalDate.now())
