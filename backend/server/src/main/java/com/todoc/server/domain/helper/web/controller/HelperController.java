@@ -62,7 +62,7 @@ public class HelperController {
 
         @Operation(
             summary = "도우미 상세 조회",
-            description = "특정 도우미의 상세 정보를 조회합니다.")
+            description = "userId에 해당하는 도우미의 상세 정보를 조회합니다.")
     @ApiResponse(
             responseCode = "200",
             description = "도우미 상세 정보 조회 성공",
@@ -70,9 +70,9 @@ public class HelperController {
                     mediaType = "application/json",
                     schema = @Schema(implementation = Response.class)
             ))
-    @GetMapping("/{helperId}")
-    public Response<HelperDetailResponse> getHelperDetail(@PathVariable Long helperId) {
-        // TODO :: 도우미 ID를 받아, 해당 도우미의 상세 정보를 생성
+    @GetMapping("/{userId}")
+    public Response<HelperDetailResponse> getHelperDetail(@PathVariable Long userId) {
+        // TODO :: 도우미의 userId를 받아, 해당 도우미의 상세 정보를 생성
 
         List<PositiveFeedbackStatResponse> positiveFeedbackList = new ArrayList<>();
         positiveFeedbackList.add(new PositiveFeedbackStatResponse("친절해요", 3));
