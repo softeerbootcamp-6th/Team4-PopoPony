@@ -55,10 +55,10 @@ public class RecruitCreateRequest {
     private LocalTime estimatedReturnTime;
 
     @Schema(description = "만나는 장소")
-    private String departureLocation;
+    private String meetingLocation;
 
     @Schema(description = "만나는 장소에 대한 추가 정보", example = "103동 402호 현관 앞")
-    private String departureLocationDetail;
+    private String meetingLocationInfo;
 
     @Schema(description = "목적지 병원")
     private String destination;
@@ -82,8 +82,8 @@ public class RecruitCreateRequest {
     public RecruitCreateRequest(String imageUrl, String patientName, Integer patientAge, Gender patientGender,
                                 String patientPhoneNumber, boolean needsHelping, boolean usesWheelchair, boolean hasCognitiveIssue,
                                 boolean cognitiveIssueDetail, boolean hasCommunicationIssue, boolean communicationIssueDetail,
-                                LocalDate escortDate, LocalTime estimatedMeetingTime, LocalTime estimatedReturnTime, String departureLocation,
-                                String departureLocationDetail, String destination, String destinationDetail, String returnLocation,
+                                LocalDate escortDate, LocalTime estimatedMeetingTime, LocalTime estimatedReturnTime, String meetingLocation,
+                                String meetingLocationInfo, String destination, String destinationDetail, String returnLocation,
                                 String returnLocationDetail, String purpose, String otherRequestDetail) {
         this.imageUrl = imageUrl;
         this.patientName = patientName;
@@ -99,8 +99,8 @@ public class RecruitCreateRequest {
         this.escortDate = escortDate;
         this.estimatedMeetingTime = estimatedMeetingTime;
         this.estimatedReturnTime = estimatedReturnTime;
-        this.departureLocation = departureLocation;
-        this.departureLocationDetail = departureLocationDetail;
+        this.meetingLocation = meetingLocation;
+        this.meetingLocationInfo = meetingLocationInfo;
         this.destination = destination;
         this.destinationDetail = destinationDetail;
         this.returnLocation = returnLocation;
