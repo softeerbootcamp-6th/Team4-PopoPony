@@ -1,0 +1,30 @@
+package com.todoc.server.domain.route.web.dto.response;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Builder;
+import lombok.Getter;
+
+@Getter
+@Schema(description = "장소 요약 정보 DTO")
+public class LocationInfoSimpleResponse {
+
+    @Schema(description = "장소 ID")
+    private Long locationInfoId;
+
+    @Schema(description = "장소명(상호명 주소)")
+    private String placeName;
+
+    @Schema(description = "도로명 주소")
+    private String address;
+
+    @Schema(description = "상세 주소")
+    private String detailAddress;
+
+    @Builder
+    public LocationInfoSimpleResponse(Long locationInfoId, String placeName, String address, String detailAddress) {
+        this.locationInfoId = locationInfoId;
+        this.placeName = placeName;
+        this.address = address;
+        this.detailAddress = detailAddress;
+    }
+}
