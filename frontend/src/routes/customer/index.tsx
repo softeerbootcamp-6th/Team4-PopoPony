@@ -1,7 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { PageLayout } from '@layouts';
-import { Button, EscortCard, StatusTag, StrengthTag, Tabs, Tag } from '@components';
-import { IcPlusSideLeft, IcShoes } from '@icons';
+import { Button, EscortCard, Tabs } from '@components';
+import { IcPlusSideLeft } from '@icons';
 
 export const Route = createFileRoute('/customer/')({
   component: RouteComponent,
@@ -69,7 +69,35 @@ function RouteComponent() {
                   <EscortCard.Info type='location' text='꿈에그린아파트 → 서울아산병원' />
                   <EscortCard.Info type='price' text='123,456원' />
                 </EscortCard.InfoSection>
-                <EscortCard.Tag tags={['safety', 'wheelchair', 'care']} />
+                <EscortCard.Button onClick={() => {}} />
+              </EscortCard>
+              <EscortCard>
+                <EscortCard.StatusHeader
+                  status='matching'
+                  text='동행번호 NO.12394O4L'
+                  title='7월 22일 (토), 서울아산병원'
+                />
+                <EscortCard.Divider />
+                <EscortCard.InfoSection>
+                  <EscortCard.Info type='time' text='7월 22일(토) 12시 ~ 15시' />
+                  <EscortCard.Info type='location' text='꿈에그린아파트 → 서울아산병원' />
+                  <EscortCard.Info type='price' text='123,456원' />
+                </EscortCard.InfoSection>
+                <EscortCard.Button onClick={() => {}} />
+              </EscortCard>
+              <EscortCard>
+                <EscortCard.StatusHeader
+                  status='matching'
+                  text='동행번호 NO.12394O4L'
+                  title='7월 22일 (토), 서울아산병원'
+                />
+                <EscortCard.Divider />
+                <EscortCard.InfoSection>
+                  <EscortCard.Info type='time' text='7월 22일(토) 12시 ~ 15시' />
+                  <EscortCard.Info type='location' text='꿈에그린아파트 → 서울아산병원' />
+                  <EscortCard.Info type='price' text='123,456원' />
+                </EscortCard.InfoSection>
+                <EscortCard.Button onClick={() => {}} />
               </EscortCard>
             </div>
           </Tabs.TabsContent>

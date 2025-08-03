@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { StatusTag, StrengthTag } from '@components';
+import { Button, StatusTag, StrengthTag } from '@components';
 import { IcChevronRightSecondary, IcClockFill, IcCoinFill, IcMarkFill } from '@icons';
 
 type Props = {
@@ -70,10 +70,15 @@ const CardTags = ({ tags }: { tags: ('safety' | 'wheelchair' | 'care')[] }) => {
   );
 };
 
+const CardButton = ({ onClick }: { onClick: () => void }) => {
+  return <Button onClick={onClick}>대시보드 확인하기</Button>;
+};
+
 EscortCard.Divider = CardDivider;
 EscortCard.StatusHeader = CardStatusHeader;
 EscortCard.InfoSection = InfoSection;
 EscortCard.Info = CardInfo;
 EscortCard.Tag = CardTags;
+EscortCard.Button = CardButton;
 
 export default EscortCard;
