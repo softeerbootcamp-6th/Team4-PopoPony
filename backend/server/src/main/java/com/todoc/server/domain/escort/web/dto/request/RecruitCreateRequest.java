@@ -37,13 +37,13 @@ public class RecruitCreateRequest {
     private boolean hasCognitiveIssue;
     
     @Schema(description = "인지능력 이슈가 있다면, 디테일 설명", example = "['판단에 도움이 필요해요', '기억하거나 이해하는 것이 어려워요]")
-    private boolean cognitiveIssueDetail;
+    private String cognitiveIssueDetail;
 
     @Schema(description = "의사소통 이슈가 있는지", example = "true")
     private boolean hasCommunicationIssue;
 
     @Schema(description = "의사소통 이슈가 있다면, 디테일 설명", example = "이가 많이 없으셔서.. 천천히 이야기 들어주세요")
-    private boolean communicationIssueDetail;
+    private String communicationIssueDetail;
 
     @Schema(description = "동행 날짜", example = "2025-08-01")
     private LocalDate escortDate;
@@ -76,15 +76,15 @@ public class RecruitCreateRequest {
     private String purpose;
 
     @Schema(description = "기타 요청사항", example = "약 수령도 대신 부탁드립니다.")
-    private String otherRequestDetail;
+    private String extraRequest;
 
     @Builder
     public RecruitCreateRequest(String imageUrl, String name, Integer age, Gender gender,
                                 String phoneNumber, boolean needsHelping, boolean usesWheelchair, boolean hasCognitiveIssue,
-                                boolean cognitiveIssueDetail, boolean hasCommunicationIssue, boolean communicationIssueDetail,
+                                String cognitiveIssueDetail, boolean hasCommunicationIssue, String communicationIssueDetail,
                                 LocalDate escortDate, LocalTime estimatedMeetingTime, LocalTime estimatedReturnTime, String meetingLocation,
                                 String meetingLocationInfo, String destination, String destinationDetail, String returnLocation,
-                                String returnLocationDetail, String purpose, String otherRequestDetail) {
+                                String returnLocationDetail, String purpose, String extraRequest) {
         this.imageUrl = imageUrl;
         this.name = name;
         this.age = age;
@@ -106,6 +106,6 @@ public class RecruitCreateRequest {
         this.returnLocation = returnLocation;
         this.returnLocationDetail = returnLocationDetail;
         this.purpose = purpose;
-        this.otherRequestDetail = otherRequestDetail;
+        this.extraRequest = extraRequest;
     }
 }
