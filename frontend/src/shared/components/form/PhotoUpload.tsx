@@ -68,10 +68,12 @@ const PhotoUpload = ({ name }: Props) => {
 
       <button
         type='button'
-        onClick={handleUploadClick}
-        className={`relative flex h-[16rem] w-[16rem] flex-col items-center justify-center gap-1 transition-all duration-200 ease-in-out ${
-          hasImage ? '' : 'bg-neutral-10 border-neutral-20 border-[1.5px] border-dashed'
-        } hover:opacity-80 active:scale-95`}>
+        onClick={!hasImage ? handleUploadClick : undefined}
+        className={`relative flex h-[16rem] w-[16rem] flex-col items-center justify-center gap-1 rounded-full transition-all duration-200 ease-in-out ${
+          hasImage
+            ? ''
+            : 'bg-neutral-10 border-neutral-20 border-[1.5px] border-dashed hover:opacity-80 active:scale-95'
+        }`}>
         {/* ✅ previewSrc 기준으로 렌더 */}
         {previewSrc && (
           <img
@@ -92,7 +94,7 @@ const PhotoUpload = ({ name }: Props) => {
 
         {hasImage && (
           <div
-            className='border-neutral-0 absolute right-0 bottom-[0.8rem] z-10 flex h-[4rem] w-[4rem] items-center justify-center rounded-full border bg-neutral-100'
+            className='border-neutral-0 hover:bg-neutral-90 absolute right-0 bottom-[0.8rem] z-10 flex h-[4rem] w-[4rem] items-center justify-center rounded-full border bg-neutral-100 transition-all duration-200 ease-in-out active:scale-95'
             onClick={handleEditClick}>
             <IcEdit className='text-neutral-0 h-[2.4rem] w-[2.4rem]' />
           </div>
