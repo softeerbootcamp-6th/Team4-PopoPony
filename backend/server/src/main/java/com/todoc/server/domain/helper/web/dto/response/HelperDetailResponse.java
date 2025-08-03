@@ -35,7 +35,7 @@ public class HelperDetailResponse {
     private String contact;
 
     @Schema(description = "총 동행자 수")
-    private Integer escortCount;
+    private Long escortCount;
 
     @Schema(description = "추천해요 비율")
     private Integer goodRate;
@@ -47,7 +47,7 @@ public class HelperDetailResponse {
     private Integer badRate;
 
     @Schema(description = "동행 후기 수")
-    private Integer reviewCount;
+    private Long reviewCount;
 
     @Schema(description = "자격증 목록")
     private List<String> certificateList;
@@ -63,8 +63,8 @@ public class HelperDetailResponse {
 
     @Builder
     public HelperDetailResponse(Long helperId, String imageUrl, String name, Gender gender, Integer age, String shortBio,
-                                String contact, Integer escortCount, Integer goodRate, Integer averageRate, Integer badRate,
-                                Integer reviewCount, List<String> certificateList, List<String> strengthList,
+                                String contact, Long escortCount, Integer goodRate, Integer averageRate, Integer badRate,
+                                Long reviewCount, List<String> certificateList, List<String> strengthList,
                                 List<PositiveFeedbackStatResponse> positiveFeedbackStatList, List<ReviewSimpleResponse> latestReviewList) {
         this.helperId = helperId;
         this.imageUrl = imageUrl;
