@@ -8,6 +8,7 @@ import com.todoc.server.domain.escort.service.RecruitService;
 import com.todoc.server.domain.escort.web.dto.request.RecruitCreateRequest;
 import com.todoc.server.domain.escort.web.dto.response.RecruitDetailResponse;
 import com.todoc.server.domain.escort.web.dto.response.RecruitListResponse;
+import com.todoc.server.domain.escort.web.dto.response.RecruitPaymentResponse;
 import com.todoc.server.domain.escort.web.dto.response.RecruitSimpleResponse;
 import com.todoc.server.domain.route.web.dto.response.LocationInfoSimpleResponse;
 import com.todoc.server.domain.route.web.dto.response.RouteSimpleResponse;
@@ -136,6 +137,58 @@ public class RecruitController {
                 .patient(patient)
                 .purpose("고혈압 정기 검진")
                 .extraRequest("다음 정기 검진 예약 꼭 잡아주세요!")
+                .build();
+
+        return Response.from(mock);
+    }
+
+    @Operation(
+            summary = "특정 동행 신청의 결제 정보 조회",
+            description = "recruitId에 해당하는 동행 신청의 결제 정보를 조회합니다.")
+    @ApiResponse(
+            responseCode = "200",
+            description = "동행 신청 결제 정보 조회 성공",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = Response.class)
+            ))
+    @GetMapping("/{recruitId}/payments")
+    public Response<RecruitPaymentResponse> getRecruitPayment(@PathVariable Long recruitId) {
+        // TODO :: recruitId에 해당하는 동행 신청의 결제 금액을 계산
+
+        LocationInfoSimpleResponse meetingLocationInfo = LocationInfoSimpleResponse.builder()
+                .locationInfoId(1L)
+                .placeName("신촌역 3번 출구")
+                .address("서울특별시 서대문구 연세로 2")
+                .detailAddress("출구 앞 파란 의자 근처")
+                .build();
+
+        LocationInfoSimpleResponse hospitalLocationInfo = LocationInfoSimpleResponse.builder()
+                .locationInfoId(1L)
+                .placeName("서울성모병원")
+                .address("서울특별시 서초구 반포대로 222")
+                .detailAddress("본관 3층 내과 외래")
+                .build();
+
+        LocationInfoSimpleResponse returnLocationInfo = LocationInfoSimpleResponse.builder()
+                .locationInfoId(1L)
+                .placeName("신촌역 3번 출구")
+                .address("서울특별시 서대문구 연세로 2")
+                .detailAddress("출구 앞 파란 의자 근처")
+                .build();
+
+        RouteSimpleResponse route = RouteSimpleResponse.builder()
+                .routeId(1L)
+                .meetingLocationInfo(meetingLocationInfo)
+                .hospitalLocationInfo(hospitalLocationInfo)
+                .returnLocationInfo(returnLocationInfo)
+                .build();
+
+        RecruitPaymentResponse mock = RecruitPaymentResponse.builder()
+                .recruitId(1L)
+                .route(route)
+                .baseFee(30000)
+                .expectedTaxiFee(100000)
                 .build();
 
         return Response.from(mock);
