@@ -8,6 +8,7 @@ import com.todoc.server.domain.helper.web.dto.response.HelperListResponse;
 import com.todoc.server.domain.helper.web.dto.response.HelperSimpleResponse;
 import com.todoc.server.domain.review.web.dto.response.PositiveFeedbackStatResponse;
 import com.todoc.server.domain.review.web.dto.response.ReviewSimpleResponse;
+import com.todoc.server.domain.review.web.dto.response.ReviewStatResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -92,6 +93,13 @@ public class HelperController {
         reviewList.add(review);
         reviewList.add(review);
 
+        ReviewStatResponse reviewStat = ReviewStatResponse.builder()
+                .reviewCount(13L)
+                .goodRate(89)
+                .averageRate(11)
+                .badRate(0)
+                .build();
+
         HelperDetailResponse mock = HelperDetailResponse.builder()
                 .helperId(1L)
                 .imageUrl("https://example.com/images/sample.jpg")
@@ -101,10 +109,7 @@ public class HelperController {
                 .shortBio("제 부모님처럼 모시겠습니다!")
                 .contact("010-1234-5678")
                 .escortCount(20L)
-                .goodRate(89)
-                .averageRate(11)
-                .badRate(0)
-                .reviewCount(13L)
+                .reviewStat(reviewStat)
                 .certificateList(new ArrayList<>(List.of("간호사", "간호조무사", "요양보호사")))
                 .strengthList(new ArrayList<>(List.of("안전한 부축", "휠체어 이동", "인지장애 케어")))
                 .positiveFeedbackStatList(positiveFeedbackList)
