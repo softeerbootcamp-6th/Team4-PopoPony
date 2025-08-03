@@ -5,8 +5,8 @@ import type {
   Step4FormValues,
   Step5FormValues,
   Step6FormValues,
-  RecruitFormValues,
   COGNITIVE_ISSUES_OPTIONS,
+  RecruitFormValues,
 } from './recruitFormValues';
 
 export type {

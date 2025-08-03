@@ -7,8 +7,9 @@ import {
   ProgressBar,
   Modal,
   BottomSheet,
+  PhotoUpload,
 } from '@components';
-import { useForm, FormProvider, type SubmitHandler } from 'react-hook-form';
+import { useForm, FormProvider, type SubmitHandler, useWatch, Controller } from 'react-hook-form';
 import type { HTMLAttributes } from 'react';
 import { useModal } from '@hooks';
 
@@ -27,6 +28,8 @@ type FormValues = {
 
 function RouteComponent() {
   const methods = useForm<FormValues>();
+  const watchAllFields = methods.watch();
+  console.log(watchAllFields);
   const onSubmit: SubmitHandler<FormValues> = (data) => {
     console.log('Final Data:', data);
   };
@@ -108,21 +111,19 @@ function RouteComponent() {
 
       <Section title='LabeledSection/TwoOptionSelector'>
         <FormProvider {...methods}>
-          {/* 일반 텍스트 입력 */}
-          <FormInput name='name' type='text' size='M' placeholder='텍스트를 입력하세요' />
-
-          <FormInput
-            name='quantity'
-            type='number'
-            size='M'
-            description='개'
-            placeholder='수량을 입력하세요'
-          />
-          <FormInput name='price' type='cost' size='M' placeholder='가격을 입력하세요' />
-          <FormInput name='birthDate' type='date' size='M' placeholder='날짜를 선택하세요' />
-          <FormInput name='time' type='time' size='M' placeholder='시간을 선택하세요' />
-          <FormInput name='phone' type='contact' size='M' placeholder='연락처를 입력하세요' />
+          <PhotoUpload name='photo' />
         </FormProvider>
+        <form onSubmit={methods.handleSubmit(onSubmit)}>
+          {/* register your input into the hook by invoking the "register" function */}
+          <input defaultValue='name' {...methods.register('name')} />
+
+          {/* include validation with required or other standard HTML validation rules */}
+          <input {...methods.register('price', { required: true })} />
+          {/* errors will return when field validation fails  */}
+          {methods.formState.errors.price && <span>This field is required</span>}
+
+          <input type='submit' />
+        </form>
       </Section>
 
       <Section title='ProgressBar'>
