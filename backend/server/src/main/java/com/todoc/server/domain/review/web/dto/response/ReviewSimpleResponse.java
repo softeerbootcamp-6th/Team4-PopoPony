@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @Schema(description = "도우미 후기 요약 정보 DTO")
 public class ReviewSimpleResponse {
 
-    @Schema(description = "만족도")
+    @Schema(description = "만족도", allowableValues = {"GOOD", "AVERAGE", "BAD"})
     private SatisfactionLevel satisfactionLevel;
 
     @Schema(description = "작성일")
