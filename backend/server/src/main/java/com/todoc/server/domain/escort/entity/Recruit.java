@@ -6,7 +6,9 @@ import com.todoc.server.domain.auth.entity.Auth;
 import com.todoc.server.domain.customer.entity.Patient;
 import com.todoc.server.domain.route.entity.Route;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
@@ -15,6 +17,7 @@ import java.time.LocalTime;
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
 public class Recruit extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -51,4 +54,20 @@ public class Recruit extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     private RecruitStatus status;
+
+    @Builder
+    public Recruit(Auth customer, Patient patient, Route route, LocalDate escortDate, LocalTime estimatedMeetingTime,
+                   LocalTime estimatedReturnTime, String purpose, String extraRequest, Integer estimatedFee,
+                   RecruitStatus status) {
+        this.customer = customer;
+        this.patient = patient;
+        this.route = route;
+        this.escortDate = escortDate;
+        this.estimatedMeetingTime = estimatedMeetingTime;
+        this.estimatedReturnTime = estimatedReturnTime;
+        this.purpose = purpose;
+        this.extraRequest = extraRequest;
+        this.estimatedFee = estimatedFee;
+        this.status = status;
+    }
 }
