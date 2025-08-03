@@ -51,6 +51,7 @@ const Button = ({
   return (
     <button
       type='button'
+      disabled={disabled}
       className={`${baseStyle} ${disabled ? disabledVariantStyle[variant] : variantStyle[variant]} ${sizeStyle[size]}`}
       {...props}>
       <Spinner size={spinnerSize[size]} color={spinnerColor[variant]} isLoading={isLoading} />
