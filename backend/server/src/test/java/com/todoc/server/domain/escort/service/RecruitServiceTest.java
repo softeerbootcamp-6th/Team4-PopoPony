@@ -39,11 +39,11 @@ class RecruitServiceTest {
     public void getRecruitListAsCustomerByUserId_ShouldReturnSortedRecruitList() {
         // given
         Long userId = 1L;
-        RecruitSimpleResponse inProgress1 = new RecruitSimpleResponse(1L, RecruitStatus.IN_PROGRESS, 2L, LocalDate.of(2024, 6, 3), LocalTime.NOON, LocalTime.MIDNIGHT, "서울역", "병원A");
-        RecruitSimpleResponse inProgress2 = new RecruitSimpleResponse(1L, RecruitStatus.IN_PROGRESS, 2L, LocalDate.of(2024, 6, 1), LocalTime.NOON, LocalTime.MIDNIGHT, "서울역", "병원A");
-        RecruitSimpleResponse inProgress3 = new RecruitSimpleResponse(2L, RecruitStatus.MATCHING, 3L, LocalDate.of(2024, 6, 2), LocalTime.NOON, LocalTime.MIDNIGHT, "학동역", "병원B");
-        RecruitSimpleResponse done1 = new RecruitSimpleResponse(3L, RecruitStatus.DONE, 2L, LocalDate.of(2024, 5, 30), LocalTime.NOON, LocalTime.MIDNIGHT, "서울역", "병원C");
-        RecruitSimpleResponse done2 = new RecruitSimpleResponse(4L, RecruitStatus.DONE, 1L, LocalDate.of(2024, 6, 4), LocalTime.NOON, LocalTime.MIDNIGHT, "학동역", "병원D");
+        RecruitSimpleResponse inProgress1 = new RecruitSimpleResponse(1L,1L, RecruitStatus.IN_PROGRESS, 2L, LocalDate.of(2024, 6, 3), LocalTime.NOON, LocalTime.MIDNIGHT, "서울역", "병원A");
+        RecruitSimpleResponse inProgress2 = new RecruitSimpleResponse(1L, 2L, RecruitStatus.IN_PROGRESS, 2L, LocalDate.of(2024, 6, 1), LocalTime.NOON, LocalTime.MIDNIGHT, "서울역", "병원A");
+        RecruitSimpleResponse inProgress3 = new RecruitSimpleResponse(2L, null, RecruitStatus.MATCHING, 3L, LocalDate.of(2024, 6, 2), LocalTime.NOON, LocalTime.MIDNIGHT, "학동역", "병원B");
+        RecruitSimpleResponse done1 = new RecruitSimpleResponse(3L, null, RecruitStatus.DONE, 2L, LocalDate.of(2024, 5, 30), LocalTime.NOON, LocalTime.MIDNIGHT, "서울역", "병원C");
+        RecruitSimpleResponse done2 = new RecruitSimpleResponse(4L, null, RecruitStatus.DONE, 1L, LocalDate.of(2024, 6, 4), LocalTime.NOON, LocalTime.MIDNIGHT, "학동역", "병원D");
 
         List<RecruitSimpleResponse> mockList = Arrays.asList(inProgress2, done1, inProgress1, done2, inProgress3);
 
