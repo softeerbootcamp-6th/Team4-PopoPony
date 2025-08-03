@@ -16,16 +16,16 @@ public class RecruitCreateRequest {
     private String imageUrl;
 
     @Schema(description = "환자 이름", example = "홍길동")
-    private String patientName;
+    private String name;
     
     @Schema(description = "환자 나이", example = "81")
-    private Integer patientAge;
+    private Integer age;
 
     @Schema(description = "환자 성별", example = "GENDER.MALE")
-    private Gender patientGender;
+    private Gender gender;
 
     @Schema(description = "환자 연락처", example = "010-1234-5678")
-    private String patientPhoneNumber;
+    private String phoneNumber;
     
     @Schema(description = "부축이 필요한지", example = "true")
     private boolean needsHelping;
@@ -79,17 +79,17 @@ public class RecruitCreateRequest {
     private String otherRequestDetail;
 
     @Builder
-    public RecruitCreateRequest(String imageUrl, String patientName, Integer patientAge, Gender patientGender,
-                                String patientPhoneNumber, boolean needsHelping, boolean usesWheelchair, boolean hasCognitiveIssue,
+    public RecruitCreateRequest(String imageUrl, String name, Integer age, Gender gender,
+                                String phoneNumber, boolean needsHelping, boolean usesWheelchair, boolean hasCognitiveIssue,
                                 boolean cognitiveIssueDetail, boolean hasCommunicationIssue, boolean communicationIssueDetail,
                                 LocalDate escortDate, LocalTime estimatedMeetingTime, LocalTime estimatedReturnTime, String meetingLocation,
                                 String meetingLocationInfo, String destination, String destinationDetail, String returnLocation,
                                 String returnLocationDetail, String purpose, String otherRequestDetail) {
         this.imageUrl = imageUrl;
-        this.patientName = patientName;
-        this.patientAge = patientAge;
-        this.patientGender = patientGender;
-        this.patientPhoneNumber = patientPhoneNumber;
+        this.name = name;
+        this.age = age;
+        this.gender = gender;
+        this.phoneNumber = phoneNumber;
         this.needsHelping = needsHelping;
         this.usesWheelchair = usesWheelchair;
         this.hasCognitiveIssue = hasCognitiveIssue;
