@@ -8,7 +8,7 @@
     "format": "prettier --write \"**/*.{js,ts,tsx,jsx,mjs,hbs,json,css,md}\"",
     "build": "vite build && tsc",
     "check": "pnpm lint && pnpm format && pnpm build",
-    "openapi": "pnpm dlx openapi-typescript http://43.202.155.55/v3/api-docs --output ./src/shared/types/api/schema.d.ts && prettier --write ./src/shared/types/api/schema.d.ts"
+    "openapi": "pnpm dlx openapi-typescript ./src/shared/types/api/openapi.json --output ./src/shared/types/api/schema.d.ts && prettier --write ./src/shared/types/api/schema.d.ts"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.14",

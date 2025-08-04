@@ -356,6 +356,56 @@ export interface components {
       /** @description 응답 body 필드 */
       data?: unknown;
     };
+    /** @description 동행 목록 조회 응답 DTO */
+    RecruitListResponse: {
+      /** @description 진행 중인 동행 목록 */
+      inProgressList?: components['schemas']['RecruitSimpleResponse'][];
+      /** @description 완료된 동행 목록 */
+      completedList?: components['schemas']['RecruitSimpleResponse'][];
+    };
+    /** @description 동행 신청 정보 요약본 응답 DTO */
+    RecruitSimpleResponse: {
+      /**
+       * Format: int64
+       * @description 동행 신청 ID
+       */
+      recruitId?: number;
+      /**
+       * Format: int64
+       * @description 동행중인 경우, 동행 ID
+       */
+      escortId?: number;
+      /**
+       * @description 동행 신청의 진행 상태
+       * @enum {string}
+       */
+      status?: 'MATCHING' | 'COMPLETED' | 'IN_PROGRESS' | 'DONE';
+      /**
+       * Format: int64
+       * @description 지원한 도우미 수
+       */
+      numberOfApplication?: number;
+      /**
+       * Format: date
+       * @description 동행 날짜
+       * @example 2025-08-01
+       */
+      escortDate?: string;
+      /**
+       * @description 만나는 시각
+       * @example 09:30:00
+       */
+      estimatedMeetingTime?: string;
+      /**
+       * @description 복귀 시각
+       * @example 12:30:00
+       */
+      estimatedReturnTime?: string;
+      /** @description 만나는 장소 */
+      departureLocation?: string;
+      /** @description 목적지 병원 */
+      destination?: string;
+    };
   };
   responses: never;
   parameters: never;
@@ -536,7 +586,7 @@ export interface operations {
           [name: string]: unknown;
         };
         content: {
-          'application/json': components['schemas']['Response'];
+          'application/json': components['schemas']['RecruitListResponse'];
         };
       };
     };
