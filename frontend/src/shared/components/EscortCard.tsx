@@ -54,7 +54,7 @@ const CardInfo = ({ type, text }: CardInfoProps) => {
       {type === 'time' && <IcClockFill />}
       {type === 'location' && <IcMarkFill />}
       {type === 'price' && <IcCoinFill />}
-      <span className='label2-14-medium text-text-neutral-primary'>{text}</span>
+      <span className='label2-14-medium text-text-neutral-secondary'>{text}</span>
     </div>
   );
 };
