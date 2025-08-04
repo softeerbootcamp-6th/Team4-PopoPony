@@ -64,18 +64,18 @@ const BottomSheetContent = ({
     <SheetPrimitive.Portal container={container}>
       <SheetPrimitive.Overlay
         data-slot='bottom-sheet-overlay'
-        className={cn('absolute inset-0 z-50 bg-[var(--color-black-opacity-40)]', className)}
+        className={cn('bg-color-black-opacity-40 absolute inset-0 z-50', className)}
       />
       <SheetPrimitive.Content
         data-slot='bottom-sheet-content'
         className={cn(
-          'shadow-bottom-sheet absolute inset-x-0 bottom-0 z-50 h-auto rounded-t-[1.2rem] border-t bg-[var(--color-background-default-white)]',
+          'shadow-bottom-sheet bg-background-default-white absolute inset-x-0 bottom-0 z-50 h-auto rounded-t-[1.2rem] border-t',
           className
         )}
         {...props}>
         {children}
         <SheetPrimitive.Close className='absolute top-[1.6rem] right-[1.6rem] rounded-[0.8rem] p-[0.8rem] opacity-70 transition-opacity hover:opacity-100 focus:ring-2 focus:ring-[var(--color-background-default-mint)] focus:ring-offset-2 focus:outline-none disabled:pointer-events-none'>
-          <XIcon className='h-[2rem] w-[2rem] text-[var(--color-text-neutral-primary)]' />
+          <XIcon className='text-text-neutral-primary h-[2rem] w-[2rem]' />
           <span className='sr-only'>닫기</span>
         </SheetPrimitive.Close>
       </SheetPrimitive.Content>
@@ -124,7 +124,7 @@ const BottomSheetTitle = ({ className, children, ...props }: BottomSheetTitlePro
   return (
     <SheetPrimitive.Title
       data-slot='bottom-sheet-title'
-      className={cn('title-20-bold text-[var(--color-text-neutral-primary)]', className)}
+      className={cn('title-20-bold text-text-neutral-primary', className)}
       {...props}>
       {children}
     </SheetPrimitive.Title>
@@ -141,7 +141,7 @@ const BottomSheetDescription = ({ className, children, ...props }: BottomSheetDe
   return (
     <SheetPrimitive.Description
       data-slot='bottom-sheet-description'
-      className={cn('body1-16-medium text-[var(--color-text-neutral-secondary)]', className)}
+      className={cn('body1-16-medium text-text-neutral-secondary', className)}
       {...props}>
       {children}
     </SheetPrimitive.Description>
