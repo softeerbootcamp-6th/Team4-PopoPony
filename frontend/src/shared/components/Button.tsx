@@ -21,7 +21,7 @@ const Button = ({
   const variantStyle = {
     primary: 'bg-mint-50 text-neutral-0',
     secondary: 'bg-neutral-10 text-neutral-90',
-    assistive: 'bg-neutral-0 text-neutral-90',
+    assistive: 'bg-neutral-0 text-neutral-90 border border-stroke-neutral-dark',
   };
 
   const disabledVariantStyle = {
