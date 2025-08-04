@@ -18,21 +18,22 @@ public class PatientService {
     // 예: 환자 등록, 조회, 수정, 삭제 등
 
     // 예시 메서드
-    public Patient register(RecruitCreateRequest request) {
+    public Patient register(RecruitCreateRequest.PatientDetail patientDetail) {
 
+        // 환자 정보를 Patient 엔티티로 변환하고 저장
         Patient patient = Patient.builder()
                 .latestLocation(null)
-                .name(request.getName())
+                .name(patientDetail.getName())
                 .imageUrl(null)
-                .age(request.getAge())
-                .gender(request.getGender())
-                .contact(request.getPhoneNumber())
-                .needsHelping(request.isNeedsHelping())
-                .usesWheelchair(request.isUsesWheelchair())
-                .hasCognitiveIssue(request.isHasCognitiveIssue())
-                .cognitiveIssueDetail(request.getCognitiveIssueDetail())
-                .hasCommunicationIssue(request.isHasCommunicationIssue())
-                .communicationIssueDetail(request.getCommunicationIssueDetail())
+                .age(patientDetail.getAge())
+                .gender(patientDetail.getGender())
+                .contact(patientDetail.getPhoneNumber())
+                .needsHelping(patientDetail.isNeedsHelping())
+                .usesWheelchair(patientDetail.isUsesWheelchair())
+                .hasCognitiveIssue(patientDetail.isHasCognitiveIssue())
+                .cognitiveIssueDetail(patientDetail.getCognitiveIssueDetail())
+                .hasCommunicationIssue(patientDetail.isHasCommunicationIssue())
+                .communicationIssueDetail(patientDetail.getCommunicationIssueDetail())
                 .build();
 
         return patientJpaRepository.save(patient);
