@@ -1,7 +1,14 @@
-import { useFormContext } from 'react-hook-form';
-type Props = {};
+import { TwoOptionSelector, FormInput, LabeledSection, PhotoUpload, Button } from '@components';
+import { useWatch, useFormContext } from 'react-hook-form';
+import { memo, useState, useEffect } from 'react';
+import { FormLayout } from '@layouts';
+import { z } from 'zod';
 
-const Condition = (props: Props) => {
+type Props = {
+  handleNextStep: () => void;
+};
+
+const Condition = memo(({ handleNextStep }: Props) => {
   const { getValues } = useFormContext();
   const patientName = getValues('patientName');
   return <div>{patientName}</div>;
