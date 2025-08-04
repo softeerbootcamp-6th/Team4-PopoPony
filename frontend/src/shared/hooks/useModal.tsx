@@ -11,14 +11,6 @@ const useModal = () => {
     setIsOpen(false);
   };
 
-  // page-layout-container가 없으면 modal을 열 수 없도록 처리
-  useEffect(() => {
-    const container = document.getElementById('page-layout-container');
-    if (!container) {
-      console.warn('page-layout-container not found. Modal may not work properly.');
-    }
-  }, []);
-
   // ESC 키로 모달 닫기
   useEffect(() => {
     const handleEscape = (event: KeyboardEvent) => {

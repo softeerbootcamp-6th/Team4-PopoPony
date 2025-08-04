@@ -16,8 +16,6 @@ const Step1 = memo(({ handleNextStep }: Props) => {
   const sexValue = useWatch({ name: 'patientSex' });
   const profileImageUrl = useWatch({ name: 'profileImageUrl' });
 
-  // // 필수 값 모두 채워졌는지 판단해서 상위로 전달
-
   return (
     <>
       <FormLayout>
