@@ -22,10 +22,10 @@ const Step1 = memo(({ handleNextStep }: Props) => {
     <>
       <FormLayout>
         <FormLayout.Content>
-          <FormLayout.Title>동행할 환자의 기본정보를 입력해주세요</FormLayout.Title>
-          <FormLayout.SubTitle>
-            <Button variant='assistive'>이전 환자 정보 불러오기</Button>
-          </FormLayout.SubTitle>
+          <FormLayout.TitleWrapper>
+            <FormLayout.Title>동행할 환자의 기본정보를 입력해주세요</FormLayout.Title>
+          </FormLayout.TitleWrapper>
+          <Button variant='assistive'>이전 환자 정보 불러오기</Button>
           <div className='flex-center w-full'>
             <PhotoUpload name='profileImageUrl' />
           </div>

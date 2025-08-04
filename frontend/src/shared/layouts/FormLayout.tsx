@@ -8,18 +8,22 @@ const FormLayout = ({ children }: FormLayoutProps) => {
   return <div className='bg-background-default-white flex h-full w-full flex-col'>{children}</div>;
 };
 
+const TitleWrapper = ({ children }: FormLayoutProps) => {
+  return <div className='flex flex-col gap-[0.8rem]'>{children}</div>;
+};
+
 const Title = ({ className, children }: { className?: string; children: React.ReactNode }) => {
   return (
-    <div className={`headline-24-bold text-text-neutral-primary break-keep ${className}`}>
-      <h2>{children}</h2>
-    </div>
+    <h2 className={`headline-24-bold text-text-neutral-primary break-keep ${className}`}>
+      {children}
+    </h2>
   );
 };
 const SubTitle = ({ className, children }: { className?: string; children: React.ReactNode }) => {
   return (
-    <div className={`body1-16-medium text-text-neutral-secondary pt-[0.8rem] ${className}`}>
+    <h3 className={`body1-16-medium text-text-neutral-secondary pt-[0.8rem] ${className}`}>
       {children}
-    </div>
+    </h3>
   );
 };
 
@@ -37,6 +41,7 @@ const Footer = ({ children }: FormLayoutProps) => {
   );
 };
 
+FormLayout.TitleWrapper = TitleWrapper;
 FormLayout.Title = Title;
 FormLayout.SubTitle = SubTitle;
 FormLayout.Content = Content;
