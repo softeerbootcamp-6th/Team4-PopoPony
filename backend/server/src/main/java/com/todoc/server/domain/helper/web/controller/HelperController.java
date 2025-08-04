@@ -3,6 +3,7 @@ package com.todoc.server.domain.helper.web.controller;
 import com.todoc.server.common.enumeration.Gender;
 import com.todoc.server.common.enumeration.SatisfactionLevel;
 import com.todoc.server.common.response.Response;
+import com.todoc.server.domain.helper.service.HelperFacadeService;
 import com.todoc.server.domain.helper.web.dto.response.HelperDetailResponse;
 import com.todoc.server.domain.helper.web.dto.response.HelperListResponse;
 import com.todoc.server.domain.helper.web.dto.response.HelperSimpleResponse;
@@ -17,7 +18,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +27,8 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("api/helpers")
 public class HelperController {
+
+    private final HelperFacadeService helperFacadeService;
 
     @Operation(
             summary = "신청에 지원한 도우미 목록 조회",
@@ -75,14 +78,17 @@ public class HelperController {
     public Response<HelperDetailResponse> getHelperDetail(@PathVariable Long userId) {
         // TODO :: 도우미의 userId를 받아, 해당 도우미의 상세 정보를 생성
 
+//        HelperDetailResponse response = helperFacadeService.getHelperDetailByUserId(userId);
+//        return Response.from(response);
+
         List<PositiveFeedbackStatResponse> positiveFeedbackList = new ArrayList<>();
-        positiveFeedbackList.add(new PositiveFeedbackStatResponse("친절해요", 3));
-        positiveFeedbackList.add(new PositiveFeedbackStatResponse("책임감", 5));
-        positiveFeedbackList.add(new PositiveFeedbackStatResponse("소통이 잘돼요", 1));
+        positiveFeedbackList.add(new PositiveFeedbackStatResponse("친절해요", 3L));
+        positiveFeedbackList.add(new PositiveFeedbackStatResponse("책임감", 5L));
+        positiveFeedbackList.add(new PositiveFeedbackStatResponse("소통이 잘돼요", 1L));
 
         ReviewSimpleResponse review = ReviewSimpleResponse.builder()
                 .satisfactionLevel(SatisfactionLevel.GOOD)
-                .createdAt(LocalDate.now().minusDays(30))
+                .createdAt(LocalDateTime.now().minusDays(30))
                 .shortComment("너무 잘해주시고 부모님을 집에 무사히 모셔주셔서...")
                 .build();
 
