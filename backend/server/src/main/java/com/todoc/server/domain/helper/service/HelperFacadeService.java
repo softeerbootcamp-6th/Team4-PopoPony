@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.todoc.server.common.util.DateTimeUtils;
 import com.todoc.server.common.util.JsonUtils;
 import com.todoc.server.domain.auth.entity.Auth;
-import com.todoc.server.domain.auth.exception.AuthErrorCode;
 import com.todoc.server.domain.auth.exception.AuthNotFoundException;
 import com.todoc.server.domain.escort.service.EscortService;
 import com.todoc.server.domain.helper.entity.Helper;
@@ -35,7 +34,7 @@ public class HelperFacadeService {
      * userId(authId)에 해당하는 도우미의 상세 정보를 조회하는 함수
      *
      * @param userId (authId)
-     * @return 분리된 '동행 신청 목록'응답 DTO
+     * @return 도우미 상세 정보 (HelperDetailResponse)
      */
     @Transactional(readOnly = true)
     public HelperDetailResponse getHelperDetailByUserId(Long userId) {
@@ -64,7 +63,7 @@ public class HelperFacadeService {
         List<ReviewSimpleResponse> latestReviews = reviewService.getLatestReviewsByHelperUserId(auth.getId());
 
         // 6. JSON 문자열 → List<String> 변환 (강점, 자격증)
-        List<String> strengthList = JsonUtils.fromJson(helper.getStrength(), new TypeReference<List<String>>() {});
+        List<String> strengthList = JsonUtils.fromJson(helper.getStrength(), new TypeReference<>() {});
         List<String> certificateList = certificateService.getHelperByUserId(helper.getId());
 
         // 7. 응답 객체 생성
