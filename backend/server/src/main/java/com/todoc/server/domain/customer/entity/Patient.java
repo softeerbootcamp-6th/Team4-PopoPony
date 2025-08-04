@@ -2,14 +2,18 @@ package com.todoc.server.domain.customer.entity;
 
 import com.todoc.server.common.enumeration.Gender;
 import com.todoc.server.common.entity.BaseEntity;
+import com.todoc.server.domain.auth.entity.Auth;
 import com.todoc.server.domain.latestlocation.entity.LatestLocation;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
 public class Patient extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,7 +21,7 @@ public class Patient extends BaseEntity {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id")
-    private Customer customer;
+    private Auth customer;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "latest_location_id")
@@ -41,9 +45,6 @@ public class Patient extends BaseEntity {
     @Column(name = "uses_wheelchair")
     private Boolean usesWheelchair;
 
-    @Column(name = "needs_toilet_escort")
-    private Boolean needsToiletEscort;
-
     @Column(name = "has_cognitive_issue")
     private Boolean hasCognitiveIssue;
 
@@ -56,4 +57,23 @@ public class Patient extends BaseEntity {
 
     @Column(name = "communication_issue_detail")
     private String communicationIssueDetail;
+
+    @Builder
+    public Patient(Auth customer, LatestLocation latestLocation, String name, String imageUrl,
+                   Integer age, Gender gender, String contact, Boolean needsHelping, Boolean usesWheelchair,
+                   Boolean hasCognitiveIssue, String cognitiveIssueDetail, Boolean hasCommunicationIssue, String communicationIssueDetail) {
+        this.customer = customer;
+        this.latestLocation = latestLocation;
+        this.name = name;
+        this.imageUrl = imageUrl;
+        this.age = age;
+        this.gender = gender;
+        this.contact = contact;
+        this.needsHelping = needsHelping;
+        this.usesWheelchair = usesWheelchair;
+        this.hasCognitiveIssue = hasCognitiveIssue;
+        this.cognitiveIssueDetail = cognitiveIssueDetail;
+        this.hasCommunicationIssue = hasCommunicationIssue;
+        this.communicationIssueDetail = communicationIssueDetail;
+    }
 }

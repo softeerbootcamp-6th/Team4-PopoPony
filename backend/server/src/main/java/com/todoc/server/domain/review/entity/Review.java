@@ -2,8 +2,8 @@ package com.todoc.server.domain.review.entity;
 
 import com.todoc.server.common.enumeration.SatisfactionLevel;
 import com.todoc.server.common.entity.BaseEntity;
-import com.todoc.server.domain.escort.entity.Escort;
-import com.todoc.server.domain.helper.entity.Helper;
+import com.todoc.server.domain.auth.entity.Auth;
+import com.todoc.server.domain.escort.entity.Recruit;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,20 +17,20 @@ public class Review extends BaseEntity {
     private Long id;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "escort_id")
-    private Escort escort;
+    @JoinColumn(name = "recruit_id")
+    private Recruit recruit;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "customer_id")
+    private Auth customer;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "helper_id")
-    private Helper helper;
+    private Auth helper;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "satisfaction_level")
     private SatisfactionLevel satisfactionLevel;
-
-    @Column(columnDefinition = "json",
-            name = "positive_feedback")
-    private String positiveFeedback;
 
     @Column(name = "negative_feedback")
     private String negativeFeedback;

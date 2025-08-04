@@ -1,7 +1,8 @@
 package com.todoc.server.domain.report.entity;
 
 import com.todoc.server.common.entity.BaseEntity;
-import com.todoc.server.domain.escort.entity.Escort;
+import com.todoc.server.domain.auth.entity.Auth;
+import com.todoc.server.domain.escort.entity.Recruit;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,8 +19,16 @@ public class Report extends BaseEntity {
     private Long id;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "escort_id", unique = true)
-    private Escort escort;
+    @JoinColumn(name = "recruit_id")
+    private Recruit recruit;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "customer_id")
+    private Auth customer;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "helper_id")
+    private Auth helper;
 
     @Column(name = "actual_meeting_time")
     private LocalTime actualMeetingTime;
