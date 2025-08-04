@@ -55,45 +55,49 @@ function RouteComponent() {
         background={true}
       />
       <PageLayout.Content>
-        <ProgressBar maxStep={stepList.length} currentStep={stepList.indexOf(currentStep) + 1} />
-        <FormProvider {...methods}>
-          <Funnel>
-            <Step name='기본정보'>
-              <Step1 onValidChange={setIsStepValid} />
-            </Step>
-            <Step name='보행상태'>
-              <div>step2</div>
-              <TwoOptionSelector
-                name='needsPhysicalSupport'
-                leftOption={{ label: '필요해요', value: true }}
-                rightOption={{ label: '필요없어요', value: false }}
-              />
-              <TwoOptionSelector
-                name='usesWheelchair'
-                leftOption={{ label: '이용하고 있어요', value: true }}
-                rightOption={{ label: '이용하지 않아요', value: false }}
-              />
-            </Step>
-            <Step name='의사소통'>
-              <div>step3</div>
-              <TwoOptionSelector
-                name='communicationAbility'
-                leftOption={{ label: '왼쪽', value: 'step3-left' }}
-                rightOption={{ label: '오른쪽', value: 'step3-right' }}
-              />
-            </Step>
+        <div className='flex h-full flex-col'>
+          <div className='flex-shrink-0 pb-[2rem]'>
+            <ProgressBar
+              maxStep={stepList.length}
+              currentStep={stepList.indexOf(currentStep) + 1}
+            />
+          </div>
+          <div className='flex-1 overflow-hidden'>
+            <FormProvider {...methods}>
+              <Funnel>
+                <Step name='기본정보'>
+                  <Step1 onValidChange={setIsStepValid} />
+                </Step>
+                <Step name='보행상태'>
+                  <div>step2</div>
+                  <TwoOptionSelector
+                    name='needsPhysicalSupport'
+                    leftOption={{ label: '필요해요', value: true }}
+                    rightOption={{ label: '필요없어요', value: false }}
+                  />
+                  <TwoOptionSelector
+                    name='usesWheelchair'
+                    leftOption={{ label: '이용하고 있어요', value: true }}
+                    rightOption={{ label: '이용하지 않아요', value: false }}
+                  />
+                </Step>
+                <Step name='의사소통'>
+                  <div>step3</div>
+                  <TwoOptionSelector
+                    name='communicationAbility'
+                    leftOption={{ label: '왼쪽', value: 'step3-left' }}
+                    rightOption={{ label: '오른쪽', value: 'step3-right' }}
+                  />
+                </Step>
 
-            <Step name='step4'>
-              <div>마지막</div>
-            </Step>
-          </Funnel>
-        </FormProvider>
+                <Step name='step4'>
+                  <div>마지막</div>
+                </Step>
+              </Funnel>
+            </FormProvider>
+          </div>
+        </div>
       </PageLayout.Content>
-      <PageLayout.Footer>
-        <Button variant='primary' disabled={!isStepValid} onClick={handleNextStep}>
-          {getButtonLabel()}
-        </Button>
-      </PageLayout.Footer>
     </PageLayout>
   );
 }
