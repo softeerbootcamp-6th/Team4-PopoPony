@@ -40,10 +40,19 @@ public class HelperFacadeService {
 
         // 1. 도우미 조회
         Helper helper = helperService.getHelperByUserId(userId);
+        if (helper == null) {
+            throw new IllegalArgumentException("해당 userId에 대한 도우미 정보가 존재하지 않습니다.");
+        }
         Auth auth = helper.getAuth();
+        if (auth == null) {
+            throw new IllegalStateException("도우미에 연결된 사용자 정보가 없습니다.");
+        }
 
         // 2. 나이 계산
-        int age = DateTimeUtils.calculateAge(auth.getBirthDate());
+        int age = 0;
+        if (auth.getBirthDate() != null) {
+            age = DateTimeUtils.calculateAge(auth.getBirthDate());
+        }
 
         // 3. 동행 횟수 조회 (helper의 userId(authId)로 검색)
         Long escortCount = escortService.getCountByHelperUserId(auth.getId());
