@@ -3,6 +3,7 @@ package com.todoc.server.domain.helper.web.dto.response;
 import com.todoc.server.common.enumeration.Gender;
 import com.todoc.server.domain.review.web.dto.response.PositiveFeedbackStatResponse;
 import com.todoc.server.domain.review.web.dto.response.ReviewSimpleResponse;
+import com.todoc.server.domain.review.web.dto.response.ReviewStatResponse;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
@@ -37,17 +38,8 @@ public class HelperDetailResponse {
     @Schema(description = "총 동행자 수")
     private Long escortCount;
 
-    @Schema(description = "추천해요 비율")
-    private Integer goodRate;
-
-    @Schema(description = "괜찮아요 비율")
-    private Integer averageRate;
-
-    @Schema(description = "아쉬워요 비율")
-    private Integer badRate;
-
-    @Schema(description = "동행 후기 수")
-    private Long reviewCount;
+    @Schema(description = "도우미 리뷰 통계")
+    private ReviewStatResponse reviewStat;
 
     @Schema(description = "자격증 목록")
     private List<String> certificateList;
@@ -63,9 +55,9 @@ public class HelperDetailResponse {
 
     @Builder
     public HelperDetailResponse(Long helperId, String imageUrl, String name, Gender gender, Integer age, String shortBio,
-                                String contact, Long escortCount, Integer goodRate, Integer averageRate, Integer badRate,
-                                Long reviewCount, List<String> certificateList, List<String> strengthList,
-                                List<PositiveFeedbackStatResponse> positiveFeedbackStatList, List<ReviewSimpleResponse> latestReviewList) {
+                                String contact, Long escortCount, ReviewStatResponse reviewStat, List<String> certificateList,
+                                List<String> strengthList, List<PositiveFeedbackStatResponse> positiveFeedbackStatList,
+                                List<ReviewSimpleResponse> latestReviewList) {
         this.helperId = helperId;
         this.imageUrl = imageUrl;
         this.name = name;
@@ -74,10 +66,7 @@ public class HelperDetailResponse {
         this.shortBio = shortBio;
         this.contact = contact;
         this.escortCount = escortCount;
-        this.goodRate = goodRate;
-        this.averageRate = averageRate;
-        this.badRate = badRate;
-        this.reviewCount = reviewCount;
+        this.reviewStat = reviewStat;
         this.certificateList = certificateList;
         this.strengthList = strengthList;
         this.positiveFeedbackStatList = positiveFeedbackStatList;
