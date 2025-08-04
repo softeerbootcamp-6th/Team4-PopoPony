@@ -26,19 +26,16 @@ function RouteComponent() {
   };
   // Modal hooks
   const {
-    modalRef: singleModalRef,
     isOpen: isSingleModalOpen,
     openModal: openSingleModal,
     closeModal: closeSingleModal,
   } = useModal();
   const {
-    modalRef: doubleModalRef,
     isOpen: isDoubleModalOpen,
     openModal: openDoubleModal,
     closeModal: closeDoubleModal,
   } = useModal();
   const {
-    modalRef: confirmModalRef,
     isOpen: isConfirmModalOpen,
     openModal: openConfirmModal,
     closeModal: closeConfirmModal,
@@ -138,7 +135,7 @@ function RouteComponent() {
         </div>
       </Section>
       {/* Modal components */}
-      <Modal ref={singleModalRef} isOpen={isSingleModalOpen} onClose={closeSingleModal}>
+      <Modal isOpen={isSingleModalOpen} onClose={closeSingleModal}>
         <Modal.Title>알림</Modal.Title>
         <Modal.Content>
           정말로 삭제하시겠습니까?
@@ -150,7 +147,7 @@ function RouteComponent() {
         </Modal.ButtonContainer>
       </Modal>
       {/* 이중 버튼 모달 */}
-      <Modal ref={doubleModalRef} isOpen={isDoubleModalOpen} onClose={closeDoubleModal}>
+      <Modal isOpen={isDoubleModalOpen} onClose={closeDoubleModal}>
         <Modal.Title>동행 신청 완료</Modal.Title>
         <Modal.Content>
           동행 신청이 성공적으로 완료되었습니다.
@@ -169,7 +166,7 @@ function RouteComponent() {
         </Modal.ButtonContainer>
       </Modal>
       {/* 확인 모달 */}
-      <Modal ref={confirmModalRef} isOpen={isConfirmModalOpen} onClose={closeConfirmModal}>
+      <Modal isOpen={isConfirmModalOpen} onClose={closeConfirmModal}>
         <Modal.Title>주의사항</Modal.Title>
         <Modal.Content>
           동행 서비스를 이용하기 전에 다음 사항을 확인해주세요:
