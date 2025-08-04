@@ -15,6 +15,7 @@ import IcChevronDoubleLeft from './chevron-double-left.svg?react';
 import IcChevronDown from './chevron-down.svg?react';
 import IcChevronLeft from './chevron-left.svg?react';
 import IcChevronRight from './chevron-right.svg?react';
+import IcChevronRightSecondary from './chevron-right-secondary.svg?react';
 import IcChevronUp from './chevron-up.svg?react';
 import IcClear from './clear.svg?react';
 import IcClock from './clock.svg?react';
@@ -23,6 +24,7 @@ import IcClockS from './clock-S.svg?react';
 import IcCloseL from './close-L.svg?react';
 import IcCloseM from './close-M.svg?react';
 import IcCloseS from './close-S.svg?react';
+import IcCoinFill from './coin-fill.svg?react';
 import IcDownArrow from './down-arrow.svg?react';
 
 // Transportation Icons
@@ -83,6 +85,7 @@ export {
   IcChevronDown,
   IcChevronLeft,
   IcChevronRight,
+  IcChevronRightSecondary,
   IcChevronUp,
   IcClear,
   IcClock,
@@ -91,6 +94,7 @@ export {
   IcCloseL,
   IcCloseM,
   IcCloseS,
+  IcCoinFill,
   IcDownArrow,
 
   // Transportation Icons

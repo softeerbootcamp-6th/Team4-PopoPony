@@ -7,6 +7,11 @@ import TopAppBar from './TopAppBar';
 import TwoOptionSelector from './form/TwoOptionSelector';
 import FormInput from './TextField/FormInput';
 import Landing from './Landing';
+import Tabs from './Tabs';
+import EscortCard from './EscortCard';
+import StatusTag from './StatusTag';
+import Tag from './Tag';
+import StrengthTag from './StrengthTag';
 import Modal from './modal/Modal';
 import BottomSheet from './modal/BottomSheet';
 import PhotoUpload from './form/PhotoUpload';
@@ -21,6 +26,11 @@ export {
   FormInput,
   Landing,
   ProgressBar,
+  Tabs,
+  EscortCard,
+  StatusTag,
+  Tag,
+  StrengthTag,
   Modal,
   BottomSheet,
   PhotoUpload,
