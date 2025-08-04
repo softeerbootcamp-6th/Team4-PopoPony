@@ -84,7 +84,7 @@ const ModalButtonContainer = ({ children }: ModalButtonContainerProps) => {
 
 const ModalButton = ({ children, onClick, variant = 'primary', disabled = false }: ButtonProps) => {
   return (
-    <Button variant={variant} onClick={onClick} disabled={disabled}>
+    <Button variant={variant} size='md' onClick={onClick} disabled={disabled}>
       {children}
     </Button>
   );
