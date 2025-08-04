@@ -3,7 +3,7 @@ export interface Step1FormValues {
   patientName: string; // 환자 이름
   patientSex: 'male' | 'female';
   patientAge: number;
-  patientContact: number; //TODO: 백엔드에서 어떻게 저장하는지
+  patientContact: string;
   profileImageUrl: string; // 프로필 이미지
 }
 

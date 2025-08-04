@@ -2,10 +2,12 @@ import { useFormContext } from 'react-hook-form';
 import { type InputHTMLAttributes, useCallback } from 'react';
 import { IcChevronDown } from '@icons';
 
+type InputType = 'date' | 'time' | 'cost' | 'number' | 'text' | 'contact';
+
 interface FormInputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'size' | 'type'> {
   name: string;
   size?: 'S' | 'M';
-  type: 'date' | 'time' | 'cost' | 'number' | 'text' | 'contact';
+  type: InputType;
   description?: string;
   placeholder?: string;
 }
