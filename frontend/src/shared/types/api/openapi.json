@@ -213,7 +213,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Response"
+                  "$ref": "#/components/schemas/RecruitDetailResponse"
                 }
               }
             }
@@ -262,9 +262,9 @@
           "200": {
             "description": "동행 목록 조회 성공",
             "content": {
-              "application/json": {
+              "*/*": {
                 "schema": {
-                  "$ref": "#/components/schemas/RecruitListResponse"
+                  "$ref": "#/components/schemas/ResponseRecruitListResponse"
                 }
               }
             }
@@ -509,6 +509,156 @@
           }
         }
       },
+      "LocationInfoSimpleResponse": {
+        "type": "object",
+        "description": "장소 요약 정보 DTO",
+        "properties": {
+          "locationInfoId": {
+            "type": "integer",
+            "format": "int64",
+            "description": "장소 ID"
+          },
+          "placeName": {
+            "type": "string",
+            "description": "장소명(상호명 주소)"
+          },
+          "address": {
+            "type": "string",
+            "description": "도로명 주소"
+          },
+          "detailAddress": {
+            "type": "string",
+            "description": "상세 주소"
+          }
+        }
+      },
+      "PatientSimpleResponse": {
+        "type": "object",
+        "description": "환자 요약 정보 조회 응답 DTO",
+        "properties": {
+          "patientId": {
+            "type": "integer",
+            "format": "int64",
+            "description": "환자 ID"
+          },
+          "imageUrl": {
+            "type": "string",
+            "description": "프로필 이미지 URL"
+          },
+          "name": {
+            "type": "string",
+            "description": "성명"
+          },
+          "gender": {
+            "type": "string",
+            "description": "성별",
+            "enum": ["MALE", "FEMALE"]
+          },
+          "age": {
+            "type": "integer",
+            "format": "int32",
+            "description": "나이"
+          },
+          "needsHelping": {
+            "type": "boolean",
+            "description": "부축 필요 여부"
+          },
+          "usesWheelchair": {
+            "type": "boolean",
+            "description": "휠체어 필요 여부"
+          },
+          "hasCognitiveIssue": {
+            "type": "boolean",
+            "description": "인지 능력 문제 유무"
+          },
+          "cognitiveIssueDetail": {
+            "type": "array",
+            "description": "인지 능력 상세 설명",
+            "items": {
+              "type": "string"
+            }
+          },
+          "hasCommunicationIssue": {
+            "type": "boolean",
+            "description": "의사소통 문제 유무"
+          },
+          "communicationIssueDetail": {
+            "type": "string",
+            "description": "의사소통 상세 설명"
+          }
+        }
+      },
+      "RecruitDetailResponse": {
+        "type": "object",
+        "description": "동행 신청 상세 정보 조회 응답 DTO",
+        "properties": {
+          "recruitId": {
+            "type": "integer",
+            "format": "int64",
+            "description": "동행 신청 ID"
+          },
+          "status": {
+            "type": "string",
+            "description": "동행 신청의 진행 상태",
+            "enum": ["MATCHING", "COMPLETED", "IN_PROGRESS", "DONE"]
+          },
+          "escortDate": {
+            "type": "string",
+            "format": "date",
+            "description": "동행 날짜",
+            "example": "2025-08-01"
+          },
+          "estimatedMeetingTime": {
+            "type": "string",
+            "description": "만나는 시각",
+            "example": "09:30:00"
+          },
+          "estimatedReturnTime": {
+            "type": "string",
+            "description": "복귀 시각",
+            "example": "12:30:00"
+          },
+          "route": {
+            "$ref": "#/components/schemas/RouteSimpleResponse",
+            "description": "경로 요약 정보"
+          },
+          "patient": {
+            "$ref": "#/components/schemas/PatientSimpleResponse",
+            "description": "환자 요약 정보"
+          },
+          "purpose": {
+            "type": "string",
+            "description": "동행 목적"
+          },
+          "extraRequest": {
+            "type": "string",
+            "description": "요청 사항"
+          }
+        }
+      },
+      "RouteSimpleResponse": {
+        "type": "object",
+        "description": "경로 요약 정보 DTO",
+        "properties": {
+          "routeId": {
+            "type": "integer",
+            "format": "int64",
+            "description": "경로 ID"
+          },
+          "meetingLocationInfo": {
+            "$ref": "#/components/schemas/LocationInfoSimpleResponse",
+            "description": "만남 장소 위치 정보"
+          },
+          "hospitalLocationInfo": {
+            "$ref": "#/components/schemas/LocationInfoSimpleResponse",
+            "description": "병원 위치 정보"
+          },
+          "returnLocationInfo": {
+            "$ref": "#/components/schemas/LocationInfoSimpleResponse",
+            "description": "복귀 장소 위치 정보"
+          }
+        }
+      },
       "RecruitListResponse": {
         "type": "object",
         "description": "동행 목록 조회 응답 DTO",
@@ -576,6 +726,32 @@
           "destination": {
             "type": "string",
             "description": "목적지 병원"
+          }
+        }
+      },
+      "ResponseRecruitListResponse": {
+        "type": "object",
+        "description": "공통 응답 포맷",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32",
+            "description": "직접 정의한 응답에 대한 code"
+          },
+          "status": {
+            "type": "integer",
+            "format": "int32",
+            "description": "응답 상태에 대한 HTTP 상태 코드",
+            "example": 200
+          },
+          "message": {
+            "type": "string",
+            "description": "응답 상태에 대한 HTTP 메시지",
+            "example": "SUCCESS"
+          },
+          "data": {
+            "$ref": "#/components/schemas/RecruitListResponse",
+            "description": "응답 body 필드"
           }
         }
       }

@@ -356,6 +356,105 @@ export interface components {
       /** @description 응답 body 필드 */
       data?: unknown;
     };
+    /** @description 장소 요약 정보 DTO */
+    LocationInfoSimpleResponse: {
+      /**
+       * Format: int64
+       * @description 장소 ID
+       */
+      locationInfoId?: number;
+      /** @description 장소명(상호명 주소) */
+      placeName?: string;
+      /** @description 도로명 주소 */
+      address?: string;
+      /** @description 상세 주소 */
+      detailAddress?: string;
+    };
+    /** @description 환자 요약 정보 조회 응답 DTO */
+    PatientSimpleResponse: {
+      /**
+       * Format: int64
+       * @description 환자 ID
+       */
+      patientId?: number;
+      /** @description 프로필 이미지 URL */
+      imageUrl?: string;
+      /** @description 성명 */
+      name?: string;
+      /**
+       * @description 성별
+       * @enum {string}
+       */
+      gender?: 'MALE' | 'FEMALE';
+      /**
+       * Format: int32
+       * @description 나이
+       */
+      age?: number;
+      /** @description 부축 필요 여부 */
+      needsHelping?: boolean;
+      /** @description 휠체어 필요 여부 */
+      usesWheelchair?: boolean;
+      /** @description 인지 능력 문제 유무 */
+      hasCognitiveIssue?: boolean;
+      /** @description 인지 능력 상세 설명 */
+      cognitiveIssueDetail?: string[];
+      /** @description 의사소통 문제 유무 */
+      hasCommunicationIssue?: boolean;
+      /** @description 의사소통 상세 설명 */
+      communicationIssueDetail?: string;
+    };
+    /** @description 동행 신청 상세 정보 조회 응답 DTO */
+    RecruitDetailResponse: {
+      /**
+       * Format: int64
+       * @description 동행 신청 ID
+       */
+      recruitId?: number;
+      /**
+       * @description 동행 신청의 진행 상태
+       * @enum {string}
+       */
+      status?: 'MATCHING' | 'COMPLETED' | 'IN_PROGRESS' | 'DONE';
+      /**
+       * Format: date
+       * @description 동행 날짜
+       * @example 2025-08-01
+       */
+      escortDate?: string;
+      /**
+       * @description 만나는 시각
+       * @example 09:30:00
+       */
+      estimatedMeetingTime?: string;
+      /**
+       * @description 복귀 시각
+       * @example 12:30:00
+       */
+      estimatedReturnTime?: string;
+      /** @description 경로 요약 정보 */
+      route?: components['schemas']['RouteSimpleResponse'];
+      /** @description 환자 요약 정보 */
+      patient?: components['schemas']['PatientSimpleResponse'];
+      /** @description 동행 목적 */
+      purpose?: string;
+      /** @description 요청 사항 */
+      extraRequest?: string;
+    };
+    /** @description 경로 요약 정보 DTO */
+    RouteSimpleResponse: {
+      /**
+       * Format: int64
+       * @description 경로 ID
+       */
+      routeId?: number;
+      /** @description 만남 장소 위치 정보 */
+      meetingLocationInfo?: components['schemas']['LocationInfoSimpleResponse'];
+      /** @description 병원 위치 정보 */
+      hospitalLocationInfo?: components['schemas']['LocationInfoSimpleResponse'];
+      /** @description 복귀 장소 위치 정보 */
+      returnLocationInfo?: components['schemas']['LocationInfoSimpleResponse'];
+    };
     /** @description 동행 목록 조회 응답 DTO */
     RecruitListResponse: {
       /** @description 진행 중인 동행 목록 */
@@ -405,6 +504,27 @@ export interface components {
       departureLocation?: string;
       /** @description 목적지 병원 */
       destination?: string;
+    };
+    /** @description 공통 응답 포맷 */
+    ResponseRecruitListResponse: {
+      /**
+       * Format: int32
+       * @description 직접 정의한 응답에 대한 code
+       */
+      code?: number;
+      /**
+       * Format: int32
+       * @description 응답 상태에 대한 HTTP 상태 코드
+       * @example 200
+       */
+      status?: number;
+      /**
+       * @description 응답 상태에 대한 HTTP 메시지
+       * @example SUCCESS
+       */
+      message?: string;
+      /** @description 응답 body 필드 */
+      data?: components['schemas']['RecruitListResponse'];
     };
   };
   responses: never;
@@ -544,7 +664,7 @@ export interface operations {
           [name: string]: unknown;
         };
         content: {
-          'application/json': components['schemas']['Response'];
+          'application/json': components['schemas']['RecruitDetailResponse'];
         };
       };
     };
@@ -586,7 +706,7 @@ export interface operations {
           [name: string]: unknown;
         };
         content: {
-          'application/json': components['schemas']['RecruitListResponse'];
+          '*/*': components['schemas']['ResponseRecruitListResponse'];
         };
       };
     };
