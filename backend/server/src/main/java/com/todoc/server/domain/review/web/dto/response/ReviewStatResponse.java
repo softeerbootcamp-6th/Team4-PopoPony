@@ -24,7 +24,7 @@ public class ReviewStatResponse {
     private final int badRate;
 
     @Builder
-    private ReviewStatResponse(Long reviewCount, int goodRate, int averageRate, int badRate) {
+    public ReviewStatResponse(Long reviewCount, int goodRate, int averageRate, int badRate) {
         this.reviewCount = reviewCount;
         this.goodRate = goodRate;
         this.averageRate = averageRate;
