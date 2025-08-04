@@ -1,5 +1,5 @@
 // 폼 단계별 타입 정의
-export interface Step1FormValues {
+export interface ProfileFormValues {
   patientName: string; // 환자 이름
   patientSex: 'male' | 'female';
   patientAge: number;
@@ -7,26 +7,26 @@ export interface Step1FormValues {
   profileImageUrl: string; // 프로필 이미지
 }
 
-export interface Step2FormValues {
+export interface ConditionFormValues {
   needsPhysicalSupport: boolean;
   usesWheelchair: boolean;
 }
 
-export interface Step3FormValues {
+export interface CommunicationFormValues {
   cognitiveAbility: 'good' | 'bad';
   cognitiveIssues?: string[]; //체크박스 다중 선택
   communicationAbility: 'good' | 'bad';
   communicationHelp?: string; //단순 텍스트
 }
 
-export interface Step4FormValues {
+export interface TimeFormValues {
   escortDate: string;
   escortStartTime: string;
   escortEndTime: string;
   escortDuration: number;
 }
 
-export interface Step5FormValues {
+export interface RouteFormValues {
   departureName: string;
   departureAddress: string;
   departureDetailAddress: string;
@@ -37,18 +37,18 @@ export interface Step5FormValues {
   destinationDetailAddress: string;
 }
 
-export interface Step6FormValues {
+export interface RequestFormValues {
   escortPurpose: string;
   escortNotes: string;
 }
 
 // 전체 폼 타입
-export type RecruitFormValues = Step1FormValues &
-  Step2FormValues &
-  Step3FormValues &
-  Step4FormValues &
-  Step5FormValues &
-  Step6FormValues;
+export type RecruitFormValues = ProfileFormValues &
+  ConditionFormValues &
+  CommunicationFormValues &
+  TimeFormValues &
+  RouteFormValues &
+  RequestFormValues;
 
 // 인지 문제 옵션들
 export const COGNITIVE_ISSUES_OPTIONS = [

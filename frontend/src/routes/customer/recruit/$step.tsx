@@ -4,13 +4,13 @@ import { type RecruitFormValues } from '@customer/types';
 import { useFunnel, useModal } from '@hooks';
 import { createFileRoute, useRouter } from '@tanstack/react-router';
 import { FormProvider, useForm, type SubmitHandler } from 'react-hook-form';
-import { Step1 } from '@customer/components';
+import { Profile, Condition } from '@customer/components';
 
 export const Route = createFileRoute('/customer/recruit/$step')({
   component: RouteComponent,
 });
 
-const stepList = ['기본정보', '보행상태', '의사소통', '동행시간', '동행경로', '요청사항'];
+const stepList = ['profile', 'condition', 'communication', 'time', 'route', 'request'];
 
 function RouteComponent() {
   const router = useRouter();
@@ -22,7 +22,7 @@ function RouteComponent() {
   };
 
   const { Funnel, Step, nextStep, currentStep } = useFunnel({
-    defaultStep: '기본정보',
+    defaultStep: 'profile',
     basePath: 'customer/recruit',
     paramPath: '/customer/recruit/$step',
   });
@@ -62,7 +62,7 @@ function RouteComponent() {
     <PageLayout>
       <PageLayout.Header
         title='동행 신청하기'
-        showBack={currentStep !== '기본정보'}
+        showBack={currentStep !== 'profile'}
         showClose={true}
         onClose={handleClose}
         background={true}
@@ -78,23 +78,13 @@ function RouteComponent() {
           <div className='flex-1 overflow-hidden'>
             <FormProvider {...methods}>
               <Funnel>
-                <Step name='기본정보'>
-                  <Step1 handleNextStep={handleNextStep} />
+                <Step name='profile'>
+                  <Profile handleNextStep={handleNextStep} />
                 </Step>
-                <Step name='보행상태'>
-                  <div>step2</div>
-                  <TwoOptionSelector
-                    name='needsPhysicalSupport'
-                    leftOption={{ label: '필요해요', value: true }}
-                    rightOption={{ label: '필요없어요', value: false }}
-                  />
-                  <TwoOptionSelector
-                    name='usesWheelchair'
-                    leftOption={{ label: '이용하고 있어요', value: true }}
-                    rightOption={{ label: '이용하지 않아요', value: false }}
-                  />
+                <Step name='condition'>
+                  <Condition handleNextStep={handleNextStep} />
                 </Step>
-                <Step name='의사소통'>
+                <Step name='communication'>
                   <div>step3</div>
                   <TwoOptionSelector
                     name='communicationAbility'
@@ -103,7 +93,7 @@ function RouteComponent() {
                   />
                 </Step>
 
-                <Step name='step4'>
+                <Step name='time'>
                   <div>마지막</div>
                 </Step>
               </Funnel>
