@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import static com.todoc.server.domain.route.entity.QRoute.route;
 import static com.todoc.server.domain.escort.entity.QApplication.application;
 import static com.todoc.server.domain.escort.entity.QRecruit.recruit;
+import static com.todoc.server.domain.escort.entity.QEscort.escort;
 
 @Repository
 public class RecruitQueryRepository extends QuerydslRepositorySupport {
@@ -27,6 +28,7 @@ public class RecruitQueryRepository extends QuerydslRepositorySupport {
         List<RecruitSimpleResponse> result = getQuerydsl().createQuery()
             .select(Projections.constructor(RecruitSimpleResponse.class,
                 recruit.id,
+
                 recruit.status,
                 application.count(),
                 recruit.escortDate,
@@ -37,6 +39,7 @@ public class RecruitQueryRepository extends QuerydslRepositorySupport {
             ))
             .from(recruit)
             .leftJoin(application).on(application.recruit.eq(recruit))
+            .leftJoin(escort).on(escort.recruit.eq(recruit))
             .join(recruit.route, route)
             .join(route.meetingLocationInfo, meetingLocation)
             .join(route.hospitalLocationInfo, hospitalLocation)

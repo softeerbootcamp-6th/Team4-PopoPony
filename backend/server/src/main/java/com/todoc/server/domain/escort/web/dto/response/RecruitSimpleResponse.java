@@ -15,6 +15,9 @@ public class RecruitSimpleResponse {
     @Schema(description = "동행 신청 ID")
     private Long recruitId;
 
+    @Schema(description = "동행중인 경우, 동행 ID")
+    private Long escortId;
+
     // 매칭중, 매칭완료, 동행중
     @Schema(description = "동행 신청의 진행 상태", allowableValues = {"MATCHING", "COMPLETED", "IN_PROGRESS", "DONE"})
     private RecruitStatus status;
@@ -38,8 +41,9 @@ public class RecruitSimpleResponse {
     private String destination;
 
     @Builder
-    public RecruitSimpleResponse(Long recruitId, RecruitStatus status, Long numberOfApplication, LocalDate escortDate, LocalTime estimatedMeetingTime, LocalTime estimatedReturnTime, String departureLocation, String destination) {
+    public RecruitSimpleResponse(Long recruitId, Long escortId, RecruitStatus status, Long numberOfApplication, LocalDate escortDate, LocalTime estimatedMeetingTime, LocalTime estimatedReturnTime, String departureLocation, String destination) {
         this.recruitId = recruitId;
+        this.escortId = escortId;
         this.status = status;
         this.numberOfApplication = numberOfApplication;
         this.escortDate = escortDate;

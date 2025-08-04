@@ -1,8 +1,10 @@
 package com.todoc.server.domain.escort.service;
 
 import com.todoc.server.common.enumeration.RecruitStatus;
+import com.todoc.server.domain.escort.entity.Recruit;
 import com.todoc.server.domain.escort.repository.RecruitJpaRepository;
 import com.todoc.server.domain.escort.repository.RecruitQueryRepository;
+import com.todoc.server.domain.escort.web.dto.request.RecruitCreateRequest;
 import com.todoc.server.domain.escort.web.dto.response.RecruitListResponse;
 import com.todoc.server.domain.escort.web.dto.response.RecruitSimpleResponse;
 import java.util.ArrayList;
@@ -64,5 +66,18 @@ public class RecruitService {
             .build();
 
         return result;
+    }
+
+    public Recruit register(RecruitCreateRequest request) {
+        Recruit recruit = Recruit.builder()
+                .escortDate(request.getEscortDate())
+                .estimatedMeetingTime(request.getEstimatedMeetingTime())
+                .estimatedReturnTime(request.getEstimatedReturnTime())
+                .purpose(request.getPurpose())
+                .extraRequest(request.getExtraRequest())
+                .status(RecruitStatus.MATCHING)
+                .build();
+
+        return recruitJpaRepository.save(recruit);
     }
 }

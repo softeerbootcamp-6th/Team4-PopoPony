@@ -44,8 +44,8 @@ public class RecruitController {
                     mediaType = "application/json",
                     schema = @Schema(implementation = Response.class)
             ))
-    @GetMapping("/customers/{userId}")
-    public Response<RecruitListResponse> getRecruitListAsCustomer(@PathVariable(name = "userId") Long userId) {
+    @GetMapping("/customer")
+    public Response<RecruitListResponse> getRecruitListAsCustomer() {
         // TODO :: 원래라면 jwt 혹은 sessionId로부터 유저 정보를 조회해야 함
         // 현재는 우선 userId = 1로 고정
 

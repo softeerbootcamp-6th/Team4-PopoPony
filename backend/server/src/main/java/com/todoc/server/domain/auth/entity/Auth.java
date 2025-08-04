@@ -3,7 +3,9 @@ package com.todoc.server.domain.auth.entity;
 import com.todoc.server.common.entity.BaseEntity;
 import com.todoc.server.common.enumeration.Gender;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
@@ -11,6 +13,7 @@ import java.time.LocalDate;
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
 public class Auth extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,4 +33,15 @@ public class Auth extends BaseEntity {
     private Gender gender;
 
     private String contact;
+
+    @Builder
+    public Auth(Long id, String loginId, String password, String name, LocalDate birthDate, Gender gender, String contact) {
+        this.id = id;
+        this.loginId = loginId;
+        this.password = password;
+        this.name = name;
+        this.birthDate = birthDate;
+        this.gender = gender;
+        this.contact = contact;
+    }
 }
