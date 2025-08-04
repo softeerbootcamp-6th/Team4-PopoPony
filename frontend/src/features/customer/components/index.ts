@@ -1,3 +1,4 @@
-import Step1 from './recruitStep/step1';
+import Profile from './recruitStep/Profile';
+import Condition from './recruitStep/Condition';
 
-export { Step1 };
+export { Profile, Condition };
