@@ -10,7 +10,7 @@ const FormLayout = ({ children }: FormLayoutProps) => {
 
 const Title = ({ className, children }: { className?: string; children: React.ReactNode }) => {
   return (
-    <div className={`headline-24-bold text-text-neutral-primary ${className}`}>
+    <div className={`headline-24-bold text-text-neutral-primary break-keep ${className}`}>
       <h2>{children}</h2>
     </div>
   );
