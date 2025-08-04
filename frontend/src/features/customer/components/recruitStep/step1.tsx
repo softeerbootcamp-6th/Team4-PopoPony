@@ -3,7 +3,7 @@ import { TwoOptionSelector, FormInput, LabeledSection, PhotoUpload, Button } fro
 import { useWatch } from 'react-hook-form';
 import { memo } from 'react';
 import { FormLayout } from '@layouts';
-import { type Step1FormValues } from '@types';
+//import { type Step1FormValues } from '@types';
 
 type Props = {
   handleNextStep: () => void;
@@ -12,8 +12,6 @@ type Props = {
 const Step1 = memo(({ handleNextStep }: Props) => {
   const nameValue = useWatch({ name: 'patientName' });
   const ageValue = useWatch({ name: 'patientAge' });
-  const leftValue = useWatch({ name: 'step1' });
-  const photoValue = useWatch({ name: 'photo' });
   const contactValue = useWatch({ name: 'patientContact' });
   const sexValue = useWatch({ name: 'patientSex' });
   const profileImageUrl = useWatch({ name: 'profileImageUrl' });
