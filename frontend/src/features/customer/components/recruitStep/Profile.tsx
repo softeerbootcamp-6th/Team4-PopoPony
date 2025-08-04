@@ -4,6 +4,7 @@ import { useWatch, useFormContext } from 'react-hook-form';
 import { memo, useState, useEffect } from 'react';
 import { FormLayout } from '@layouts';
 import { z } from 'zod';
+import { useFormValidation } from '@customer/hooks';
 
 type Props = {
   handleNextStep: () => void;
@@ -94,7 +95,9 @@ const Profile = memo(({ handleNextStep }: Props) => {
           <FormLayout.TitleWrapper>
             <FormLayout.Title>동행할 환자의 기본정보를 입력해주세요</FormLayout.Title>
           </FormLayout.TitleWrapper>
-          <Button variant='assistive'>이전 환자 정보 불러오기</Button>
+          <Button size='lg' className='min-h-[5.6rem]' variant='assistive'>
+            이전 환자 정보 불러오기
+          </Button>
           <LabeledSection
             label='프로필 이미지'
             isChecked={!fieldErrors.profileImageUrl && !!profileImageUrl}
@@ -103,7 +106,7 @@ const Profile = memo(({ handleNextStep }: Props) => {
               <PhotoUpload name='profileImageUrl' />
             </div>
           </LabeledSection>
-          <div className='flex gap-[1.2rem]'>
+          <div className='flex flex-col gap-[1.2rem] sm:flex-row'>
             <LabeledSection
               label='환자 이름'
               isChecked={!fieldErrors.patientName && !!nameValue}
