@@ -4,6 +4,6 @@ import com.todoc.server.common.exception.base.CustomException;
 
 public class HelperNotFoundException extends CustomException {
     public HelperNotFoundException() {
-        super(HelperResponseCode.HELPER_NOT_FOUND);
+        super(HelperErrorCode.NOT_FOUND);
     }
 }
