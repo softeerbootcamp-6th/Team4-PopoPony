@@ -28,7 +28,7 @@ public class RecruitQueryRepository extends QuerydslRepositorySupport {
         List<RecruitSimpleResponse> result = getQuerydsl().createQuery()
             .select(Projections.constructor(RecruitSimpleResponse.class,
                 recruit.id,
-
+                escort.id,
                 recruit.status,
                 application.count(),
                 recruit.escortDate,
