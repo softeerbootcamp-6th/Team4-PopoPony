@@ -4,8 +4,6 @@ import com.todoc.server.common.enumeration.SatisfactionLevel;
 import com.todoc.server.common.response.Response;
 import com.todoc.server.domain.review.web.dto.response.ReviewSimpleResponse;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +18,7 @@ import java.time.LocalDateTime;
 @Tag(name = "reviews", description = "도우미 리뷰 관련 API")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("api/reviews")
+@RequestMapping("/api/reviews")
 public class ReviewController {
 
     @Operation(
@@ -28,11 +26,7 @@ public class ReviewController {
             description = "특정 동행 신청을 담당한 도우미의 리뷰를 조회합니다.")
     @ApiResponse(
             responseCode = "200",
-            description = "도우미 리뷰 조회 성공",
-            content = @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = Response.class)
-            ))
+            description = "도우미 리뷰 조회 성공")
     @GetMapping("/recruits/{recruitId}")
     public Response<ReviewSimpleResponse> getReviewAsRecruit(@PathVariable Long recruitId) {
         // TODO :: 신청 ID를 받아, 해당 신청을 담당한 도우미의 리뷰를 검색
