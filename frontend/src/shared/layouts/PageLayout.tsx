@@ -4,6 +4,7 @@ import type { BottomCTAProps } from '../components/BottomCTA';
 
 interface PageLayoutProps {
   children: React.ReactNode;
+  className?: string;
 }
 
 const PageLayout = ({ children }: PageLayoutProps) => {
@@ -29,8 +30,8 @@ const Header = ({ title, showBack, showClose, background, onClose, className }: 
   );
 };
 
-const PageLayoutContent = ({ children }: PageLayoutProps) => {
-  return <div className='flex-1 overflow-y-auto'>{children}</div>;
+const PageLayoutContent = ({ children, className }: PageLayoutProps) => {
+  return <div className={`flex-1 overflow-y-auto ${className}`}>{children}</div>;
 };
 
 const Footer = ({ children }: BottomCTAProps) => {
