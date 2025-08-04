@@ -3,6 +3,7 @@ import { TwoOptionSelector, FormInput, LabeledSection, PhotoUpload, Button } fro
 import { useWatch } from 'react-hook-form';
 import { memo } from 'react';
 import { FormLayout } from '@layouts';
+import { type Step1FormValues } from '@types';
 
 type Props = {
   handleNextStep: () => void;
@@ -10,8 +11,12 @@ type Props = {
 
 const Step1 = memo(({ handleNextStep }: Props) => {
   const nameValue = useWatch({ name: 'patientName' });
+  const ageValue = useWatch({ name: 'patientAge' });
   const leftValue = useWatch({ name: 'step1' });
   const photoValue = useWatch({ name: 'photo' });
+  const contactValue = useWatch({ name: 'patientContact' });
+  const sexValue = useWatch({ name: 'patientSex' });
+  const profileImageUrl = useWatch({ name: 'profileImageUrl' });
 
   // // 필수 값 모두 채워졌는지 판단해서 상위로 전달
 
@@ -24,24 +29,38 @@ const Step1 = memo(({ handleNextStep }: Props) => {
             <Button variant='assistive'>이전 환자 정보 불러오기</Button>
           </FormLayout.SubTitle>
           <div className='flex-center w-full'>
-            <PhotoUpload name='photo' />
+            <PhotoUpload name='profileImageUrl' />
           </div>
-          <LabeledSection label='왼쪽' isChecked={!!leftValue}>
+          <div className='flex gap-[1.2rem]'>
+            <LabeledSection label='환자 이름' isChecked={!!nameValue}>
+              <FormInput type='text' size='M' placeholder='이름 입력' name='patientName' />
+            </LabeledSection>
+            <LabeledSection label='환자 나이' isChecked={!!ageValue}>
+              <FormInput
+                type='number'
+                size='M'
+                placeholder='나이 입력'
+                description='세'
+                name='patientAge'
+              />
+            </LabeledSection>
+          </div>
+          <LabeledSection label='환자 성별' isChecked={!!sexValue}>
             <TwoOptionSelector
-              name='step1'
-              leftOption={{ label: '왼쪽', value: 'step1-left' }}
-              rightOption={{ label: '오른쪽', value: 'step1-right' }}
+              name='patientSex'
+              leftOption={{ label: '남자', value: 'male' }}
+              rightOption={{ label: '여자', value: 'female' }}
             />
           </LabeledSection>
-          <LabeledSection label='환자 이름' isChecked={!!nameValue}>
-            <FormInput type='text' size='M' placeholder='이름 입력' name='patientName' />
+          <LabeledSection label='환자 연락처' isChecked={!!contactValue}>
+            <FormInput type='contact' size='M' placeholder='연락처 입력' name='patientContact' />
           </LabeledSection>
         </FormLayout.Content>
         <FormLayout.Footer>
           <Button
             variant='primary'
             onClick={handleNextStep}
-            disabled={!(leftValue && nameValue && photoValue)}>
+            disabled={!(nameValue && ageValue && sexValue && contactValue && profileImageUrl)}>
             다음
           </Button>
         </FormLayout.Footer>
