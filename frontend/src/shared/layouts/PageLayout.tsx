@@ -8,7 +8,9 @@ interface PageLayoutProps {
 
 const PageLayout = ({ children }: PageLayoutProps) => {
   return (
-    <div className='bg-background-default-white relative flex h-[100dvh] min-h-[100dvh] w-full max-w-[500px] min-w-[375px] flex-col'>
+    <div
+      id='page-layout-container'
+      className='bg-background-default-white relative flex h-[100dvh] min-h-[100dvh] w-full max-w-[500px] min-w-[375px] flex-col'>
       {children}
     </div>
   );

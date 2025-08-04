@@ -9,13 +9,13 @@ import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class JsonUtilTest {
+class JsonUtilsTest {
 
     @Test
     @DisplayName("객체 -> JSON 문자열로 직렬화")
     void toJson_class() {
         TestDto testDto = new TestDto("홍길동", 30);
-        String json = JsonUtil.toJson(testDto);
+        String json = JsonUtils.toJson(testDto);
 
         assertThat(json).isEqualTo("{\"name\":\"홍길동\",\"age\":30}");
     }
@@ -24,7 +24,7 @@ class JsonUtilTest {
     @DisplayName("List -> JSON 문자열로 직렬화")
     void toJson_list() {
         List<String> values = List.of("친절함", "책임감");
-        String json = JsonUtil.toJson(values);
+        String json = JsonUtils.toJson(values);
 
         assertThat(json).isEqualTo("[\"친절함\",\"책임감\"]");
     }
@@ -33,7 +33,7 @@ class JsonUtilTest {
     @DisplayName("JSON 문자열 -> 객체로 역직렬화 (Class<T>)")
     void fromJson_class() {
         String json = "{\"name\":\"홍길동\",\"age\":30}";
-        TestDto testDto = JsonUtil.fromJson(json, TestDto.class);
+        TestDto testDto = JsonUtils.fromJson(json, TestDto.class);
 
         assertThat(testDto).isNotNull();
         assertThat(testDto.getName()).isEqualTo("홍길동");
@@ -44,7 +44,7 @@ class JsonUtilTest {
     @DisplayName("JSON 배열 -> List로 역직렬화 (TypeReference<T>)")
     void fromJson_list() {
         String json = "[\"A\", \"B\", \"C\"]";
-        List<String> list = JsonUtil.fromJson(json, new TypeReference<List<String>>() {});
+        List<String> list = JsonUtils.fromJson(json, new TypeReference<List<String>>() {});
 
         assertThat(list).containsExactly("A", "B", "C");
     }
@@ -53,7 +53,7 @@ class JsonUtilTest {
     @DisplayName("JSON 객체 -> Map으로 역직렬화 (TypeReference<T>)")
     void fromJson_map() {
         String json = "{\"key1\": \"value1\", \"key2\": \"value2\"}";
-        Map<String, String> map = JsonUtil.fromJson(json, new TypeReference<Map<String, String>>() {});
+        Map<String, String> map = JsonUtils.fromJson(json, new TypeReference<Map<String, String>>() {});
 
         assertThat(map).hasSize(2);
         assertThat(map.get("key1")).isEqualTo("value1");

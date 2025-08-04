@@ -8,7 +8,7 @@ interface Props {
 
 const LabeledSection = ({ label, isChecked = false, children }: Props) => {
   return (
-    <section className='flex flex-col gap-[0.8rem]'>
+    <section className='flex w-full flex-col gap-[0.8rem]'>
       <div className='flex items-center'>
         <h6 className='body1-16-bold text-neutral-90'>{label}</h6>
         <IcCheck

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Tag(name = "reviews", description = "도우미 리뷰 관련 API")
 @RestController
@@ -38,7 +39,7 @@ public class ReviewController {
 
         ReviewSimpleResponse mock = ReviewSimpleResponse.builder()
                 .satisfactionLevel(SatisfactionLevel.GOOD)
-                .createdAt(LocalDate.now().minusDays(30))
+                .createdAt(LocalDateTime.now().minusDays(30))
                 .shortComment("약간 아쉽지만 좋았어요! 또 이용하고 싶습니다!")
                 .build();
 

@@ -8,6 +8,7 @@ export const Route = createFileRoute('/customer/')({
 });
 
 function RouteComponent() {
+  const { isOpen, openModal, closeModal } = useModal();
   return (
     <PageLayout>
       <PageLayout.Content>
@@ -18,7 +19,7 @@ function RouteComponent() {
               토닥과 함께 <br />
               안전하게 동행하세요!
             </h2>
-            <Button variant='assistive' size='md'>
+            <Button variant='assistive' size='md' onClick={openModal}>
               <IcPlusSideLeft />
               <span className='text-text-neutral-primary'>새로운 동행 신청하기</span>
             </Button>

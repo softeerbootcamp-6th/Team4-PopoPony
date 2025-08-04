@@ -9,14 +9,14 @@ import lombok.Getter;
 public class PositiveFeedbackStatResponse {
 
     @Schema(description = "좋았던점 키워드", example = "친절해요")
-    private String keyword;
+    private String description;
 
     @Schema(description = "해당 키워드의 개수", example = "12")
-    private Integer count;
+    private Long count;
 
     @Builder
-    public PositiveFeedbackStatResponse(String keyword, Integer count) {
-        this.keyword = keyword;
+    public PositiveFeedbackStatResponse(String description, Long count) {
+        this.description = description;
         this.count = count;
     }
 }

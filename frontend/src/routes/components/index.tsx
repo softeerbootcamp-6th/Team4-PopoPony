@@ -1,21 +1,45 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { Button, LabeledSection, TwoOptionSelector, TextField, ProgressBar } from '@components';
+import { Button, ProgressBar, Modal, PhotoUpload } from '@components';
 import { useForm, FormProvider, type SubmitHandler } from 'react-hook-form';
 import type { HTMLAttributes } from 'react';
+import { useModal } from '@hooks';
 
 export const Route = createFileRoute('/components/')({
   component: RouteComponent,
 });
 
 type FormValues = {
-  cognitive: string;
+  name: string;
+  quantity: string;
+  price: string;
+  birthDate: string;
+  time: string;
+  phone: string;
 };
 
 function RouteComponent() {
   const methods = useForm<FormValues>();
+  const watchAllFields = methods.watch();
+  console.log(watchAllFields);
   const onSubmit: SubmitHandler<FormValues> = (data) => {
     console.log('Final Data:', data);
   };
+  // Modal hooks
+  const {
+    isOpen: isSingleModalOpen,
+    openModal: openSingleModal,
+    closeModal: closeSingleModal,
+  } = useModal();
+  const {
+    isOpen: isDoubleModalOpen,
+    openModal: openDoubleModal,
+    closeModal: closeDoubleModal,
+  } = useModal();
+  const {
+    isOpen: isConfirmModalOpen,
+    openModal: openConfirmModal,
+    closeModal: closeConfirmModal,
+  } = useModal();
 
   interface SectionProps extends HTMLAttributes<HTMLDivElement> {
     title: string;
@@ -75,17 +99,19 @@ function RouteComponent() {
 
       <Section title='LabeledSection/TwoOptionSelector'>
         <FormProvider {...methods}>
-          <LabeledSection label='인지능력' isChecked={!!methods.watch('cognitive')}>
-            <TwoOptionSelector
-              name='cognitive'
-              leftOption={{ label: '괜찮아요', value: 'ok' }}
-              rightOption={{ label: '도움이 필요해요', value: 'help' }}
-            />
-          </LabeledSection>
-          <form onSubmit={methods.handleSubmit(onSubmit)}>
-            <Button type='submit'>Submit</Button>
-          </form>
+          <PhotoUpload name='photo' />
         </FormProvider>
+        <form onSubmit={methods.handleSubmit(onSubmit)}>
+          {/* register your input into the hook by invoking the "register" function */}
+          <input defaultValue='name' {...methods.register('name')} />
+
+          {/* include validation with required or other standard HTML validation rules */}
+          <input {...methods.register('price', { required: true })} />
+          {/* errors will return when field validation fails  */}
+          {methods.formState.errors.price && <span>This field is required</span>}
+
+          <input type='submit' />
+        </form>
       </Section>
 
       <Section title='ProgressBar'>
@@ -95,82 +121,66 @@ function RouteComponent() {
         <ProgressBar maxStep={4} currentStep={1} />
       </Section>
 
-      {/* TextField Section */}
-      <Section title='TextField'>
-        <div className='flex w-[32rem] flex-col gap-[2.4rem]'>
-          {/* Text Type - Size Variants */}
-          <div className='space-y-[1.2rem]'>
-            <h4 className='text-neutral-80 body-16-medium'>Text Type</h4>
-            <TextField
-              size='S'
-              type='text'
-              label='환자 나이 (Size S)'
-              placeholder='나이를 입력하세요'
-            />
-            <TextField
-              size='M'
-              type='text'
-              label='환자 나이 (Size M)'
-              placeholder='나이를 입력하세요'
-            />
-            <TextField size='M' type='text' label='입력된 상태' value='입력된 텍스트' />
-          </div>
-
-          {/* Unit Type */}
-          <div className='space-y-[1.2rem]'>
-            <h4 className='text-neutral-80 body-16-medium'>Unit Type</h4>
-            <TextField size='S' type='unit' unit='세' label='나이 (세 단위)' placeholder='0' />
-            <TextField size='M' type='unit' unit='세' label='나이 (세 단위)' value='25' />
-            <TextField size='S' type='unit' unit='원' label='금액 (원 단위)' placeholder='0' />
-            <TextField size='M' type='unit' unit='원' label='금액 (원 단위)' value='150000' />
-          </div>
-
-          {/* File Type */}
-          <div className='space-y-[1.2rem]'>
-            <h4 className='text-neutral-80 body-16-medium'>File Type</h4>
-            <TextField
-              size='S'
-              type='file'
-              label='첨부파일 (Size S)'
-              placeholder='파일을 선택하세요'
-              onFileSelect={() => alert('파일 선택 클릭됨')}
-            />
-            <TextField
-              size='M'
-              type='file'
-              label='첨부파일 (Size M)'
-              placeholder='파일을 선택하세요'
-              onFileSelect={() => alert('파일 선택 클릭됨')}
-            />
-            <TextField
-              size='M'
-              type='file'
-              label='업로드된 파일'
-              value='자격증.jpg'
-              onFileSelect={() => alert('파일 재선택 클릭됨')}
-            />
-          </div>
-
-          {/* Combined Examples */}
-          <div className='space-y-[1.2rem]'>
-            <h4 className='text-neutral-80 body-16-medium'>Various States</h4>
-            <TextField
-              size='M'
-              type='text'
-              label='읽기 전용'
-              value='수정할 수 없는 텍스트'
-              readOnly
-            />
-            <TextField
-              size='M'
-              type='text'
-              label='비활성화'
-              placeholder='비활성화된 입력'
-              disabled
-            />
-          </div>
+      <Section title='Modal은 작동 안해요!! PageLayout 안에 있어야 해요!!'>
+        <div className='flex flex-col gap-[1.6rem]'>
+          <Button variant='primary' size='md' onClick={openSingleModal}>
+            단일 버튼 모달
+          </Button>
+          <Button variant='secondary' size='md' onClick={openDoubleModal}>
+            이중 버튼 모달
+          </Button>
+          <Button variant='assistive' size='md' onClick={openConfirmModal}>
+            확인 모달
+          </Button>
         </div>
       </Section>
+      {/* Modal components */}
+      <Modal isOpen={isSingleModalOpen} onClose={closeSingleModal}>
+        <Modal.Title>알림</Modal.Title>
+        <Modal.Content>
+          정말로 삭제하시겠습니까?
+          <br />
+          삭제된 데이터는 복구할 수 없습니다.
+        </Modal.Content>
+        <Modal.ButtonContainer>
+          <Modal.ConfirmButton onClick={closeSingleModal}>확인</Modal.ConfirmButton>
+        </Modal.ButtonContainer>
+      </Modal>
+      {/* 이중 버튼 모달 */}
+      <Modal isOpen={isDoubleModalOpen} onClose={closeDoubleModal}>
+        <Modal.Title>동행 신청 완료</Modal.Title>
+        <Modal.Content>
+          동행 신청이 성공적으로 완료되었습니다.
+          <br />
+          신청 내역은 마이페이지에서 확인하실 수 있습니다.
+        </Modal.Content>
+        <Modal.ButtonContainer>
+          <Modal.CloseButton onClick={closeDoubleModal}>취소</Modal.CloseButton>
+          <Modal.ConfirmButton
+            onClick={() => {
+              alert('확인 버튼 클릭됨!');
+              closeDoubleModal();
+            }}>
+            확인
+          </Modal.ConfirmButton>
+        </Modal.ButtonContainer>
+      </Modal>
+      {/* 확인 모달 */}
+      <Modal isOpen={isConfirmModalOpen} onClose={closeConfirmModal}>
+        <Modal.Title>주의사항</Modal.Title>
+        <Modal.Content>
+          동행 서비스를 이용하기 전에 다음 사항을 확인해주세요:
+          <br />
+          <br />
+          • 환자의 건강 상태가 안정적인지 확인
+          <br />
+          • 필요한 의료용품을 준비
+          <br />• 병원 예약 시간을 확인
+        </Modal.Content>
+        <Modal.ButtonContainer>
+          <Modal.ConfirmButton onClick={closeConfirmModal}>이해했습니다</Modal.ConfirmButton>
+        </Modal.ButtonContainer>
+      </Modal>
     </div>
   );
 }

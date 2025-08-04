@@ -1,17 +1,20 @@
 import Button from './Button';
 import BottomCTA from './BottomCTA';
 import ProgressBar from './ProgressBar';
-import LabeledSection from './LabeledSection';
+import LabeledSection from './form/LabeledSection';
 import Spinner from './Spinner';
 import TopAppBar from './TopAppBar';
-import TwoOptionSelector from './TwoOptionSelector';
-import TextField from './TextField/TextField_S';
+import TwoOptionSelector from './form/TwoOptionSelector';
+import FormInput from './TextField/FormInput';
 import Landing from './Landing';
 import Tabs from './Tabs';
 import EscortCard from './EscortCard';
 import StatusTag from './StatusTag';
 import Tag from './Tag';
 import StrengthTag from './StrengthTag';
+import Modal from './modal/Modal';
+import BottomSheet from './modal/BottomSheet';
+import PhotoUpload from './form/PhotoUpload';
 
 export {
   Button,
@@ -20,7 +23,7 @@ export {
   Spinner,
   TopAppBar,
   TwoOptionSelector,
-  TextField,
+  FormInput,
   Landing,
   ProgressBar,
   Tabs,
@@ -28,4 +31,7 @@ export {
   StatusTag,
   Tag,
   StrengthTag,
+  Modal,
+  BottomSheet,
+  PhotoUpload,
 };
