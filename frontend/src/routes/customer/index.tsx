@@ -18,7 +18,7 @@ function RouteComponent() {
               토닥과 함께 <br />
               안전하게 동행하세요!
             </h2>
-            <Link to='/customer/recruit/$step' params={{ step: '기본정보' }}>
+            <Link to='/customer/recruit/$step' params={{ step: 'profile' }}>
               <Button variant='assistive' size='md'>
                 <IcPlusSideLeft />
                 <span className='text-text-neutral-primary'>새로운 동행 신청하기</span>
