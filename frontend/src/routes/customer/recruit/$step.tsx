@@ -1,8 +1,8 @@
-import { TwoOptionSelector, ProgressBar } from '@components';
+import { TwoOptionSelector, ProgressBar, Modal } from '@components';
 import { PageLayout } from '@layouts';
 import { type RecruitFormValues } from '@customer/types';
-import { useFunnel } from '@hooks';
-import { createFileRoute } from '@tanstack/react-router';
+import { useFunnel, useModal } from '@hooks';
+import { createFileRoute, useRouter } from '@tanstack/react-router';
 import { FormProvider, useForm, type SubmitHandler } from 'react-hook-form';
 import { Step1 } from '@customer/components';
 
@@ -13,6 +13,8 @@ export const Route = createFileRoute('/customer/recruit/$step')({
 const stepList = ['기본정보', '보행상태', '의사소통', '동행시간', '동행경로', '요청사항'];
 
 function RouteComponent() {
+  const router = useRouter();
+  const { isOpen, openModal, closeModal } = useModal();
   const methods = useForm<RecruitFormValues>({ shouldUnregister: false });
 
   const onSubmit: SubmitHandler<RecruitFormValues> = (data) => {
@@ -37,6 +39,19 @@ function RouteComponent() {
     }
   };
 
+  const handleClose = () => {
+    openModal();
+  };
+
+  const handleApproveClose = () => {
+    closeModal();
+    router.navigate({ to: '/customer' });
+  };
+
+  const handleDenyClose = () => {
+    closeModal();
+  };
+
   // // Footer 버튼 텍스트 결정
   // const getButtonLabel = () => {
   //   const currentIndex = stepList.indexOf(currentStep);
@@ -49,6 +64,7 @@ function RouteComponent() {
         title='동행 신청하기'
         showBack={currentStep !== '기본정보'}
         showClose={true}
+        onClose={handleClose}
         background={true}
       />
       <PageLayout.Content>
@@ -95,6 +111,14 @@ function RouteComponent() {
           </div>
         </div>
       </PageLayout.Content>
+
+      <Modal isOpen={isOpen} onClose={handleDenyClose}>
+        <Modal.Title>동행 신청을 중단하시겠어요?</Modal.Title>
+        <Modal.ButtonContainer>
+          <Modal.ConfirmButton onClick={handleApproveClose}>네</Modal.ConfirmButton>
+          <Modal.CloseButton onClick={handleDenyClose}>아니오</Modal.CloseButton>
+        </Modal.ButtonContainer>
+      </Modal>
     </PageLayout>
   );
 }
