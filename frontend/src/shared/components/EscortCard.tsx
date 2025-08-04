@@ -8,8 +8,7 @@ type Props = {
 
 const EscortCard = ({ children }: Props) => {
   return (
-    // TODO: 그림자 추가
-    <div className='bg-background-default-white border-stroke-neutral-dark flex w-full flex-col gap-[1.2rem] rounded-[0.8rem] border p-[1.6rem]'>
+    <div className='bg-background-default-white border-stroke-neutral-dark shadow-card flex w-full flex-col gap-[1.2rem] rounded-[0.8rem] border p-[1.6rem]'>
       {children}
     </div>
   );
