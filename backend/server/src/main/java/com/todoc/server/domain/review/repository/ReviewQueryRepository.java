@@ -3,7 +3,6 @@ package com.todoc.server.domain.review.repository;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Projections;
 import com.todoc.server.common.enumeration.SatisfactionLevel;
-import com.todoc.server.domain.review.entity.QReview;
 import com.todoc.server.domain.review.entity.Review;
 import com.todoc.server.domain.review.web.dto.response.ReviewSimpleResponse;
 import com.todoc.server.domain.review.web.dto.response.ReviewStatResponse;
@@ -13,6 +12,8 @@ import org.springframework.stereotype.Repository;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static com.todoc.server.domain.review.entity.QReview.review;
 
 @Repository
 public class ReviewQueryRepository extends QuerydslRepositorySupport {
@@ -25,7 +26,6 @@ public class ReviewQueryRepository extends QuerydslRepositorySupport {
      * userId에 해당하는 도우미의 리뷰 총 개수와 만족도 비율을 조회
      */
     public ReviewStatResponse getReviewStatByHelperUserId(Long userId) {
-        QReview review = QReview.review;
 
         List<Tuple> results = getQuerydsl().createQuery()
                 .select(review.satisfactionLevel, review.count())
@@ -51,7 +51,6 @@ public class ReviewQueryRepository extends QuerydslRepositorySupport {
      * userId에 해당하는 도우미의 최근 5개의 리뷰 목록 조회
      */
     public List<ReviewSimpleResponse> getLatestReviewsByHelperUserId(Long userId) {
-        QReview review = QReview.review;
 
         return getQuerydsl().createQuery()
                 .select(Projections.constructor(
