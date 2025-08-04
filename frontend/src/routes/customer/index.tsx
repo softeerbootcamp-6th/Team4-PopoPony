@@ -83,7 +83,7 @@ function RouteComponent() {
                   <EscortCard.Info type='location' text='꿈에그린아파트 → 서울아산병원' />
                   <EscortCard.Info type='price' text='123,456원' />
                 </EscortCard.InfoSection>
-                <EscortCard.Button onClick={() => {}} />
+                <EscortCard.Tag tags={['safety', 'wheelchair', 'care']} />
               </EscortCard>
               <EscortCard>
                 <EscortCard.StatusHeader
