@@ -1,8 +1,12 @@
 package com.todoc.server.domain.auth.exception;
 
 import com.todoc.server.common.exception.base.ResponseCode;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 
+@Getter
+@RequiredArgsConstructor
 public enum AuthErrorCode implements ResponseCode {
 
     // 사용자(auth)
@@ -12,25 +16,4 @@ public enum AuthErrorCode implements ResponseCode {
     private final int code;
     private final int status;
     private final String message;
-
-    AuthErrorCode(int code, int status, String message) {
-        this.code = code;
-        this.status = status;
-        this.message = message;
-    }
-
-    @Override
-    public int getCode() {
-        return code;
-    }
-
-    @Override
-    public int getStatus() {
-        return status;
-    }
-
-    @Override
-    public String getMessage() {
-        return message;
-    }
 }
