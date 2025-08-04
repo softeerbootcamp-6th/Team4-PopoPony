@@ -9,7 +9,7 @@ export const Route = createFileRoute('/customer/')({
 });
 
 function RouteComponent() {
-  const { modalRef, isOpen, openModal, closeModal } = useModal();
+  const { isOpen, openModal, closeModal } = useModal();
   return (
     <PageLayout>
       <PageLayout.Content>
@@ -31,7 +31,7 @@ function RouteComponent() {
             className='absolute top-[-4.4rem] right-0 w-[24.8rem]'
           />
         </div>
-        <Modal ref={modalRef} isOpen={isOpen} onClose={closeModal}>
+        <Modal isOpen={isOpen} onClose={closeModal}>
           <Modal.Title>알림</Modal.Title>
           <Modal.Content>
             정말로 삭제하시겠습니까?

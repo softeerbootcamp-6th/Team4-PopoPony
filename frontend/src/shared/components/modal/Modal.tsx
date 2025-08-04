@@ -7,12 +7,11 @@ import type { ButtonProps } from '../Button';
 // Main Modal Component
 interface ModalProps {
   children: ReactNode;
-  ref?: React.RefObject<HTMLDivElement | null>;
   isOpen?: boolean;
   onClose?: () => void;
 }
 
-const Modal = ({ children, ref, isOpen = false, onClose }: ModalProps) => {
+const Modal = ({ children, isOpen = false, onClose }: ModalProps) => {
   const [container, setContainer] = useState<HTMLElement | null>(null);
 
   useEffect(() => {
@@ -37,7 +36,6 @@ const Modal = ({ children, ref, isOpen = false, onClose }: ModalProps) => {
       {/* Modal Content */}
       <div className='pointer-events-none absolute inset-0 z-50 flex items-center justify-center'>
         <div
-          ref={ref as React.RefObject<HTMLDivElement>}
           className='pointer-events-auto relative w-[30rem] rounded-[1.2rem] bg-[var(--color-background-default-white)] p-[2rem] focus:outline-none'
           role='dialog'
           aria-modal='true'>
