@@ -7,7 +7,7 @@ const Tabs = ({ className, ...props }: React.ComponentProps<typeof TabsPrimitive
   return (
     <TabsPrimitive.Root
       data-slot='tabs'
-      className={cn('flex h-[5rem] w-full flex-col', className)}
+      className={cn('flex h-full w-full flex-col', className)}
       {...props}
     />
   );
@@ -18,7 +18,7 @@ const TabsList = ({ className, ...props }: React.ComponentProps<typeof TabsPrimi
     <TabsPrimitive.List
       data-slot='tabs-list'
       className={cn(
-        'bg-background-default-white text-neutral-assistive flex-center rounded-lg',
+        'bg-background-default-white text-neutral-assistive flex-center sticky top-0 z-10 rounded-lg',
         className
       )}
       {...props}
