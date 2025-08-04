@@ -1,11 +1,10 @@
-import { TwoOptionSelector, ProgressBar, Button } from '@components';
+import { TwoOptionSelector, ProgressBar } from '@components';
 import { PageLayout } from '@layouts';
 import { type RecruitFormValues } from '@customer/types';
 import { useFunnel } from '@hooks';
 import { createFileRoute } from '@tanstack/react-router';
 import { FormProvider, useForm, type SubmitHandler } from 'react-hook-form';
 import { Step1 } from '@customer/components';
-import { useState } from 'react';
 
 export const Route = createFileRoute('/customer/recruit/$step')({
   component: RouteComponent,
@@ -15,7 +14,6 @@ const stepList = ['기본정보', '보행상태', '의사소통', '동행시간'
 
 function RouteComponent() {
   const methods = useForm<RecruitFormValues>({ shouldUnregister: false });
-  const [isStepValid, setIsStepValid] = useState(false);
 
   const onSubmit: SubmitHandler<RecruitFormValues> = (data) => {
     console.log('Final Data:', data);
@@ -32,7 +30,6 @@ function RouteComponent() {
     const currentIndex = stepList.indexOf(currentStep);
     if (currentIndex < stepList.length - 1) {
       const nextStepName = stepList[currentIndex + 1];
-      setIsStepValid(false);
       nextStep(nextStepName);
     } else {
       // 마지막 스텝에서는 제출
@@ -40,11 +37,11 @@ function RouteComponent() {
     }
   };
 
-  // Footer 버튼 텍스트 결정
-  const getButtonLabel = () => {
-    const currentIndex = stepList.indexOf(currentStep);
-    return currentIndex === stepList.length - 1 ? '제출' : '다음';
-  };
+  // // Footer 버튼 텍스트 결정
+  // const getButtonLabel = () => {
+  //   const currentIndex = stepList.indexOf(currentStep);
+  //   return currentIndex === stepList.length - 1 ? '제출' : '다음';
+  // };
 
   return (
     <PageLayout>
@@ -66,7 +63,7 @@ function RouteComponent() {
             <FormProvider {...methods}>
               <Funnel>
                 <Step name='기본정보'>
-                  <Step1 onValidChange={setIsStepValid} />
+                  <Step1 handleNextStep={handleNextStep} />
                 </Step>
                 <Step name='보행상태'>
                   <div>step2</div>

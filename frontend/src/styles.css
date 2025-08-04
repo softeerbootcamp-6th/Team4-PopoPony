@@ -155,8 +155,6 @@
 /*        BASE STYLES        */
 /* ========================= */
 @layer base {
-
-
   html {
     font-size: 62.5%;
     font-family: var(--font-pretendard);

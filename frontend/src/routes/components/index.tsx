@@ -1,15 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
-import {
-  Button,
-  LabeledSection,
-  TwoOptionSelector,
-  FormInput,
-  ProgressBar,
-  Modal,
-  BottomSheet,
-  PhotoUpload,
-} from '@components';
-import { useForm, FormProvider, type SubmitHandler, useWatch, Controller } from 'react-hook-form';
+import { Button, ProgressBar, Modal, PhotoUpload } from '@components';
+import { useForm, FormProvider, type SubmitHandler } from 'react-hook-form';
 import type { HTMLAttributes } from 'react';
 import { useModal } from '@hooks';
 

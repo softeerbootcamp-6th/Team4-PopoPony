@@ -5,10 +5,10 @@ import { memo } from 'react';
 import { FormLayout } from '@layouts';
 
 type Props = {
-  onValidChange: (isValid: boolean) => void;
+  handleNextStep: () => void;
 };
 
-const Step1 = memo(({ onValidChange }: Props) => {
+const Step1 = memo(({ handleNextStep }: Props) => {
   const nameValue = useWatch({ name: 'patientName' });
   const leftValue = useWatch({ name: 'step1' });
   const photoValue = useWatch({ name: 'photo' });
@@ -19,9 +19,7 @@ const Step1 = memo(({ onValidChange }: Props) => {
     <>
       <FormLayout>
         <FormLayout.Content>
-          <FormLayout.Title>
-            <h2>동행할 환자의 기본정보를 입력해주세요</h2>
-          </FormLayout.Title>
+          <FormLayout.Title>동행할 환자의 기본정보를 입력해주세요</FormLayout.Title>
           <FormLayout.SubTitle>
             <Button variant='assistive'>이전 환자 정보 불러오기</Button>
           </FormLayout.SubTitle>
@@ -38,22 +36,12 @@ const Step1 = memo(({ onValidChange }: Props) => {
           <LabeledSection label='환자 이름' isChecked={!!nameValue}>
             <FormInput type='text' size='M' placeholder='이름 입력' name='patientName' />
           </LabeledSection>
-          <div className='flex-center w-full'>
-            <PhotoUpload name='photo' />
-          </div>
-          <LabeledSection label='왼쪽' isChecked={!!leftValue}>
-            <TwoOptionSelector
-              name='step1'
-              leftOption={{ label: '왼쪽', value: 'step1-left' }}
-              rightOption={{ label: '오른쪽', value: 'step1-right' }}
-            />
-          </LabeledSection>
-          <LabeledSection label='환자 이름' isChecked={!!nameValue}>
-            <FormInput type='text' size='M' placeholder='이름 입력' name='patientName' />
-          </LabeledSection>
         </FormLayout.Content>
         <FormLayout.Footer>
-          <Button variant='primary' disabled={!(leftValue && nameValue && photoValue)}>
+          <Button
+            variant='primary'
+            onClick={handleNextStep}
+            disabled={!(leftValue && nameValue && photoValue)}>
             다음
           </Button>
         </FormLayout.Footer>
