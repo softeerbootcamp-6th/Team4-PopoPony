@@ -57,6 +57,14 @@ import IcVariant34 from './Variant34.svg?react';
 import IcVariant55 from './Variant55.svg?react';
 import IcVerifiedUser from './verified_user.svg?react';
 
+import IcEdit from './edit.svg?react';
+import IcHomeFill from './home-fill.svg?react';
+import IcHospitalFill from './hospital-fill.svg?react';
+import IcNumber1 from './number-1.svg?react';
+import IcNumber2 from './number-2.svg?react';
+import IcNumber3 from './number-3.svg?react';
+import IcTextGo from './text-go.svg?react';
+
 export {
   // Basic Icons
   IcAddCircle,
@@ -116,4 +124,13 @@ export {
   IcVariant34,
   IcVariant55,
   IcVerifiedUser,
+
+  // Form Icons
+  IcEdit,
+  IcHomeFill,
+  IcHospitalFill,
+  IcNumber1,
+  IcNumber2,
+  IcNumber3,
+  IcTextGo,
 };
