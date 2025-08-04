@@ -4,6 +4,8 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.todoc.server.common.util.DateTimeUtils;
 import com.todoc.server.common.util.JsonUtils;
 import com.todoc.server.domain.auth.entity.Auth;
+import com.todoc.server.domain.auth.exception.AuthErrorCode;
+import com.todoc.server.domain.auth.exception.AuthNotFoundException;
 import com.todoc.server.domain.escort.service.EscortService;
 import com.todoc.server.domain.helper.entity.Helper;
 import com.todoc.server.domain.helper.web.dto.response.HelperDetailResponse;
@@ -40,12 +42,9 @@ public class HelperFacadeService {
 
         // 1. 도우미 조회
         Helper helper = helperService.getHelperByUserId(userId);
-        if (helper == null) {
-            throw new IllegalArgumentException("해당 userId에 대한 도우미 정보가 존재하지 않습니다.");
-        }
         Auth auth = helper.getAuth();
         if (auth == null) {
-            throw new IllegalStateException("도우미에 연결된 사용자 정보가 없습니다.");
+            throw new AuthNotFoundException();
         }
 
         // 2. 나이 계산
