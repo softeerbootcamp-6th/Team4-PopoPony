@@ -1,6 +1,5 @@
 package com.todoc.server.domain.escort.service;
 
-import com.todoc.server.domain.escort.repository.ApplicationJpaRepository;
 import com.todoc.server.domain.escort.repository.ApplicationQueryRepository;
 import com.todoc.server.domain.escort.web.dto.response.ApplicationListResponse;
 import lombok.RequiredArgsConstructor;
