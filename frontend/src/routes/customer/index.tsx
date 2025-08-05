@@ -24,7 +24,7 @@ function RouteComponent() {
             </Button>
           </div>
           <img
-            src='/images/home-graphic.png'
+            src='/images/home-graphic.svg'
             alt='home'
             className='absolute top-[-4.4rem] right-0 w-[24.8rem]'
           />
