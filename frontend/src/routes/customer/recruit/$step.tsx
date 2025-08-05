@@ -4,7 +4,7 @@ import { type RecruitFormValues } from '@customer/types';
 import { useFunnel, useModal } from '@hooks';
 import { createFileRoute, useRouter } from '@tanstack/react-router';
 import { FormProvider, useForm, type SubmitHandler } from 'react-hook-form';
-import { Profile, Condition } from '@customer/components';
+import { Profile, Condition, Communication, Time } from '@customer/components';
 
 export const Route = createFileRoute('/customer/recruit/$step')({
   component: RouteComponent,
@@ -85,16 +85,18 @@ function RouteComponent() {
                   <Condition handleNextStep={handleNextStep} />
                 </Step>
                 <Step name='communication'>
-                  <div>step3</div>
-                  <TwoOptionSelector
-                    name='communicationAbility'
-                    leftOption={{ label: '왼쪽', value: 'step3-left' }}
-                    rightOption={{ label: '오른쪽', value: 'step3-right' }}
-                  />
+                  <Communication handleNextStep={handleNextStep} />
                 </Step>
-
                 <Step name='time'>
-                  <div>마지막</div>
+                  <Time handleNextStep={handleNextStep} />
+                </Step>
+                <Step name='route'>
+                  <div>루트</div>
+                  {/* <Route handleNextStep={handleNextStep} /> */}
+                </Step>
+                <Step name='request'>
+                  <div>요청</div>
+                  {/* <Request handleNextStep={handleNextStep} /> */}
                 </Step>
               </Funnel>
             </FormProvider>
