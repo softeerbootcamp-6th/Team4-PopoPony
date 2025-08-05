@@ -29,7 +29,7 @@ const CardStatusHeader = ({ status, text, title }: CardStatusHeaderProps) => {
       </div>
       <div className='flex-between mt-[0.6rem] cursor-pointer'>
         <h3 className='subtitle-18-bold text-text-neutral-primary'>{title}</h3>
-        <IcChevronRightSecondary color='text-text-neutral-secondary' />
+        <IcChevronRightSecondary />
       </div>
     </>
   );
@@ -59,7 +59,7 @@ const CardInfo = ({ type, text }: CardInfoProps) => {
   );
 };
 
-const CardTags = ({ tags }: { tags: ('safety' | 'wheelchair' | 'care')[] }) => {
+const CardTags = ({ tags }: { tags: ('support' | 'wheelchair' | 'care')[] }) => {
   return (
     <div className='flex-start gap-[0.4rem]'>
       {tags.map((tag) => (
