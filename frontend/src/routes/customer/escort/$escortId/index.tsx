@@ -1,4 +1,5 @@
 import { EscortCard, ProgressIndicator, Tabs } from '@components';
+import { HelperCard } from '@customer/components';
 import { PageLayout } from '@layouts';
 import { createFileRoute } from '@tanstack/react-router';
 
@@ -32,7 +33,47 @@ function RouteComponent() {
             <Tabs.TabsTrigger value='신청 내역'>신청 내역</Tabs.TabsTrigger>
           </Tabs.TabsList>
           <Tabs.TabsContent value='도우미'>
-            <div className='flex-col-start gap-[1.2rem] p-[2rem]'></div>
+            <div className='flex flex-col gap-[1.6rem] p-[2rem]'>
+              {/* 기본 헬퍼 (자격증 2개) */}
+              <HelperCard
+                helper={{
+                  id: '1',
+                  name: '최솔희',
+                  age: 39,
+                  gender: '여',
+                  profileImage: '/images/helper-profile.svg',
+                  certificates: ['간호사', '간호조무사'],
+                  tags: ['support', 'wheelchair', 'care'],
+                }}
+                onClick={(id) => console.log('헬퍼 카드 클릭:', id)}
+              />
+
+              {/* 자격증 많은 헬퍼 (5개 - +3 표시) */}
+              <HelperCard
+                helper={{
+                  id: '2',
+                  name: '김민수',
+                  age: 45,
+                  gender: '남',
+                  certificates: ['간호사', '간호조무사', '응급처치', '심폐소생술', '요양보호사'],
+                  tags: ['support', 'wheelchair'],
+                }}
+                onClick={(id) => console.log('헬퍼 카드 클릭:', id)}
+              />
+
+              {/* 프로필 이미지 없는 헬퍼 */}
+              <HelperCard
+                helper={{
+                  id: '3',
+                  name: '박영희',
+                  age: 52,
+                  gender: '여',
+                  certificates: ['요양보호사'],
+                  tags: ['care'],
+                }}
+                onClick={(id) => console.log('헬퍼 카드 클릭:', id)}
+              />
+            </div>
           </Tabs.TabsContent>
           <Tabs.TabsContent value='신청 내역'>Change your 신청 내역 here.</Tabs.TabsContent>
         </Tabs>
