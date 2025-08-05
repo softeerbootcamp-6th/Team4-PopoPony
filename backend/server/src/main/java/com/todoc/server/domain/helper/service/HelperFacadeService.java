@@ -63,7 +63,10 @@ public class HelperFacadeService {
         List<ReviewSimpleResponse> latestReviews = reviewService.getLatestReviewsByHelperUserId(auth.getId());
 
         // 6. JSON 문자열 → List<String> 변환 (강점, 자격증)
-        List<String> strengthList = JsonUtils.fromJson(helper.getStrength(), new TypeReference<>() {});
+        List<String> strengthList = null;
+        if (helper.getStrength() != null) {
+            strengthList = JsonUtils.fromJson(helper.getStrength(), new TypeReference<>() {});
+        }
         List<String> certificateList = certificateService.getHelperByUserId(helper.getId());
 
         // 7. 응답 객체 생성

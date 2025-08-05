@@ -49,7 +49,10 @@ public class ApplicationFacadeService {
                     }
                     Helper helper = helperService.getHelperByUserId(helperAuth.getId());
 
-                    List<String> strengthList = JsonUtils.fromJson(helper.getStrength(), new TypeReference<>() {});
+                    List<String> strengthList = null;
+                    if (helper.getStrength() != null) {
+                        JsonUtils.fromJson(helper.getStrength(), new TypeReference<>() {});
+                    }
 
                     // 2.2. 도우미 요약 정보(HelperSimpleResponse) 생성
                     HelperSimpleResponse helperSimple = HelperSimpleResponse.builder()
