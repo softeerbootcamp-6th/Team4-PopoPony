@@ -8,7 +8,7 @@ interface FormInputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'si
   name: string;
   size?: 'S' | 'M';
   type: InputType;
-  description?: string;
+  description?: string | React.ReactNode;
   placeholder?: string;
   validation?: () => void;
 }
