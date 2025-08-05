@@ -2,20 +2,39 @@ import { useState, useEffect } from 'react';
 import { FormLayout } from '@layouts';
 import { searchRoute } from '@customer/apis';
 import { useFormContext } from 'react-hook-form';
+import { useLocation } from '@tanstack/react-router';
 import type { LocationDetail } from '@customer/types';
 import SearchInput from '../search/searchInput';
 
-
 type Props = {
   handleSelectRoute: () => void;
-  place: '만남 장소를' | '병원을' | '복귀 장소를';
 };
 
-const SearchRoute = ({ handleSelectRoute, place }: Props) => {
+const SearchRoute = ({ handleSelectRoute }: Props) => {
+  // URL에서 query parameter 파싱
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const placeParam = searchParams.get('place');
+
+  // place 파라미터에 따른 텍스트 매핑
+  const getPlaceText = (place?: string | null): '만남 장소를' | '병원을' | '복귀 장소를' => {
+    switch (place) {
+      case 'meeting':
+        return '만남 장소를';
+      case 'hospital':
+        return '병원을';
+      case 'return':
+        return '복귀 장소를';
+      default:
+        return '만남 장소를';
+    }
+  };
+
+  const place = getPlaceText(placeParam);
   const [searchValue, setSearchValue] = useState<string>('');
   const [searchResult, setSearchResult] = useState<LocationDetail[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const { setValue } = useFormContext();
+  const { setValue, getValues } = useFormContext();
 
   const fetchSearchResult = async () => {
     if (!searchValue.trim()) {
@@ -73,6 +92,7 @@ const SearchRoute = ({ handleSelectRoute, place }: Props) => {
     };
 
     setValue(formFieldName, locationData);
+    console.log(getValues());
 
     // 검색 결과 초기화 및 라우트 변경
     setSearchResult([]);
