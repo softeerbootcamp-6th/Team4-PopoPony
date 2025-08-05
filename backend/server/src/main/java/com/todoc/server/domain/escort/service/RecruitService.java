@@ -90,7 +90,7 @@ public class RecruitService {
                 .orElseThrow(RecruitNotFoundException::new);
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public void cancelRecruit(Long recruitId) {
         Recruit recruit = recruitJpaRepository.findById(recruitId)
                 .orElseThrow(RecruitNotFoundException::new);
@@ -99,9 +99,6 @@ public class RecruitService {
         if (recruit.getStatus() != RecruitStatus.MATCHING) {
             throw new RecruitInvalidCancelException();
         }
-
-        // 상태 변경
-        recruit.setStatus(RecruitStatus.CANCELLED);
 
         // soft delete
         recruit.softDelete();
