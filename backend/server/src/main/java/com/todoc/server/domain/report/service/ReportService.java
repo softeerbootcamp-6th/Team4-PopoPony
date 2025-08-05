@@ -23,6 +23,6 @@ public class ReportService {
     @Transactional(readOnly = true)
     public Report getReportByRecruitId(Long recruitId) {
         return reportJpaRepository.findByRecruitId(recruitId)
-                .orElseThrow(() -> new ReportNotFoundException() {});
+                .orElseThrow(ReportNotFoundException::new);
     }
 }

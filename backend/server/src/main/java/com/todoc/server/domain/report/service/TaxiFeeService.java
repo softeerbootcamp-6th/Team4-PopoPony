@@ -23,6 +23,6 @@ public class TaxiFeeService {
     @Transactional(readOnly = true)
     public TaxiFee getReportByRecruitId(Long reportId) {
         return taxiFeeJpaRepository.findByReportId(reportId)
-                .orElseThrow(() -> new TaxiFeeNotFoundException() {});
+                .orElseThrow(TaxiFeeNotFoundException::new);
     }
 }
