@@ -5,6 +5,7 @@ import {
   HelperSelectInfoCard,
   PaymentFailedCard,
   ReportInfoCard,
+  RouteButton,
 } from '@customer/components';
 import { PageLayout } from '@layouts';
 import { createFileRoute } from '@tanstack/react-router';
@@ -33,7 +34,7 @@ function RouteComponent() {
           <ProgressIndicator currentStatus='매칭중' />
         </div>
 
-        <Tabs defaultValue='도우미'>
+        <Tabs defaultValue='신청 내역'>
           <Tabs.TabsList>
             <Tabs.TabsTrigger value='도우미'>도우미</Tabs.TabsTrigger>
             <Tabs.TabsTrigger value='신청 내역'>신청 내역</Tabs.TabsTrigger>
@@ -88,7 +89,12 @@ function RouteComponent() {
               <PaymentFailedCard />
             </Tabs.TabsCotentSection>
           </Tabs.TabsContent>
-          <Tabs.TabsContent value='신청 내역'>Change your 신청 내역 here.</Tabs.TabsContent>
+          <Tabs.TabsContent value='신청 내역'>
+            <Tabs.TabsCotentSection>
+              <RouteButton />
+            </Tabs.TabsCotentSection>
+            <Tabs.TabsDivider />
+          </Tabs.TabsContent>
         </Tabs>
       </PageLayout.Content>
     </PageLayout>

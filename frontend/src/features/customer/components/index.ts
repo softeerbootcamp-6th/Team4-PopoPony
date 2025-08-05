@@ -4,6 +4,7 @@ import HelperSelectInfoCard from './cards/HelperSelectInfoCard';
 import HelperEmptyCard from './cards/HelperEmptyCard';
 import ReportInfoCard from './cards/ReportInfoCard';
 import PaymentFailedCard from './cards/PaymentFailedCard';
+import RouteButton from './RouteButton';
 
 export {
   Step1,
@@ -12,4 +13,5 @@ export {
   HelperEmptyCard,
   ReportInfoCard,
   PaymentFailedCard,
+  RouteButton,
 };
