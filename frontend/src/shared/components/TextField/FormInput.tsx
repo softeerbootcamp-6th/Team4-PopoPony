@@ -66,7 +66,7 @@ const FormInput = ({
     const [isFocused, setIsFocused] = useState(false);
 
     return (
-      <div className='border-stroke-neutral-dark bg-background-default-white focus-within:border-neutral-80 relative flex h-[5.1rem] w-full items-center border-b px-[1.6rem] transition-[color,box-shadow] focus-within:ring-0'>
+      <div className='border-stroke-neutral-dark bg-background-default-white focus-within:border-neutral-80 relative flex h-[5.1rem] w-full items-center border-b transition-[color,box-shadow] focus-within:ring-0'>
         <div className='relative flex-1'>
           <input
             type={type}
@@ -98,7 +98,7 @@ const FormInput = ({
           )}
         </div>
         <IcChevronDown
-          className={`text-icon-neutral-secondary pointer-events-none h-[2.4rem] w-[2.4rem] transition-transform duration-200 ${
+          className={`[&_path]:fill-icon-neutral-secondary pointer-events-none h-[2.4rem] w-[2.4rem] transition-transform duration-200 ${
             isFocused ? 'rotate-180' : ''
           }`}
         />
