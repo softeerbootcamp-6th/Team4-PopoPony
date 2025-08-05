@@ -11,8 +11,6 @@ import com.todoc.server.domain.review.web.dto.response.PositiveFeedbackStatRespo
 import com.todoc.server.domain.review.web.dto.response.ReviewSimpleResponse;
 import com.todoc.server.domain.review.web.dto.response.ReviewStatResponse;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +23,7 @@ import java.util.List;
 @Tag(name = "helpers", description = "도우미 관련 API")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("api/helpers")
+@RequestMapping("/api/helpers")
 public class HelperController {
 
     private final HelperFacadeService helperFacadeService;
@@ -35,11 +33,7 @@ public class HelperController {
             description = "특정 신청에 지원한 도우미 목록을 조회합니다.")
     @ApiResponse(
             responseCode = "200",
-            description = "도우미 목록 조회 성공",
-            content = @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = Response.class)
-            ))
+            description = "도우미 목록 조회 성공")
     @GetMapping("/recruits/{recruitId}")
     public Response<HelperListResponse> getHelperListAsRecruit(@PathVariable Long recruitId) {
         // TODO :: 신청 ID를 받아, 해당 신청에 지원한 도우미들을 검색
@@ -69,11 +63,7 @@ public class HelperController {
             description = "userId에 해당하는 도우미의 상세 정보를 조회합니다.")
     @ApiResponse(
             responseCode = "200",
-            description = "도우미 상세 정보 조회 성공",
-            content = @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = Response.class)
-            ))
+            description = "도우미 상세 정보 조회 성공")
     @GetMapping("/{userId}")
     public Response<HelperDetailResponse> getHelperDetail(@PathVariable Long userId) {
         // TODO :: 도우미의 userId를 받아, 해당 도우미의 상세 정보를 생성

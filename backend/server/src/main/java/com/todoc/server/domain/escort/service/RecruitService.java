@@ -68,13 +68,14 @@ public class RecruitService {
         return result;
     }
 
-    public Recruit register(RecruitCreateRequest request) {
+    public Recruit register(RecruitCreateRequest.EscortDetail escortDetail) {
+
         Recruit recruit = Recruit.builder()
-                .escortDate(request.getEscortDate())
-                .estimatedMeetingTime(request.getEstimatedMeetingTime())
-                .estimatedReturnTime(request.getEstimatedReturnTime())
-                .purpose(request.getPurpose())
-                .extraRequest(request.getExtraRequest())
+                .escortDate(escortDetail.getEscortDate())
+                .estimatedMeetingTime(escortDetail.getEstimatedMeetingTime())
+                .estimatedReturnTime(escortDetail.getEstimatedReturnTime())
+                .purpose(escortDetail.getPurpose())
+                .extraRequest(escortDetail.getExtraRequest())
                 .status(RecruitStatus.MATCHING)
                 .build();
 

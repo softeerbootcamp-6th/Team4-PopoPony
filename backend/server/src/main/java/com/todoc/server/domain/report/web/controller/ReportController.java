@@ -4,8 +4,6 @@ import com.todoc.server.common.response.Response;
 import com.todoc.server.domain.report.service.ReportFacadeService;
 import com.todoc.server.domain.report.web.dto.response.ReportDetailResponse;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +18,7 @@ import java.time.LocalTime;
 @Tag(name = "reports", description = "리포트 관련 API")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("api/reports")
+@RequestMapping("/api/reports")
 public class ReportController {
 
     private final ReportFacadeService reportFacadeService;
@@ -30,11 +28,7 @@ public class ReportController {
             description = "특정 동행 신청에 대한 리포트의 상세 정보를 조회합니다.")
     @ApiResponse(
             responseCode = "200",
-            description = "리포트 상세 정보 조회 성공",
-            content = @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = Response.class)
-            ))
+            description = "리포트 상세 정보 조회 성공")
     @GetMapping("recruits/{recruitId}")
     public Response<ReportDetailResponse> getReportAsRecruit(@PathVariable Long recruitId) {
         // TODO :: 신청 ID를 받아, 해당 신청에 대한 리포트를 검색
