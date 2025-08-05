@@ -91,6 +91,38 @@ function RouteComponent() {
           </Tabs.TabsContent>
           <Tabs.TabsContent value='신청 내역'>
             <Tabs.TabsCotentSection>
+              <div className='flex-start gap-[1.2rem]'>
+                <img
+                  src='/images/default-profile.svg'
+                  alt='환자 프로필'
+                  className='h-[5.6rem] w-[5.6rem] object-cover'
+                />
+                <div className='flex flex-col gap-[0.4rem]'>
+                  <span className='subtitle-18-bold text-text-neutral-primary'>김토닥 환자</span>
+                  <span className='label2-14-medium text-text-neutral-assistive'>
+                    ({`70`}세)/{`남`}
+                  </span>
+                </div>
+              </div>
+              <div className='flex flex-col gap-[0.8rem]'>
+                <div className='flex-start body1-16-medium gap-[2rem]'>
+                  <span className='text-text-neutral-primary'>동행 날짜</span>
+                  <span className='text-text-neutral-secondary'>2025년 7월 22일 (토)</span>
+                </div>
+                <div className='flex-start body1-16-medium gap-[2rem]'>
+                  <span className='text-text-neutral-primary'>동행 시간</span>
+                  <span className='text-text-neutral-secondary'>오후 12시 ~ 3시 (3시간)</span>
+                </div>
+                <div className='flex-start body1-16-medium gap-[2rem]'>
+                  <span className='text-text-neutral-primary'>동행 병원</span>
+                  <div className='flex-start gap-[0.8rem]'>
+                    <span className='text-text-neutral-secondary'>서울아산병원</span>
+                    <button className='caption2-10-medium text-text-neutral-secondary border-stroke-neutral-dark w-fit rounded-[0.4rem] border px-[0.5rem] py-[0.2rem]'>
+                      지도 보기
+                    </button>
+                  </div>
+                </div>
+              </div>
               <RouteButton />
             </Tabs.TabsCotentSection>
             <Tabs.TabsDivider />
