@@ -5,10 +5,12 @@ import com.todoc.server.domain.helper.entity.Helper;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.SQLRestriction;
 
 @Entity
 @Getter
 @Setter
+@SQLRestriction("deleted_at is NULL")
 public class PositiveFeedbackChoice extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
