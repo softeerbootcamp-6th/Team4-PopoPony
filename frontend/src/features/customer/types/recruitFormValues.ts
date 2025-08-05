@@ -27,14 +27,47 @@ export interface TimeFormValues {
 }
 
 export interface RouteFormValues {
-  departureName: string;
-  departureAddress: string;
-  departureDetailAddress: string;
-  hospitalAddress: string;
-  hospitalDepartment: string;
-  destinationName: string;
-  destinationAddress: string;
+  // 출발지 (meetingLocationDetail)
+  meetingPlaceName: string;
+  meetingUpperAddrName: string;
+  meetingMiddleAddrName: string;
+  meetingLowerAddrName: string;
+  meetingFirstAddrNo: string;
+  meetingSecondAddrNo: string;
+  meetingRoadName: string;
+  meetingFirstBuildingNo: string;
+  meetingSecondBuildingNo: string;
+  meetingDetailAddress: string;
+  meetingLongitude?: number;
+  meetingLatitude?: number;
+
+  // 목적지 (destinationDetail)
+  destinationPlaceName: string;
+  destinationUpperAddrName: string;
+  destinationMiddleAddrName: string;
+  destinationLowerAddrName: string;
+  destinationFirstAddrNo: string;
+  destinationSecondAddrNo: string;
+  destinationRoadName: string;
+  destinationFirstBuildingNo: string;
+  destinationSecondBuildingNo: string;
   destinationDetailAddress: string;
+  destinationLongitude?: number;
+  destinationLatitude?: number;
+
+  // 복귀지 (returnLocationDetail)
+  returnPlaceName: string;
+  returnUpperAddrName: string;
+  returnMiddleAddrName: string;
+  returnLowerAddrName: string;
+  returnFirstAddrNo: string;
+  returnSecondAddrNo: string;
+  returnRoadName: string;
+  returnFirstBuildingNo: string;
+  returnSecondBuildingNo: string;
+  returnDetailAddress: string;
+  returnLongitude?: number;
+  returnLatitude?: number;
 }
 
 export interface RequestFormValues {
