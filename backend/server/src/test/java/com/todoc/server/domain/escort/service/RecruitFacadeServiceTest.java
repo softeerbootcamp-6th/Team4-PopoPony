@@ -40,6 +40,18 @@ class RecruitFacadeServiceTest {
     void createRecruit() {
         // given
         RecruitCreateRequest request = mock(RecruitCreateRequest.class);
+        RecruitCreateRequest.PatientDetail patientDetail = mock(RecruitCreateRequest.PatientDetail.class);
+        RecruitCreateRequest.EscortDetail escortDetail = mock(RecruitCreateRequest.EscortDetail.class);
+        RecruitCreateRequest.LocationDetail meetingLocationDetail = mock(RecruitCreateRequest.LocationDetail.class);
+        RecruitCreateRequest.LocationDetail destinationDetail = mock(RecruitCreateRequest.LocationDetail.class);
+        RecruitCreateRequest.LocationDetail returnLocationDetail = mock(RecruitCreateRequest.LocationDetail.class);
+
+        when(request.getPatientDetail()).thenReturn(patientDetail);
+        when(request.getEscortDetail()).thenReturn(escortDetail);
+        when(request.getMeetingLocationDetail()).thenReturn(meetingLocationDetail);
+        when(request.getDestinationDetail()).thenReturn(destinationDetail);
+        when(request.getReturnLocationDetail()).thenReturn(returnLocationDetail);
+
         Patient patient = mock(Patient.class);
         LocationInfo meetingLocation = mock(LocationInfo.class);
         LocationInfo hospitalLocation = mock(LocationInfo.class);
@@ -47,29 +59,34 @@ class RecruitFacadeServiceTest {
         Route route = mock(Route.class);
         Recruit recruit = mock(Recruit.class);
 
-        when(patientService.register(request)).thenReturn(patient);
-        when(locationInfoService.register(request)).thenReturn(meetingLocation, hospitalLocation, returnLocation);
+        when(patientService.register(patientDetail)).thenReturn(patient);
+        when(locationInfoService.register(meetingLocationDetail)).thenReturn(meetingLocation);
+        when(locationInfoService.register(destinationDetail)).thenReturn(hospitalLocation);
+        when(locationInfoService.register(returnLocationDetail)).thenReturn(returnLocation);
         when(routeService.register(request)).thenReturn(route);
-        when(recruitService.register(request)).thenReturn(recruit);
+        when(recruitService.register(escortDetail)).thenReturn(recruit);
 
         // when
         recruitFacadeService.createRecruit(request);
 
         // then
-        verify(patientService).register(request);
+        verify(patientService).register(patientDetail);
         verify(patient).setCustomer(any(Auth.class));
 
-        verify(locationInfoService, times(3)).register(request);
+        verify(locationInfoService).register(meetingLocationDetail);
+        verify(locationInfoService).register(destinationDetail);
+        verify(locationInfoService).register(returnLocationDetail);
 
         verify(routeService).register(request);
         verify(route).setMeetingLocationInfo(meetingLocation);
         verify(route).setHospitalLocationInfo(hospitalLocation);
         verify(route).setReturnLocationInfo(returnLocation);
 
-        verify(recruitService).register(request);
+        verify(recruitService).register(escortDetail);
         verify(recruit).setCustomer(any(Auth.class));
         verify(recruit).setPatient(patient);
         verify(recruit).setRoute(route);
         verify(recruit).setEstimatedFee(null);
+
     }
 }
