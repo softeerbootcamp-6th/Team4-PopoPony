@@ -23,8 +23,6 @@ const profileSchema = z.object({
   profileImageUrl: z.string().min(1, { message: '프로필 이미지를 선택해주세요' }),
 });
 
-type ProfileForm = z.infer<typeof profileSchema>;
-
 const Profile = memo(({ handleNextStep }: Props) => {
   const { values, fieldErrors, isFormValid, markFieldAsTouched } = useFormValidation(profileSchema);
 
@@ -79,8 +77,7 @@ const Profile = memo(({ handleNextStep }: Props) => {
 
         <LabeledSection
           label='환자 성별'
-          isChecked={!fieldErrors.patientSex && !!values.patientSex}
-          message={fieldErrors.patientSex}>
+          isChecked={!fieldErrors.patientSex && !!values.patientSex}>
           <div onClick={() => markFieldAsTouched('patientSex')}>
             <TwoOptionSelector
               name='patientSex'

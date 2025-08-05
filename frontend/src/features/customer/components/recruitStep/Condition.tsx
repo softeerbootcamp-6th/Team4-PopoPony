@@ -11,8 +11,8 @@ type ConditionProps = {
 //TODO: 현재 true, false 값이 문자열로 저장되어 있음. 이를 boolean으로 변환해야 함.
 
 const conditionSchema = z.object({
-  needsPhysicalSupport: z.boolean(),
-  usesWheelchair: z.boolean(),
+  needsPhysicalSupport: z.string(),
+  usesWheelchair: z.string(),
 });
 
 const Condition = memo(({ handleNextStep }: ConditionProps) => {
@@ -36,8 +36,8 @@ const Condition = memo(({ handleNextStep }: ConditionProps) => {
           <div onClick={() => markFieldAsTouched('needsPhysicalSupport')}>
             <TwoOptionSelector
               name='needsPhysicalSupport'
-              leftOption={{ label: '필요해요', value: true }}
-              rightOption={{ label: '필요없어요', value: false }}
+              leftOption={{ label: '필요해요', value: 'true' }}
+              rightOption={{ label: '필요없어요', value: 'false' }}
             />
           </div>
         </LabeledSection>
@@ -47,12 +47,17 @@ const Condition = memo(({ handleNextStep }: ConditionProps) => {
           <div onClick={() => markFieldAsTouched('usesWheelchair')}>
             <TwoOptionSelector
               name='usesWheelchair'
-              leftOption={{ label: '필요해요', value: true }}
-              rightOption={{ label: '필요없어요', value: false }}
+              leftOption={{ label: '필요해요', value: 'true' }}
+              rightOption={{ label: '필요없어요', value: 'false' }}
             />
           </div>
         </LabeledSection>
       </FormLayout.Content>
+      <FormLayout.Footer>
+        <Button variant='primary' onClick={handleNextStep} disabled={!isFormValid}>
+          다음
+        </Button>
+      </FormLayout.Footer>
     </FormLayout>
   );
 });
