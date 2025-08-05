@@ -11,21 +11,20 @@ const TwoOptionSelector = ({ name, leftOption, rightOption }: Props) => {
 
   const options = [leftOption, rightOption];
 
-  // value를 string으로 변환하는 함수
-  const getStringValue = (value: string | boolean): string => {
-    return typeof value === 'boolean' ? value.toString() : value;
-  };
+  // 원본 값이 boolean인지 확인
+  const hasBoolean = options.some((option) => typeof option.value === 'boolean');
 
   // 고유한 key를 생성하는 함수
   const getUniqueKey = (value: string | boolean, index: number): string => {
-    return typeof value === 'boolean' ? `${value}-${index}` : value;
+    return `${name}-${typeof value === 'boolean' ? value : value}-${index}`;
   };
 
   return (
     <div className='body1-16-medium text-neutral-90 flex-between gap-[2rem]'>
       {options.map((option, index) => {
-        const stringValue = getStringValue(option.value);
         const uniqueKey = getUniqueKey(option.value, index);
+        const stringValue =
+          typeof option.value === 'boolean' ? option.value.toString() : option.value;
 
         return (
           <div key={uniqueKey} className='w-full'>
@@ -34,7 +33,17 @@ const TwoOptionSelector = ({ name, leftOption, rightOption }: Props) => {
               id={uniqueKey}
               value={stringValue}
               className='peer hidden'
-              {...register(name)}
+              {...register(name, {
+                // boolean 값이 있는 경우에만 변환 함수 적용
+                ...(hasBoolean && {
+                  setValueAs: (value: string) => {
+                    // "true" -> true, "false" -> false로 변환
+                    if (value === 'true') return true;
+                    if (value === 'false') return false;
+                    return value; // 문자열은 그대로 반환
+                  },
+                }),
+              })}
             />
             <label
               htmlFor={uniqueKey}

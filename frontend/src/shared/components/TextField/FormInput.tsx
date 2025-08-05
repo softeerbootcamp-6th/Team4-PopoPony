@@ -82,7 +82,7 @@ const FormInput = ({
       className={`border-stroke-neutral-dark bg-background-default-white focus-within:border-stroke-mint focus-within:ring-stroke-mint/20 relative flex w-full items-center rounded-[0.8rem] border px-[1.6rem] transition-[color,box-shadow] focus-within:ring-[0.3rem] ${sizeStyles[size]}`}>
       <input
         type='text'
-        className='body1-16-medium text-text-neutral-primary placeholder:text-text-neutral-assistive flex-1 bg-transparent outline-none disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50'
+        className='body1-16-medium text-text-neutral-primary placeholder:text-text-neutral-assistive min-w-0 flex-1 bg-transparent outline-none disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50'
         placeholder={placeholder}
         onChange={(e) => {
           handleChange(e); // 포맷팅 적용

@@ -6,6 +6,7 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: 'primary' | 'secondary' | 'assistive';
   size?: 'sm' | 'md' | 'lg';
   isLoading?: boolean;
+  className?: string;
 }
 
 const Button = ({
@@ -13,6 +14,7 @@ const Button = ({
   variant = 'primary',
   size = 'lg',
   isLoading,
+  className = '',
   children,
   ...props
 }: ButtonProps) => {
@@ -52,7 +54,7 @@ const Button = ({
     <button
       type='button'
       disabled={disabled}
-      className={`${baseStyle} ${disabled ? disabledVariantStyle[variant] : variantStyle[variant]} ${sizeStyle[size]}`}
+      className={`${baseStyle} ${disabled ? disabledVariantStyle[variant] : variantStyle[variant]} ${sizeStyle[size]} ${className}`}
       {...props}>
       <Spinner size={spinnerSize[size]} color={spinnerColor[variant]} isLoading={isLoading} />
       {!isLoading && <>{children}</>}
