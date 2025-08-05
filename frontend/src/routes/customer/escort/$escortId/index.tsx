@@ -1,5 +1,11 @@
 import { EscortCard, ProgressIndicator, Tabs } from '@components';
-import { HelperCard, HelperSelectInfoCard } from '@customer/components';
+import {
+  HelperCard,
+  HelperEmptyCard,
+  HelperSelectInfoCard,
+  PaymentFailedCard,
+  ReportInfoCard,
+} from '@customer/components';
 import { PageLayout } from '@layouts';
 import { createFileRoute } from '@tanstack/react-router';
 
@@ -35,6 +41,8 @@ function RouteComponent() {
           <Tabs.TabsContent value='도우미'>
             <div className='flex flex-col gap-[1.6rem] p-[2rem]'>
               <HelperSelectInfoCard />
+
+              <HelperEmptyCard />
               {/* 기본 헬퍼 (자격증 2개) */}
               <HelperCard
                 helper={{
@@ -74,6 +82,9 @@ function RouteComponent() {
                 }}
                 onClick={(id) => console.log('헬퍼 카드 클릭:', id)}
               />
+
+              <ReportInfoCard />
+              <PaymentFailedCard />
             </div>
           </Tabs.TabsContent>
           <Tabs.TabsContent value='신청 내역'>Change your 신청 내역 here.</Tabs.TabsContent>
