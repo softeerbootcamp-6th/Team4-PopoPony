@@ -6,6 +6,7 @@ import Spinner from './Spinner';
 import TopAppBar from './TopAppBar';
 import TwoOptionSelector from './form/TwoOptionSelector';
 import FormInput from './TextField/FormInput';
+import FormTextarea from './TextField/FormTextarea';
 import Landing from './Landing';
 import Tabs from './Tabs';
 import EscortCard from './EscortCard';
@@ -25,6 +26,7 @@ export {
   TopAppBar,
   TwoOptionSelector,
   FormInput,
+  FormTextarea,
   Landing,
   ProgressBar,
   Tabs,
