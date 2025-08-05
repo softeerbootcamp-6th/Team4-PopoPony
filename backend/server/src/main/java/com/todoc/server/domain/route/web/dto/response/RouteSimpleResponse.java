@@ -1,5 +1,6 @@
 package com.todoc.server.domain.route.web.dto.response;
 
+import com.todoc.server.domain.route.entity.Route;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
@@ -27,5 +28,14 @@ public class RouteSimpleResponse {
         this.meetingLocationInfo = meetingLocationInfo;
         this.hospitalLocationInfo = hospitalLocationInfo;
         this.returnLocationInfo = returnLocationInfo;
+    }
+
+    public static RouteSimpleResponse from(Route route) {
+        return RouteSimpleResponse.builder()
+                .routeId(route.getId())
+                .meetingLocationInfo(LocationInfoSimpleResponse.from(route.getMeetingLocationInfo()))
+                .hospitalLocationInfo(LocationInfoSimpleResponse.from(route.getHospitalLocationInfo()))
+                .returnLocationInfo(LocationInfoSimpleResponse.from(route.getReturnLocationInfo()))
+                .build();
     }
 }
