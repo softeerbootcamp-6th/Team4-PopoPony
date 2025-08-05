@@ -1,22 +1,57 @@
-import { createFileRoute } from '@tanstack/react-router';
+import { PageLayout } from '@layouts';
+import { createFileRoute, Link } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/')({
   component: App,
 });
 
+const landingButtonData = [
+  {
+    subtitle: '보호자 서비스',
+    title: '병원 동행 신청하기',
+    image: '/images/hospital.png',
+    link: '/customer',
+  },
+  {
+    subtitle: '도우미 서비스',
+    title: '일감 찾기',
+    image: '/images/work.png',
+    link: '/helper',
+  },
+];
+
 function App() {
   return (
-    <div className='text-center'>
-      <header className='flex min-h-screen flex-col items-center justify-center bg-[#282c34] text-[calc(10px+2vmin)] text-white'>
-        <p>토닥 서비스 준비중입니다.</p>
-        <a
-          className='text-[#61dafb] hover:underline'
-          href='https://github.com/softeerbootcamp-6th/Team4-PopoPony'
-          target='_blank'
-          rel='noopener noreferrer'>
-          팀 레포지토리 바로가기
-        </a>
-      </header>
-    </div>
+    <PageLayout>
+      <PageLayout.Content>
+        <div className='h-full bg-[url("/images/landing-background.png")] bg-cover bg-center px-[2rem]'>
+          <div className='flex-col-center gap-[1.6rem] pt-[9.6rem]'>
+            <img src='/images/logo-text.svg' alt='logo-text' className='w-[7.2rem]' />
+            <h2 className='title-20-bold text-text-neutral-secondary'>토닥과 함께, 투-닥터!</h2>
+          </div>
+
+          <div className='flex-col-center mt-[4rem] cursor-pointer gap-[0.8rem]'>
+            {landingButtonData.map((data) => (
+              <Link
+                key={data.title}
+                to={data.link}
+                className='from-neutral-5 to-neutral-10 relative flex h-[12rem] w-full justify-between rounded-[2rem] bg-gradient-to-b p-[1.6rem]'>
+                <div className='z-10'>
+                  <h3 className='body2-14-bold text-text-mint-primary'>{data.subtitle}</h3>
+                  <h2 className='headline-24-bold text-text-neutral-primary mt-[0.4rem]'>
+                    {data.title}
+                  </h2>
+                </div>
+                <img
+                  src={data.image}
+                  alt={data.title}
+                  className='absolute right-[1.6rem] max-h-[8.8rem]'
+                />
+              </Link>
+            ))}
+          </div>
+        </div>
+      </PageLayout.Content>
+    </PageLayout>
   );
 }

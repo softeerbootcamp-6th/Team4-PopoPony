@@ -6,7 +6,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        작성 예시 : "[BE] [SUB] Auth: Refresh Token 로직 구현"
+        작성 예시 : "[BE] [SUB] Auth > Refresh Token 로직 구현"
 
   - type: textarea
     id: main-content

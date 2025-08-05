@@ -1,5 +1,195 @@
 ---
 description: "프론트엔드 개발 시, 폴더 구조 및 각 폴더의 역할을 설명하는 룰입니다."
 globs: : "frontend/**"
-alwaysApply: false
+alwaysApply: true
 ---
+아래는 우리 프로덕트의 프론트엔드 폴더구조이다.
+frontend
+├── 📁 dist/
+├── 📁 node_modules/
+├── 📁 public/
+├── 📁 src/
+│   ├── 📁 assets/
+│   ├── 📁 features/
+│   │   ├── 📁 auth/
+│   │   │   ├── 📁 apis/
+│   │   │   ├── 📁 components/
+│   │   │   ├── 📁 hooks/
+│   │   │   ├── 📁 types/
+│   │   │   └── 📁 utils/
+│   │   ├── 📁 customer/
+│   │   ├── 📁 dashboard/
+│   │   └── 📁 helper/
+│   │
+│   ├── 📁 routes/
+│   │   ├── 📁 customer/
+│   │   ├── 📁 dashboard/
+│   │   ├── 📁 helper/
+│   │   ├── 📁 login/
+│   │   ├── __root.tsx
+│   │   └── index.tsx
+│   │
+│   ├── 📁 shared/
+│   │   ├── 📁 apis/
+│   │   ├── 📁 components/
+│   │   ├── 📁 hooks/
+│   │   ├── 📁 types/
+│   │   └── 📁 utils/
+│   │
+│   ├── main.tsx
+│   ├── routeTree.gen.ts
+│   ├── styles.css
+│   └── vite-env.d.ts
+│
+├── .cta.json
+├── .gitignore
+├── .prettierignore
+├── .prettierrc
+├── eslint.config.mjs
+├── index.html
+├── package.json
+├── pnpm-lock.yaml
+├── README.md
+├── tsconfig.json
+├── vercel.json
+└── vite.config.ts
+
+1) 라우팅 규칙 (TanStack Router)
+폴더 = 라우트. `src/routes` 하위 폴더 구조가 실제 라우팅 구조와 1:1 대응한다.
+
+파라미터 폴더는 `$` 접두사를 사용한다. 예: `/$customerId/…`
+
+각 라우트 화면 정의는 해당 폴더의 `index.ts(x)`에서만 한다. 여기서 데이터 로딩/액션 바인딩/레이아웃 연결을 수행하고, UI는 `features`의 컴포넌트를 조합해 구성한다.
+
+라우트 파일은 얇게 유지한다. 비즈니스 로직/상태/훅/유틸은 라우트에 두지 않는다(아래 `Features`로 이동).
+
+`routeTree.gen.ts`는 생성물이므로 절대 수정하지 않는다.
+
+2) 도메인 기능(`Features`) 규칙
+경로: `src/features/<도메인>/…` (`auth`, `customer`, `dashboard`, `helper` 등).
+
+각 도메인 폴더는 다음 서브폴더만 사용: `apis/`, `components/`, `hooks/`, `types/`, `utils/`.
+
+도메인 전용 로직은 반드시 해당 도메인의 하위 폴더에만 둔다.
+
+예) 대시보드 라우트 전용 컴포넌트 → `features/dashboard/components/`
+
+예) 대시보드 전용 API 클라이언트/쿼리 → `features/dashboard/apis/`
+
+도메인 간 직접 import 금지. 다른 도메인의 모듈이 필요하면 `shared`로 승격한 후 참조한다.
+
+파일 책임 분리:
+
+`apis/` : fetcher, 쿼리 키, 응답 스키마/파서(필요 시). `@tanstack/react-query` 사용.
+
+`components/` : 화면 단 UI 조각(도메인 전용). 전역 스타일/레이아웃 책임 없음.
+
+`hooks/` : 도메인 상태/비즈니스 규칙 캡슐화(useXxx).
+
+`types/` : 도메인 타입/스키마(외부로 공개할 타입만 export).
+
+`utils/` : 도메인 한정 순수 유틸(부작용 없음, DOM 접근 금지).
+
+
+3) 공유 레이어(Shared) 규칙
+경로: `src/shared/…` (apis/, components/, hooks/, types/, utils/).
+
+재사용 의도가 명확하고 도메인 중립적일 때만 이곳으로 둔다.
+
+`shared`는 도메인 독립 계층이다. `routes/Features` → `shared`만 허용, `shared` → `routes/Features` 금지”로 통일.
+
+공유 컴포넌트는 범용성/접근성 우선. 도메인 특수 로직을 넣지 않는다.
+
+4) 에셋/퍼블릭 규칙
+src/assets/ : 번들에 포함되는 코드 참조형 자산(이미지/폰트, svgr을 이용한 icon 등).
+
+public/ : 정적 공개 파일(직접 URL 접근, index.html에서 참조).
+
+5) 구성/빌드/산출물
+dist/, node_modules/ 수정 금지.
+
+vite-env.d.ts, 빌드/툴링 설정은 명시적으로 요구받지 않는 한 변경하지 않는다.
+
+vercel.json, vite.config.ts, eslint.config.mjs, tsconfig.json 등 설정 파일 변경은 명시적 지시가 있을 때만 진행한다.
+
+6) import 경계(허용 그래프)
+모든 import는 tsconfig.json의 paths에 정의된 별칭(alias)을 통해서만 수행한다. 상대 경로(../../../ 등) import 금지.
+
+허용된 별칭은 다음과 같다:
+
+
+`@icons` → `src/assets/icons`
+`@apis` → `src/shared/apis`
+`@components` → `src/shared/components`
+`@hooks` → `src/shared/hooks`
+`@types` → `src/shared/types`
+`@utils` → `src/shared/utils`
+`@auth/*` → `src/features/auth/*`
+`@customer/*` → `src/features/customer/*`
+`@dashboard/*` → `src/features/dashboard/*`
+`@helper/*` → `src/features/helper/*`
+`@/*` → `src/*`
+
+각 별칭은 해당 경로 내부의 모듈만 import할 수 있으며, 다른 도메인 import는 경로상 접근이 가능하더라도 절대 금지한다.
+
+
+
+7) 네이밍/파일 작성 규칙
+페이지 진입점: 각 라우트 폴더의 `index.tsx` (또는 `index.ts`).
+
+훅: `useXxx.ts` (기능/도메인 명시).
+
+유틸: `verbNoun` 스타일, 순수함수 우선.
+
+타입: `PascalCase` 인터페이스/타입. 외부 공개 필요 타입만 export.
+
+API 모듈: 엔드포인트/쿼리 키/스키마를 가까이 배치, 사이드이펙트 최소화.
+
+컴포넌트: 단일 책임. 라우트 전용 UI는 Feature 컴포넌트로 작성하고 라우트에서는 조립만.
+
+8) 상태/사이드 이펙트 규칙
+라우트 파일: 라우터 로더/액션/메타/레이아웃 배선만. 비즈니스 상태/이펙트 금지.
+
+도메인 상태/이펙트: 해당 도메인의 hooks/에서 캡슐화 후 컴포넌트에서 사용.
+
+Shared 훅: 브라우저/플랫폼 일반화 가능한 로직만. 도메인 지식 혼입 금지.
+
+9) **에이전트 모드 가드레일(가장 중요)**
+경계 밖 생성/수정 금지. 작업 대상 라우트/도메인에 대응하는 폴더 내부에만 코드를 작성한다.
+
+예) 대시보드 전용 컴포넌트/훅/API는 오직 `features/dashboard/**` 내부.
+
+새 폴더/레이어 추가 금지. `features/` 도메인/하위 5폴더 체계와 `shared/` 하위 5폴더 체계를 벗어나는 구조 생성 금지.
+
+공유화는 신중히. 한 번 `shared/`로 승격하면 도메인 의존을 절대 추가하지 않는다.
+
+설정/빌드 파일 변경 금지. 명시적 요청이 없는 한 config 수정/패키지 추가/스크립트 변경 불가.
+
+생성물/잠금파일 편집 금지. `routeTree.gen.ts`, `pnpm-lock.yaml`, `dist/` 등은 건드리지 않는다.
+
+라벨·주석에 출처 표시. **라우트/도메인 경계를 넘기는 변경 요청을 받으면 거부**하고 사유를 주석으로 남긴다.
+
+10) 라우트 추가/변경 절차
+src/routes에 폴더 생성(필요 시 $param 사용) 후 index.ts(x) 작성.
+
+필요한 UI/로직은 **해당 도메인의 features/<domain>/…**에 새로 추가(없으면 도메인 신설).
+
+범용 로직만 shared에 배치(도메인 의존 금지).
+
+라우트-피처 연결: 라우트 `index.ts(x)`에서 `features 컴포넌트/훅`을 import해 조립.
+
+동작/타입 점검: 외부로 노출되는 타입만 export, 나머지는 모듈 내부 캡슐화.
+
+11) PR 체크리스트(Agent용)
+ 변경 파일이 올바른 폴더 경계 내에만 존재한다.
+
+ 라우트 파일에 비즈니스 로직 없음(조립만 수행).
+
+ 도메인 간 직접 import 없음(필요시 shared 승격 고려).
+
+ shared가 features/routes를 참조하지 않음.
+
+ API/훅/유틸/타입이 지정된 서브폴더에 정확히 배치됨.
+
+ 생성물/설정/잠금파일에 무단 변경 없음.
+

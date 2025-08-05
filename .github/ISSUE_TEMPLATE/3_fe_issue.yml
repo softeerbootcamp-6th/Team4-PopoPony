@@ -6,7 +6,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        작성 예시 : "[FE] [SUB] Login: 소셜 로그인 버튼 생성"
+        작성 예시 : "[FE] [SUB] Login > 소셜 로그인 버튼 생성"
   - type: textarea
     id: feature-description
     attributes:
