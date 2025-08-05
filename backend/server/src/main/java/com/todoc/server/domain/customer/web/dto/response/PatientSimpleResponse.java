@@ -2,6 +2,7 @@ package com.todoc.server.domain.customer.web.dto.response;
 
 import com.todoc.server.common.enumeration.Gender;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -11,33 +12,42 @@ import java.util.List;
 @Schema(description = "환자 요약 정보 조회 응답 DTO")
 public class PatientSimpleResponse {
 
+    @NotNull
     @Schema(description = "환자 ID")
     private Long patientId;
 
+    @NotNull
     @Schema(description = "프로필 이미지 URL")
     private String imageUrl;
 
+    @NotNull
     @Schema(description = "성명")
     private String name;
 
+    @NotNull
     @Schema(description = "성별", allowableValues = {"MALE", "FEMALE"})
     private Gender gender;
 
+    @NotNull
     @Schema(description = "나이")
     private Integer age;
 
+    @NotNull
     @Schema(description = "부축 필요 여부")
     private Boolean needsHelping;
 
+    @NotNull
     @Schema(description = "휠체어 필요 여부")
     private Boolean usesWheelchair;
 
+    @NotNull
     @Schema(description = "인지 능력 문제 유무")
     private Boolean hasCognitiveIssue;
 
     @Schema(description = "인지 능력 상세 설명")
     private List<String> cognitiveIssueDetail;
 
+    @NotNull
     @Schema(description = "의사소통 문제 유무")
     private Boolean hasCommunicationIssue;
 
