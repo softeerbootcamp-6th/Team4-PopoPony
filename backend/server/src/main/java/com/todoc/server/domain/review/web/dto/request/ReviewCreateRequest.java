@@ -3,9 +3,12 @@ package com.todoc.server.domain.review.web.dto.request;
 import com.todoc.server.common.enumeration.SatisfactionLevel;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
 
 import java.util.List;
 
+@Getter
+@Schema(description = "리뷰 작성 DTO")
 public class ReviewCreateRequest {
 
     @NotNull
