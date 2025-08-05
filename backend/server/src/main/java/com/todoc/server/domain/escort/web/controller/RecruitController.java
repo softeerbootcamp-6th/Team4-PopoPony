@@ -199,14 +199,14 @@ public class RecruitController {
     }
 
     @Operation(
-            summary = "신청 취소",
-            description = "recruitId에 해당하는 신청을 취소합니다.")
+            summary = "동행 신청 취소",
+            description = "recruitId에 해당하는 동행 신청을 취소합니다.")
     @ApiResponse(
             responseCode = "200",
-            description = "신청 취소 성공")
+            description = "동행 신청 취소 성공")
     @PatchMapping("/{recruitId}/cancel")
     public Response<Void> cancelRecruit(@PathVariable Long recruitId) {
-        // TODO :: recruitId에 해당하는 Recruit을 찾아, 취소 상태로 변경 후, Soft Delete
+        // recruitFacadeService.cancelRecruit(recruitId);
 
         return Response.from();
     }
