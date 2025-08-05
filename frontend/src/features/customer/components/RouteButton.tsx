@@ -1,4 +1,4 @@
-import { Button, Checkbox } from '@components';
+import { Button, Checkbox, ShowMapButton } from '@components';
 import { IcChevronDown } from '@icons';
 import { useState } from 'react';
 
@@ -68,16 +68,13 @@ const RouteButton = () => {
                     )}
                   </div>
                   <div className='ml-[2.8rem] flex flex-col'>
-                    <h5 className='subtitle-18-medium text-text-neutral-primary mt-[0.8rem]'>
+                    <h5 className='subtitle-18-medium text-text-neutral-primary mt-[0.8rem] mb-[0.4rem]'>
                       {value.location}
                     </h5>
-                    <div className='body2-14-medium text-text-neutral-secondary mt-[0.4rem] gap-[0.4rem]'>
-                      <span className='mr-[0.4rem]'>{value.roadAddress}</span>
-                      <span className='mr-[0.4rem]'>{value.businessAddress}</span>
-                      <button className='caption2-10-medium text-text-neutral-secondary border-stroke-neutral-dark w-fit rounded-[0.4rem] border px-[0.5rem] py-[0.2rem]'>
-                        지도 보기
-                      </button>
-                    </div>
+                    <ShowMapButton
+                      roadAddress={value.roadAddress}
+                      businessAddress={value.businessAddress}
+                    />
                   </div>
                 </div>
               ))}
