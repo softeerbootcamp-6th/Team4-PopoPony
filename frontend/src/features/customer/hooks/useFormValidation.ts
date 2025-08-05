@@ -62,10 +62,6 @@ export function useFormValidation<S extends z.ZodObject<Record<string, z.ZodType
       });
     }
 
-    console.log('Field Errors:', errors);
-    console.log('Touched Fields:', touchedFields);
-    console.log('========================');
-
     setFieldErrors(errors);
   }, [values, touchedFields, schema, getValues, schemaKeys]);
 

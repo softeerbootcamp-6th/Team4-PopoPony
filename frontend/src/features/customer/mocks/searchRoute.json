@@ -10,7 +10,6 @@
     "roadName": "보람로",
     "firstBuildingNo": "123",
     "secondBuildingNo": "2",
-    "detailAddress": "세종시청 본관 3층",
     "longitude": 127.2581225,
     "latitude": 36.4809912
   },
@@ -25,7 +24,6 @@
     "roadName": "청파로",
     "firstBuildingNo": "405",
     "secondBuildingNo": "1",
-    "detailAddress": "서울역 1층 대합실",
     "longitude": 126.970708,
     "latitude": 37.554722
   },
@@ -40,7 +38,6 @@
     "roadName": "중앙대로",
     "firstBuildingNo": "1000",
     "secondBuildingNo": "0",
-    "detailAddress": "부산시청 2층 민원실",
     "longitude": 129.081936,
     "latitude": 35.179554
   },
@@ -55,7 +52,6 @@
     "roadName": "광주천로",
     "firstBuildingNo": "120",
     "secondBuildingNo": "3",
-    "detailAddress": "광주광역시청 1층 안내데스크",
     "longitude": 126.853079,
     "latitude": 35.160032
   },
@@ -70,7 +66,6 @@
     "roadName": "중앙로",
     "firstBuildingNo": "1",
     "secondBuildingNo": "0",
-    "detailAddress": "대전역 2층 맞이방",
     "longitude": 127.425436,
     "latitude": 36.332709
   }

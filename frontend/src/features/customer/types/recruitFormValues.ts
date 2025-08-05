@@ -26,48 +26,25 @@ export interface TimeFormValues {
   escortDuration: number;
 }
 
+export interface LocationDetail {
+  placeName: string;
+  upperAddrName: string;
+  middleAddrName: string;
+  lowerAddrName: string;
+  firstAddrNo: string;
+  secondAddrNo: string;
+  roadName: string;
+  firstBuildingNo: string;
+  secondBuildingNo: string;
+  detailAddress: string;
+  longitude: number;
+  latitude: number;
+}
+
 export interface RouteFormValues {
-  // 출발지 (meetingLocationDetail)
-  meetingPlaceName: string;
-  meetingUpperAddrName: string;
-  meetingMiddleAddrName: string;
-  meetingLowerAddrName: string;
-  meetingFirstAddrNo: string;
-  meetingSecondAddrNo: string;
-  meetingRoadName: string;
-  meetingFirstBuildingNo: string;
-  meetingSecondBuildingNo: string;
-  meetingDetailAddress: string;
-  meetingLongitude?: number;
-  meetingLatitude?: number;
-
-  // 목적지 (destinationDetail)
-  destinationPlaceName: string;
-  destinationUpperAddrName: string;
-  destinationMiddleAddrName: string;
-  destinationLowerAddrName: string;
-  destinationFirstAddrNo: string;
-  destinationSecondAddrNo: string;
-  destinationRoadName: string;
-  destinationFirstBuildingNo: string;
-  destinationSecondBuildingNo: string;
-  destinationDetailAddress: string;
-  destinationLongitude?: number;
-  destinationLatitude?: number;
-
-  // 복귀지 (returnLocationDetail)
-  returnPlaceName: string;
-  returnUpperAddrName: string;
-  returnMiddleAddrName: string;
-  returnLowerAddrName: string;
-  returnFirstAddrNo: string;
-  returnSecondAddrNo: string;
-  returnRoadName: string;
-  returnFirstBuildingNo: string;
-  returnSecondBuildingNo: string;
-  returnDetailAddress: string;
-  returnLongitude?: number;
-  returnLatitude?: number;
+  meetingLocationDetail: LocationDetail;
+  destinationDetail: LocationDetail;
+  returnLocationDetail: LocationDetail;
 }
 
 export interface RequestFormValues {

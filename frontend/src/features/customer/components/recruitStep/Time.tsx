@@ -113,8 +113,7 @@ const Time = memo(({ handleNextStep }: RecruitStepProps) => {
           </LabeledSection>
           <LabeledSection
             label='종료 시간'
-            isChecked={!timeFieldErrors.escortEndTime && !!timeValues.escortEndTime}
-            message={timeFieldErrors.escortEndTime}>
+            isChecked={!timeFieldErrors.escortEndTime && !!timeValues.escortEndTime}>
             <FormInput
               type='time'
               size='M'
@@ -128,18 +127,20 @@ const Time = memo(({ handleNextStep }: RecruitStepProps) => {
           <div className='flex-center gap-1'>
             <IcAlertCircle
               className={`${
-                timeFieldErrors.escortDuration && !timeFieldErrors.escortEndTime
+                timeFieldErrors.escortDuration || timeFieldErrors.escortEndTime
                   ? '[&_path]:fill-text-red-primary'
                   : '[&_path]:fill-icon-neutral-secondary'
               }`}
             />
             <span
               className={`body1-16-medium ${
-                timeFieldErrors.escortDuration && !timeFieldErrors.escortEndTime
+                timeFieldErrors.escortDuration || timeFieldErrors.escortEndTime
                   ? 'text-text-red-primary'
                   : 'text-text-neutral-assistive'
               }`}>
-              최소 2시간 이상 예약해주세요
+              {timeFieldErrors.escortEndTime
+                ? timeFieldErrors.escortEndTime
+                : '최소 2시간 이상 예약해주세요'}
             </span>
           </div>
         </div>
