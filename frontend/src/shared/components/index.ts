@@ -16,6 +16,7 @@ import Modal from './modal/Modal';
 import BottomSheet from './modal/BottomSheet';
 import PhotoUpload from './form/PhotoUpload';
 import ProgressIndicator from './ProgressIndicator';
+import Checkbox from './Checkbox';
 
 export {
   Button,
@@ -36,4 +37,5 @@ export {
   BottomSheet,
   PhotoUpload,
   ProgressIndicator,
+  Checkbox,
 };
