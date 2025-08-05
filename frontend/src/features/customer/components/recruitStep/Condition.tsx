@@ -1,13 +1,11 @@
-import { TwoOptionSelector, FormInput, LabeledSection, PhotoUpload, Button } from '@components';
-import { useWatch, useFormContext } from 'react-hook-form';
-import { memo, useState, useEffect } from 'react';
+import { TwoOptionSelector, LabeledSection, Button } from '@components';
+import { useFormContext } from 'react-hook-form';
+import { memo } from 'react';
 import { FormLayout } from '@layouts';
 import { useFormValidation } from '@customer/hooks';
 import { z } from 'zod';
+import type { RecruitStepProps } from '@customer/types';
 
-type ConditionProps = {
-  handleNextStep: () => void;
-};
 //TODO: 현재 true, false 값이 문자열로 저장되어 있음. 이를 boolean으로 변환해야 함.
 
 const conditionSchema = z.object({
@@ -15,10 +13,10 @@ const conditionSchema = z.object({
   usesWheelchair: z.string(),
 });
 
-const Condition = memo(({ handleNextStep }: ConditionProps) => {
+const Condition = memo(({ handleNextStep }: RecruitStepProps) => {
   const { values, fieldErrors, isFormValid, markFieldAsTouched } =
     useFormValidation(conditionSchema);
-  const { getValues, setValue } = useFormContext();
+  const { getValues } = useFormContext();
   const patientName = getValues('patientName');
 
   return (
