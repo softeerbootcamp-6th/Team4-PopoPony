@@ -5,9 +5,10 @@ import type {
   TimeFormValues,
   RouteFormValues,
   RequestFormValues,
-  COGNITIVE_ISSUES_OPTIONS,
   RecruitFormValues,
 } from './recruitFormValues';
+import { COGNITIVE_ISSUES_OPTIONS } from './recruitFormValues';
+import type { RecruitStepProps } from './recruitStep';
 
 export type {
   ProfileFormValues,
@@ -17,5 +18,6 @@ export type {
   RouteFormValues,
   RequestFormValues,
   RecruitFormValues,
-  COGNITIVE_ISSUES_OPTIONS,
+  RecruitStepProps,
 };
+export { COGNITIVE_ISSUES_OPTIONS };

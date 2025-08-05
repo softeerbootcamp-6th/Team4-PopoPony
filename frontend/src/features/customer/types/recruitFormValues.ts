@@ -55,4 +55,4 @@ export const COGNITIVE_ISSUES_OPTIONS = [
   '판단에 도움이 필요해요',
   '상황 파악에 도움이 필요해요',
   '기억하거나 이해하는 것이 어려워요',
-] as const;
+];
