@@ -10,6 +10,8 @@ alwaysApply: false
 1. component 내부가 group-{}, frame={} 등으로 명시되어 해당 컴포넌트의 div 구조를 명확히 명시하기 힘들 때
 ### 질문 후, 유저에게 생성할 컴포넌트의 내부구조, 반응형, type등을 최종적으로 확인받고 작업합니다.
 
+### 단위는 tailwind 기본 속성이 아닌 rem을 사용합니다. `1rem == 10px`입니다. 따라서, `gap`이 `16px`이라면, `gap-[1.6rem]` className을 사용합니다.
+
 ### icon은, `src/assets/icon/index.ts`에서 import하여 사용합니다. 
 ### font는 `frontend/src/styles.css`에서 정의된 클래스를 사용합니다.
 (ex:   `.body2-14-medium {@apply font-pretendard text-[1.4rem] leading-[150%] font-medium tracking-[-0.02rem];}`
