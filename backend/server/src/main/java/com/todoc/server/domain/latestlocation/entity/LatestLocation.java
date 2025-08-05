@@ -1,4 +1,4 @@
-package com.todoc.server.domain.lastlocation.entity;
+package com.todoc.server.domain.latestlocation.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
