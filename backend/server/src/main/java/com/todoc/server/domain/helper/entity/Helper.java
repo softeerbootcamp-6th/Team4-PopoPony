@@ -7,10 +7,12 @@ import com.todoc.server.domain.latestlocation.entity.LatestLocation;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.SQLRestriction;
 
 @Entity
 @Getter
 @Setter
+@SQLRestriction("deleted_at is NULL")
 public class Helper extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

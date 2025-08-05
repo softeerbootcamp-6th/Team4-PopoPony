@@ -5,10 +5,12 @@ import com.todoc.server.domain.auth.entity.Auth;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.SQLRestriction;
 
 @Entity
 @Getter
 @Setter
+@SQLRestriction("deleted_at is NULL")
 public class Application extends BaseEntity {
 
     @Id
