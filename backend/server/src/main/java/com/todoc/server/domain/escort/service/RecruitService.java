@@ -89,4 +89,21 @@ public class RecruitService {
         return recruitJpaRepository.findById(recruitId)
                 .orElseThrow(RecruitNotFoundException::new);
     }
+
+    @Transactional(readOnly = true)
+    public void cancelRecruit(Long recruitId) {
+        Recruit recruit = recruitJpaRepository.findById(recruitId)
+                .orElseThrow(RecruitNotFoundException::new);
+
+        // 매칭 완료된 동행 신청에 대한 예외 처리
+        if (recruit.getStatus() != RecruitStatus.MATCHING) {
+            throw new RecruitInvalidCancelException();
+        }
+
+        // 상태 변경
+        recruit.setStatus(RecruitStatus.CANCELLED);
+
+        // soft delete
+        recruit.softDelete();
+    }
 }
