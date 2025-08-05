@@ -1,5 +1,5 @@
 import { EscortCard, ProgressIndicator, Tabs } from '@components';
-import { HelperCard, HelperSelectInfo } from '@customer/components';
+import { HelperCard, HelperSelectInfoCard } from '@customer/components';
 import { PageLayout } from '@layouts';
 import { createFileRoute } from '@tanstack/react-router';
 
@@ -34,7 +34,7 @@ function RouteComponent() {
           </Tabs.TabsList>
           <Tabs.TabsContent value='도우미'>
             <div className='flex flex-col gap-[1.6rem] p-[2rem]'>
-              <HelperSelectInfo />
+              <HelperSelectInfoCard />
               {/* 기본 헬퍼 (자격증 2개) */}
               <HelperCard
                 helper={{

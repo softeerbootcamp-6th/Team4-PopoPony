@@ -1,6 +1,6 @@
 import { IcAlertCircle } from '@icons';
 
-const HelperSelectInfo = () => {
+const HelperSelectInfoCard = () => {
   return (
     <div className='bg-neutral-10 flex flex-col gap-[1rem] rounded-[0.8rem] p-[1.2rem]'>
       <div className='flex-start gap-[0.8rem]'>
@@ -14,4 +14,4 @@ const HelperSelectInfo = () => {
   );
 };
 
-export default HelperSelectInfo;
+export default HelperSelectInfoCard;
