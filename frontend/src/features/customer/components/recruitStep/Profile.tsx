@@ -3,8 +3,7 @@ import { memo } from 'react';
 import { FormLayout } from '@layouts';
 import { z } from 'zod';
 import { useFormValidation } from '@customer/hooks';
-
-type Props = { handleNextStep: () => void };
+import type { RecruitStepProps } from '@customer/types';
 
 const profileSchema = z.object({
   patientName: z.string().min(2, { message: '올바른 이름을 입력해주세요' }),
@@ -18,12 +17,12 @@ const profileSchema = z.object({
       },
       { message: '올바른 나이를 입력해주세요' }
     ),
-  patientContact: z.string().min(10, { message: '연락처를 입력해주세요' }),
+  patientContact: z.string().min(12, { message: '숫자만 입력해주세요' }),
   patientSex: z.enum(['male', 'female'], { message: '성별을 선택해주세요' }),
   profileImageUrl: z.string().min(1, { message: '프로필 이미지를 선택해주세요' }),
 });
 
-const Profile = memo(({ handleNextStep }: Props) => {
+const Profile = memo(({ handleNextStep }: RecruitStepProps) => {
   const { values, fieldErrors, isFormValid, markFieldAsTouched } = useFormValidation(profileSchema);
 
   return (
@@ -56,7 +55,7 @@ const Profile = memo(({ handleNextStep }: Props) => {
               size='M'
               placeholder='이름 입력'
               name='patientName'
-              onBlur={() => markFieldAsTouched('patientName')}
+              validation={() => markFieldAsTouched('patientName')}
             />
           </LabeledSection>
 
@@ -70,7 +69,7 @@ const Profile = memo(({ handleNextStep }: Props) => {
               placeholder='나이 입력'
               description='세'
               name='patientAge'
-              onBlur={() => markFieldAsTouched('patientAge')}
+              validation={() => markFieldAsTouched('patientAge')}
             />
           </LabeledSection>
         </div>
@@ -96,7 +95,7 @@ const Profile = memo(({ handleNextStep }: Props) => {
             size='M'
             placeholder='연락처 입력'
             name='patientContact'
-            onBlur={() => markFieldAsTouched('patientContact')}
+            validation={() => markFieldAsTouched('patientContact')}
           />
         </LabeledSection>
       </FormLayout.Content>
