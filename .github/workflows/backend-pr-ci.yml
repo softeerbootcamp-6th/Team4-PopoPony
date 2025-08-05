@@ -8,14 +8,30 @@ on:
       - "backend/**"
 
 env:
-  SPRING_PROFILE: local
-  DB_URL: ${{ secrets.DB_URL }}
-  DB_USERNAME: ${{ secrets.DB_USERNAME }}
-  DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+  SPRING_PROFILE: ci
+  DB_URL: jdbc:mysql://localhost:3306/todoc_db?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+  DB_USERNAME: testuser
+  DB_PASSWORD: testpass
 
 jobs:
   validate:
     runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:8.0.33
+        ports:
+          - 3306:3306
+        env:
+          MYSQL_DATABASE: todoc_db
+          MYSQL_ROOT_PASSWORD: rootpass
+          MYSQL_USER: testuser
+          MYSQL_PASSWORD: testpass
+        options: >-
+          --health-cmd="mysqladmin ping -h localhost"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
 
     steps:
       - name: Checkout
@@ -38,7 +54,7 @@ jobs:
           echo $! > app.pid
           sleep 15
 
-      - name: Check application health in Local Profile
+      - name: Check application health
         run: |
           curl -f http://localhost:8080/actuator/health
 
