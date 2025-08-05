@@ -1,5 +1,5 @@
 import { useFormContext } from 'react-hook-form';
-import { type InputHTMLAttributes, useCallback } from 'react';
+import { type InputHTMLAttributes, useCallback, useState } from 'react';
 import { IcChevronDown } from '@icons';
 
 type InputType = 'date' | 'time' | 'cost' | 'number' | 'text' | 'contact';
@@ -10,6 +10,7 @@ interface FormInputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'si
   type: InputType;
   description?: string;
   placeholder?: string;
+  validation?: () => void;
 }
 
 const FormInput = ({
@@ -18,6 +19,7 @@ const FormInput = ({
   type,
   description,
   placeholder,
+  validation,
   ...props
 }: FormInputProps) => {
   const { register } = useFormContext();
@@ -59,16 +61,47 @@ const FormInput = ({
 
   // 날짜/시간 타입
   if (type === 'date' || type === 'time') {
+    const { onChange, onBlur, ...registerProps } = register(name);
+    const [hasValue, setHasValue] = useState(false);
+    const [isFocused, setIsFocused] = useState(false);
+
     return (
-      <div className='border-stroke-neutral-dark bg-background-default-white focus-within:border-stroke-mint focus-within:ring-stroke-mint/20 relative flex h-[5.1rem] w-full items-center rounded-[0.8rem] border px-[1.6rem] transition-[color,box-shadow] focus-within:ring-[0.3rem]'>
-        <input
-          type={type}
-          className='body1-16-medium text-text-neutral-primary flex-1 bg-transparent outline-none disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:top-0 [&::-webkit-calendar-picker-indicator]:left-0 [&::-webkit-calendar-picker-indicator]:h-full [&::-webkit-calendar-picker-indicator]:w-full [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:opacity-0'
-          placeholder={placeholder}
-          {...register(name)} // onChange 옵션 제거
-          {...props}
+      <div className='border-stroke-neutral-dark bg-background-default-white focus-within:border-neutral-80 relative flex h-[5.1rem] w-full items-center border-b px-[1.6rem] transition-[color,box-shadow] focus-within:ring-0'>
+        <div className='relative flex-1'>
+          <input
+            type={type}
+            className='body1-16-medium text-text-neutral-primary w-full bg-transparent outline-none disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:top-0 [&::-webkit-calendar-picker-indicator]:left-0 [&::-webkit-calendar-picker-indicator]:h-full [&::-webkit-calendar-picker-indicator]:w-full [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:opacity-0'
+            onFocus={() => {
+              setIsFocused(true);
+              setHasValue(true);
+            }}
+            onBlur={(e) => {
+              onBlur(e);
+              setIsFocused(false);
+              setHasValue(!!e.target.value);
+            }}
+            onChange={(e) => {
+              onChange(e);
+              setHasValue(!!e.target.value);
+              if (validation) {
+                validation();
+              }
+            }}
+            {...registerProps}
+            {...props}
+          />
+          {/* Custom Placeholder */}
+          {!hasValue && placeholder && (
+            <div className='body1-16-medium bg-background-default-white text-text-neutral-assistive pointer-events-none absolute top-0 left-0 w-full'>
+              {placeholder}
+            </div>
+          )}
+        </div>
+        <IcChevronDown
+          className={`text-icon-neutral-secondary pointer-events-none h-[2.4rem] w-[2.4rem] transition-transform duration-200 ${
+            isFocused ? 'rotate-180' : ''
+          }`}
         />
-        <IcChevronDown className='text-icon-neutral-primary pointer-events-none h-[2.4rem] w-[2.4rem]' />
       </div>
     );
   }
@@ -87,6 +120,9 @@ const FormInput = ({
         onChange={(e) => {
           handleChange(e); // 포맷팅 적용
           onChange(e); // React Hook Form의 onChange 호출
+          if (validation) {
+            validation();
+          }
         }}
         {...registerProps}
         {...props}
