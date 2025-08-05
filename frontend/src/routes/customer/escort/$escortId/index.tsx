@@ -39,9 +39,8 @@ function RouteComponent() {
             <Tabs.TabsTrigger value='신청 내역'>신청 내역</Tabs.TabsTrigger>
           </Tabs.TabsList>
           <Tabs.TabsContent value='도우미'>
-            <div className='flex flex-col gap-[1.6rem] p-[2rem]'>
+            <Tabs.TabsCotentSection>
               <HelperSelectInfoCard />
-
               <HelperEmptyCard />
               {/* 기본 헬퍼 (자격증 2개) */}
               <HelperCard
@@ -82,10 +81,12 @@ function RouteComponent() {
                 }}
                 onClick={(id) => console.log('헬퍼 카드 클릭:', id)}
               />
-
+            </Tabs.TabsCotentSection>
+            <Tabs.TabsDivider />
+            <Tabs.TabsCotentSection>
               <ReportInfoCard />
               <PaymentFailedCard />
-            </div>
+            </Tabs.TabsCotentSection>
           </Tabs.TabsContent>
           <Tabs.TabsContent value='신청 내역'>Change your 신청 내역 here.</Tabs.TabsContent>
         </Tabs>

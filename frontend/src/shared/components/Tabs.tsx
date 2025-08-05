@@ -57,8 +57,18 @@ const TabsContent = ({
   );
 };
 
+const TabsCotentSection = ({ children }: { children: React.ReactNode }) => {
+  return <div className='flex flex-col gap-[1.6rem] p-[2rem]'>{children}</div>;
+};
+
+const TabsDivider = () => {
+  return <div className='bg-stroke-neutral-light h-[6px] w-full' />;
+};
+
 Tabs.TabsList = TabsList;
 Tabs.TabsTrigger = TabsTrigger;
 Tabs.TabsContent = TabsContent;
+Tabs.TabsCotentSection = TabsCotentSection;
+Tabs.TabsDivider = TabsDivider;
 
 export default Tabs;
