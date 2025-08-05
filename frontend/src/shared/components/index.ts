@@ -17,7 +17,7 @@ import BottomSheet from './modal/BottomSheet';
 import PhotoUpload from './form/PhotoUpload';
 import ProgressIndicator from './ProgressIndicator';
 import Checkbox from './Checkbox';
-
+import ShowMapButton from './ShowMapButton';
 export {
   Button,
   BottomCTA,
@@ -38,4 +38,5 @@ export {
   PhotoUpload,
   ProgressIndicator,
   Checkbox,
+  ShowMapButton,
 };
