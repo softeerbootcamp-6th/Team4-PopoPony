@@ -8,7 +8,7 @@ on:
       - "backend/**"
 
 env:
-  SPRING_PROFILE: prod
+  SPRING_PROFILE: local
   DB_URL: ${{ secrets.DB_URL }}
   DB_USERNAME: ${{ secrets.DB_USERNAME }}
   DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
@@ -38,7 +38,7 @@ jobs:
           echo $! > app.pid
           sleep 15
 
-      - name: Check application health
+      - name: Check application health in Local Profile
         run: |
           curl -f http://localhost:8080/actuator/health
 
