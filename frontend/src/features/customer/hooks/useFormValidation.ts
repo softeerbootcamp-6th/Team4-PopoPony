@@ -19,46 +19,54 @@ export function useFormValidation<S extends z.ZodObject<Record<string, z.ZodType
 ): UseFormValidationResult<z.infer<S>> {
   type T = z.infer<S>;
 
-  // RHF 컨텍스트를 폼 타입으로 묶어줍니다.
   const { control, getValues } = useFormContext<T>();
-
-  // 전체 폼을 한번에 watch (필요하면 키별 watch로 바꿔도 됨)
   const values = useWatch<T>({ control }) as T;
 
   const [fieldErrors, setFieldErrors] = useState<FieldErrors<T>>({});
   const [isFormValid, setIsFormValid] = useState(false);
   const [touchedFields, setTouchedFields] = useState<TouchedFields<T>>({});
 
-  // shape는 AnyZodObject에서 안전함
   const shape = schema.shape as Record<keyof T, z.ZodTypeAny>;
   const schemaKeys = useMemo(() => Object.keys(shape) as (keyof T)[], [shape]);
-
-  const validateField = (fieldName: keyof T, value: unknown): string | null => {
-    const fieldSchema = shape[fieldName];
-    if (!fieldSchema) return null;
-    const result = fieldSchema.safeParse(value);
-    return result.success ? null : (result.error.issues[0]?.message ?? 'Invalid');
-  };
 
   const markFieldAsTouched = (fieldName: keyof T) => {
     setTouchedFields((prev) => ({ ...prev, [fieldName]: true }));
   };
 
   useEffect(() => {
+    const currentValues = getValues();
+
+    // 전체 폼 검증 (superRefine 포함)
+    const formResult = schema.safeParse(currentValues);
+    setIsFormValid(formResult.success);
+
+    // 디버깅을 위한 콘솔 로그
+    console.log('=== Form Validation Debug ===');
+    console.log('Current Values:', currentValues);
+    console.log('Form Valid:', formResult.success);
+
+    if (!formResult.success) {
+      console.log('Validation Errors:', formResult.error.issues);
+    }
+
+    // 에러 맵핑
     const errors: FieldErrors<T> = {};
 
-    // touched된 필드만 검사
-    for (const key of schemaKeys) {
-      if (touchedFields[key]) {
-        const err = validateField(key, values?.[key as keyof T]);
-        if (err) errors[key] = err;
-      }
+    if (!formResult.success) {
+      // Zod 에러를 필드별로 매핑
+      formResult.error.issues.forEach((issue) => {
+        const fieldPath = issue.path[0] as keyof T;
+        if (fieldPath && touchedFields[fieldPath]) {
+          errors[fieldPath] = issue.message;
+        }
+      });
     }
-    setFieldErrors(errors);
 
-    // 전체 폼 유효성
-    const formResult = schema.safeParse(getValues());
-    setIsFormValid(formResult.success);
+    console.log('Field Errors:', errors);
+    console.log('Touched Fields:', touchedFields);
+    console.log('========================');
+
+    setFieldErrors(errors);
   }, [values, touchedFields, schema, getValues, schemaKeys]);
 
   return {
