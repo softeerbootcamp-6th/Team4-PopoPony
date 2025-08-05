@@ -4,7 +4,7 @@ import com.todoc.server.common.enumeration.Gender;
 import com.todoc.server.common.enumeration.RecruitStatus;
 import com.todoc.server.common.response.Response;
 import com.todoc.server.domain.customer.web.dto.response.PatientSimpleResponse;
-import com.todoc.server.domain.escort.service.RecruitService;
+import com.todoc.server.domain.escort.service.RecruitFacadeService;
 import com.todoc.server.domain.escort.web.dto.request.RecruitCreateRequest;
 import com.todoc.server.domain.escort.web.dto.response.RecruitDetailResponse;
 import com.todoc.server.domain.escort.web.dto.response.RecruitListResponse;
@@ -30,7 +30,7 @@ import java.util.List;
 @RequestMapping("/api/recruits")
 public class RecruitController {
 
-    private final RecruitService recruitService;
+    private final RecruitFacadeService recruitFacadeService;
 
     @Operation(
             summary = "고객의 동행 목록 조회",
@@ -73,7 +73,8 @@ public class RecruitController {
             description = "동행 신청 상세 정보 조회 성공")
     @GetMapping("/{recruitId}")
     public Response<RecruitDetailResponse> getRecruitDetail(@PathVariable Long recruitId) {
-        // TODO :: recruitId에 해당하는 동행 신청을 검색
+
+//        return Response.from(recruitFacadeService.getRecruitDetailByRecruitId(recruitId));
 
         LocationInfoSimpleResponse meetingLocationInfo = LocationInfoSimpleResponse.builder()
                 .locationInfoId(1L)
