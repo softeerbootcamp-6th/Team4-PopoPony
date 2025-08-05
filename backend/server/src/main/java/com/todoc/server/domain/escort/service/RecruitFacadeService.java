@@ -1,21 +1,12 @@
 package com.todoc.server.domain.escort.service;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.todoc.server.common.util.DateTimeUtils;
-import com.todoc.server.common.util.JsonUtils;
 import com.todoc.server.domain.auth.entity.Auth;
-import com.todoc.server.domain.auth.exception.AuthNotFoundException;
 import com.todoc.server.domain.customer.entity.Patient;
 import com.todoc.server.domain.customer.service.PatientService;
 import com.todoc.server.domain.customer.web.dto.response.PatientSimpleResponse;
-import com.todoc.server.domain.escort.entity.Application;
 import com.todoc.server.domain.escort.entity.Recruit;
 import com.todoc.server.domain.escort.web.dto.request.RecruitCreateRequest;
-import com.todoc.server.domain.escort.web.dto.response.ApplicationListResponse;
-import com.todoc.server.domain.escort.web.dto.response.ApplicationSimpleResponse;
 import com.todoc.server.domain.escort.web.dto.response.RecruitDetailResponse;
-import com.todoc.server.domain.helper.entity.Helper;
-import com.todoc.server.domain.helper.web.dto.response.HelperSimpleResponse;
 import com.todoc.server.domain.route.entity.LocationInfo;
 import com.todoc.server.domain.route.entity.Route;
 import com.todoc.server.domain.route.service.LocationInfoService;
@@ -24,8 +15,6 @@ import com.todoc.server.domain.route.web.dto.response.RouteSimpleResponse;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
