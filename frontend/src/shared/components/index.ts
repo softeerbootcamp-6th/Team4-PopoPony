@@ -15,6 +15,7 @@ import StrengthTag from './StrengthTag';
 import Modal from './modal/Modal';
 import BottomSheet from './modal/BottomSheet';
 import PhotoUpload from './form/PhotoUpload';
+import MultiOptionSelector from './form/MultiOptionSelector';
 
 export {
   Button,
@@ -34,4 +35,5 @@ export {
   Modal,
   BottomSheet,
   PhotoUpload,
+  MultiOptionSelector,
 };
