@@ -50,7 +50,7 @@ function RouteComponent() {
                   name: '최솔희',
                   age: 39,
                   gender: '여',
-                  profileImage: '/images/helper-profile.svg',
+                  profileImage: '/images/default-profile.svg',
                   certificates: ['간호사', '간호조무사'],
                   tags: ['support', 'wheelchair', 'care'],
                 }}

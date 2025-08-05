@@ -40,7 +40,7 @@ export default function HelperCard({ helper, onClick }: HelperCardProps) {
       onClick={handleCardClick}>
       <div className='flex-center gap-[1.2rem]'>
         <img
-          src={profileImage || '/images/helper-profile.svg'}
+          src={profileImage || '/images/default-profile.svg'}
           alt={`${name} 프로필`}
           className='w-[5.6rem h-[5.6rem] object-cover'
         />
