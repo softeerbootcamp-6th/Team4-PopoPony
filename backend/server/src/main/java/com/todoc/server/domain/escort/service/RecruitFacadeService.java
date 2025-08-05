@@ -100,4 +100,14 @@ public class RecruitFacadeService {
                 .extraRequest(recruit.getExtraRequest())
                 .build();
     }
+
+    /**
+     * recruitId에 해당하는 동행 신청을 취소하는 함수
+     *
+     * @param recruitId 동행 신청의 ID
+     */
+    @Transactional(readOnly = true)
+    public void cancelRecruit(Long recruitId) {
+        recruitService.cancelRecruit(recruitId);
+    }
 }
