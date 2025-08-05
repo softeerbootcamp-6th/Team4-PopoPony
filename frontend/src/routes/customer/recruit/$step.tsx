@@ -11,6 +11,7 @@ import {
   Time,
   EscortRoute,
   SearchRoute,
+  Request,
 } from '@customer/components';
 
 export const Route = createFileRoute('/customer/recruit/$step')({
@@ -76,7 +77,7 @@ function RouteComponent() {
       />
       <PageLayout.Content>
         <div className='flex h-full flex-col'>
-          <div className='flex-shrink-0 pb-[2rem]'>
+          <div className='flex-shrink-0 px-[2rem] pb-[2rem]'>
             <ProgressBar
               maxStep={stepList.length}
               currentStep={stepList.indexOf(currentStep) + 1}
@@ -104,8 +105,7 @@ function RouteComponent() {
                   <SearchRoute handleSelectRoute={() => nextStep('route')} />
                 </Step>
                 <Step name='request'>
-                  <div>요청</div>
-                  {/* <Request handleNextStep={handleNextStep} /> */}
+                  <Request handleNextStep={handleNextStep} />
                 </Step>
               </Funnel>
             </FormProvider>

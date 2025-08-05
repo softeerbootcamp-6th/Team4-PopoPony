@@ -4,6 +4,6 @@ import Communication from './recruitStep/Communication';
 import Time from './recruitStep/Time';
 import EscortRoute from './recruitStep/EscortRoute';
 import SearchRoute from './recruitStep/SearchRoute';
+import Request from './recruitStep/Request';
 
-
-export { Profile, Condition, Communication, Time, EscortRoute, SearchRoute };
+export { Profile, Condition, Communication, Time, EscortRoute, SearchRoute, Request };
