@@ -18,7 +18,7 @@ const TabsList = ({ className, ...props }: React.ComponentProps<typeof TabsPrimi
     <TabsPrimitive.List
       data-slot='tabs-list'
       className={cn(
-        'bg-background-default-white text-neutral-assistive flex-center sticky top-0 z-10 rounded-lg',
+        'bg-background-default-white text-neutral-assistive flex-center sticky top-0 z-20 rounded-lg',
         className
       )}
       {...props}
