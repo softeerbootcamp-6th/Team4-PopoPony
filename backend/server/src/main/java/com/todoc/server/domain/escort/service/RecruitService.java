@@ -7,6 +7,7 @@ import com.todoc.server.domain.escort.exception.RecruitNotFoundException;
 import com.todoc.server.domain.escort.repository.RecruitJpaRepository;
 import com.todoc.server.domain.escort.repository.RecruitQueryRepository;
 import com.todoc.server.domain.escort.web.dto.request.RecruitCreateRequest;
+import com.todoc.server.domain.escort.web.dto.response.RecruitDetailResponse;
 import com.todoc.server.domain.escort.web.dto.response.RecruitListResponse;
 import com.todoc.server.domain.escort.web.dto.response.RecruitSimpleResponse;
 import java.util.ArrayList;
@@ -102,5 +103,16 @@ public class RecruitService {
 
         // soft delete
         recruit.softDelete();
+    }
+
+    /**
+     * recruitId에 해당하는 동행 신청에 대한 상세 정보를 조회하는 함수
+     *
+     * @param recruitId 동행 신청의 ID
+     * @return 동행 신청 상세 정보 DTO(RecruitDetailResponse)
+     */
+    @Transactional(readOnly = true)
+    public RecruitDetailResponse getRecruitDetailByRecruitId(Long recruitId) {
+        return recruitQueryRepository.getRecruitDetailByRecruitId(recruitId);
     }
 }

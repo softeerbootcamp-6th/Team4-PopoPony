@@ -3,7 +3,6 @@ package com.todoc.server.domain.escort.service;
 import com.todoc.server.domain.auth.entity.Auth;
 import com.todoc.server.domain.customer.entity.Patient;
 import com.todoc.server.domain.customer.service.PatientService;
-import com.todoc.server.domain.customer.web.dto.response.PatientSimpleResponse;
 import com.todoc.server.domain.escort.entity.Recruit;
 import com.todoc.server.domain.escort.web.dto.request.RecruitCreateRequest;
 import com.todoc.server.domain.escort.web.dto.response.RecruitDetailResponse;
@@ -11,7 +10,6 @@ import com.todoc.server.domain.route.entity.LocationInfo;
 import com.todoc.server.domain.route.entity.Route;
 import com.todoc.server.domain.route.service.LocationInfoService;
 import com.todoc.server.domain.route.service.RouteService;
-import com.todoc.server.domain.route.web.dto.response.RouteSimpleResponse;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -64,30 +62,7 @@ public class RecruitFacadeService {
      */
     @Transactional(readOnly = true)
     public RecruitDetailResponse getRecruitDetailByRecruitId(Long recruitId) {
-
-        // 1. 동행 신청 조회
-        Recruit recruit = recruitService.findById(recruitId);
-
-        // 2. Patient → PatientSimpleResponse
-        Patient patient = recruit.getPatient();
-        PatientSimpleResponse patientResponse = PatientSimpleResponse.from(patient);
-
-        // 3. Route → RouteSimpleResponse
-        Route route = recruit.getRoute();
-        RouteSimpleResponse routeResponse = RouteSimpleResponse.from(route);
-
-        // 4. Recruit → RecruitDetailResponse
-        return RecruitDetailResponse.builder()
-                .recruitId(recruit.getId())
-                .status(recruit.getStatus())
-                .escortDate(recruit.getEscortDate())
-                .estimatedMeetingTime(recruit.getEstimatedMeetingTime())
-                .estimatedReturnTime(recruit.getEstimatedReturnTime())
-                .route(routeResponse)
-                .patient(patientResponse)
-                .purpose(recruit.getPurpose())
-                .extraRequest(recruit.getExtraRequest())
-                .build();
+        return recruitService.getRecruitDetailByRecruitId(recruitId);
     }
 
     /**
