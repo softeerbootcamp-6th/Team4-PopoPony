@@ -27,7 +27,7 @@ const CardStatusHeader = ({ status, text, title }: CardStatusHeaderProps) => {
         {status && <StatusTag status={status} />}
         <span className='label2-14-medium text-text-neutral-secondary'>{text}</span>
       </div>
-      <div className='flex-between mt-[0.6rem]'>
+      <div className='flex-between mt-[0.6rem] cursor-pointer'>
         <h3 className='subtitle-18-bold text-text-neutral-primary'>{title}</h3>
         <IcChevronRightSecondary color='text-text-neutral-secondary' />
       </div>
