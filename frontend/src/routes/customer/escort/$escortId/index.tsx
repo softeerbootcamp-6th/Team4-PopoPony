@@ -1,4 +1,4 @@
-import { EscortCard, Tabs } from '@components';
+import { EscortCard, ProgressIndicator, Tabs } from '@components';
 import { PageLayout } from '@layouts';
 import { createFileRoute } from '@tanstack/react-router';
 
@@ -11,7 +11,7 @@ function RouteComponent() {
     <PageLayout>
       <PageLayout.Header title='내역 상세보기' showBack />
       <PageLayout.Content>
-        <div className='bg-neutral-10 px-[2rem] py-[1.6rem]'>
+        <div className='bg-neutral-10 flex-col-start gap-[1.2rem] px-[2rem] py-[1.6rem]'>
           <EscortCard>
             <EscortCard.StatusHeader
               text='동행번호 NO.12394O4L'
@@ -23,6 +23,7 @@ function RouteComponent() {
               <EscortCard.Info type='location' text='꿈에그린아파트 → 서울아산병원' />
             </EscortCard.InfoSection>
           </EscortCard>
+          <ProgressIndicator currentStatus='매칭중' />
         </div>
 
         <Tabs defaultValue='도우미'>
