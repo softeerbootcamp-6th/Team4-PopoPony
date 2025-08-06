@@ -5,7 +5,7 @@ interface FormLayoutProps {
 }
 
 const FormLayout = ({ children }: FormLayoutProps) => {
-  return <div className='bg-background-default-white flex h-full w-full flex-col'>{children}</div>;
+  return <div className='flex h-full w-full flex-col'>{children}</div>;
 };
 
 const TitleWrapper = ({ children }: FormLayoutProps) => {
