@@ -2,6 +2,7 @@ package com.todoc.server.domain.escort.web.controller;
 
 import com.todoc.server.common.enumeration.Gender;
 import com.todoc.server.common.response.Response;
+import com.todoc.server.domain.escort.service.ApplicationFacadeService;
 import com.todoc.server.domain.escort.web.dto.response.ApplicationListResponse;
 import com.todoc.server.domain.escort.web.dto.response.ApplicationSimpleResponse;
 import com.todoc.server.domain.helper.web.dto.response.HelperSimpleResponse;
@@ -20,6 +21,8 @@ import java.util.List;
 @RequestMapping("/api/applications")
 public class ApplicationController {
 
+    private final ApplicationFacadeService applicationFacadeService;
+
     @Operation(
             summary = "신청에 대한 지원 목록 조회",
             description = "특정 신청에 대한 지원 목록을 조회합니다.")
@@ -29,6 +32,8 @@ public class ApplicationController {
     @GetMapping("/recruits/{recruitId}")
     public Response<ApplicationListResponse> getApplicationListAsRecruit(@PathVariable Long recruitId) {
         // TODO :: 신청 ID를 받아, 해당 신청에 대한 지원들을 검색
+
+//        return Response.from(applicationFacadeService.getApplicationListByRecruitId(recruitId));
 
         HelperSimpleResponse helper = HelperSimpleResponse.builder()
                 .helperId(1L)

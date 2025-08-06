@@ -23,6 +23,6 @@ public class HelperService {
     @Transactional(readOnly = true)
     public Helper getHelperByUserId(Long userId) {
         return helperJpaRepository.findByAuthId(userId)
-                .orElseThrow(() -> new HelperNotFoundException() {});
+                .orElseThrow(HelperNotFoundException::new);
     }
 }

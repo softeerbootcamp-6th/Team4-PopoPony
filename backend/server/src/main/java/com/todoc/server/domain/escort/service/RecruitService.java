@@ -2,6 +2,8 @@ package com.todoc.server.domain.escort.service;
 
 import com.todoc.server.common.enumeration.RecruitStatus;
 import com.todoc.server.domain.escort.entity.Recruit;
+import com.todoc.server.domain.escort.exception.RecruitInvalidCancelException;
+import com.todoc.server.domain.escort.exception.RecruitNotFoundException;
 import com.todoc.server.domain.escort.repository.RecruitJpaRepository;
 import com.todoc.server.domain.escort.repository.RecruitQueryRepository;
 import com.todoc.server.domain.escort.web.dto.request.RecruitCreateRequest;
@@ -10,6 +12,7 @@ import com.todoc.server.domain.escort.web.dto.response.RecruitSimpleResponse;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -80,5 +83,27 @@ public class RecruitService {
                 .build();
 
         return recruitJpaRepository.save(recruit);
+    }
+
+    public Recruit findById(Long recruitId) {
+        return recruitJpaRepository.findById(recruitId)
+                .orElseThrow(RecruitNotFoundException::new);
+    }
+
+    @Transactional(readOnly = true)
+    public void cancelRecruit(Long recruitId) {
+        Recruit recruit = recruitJpaRepository.findById(recruitId)
+                .orElseThrow(RecruitNotFoundException::new);
+
+        // 매칭 완료된 동행 신청에 대한 예외 처리
+        if (recruit.getStatus() != RecruitStatus.MATCHING) {
+            throw new RecruitInvalidCancelException();
+        }
+
+        // 상태 변경
+        recruit.setStatus(RecruitStatus.CANCELLED);
+
+        // soft delete
+        recruit.softDelete();
     }
 }
