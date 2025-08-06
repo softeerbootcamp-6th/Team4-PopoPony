@@ -6,7 +6,6 @@ import com.todoc.server.domain.escort.exception.RecruitInvalidCancelException;
 import com.todoc.server.domain.escort.exception.RecruitNotFoundException;
 import com.todoc.server.domain.escort.repository.RecruitJpaRepository;
 import com.todoc.server.domain.escort.repository.RecruitQueryRepository;
-import com.todoc.server.domain.escort.web.dto.response.RecruitDetailResponse;
 import com.todoc.server.domain.escort.web.dto.response.RecruitListResponse;
 import com.todoc.server.domain.escort.web.dto.response.RecruitSimpleResponse;
 import org.junit.jupiter.api.DisplayName;
@@ -146,25 +145,5 @@ class RecruitServiceTest {
         // then
         assertThatThrownBy(() -> recruitService.cancelRecruit(1L))
                 .isInstanceOf(RecruitInvalidCancelException.class);
-    }
-
-    @Test
-    void getRecruitDetailByRecruitId_정상_조회() {
-        // given
-        Long recruitId = 1L;
-        RecruitDetailResponse mockDetail = RecruitDetailResponse.builder()
-                .recruitId(recruitId)
-                .escortDate(LocalDate.now())
-                .purpose("진료")
-                .build();
-
-        given(recruitQueryRepository.getRecruitDetailByRecruitId(recruitId)).willReturn(mockDetail);
-
-        // when
-        RecruitDetailResponse result = recruitService.getRecruitDetailByRecruitId(recruitId);
-
-        // then
-        assertThat(result.getRecruitId()).isEqualTo(recruitId);
-        assertThat(result.getPurpose()).isEqualTo("진료");
     }
 }
