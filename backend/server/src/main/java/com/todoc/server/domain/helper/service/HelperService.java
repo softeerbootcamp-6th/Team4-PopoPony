@@ -5,9 +5,8 @@ import com.querydsl.core.Tuple;
 import com.todoc.server.common.enumeration.Gender;
 import com.todoc.server.common.util.DateTimeUtils;
 import com.todoc.server.common.util.JsonUtils;
-import com.todoc.server.domain.helper.entity.Helper;
-import com.todoc.server.domain.helper.exception.HelperNotFoundException;
 import com.todoc.server.domain.helper.exception.HelperProfileNotFoundException;
+import com.todoc.server.domain.helper.repository.HelperJpaRepository;
 import com.todoc.server.domain.helper.repository.HelperQueryRepository;
 import com.todoc.server.domain.helper.web.dto.response.HelperSimpleResponse;
 import lombok.RequiredArgsConstructor;
@@ -67,7 +66,8 @@ public class HelperService {
         // 3. 강점 JSON 파싱
         List<String> strengthList = null;
         if (strengthJson != null) {
-            strengthList = JsonUtils.fromJson(strengthJson, new TypeReference<>() {});
+            strengthList = JsonUtils.fromJson(strengthJson, new TypeReference<>() {
+            });
         }
 
         // 4. certificate 중복 제거 및 수집
@@ -90,17 +90,5 @@ public class HelperService {
                 .strengthList(strengthList)
                 .certificateList(certificateList)
                 .build();
-    }
-
-    /**
-     * userId(authId)에 해당하는 도우미를 조회하는 함수
-     *
-     * @param userId (authId)
-     * @return Helper 인스턴스
-     */
-    @Transactional(readOnly = true)
-    public Helper getHelperByUserId(Long userId) {
-        return helperJpaRepository.findByAuthId(userId)
-                .orElseThrow(HelperNotFoundException::new);
     }
 }
