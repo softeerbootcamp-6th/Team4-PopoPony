@@ -1,9 +1,9 @@
 package com.todoc.server.domain.review.repository;
 
 import com.querydsl.core.types.Projections;
-import com.todoc.server.domain.review.entity.PositiveFeedbackChoice;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.todoc.server.domain.review.web.dto.response.PositiveFeedbackStatResponse;
-import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -13,15 +13,14 @@ import static com.todoc.server.domain.review.entity.QReview.review;
 import static com.todoc.server.domain.review.entity.QPositiveFeedbackChoice.positiveFeedbackChoice;
 
 @Repository
-public class PositiveFeedbackChoiceQueryRepository extends QuerydslRepositorySupport {
+@RequiredArgsConstructor
+public class PositiveFeedbackChoiceQueryRepository {
 
-    public PositiveFeedbackChoiceQueryRepository() {
-        super(PositiveFeedbackChoice.class);
-    }
+    private final JPAQueryFactory queryFactory;
 
     public List<PositiveFeedbackStatResponse> findPositiveFeedbackStatByHelperUserId(Long userId) {
 
-        return getQuerydsl().createQuery()
+        return queryFactory
                 .select(Projections.constructor(
                         PositiveFeedbackStatResponse.class,
                         positiveFeedback.description,
