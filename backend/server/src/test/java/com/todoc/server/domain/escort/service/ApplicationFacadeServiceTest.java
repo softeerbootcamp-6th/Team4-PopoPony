@@ -67,7 +67,7 @@ class ApplicationFacadeServiceTest {
         when(applicationService.getApplicationListByRecruitId(recruitId))
                 .thenReturn(Map.of(applicationId, mockTuples));
 
-        when(helperService.buildHelperSimpleByHelper(mockTuples))
+        when(helperService.buildHelperSimpleByHelperId(mockTuples))
                 .thenReturn(mockHelperResponse);
 
         // when
@@ -82,6 +82,6 @@ class ApplicationFacadeServiceTest {
         assertThat(item.getHelper()).isEqualTo(mockHelperResponse);
 
         verify(applicationService).getApplicationListByRecruitId(recruitId);
-        verify(helperService).buildHelperSimpleByHelper(mockTuples);
+        verify(helperService).buildHelperSimpleByHelperId(mockTuples);
     }
 }
