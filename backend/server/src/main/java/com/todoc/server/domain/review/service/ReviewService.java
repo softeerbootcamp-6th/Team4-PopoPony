@@ -49,7 +49,7 @@ public class ReviewService {
         // 요청에서 만족도 레벨을 가져와서 유효성 검사
         // 유효하지 않은 경우 SatisfactionInvalidException 예외를 발생시킴
         SatisfactionLevel satisfactionLevel = SatisfactionLevel.from(request.getSatisfactionLevel())
-                .orElseThrow(() -> new SatisfactionInvalidException() {});
+                .orElseThrow(SatisfactionInvalidException::new);
 
         Review review = Review.builder()
                 .satisfactionLevel(satisfactionLevel)

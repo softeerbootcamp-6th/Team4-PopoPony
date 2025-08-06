@@ -22,7 +22,7 @@ public class AuthService {
      */
     public Auth getAuthById(Long authId) {
         return authJpaRepository.findById(authId)
-                .orElseThrow(() -> new AuthNotFoundException() {});
+                .orElseThrow(AuthNotFoundException::new);
     }
 
 
