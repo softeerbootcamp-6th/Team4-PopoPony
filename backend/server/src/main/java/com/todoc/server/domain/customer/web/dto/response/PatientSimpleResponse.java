@@ -1,6 +1,9 @@
 package com.todoc.server.domain.customer.web.dto.response;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.todoc.server.common.enumeration.Gender;
+import com.todoc.server.common.util.JsonUtils;
+import com.todoc.server.domain.customer.entity.Patient;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
@@ -59,5 +62,26 @@ public class PatientSimpleResponse {
         this.cognitiveIssueDetail = cognitiveIssueDetail;
         this.hasCommunicationIssue = hasCommunicationIssue;
         this.communicationIssueDetail = communicationIssueDetail;
+    }
+
+    public static PatientSimpleResponse from(Patient patient) {
+        List<String> cognitiveIssueDetail = null;
+        if (patient.getCognitiveIssueDetail() != null) {
+            cognitiveIssueDetail = JsonUtils.fromJson(patient.getCognitiveIssueDetail(), new TypeReference<>() {});
+        }
+
+        return PatientSimpleResponse.builder()
+                .patientId(patient.getId())
+                .imageUrl(patient.getImageUrl())
+                .name(patient.getName())
+                .gender(patient.getGender())
+                .age(patient.getAge())
+                .needsHelping(patient.getNeedsHelping())
+                .usesWheelchair(patient.getUsesWheelchair())
+                .hasCognitiveIssue(patient.getHasCognitiveIssue())
+                .cognitiveIssueDetail(cognitiveIssueDetail)
+                .hasCommunicationIssue(patient.getHasCommunicationIssue())
+                .communicationIssueDetail(patient.getCommunicationIssueDetail())
+                .build();
     }
 }

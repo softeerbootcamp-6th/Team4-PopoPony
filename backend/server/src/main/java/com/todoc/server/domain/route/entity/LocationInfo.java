@@ -83,7 +83,7 @@ public class LocationInfo extends BaseEntity {
         StringBuilder sb = new StringBuilder().append(upperAddrName);
 
         if (middleAddrName != null && !middleAddrName.isBlank()) {
-            sb.append(middleAddrName).append(" ");
+            sb.append(" ").append(middleAddrName).append(" ");
         }
 
         if (roadName != null && !roadName.isBlank()) {
@@ -110,7 +110,7 @@ public class LocationInfo extends BaseEntity {
         StringBuilder sb = new StringBuilder().append(upperAddrName);
 
         if (middleAddrName != null && !middleAddrName.isBlank()) {
-            sb.append(middleAddrName).append(" ");
+            sb.append(" ").append(middleAddrName).append(" ");
         }
 
         if (lowerAddrName != null && !lowerAddrName.isBlank()) {

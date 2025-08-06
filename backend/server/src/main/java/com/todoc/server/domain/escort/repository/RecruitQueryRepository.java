@@ -1,34 +1,35 @@
 package com.todoc.server.domain.escort.repository;
 
 import com.querydsl.core.types.Projections;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.todoc.server.domain.route.entity.QLocationInfo;
 import java.util.List;
 import com.todoc.server.domain.escort.entity.Recruit;
 import com.todoc.server.domain.escort.web.dto.response.RecruitSimpleResponse;
 
-import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import static com.todoc.server.domain.route.entity.QRoute.route;
 import static com.todoc.server.domain.escort.entity.QApplication.application;
 import static com.todoc.server.domain.escort.entity.QRecruit.recruit;
 import static com.todoc.server.domain.escort.entity.QEscort.escort;
+import static com.todoc.server.domain.customer.entity.QPatient.patient;
 
 @Repository
-public class RecruitQueryRepository extends QuerydslRepositorySupport {
+@RequiredArgsConstructor
+public class RecruitQueryRepository {
 
-    public RecruitQueryRepository() {
-        super(Recruit.class);
-    }
+    private final JPAQueryFactory queryFactory;
 
     QLocationInfo meetingLocation = new QLocationInfo("meetingLocation");
     QLocationInfo hospitalLocation = new QLocationInfo("hospitalLocation");
 
     public List<RecruitSimpleResponse> findListByUserId(Long userId) {
-        List<RecruitSimpleResponse> result = getQuerydsl().createQuery()
+        List<RecruitSimpleResponse> result = queryFactory
             .select(Projections.constructor(RecruitSimpleResponse.class,
                 recruit.id,
-
+                escort.id,
                 recruit.status,
                 application.count(),
                 recruit.escortDate,
@@ -48,5 +49,23 @@ public class RecruitQueryRepository extends QuerydslRepositorySupport {
             .fetch();
 
         return result;
+    }
+
+    public Recruit getRecruitWithPatientAndRouteByRecruitId(Long recruitId) {
+
+        QLocationInfo meetingLocation = new QLocationInfo("meetingLocation");
+        QLocationInfo hospitalLocation = new QLocationInfo("hospitalLocation");
+        QLocationInfo returnLocation = new QLocationInfo("returnLocation");
+
+        return queryFactory
+                .select(recruit)
+                .from(recruit)
+                .join(recruit.patient, patient).fetchJoin()
+                .join(recruit.route, route).fetchJoin()
+                .join(route.meetingLocationInfo, meetingLocation).fetchJoin()
+                .join(route.hospitalLocationInfo, hospitalLocation).fetchJoin()
+                .join(route.returnLocationInfo, returnLocation).fetchJoin()
+                .where(recruit.id.eq(recruitId))
+                .fetchOne();
     }
 }

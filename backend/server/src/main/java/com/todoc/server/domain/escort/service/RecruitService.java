@@ -1,16 +1,24 @@
 package com.todoc.server.domain.escort.service;
 
 import com.todoc.server.common.enumeration.RecruitStatus;
+import com.todoc.server.domain.customer.entity.Patient;
+import com.todoc.server.domain.customer.exception.PatientNotFoundException;
+import com.todoc.server.domain.customer.web.dto.response.PatientSimpleResponse;
 import com.todoc.server.domain.escort.entity.Recruit;
 import com.todoc.server.domain.escort.exception.RecruitNotFoundException;
 import com.todoc.server.domain.escort.repository.RecruitJpaRepository;
 import com.todoc.server.domain.escort.repository.RecruitQueryRepository;
 import com.todoc.server.domain.escort.web.dto.request.RecruitCreateRequest;
+import com.todoc.server.domain.escort.web.dto.response.RecruitDetailResponse;
 import com.todoc.server.domain.escort.web.dto.response.RecruitListResponse;
 import com.todoc.server.domain.escort.web.dto.response.RecruitSimpleResponse;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+
+import com.todoc.server.domain.route.entity.Route;
+import com.todoc.server.domain.route.exception.RouteNotFoundException;
+import com.todoc.server.domain.route.web.dto.response.RouteSimpleResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

@@ -58,9 +58,10 @@ public class Recruit extends BaseEntity {
     private RecruitStatus status;
 
     @Builder
-    public Recruit(Auth customer, Patient patient, Route route, LocalDate escortDate, LocalTime estimatedMeetingTime,
+    public Recruit(Long id, Auth customer, Patient patient, Route route, LocalDate escortDate, LocalTime estimatedMeetingTime,
                    LocalTime estimatedReturnTime, String purpose, String extraRequest, Integer estimatedFee,
                    RecruitStatus status) {
+        this.id = id;
         this.customer = customer;
         this.patient = patient;
         this.route = route;
