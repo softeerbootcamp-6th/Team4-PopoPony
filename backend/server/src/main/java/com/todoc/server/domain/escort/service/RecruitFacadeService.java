@@ -5,7 +5,6 @@ import com.todoc.server.domain.customer.entity.Patient;
 import com.todoc.server.domain.customer.service.PatientService;
 import com.todoc.server.domain.escort.entity.Recruit;
 import com.todoc.server.domain.escort.web.dto.request.RecruitCreateRequest;
-import com.todoc.server.domain.escort.web.dto.response.RecruitDetailResponse;
 import com.todoc.server.domain.route.entity.LocationInfo;
 import com.todoc.server.domain.route.entity.Route;
 import com.todoc.server.domain.route.service.LocationInfoService;
@@ -52,26 +51,5 @@ public class RecruitFacadeService {
         recruit.setRoute(route);
         // TODO :: 경로 API 로부터 금액 가져와야 함
         recruit.setEstimatedFee(null);
-    }
-
-    /**
-     * recruitId에 해당하는 동행 신청에 대한 상세 정보를 조회하는 함수
-     *
-     * @param recruitId 동행 신청의 ID
-     * @return 동행 신청 상세 정보 DTO(RecruitDetailResponse)
-     */
-    @Transactional(readOnly = true)
-    public RecruitDetailResponse getRecruitDetailByRecruitId(Long recruitId) {
-        return recruitService.getRecruitDetailByRecruitId(recruitId);
-    }
-
-    /**
-     * recruitId에 해당하는 동행 신청을 취소하는 함수
-     *
-     * @param recruitId 동행 신청의 ID
-     */
-    @Transactional(readOnly = true)
-    public void cancelRecruit(Long recruitId) {
-        recruitService.cancelRecruit(recruitId);
     }
 }
