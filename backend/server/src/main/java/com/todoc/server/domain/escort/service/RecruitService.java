@@ -85,7 +85,6 @@ public class RecruitService {
 
     public Recruit getRecruitById(Long recruitId) {
         return recruitJpaRepository.findById(recruitId)
-                .orElseThrow(() -> new RecruitNotFoundException() {
-                });
+                .orElseThrow(RecruitNotFoundException::new);
     }
 }
