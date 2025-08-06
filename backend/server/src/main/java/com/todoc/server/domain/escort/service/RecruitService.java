@@ -1,6 +1,8 @@
 package com.todoc.server.domain.escort.service;
 
 import com.todoc.server.common.enumeration.RecruitStatus;
+import com.todoc.server.common.util.DateTimeUtils;
+import com.todoc.server.common.util.FeeUtils;
 import com.todoc.server.domain.customer.entity.Patient;
 import com.todoc.server.domain.customer.exception.PatientNotFoundException;
 import com.todoc.server.domain.customer.web.dto.response.PatientSimpleResponse;
@@ -12,6 +14,7 @@ import com.todoc.server.domain.escort.repository.RecruitQueryRepository;
 import com.todoc.server.domain.escort.web.dto.request.RecruitCreateRequest;
 import com.todoc.server.domain.escort.web.dto.response.RecruitDetailResponse;
 import com.todoc.server.domain.escort.web.dto.response.RecruitListResponse;
+import com.todoc.server.domain.escort.web.dto.response.RecruitPaymentResponse;
 import com.todoc.server.domain.escort.web.dto.response.RecruitSimpleResponse;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -151,6 +154,43 @@ public class RecruitService {
                 .patient(patientResponse)
                 .purpose(recruit.getPurpose())
                 .extraRequest(recruit.getExtraRequest())
+                .build();
+    }
+
+    /**
+     * recruitId에 해당하는 동행 신청에 대한 결제 정보를 조회하는 함수
+     *
+     * @param recruitId 동행 신청의 ID
+     * @return 동행 신청 결제 정보 DTO(RecruitPaymentResponse)
+     */
+    @Transactional(readOnly = true)
+    public RecruitPaymentResponse getRecruitPaymentByRecruitId(Long recruitId) {
+
+        // 1. 데이터 조회 (Recruit + Route)
+        Recruit recruit = recruitQueryRepository.getRecruitWithRouteByRecruitId(recruitId);
+        if (recruit == null) {
+            throw new RecruitNotFoundException();
+        }
+
+        // 2. Route → RouteSimpleResponse
+        Route route = recruit.getRoute();
+        if (route == null) {
+            throw new RouteNotFoundException();
+        }
+        RouteSimpleResponse routeResponse = RouteSimpleResponse.from(route);
+
+        // 2. 기본 요금 계산
+        int baseFee = FeeUtils.calculateTotalFee(recruit.getEstimatedMeetingTime(), recruit.getEstimatedReturnTime());
+
+        // 3. 예상 택시 요금 계산
+        // TODO :: 택시 요금에 대한 처리
+        int expectedTaxiFee = 0;
+
+        return RecruitPaymentResponse.builder()
+                .recruitId(recruit.getId())
+                .route(routeResponse)
+                .baseFee(baseFee)
+                .expectedTaxiFee(expectedTaxiFee)
                 .build();
     }
 }
