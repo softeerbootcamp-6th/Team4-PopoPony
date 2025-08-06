@@ -92,7 +92,7 @@ public class RecruitService {
         return recruitJpaRepository.save(recruit);
     }
 
-    public Recruit findById(Long recruitId) {
+    public Recruit getRecruitById(Long recruitId) {
         return recruitJpaRepository.findById(recruitId)
                 .orElseThrow(RecruitNotFoundException::new);
     }

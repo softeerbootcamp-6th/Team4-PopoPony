@@ -16,8 +16,12 @@ public class ReviewCreateRequest {
     private Long helperId;
 
     @NotNull
-    @Schema(description = "만족도", allowableValues = {"GOOD", "AVERAGE", "BAD"})
-    private SatisfactionLevel satisfactionLevel;
+    @Schema(description = "동행 ID")
+    private Long recruitId;
+
+    @NotNull
+    @Schema(description = "만족도", allowableValues = {"좋았어요", "괜찮아요", "아쉬워요"})
+    private String satisfactionLevel;
 
     @Schema(description = "만족도에 대한 코멘트 (괜찮아요/아쉬워요 인 경우에 해당")
     private String satisfactionComment;

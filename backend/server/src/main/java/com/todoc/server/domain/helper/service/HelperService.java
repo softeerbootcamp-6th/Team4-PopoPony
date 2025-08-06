@@ -6,6 +6,7 @@ import com.todoc.server.common.enumeration.Gender;
 import com.todoc.server.common.util.DateTimeUtils;
 import com.todoc.server.common.util.JsonUtils;
 import com.todoc.server.domain.helper.exception.HelperProfileNotFoundException;
+import com.todoc.server.domain.helper.repository.HelperJpaRepository;
 import com.todoc.server.domain.helper.repository.HelperQueryRepository;
 import com.todoc.server.domain.helper.web.dto.response.HelperSimpleResponse;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +26,7 @@ import static com.todoc.server.domain.helper.entity.QHelperProfile.helperProfile
 @Transactional
 public class HelperService {
 
+    private final HelperJpaRepository helperJpaRepository;
     private final HelperQueryRepository helperQueryRepository;
 
     /**
@@ -64,7 +66,8 @@ public class HelperService {
         // 3. 강점 JSON 파싱
         List<String> strengthList = null;
         if (strengthJson != null) {
-            strengthList = JsonUtils.fromJson(strengthJson, new TypeReference<>() {});
+            strengthList = JsonUtils.fromJson(strengthJson, new TypeReference<>() {
+            });
         }
 
         // 4. certificate 중복 제거 및 수집

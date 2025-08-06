@@ -33,5 +33,7 @@ public class PositiveFeedbackChoiceQueryRepository {
                 .groupBy(positiveFeedback.description)
                 .orderBy(positiveFeedback.count().desc())
                 .fetch();
+
+
     }
 }

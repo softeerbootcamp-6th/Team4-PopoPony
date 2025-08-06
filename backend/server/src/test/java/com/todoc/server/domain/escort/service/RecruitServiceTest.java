@@ -104,7 +104,7 @@ class RecruitServiceTest {
         given(recruitJpaRepository.findById(1L)).willReturn(Optional.of(recruit));
 
         // when
-        Recruit result = recruitService.findById(1L);
+        Recruit result = recruitService.getRecruitById(1L);
 
         // then
         assertThat(result.getId()).isEqualTo(1L);
@@ -116,7 +116,7 @@ class RecruitServiceTest {
         given(recruitJpaRepository.findById(1L)).willReturn(Optional.empty());
 
         // then
-        assertThatThrownBy(() -> recruitService.findById(1L))
+        assertThatThrownBy(() -> recruitService.getRecruitById(1L))
                 .isInstanceOf(RecruitNotFoundException.class);
     }
 
