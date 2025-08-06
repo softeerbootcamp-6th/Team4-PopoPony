@@ -73,7 +73,7 @@ public class ApplicationController {
     public Response<ApplicationListResponse> selectApplication(@PathVariable Long applicationId) {
         // TODO :: 지원 ID를 받아, 지원과 신청의 상태를 바꾸고 동행 생성
 
-        // applicationFacadeService.selectApplication(applicationId);
+//        applicationFacadeService.selectApplication(applicationId);
 
         return Response.from();
     }
