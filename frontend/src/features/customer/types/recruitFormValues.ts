@@ -8,8 +8,9 @@ export interface ProfileFormValues {
 }
 
 export interface ConditionFormValues {
-  needsPhysicalSupport: boolean;
-  usesWheelchair: boolean;
+  //TODO: 나중에 boolean으로 변경해야 할 확률 높음
+  needsPhysicalSupport: 'true' | 'false';
+  usesWheelchair: 'true' | 'false';
 }
 
 export interface CommunicationFormValues {
