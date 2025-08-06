@@ -24,6 +24,8 @@
     "baseUrl": ".",
     "paths": {
       "@icons": ["src/assets/icons"],
+      "@assets": ["src/assets"],
+      "@video": ["src/assets/video"],
       "@apis": ["src/shared/apis"],
       "@layouts": ["src/shared/layouts"],
       "@components": ["src/shared/components"],
