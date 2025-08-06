@@ -5,6 +5,7 @@ import com.todoc.server.common.enumeration.RecruitStatus;
 import com.todoc.server.common.response.Response;
 import com.todoc.server.domain.customer.web.dto.response.PatientSimpleResponse;
 import com.todoc.server.domain.escort.service.RecruitFacadeService;
+import com.todoc.server.domain.escort.service.RecruitService;
 import com.todoc.server.domain.escort.web.dto.request.RecruitCreateRequest;
 import com.todoc.server.domain.escort.web.dto.response.RecruitDetailResponse;
 import com.todoc.server.domain.escort.web.dto.response.RecruitListResponse;
@@ -31,6 +32,7 @@ import java.util.List;
 public class RecruitController {
 
     private final RecruitFacadeService recruitFacadeService;
+    private final RecruitService recruitService;
 
     @Operation(
             summary = "고객의 동행 목록 조회",
@@ -74,7 +76,7 @@ public class RecruitController {
     @GetMapping("/{recruitId}")
     public Response<RecruitDetailResponse> getRecruitDetail(@PathVariable Long recruitId) {
 
-//        return Response.from(recruitFacadeService.getRecruitDetailByRecruitId(recruitId));
+//        return Response.from(recruitService.getRecruitDetailByRecruitId(recruitId));
 
         LocationInfoSimpleResponse meetingLocationInfo = LocationInfoSimpleResponse.builder()
                 .locationInfoId(1L)
@@ -206,7 +208,7 @@ public class RecruitController {
             description = "동행 신청 취소 성공")
     @PatchMapping("/{recruitId}/cancel")
     public Response<Void> cancelRecruit(@PathVariable Long recruitId) {
-        // recruitFacadeService.cancelRecruit(recruitId);
+        recruitService.cancelRecruit(recruitId);
 
         return Response.from();
     }
