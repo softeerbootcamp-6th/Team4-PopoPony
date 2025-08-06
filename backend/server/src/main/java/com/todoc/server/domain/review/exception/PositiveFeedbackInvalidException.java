@@ -4,6 +4,6 @@ import com.todoc.server.common.exception.base.CustomException;
 
 public class PositiveFeedbackInvalidException extends CustomException {
     public PositiveFeedbackInvalidException() {
-        super(PositiveFeedbackErrorCode.IN_VALID_POSITIVE_FEEDBACK);
+        super(PositiveFeedbackErrorCode.POSITIVE_FEEDBACK_IN_VALID);
     }
 }

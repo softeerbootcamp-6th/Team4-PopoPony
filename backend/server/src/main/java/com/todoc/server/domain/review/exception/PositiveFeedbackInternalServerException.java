@@ -4,6 +4,6 @@ import com.todoc.server.common.exception.base.CustomException;
 
 public class PositiveFeedbackInternalServerException extends CustomException {
     public PositiveFeedbackInternalServerException() {
-        super(PositiveFeedbackErrorCode.INTERNAL_SERVER_ERROR);
+        super(PositiveFeedbackErrorCode.POSITIVE_FEEDBACK_INTERNAL_SERVER_ERROR);
     }
 }
