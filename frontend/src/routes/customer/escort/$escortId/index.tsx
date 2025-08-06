@@ -45,9 +45,7 @@ function RouteComponent() {
         </Tabs>
       </PageLayout.Content>
       <PageLayout.Footer>
-        <div className='flex-start gap-[1.2rem]'>
-          <Button onClick={() => {}}>도우미 후기 남기기</Button>
-        </div>
+        <Button onClick={() => {}}>도우미 후기 남기기</Button>
       </PageLayout.Footer>
     </PageLayout>
   );
