@@ -6,13 +6,13 @@ import com.todoc.server.domain.escort.exception.RecruitInvalidCancelException;
 import com.todoc.server.domain.escort.exception.RecruitNotFoundException;
 import com.todoc.server.domain.escort.repository.RecruitJpaRepository;
 import com.todoc.server.domain.escort.repository.RecruitQueryRepository;
+import com.todoc.server.domain.escort.web.dto.response.RecruitDetailResponse;
 import com.todoc.server.domain.escort.web.dto.response.RecruitListResponse;
 import com.todoc.server.domain.escort.web.dto.response.RecruitSimpleResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import java.time.LocalDate;
@@ -21,7 +21,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
 class RecruitServiceTest {
@@ -71,22 +74,6 @@ class RecruitServiceTest {
     }
 
     @Test
-    @DisplayName("recruitId로 취소 성공")
-    void cancelRecruit_success() {
-        // given
-        Long recruitId = 1L;
-        Recruit recruit = Mockito.mock(Recruit.class);
-        when(recruit.getStatus()).thenReturn(RecruitStatus.MATCHING);
-        when(recruitJpaRepository.findById(recruitId)).thenReturn(Optional.of(recruit));
-
-        // when
-        recruitService.cancelRecruit(recruitId);
-
-        // then
-        verify(recruit, times(1)).softDelete();
-    }
-
-    @Test
     @DisplayName("recruitId로 취소 실패 - 이미 매칭된 동행 신청")
     void cancelRecruit_notMatching_shouldThrowException() {
         // given
@@ -109,5 +96,75 @@ class RecruitServiceTest {
 
         // when & then
         assertThrows(RecruitNotFoundException.class, () -> recruitService.cancelRecruit(recruitId));
+    }
+
+    @Test
+    void findById_존재하는_경우() {
+        // given
+        Recruit recruit = Recruit.builder().id(1L).status(RecruitStatus.MATCHING).build();
+        given(recruitJpaRepository.findById(1L)).willReturn(Optional.of(recruit));
+
+        // when
+        Recruit result = recruitService.findById(1L);
+
+        // then
+        assertThat(result.getId()).isEqualTo(1L);
+    }
+
+    @Test
+    void findById_존재하지_않는_경우() {
+        // given
+        given(recruitJpaRepository.findById(1L)).willReturn(Optional.empty());
+
+        // then
+        assertThatThrownBy(() -> recruitService.findById(1L))
+                .isInstanceOf(RecruitNotFoundException.class);
+    }
+
+    @Test
+    void cancelRecruit_정상_취소() {
+        // given
+        Recruit recruit = Recruit.builder().id(1L).status(RecruitStatus.MATCHING).build();
+        given(recruitJpaRepository.findById(1L)).willReturn(Optional.of(recruit));
+
+        // when
+        recruitService.cancelRecruit(1L);
+
+        // then
+        assertThat(recruit.isDeleted()).isTrue();
+    }
+
+    @Test
+    void cancelRecruit_이미_매칭이_완료된_경우() {
+        // given
+        Recruit recruit = Recruit.builder()
+                .id(1L)
+                .status(RecruitStatus.IN_PROGRESS)
+                .build();
+        given(recruitJpaRepository.findById(1L)).willReturn(Optional.of(recruit));
+
+        // then
+        assertThatThrownBy(() -> recruitService.cancelRecruit(1L))
+                .isInstanceOf(RecruitInvalidCancelException.class);
+    }
+
+    @Test
+    void getRecruitDetailByRecruitId_정상_조회() {
+        // given
+        Long recruitId = 1L;
+        RecruitDetailResponse mockDetail = RecruitDetailResponse.builder()
+                .recruitId(recruitId)
+                .escortDate(LocalDate.now())
+                .purpose("진료")
+                .build();
+
+        given(recruitQueryRepository.getRecruitDetailByRecruitId(recruitId)).willReturn(mockDetail);
+
+        // when
+        RecruitDetailResponse result = recruitService.getRecruitDetailByRecruitId(recruitId);
+
+        // then
+        assertThat(result.getRecruitId()).isEqualTo(recruitId);
+        assertThat(result.getPurpose()).isEqualTo("진료");
     }
 }
