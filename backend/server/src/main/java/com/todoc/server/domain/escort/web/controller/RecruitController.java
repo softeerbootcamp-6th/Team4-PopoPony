@@ -210,7 +210,8 @@ public class RecruitController {
             description = "동행 신청 취소 성공")
     @PatchMapping("/{recruitId}/cancel")
     public Response<Void> cancelRecruit(@PathVariable Long recruitId) {
-        recruitService.cancelRecruit(recruitId);
+
+        // recruitService.cancelRecruit(recruitId);
 
         return Response.from();
     }
