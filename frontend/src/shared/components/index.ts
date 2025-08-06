@@ -17,6 +17,8 @@ import Modal from './modal/Modal';
 import BottomSheet from './modal/BottomSheet';
 import PhotoUpload from './form/PhotoUpload';
 import MultiOptionSelector from './form/MultiOptionSelector';
+import CheckboxCircle from './checkbox/checkbox-circle';
+import TermsModal from './modal/TermsModal';
 
 export {
   Button,
@@ -38,4 +40,6 @@ export {
   BottomSheet,
   PhotoUpload,
   MultiOptionSelector,
+  CheckboxCircle,
+  TermsModal,
 };
