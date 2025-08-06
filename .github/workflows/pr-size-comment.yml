@@ -1,0 +1,76 @@
+name: PR Size Notifier
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  check-pr-size:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Calculate PR size and comment
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.FORKED_REPO_TOKEN }}
+          script: |
+            const pr = context.payload.pull_request;
+            const { data: files } = await github.rest.pulls.listFiles({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: pr.number,
+            });
+
+            // 제외할 파일 패턴 (프론트 + 백엔드)
+            const excludedPatterns = [
+              /package-lock\.json$/, /\.lock$/, /^docs\//,
+              /^target\//, /^build\//, /pom\.xml$/, /build\.gradle$/, /settings\.gradle$/,
+              /\.properties$/, /\.yml$/, /\.yaml$/
+            ];
+
+            const totalAdditions = files
+              .filter(file => !excludedPatterns.some(pattern => pattern.test(file.filename)))
+              .reduce((sum, file) => sum + file.additions, 0);
+
+            let sizeLabel, message;
+
+
+            if (totalAdditions <= 50) {
+              sizeLabel = 'XS';
+              message = `✅ 작은 변경입니다. (${totalAdditions}줄) 빠르게 리뷰할 수 있어요.`;
+            } else if (totalAdditions <= 200) {
+              sizeLabel = 'S';
+              message = `👍 적절한 크기입니다. (${totalAdditions}줄) 리뷰하기 좋네요.`;
+            } else if (totalAdditions <= 500) {
+              sizeLabel = 'M';
+              message = `ℹ️ 다소 큰 PR입니다. (${totalAdditions}줄) 집중해서 리뷰해 주세요.`;
+            } else if (totalAdditions <= 1000) {
+              sizeLabel = 'L';
+              message = `⚠️ 큰 변경사항입니다. (${totalAdditions}줄) 리뷰에 시간이 좀 걸릴 수 있어요.`;
+            } else {
+              sizeLabel = 'XL';
+              message = `🚨 매우 큰 PR입니다. (${totalAdditions}줄) 가능하다면 작업을 나눠서 제출해 주세요.`;
+            }
+
+
+            // 기존 코멘트 있으면 삭제
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: pr.number,
+            });
+
+            const botComment = comments.find(c => c.user.login === 'github-actions[bot]' && c.body.includes('PR 크기 체크 결과'));
+            if (botComment) {
+              await github.rest.issues.deleteComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: botComment.id,
+              });
+            }
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: pr.number,
+              body: `### 🔍 PR 크기 체크 결과 (${sizeLabel})\n${message}`
+            });
