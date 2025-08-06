@@ -3,7 +3,8 @@ import type { RecruitStepProps } from '@customer/types';
 import { useNavigate } from '@tanstack/react-router';
 import { FormLayout } from '@layouts';
 import { useWatch, useFormContext } from 'react-hook-form';
-import { FormInput, LabeledSection, Button } from '@components';
+import { FormInput, LabeledSection, Button, Dot, Checkbox } from '@components';
+import { SearchButton } from '@customer/components';
 import { z } from 'zod';
 import { useFormValidation } from '@customer/hooks';
 
@@ -84,57 +85,85 @@ const EscortRoute = memo(({ handleNextStep }: RecruitStepProps) => {
         <FormLayout.TitleWrapper>
           <FormLayout.Title>동행 경로를 선택해주세요</FormLayout.Title>
         </FormLayout.TitleWrapper>
-        <Button onClick={() => handleNavigate('meeting')}>
-          {values.meetingLocationDetail?.placeName || '지번, 도로명, 건물명으로 검색'}
-        </Button>
-        <LabeledSection
-          label='만남 장소'
-          isChecked={
-            !fieldErrors.meetingLocationDetail && !!values.meetingLocationDetail?.detailAddress
-          }
-          message={fieldErrors.meetingLocationDetail}>
-          <FormInput
-            name='meetingLocationDetail.detailAddress'
-            type='text'
-            placeholder='만남 장소를 입력 ex) 현관 앞'
-          />
-        </LabeledSection>
-        <Button onClick={() => handleNavigate('hospital')}>
-          {values.destinationDetail?.placeName || '병원명으로 검색'}
-        </Button>
-        <LabeledSection
-          label='병원'
-          isChecked={!fieldErrors.destinationDetail && !!values.destinationDetail?.detailAddress}
-          message={fieldErrors.destinationDetail}>
-          <FormInput
-            name='destinationDetail.detailAddress'
-            type='text'
-            placeholder='방문하실 과 ex) 내과'
-          />
-        </LabeledSection>
-        <Button onClick={() => handleNavigate('return')}>
-          {values.returnLocationDetail?.placeName || '지번, 도로명, 건물명으로 검색'}
-        </Button>
-        <LabeledSection
-          label='복귀 장소'
-          isChecked={
-            !fieldErrors.returnLocationDetail && !!values.returnLocationDetail?.detailAddress
-          }
-          message={fieldErrors.returnLocationDetail}>
-          <FormInput
-            name='returnLocationDetail.detailAddress'
-            type='text'
-            placeholder='복귀 장소를 입력 ex) 현관 앞'
-          />
-        </LabeledSection>
+        <div className='relative'>
+          <Dot active={!!values.meetingLocationDetail?.placeName} />
+          <div className='ml-[2.8rem]'>
+            <LabeledSection
+              label='만남 장소'
+              isChecked={
+                !fieldErrors.meetingLocationDetail && !!values.meetingLocationDetail?.detailAddress
+              }
+              message={fieldErrors.meetingLocationDetail}>
+              <div className='flex flex-col gap-[0.8rem]'>
+                <SearchButton
+                  onClick={() => handleNavigate('meeting')}
+                  text={values.meetingLocationDetail?.placeName}
+                />
+                <FormInput
+                  name='meetingLocationDetail.detailAddress'
+                  type='text'
+                  placeholder='만남 장소를 입력 ex) 현관 앞'
+                />
+              </div>
+            </LabeledSection>
+          </div>
+          <div className='bg-stroke-neutral-dark absolute top-[1rem] left-[0.8rem] h-[calc(100%+2.2rem)] w-[0.4rem]' />
+        </div>
+        <div className='relative'>
+          <Dot active={!!values.destinationDetail?.placeName} />
+          <div className='ml-[2.8rem]'>
+            <LabeledSection
+              label='병원'
+              isChecked={
+                !fieldErrors.destinationDetail && !!values.destinationDetail?.detailAddress
+              }
+              message={fieldErrors.destinationDetail}>
+              <div className='flex flex-col gap-[0.8rem]'>
+                <SearchButton
+                  onClick={() => handleNavigate('hospital')}
+                  text={values.destinationDetail?.placeName}
+                />
+                <FormInput
+                  name='destinationDetail.detailAddress'
+                  type='text'
+                  placeholder='방문하실 과 ex) 내과'
+                />
+              </div>
+            </LabeledSection>
+          </div>
+          <div className='bg-stroke-neutral-dark absolute top-[1rem] left-[0.8rem] h-[calc(100%+2.2rem)] w-[0.4rem]' />
+        </div>
+        <div className='relative'>
+          <Dot active={!!values.returnLocationDetail?.placeName} />
+          <div className='ml-[2.8rem]'>
+            <LabeledSection
+              label='복귀 장소'
+              isChecked={
+                !fieldErrors.returnLocationDetail && !!values.returnLocationDetail?.detailAddress
+              }
+              message={fieldErrors.returnLocationDetail}>
+              <div className='flex flex-col gap-[0.8rem]'>
+                <SearchButton
+                  onClick={() => handleNavigate('return')}
+                  text={values.returnLocationDetail?.placeName}
+                />
+                <FormInput
+                  name='returnLocationDetail.detailAddress'
+                  type='text'
+                  placeholder='복귀 장소를 입력 ex) 현관 앞'
+                />
+              </div>
+            </LabeledSection>
+          </div>
+        </div>
+
         <div className='flex items-center gap-[0.4rem]'>
-          <input
-            type='checkbox'
+          <Checkbox
+            label='만남 장소와 복귀 장소가 동일해요.'
             disabled={!handleCheckboxAble()}
             checked={isSameLocation}
-            onChange={(e) => handleSameLocationChange(e.target.checked)}
+            onChange={() => handleSameLocationChange(!isSameLocation)}
           />
-          <label>만남 장소와 복귀 장소가 동일해요.</label>
         </div>
       </FormLayout.Content>
       <FormLayout.Footer>
