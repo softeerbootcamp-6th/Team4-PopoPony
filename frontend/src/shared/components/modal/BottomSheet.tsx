@@ -64,12 +64,12 @@ const BottomSheetContent = ({
     <SheetPrimitive.Portal container={container}>
       <SheetPrimitive.Overlay
         data-slot='bottom-sheet-overlay'
-        className={cn('bg-color-black-opacity-40 absolute inset-0 z-50', className)}
+        className={cn('bg-black-opacity-40 absolute inset-0 z-50', className)}
       />
       <SheetPrimitive.Content
         data-slot='bottom-sheet-content'
         className={cn(
-          'shadow-bottom-sheet bg-background-default-white absolute inset-x-0 bottom-0 z-50 h-auto rounded-t-[1.2rem] border-t',
+          'shadow-bottom-sheet bg-background-default-white absolute inset-x-0 bottom-0 z-50 h-auto rounded-t-[1.2rem]',
           className
         )}
         {...props}>
