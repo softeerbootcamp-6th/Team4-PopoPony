@@ -23,6 +23,9 @@ import HelperTab from './tabs/HelperTab';
 import ReportTab from './tabs/ReportTab';
 import DetailTab from './tabs/DetailTab';
 
+//Button
+import SearchButton from './Button/SearchButton';
+
 export {
   RouteButton,
   InfoSection,
@@ -44,4 +47,5 @@ export {
   Request,
   Final,
   CardWrapper,
+  SearchButton,
 };
