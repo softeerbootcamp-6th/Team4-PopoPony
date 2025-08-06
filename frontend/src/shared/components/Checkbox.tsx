@@ -11,7 +11,7 @@ const Checkbox = ({ label, checked, disabled, onChange = () => {} }: Props) => {
   const checkboxStyle = () => {
     if (disabled) {
       return {
-        background: 'bg-neutral-20',
+        background: 'bg-neutral-15',
         iconColor: '[&_path]:fill-text-neutral-disabled',
         textColor: 'text-text-neutral-disabled',
       };
@@ -24,7 +24,7 @@ const Checkbox = ({ label, checked, disabled, onChange = () => {} }: Props) => {
       };
     }
     return {
-      background: 'bg-icon-neutral-disabled',
+      background: 'bg-neutral-15',
       iconColor: '[&_path]:fill-neutral-0',
       textColor: 'text-text-neutral-disabled',
     };
@@ -44,7 +44,7 @@ const Checkbox = ({ label, checked, disabled, onChange = () => {} }: Props) => {
           disabled={disabled}
           onChange={onChange}
         />
-        <IcCheckBox className={iconColor} />
+        {checked ? <IcCheckBox className={iconColor} /> : null}
       </div>
       <span>{label}</span>
     </label>
