@@ -18,6 +18,8 @@ import PhotoUpload from './form/PhotoUpload';
 import ProgressIndicator from './ProgressIndicator';
 import Checkbox from './Checkbox';
 import ShowMapButton from './ShowMapButton';
+import Divider from './Divider';
+
 export {
   Button,
   BottomCTA,
@@ -39,4 +41,5 @@ export {
   ProgressIndicator,
   Checkbox,
   ShowMapButton,
+  Divider,
 };
