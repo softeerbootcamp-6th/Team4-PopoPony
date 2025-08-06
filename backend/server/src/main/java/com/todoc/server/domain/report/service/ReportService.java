@@ -1,8 +1,7 @@
 package com.todoc.server.domain.report.service;
 
-import com.todoc.server.domain.report.entity.Report;
-import com.todoc.server.domain.report.exception.ReportNotFoundException;
-import com.todoc.server.domain.report.repository.ReportJpaRepository;
+import com.todoc.server.domain.report.repository.ReportQueryRepository;
+import com.todoc.server.domain.report.web.dto.response.ReportDetailResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,17 +11,16 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class ReportService {
 
-    private final ReportJpaRepository reportJpaRepository;
+    private final ReportQueryRepository reportQueryRepository;
 
     /**
-     * recruitId로 신청한 동행에 대한 리포트를 조회하는 함수
+     * recruitId로 신청한 동행에 대한 리포트 상세 정보를 조회하는 함수
      *
      * @param recruitId 동행 신청 ID
-     * @return Report 인스턴스
+     * @return ReportDetailResponse 인스턴스
      */
     @Transactional(readOnly = true)
-    public Report getReportByRecruitId(Long recruitId) {
-        return reportJpaRepository.findByRecruitId(recruitId)
-                .orElseThrow(ReportNotFoundException::new);
+    public ReportDetailResponse getReportDetailByRecruitId(Long recruitId) {
+        return reportQueryRepository.getReportDetailByRecruitId(recruitId);
     }
 }
