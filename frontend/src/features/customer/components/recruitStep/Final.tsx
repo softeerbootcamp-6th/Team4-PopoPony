@@ -14,6 +14,7 @@ import { IcChevronRight } from '@icons';
 import { useState } from 'react';
 import { getTermsById, termsData } from '@utils';
 import type { TermsData } from '@types';
+import { useNavigate } from '@tanstack/react-router';
 
 interface Props {
   handleNextStep: () => void;
@@ -22,6 +23,7 @@ interface Props {
 export function Final({ handleNextStep }: Props) {
   const { getValues } = useFormContext<RecruitFormValues>();
   const formData = getValues();
+  const navigate = useNavigate();
 
   // 약관 모달 상태
   const [selectedTerms, setSelectedTerms] = useState<TermsData | null>(null);
@@ -71,8 +73,8 @@ export function Final({ handleNextStep }: Props) {
       // await submitRecruitRequest(formData);
 
       // 성공 시 완료 페이지로 이동
-      // router.navigate({ to: '/customer' });
       alert('동행 신청이 완료되었습니다!');
+      navigate({ to: '/customer/recruit/completed' });
     } catch (error) {
       console.error('제출 실패:', error);
     }
