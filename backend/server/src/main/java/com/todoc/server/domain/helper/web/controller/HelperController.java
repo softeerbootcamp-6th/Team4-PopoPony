@@ -37,8 +37,7 @@ public class HelperController {
     public Response<HelperDetailResponse> getHelperDetail(@PathVariable Long userId) {
         // TODO :: 도우미의 userId를 받아, 해당 도우미의 상세 정보를 생성
 
-//        HelperDetailResponse response = helperFacadeService.getHelperDetailByUserId(userId);
-//        return Response.from(response);
+//        return Response.from(helperFacadeService.getHelperDetailByUserId(userId));
 
         List<PositiveFeedbackStatResponse> positiveFeedbackList = new ArrayList<>();
         positiveFeedbackList.add(new PositiveFeedbackStatResponse("친절해요", 3L));
