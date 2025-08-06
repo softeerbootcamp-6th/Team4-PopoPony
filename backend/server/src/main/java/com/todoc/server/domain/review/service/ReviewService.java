@@ -1,5 +1,7 @@
 package com.todoc.server.domain.review.service;
 
+import com.querydsl.core.Tuple;
+import com.todoc.server.common.enumeration.SatisfactionLevel;
 import com.todoc.server.domain.review.repository.ReviewQueryRepository;
 import com.todoc.server.domain.review.web.dto.response.ReviewSimpleResponse;
 import com.todoc.server.domain.review.web.dto.response.ReviewStatResponse;
@@ -7,7 +9,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -24,7 +28,20 @@ public class ReviewService {
      */
     @Transactional(readOnly = true)
     public ReviewStatResponse getReviewStatByUserId(Long userId) {
-        return reviewQueryRepository.getReviewStatByHelperUserId(userId);
+
+        List<Tuple> tuples = reviewQueryRepository.getReviewStatByHelperUserId(userId);
+
+        Map<SatisfactionLevel, Long> statMap = new HashMap<>();
+        long total = 0L;
+
+        for (Tuple tuple : tuples) {
+            SatisfactionLevel satisfactionLevel = tuple.get(0, SatisfactionLevel.class); // Enum일 경우 `.name()`
+            Long count = tuple.get(1, Long.class);
+            statMap.put(satisfactionLevel, count);
+            total += count;
+        }
+
+        return ReviewStatResponse.from(statMap, total);
     }
 
     /**

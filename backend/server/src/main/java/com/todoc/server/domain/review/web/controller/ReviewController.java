@@ -34,14 +34,14 @@ public class ReviewController {
     public Response<ReviewSimpleResponse> getReviewAsRecruit(@PathVariable Long recruitId) {
         // TODO :: 신청 ID를 받아, 해당 신청을 담당한 도우미의 리뷰를 검색
 
-        return Response.from(reviewService.getReviewSimpleByRecruitId(recruitId));
+//        return Response.from(reviewService.getReviewSimpleByRecruitId(recruitId));
 
-//        ReviewSimpleResponse mock = ReviewSimpleResponse.builder()
-//                .satisfactionLevel(SatisfactionLevel.GOOD)
-//                .createdAt(LocalDateTime.now().minusDays(30))
-//                .shortComment("약간 아쉽지만 좋았어요! 또 이용하고 싶습니다!")
-//                .build();
-//
-//        return Response.from(mock);
+        ReviewSimpleResponse mock = ReviewSimpleResponse.builder()
+                .satisfactionLevel(SatisfactionLevel.GOOD)
+                .createdAt(LocalDateTime.now().minusDays(30))
+                .shortComment("약간 아쉽지만 좋았어요! 또 이용하고 싶습니다!")
+                .build();
+
+        return Response.from(mock);
     }
 }
