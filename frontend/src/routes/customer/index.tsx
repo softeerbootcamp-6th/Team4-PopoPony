@@ -26,7 +26,7 @@ function RouteComponent() {
             </Link>
           </div>
           <img
-            src='/images/home-graphic.png'
+            src='/images/home-graphic.svg'
             alt='home'
             className='absolute top-[-4.4rem] right-0 w-[24.8rem]'
           />
@@ -57,7 +57,7 @@ function RouteComponent() {
                   <EscortCard.Info type='location' text='꿈에그린아파트 → 서울아산병원' />
                   <EscortCard.Info type='price' text='123,456원' />
                 </EscortCard.InfoSection>
-                <EscortCard.Tag tags={['safety', 'wheelchair', 'care']} />
+                <EscortCard.Tag tags={['support', 'wheelchair', 'care']} />
               </EscortCard>
               <EscortCard>
                 <EscortCard.StatusHeader
@@ -85,7 +85,7 @@ function RouteComponent() {
                   <EscortCard.Info type='location' text='꿈에그린아파트 → 서울아산병원' />
                   <EscortCard.Info type='price' text='123,456원' />
                 </EscortCard.InfoSection>
-                <EscortCard.Tag tags={['safety', 'wheelchair', 'care']} />
+                <EscortCard.Tag tags={['support', 'wheelchair', 'care']} />
               </EscortCard>
               <EscortCard>
                 <EscortCard.StatusHeader

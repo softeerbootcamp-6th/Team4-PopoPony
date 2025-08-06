@@ -16,6 +16,10 @@ import StrengthTag from './StrengthTag';
 import Modal from './modal/Modal';
 import BottomSheet from './modal/BottomSheet';
 import PhotoUpload from './form/PhotoUpload';
+import ProgressIndicator from './ProgressIndicator';
+import Checkbox from './Checkbox';
+import ShowMapButton from './ShowMapButton';
+import Divider from './Divider';
 import MultiOptionSelector from './form/MultiOptionSelector';
 import CheckboxCircle from './checkbox/checkbox-circle';
 import TermsModal from './modal/TermsModal';
@@ -39,6 +43,10 @@ export {
   Modal,
   BottomSheet,
   PhotoUpload,
+  ProgressIndicator,
+  Checkbox,
+  ShowMapButton,
+  Divider,
   MultiOptionSelector,
   CheckboxCircle,
   TermsModal,

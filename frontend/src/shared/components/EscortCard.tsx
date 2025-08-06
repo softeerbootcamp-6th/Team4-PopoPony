@@ -27,9 +27,9 @@ const CardStatusHeader = ({ status, text, title }: CardStatusHeaderProps) => {
         {status && <StatusTag status={status} />}
         <span className='label2-14-medium text-text-neutral-secondary'>{text}</span>
       </div>
-      <div className='flex-between mt-[0.6rem]'>
+      <div className='flex-between mt-[0.6rem] cursor-pointer'>
         <h3 className='subtitle-18-bold text-text-neutral-primary'>{title}</h3>
-        <IcChevronRightSecondary color='text-text-neutral-secondary' />
+        <IcChevronRightSecondary />
       </div>
     </>
   );
@@ -54,12 +54,12 @@ const CardInfo = ({ type, text }: CardInfoProps) => {
       {type === 'time' && <IcClockFill />}
       {type === 'location' && <IcMarkFill />}
       {type === 'price' && <IcCoinFill />}
-      <span className='label2-14-medium text-text-neutral-primary'>{text}</span>
+      <span className='label2-14-medium text-text-neutral-secondary'>{text}</span>
     </div>
   );
 };
 
-const CardTags = ({ tags }: { tags: ('safety' | 'wheelchair' | 'care')[] }) => {
+const CardTags = ({ tags }: { tags: ('support' | 'wheelchair' | 'care')[] }) => {
   return (
     <div className='flex-start gap-[0.4rem]'>
       {tags.map((tag) => (

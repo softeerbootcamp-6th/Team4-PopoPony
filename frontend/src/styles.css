@@ -298,6 +298,10 @@
   .shadow-map-tag {
     @apply shadow-[0px_4px_2px_0px_rgba(0,0,0,0.15)];
   }
+
+  .shadow-page {
+    @apply shadow-[0px_0px_30px_0px_rgba(0,0,0,0.1)];
+  }
 }
 
 /* ========================= */
