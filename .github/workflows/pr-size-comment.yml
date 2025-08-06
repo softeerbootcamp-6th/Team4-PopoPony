@@ -22,9 +22,11 @@ jobs:
 
             // 제외할 파일 패턴 (프론트 + 백엔드)
             const excludedPatterns = [
-              /package-lock\.json$/, /\.lock$/, /^docs\//,
-              /^target\//, /^build\//, /pom\.xml$/, /build\.gradle$/, /settings\.gradle$/,
-              /\.properties$/, /\.yml$/, /\.yaml$/
+              /^frontend\/package-lock\.json$/, /^frontend\/.*\.lock$/, /^docs\//,
+              /^backend\/.*\/target\//, /^backend\/.*\/build\//, 
+              /^backend\/.*\/pom\.xml$/, /^backend\/.*\/build\.gradle/, /^backend\/.*\/settings\.gradle/,
+              /^backend\/.*\.(properties|yml|yaml)$/, 
+              /^frontend\/public\//, /^frontend\/src\/assets\//
             ];
 
             const totalAdditions = files
