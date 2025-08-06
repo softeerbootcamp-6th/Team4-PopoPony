@@ -6,12 +6,14 @@ import com.todoc.server.domain.auth.entity.Auth;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.SQLRestriction;
 
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
 @SQLRestriction("deleted_at is NULL")
 public class Escort extends BaseEntity {
     @Id
