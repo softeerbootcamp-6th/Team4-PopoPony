@@ -40,10 +40,10 @@ public class HelperService {
         if (tuples.isEmpty()) {
             throw new HelperProfileNotFoundException();
         }
-        return buildHelperSimpleByHelper(tuples);
+        return buildHelperSimpleByHelperId(tuples);
     }
 
-    public HelperSimpleResponse buildHelperSimpleByHelper(List<Tuple> tuples) {
+    public HelperSimpleResponse buildHelperSimpleByHelperId(List<Tuple> tuples) {
 
         // 1. 필드 추출
         Tuple first = tuples.getFirst();
