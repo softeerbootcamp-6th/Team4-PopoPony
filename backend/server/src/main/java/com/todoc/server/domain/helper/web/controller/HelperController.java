@@ -5,7 +5,6 @@ import com.todoc.server.common.enumeration.SatisfactionLevel;
 import com.todoc.server.common.response.Response;
 import com.todoc.server.domain.helper.service.HelperFacadeService;
 import com.todoc.server.domain.helper.web.dto.response.HelperDetailResponse;
-import com.todoc.server.domain.helper.web.dto.response.HelperListResponse;
 import com.todoc.server.domain.helper.web.dto.response.HelperSimpleResponse;
 import com.todoc.server.domain.review.web.dto.response.PositiveFeedbackStatResponse;
 import com.todoc.server.domain.review.web.dto.response.ReviewSimpleResponse;
@@ -29,36 +28,6 @@ public class HelperController {
     private final HelperFacadeService helperFacadeService;
 
     @Operation(
-            summary = "신청에 지원한 도우미 목록 조회",
-            description = "특정 신청에 지원한 도우미 목록을 조회합니다.")
-    @ApiResponse(
-            responseCode = "200",
-            description = "도우미 목록 조회 성공")
-    @GetMapping("/recruits/{recruitId}")
-    public Response<HelperListResponse> getHelperListAsRecruit(@PathVariable Long recruitId) {
-        // TODO :: 신청 ID를 받아, 해당 신청에 지원한 도우미들을 검색
-
-        HelperSimpleResponse dto = HelperSimpleResponse.builder()
-                .helperId(1L)
-                .imageUrl("https://example.com/images/sample.jpg")
-                .name("최솔희")
-                .age(39)
-                .gender(Gender.FEMALE)
-                .certificateList(new ArrayList<>(List.of("간호사", "간호조무사", "요양보호사")))
-                .strengthList(new ArrayList<>(List.of("안전한 부축", "휠체어 이동", "인지장애 케어")))
-                .build();
-
-        List<HelperSimpleResponse> list = new ArrayList<>();
-        list.add(dto);
-        list.add(dto);
-
-        HelperListResponse mock = HelperListResponse.builder()
-                .helperList(list).build();
-
-        return Response.from(mock);
-    }
-
-    @Operation(
             summary = "도우미 상세 조회",
             description = "userId에 해당하는 도우미의 상세 정보를 조회합니다.")
     @ApiResponse(
@@ -68,8 +37,7 @@ public class HelperController {
     public Response<HelperDetailResponse> getHelperDetail(@PathVariable Long userId) {
         // TODO :: 도우미의 userId를 받아, 해당 도우미의 상세 정보를 생성
 
-//        HelperDetailResponse response = helperFacadeService.getHelperDetailByUserId(userId);
-//        return Response.from(response);
+//        return Response.from(helperFacadeService.getHelperDetailByUserId(userId));
 
         List<PositiveFeedbackStatResponse> positiveFeedbackList = new ArrayList<>();
         positiveFeedbackList.add(new PositiveFeedbackStatResponse("친절해요", 3L));
@@ -77,6 +45,7 @@ public class HelperController {
         positiveFeedbackList.add(new PositiveFeedbackStatResponse("소통이 잘돼요", 1L));
 
         ReviewSimpleResponse review = ReviewSimpleResponse.builder()
+                .reviewId(1L)
                 .satisfactionLevel(SatisfactionLevel.GOOD)
                 .createdAt(LocalDateTime.now().minusDays(30))
                 .shortComment("너무 잘해주시고 부모님을 집에 무사히 모셔주셔서...")
@@ -96,18 +65,23 @@ public class HelperController {
                 .badRate(0)
                 .build();
 
-        HelperDetailResponse mock = HelperDetailResponse.builder()
-                .helperId(1L)
+        HelperSimpleResponse helperSimple = HelperSimpleResponse.builder()
+                .authId(1L)
+                .helperProfileId(1L)
                 .imageUrl("https://example.com/images/sample.jpg")
                 .name("최솔희")
                 .age(39)
                 .gender(Gender.FEMALE)
-                .shortBio("제 부모님처럼 모시겠습니다!")
                 .contact("010-1234-5678")
-                .escortCount(20L)
-                .reviewStat(reviewStat)
+                .shortBio("부모님처럼 모시겠습니다.")
                 .certificateList(new ArrayList<>(List.of("간호사", "간호조무사", "요양보호사")))
                 .strengthList(new ArrayList<>(List.of("안전한 부축", "휠체어 이동", "인지장애 케어")))
+                .build();
+
+        HelperDetailResponse mock = HelperDetailResponse.builder()
+                .helperSimple(helperSimple)
+                .escortCount(20L)
+                .reviewStat(reviewStat)
                 .positiveFeedbackStatList(positiveFeedbackList)
                 .latestReviewList(reviewList)
                 .build();

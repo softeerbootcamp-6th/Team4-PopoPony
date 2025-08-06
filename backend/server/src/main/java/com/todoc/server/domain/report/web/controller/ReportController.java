@@ -1,7 +1,7 @@
 package com.todoc.server.domain.report.web.controller;
 
 import com.todoc.server.common.response.Response;
-import com.todoc.server.domain.report.service.ReportFacadeService;
+import com.todoc.server.domain.report.service.ReportService;
 import com.todoc.server.domain.report.web.dto.response.ReportDetailResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -21,7 +21,7 @@ import java.time.LocalTime;
 @RequestMapping("/api/reports")
 public class ReportController {
 
-    private final ReportFacadeService reportFacadeService;
+    private final ReportService reportService;
 
     @Operation(
             summary = "동행 신청에 대한 리포트 상세 정보 조회",
@@ -35,7 +35,7 @@ public class ReportController {
         // '리포트 작성 중' 상태에 대한 처리 필요
         // 결제 정보까지 포함하여 전달 필요
 
-//        return Response.from(reportFacadeService.getReportDetailByRecruitId(recruitId));
+//        return Response.from(reportService.getReportDetailByRecruitId(recruitId));
 
         ReportDetailResponse mock = ReportDetailResponse.builder()
                 .reportId(1L)

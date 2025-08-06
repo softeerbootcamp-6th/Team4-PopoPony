@@ -1,7 +1,6 @@
 package com.todoc.server.domain.review.entity;
 
 import com.todoc.server.common.entity.BaseEntity;
-import com.todoc.server.domain.helper.entity.Helper;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
