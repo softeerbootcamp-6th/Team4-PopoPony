@@ -145,6 +145,8 @@ public class RecruitController {
     public Response<RecruitPaymentResponse> getRecruitPayment(@PathVariable Long recruitId) {
         // TODO :: recruitId에 해당하는 동행 신청의 결제 금액을 계산
 
+//        return Response.from(recruitService.getRecruitPaymentByRecruitId(recruitId));
+
         LocationInfoSimpleResponse meetingLocationInfo = LocationInfoSimpleResponse.builder()
                 .locationInfoId(1L)
                 .placeName("신촌역 3번 출구")
