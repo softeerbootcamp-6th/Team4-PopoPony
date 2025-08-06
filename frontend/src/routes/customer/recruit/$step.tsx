@@ -12,13 +12,14 @@ import {
   EscortRoute,
   SearchRoute,
   Request,
+  Final,
 } from '@customer/components';
 
 export const Route = createFileRoute('/customer/recruit/$step')({
   component: RouteComponent,
 });
 
-const stepList = ['profile', 'condition', 'communication', 'time', 'route', 'request'];
+const stepList = ['profile', 'condition', 'communication', 'time', 'route', 'request', 'final'];
 
 function RouteComponent() {
   const router = useRouter();
@@ -41,9 +42,6 @@ function RouteComponent() {
     if (currentIndex < stepList.length - 1) {
       const nextStepName = stepList[currentIndex + 1];
       nextStep(nextStepName);
-    } else {
-      // 마지막 스텝에서는 제출
-      methods.handleSubmit(onSubmit)();
     }
   };
 
@@ -60,29 +58,28 @@ function RouteComponent() {
     closeModal();
   };
 
-  // // Footer 버튼 텍스트 결정
-  // const getButtonLabel = () => {
-  //   const currentIndex = stepList.indexOf(currentStep);
-  //   return currentIndex === stepList.length - 1 ? '제출' : '다음';
-  // };
-
   return (
-    <PageLayout>
+    <PageLayout
+      background={currentStep === 'final' ? 'bg-neutral-10' : 'bg-background-default-white'}>
       <PageLayout.Header
         title='동행 신청하기'
         showBack={currentStep !== 'profile'}
         showClose={true}
         onClose={handleClose}
-        background={true}
+        background={currentStep === 'final' ? false : true}
       />
       <PageLayout.Content>
         <div className='flex h-full flex-col'>
-          <div className='flex-shrink-0 px-[2rem] pb-[2rem]'>
-            <ProgressBar
-              maxStep={stepList.length}
-              currentStep={stepList.indexOf(currentStep) + 1}
-            />
-          </div>
+          {currentStep !== 'final' ? (
+            <div className='flex-shrink-0 px-[2rem] pb-[2rem]'>
+              <ProgressBar
+                maxStep={stepList.length - 1}
+                currentStep={stepList.indexOf(currentStep) + 1}
+              />
+            </div>
+          ) : (
+            ''
+          )}
           <div className='flex-1 overflow-hidden'>
             <FormProvider {...methods}>
               <Funnel>
@@ -102,10 +99,13 @@ function RouteComponent() {
                   <EscortRoute handleNextStep={handleNextStep} />
                 </Step>
                 <Step name='searchRoute'>
-                  <SearchRoute handleSelectRoute={() => nextStep('route')} />
+                  <SearchRoute handleSelectRoute={() => router.history.back()} />
                 </Step>
                 <Step name='request'>
                   <Request handleNextStep={handleNextStep} />
+                </Step>
+                <Step name='final'>
+                  <Final handleNextStep={handleNextStep} />
                 </Step>
               </Funnel>
             </FormProvider>
