@@ -14,8 +14,8 @@ public class Certificate extends BaseEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "helper_id")
-    private Helper helper;
+    @JoinColumn(name = "helper_profile_id")
+    private HelperProfile helperProfile;
 
     private String type;
 
