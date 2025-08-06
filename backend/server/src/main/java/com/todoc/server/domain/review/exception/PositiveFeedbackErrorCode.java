@@ -10,8 +10,8 @@ import org.springframework.http.HttpStatus;
 public enum PositiveFeedbackErrorCode implements ResponseCode {
 
     // 피드백 02
-    NOT_FOUND_POSITIVE_FEEDBACK(160201, HttpStatus.NOT_FOUND.value(), "해당 피드백을 찾을 수 없습니다."),
     IN_VALID_POSITIVE_FEEDBACK(160202, HttpStatus.BAD_REQUEST.value(), "유효하지 않은 피드백입니다."),
+    INTERNAL_SERVER_ERROR(160500, HttpStatus.INTERNAL_SERVER_ERROR.value(), "서버 오류입니다.")
     ;
 
     private final int code;
