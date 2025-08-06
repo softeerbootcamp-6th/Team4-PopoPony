@@ -37,9 +37,9 @@ export const useFunnel = ({ defaultStep, basePath, paramPath }: UseFunnelProps) 
     return <>{targetStep}</>;
   };
 
-  const nextStep = (next: string) => {
+  const nextStep = (next: string, replace = false) => {
     setStep(next);
-    navigate({ to: `/${basePath}/${next}` });
+    navigate({ to: `/${basePath}/${next}`, replace });
   };
 
   return { Funnel, Step, setStep, nextStep, currentStep: step } as const;
