@@ -57,8 +57,14 @@ const TabsContent = ({
   );
 };
 
-const TabsCotentSection = ({ children }: { children: React.ReactNode }) => {
-  return <div className='flex flex-col gap-[1.6rem] p-[2rem]'>{children}</div>;
+const TabsCotentSection = ({
+  children,
+  gap = 'gap-[1.6rem]',
+}: {
+  children: React.ReactNode;
+  gap?: string;
+}) => {
+  return <div className={cn('flex flex-col p-[2rem]', gap)}>{children}</div>;
 };
 
 const TabsDivider = () => {
