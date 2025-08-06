@@ -1,8 +1,8 @@
-import React from 'react';
+import { useState, memo } from 'react';
 import type { RecruitStepProps } from '@customer/types';
 import { useNavigate } from '@tanstack/react-router';
 import { FormLayout } from '@layouts';
-import { useWatch } from 'react-hook-form';
+import { useWatch, useFormContext } from 'react-hook-form';
 import { FormInput, LabeledSection, Button } from '@components';
 import { z } from 'zod';
 import { useFormValidation } from '@customer/hooks';
@@ -28,8 +28,10 @@ const routeFormSchema = z.object({
   returnLocationDetail: locationDetailSchema,
 });
 
-const EscortRoute = ({ handleNextStep }: RecruitStepProps) => {
+const EscortRoute = memo(({ handleNextStep }: RecruitStepProps) => {
+  const { getValues, setValue } = useFormContext();
   const navigate = useNavigate();
+  const [isSameLocation, setIsSameLocation] = useState(false);
   const { values, fieldErrors, isFormValid, markFieldAsTouched } =
     useFormValidation(routeFormSchema);
 
@@ -43,6 +45,37 @@ const EscortRoute = ({ handleNextStep }: RecruitStepProps) => {
         place: place as 'meeting' | 'hospital' | 'return',
       },
     });
+  };
+  const handleCheckboxAble = () => {
+    if (values.meetingLocationDetail) {
+      return true;
+    }
+    return false;
+  };
+  const handleSameLocationChange = (checked: boolean) => {
+    setIsSameLocation(checked);
+
+    if (checked && values.meetingLocationDetail) {
+      // meetingLocationDetail의 모든 정보를 returnLocationDetail에 복사
+      const meetingData = values.meetingLocationDetail;
+      setValue('returnLocationDetail', {
+        placeName: meetingData.placeName,
+        upperAddrName: meetingData.upperAddrName,
+        middleAddrName: meetingData.middleAddrName,
+        lowerAddrName: meetingData.lowerAddrName,
+        firstAddrNo: meetingData.firstAddrNo,
+        secondAddrNo: meetingData.secondAddrNo,
+        roadName: meetingData.roadName,
+        firstBuildingNo: meetingData.firstBuildingNo,
+        secondBuildingNo: meetingData.secondBuildingNo,
+        detailAddress: meetingData.detailAddress, // detailAddress도 복사
+        longitude: meetingData.longitude,
+        latitude: meetingData.latitude,
+      });
+
+      // returnLocationDetail 필드를 터치된 상태로 만들기
+      markFieldAsTouched('returnLocationDetail');
+    }
   };
 
   return (
@@ -94,6 +127,15 @@ const EscortRoute = ({ handleNextStep }: RecruitStepProps) => {
             placeholder='복귀 장소를 입력 ex) 현관 앞'
           />
         </LabeledSection>
+        <div className='flex items-center gap-[0.4rem]'>
+          <input
+            type='checkbox'
+            disabled={!handleCheckboxAble()}
+            checked={isSameLocation}
+            onChange={(e) => handleSameLocationChange(e.target.checked)}
+          />
+          <label>만남 장소와 복귀 장소가 동일해요.</label>
+        </div>
       </FormLayout.Content>
       <FormLayout.Footer>
         <Button disabled={!isFormValid} onClick={handleNextStep}>
@@ -102,6 +144,6 @@ const EscortRoute = ({ handleNextStep }: RecruitStepProps) => {
       </FormLayout.Footer>
     </FormLayout>
   );
-};
+});
 
 export default EscortRoute;
