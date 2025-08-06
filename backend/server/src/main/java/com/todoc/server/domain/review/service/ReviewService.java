@@ -37,4 +37,15 @@ public class ReviewService {
     public List<ReviewSimpleResponse> getLatestReviewsByHelperUserId(Long userId) {
         return reviewQueryRepository.getLatestReviewsByHelperUserId(userId);
     }
+
+    /**
+     * recruitId로 신청한 동행의 리뷰 요약 정보를 조회하는 함수
+     *
+     * @param recruitId 동행 신청 ID
+     * @return ReviewSimpleResponse
+     */
+    @Transactional(readOnly = true)
+    public ReviewSimpleResponse getReviewSimpleByRecruitId(Long recruitId) {
+        return reviewQueryRepository.getReviewSimpleByRecruitId(recruitId);
+    }
 }
