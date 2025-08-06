@@ -1,12 +1,23 @@
-import { EscortCard, ProgressIndicator, Tabs } from '@components';
+import {
+  EscortCard,
+  ProgressIndicator,
+  StrengthTag,
+  Tabs,
+  Divider,
+  Button,
+  Modal,
+} from '@components';
 import {
   HelperCard,
   HelperEmptyCard,
   HelperSelectInfoCard,
+  InfoSection,
   PaymentFailedCard,
   ReportInfoCard,
   RouteButton,
 } from '@customer/components';
+import { useModal } from '@hooks';
+import { IcCheck } from '@icons';
 import { PageLayout } from '@layouts';
 import { createFileRoute } from '@tanstack/react-router';
 
@@ -15,6 +26,7 @@ export const Route = createFileRoute('/customer/escort/$escortId/')({
 });
 
 function RouteComponent() {
+  const { isOpen, openModal, closeModal } = useModal();
   return (
     <PageLayout>
       <PageLayout.Header title='내역 상세보기' showBack />
@@ -126,6 +138,75 @@ function RouteComponent() {
               <RouteButton />
             </Tabs.TabsCotentSection>
             <Tabs.TabsDivider />
+            <Tabs.TabsCotentSection gap='gap-[2.4rem]'>
+              <div className='flex flex-col gap-[1.6rem]'>
+                <h3 className='subtitle-18-bold text-text-neutral-primary'>환자 상태</h3>
+                <div className='flex flex-col gap-[2rem]'>
+                  <InfoSection title='보행 상태'>
+                    <div className='flex-start gap-[0.4rem]'>
+                      {['support', 'wheelchair'].map((tag) => (
+                        <StrengthTag key={tag} type={tag as 'support' | 'wheelchair' | 'care'} />
+                      ))}
+                    </div>
+                  </InfoSection>
+                  <InfoSection title='인지 능력' status='괜찮아요'>
+                    <div className='bg-neutral-10 label2-14-medium text-text-neutral-primary flex flex-col rounded-[0.6rem] p-[0.8rem]'>
+                      <div className='flex-start'>
+                        <IcCheck />
+                        <span>판단에 도움이 필요해요</span>
+                      </div>
+                      <div className='flex-start'>
+                        <IcCheck />
+                        <span>기억하거나 이해하는 것이 어려워요</span>
+                      </div>
+                    </div>
+                  </InfoSection>
+                  <InfoSection title='의사소통' status='도움이 필요해요'>
+                    <div className='bg-neutral-10 label2-14-medium text-text-neutral-primary flex gap-[0.8rem] rounded-[0.6rem] p-[0.8rem]'>
+                      <span>이가 많이 없으셔서 발음하시는 게 불편하세요.</span>
+                    </div>
+                  </InfoSection>
+                </div>
+              </div>
+              <Divider />
+              <div className='flex flex-col gap-[1.6rem]'>
+                <h3 className='subtitle-18-bold text-text-neutral-primary'>진료시 참고 사항</h3>
+                <div className='flex flex-col gap-[2rem]'>
+                  <InfoSection title='특이사항'>
+                    <div className='bg-neutral-10 label2-14-medium text-text-neutral-primary flex flex-col gap-[0.8rem] rounded-[0.6rem] p-[0.8rem]'>
+                      <span>이가 많이 없으셔서 발음하시는 게 불편하세요.</span>
+                    </div>
+                  </InfoSection>
+                  <InfoSection title='동행 목적'>
+                    <div className='bg-neutral-10 label2-14-medium text-text-neutral-primary flex flex-col gap-[0.8rem] rounded-[0.6rem] p-[0.8rem]'>
+                      <span>이가 많이 없으셔서 발음하시는 게 불편하세요.</span>
+                    </div>
+                  </InfoSection>
+                  <InfoSection title='요청사항'>
+                    <div className='bg-neutral-10 label2-14-medium text-text-neutral-primary flex flex-col gap-[0.8rem] rounded-[0.6rem] p-[0.8rem]'>
+                      <span>다음 정기 검진 예약 꼭 잡아주세요!</span>
+                    </div>
+                  </InfoSection>
+                </div>
+              </div>
+              <Button variant='assistive' onClick={openModal}>
+                신청 취소하기
+              </Button>
+              <Modal isOpen={isOpen} onClose={closeModal}>
+                <Modal.Title>동행 신청을 취소하시겠어요?</Modal.Title>
+                <Modal.Content>취소된 동행은 복구할 수 없어요.</Modal.Content>
+                <Modal.ButtonContainer>
+                  <Modal.ConfirmButton
+                    onClick={() => {
+                      alert('확인 버튼 클릭됨!');
+                      closeModal();
+                    }}>
+                    취소하기
+                  </Modal.ConfirmButton>
+                  <Modal.CloseButton onClick={closeModal}>돌아가기</Modal.CloseButton>
+                </Modal.ButtonContainer>
+              </Modal>
+            </Tabs.TabsCotentSection>
           </Tabs.TabsContent>
         </Tabs>
       </PageLayout.Content>
