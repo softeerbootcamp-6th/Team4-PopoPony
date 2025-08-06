@@ -23,6 +23,7 @@ import Divider from './Divider';
 import MultiOptionSelector from './form/MultiOptionSelector';
 import CheckboxCircle from './checkbox/checkbox-circle';
 import TermsModal from './modal/TermsModal';
+import Dot from './Dot';
 
 export {
   Button,
@@ -50,4 +51,5 @@ export {
   MultiOptionSelector,
   CheckboxCircle,
   TermsModal,
+  Dot,
 };
