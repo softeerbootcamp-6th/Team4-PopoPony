@@ -91,6 +91,13 @@ class ReviewFacadeServiceTest {
     void createReview_PositiveFeedbackIsNotEight() {
         // given
         ReviewCreateRequest request = mock(ReviewCreateRequest.class);
+        when(request.getPositiveFeedbackList()).thenReturn(List.of("친절해요"));
+        when(request.getHelperId()).thenReturn(1L);
+        when(request.getRecruitId()).thenReturn(2L);
+
+        when(authService.getAuthById(1L)).thenReturn(mock(Auth.class));
+        when(recruitService.getRecruitById(2L)).thenReturn(mock(Recruit.class));
+        when(reviewService.register(request)).thenReturn(mock(Review.class));
         when(request.getPositiveFeedbackList()).thenReturn(Collections.singletonList("친절해요"));
         when(positiveFeedbackService.getAll()).thenReturn(Collections.singletonList(mockPositiveFeedback("친절해요")));
 
@@ -106,6 +113,12 @@ class ReviewFacadeServiceTest {
         // given
         ReviewCreateRequest request = mock(ReviewCreateRequest.class);
         when(request.getPositiveFeedbackList()).thenReturn(Collections.singletonList("게임을 잘해요"));
+        when(request.getHelperId()).thenReturn(1L);
+        when(request.getRecruitId()).thenReturn(2L);
+
+        when(authService.getAuthById(1L)).thenReturn(mock(Auth.class));
+        when(recruitService.getRecruitById(2L)).thenReturn(mock(Recruit.class));
+        when(reviewService.register(request)).thenReturn(mock(Review.class));
 
         List<PositiveFeedback> allFeedback = Arrays.asList(
                 mockPositiveFeedback("친절해요"),
@@ -129,10 +142,9 @@ class ReviewFacadeServiceTest {
         }
     }
 
-    // PositiveFeedback mock 생성 유틸
     private PositiveFeedback mockPositiveFeedback(String description) {
-        PositiveFeedback pf = mock(PositiveFeedback.class);
-        when(pf.getDescription()).thenReturn(description);
+        PositiveFeedback pf = new PositiveFeedback();
+        pf.setDescription(description);
         return pf;
     }
 }
