@@ -185,7 +185,7 @@ public class RecruitController {
             description = "로그인한 고객이 동행을 신청합니다.")
     @ApiResponse(
             responseCode = "200",
-            description = "동행 목록 신청 성공")
+            description = "동행 신청 성공")
     @PostMapping("")
     public Response<Void> createRecruit(@RequestBody RecruitCreateRequest requestDto) {
         // TODO :: 원래라면 jwt 혹은 sessionId로부터 유저 정보를 조회해야 함
