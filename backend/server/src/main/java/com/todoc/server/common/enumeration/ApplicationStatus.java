@@ -1,7 +1,7 @@
 package com.todoc.server.common.enumeration;
 
 public enum ApplicationStatus {
-    PENDING("대기중 "),
+    PENDING("대기중"),
     MATCHED("매칭성공"),
     FAILED("매칭실패");
 
