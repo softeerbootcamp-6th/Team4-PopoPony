@@ -1,6 +1,7 @@
 package com.todoc.server.domain.escort.repository;
 
 import com.querydsl.core.types.Projections;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.todoc.server.domain.customer.entity.Patient;
 import com.todoc.server.domain.customer.exception.PatientNotFoundException;
 import com.todoc.server.domain.customer.web.dto.response.PatientSimpleResponse;
@@ -14,7 +15,7 @@ import com.todoc.server.domain.escort.web.dto.response.RecruitSimpleResponse;
 import com.todoc.server.domain.route.entity.Route;
 import com.todoc.server.domain.route.exception.RouteNotFoundException;
 import com.todoc.server.domain.route.web.dto.response.RouteSimpleResponse;
-import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import static com.todoc.server.domain.route.entity.QRoute.route;
@@ -24,17 +25,16 @@ import static com.todoc.server.domain.escort.entity.QEscort.escort;
 import static com.todoc.server.domain.customer.entity.QPatient.patient;
 
 @Repository
-public class RecruitQueryRepository extends QuerydslRepositorySupport {
+@RequiredArgsConstructor
+public class RecruitQueryRepository {
 
-    public RecruitQueryRepository() {
-        super(Recruit.class);
-    }
+    private final JPAQueryFactory queryFactory;
 
     QLocationInfo meetingLocation = new QLocationInfo("meetingLocation");
     QLocationInfo hospitalLocation = new QLocationInfo("hospitalLocation");
 
     public List<RecruitSimpleResponse> findListByUserId(Long userId) {
-        List<RecruitSimpleResponse> result = getQuerydsl().createQuery()
+        List<RecruitSimpleResponse> result = queryFactory
             .select(Projections.constructor(RecruitSimpleResponse.class,
                 recruit.id,
                 escort.id,
@@ -66,7 +66,7 @@ public class RecruitQueryRepository extends QuerydslRepositorySupport {
         QLocationInfo returnLocation = new QLocationInfo("returnLocation");
 
         // 1. 동행 신청 조회
-        Recruit result = getQuerydsl().createQuery()
+        Recruit result = queryFactory
                 .select(recruit)
                 .from(recruit)
                 .join(recruit.patient, patient).fetchJoin()
