@@ -1,6 +1,7 @@
 package com.todoc.server.domain.escort.entity;
 
 import com.todoc.server.common.entity.BaseEntity;
+import com.todoc.server.common.enumeration.ApplicationStatus;
 import com.todoc.server.domain.auth.entity.Auth;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -24,4 +25,7 @@ public class Application extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "helper_id")
     private Auth helper;
+
+    @Enumerated(EnumType.STRING)
+    private ApplicationStatus status;
 }
