@@ -1,6 +1,5 @@
 package com.todoc.server.domain.review.service;
 
-import com.todoc.server.domain.escort.entity.Recruit;
 import com.todoc.server.domain.escort.exception.RecruitNotFoundException;
 import com.todoc.server.domain.review.entity.PositiveFeedbackChoice;
 import com.todoc.server.domain.review.entity.Review;

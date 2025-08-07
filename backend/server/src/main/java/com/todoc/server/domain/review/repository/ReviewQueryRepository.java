@@ -3,17 +3,11 @@ package com.todoc.server.domain.review.repository;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.todoc.server.common.enumeration.SatisfactionLevel;
 import com.todoc.server.domain.review.web.dto.response.ReviewSimpleResponse;
-import lombok.RequiredArgsConstructor;
-import com.todoc.server.domain.review.web.dto.response.ReviewStatResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static com.todoc.server.domain.review.entity.QReview.review;
 

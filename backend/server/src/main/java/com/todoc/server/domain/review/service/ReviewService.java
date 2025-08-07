@@ -2,7 +2,6 @@ package com.todoc.server.domain.review.service;
 
 import com.querydsl.core.Tuple;
 import com.todoc.server.common.enumeration.SatisfactionLevel;
-import com.todoc.server.common.enumeration.SatisfactionLevel;
 import com.todoc.server.domain.review.entity.Review;
 import com.todoc.server.domain.review.exception.ReviewNotFoundException;
 import com.todoc.server.domain.review.exception.SatisfactionInvalidException;

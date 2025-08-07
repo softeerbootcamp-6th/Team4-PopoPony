@@ -1,7 +1,6 @@
 package com.todoc.server.domain.customer.web.dto.response;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.todoc.server.common.enumeration.Gender;
 import com.todoc.server.common.util.JsonUtils;
 import com.todoc.server.domain.customer.entity.Patient;
 import io.swagger.v3.oas.annotations.media.Schema;

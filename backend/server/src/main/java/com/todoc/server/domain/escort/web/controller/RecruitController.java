@@ -1,6 +1,5 @@
 package com.todoc.server.domain.escort.web.controller;
 
-import com.todoc.server.common.enumeration.Gender;
 import com.todoc.server.common.enumeration.RecruitStatus;
 import com.todoc.server.common.response.Response;
 import com.todoc.server.domain.customer.web.dto.response.PatientSimpleResponse;
