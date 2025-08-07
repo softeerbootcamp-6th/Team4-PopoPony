@@ -7,9 +7,31 @@ on:
     paths:
       - "backend/**"
 
+env:
+  SPRING_PROFILE: ci
+  DB_URL: jdbc:mysql://localhost:3306/todoc_db?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+  DB_USERNAME: testuser
+  DB_PASSWORD: testpass
+
 jobs:
   validate:
     runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:8.0.33
+        ports:
+          - 3306:3306
+        env:
+          MYSQL_DATABASE: todoc_db
+          MYSQL_ROOT_PASSWORD: rootpass
+          MYSQL_USER: testuser
+          MYSQL_PASSWORD: testpass
+        options: >-
+          --health-cmd="mysqladmin ping -h localhost"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
 
     steps:
       - name: Checkout

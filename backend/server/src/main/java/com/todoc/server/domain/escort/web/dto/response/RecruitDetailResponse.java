@@ -4,6 +4,7 @@ import com.todoc.server.common.enumeration.RecruitStatus;
 import com.todoc.server.domain.customer.web.dto.response.PatientSimpleResponse;
 import com.todoc.server.domain.route.web.dto.response.RouteSimpleResponse;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -14,25 +15,32 @@ import java.time.LocalTime;
 @Schema(description = "동행 신청 상세 정보 조회 응답 DTO")
 public class RecruitDetailResponse {
 
+    @NotNull
     @Schema(description = "동행 신청 ID")
     private Long recruitId;
 
     // 매칭중, 매칭완료, 동행중, 완료된 동행
+    @NotNull
     @Schema(description = "동행 신청의 진행 상태", allowableValues = {"MATCHING", "COMPLETED", "IN_PROGRESS", "DONE"})
     private RecruitStatus status;
 
+    @NotNull
     @Schema(description = "동행 날짜", example = "2025-08-01")
     private LocalDate escortDate;
 
+    @NotNull
     @Schema(description = "만나는 시각", example = "09:30:00")
     private LocalTime estimatedMeetingTime;
 
+    @NotNull
     @Schema(description = "복귀 시각", example = "12:30:00")
     private LocalTime estimatedReturnTime;
 
+    @NotNull
     @Schema(description = "경로 요약 정보")
     private RouteSimpleResponse route;
 
+    @NotNull
     @Schema(description = "환자 요약 정보")
     private PatientSimpleResponse patient;
 

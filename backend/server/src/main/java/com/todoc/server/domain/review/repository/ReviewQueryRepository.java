@@ -2,11 +2,13 @@ package com.todoc.server.domain.review.repository;
 
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Projections;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.todoc.server.common.enumeration.SatisfactionLevel;
-import com.todoc.server.domain.review.entity.Review;
 import com.todoc.server.domain.review.web.dto.response.ReviewSimpleResponse;
+import lombok.RequiredArgsConstructor;
 import com.todoc.server.domain.review.web.dto.response.ReviewStatResponse;
-import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
@@ -16,35 +18,22 @@ import java.util.Map;
 import static com.todoc.server.domain.review.entity.QReview.review;
 
 @Repository
-public class ReviewQueryRepository extends QuerydslRepositorySupport {
+@RequiredArgsConstructor
+public class ReviewQueryRepository {
 
-    public ReviewQueryRepository() {
-        super(Review.class);
-    }
+    private final JPAQueryFactory queryFactory;
 
     /**
      * userId에 해당하는 도우미의 리뷰 총 개수와 만족도 비율을 조회
      */
-    public ReviewStatResponse getReviewStatByHelperUserId(Long userId) {
+    public List<Tuple> getReviewStatByHelperUserId(Long userId) {
 
-        List<Tuple> results = getQuerydsl().createQuery()
+        return queryFactory
                 .select(review.satisfactionLevel, review.count())
                 .from(review)
                 .where(review.helper.id.eq(userId))
                 .groupBy(review.satisfactionLevel)
                 .fetch();
-
-        Map<SatisfactionLevel, Long> statMap = new HashMap<>();
-        long total = 0L;
-
-        for (Tuple tuple : results) {
-            SatisfactionLevel satisfactionLevel = tuple.get(0, SatisfactionLevel.class); // Enum일 경우 `.name()`
-            Long count = tuple.get(1, Long.class);
-            statMap.put(satisfactionLevel, count);
-            total += count;
-        }
-
-        return ReviewStatResponse.from(statMap, total);
     }
 
     /**
@@ -52,7 +41,7 @@ public class ReviewQueryRepository extends QuerydslRepositorySupport {
      */
     public List<ReviewSimpleResponse> getLatestReviewsByHelperUserId(Long userId) {
 
-        return getQuerydsl().createQuery()
+        return queryFactory
                 .select(Projections.constructor(
                         ReviewSimpleResponse.class,
                         review.id,
@@ -65,5 +54,23 @@ public class ReviewQueryRepository extends QuerydslRepositorySupport {
                 .orderBy(review.createdAt.desc())
                 .limit(5)
                 .fetch();
+    }
+
+    /**
+     * recruitId로 신청한 동행의 리뷰 요약 정보를 조회
+     */
+    public ReviewSimpleResponse getReviewSimpleByRecruitId(Long recruitId) {
+
+        return queryFactory
+                .select(Projections.constructor(
+                        ReviewSimpleResponse.class,
+                        review.id,
+                        review.satisfactionLevel,
+                        review.shortComment,
+                        review.createdAt
+                ))
+                .from(review)
+                .where(review.recruit.id.eq(recruitId))
+                .fetchOne();
     }
 }

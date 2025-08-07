@@ -2,6 +2,7 @@ package com.todoc.server.domain.report.web.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -12,18 +13,23 @@ import java.time.LocalTime;
 @Schema(description = "리포트 상세 정보 응답 DTO")
 public class ReportDetailResponse {
 
+    @NotNull
     @Schema(description = "리포트 ID")
     private Long reportId;
 
+    @NotNull
     @Schema(description = "실제 만남 시각")
     private LocalTime actualMeetingTime;
 
+    @NotNull
     @Schema(description = "실제 복귀 시각")
     private LocalTime actualReturnTime;
 
+    @NotNull
     @Schema(description = "초과한 시간")
     private Integer extraMinutes;
 
+    @NotNull
     @Schema(description = "다음 예약 존재 여부")
     private Boolean hasNextAppointment;
 
@@ -34,12 +40,15 @@ public class ReportDetailResponse {
     @Schema(description = "전달 내용")
     private String description;
 
+    @NotNull
     @Schema(description = "기존 결제금액")
     private Integer baseFee;
 
+    @NotNull
     @Schema(description = "택시 요금")
     private Integer taxiFee;
 
+    @NotNull
     @Schema(description = "이용 시간 초과 요금")
     private Integer extraTimeFee;
 

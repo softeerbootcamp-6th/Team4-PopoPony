@@ -10,6 +10,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.SQLRestriction;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -18,6 +19,7 @@ import java.time.LocalTime;
 @Getter
 @Setter
 @NoArgsConstructor
+@SQLRestriction("deleted_at is NULL")
 public class Recruit extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -56,9 +58,10 @@ public class Recruit extends BaseEntity {
     private RecruitStatus status;
 
     @Builder
-    public Recruit(Auth customer, Patient patient, Route route, LocalDate escortDate, LocalTime estimatedMeetingTime,
+    public Recruit(Long id, Auth customer, Patient patient, Route route, LocalDate escortDate, LocalTime estimatedMeetingTime,
                    LocalTime estimatedReturnTime, String purpose, String extraRequest, Integer estimatedFee,
                    RecruitStatus status) {
+        this.id = id;
         this.customer = customer;
         this.patient = patient;
         this.route = route;
