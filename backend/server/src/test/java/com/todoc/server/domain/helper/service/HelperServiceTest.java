@@ -40,7 +40,6 @@ class HelperServiceTest {
 
     @BeforeEach
     void setUp() {
-        when(tuple1.get(auth.id)).thenReturn(1L);
         when(tuple1.get(auth.name)).thenReturn("홍길동");
         when(tuple1.get(auth.birthDate)).thenReturn(LocalDate.of(1990, 1, 1));
         when(tuple1.get(auth.gender)).thenReturn(Gender.MALE);
