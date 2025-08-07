@@ -33,7 +33,7 @@ public class ReviewSimpleResponse {
     @Builder
     public ReviewSimpleResponse(Long reviewId, String satisfactionLevel, String shortComment, LocalDateTime createdAt) {
         this.reviewId = reviewId;
-        this.satisfactionLevel = satisfactionLevel;
+        this.satisfactionLevel = SatisfactionLevel.valueOf(satisfactionLevel).getLabel();
         this.shortComment = shortComment;
         this.createdAt = createdAt;
     }
