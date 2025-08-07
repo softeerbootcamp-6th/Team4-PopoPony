@@ -34,7 +34,7 @@ const SearchRoute = ({ handleSelectRoute }: Props) => {
   const [searchValue, setSearchValue] = useState<string>('');
   const [searchResult, setSearchResult] = useState<LocationDetail[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const { setValue, getValues } = useFormContext();
+  const { setValue } = useFormContext();
 
   const fetchSearchResult = async () => {
     if (!searchValue.trim()) {

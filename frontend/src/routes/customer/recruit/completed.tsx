@@ -38,7 +38,6 @@ function RouteComponent() {
       };
 
       const handleError = () => {
-
         // 로드 실패 시 다음 비디오 시도
         if (currentVideoIndex < videoSources.length - 1) {
           setCurrentVideoIndex((prev) => prev + 1);

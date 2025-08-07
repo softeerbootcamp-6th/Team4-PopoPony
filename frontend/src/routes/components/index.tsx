@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { Button, ProgressBar, Modal, PhotoUpload, CheckboxCircle } from '@components';
-import { useForm, FormProvider, type SubmitHandler } from 'react-hook-form';
+import { useForm, FormProvider } from 'react-hook-form';
 import type { HTMLAttributes } from 'react';
 import { useModal } from '@hooks';
 import { useState } from 'react';
@@ -20,7 +20,6 @@ type FormValues = {
 
 function RouteComponent() {
   const methods = useForm<FormValues>();
-  const watchAllFields = methods.watch();
   // Modal hooks
   const {
     isOpen: isSingleModalOpen,
@@ -103,17 +102,6 @@ function RouteComponent() {
         <FormProvider {...methods}>
           <PhotoUpload name='photo' />
         </FormProvider>
-        <form onSubmit={methods.handleSubmit(onSubmit)}>
-          {/* register your input into the hook by invoking the "register" function */}
-          <input defaultValue='name' {...methods.register('name')} />
-
-          {/* include validation with required or other standard HTML validation rules */}
-          <input {...methods.register('price', { required: true })} />
-          {/* errors will return when field validation fails  */}
-          {methods.formState.errors.price && <span>This field is required</span>}
-
-          <input type='submit' />
-        </form>
       </Section>
 
       <Section title='ProgressBar'>
