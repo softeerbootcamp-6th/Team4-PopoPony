@@ -1,5 +1,5 @@
 import { type ReactElement, type ReactNode, useEffect, useState } from 'react';
-import { useNavigate, useParams, useRouter } from '@tanstack/react-router';
+import { useParams, useRouter } from '@tanstack/react-router';
 
 type FunnelRoute = '/customer/recruit/$step';
 interface UseFunnelProps {
@@ -19,7 +19,6 @@ interface FunnelProps {
 
 export const useFunnel = ({ defaultStep, basePath, paramPath, stepList }: UseFunnelProps) => {
   const [step, setStep] = useState(defaultStep);
-  const navigate = useNavigate();
   const router = useRouter();
   const { step: urlStep } = useParams({ from: paramPath });
 
@@ -47,7 +46,7 @@ export const useFunnel = ({ defaultStep, basePath, paramPath, stepList }: UseFun
     if (currentIndex < stepList.length - 1) {
       const nextStepName = stepList[currentIndex + 1];
       setStep(nextStepName);
-      navigate({ to: `/${basePath}/${nextStepName}` });
+      router.navigate({ to: `/${basePath}/${nextStepName}` });
     }
   };
 
