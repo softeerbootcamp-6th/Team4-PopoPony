@@ -14,10 +14,21 @@ public class LocationInfoService {
 
     private final LocationInfoRepository locationInfoRepository;
 
-    public LocationInfo register(RecruitCreateRequest request) {
+    public LocationInfo register(RecruitCreateRequest.LocationDetail locationDetail) {
 
-        // TODO :: Request로부터 LoacationInfo 엔티티 생성해야함 (외부 API 연동에 대해 알아본 후 적용할 것)
         LocationInfo locationInfo = LocationInfo.builder()
+                .placeName(locationDetail.getPlaceName())
+                .upperAddrName(locationDetail.getUpperAddrName())
+                .middleAddrName(locationDetail.getMiddleAddrName())
+                .lowerAddrName(locationDetail.getLowerAddrName())
+                .firstAddrNo(locationDetail.getFirstAddrNo())
+                .secondAddrNo(locationDetail.getSecondAddrNo())
+                .roadName(locationDetail.getRoadName())
+                .firstBuildingNo(locationDetail.getFirstBuildingNo())
+                .secondBuildingNo(locationDetail.getSecondBuildingNo())
+                .detailAddress(locationDetail.getDetailAddress())
+                .longitude(locationDetail.getLongitude())
+                .latitude(locationDetail.getLatitude())
                 .build();
 
         return locationInfoRepository.save(locationInfo);

@@ -1,6 +1,9 @@
 package com.todoc.server.domain.escort.service;
 
 import com.todoc.server.common.enumeration.RecruitStatus;
+import com.todoc.server.domain.escort.entity.Recruit;
+import com.todoc.server.domain.escort.exception.RecruitInvalidCancelException;
+import com.todoc.server.domain.escort.exception.RecruitNotFoundException;
 import com.todoc.server.domain.escort.repository.RecruitJpaRepository;
 import com.todoc.server.domain.escort.repository.RecruitQueryRepository;
 import com.todoc.server.domain.escort.web.dto.response.RecruitListResponse;
@@ -15,8 +18,12 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
 class RecruitServiceTest {
@@ -63,5 +70,80 @@ class RecruitServiceTest {
         // 완료된 목록: 날짜 내림차순
         assertEquals(RecruitStatus.DONE, result.getCompletedList().get(0).getStatus());
         assertTrue(result.getCompletedList().get(0).getEscortDate().isAfter(result.getCompletedList().get(1).getEscortDate()));
+    }
+
+    @Test
+    @DisplayName("recruitId로 취소 실패 - 이미 매칭된 동행 신청")
+    void cancelRecruit_notMatching_shouldThrowException() {
+        // given
+        Long recruitId = 2L;
+        Recruit recruit = new Recruit();
+        recruit.setStatus(RecruitStatus.DONE);  // 이미 매칭된 상태
+
+        when(recruitJpaRepository.findById(recruitId)).thenReturn(Optional.of(recruit));
+
+        // when & then
+        assertThrows(RecruitInvalidCancelException.class, () -> recruitService.cancelRecruit(recruitId));
+    }
+
+    @Test
+    @DisplayName("recruitId로 취소 실패 - 동행 신청이 존재하지 않음")
+    void cancelRecruit_notFound_shouldThrowException() {
+        // given
+        Long recruitId = 999L;
+        when(recruitJpaRepository.findById(recruitId)).thenReturn(Optional.empty());
+
+        // when & then
+        assertThrows(RecruitNotFoundException.class, () -> recruitService.cancelRecruit(recruitId));
+    }
+
+    @Test
+    void findById_존재하는_경우() {
+        // given
+        Recruit recruit = Recruit.builder().id(1L).status(RecruitStatus.MATCHING).build();
+        given(recruitJpaRepository.findById(1L)).willReturn(Optional.of(recruit));
+
+        // when
+        Recruit result = recruitService.getRecruitById(1L);
+
+        // then
+        assertThat(result.getId()).isEqualTo(1L);
+    }
+
+    @Test
+    void findById_존재하지_않는_경우() {
+        // given
+        given(recruitJpaRepository.findById(1L)).willReturn(Optional.empty());
+
+        // then
+        assertThatThrownBy(() -> recruitService.getRecruitById(1L))
+                .isInstanceOf(RecruitNotFoundException.class);
+    }
+
+    @Test
+    void cancelRecruit_정상_취소() {
+        // given
+        Recruit recruit = Recruit.builder().id(1L).status(RecruitStatus.MATCHING).build();
+        given(recruitJpaRepository.findById(1L)).willReturn(Optional.of(recruit));
+
+        // when
+        recruitService.cancelRecruit(1L);
+
+        // then
+        assertThat(recruit.isDeleted()).isTrue();
+    }
+
+    @Test
+    void cancelRecruit_이미_매칭이_완료된_경우() {
+        // given
+        Recruit recruit = Recruit.builder()
+                .id(1L)
+                .status(RecruitStatus.IN_PROGRESS)
+                .build();
+        given(recruitJpaRepository.findById(1L)).willReturn(Optional.of(recruit));
+
+        // then
+        assertThatThrownBy(() -> recruitService.cancelRecruit(1L))
+                .isInstanceOf(RecruitInvalidCancelException.class);
     }
 }

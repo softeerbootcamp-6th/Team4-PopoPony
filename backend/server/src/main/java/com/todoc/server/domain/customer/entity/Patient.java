@@ -9,11 +9,13 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.SQLRestriction;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
+@SQLRestriction("deleted_at is NULL")
 public class Patient extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
