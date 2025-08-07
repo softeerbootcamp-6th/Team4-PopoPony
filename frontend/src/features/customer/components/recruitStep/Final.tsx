@@ -241,9 +241,11 @@ export function Final({ handleBackStep }: RecruitStepProps) {
           <div className='flex gap-[1.2rem]'>
             <BottomSheet open={isBottomSheetOpen} onOpenChange={setIsBottomSheetOpen}>
               <FormLayout.FooterButtonWrapper>
-                <Button variant='secondary' width='10rem' onClick={handleBackStep}>
-                  이전
-                </Button>
+                <div className='w-[10rem]'>
+                  <Button variant='secondary' onClick={handleBackStep}>
+                    이전
+                  </Button>
+                </div>
                 <BottomSheet.Trigger asChild>
                   <Button variant='primary' className='flex-1'>
                     다음

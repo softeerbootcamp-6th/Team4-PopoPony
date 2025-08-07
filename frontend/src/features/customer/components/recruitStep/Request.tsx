@@ -41,9 +41,11 @@ const Request = ({ handleNextStep, handleBackStep }: RecruitStepProps) => {
       </FormLayout.Content>
       <FormLayout.Footer>
         <FormLayout.FooterButtonWrapper>
-          <Button variant='secondary' width='10rem' onClick={handleBackStep}>
-            이전
-          </Button>
+          <div className='w-[10rem]'>
+            <Button variant='secondary' onClick={handleBackStep}>
+              이전
+            </Button>
+          </div>
           <Button
             className='flex-1'
             variant='primary'
