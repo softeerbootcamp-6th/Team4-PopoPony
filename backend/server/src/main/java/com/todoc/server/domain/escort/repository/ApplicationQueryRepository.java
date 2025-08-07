@@ -21,6 +21,12 @@ public class ApplicationQueryRepository {
 
     private final JPAQueryFactory queryFactory;
 
+    /**
+     * 특정 동행 신청에 대한 지원들의 목록을 도우미 정보와 함께 조회합니다.
+     *
+     * @param recruitId 동행 신청 ID
+     * @return 지원, 도우미 정보가 담긴 튜플들의 리스트
+     */
     public List<Tuple> findApplicationWithHelperByRecruitId(Long recruitId) {
 
         return queryFactory
@@ -45,6 +51,12 @@ public class ApplicationQueryRepository {
                 .fetch();
     }
 
+    /**
+     * 지정된 지원과 같은 신청에 속하는 지원들의 목록을 조회합니다.
+     *
+     * @param applicationId 지원 ID
+     * @return applicationId의 지원과 같은 신청에 속하는 지원들의 리스트
+     */
     public List<Application> findAllApplicationsOfRecruitByApplicationId(Long applicationId) {
         QApplication a1 = new QApplication("a1");
         QApplication a2 = new QApplication("a2");
