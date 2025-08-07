@@ -59,9 +59,13 @@ function RouteComponent() {
                 </EscortCard.InfoSection>
                 <EscortCard.Tag tags={['support', 'wheelchair', 'care']} />
               </EscortCard>
+            </div>
+          </Tabs.TabsContent>
+          <Tabs.TabsContent value='완료'>
+            <div className='flex-col-start gap-[1.2rem] p-[2rem]'>
               <EscortCard>
                 <EscortCard.StatusHeader
-                  status='matching'
+                  status='escort-completed'
                   text='동행번호 NO.12394O4L'
                   title='7월 22일 (토), 서울아산병원'
                 />
@@ -69,41 +73,10 @@ function RouteComponent() {
                 <EscortCard.InfoSection>
                   <EscortCard.Info type='time' text='7월 22일(토) 12시 ~ 15시' />
                   <EscortCard.Info type='location' text='꿈에그린아파트 → 서울아산병원' />
-                  <EscortCard.Info type='price' text='123,456원' />
                 </EscortCard.InfoSection>
-                <EscortCard.Button onClick={() => {}} />
-              </EscortCard>
-              <EscortCard>
-                <EscortCard.StatusHeader
-                  status='matching'
-                  text='동행번호 NO.12394O4L'
-                  title='7월 22일 (토), 서울아산병원'
-                />
-                <EscortCard.Divider />
-                <EscortCard.InfoSection>
-                  <EscortCard.Info type='time' text='7월 22일(토) 12시 ~ 15시' />
-                  <EscortCard.Info type='location' text='꿈에그린아파트 → 서울아산병원' />
-                  <EscortCard.Info type='price' text='123,456원' />
-                </EscortCard.InfoSection>
-                <EscortCard.Tag tags={['support', 'wheelchair', 'care']} />
-              </EscortCard>
-              <EscortCard>
-                <EscortCard.StatusHeader
-                  status='matching'
-                  text='동행번호 NO.12394O4L'
-                  title='7월 22일 (토), 서울아산병원'
-                />
-                <EscortCard.Divider />
-                <EscortCard.InfoSection>
-                  <EscortCard.Info type='time' text='7월 22일(토) 12시 ~ 15시' />
-                  <EscortCard.Info type='location' text='꿈에그린아파트 → 서울아산병원' />
-                  <EscortCard.Info type='price' text='123,456원' />
-                </EscortCard.InfoSection>
-                <EscortCard.Button onClick={() => {}} />
               </EscortCard>
             </div>
           </Tabs.TabsContent>
-          <Tabs.TabsContent value='완료'>Change your 완료 here.</Tabs.TabsContent>
         </Tabs>
       </PageLayout.Content>
     </PageLayout>

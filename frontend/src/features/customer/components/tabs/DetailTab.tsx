@@ -104,7 +104,7 @@ const DetailTab = () => {
           <Modal.ButtonContainer>
             <Modal.ConfirmButton
               onClick={() => {
-                alert('확인 버튼 클릭됨!');
+                alert('준비중인 기능이에요');
                 closeModal();
               }}>
               취소하기
