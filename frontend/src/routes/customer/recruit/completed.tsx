@@ -2,7 +2,7 @@ import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { PageLayout, FormLayout } from '@layouts';
 import { Button } from '@components';
 import { useRef, useEffect, useState } from 'react';
-import { okVideo } from '@video';
+import { okVideo } from '@assets/video';
 
 export const Route = createFileRoute('/customer/recruit/completed')({
   component: RouteComponent,
