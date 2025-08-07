@@ -74,11 +74,9 @@ const Time = memo(({ handleNextStep, handleBackStep }: RecruitStepProps) => {
       const endTime = new Date(`2000-01-01T${timeValues.escortEndTime}`);
 
       const diffInMinutes = (endTime.getTime() - startTime.getTime()) / (1000 * 60);
-      console.log('diffInMinutes', diffInMinutes);
       setValue('escortDuration', diffInMinutes);
       timeMarkFieldAsTouched('escortDuration');
     }
-    console.log('fieldErrors', timeFieldErrors);
   }, [timeValues.escortStartTime, timeValues.escortEndTime, setValue]);
 
   return (

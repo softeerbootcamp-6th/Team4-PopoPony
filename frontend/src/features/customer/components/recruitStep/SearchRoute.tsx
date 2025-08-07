@@ -92,7 +92,6 @@ const SearchRoute = ({ handleSelectRoute }: Props) => {
     };
 
     setValue(formFieldName, locationData);
-    console.log(getValues());
 
     // 검색 결과 초기화 및 라우트 변경
     setSearchResult([]);

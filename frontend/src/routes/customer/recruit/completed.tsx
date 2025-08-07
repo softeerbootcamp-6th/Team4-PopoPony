@@ -27,8 +27,7 @@ function RouteComponent() {
     if (video && !videoError) {
       // 비디오 로드 완료 시 자동 재생 및 무한 반복 설정
       const handleLoadedData = () => {
-        video.play().catch((error) => {
-          console.log('자동 재생 실패:', error);
+        video.play().catch(() => {
           // 재생 실패 시 다음 비디오 시도
           if (currentVideoIndex < videoSources.length - 1) {
             setCurrentVideoIndex((prev) => prev + 1);
@@ -39,7 +38,7 @@ function RouteComponent() {
       };
 
       const handleError = () => {
-        console.log('비디오 로드 실패:', video.src);
+
         // 로드 실패 시 다음 비디오 시도
         if (currentVideoIndex < videoSources.length - 1) {
           setCurrentVideoIndex((prev) => prev + 1);
@@ -72,7 +71,7 @@ function RouteComponent() {
   }, [currentVideoIndex]);
 
   return (
-    <PageLayout background='bg-[#FCFCFF]'>
+    <PageLayout background='bg-neutral-2'>
       <PageLayout.Header
         background={false}
         showBack={false}

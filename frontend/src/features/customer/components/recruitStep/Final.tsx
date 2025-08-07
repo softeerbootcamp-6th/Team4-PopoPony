@@ -65,9 +65,9 @@ export function Final({ handleBackStep }: RecruitStepProps) {
 
   const handleSubmit = async () => {
     try {
-      // API 호출하여 데이터 제출
-      console.log('Submitting data:', formData);
-      // await submitRecruitRequest(formData);
+      // // API 호출하여 데이터 제출
+      // console.log('Submitting data:', formData);
+      // // await submitRecruitRequest(formData);
 
       // 성공 시 완료 페이지로 이동
       alert('동행 신청이 완료되었습니다!');

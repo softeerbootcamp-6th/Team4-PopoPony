@@ -21,10 +21,6 @@ type FormValues = {
 function RouteComponent() {
   const methods = useForm<FormValues>();
   const watchAllFields = methods.watch();
-  console.log(watchAllFields);
-  const onSubmit: SubmitHandler<FormValues> = (data) => {
-    console.log('Final Data:', data);
-  };
   // Modal hooks
   const {
     isOpen: isSingleModalOpen,
