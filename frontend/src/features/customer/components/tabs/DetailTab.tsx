@@ -48,9 +48,9 @@ const DetailTab = () => {
 
       {/* 환자 상태 */}
       <Tabs.TabsContentSection gap='2.4rem'>
-        <div className='flex flex-col gap-[1.6rem]'>
+        <div>
           <h3 className='subtitle-18-bold text-text-neutral-primary'>환자 상태</h3>
-          <div className='flex flex-col gap-[2rem]'>
+          <div className='mt-[1.2rem] flex flex-col gap-[2rem]'>
             <InfoSection title='보행 상태'>
               <div className='flex-start gap-[0.4rem]'>
                 {['support', 'wheelchair'].map((tag) => (
@@ -80,9 +80,9 @@ const DetailTab = () => {
         <Divider />
 
         {/* 진료시 참고 사항 */}
-        <div className='flex flex-col gap-[1.6rem]'>
+        <div>
           <h3 className='subtitle-18-bold text-text-neutral-primary'>진료시 참고 사항</h3>
-          <div className='flex flex-col gap-[2rem]'>
+          <div className='mt-[1.2rem] flex flex-col gap-[2rem]'>
             <InfoSection title='동행 목적'>
               <GrayBox>
                 <span>이가 많이 없으셔서 발음하시는 게 불편하세요.</span>
