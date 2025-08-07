@@ -41,10 +41,15 @@ const Footer = ({ children }: FormLayoutProps) => {
   );
 };
 
+const FooterButtonWrapper = ({ children }: FormLayoutProps) => {
+  return <div className='flex w-full flex-shrink-0 gap-[0.8rem]'>{children}</div>;
+};
+
 FormLayout.TitleWrapper = TitleWrapper;
 FormLayout.Title = Title;
 FormLayout.SubTitle = SubTitle;
 FormLayout.Content = Content;
 FormLayout.Footer = Footer;
+FormLayout.FooterButtonWrapper = FooterButtonWrapper;
 
 export default FormLayout;
