@@ -7,6 +7,7 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   size?: 'sm' | 'md' | 'lg';
   isLoading?: boolean;
   className?: string;
+  width?: string;
 }
 
 const Button = ({
@@ -16,9 +17,12 @@ const Button = ({
   isLoading,
   className = '',
   children,
+  width,
   ...props
 }: ButtonProps) => {
-  const baseStyle = `w-full flex-center focus:outline-none`;
+  const baseStyle = width
+    ? `w-[${width}] flex-center focus:outline-none`
+    : `w-full flex-center focus:outline-none`;
 
   const variantStyle = {
     primary: 'bg-mint-50 text-neutral-0',
@@ -54,7 +58,7 @@ const Button = ({
     <button
       type='button'
       disabled={disabled}
-      className={`${baseStyle} ${disabled ? disabledVariantStyle[variant] : variantStyle[variant]} ${sizeStyle[size]} ${className}`}
+      className={`${className} ${baseStyle} ${disabled ? disabledVariantStyle[variant] : variantStyle[variant]} ${sizeStyle[size]}`}
       {...props}>
       <Spinner size={spinnerSize[size]} color={spinnerColor[variant]} isLoading={isLoading} />
       {!isLoading && <>{children}</>}
