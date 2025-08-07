@@ -83,7 +83,7 @@ public class RecruitIntegrationTest {
         // then
         assertThat(response).isNotNull();
         assertThat(response.getInProgressList().size()).isEqualTo(1);
-        assertThat(response.getCompletedList().size()).isEqualTo(1);
+        assertThat(response.getCompletedList().size()).isEqualTo(2);
         assertThat(response.getCompletedList().getFirst().getDestination()).isEqualTo("서울대병원");
     }
 
@@ -132,7 +132,7 @@ public class RecruitIntegrationTest {
 
         // then
         List<Recruit> all = recruitService.getAllRecruits();
-        assertThat(all.size()).isEqualTo(11);
+        assertThat(all.size()).isEqualTo(12);
 
         Recruit created = all.getLast();
         assertThat(created.getPatient()).isNotNull();
