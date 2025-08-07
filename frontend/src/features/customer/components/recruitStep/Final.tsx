@@ -12,15 +12,12 @@ import { Button, BottomSheet, CheckboxCircle, TermsModal } from '@components';
 import { FormLayout } from '@layouts';
 import { IcChevronRight } from '@icons';
 import { useState } from 'react';
-import { getTermsById, termsData } from '@utils';
+import { getTermsById } from '@utils';
 import type { TermsData } from '@types';
 import { useNavigate } from '@tanstack/react-router';
+import type { RecruitStepProps } from '@customer/types';
 
-interface Props {
-  handleNextStep: () => void;
-}
-
-export function Final({ handleNextStep }: Props) {
+export function Final({ handleBackStep }: RecruitStepProps) {
   const { getValues } = useFormContext<RecruitFormValues>();
   const formData = getValues();
   const navigate = useNavigate();
@@ -243,9 +240,16 @@ export function Final({ handleNextStep }: Props) {
         <FormLayout.Footer>
           <div className='flex gap-[1.2rem]'>
             <BottomSheet open={isBottomSheetOpen} onOpenChange={setIsBottomSheetOpen}>
-              <BottomSheet.Trigger asChild>
-                <Button variant='primary'>다음</Button>
-              </BottomSheet.Trigger>
+              <FormLayout.FooterButtonWrapper>
+                <Button variant='secondary' width='10rem' onClick={handleBackStep}>
+                  이전
+                </Button>
+                <BottomSheet.Trigger asChild>
+                  <Button variant='primary' className='flex-1'>
+                    다음
+                  </Button>
+                </BottomSheet.Trigger>
+              </FormLayout.FooterButtonWrapper>
               <BottomSheet.Content>
                 <BottomSheet.Header>
                   <BottomSheet.Title>이용 약관 동의가 필요해요!</BottomSheet.Title>

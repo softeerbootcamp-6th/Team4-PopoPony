@@ -9,7 +9,7 @@ const requestFormSchema = z.object({
   escortNotes: z.string().optional(),
 });
 
-const Request = ({ handleNextStep }: RecruitStepProps) => {
+const Request = ({ handleNextStep, handleBackStep }: RecruitStepProps) => {
   const { values, fieldErrors, isFormValid, markFieldAsTouched } =
     useFormValidation(requestFormSchema);
 
@@ -40,9 +40,18 @@ const Request = ({ handleNextStep }: RecruitStepProps) => {
         </LabeledSection>
       </FormLayout.Content>
       <FormLayout.Footer>
-        <Button onClick={handleNextStep} disabled={!isFormValid}>
-          다음
-        </Button>
+        <FormLayout.FooterButtonWrapper>
+          <Button variant='secondary' width='10rem' onClick={handleBackStep}>
+            이전
+          </Button>
+          <Button
+            className='flex-1'
+            variant='primary'
+            onClick={handleNextStep}
+            disabled={!isFormValid}>
+            다음
+          </Button>
+        </FormLayout.FooterButtonWrapper>
       </FormLayout.Footer>
     </FormLayout>
   );

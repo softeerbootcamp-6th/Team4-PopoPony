@@ -48,7 +48,7 @@ const CommunicationSchema = z
       path: ['communicationHelp'],
     }
   );
-const Communication = memo(({ handleNextStep }: RecruitStepProps) => {
+const Communication = memo(({ handleNextStep, handleBackStep }: RecruitStepProps) => {
   const { setValue, control } = useFormContext();
   const {
     values: communicationValues,
@@ -155,12 +155,18 @@ const Communication = memo(({ handleNextStep }: RecruitStepProps) => {
         )}
       </FormLayout.Content>
       <FormLayout.Footer>
-        <Button
-          variant='primary'
-          onClick={handleNextStep}
-          disabled={!communicationIsFormValid || !cognitiveIsFormValid}>
-          다음
-        </Button>
+        <FormLayout.FooterButtonWrapper>
+          <Button variant='secondary' width='10rem' onClick={handleBackStep}>
+            이전
+          </Button>
+          <Button
+            className='flex-1'
+            variant='primary'
+            onClick={handleNextStep}
+            disabled={!communicationIsFormValid || !cognitiveIsFormValid}>
+            다음
+          </Button>
+        </FormLayout.FooterButtonWrapper>
       </FormLayout.Footer>
     </FormLayout>
   );

@@ -52,7 +52,7 @@ const timeSchema = z
     }
   );
 
-const Time = memo(({ handleNextStep }: RecruitStepProps) => {
+const Time = memo(({ handleNextStep, handleBackStep }: RecruitStepProps) => {
   const { setValue } = useFormContext();
   const {
     values: timeValues,
@@ -146,12 +146,18 @@ const Time = memo(({ handleNextStep }: RecruitStepProps) => {
         </div>
       </FormLayout.Content>
       <FormLayout.Footer>
-        <Button
-          variant='primary'
-          onClick={handleNextStep}
-          disabled={!timeIsFormValid || !dateIsFormValid}>
-          다음
-        </Button>
+        <FormLayout.FooterButtonWrapper>
+          <Button variant='secondary' width='10rem' onClick={handleBackStep}>
+            이전
+          </Button>
+          <Button
+            className='flex-1'
+            variant='primary'
+            onClick={handleNextStep}
+            disabled={!timeIsFormValid || !dateIsFormValid}>
+            다음
+          </Button>
+        </FormLayout.FooterButtonWrapper>
       </FormLayout.Footer>
     </FormLayout>
   );

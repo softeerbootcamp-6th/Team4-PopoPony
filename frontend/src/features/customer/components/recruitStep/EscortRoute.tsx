@@ -2,7 +2,7 @@ import { useState, memo } from 'react';
 import type { RecruitStepProps } from '@customer/types';
 import { useNavigate } from '@tanstack/react-router';
 import { FormLayout } from '@layouts';
-import { useWatch, useFormContext } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 import { FormInput, LabeledSection, Button, Dot, Checkbox } from '@components';
 import { SearchButton } from '@customer/components';
 import { z } from 'zod';
@@ -29,8 +29,8 @@ const routeFormSchema = z.object({
   returnLocationDetail: locationDetailSchema,
 });
 
-const EscortRoute = memo(({ handleNextStep }: RecruitStepProps) => {
-  const { getValues, setValue } = useFormContext();
+const EscortRoute = memo(({ handleNextStep, handleBackStep }: RecruitStepProps) => {
+  const { setValue } = useFormContext();
   const navigate = useNavigate();
   const [isSameLocation, setIsSameLocation] = useState(false);
   const { values, fieldErrors, isFormValid, markFieldAsTouched } =
@@ -167,9 +167,18 @@ const EscortRoute = memo(({ handleNextStep }: RecruitStepProps) => {
         </div>
       </FormLayout.Content>
       <FormLayout.Footer>
-        <Button disabled={!isFormValid} onClick={handleNextStep}>
-          다음
-        </Button>
+        <FormLayout.FooterButtonWrapper>
+          <Button variant='secondary' width='10rem' onClick={handleBackStep}>
+            이전
+          </Button>
+          <Button
+            className='flex-1'
+            variant='primary'
+            onClick={handleNextStep}
+            disabled={!isFormValid}>
+            다음
+          </Button>
+        </FormLayout.FooterButtonWrapper>
       </FormLayout.Footer>
     </FormLayout>
   );

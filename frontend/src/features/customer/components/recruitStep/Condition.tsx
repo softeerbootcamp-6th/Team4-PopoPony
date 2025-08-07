@@ -13,12 +13,11 @@ const conditionSchema = z.object({
   usesWheelchair: z.string(),
 });
 
-const Condition = memo(({ handleNextStep }: RecruitStepProps) => {
+const Condition = memo(({ handleNextStep, handleBackStep }: RecruitStepProps) => {
   const { values, fieldErrors, isFormValid, markFieldAsTouched } =
     useFormValidation(conditionSchema);
   const { getValues } = useFormContext();
   const patientName = getValues('patientName');
-
   return (
     <FormLayout>
       <FormLayout.Content>
@@ -52,9 +51,18 @@ const Condition = memo(({ handleNextStep }: RecruitStepProps) => {
         </LabeledSection>
       </FormLayout.Content>
       <FormLayout.Footer>
-        <Button variant='primary' onClick={handleNextStep} disabled={!isFormValid}>
-          다음
-        </Button>
+        <FormLayout.FooterButtonWrapper>
+          <Button variant='secondary' width='10rem' onClick={handleBackStep}>
+            이전
+          </Button>
+          <Button
+            className='flex-1'
+            variant='primary'
+            onClick={handleNextStep}
+            disabled={!isFormValid}>
+            다음
+          </Button>
+        </FormLayout.FooterButtonWrapper>
       </FormLayout.Footer>
     </FormLayout>
   );
