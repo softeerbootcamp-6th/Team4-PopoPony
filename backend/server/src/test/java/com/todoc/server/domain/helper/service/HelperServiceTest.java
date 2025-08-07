@@ -82,7 +82,7 @@ class HelperServiceTest {
         List<Tuple> tuples = List.of(tuple1, tuple2);
 
         // when
-        HelperSimpleResponse result = helperService.buildHelperSimpleByHelperId(tuples);
+        HelperSimpleResponse result = helperService.buildHelperSimpleByHelperProfileId(tuples);
 
         // then
         assertThat(result.getName()).isEqualTo("홍길동");

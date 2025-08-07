@@ -31,7 +31,7 @@ public class ApplicationFacadeService {
 
                     return ApplicationSimpleResponse.builder()
                             .applicationId(applicationId)
-                            .helper(helperService.buildHelperSimpleByHelperId(groupedTuples))
+                            .helper(helperService.buildHelperSimpleByHelperProfileId(groupedTuples))
                             .build();
                 })
                 .toList();
