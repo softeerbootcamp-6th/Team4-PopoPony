@@ -29,15 +29,15 @@ public class HelperController {
 
     @Operation(
             summary = "도우미 상세 조회",
-            description = "userId에 해당하는 도우미의 상세 정보를 조회합니다.")
+            description = "helperProfileId에 해당하는 도우미의 상세 정보를 조회합니다.")
     @ApiResponse(
             responseCode = "200",
             description = "도우미 상세 정보 조회 성공")
-    @GetMapping("/{userId}")
-    public Response<HelperDetailResponse> getHelperDetail(@PathVariable Long userId) {
-        // TODO :: 도우미의 userId를 받아, 해당 도우미의 상세 정보를 생성
+    @GetMapping("/{helperProfileId}")
+    public Response<HelperDetailResponse> getHelperDetail(@PathVariable Long helperProfileId) {
+        // TODO :: 도우미의 helperProfileId를 받아, 해당 도우미의 상세 정보를 생성
 
-//        return Response.from(helperFacadeService.getHelperDetailByUserId(userId));
+//        return Response.from(helperFacadeService.getHelperDetailByUserId(helperProfileId));
 
         List<PositiveFeedbackStatResponse> positiveFeedbackList = new ArrayList<>();
         positiveFeedbackList.add(new PositiveFeedbackStatResponse("친절해요", 3L));
@@ -66,7 +66,6 @@ public class HelperController {
                 .build();
 
         HelperSimpleResponse helperSimple = HelperSimpleResponse.builder()
-                .authId(1L)
                 .helperProfileId(1L)
                 .imageUrl("https://example.com/images/sample.jpg")
                 .name("최솔희")
