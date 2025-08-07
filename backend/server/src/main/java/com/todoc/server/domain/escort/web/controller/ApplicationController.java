@@ -3,7 +3,6 @@ package com.todoc.server.domain.escort.web.controller;
 import com.todoc.server.common.enumeration.Gender;
 import com.todoc.server.common.response.Response;
 import com.todoc.server.domain.escort.service.ApplicationFacadeService;
-import com.todoc.server.domain.escort.service.ApplicationService;
 import com.todoc.server.domain.escort.web.dto.response.ApplicationListResponse;
 import com.todoc.server.domain.escort.web.dto.response.ApplicationSimpleResponse;
 import com.todoc.server.domain.helper.web.dto.response.HelperSimpleResponse;
@@ -37,7 +36,6 @@ public class ApplicationController {
 //        return Response.from(applicationFacadeService.getApplicationListByRecruitId(recruitId));
 
         HelperSimpleResponse helper = HelperSimpleResponse.builder()
-                .authId(1L)
                 .helperProfileId(1L)
                 .imageUrl("https://example.com/images/sample.jpg")
                 .name("최솔희")
@@ -73,6 +71,8 @@ public class ApplicationController {
     @PostMapping("/{applicationId}/select")
     public Response<ApplicationListResponse> selectApplication(@PathVariable Long applicationId) {
         // TODO :: 지원 ID를 받아, 지원과 신청의 상태를 바꾸고 동행 생성
+
+//        applicationFacadeService.selectApplication(applicationId);
 
         return Response.from();
     }

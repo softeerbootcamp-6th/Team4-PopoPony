@@ -31,4 +31,15 @@ public abstract class BaseEntity {
     public boolean isDeleted() {
         return this.deletedAt != null;
     }
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = LocalDateTime.now();
+    }
 }
