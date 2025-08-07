@@ -37,7 +37,7 @@ public class ReviewController {
 //        return Response.from(reviewService.getReviewSimpleByRecruitId(recruitId));
 
         ReviewSimpleResponse mock = ReviewSimpleResponse.builder()
-                .satisfactionLevel(SatisfactionLevel.GOOD)
+                .satisfactionLevel("좋았어요")
                 .createdAt(LocalDateTime.now().minusDays(30))
                 .shortComment("약간 아쉽지만 좋았어요! 또 이용하고 싶습니다!")
                 .build();
