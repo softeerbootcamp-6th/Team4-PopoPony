@@ -1,5 +1,6 @@
 package com.todoc.server.domain.escort.repository;
 
+import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.todoc.server.domain.route.entity.QLocationInfo;
@@ -51,6 +52,9 @@ public class RecruitQueryRepository {
         return result;
     }
 
+    /**
+     * 환자, 경로 정보를 포함한 동행 신청 정보 조회
+     */
     public Recruit getRecruitWithPatientAndRouteByRecruitId(Long recruitId) {
 
         QLocationInfo meetingLocation = new QLocationInfo("meetingLocation");
@@ -61,6 +65,26 @@ public class RecruitQueryRepository {
                 .select(recruit)
                 .from(recruit)
                 .join(recruit.patient, patient).fetchJoin()
+                .join(recruit.route, route).fetchJoin()
+                .join(route.meetingLocationInfo, meetingLocation).fetchJoin()
+                .join(route.hospitalLocationInfo, hospitalLocation).fetchJoin()
+                .join(route.returnLocationInfo, returnLocation).fetchJoin()
+                .where(recruit.id.eq(recruitId))
+                .fetchOne();
+    }
+
+    /**
+     * 경로 정보를 포함한 동행 신청 정보 조회
+     */
+    public Recruit getRecruitWithRouteByRecruitId(Long recruitId) {
+
+        QLocationInfo meetingLocation = new QLocationInfo("meetingLocation");
+        QLocationInfo hospitalLocation = new QLocationInfo("hospitalLocation");
+        QLocationInfo returnLocation = new QLocationInfo("returnLocation");
+
+        return queryFactory
+                .select(recruit)
+                .from(recruit)
                 .join(recruit.route, route).fetchJoin()
                 .join(route.meetingLocationInfo, meetingLocation).fetchJoin()
                 .join(route.hospitalLocationInfo, hospitalLocation).fetchJoin()
