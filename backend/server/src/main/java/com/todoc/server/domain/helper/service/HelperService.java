@@ -42,14 +42,14 @@ public class HelperService {
         if (tuples.isEmpty()) {
             throw new HelperProfileNotFoundException();
         }
-        return buildHelperSimpleByHelperId(tuples);
+        return buildHelperSimpleByHelperProfileId(tuples);
     }
 
-    public HelperSimpleResponse buildHelperSimpleByHelperId(List<Tuple> tuples) {
+    @Transactional(readOnly = true)
+    public HelperSimpleResponse buildHelperSimpleByHelperProfileId(List<Tuple> tuples) {
 
         // 1. 필드 추출
         Tuple first = tuples.getFirst();
-        Long authId = first.get(auth.id);
         Long helperProfileId = first.get(helperProfile.id);
         String name = first.get(auth.name);
         LocalDate birthDate = first.get(auth.birthDate);
@@ -79,7 +79,6 @@ public class HelperService {
 
         // 5. 응답 객체 생성
         return HelperSimpleResponse.builder()
-                .authId(authId)
                 .helperProfileId(helperProfileId)
                 .imageUrl(imageUrl)
                 .name(name)
@@ -90,5 +89,11 @@ public class HelperService {
                 .strengthList(strengthList)
                 .certificateList(certificateList)
                 .build();
+    }
+
+    @Transactional(readOnly = true)
+    public Long getAuthIdByHelperProfileId(Long helperProfileId) {
+        return helperJpaRepository.findAuthIdByHelperProfileId(helperProfileId)
+                .orElseThrow(HelperProfileNotFoundException::new);
     }
 }

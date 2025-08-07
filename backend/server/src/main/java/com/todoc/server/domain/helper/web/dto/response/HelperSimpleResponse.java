@@ -12,9 +12,6 @@ import java.util.List;
 @Schema(description = "도우미 정보 요약본 응답 DTO")
 public class HelperSimpleResponse {
 
-    @Schema(description = "도우미 Auth ID")
-    private Long authId;
-
     @Schema(description = "도우미 프로필 ID")
     private Long helperProfileId;
 
@@ -50,9 +47,8 @@ public class HelperSimpleResponse {
     private List<String> strengthList;
 
     @Builder
-    public HelperSimpleResponse(Long authId, Long helperProfileId, String imageUrl, String name, Gender gender, Integer age,
+    public HelperSimpleResponse(Long helperProfileId, String imageUrl, String name, Gender gender, Integer age,
                                 String shortBio, String contact, List<String> certificateList, List<String> strengthList) {
-        this.authId = authId;
         this.helperProfileId = helperProfileId;
         this.imageUrl = imageUrl;
         this.name = name;
