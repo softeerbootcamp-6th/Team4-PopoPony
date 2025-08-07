@@ -18,8 +18,8 @@ public class ReviewSimpleResponse {
     private Long reviewId;
 
     @NotNull
-    @Schema(description = "만족도", allowableValues = {"GOOD", "AVERAGE", "BAD"})
-    private SatisfactionLevel satisfactionLevel;
+    @Schema(description = "만족도", allowableValues = {"좋았어요", "괜찮아요", "아쉬워요"})
+    private String satisfactionLevel;
 
     @NotNull
     @Schema(description = "작성일")
@@ -31,7 +31,7 @@ public class ReviewSimpleResponse {
     private String shortComment;
 
     @Builder
-    public ReviewSimpleResponse(Long reviewId, SatisfactionLevel satisfactionLevel, String shortComment, LocalDateTime createdAt) {
+    public ReviewSimpleResponse(Long reviewId, String satisfactionLevel, String shortComment, LocalDateTime createdAt) {
         this.reviewId = reviewId;
         this.satisfactionLevel = satisfactionLevel;
         this.shortComment = shortComment;
