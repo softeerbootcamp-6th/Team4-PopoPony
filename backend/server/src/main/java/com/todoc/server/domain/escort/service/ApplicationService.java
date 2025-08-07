@@ -32,7 +32,7 @@ public class ApplicationService {
                 .collect(Collectors.groupingBy(t -> t.get(application.id)));
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public List<Application> getApplicationsInSameRecruit(Long applicationId) {
         return applicationQueryRepository.findAllApplicationsOfRecruitByApplicationId(applicationId);
     }
