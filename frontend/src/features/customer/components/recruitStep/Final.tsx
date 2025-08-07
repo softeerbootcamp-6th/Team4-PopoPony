@@ -12,7 +12,7 @@ import { Button, BottomSheet, CheckboxCircle, TermsModal } from '@components';
 import { FormLayout } from '@layouts';
 import { IcChevronRight } from '@icons';
 import { useState } from 'react';
-import { getTermsById } from '@utils';
+import { getTermsById } from '@constants';
 import type { TermsData } from '@types';
 import { useNavigate } from '@tanstack/react-router';
 import type { RecruitStepProps } from '@customer/types';

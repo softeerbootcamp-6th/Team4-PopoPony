@@ -32,6 +32,7 @@
       "@hooks": ["src/shared/hooks"],
       "@types": ["src/shared/types"],
       "@utils": ["src/shared/utils"],
+      "@constants": ["src/shared/constants"],
       "@auth/*": ["src/features/auth/*"],
       "@customer/*": ["src/features/customer/*"],
       "@dashboard/*": ["src/features/dashboard/*"],
