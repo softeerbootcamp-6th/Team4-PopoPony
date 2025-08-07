@@ -18,5 +18,3 @@ alwaysApply: false
   )
  color은 `frontend/src/styles.css`에 정의된 color variable을 사용합니다. 다만, var을 클래스 내에서 쓰는 것은 지양합니다. `--color`가 붙은 변수는, tailwind가 인식하여 색상으로 사용할 수 있습니다.
 (ex: `text-[var(--color-text-neutral-primary)]` -> `text-text-neutral-primary`)
-
-### 컴포넌트 생성 후, 가능한 variant를 모두, `frontend/src/routes/components/index.tsx`경로에 추가하여 웹뷰로 볼 수 있도록 합니다.
