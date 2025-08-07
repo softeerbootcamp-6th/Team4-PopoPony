@@ -46,7 +46,7 @@ public class HelperController {
 
         ReviewSimpleResponse review = ReviewSimpleResponse.builder()
                 .reviewId(1L)
-                .satisfactionLevel(SatisfactionLevel.GOOD)
+                .satisfactionLevel("좋았어요")
                 .createdAt(LocalDateTime.now().minusDays(30))
                 .shortComment("너무 잘해주시고 부모님을 집에 무사히 모셔주셔서...")
                 .build();
@@ -71,7 +71,7 @@ public class HelperController {
                 .imageUrl("https://example.com/images/sample.jpg")
                 .name("최솔희")
                 .age(39)
-                .gender(Gender.FEMALE)
+                .gender("여자")
                 .contact("010-1234-5678")
                 .shortBio("부모님처럼 모시겠습니다.")
                 .certificateList(new ArrayList<>(List.of("간호사", "간호조무사", "요양보호사")))

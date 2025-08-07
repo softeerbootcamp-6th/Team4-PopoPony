@@ -67,8 +67,8 @@ class HelperFacadeServiceTest {
                 new PositiveFeedbackStatResponse("시간엄수", 2L)
         );
         List<ReviewSimpleResponse> latestReviews = List.of(
-                new ReviewSimpleResponse(1L, SatisfactionLevel.GOOD, "좋았어요", LocalDateTime.now().minusDays(30)),
-                new ReviewSimpleResponse(2L, SatisfactionLevel.AVERAGE, "무난했어요", LocalDateTime.now().minusDays(15))
+                new ReviewSimpleResponse(1L, "좋았어요", "좋았습니다!!!", LocalDateTime.now().minusDays(30)),
+                new ReviewSimpleResponse(2L, "괜찮아요", "무난하네요....", LocalDateTime.now().minusDays(15))
         );
 
         given(helperService.getHelperSimpleByHelperProfileId(userId)).willReturn(helperSimple);
