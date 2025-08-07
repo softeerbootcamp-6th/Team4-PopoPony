@@ -6,34 +6,34 @@ import { useLocation } from '@tanstack/react-router';
 import type { LocationDetail } from '@customer/types';
 import SearchInput from '../search/searchInput';
 
-type Props = {
+interface SearchRouteProps {
   handleSelectRoute: () => void;
+}
+
+// place 파라미터에 따른 텍스트 매핑
+const getPlaceText = (place?: string | null): '만남 장소를' | '병원을' | '복귀 장소를' => {
+  switch (place) {
+    case 'meeting':
+      return '만남 장소를';
+    case 'hospital':
+      return '병원을';
+    case 'return':
+      return '복귀 장소를';
+    default:
+      return '만남 장소를';
+  }
 };
 
-const SearchRoute = ({ handleSelectRoute }: Props) => {
+const SearchRoute = ({ handleSelectRoute }: SearchRouteProps) => {
   // URL에서 query parameter 파싱
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const placeParam = searchParams.get('place');
 
-  // place 파라미터에 따른 텍스트 매핑
-  const getPlaceText = (place?: string | null): '만남 장소를' | '병원을' | '복귀 장소를' => {
-    switch (place) {
-      case 'meeting':
-        return '만남 장소를';
-      case 'hospital':
-        return '병원을';
-      case 'return':
-        return '복귀 장소를';
-      default:
-        return '만남 장소를';
-    }
-  };
-
   const place = getPlaceText(placeParam);
-  const [searchValue, setSearchValue] = useState<string>('');
+  const [searchValue, setSearchValue] = useState('');
   const [searchResult, setSearchResult] = useState<LocationDetail[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState(false);
   const { setValue } = useFormContext();
 
   const fetchSearchResult = async () => {
@@ -105,42 +105,44 @@ const SearchRoute = ({ handleSelectRoute }: Props) => {
         <FormLayout.TitleWrapper>
           <FormLayout.Title>{place} 선택해주세요</FormLayout.Title>
         </FormLayout.TitleWrapper>
+        <div className='flex flex-col gap-[2rem]'>
+          <SearchInput
+            value={searchValue}
+            onValueChange={setSearchValue}
+            placeholder='검색어를 입력해주세요'
+          />
 
-        <SearchInput
-          value={searchValue}
-          onValueChange={setSearchValue}
-          placeholder='검색어를 입력해주세요'
-        />
+          {/* 로딩 상태 */}
+          {isLoading && (
+            <div className='mt-[1.6rem] p-[1.2rem] text-center text-gray-500'>검색 중...</div>
+          )}
 
-        {/* 로딩 상태 */}
-        {isLoading && <div className='mt-4 p-2 text-center text-gray-500'>검색 중...</div>}
+          {searchResult.length > 0 && (
+            <div className='flex flex-col'>
+              {searchResult.map((result, index) => (
+                <button
+                  key={`${result.placeName}-${index}`}
+                  className='bg-neutral-0 border-stroke-neutral-light hover:bg-neutral-10 flex flex-col gap-[0.2rem] border-b-2 px-[2rem] py-[1.2rem] text-left transition-colors'
+                  onClick={() => handleSelectItem(result)}
+                  type='button'>
+                  <h4 className='body1-16-medium text-text-neutral-primary'>{result.placeName}</h4>
+                  <h5 className='body2-14-medium text-text-neutral-secondary'>
+                    {result.upperAddrName} {result.middleAddrName} {result.lowerAddrName}{' '}
+                    {result.roadName} {result.firstBuildingNo}
+                    {result.secondBuildingNo ? `-${result.secondBuildingNo}` : ''}
+                  </h5>
+                </button>
+              ))}
+            </div>
+          )}
 
-        {/* 검색 결과 목록 */}
-        {searchResult.length > 0 && (
-          <div className='mt-4 flex flex-col gap-[0.4rem]'>
-            {searchResult.map((result, index) => (
-              <button
-                key={`${result.placeName}-${index}`}
-                className='flex flex-col gap-[0.2rem] rounded-lg border border-gray-200 p-3 text-left transition-colors hover:bg-gray-50'
-                onClick={() => handleSelectItem(result)}
-                type='button'>
-                <h4 className='body1-16-medium text-text-neutral-primary'>{result.placeName}</h4>
-                <h5 className='body2-14-medium text-text-neutral-secondary'>
-                  {result.upperAddrName} {result.middleAddrName} {result.lowerAddrName}{' '}
-                  {result.roadName} {result.firstBuildingNo}
-                  {result.secondBuildingNo ? `-${result.secondBuildingNo}` : ''}
-                </h5>
-              </button>
-            ))}
-          </div>
-        )}
-
-        {/* 검색 결과가 없을 때 */}
-        {searchValue.trim() && !isLoading && searchResult.length === 0 && (
-          <div className='mt-4 rounded-lg border border-gray-200 p-4 text-center text-gray-500'>
-            검색 결과가 없습니다.
-          </div>
-        )}
+          {/* 검색 결과가 없을 때 */}
+          {searchValue.trim() && !isLoading && searchResult.length === 0 && (
+            <div className='text-text-neutral-assistive border-stroke-neutral-light mt-[1.6rem] rounded-lg border p-[1.2rem] text-center'>
+              검색 결과가 없습니다.
+            </div>
+          )}
+        </div>
       </FormLayout.Content>
     </FormLayout>
   );

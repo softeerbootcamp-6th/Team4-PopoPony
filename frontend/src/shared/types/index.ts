@@ -4,9 +4,3 @@ export interface TermsData {
   content: string;
   required: boolean;
 }
-
-export interface TermsModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  terms: TermsData;
-}

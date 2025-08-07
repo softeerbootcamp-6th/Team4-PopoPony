@@ -43,12 +43,10 @@ const Modal = ({ children, isOpen = false, onClose, size = 'md' }: ModalProps) =
 
   return createPortal(
     <>
-      {/* Backdrop */}
       {size !== 'full' && (
         <div className='bg-black-opacity-40 absolute inset-0 z-40' onClick={handleBackdropClick} />
       )}
 
-      {/* Modal Content - size='full'일 때 구조 개선 */}
       {size === 'full' ? (
         <div
           className='bg-background-default-white absolute inset-0 z-100 flex h-full max-h-[100dvh] w-full flex-col p-[2rem]'
@@ -87,7 +85,6 @@ const ModalTitle = ({ children }: ModalTitleProps) => {
   );
 };
 
-// Content Component - flex-1과 min-height 추가
 interface ModalContentProps {
   children: ReactNode;
   className?: string;
@@ -101,7 +98,6 @@ const ModalContent = ({ children, className = '' }: ModalContentProps) => {
   );
 };
 
-// Button Container Component
 interface ModalButtonContainerProps {
   children: ReactNode;
 }
@@ -136,7 +132,6 @@ const ModalCloseButton = ({ children, onClick, disabled }: ButtonProps) => {
   );
 };
 
-// Compound Component Export
 Modal.Title = ModalTitle;
 Modal.Content = ModalContent;
 Modal.ButtonContainer = ModalButtonContainer;

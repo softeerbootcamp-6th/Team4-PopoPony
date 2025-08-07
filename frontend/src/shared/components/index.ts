@@ -17,11 +17,11 @@ import Modal from './modal/Modal';
 import BottomSheet from './modal/BottomSheet';
 import PhotoUpload from './form/PhotoUpload';
 import ProgressIndicator from './ProgressIndicator';
-import Checkbox from './Checkbox';
+import Checkbox from './checkbox/Checkbox';
 import ShowMapButton from './ShowMapButton';
 import Divider from './Divider';
 import MultiOptionSelector from './form/MultiOptionSelector';
-import CheckboxCircle from './checkbox/checkbox-circle';
+import CheckboxCircle from './checkbox/CheckboxCircle';
 import TermsModal from './modal/TermsModal';
 import Dot from './Dot';
 

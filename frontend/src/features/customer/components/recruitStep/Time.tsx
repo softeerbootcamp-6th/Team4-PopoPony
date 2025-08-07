@@ -97,7 +97,7 @@ const Time = memo(({ handleNextStep, handleBackStep }: RecruitStepProps) => {
             validation={() => dateMarkFieldAsTouched('escortDate')}
           />
         </LabeledSection>
-        <div className='flex gap-4'>
+        <div className='flex gap-[1.2rem]'>
           <LabeledSection
             label='시작 시간'
             isChecked={!timeFieldErrors.escortStartTime && !!timeValues.escortStartTime}>
@@ -122,7 +122,7 @@ const Time = memo(({ handleNextStep, handleBackStep }: RecruitStepProps) => {
           </LabeledSection>
         </div>
         <div className='flex-between'>
-          <div className='flex-center gap-1'>
+          <div className='flex-center gap-[0.4rem]'>
             <IcAlertCircle
               className={`${
                 timeFieldErrors.escortDuration || timeFieldErrors.escortEndTime
@@ -144,20 +144,10 @@ const Time = memo(({ handleNextStep, handleBackStep }: RecruitStepProps) => {
         </div>
       </FormLayout.Content>
       <FormLayout.Footer>
-        <FormLayout.FooterButtonWrapper>
-          <div className='w-[10rem]'>
-            <Button variant='secondary' onClick={handleBackStep}>
-              이전
-            </Button>
-          </div>
-          <Button
-            className='flex-1'
-            variant='primary'
-            onClick={handleNextStep}
-            disabled={!timeIsFormValid || !dateIsFormValid}>
-            다음
-          </Button>
-        </FormLayout.FooterButtonWrapper>
+        <FormLayout.FooterPrevNext
+          handleClickNext={handleNextStep}
+          disabled={!timeIsFormValid || !dateIsFormValid}
+        />
       </FormLayout.Footer>
     </FormLayout>
   );

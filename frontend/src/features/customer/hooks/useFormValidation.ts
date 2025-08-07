@@ -1,5 +1,5 @@
 import { useFormContext, useWatch } from 'react-hook-form';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { z } from 'zod';
 
 type TouchedFields<T> = Partial<Record<keyof T, boolean>>;
@@ -26,18 +26,13 @@ export function useFormValidation<S extends z.ZodObject<Record<string, z.ZodType
   const [isFormValid, setIsFormValid] = useState(false);
   const [touchedFields, setTouchedFields] = useState<TouchedFields<T>>({});
 
-  const shape = schema.shape as Record<keyof T, z.ZodTypeAny>;
-  const schemaKeys = useMemo(() => Object.keys(shape) as (keyof T)[], [shape]);
-
   const markFieldAsTouched = (fieldName: keyof T) => {
     setTouchedFields((prev) => ({ ...prev, [fieldName]: true }));
   };
 
   useEffect(() => {
-    const currentValues = getValues();
-
-    // 전체 폼 검증 (superRefine 포함)
-    const formResult = schema.safeParse(currentValues);
+    // 전체 폼 검증
+    const formResult = schema.safeParse(values);
     setIsFormValid(formResult.success);
 
     // // 디버깅을 위한 콘솔 로그
@@ -63,7 +58,7 @@ export function useFormValidation<S extends z.ZodObject<Record<string, z.ZodType
     }
 
     setFieldErrors(errors);
-  }, [values, touchedFields, schema, getValues, schemaKeys]);
+  }, [values, touchedFields, schema, getValues]);
 
   return {
     values,

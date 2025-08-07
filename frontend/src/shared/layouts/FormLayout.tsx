@@ -1,4 +1,5 @@
-import { BottomCTA } from '@components';
+import { BottomCTA, Button } from '@components';
+import { useRouter } from '@tanstack/react-router';
 
 interface FormLayoutProps {
   children: React.ReactNode;
@@ -41,6 +42,33 @@ const Footer = ({ children }: FormLayoutProps) => {
   );
 };
 
+const FooterPrevNext = ({
+  handleClickNext,
+  disabled,
+}: {
+  handleClickNext: () => void;
+  disabled: boolean;
+}) => {
+  const router = useRouter();
+
+  const handleClickPrev = () => {
+    router.history.back();
+  };
+
+  return (
+    <div className='flex w-full flex-shrink-0 gap-[0.8rem]'>
+      <div className='w-[10rem]'>
+        <Button variant='secondary' onClick={handleClickPrev}>
+          이전
+        </Button>
+      </div>
+      <Button className='flex-1' onClick={handleClickNext} disabled={disabled}>
+        다음
+      </Button>
+    </div>
+  );
+};
+
 const FooterButtonWrapper = ({ children }: FormLayoutProps) => {
   return <div className='flex w-full flex-shrink-0 gap-[0.8rem]'>{children}</div>;
 };
@@ -50,6 +78,7 @@ FormLayout.Title = Title;
 FormLayout.SubTitle = SubTitle;
 FormLayout.Content = Content;
 FormLayout.Footer = Footer;
+FormLayout.FooterPrevNext = FooterPrevNext;
 FormLayout.FooterButtonWrapper = FooterButtonWrapper;
 
 export default FormLayout;

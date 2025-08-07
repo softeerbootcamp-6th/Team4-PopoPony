@@ -51,20 +51,7 @@ const Condition = memo(({ handleNextStep, handleBackStep }: RecruitStepProps) =>
         </LabeledSection>
       </FormLayout.Content>
       <FormLayout.Footer>
-        <FormLayout.FooterButtonWrapper>
-          <div className='w-[10rem]'>
-            <Button variant='secondary' onClick={handleBackStep}>
-              이전
-            </Button>
-          </div>
-          <Button
-            className='flex-1'
-            variant='primary'
-            onClick={handleNextStep}
-            disabled={!isFormValid}>
-            다음
-          </Button>
-        </FormLayout.FooterButtonWrapper>
+        <FormLayout.FooterPrevNext handleClickNext={handleNextStep} disabled={!isFormValid} />
       </FormLayout.Footer>
     </FormLayout>
   );

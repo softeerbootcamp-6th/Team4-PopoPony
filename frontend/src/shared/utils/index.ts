@@ -1,4 +1,3 @@
-import { getTermsById } from './termsData';
-import { termsData } from './termsData';
+import { formatValue } from './formatValue';
 
-export { getTermsById, termsData };
+export { formatValue };

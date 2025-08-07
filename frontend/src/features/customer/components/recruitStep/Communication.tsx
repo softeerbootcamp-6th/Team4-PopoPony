@@ -155,20 +155,10 @@ const Communication = memo(({ handleNextStep, handleBackStep }: RecruitStepProps
         )}
       </FormLayout.Content>
       <FormLayout.Footer>
-        <FormLayout.FooterButtonWrapper>
-          <div className='w-[10rem]'>
-            <Button variant='secondary' onClick={handleBackStep}>
-              이전
-            </Button>
-          </div>
-          <Button
-            className='flex-1'
-            variant='primary'
-            onClick={handleNextStep}
-            disabled={!communicationIsFormValid || !cognitiveIsFormValid}>
-            다음
-          </Button>
-        </FormLayout.FooterButtonWrapper>
+        <FormLayout.FooterPrevNext
+          handleClickNext={handleNextStep}
+          disabled={!communicationIsFormValid || !cognitiveIsFormValid}
+        />
       </FormLayout.Footer>
     </FormLayout>
   );

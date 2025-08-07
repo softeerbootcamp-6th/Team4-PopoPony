@@ -32,7 +32,7 @@ const Profile = memo(({ handleNextStep }: RecruitStepProps) => {
           <FormLayout.Title>동행할 환자의 기본정보를 입력해주세요</FormLayout.Title>
         </FormLayout.TitleWrapper>
 
-        <Button size='lg' className='min-h-[5.6rem]' variant='assistive'>
+        <Button size='lg' variant='assistive'>
           이전 환자 정보 불러오기
         </Button>
 
@@ -45,7 +45,7 @@ const Profile = memo(({ handleNextStep }: RecruitStepProps) => {
           </div>
         </LabeledSection>
 
-        <div className='flex flex-col gap-[1.2rem] sm:flex-row'>
+        <div className='flex gap-[1.2rem]'>
           <LabeledSection
             label='환자 이름'
             isChecked={!fieldErrors.patientName && !!values.patientName}

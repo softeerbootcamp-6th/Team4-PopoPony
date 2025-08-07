@@ -33,9 +33,9 @@ const Button = ({
   };
 
   const sizeStyle = {
-    sm: 'label2-14-bold h-[3.1rem] rounded-[0.4rem]',
-    md: 'body1-16-bold h-[4.8rem] rounded-[0.4rem]',
-    lg: 'subtitle-18-bold h-[5.6rem] rounded-[0.6rem]',
+    sm: 'label2-14-bold h-[3.1rem] min-h-[3.1rem] rounded-[0.4rem]',
+    md: 'body1-16-bold h-[4.8rem] min-h-[4.8rem] rounded-[0.4rem]',
+    lg: 'subtitle-18-bold h-[5.6rem] min-h-[5.6rem] rounded-[0.6rem]',
   };
 
   const spinnerSize = {

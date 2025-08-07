@@ -9,18 +9,14 @@ const CheckboxCircle = ({ checked = false, className = '', ...props }: CheckboxC
   const base = 'relative flex items-center justify-center w-[2rem] h-[2rem] rounded-full';
 
   const variant = {
-    unchecked: {
-      base: 'bg-icon-neutral-disabled',
-    },
-    checked: {
-      base: 'bg-mint-50',
-    },
+    unchecked: 'bg-icon-neutral-disabled',
+    checked: 'bg-mint-50',
   };
 
   const currentVariant = checked ? variant.checked : variant.unchecked;
 
   return (
-    <div className={`${base} ${currentVariant.base} ${className}`}>
+    <div className={`${base} ${currentVariant} ${className}`}>
       <input
         type='checkbox'
         checked={checked}

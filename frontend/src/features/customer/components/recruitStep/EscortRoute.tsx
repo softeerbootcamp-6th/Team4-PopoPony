@@ -3,7 +3,7 @@ import type { RecruitStepProps } from '@customer/types';
 import { useNavigate } from '@tanstack/react-router';
 import { FormLayout } from '@layouts';
 import { useFormContext } from 'react-hook-form';
-import { FormInput, LabeledSection, Button, Dot, Checkbox } from '@components';
+import { FormInput, LabeledSection, Dot, Checkbox } from '@components';
 import { SearchButton } from '@customer/components';
 import { z } from 'zod';
 import { useFormValidation } from '@customer/hooks';
@@ -193,20 +193,7 @@ const EscortRoute = memo(({ handleNextStep, handleBackStep }: RecruitStepProps) 
         </div>
       </FormLayout.Content>
       <FormLayout.Footer>
-        <FormLayout.FooterButtonWrapper>
-          <div className='w-[10rem]'>
-            <Button variant='secondary' onClick={handleBackStep}>
-              이전
-            </Button>
-          </div>
-          <Button
-            className='flex-1'
-            variant='primary'
-            onClick={handleNextStep}
-            disabled={!isFormValid}>
-            다음
-          </Button>
-        </FormLayout.FooterButtonWrapper>
+        <FormLayout.FooterPrevNext handleClickNext={handleNextStep} disabled={!isFormValid} />
       </FormLayout.Footer>
     </FormLayout>
   );
