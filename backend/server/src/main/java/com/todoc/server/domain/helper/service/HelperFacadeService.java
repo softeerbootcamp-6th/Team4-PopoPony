@@ -25,17 +25,17 @@ public class HelperFacadeService {
     private final PositiveFeedbackChoiceService positiveFeedbackChoiceService;
 
     /**
-     * userId(authId)에 해당하는 도우미의 상세 정보를 조회하는 함수
+     * helperProfileId에 해당하는 도우미의 상세 정보를 조회하는 함수
      *
-     * @param userId (authId)
+     * @param helperProfileId 도우미 프로필 ID
      * @return 도우미 상세 정보 (HelperDetailResponse)
      */
     @Transactional(readOnly = true)
-    public HelperDetailResponse getHelperDetailByUserId(Long userId) {
+    public HelperDetailResponse getHelperDetailByHelperProfileId(Long helperProfileId) {
 
         // 1. 도우미 조회
-        HelperSimpleResponse helperSimple = helperService.getHelperSimpleByHelperProfileId(userId);
-        Long authId = helperSimple.getAuthId();
+        HelperSimpleResponse helperSimple = helperService.getHelperSimpleByHelperProfileId(helperProfileId);
+        Long authId = helperService.getAuthIdByHelperProfileId(helperProfileId);
 
         // 2. 동행 횟수 조회 (helper의 userId(authId)로 검색)
         Long escortCount = escortService.getCountByHelperUserId(authId);

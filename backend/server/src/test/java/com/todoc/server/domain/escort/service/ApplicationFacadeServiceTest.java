@@ -47,7 +47,6 @@ class ApplicationFacadeServiceTest {
         mockTuples = List.of(mockTuple);
 
         mockHelperResponse = HelperSimpleResponse.builder()
-                .authId(1L)
                 .name("헬퍼 이름")
                 .age(30)
                 .gender(null)
@@ -67,7 +66,7 @@ class ApplicationFacadeServiceTest {
         when(applicationService.getApplicationListByRecruitId(recruitId))
                 .thenReturn(Map.of(applicationId, mockTuples));
 
-        when(helperService.buildHelperSimpleByHelperId(mockTuples))
+        when(helperService.buildHelperSimpleByHelperProfileId(mockTuples))
                 .thenReturn(mockHelperResponse);
 
         // when
@@ -82,6 +81,6 @@ class ApplicationFacadeServiceTest {
         assertThat(item.getHelper()).isEqualTo(mockHelperResponse);
 
         verify(applicationService).getApplicationListByRecruitId(recruitId);
-        verify(helperService).buildHelperSimpleByHelperId(mockTuples);
+        verify(helperService).buildHelperSimpleByHelperProfileId(mockTuples);
     }
 }

@@ -37,7 +37,6 @@ public class ApplicationController {
 //        return Response.from(applicationFacadeService.getApplicationListByRecruitId(recruitId));
 
         HelperSimpleResponse helper = HelperSimpleResponse.builder()
-                .authId(1L)
                 .helperProfileId(1L)
                 .imageUrl("https://example.com/images/sample.jpg")
                 .name("최솔희")
