@@ -109,6 +109,7 @@ export function Final({ handleBackStep }: RecruitStepProps) {
     meetingLocationDetail: formData.meetingLocationDetail,
     destinationDetail: formData.destinationDetail,
     returnLocationDetail: formData.returnLocationDetail,
+    isMeetingLocationSameAsDestination: formData.isMeetingLocationSameAsDestination,
   };
 
   return (

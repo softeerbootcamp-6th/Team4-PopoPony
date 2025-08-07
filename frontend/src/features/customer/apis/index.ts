@@ -1,3 +1,3 @@
-import { searchRoute } from './rearch';
+import { searchRoute } from './search';
 
 export { searchRoute };
