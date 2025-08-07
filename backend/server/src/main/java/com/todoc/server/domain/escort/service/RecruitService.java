@@ -192,4 +192,8 @@ public class RecruitService {
                 .expectedTaxiFee(expectedTaxiFee)
                 .build();
     }
+
+    public List<Recruit> getAllRecruits() {
+        return recruitJpaRepository.findAll();
+    }
 }
