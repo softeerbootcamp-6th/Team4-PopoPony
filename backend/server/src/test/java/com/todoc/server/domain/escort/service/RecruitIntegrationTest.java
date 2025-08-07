@@ -125,6 +125,8 @@ public class RecruitIntegrationTest {
     @DisplayName("동행 신청 생성 - 정상")
     void createRecruit_정상생성() {
         // given
+        int beforeCount = recruitService.getAllRecruits().size();
+
         RecruitCreateRequest request = createSampleRequest();
 
         // when
@@ -132,7 +134,8 @@ public class RecruitIntegrationTest {
 
         // then
         List<Recruit> all = recruitService.getAllRecruits();
-        assertThat(all.size()).isEqualTo(12);
+        int afterCount = recruitService.getAllRecruits().size();
+        assertThat(afterCount - beforeCount).isEqualTo(1);
 
         Recruit created = all.getLast();
         assertThat(created.getPatient()).isNotNull();

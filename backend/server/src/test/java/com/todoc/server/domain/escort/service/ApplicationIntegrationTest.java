@@ -83,7 +83,7 @@ public class ApplicationIntegrationTest {
 
         // then
         List<Application> applications = applicationService.getApplicationsInSameRecruit(targetApplicationId);
-        Recruit recruit = applications.get(0).getRecruit();
+        Recruit recruit = applications.getFirst().getRecruit();
 
         // 선택된 지원이 MATCHED 되었는지 확인
         Application matched = applications.stream()
