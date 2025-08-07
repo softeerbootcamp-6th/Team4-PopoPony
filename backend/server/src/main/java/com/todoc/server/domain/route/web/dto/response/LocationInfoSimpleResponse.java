@@ -2,6 +2,7 @@ package com.todoc.server.domain.route.web.dto.response;
 
 import com.todoc.server.domain.route.entity.LocationInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -9,15 +10,19 @@ import lombok.Getter;
 @Schema(description = "장소 요약 정보 DTO")
 public class LocationInfoSimpleResponse {
 
+    @NotNull
     @Schema(description = "장소 ID")
     private Long locationInfoId;
 
+    @NotNull
     @Schema(description = "장소명(상호명 주소)")
     private String placeName;
 
+    @NotNull
     @Schema(description = "도로명 주소")
     private String address;
 
+    @NotNull
     @Schema(description = "상세 주소")
     private String detailAddress;
 
