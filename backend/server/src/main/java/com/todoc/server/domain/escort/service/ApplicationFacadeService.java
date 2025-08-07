@@ -28,11 +28,18 @@ public class ApplicationFacadeService {
     private final ApplicationService applicationService;
     private final HelperService helperService;
     private final EscortService escortService;
+    private final RecruitService recruitService;
 
     @Transactional(readOnly = true)
     public ApplicationListResponse getApplicationListByRecruitId(Long recruitId) {
 
         Map<Long, List<Tuple>> groupedByApplication = applicationService.getApplicationListByRecruitId(recruitId);
+
+        if (groupedByApplication.isEmpty()) {
+            if (!recruitService.existsById(recruitId)) {
+                throw new RecruitNotFoundException();
+            }
+        }
 
         List<ApplicationSimpleResponse> list = groupedByApplication.entrySet().stream()
                 .map(entry -> {
