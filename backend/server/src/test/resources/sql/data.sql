@@ -6,6 +6,10 @@ VALUES
     (4, 'user04', 'password04', '최유진', '2000-01-10', 'FEMALE', '010-4567-8901', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
     (5, 'user05', 'password05', '정우성', '1989-05-05', 'MALE', '010-5678-9012', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
+ALTER TABLE auth ALTER COLUMN id RESTART WITH 6;
+
+
+
 INSERT INTO patient (
     id, customer_id, latest_location_id, name, image_url, age, gender, contact,
     needs_helping, uses_wheelchair, has_cognitive_issue, cognitive_issue_detail,
@@ -37,6 +41,10 @@ INSERT INTO patient (
        false, NULL,
        CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
+ALTER TABLE patient ALTER COLUMN id RESTART WITH 6;
+
+
+
 INSERT INTO helper_profile (
     id, auth_id, latest_location_id, image_url, strength, short_bio, area,
     created_at, updated_at
@@ -66,6 +74,9 @@ INSERT INTO helper_profile (
        '도심 외곽 지역도 지원 가능합니다.',
        'GWANGJU', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
+ALTER TABLE helper_profile ALTER COLUMN id RESTART WITH 6;
+
+
 
 INSERT INTO certificate (id, helper_profile_id, type, image_url, created_at, updated_at)
 VALUES
@@ -76,6 +87,9 @@ VALUES
     (5, 4, '요양보호사 자격증', 'https://example.com/cert/helper4_caregiver.jpg', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
     (6, 4, '운전면허증', 'https://example.com/cert/helper4_driver.jpg', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
     (7, 5, '시간관리 교육 수료증', 'https://example.com/cert/helper5_time_management.jpg', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+ALTER TABLE certificate ALTER COLUMN id RESTART WITH 8;
+
 
 
 INSERT INTO location_info (
@@ -89,6 +103,10 @@ INSERT INTO location_info (
       (4, '신촌세브란스병원', '서울특별시', '서대문구', '신촌동', '134', '0', '연세로', '50', '', '본관', 126.936, 37.563, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
       (5, '한양대병원', '서울특별시', '성동구', '행당동', '17', '0', '왕십리로', '222', '', '입원센터', 127.045, 37.557, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
+ALTER TABLE location_info ALTER COLUMN id RESTART WITH 6;
+
+
+
 INSERT INTO route (
     id, meeting_location_info_id, hospital_location_info_id, return_location_info_id,
     created_at, updated_at
@@ -98,6 +116,9 @@ INSERT INTO route (
       (3, 3, 4, 5, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
       (4, 4, 5, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
       (5, 5, 1, 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+ALTER TABLE route ALTER COLUMN id RESTART WITH 6;
+
 
 
 INSERT INTO recruit (
@@ -146,6 +167,9 @@ INSERT INTO recruit (
        '진료', '날씨에 따라 우산 챙겨주세요.', 33000, 'DONE',
        CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
+ALTER TABLE recruit ALTER COLUMN id RESTART WITH 11;
+
+
 
 INSERT INTO application (id, recruit_id, helper_id, status, created_at, updated_at)
 VALUES
@@ -163,6 +187,9 @@ VALUES
     (12, 7, 1, 'PENDING', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
     (13, 7, 2, 'PENDING', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
     (14, 7, 5, 'PENDING', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+ALTER TABLE application ALTER COLUMN id RESTART WITH 15;
+
 
 
 INSERT INTO escort (
@@ -183,6 +210,8 @@ INSERT INTO escort (
 
 ALTER TABLE escort ALTER COLUMN id RESTART WITH 10;
 
+
+
 INSERT INTO review (
     id, recruit_id, customer_id, helper_id,
     satisfaction_level, negative_feedback, short_comment,
@@ -202,16 +231,23 @@ INSERT INTO review (
 
       (7, 10, 5, 3, 'GOOD', NULL, '안심하고 맡길 수 있었어요.', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
+ALTER TABLE review ALTER COLUMN id RESTART WITH 8;
 
-INSERT INTO positive_feedback (id, description, created_at, updated_at) VALUES
-                                                                            (1, '친절해요', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                            (2, '책임감', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                            (3, '소통이 잘돼요', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                            (4, '능숙해요', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                            (5, '리포트가 자세해요', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                            (6, '부축을 잘해요', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                            (7, '진료 지식이 많아요', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                            (8, '휠체어도 문제 없어요', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+
+INSERT INTO positive_feedback (id, description, created_at, updated_at)
+VALUES
+    (1, '친절해요', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    (2, '책임감', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    (3, '소통이 잘돼요', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    (4, '능숙해요', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    (5, '리포트가 자세해요', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    (6, '부축을 잘해요', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    (7, '진료 지식이 많아요', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    (8, '휠체어도 문제 없어요', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+ALTER TABLE positive_feedback ALTER COLUMN id RESTART WITH 9;
+
 
 
 INSERT INTO positive_feedback_choice (id, review_id, positive_feedback_id, created_at, updated_at)
@@ -238,6 +274,9 @@ VALUES
 (20, 7, 6, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 (21, 7, 8, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
+ALTER TABLE positive_feedback_choice ALTER COLUMN id RESTART WITH 22;
+
+
 
 INSERT INTO report (
     id, recruit_id, customer_id, helper_id,
@@ -260,6 +299,9 @@ INSERT INTO report (
 
       (7, 10, 5, 3, '09:10:00', '11:35:00', true, '2025-08-30 10:00:00', '날씨가 좋지 않아 외부 이동에 유의 필요. 환자 상태 양호.', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
+ALTER TABLE report ALTER COLUMN id RESTART WITH 8;
+
+
 
 INSERT INTO taxi_fee (
     id, report_id,
@@ -280,6 +322,9 @@ INSERT INTO taxi_fee (
       (6, 6, 9100, 'https://example.com/receipt6_depart.jpg', 9400, 'https://example.com/receipt6_return.jpg', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 
       (7, 7, 8900, 'https://example.com/receipt7_depart.jpg', 9100, 'https://example.com/receipt7_return.jpg', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+ALTER TABLE taxi_fee ALTER COLUMN id RESTART WITH 8;
+
 
 
 INSERT INTO image_attachment (
@@ -302,4 +347,5 @@ INSERT INTO image_attachment (
 
       (10, 7, 'https://example.com/report7_img1.jpg', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
+ALTER TABLE image_attachment ALTER COLUMN id RESTART WITH 11;
 
