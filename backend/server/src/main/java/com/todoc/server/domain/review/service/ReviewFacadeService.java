@@ -9,7 +9,6 @@ import com.todoc.server.domain.review.entity.PositiveFeedback;
 import com.todoc.server.domain.review.entity.Review;
 import com.todoc.server.domain.review.exception.PositiveFeedbackInternalServerException;
 import com.todoc.server.domain.review.exception.PositiveFeedbackInvalidException;
-import com.todoc.server.domain.review.exception.ReviewNotFoundException;
 import com.todoc.server.domain.review.web.dto.request.ReviewCreateRequest;
 import com.todoc.server.domain.review.web.dto.response.ReviewSimpleResponse;
 import lombok.RequiredArgsConstructor;
