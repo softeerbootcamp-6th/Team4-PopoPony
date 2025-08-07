@@ -1,4 +1,5 @@
 import { Button, Tabs } from '@components';
+import { StatsSummaryCard } from '@customer/components';
 import { IcPhoneFill } from '@icons';
 import { PageLayout } from '@layouts';
 import { createFileRoute } from '@tanstack/react-router';
@@ -35,6 +36,9 @@ function RouteComponent() {
             <IcPhoneFill className='[&_path]:fill-icon-neutral-primary' />
             <span className='ml-[0.8rem]'>도우미에게 전화걸기</span>
           </Button>
+          <div className='mt-[0.8rem]'>
+            <StatsSummaryCard count={20} recommendRate={89} reviewCount={13} />
+          </div>
         </div>
 
         <Tabs defaultValue='자기소개'>

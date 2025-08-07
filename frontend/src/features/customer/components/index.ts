@@ -2,6 +2,7 @@ import Step1 from './recruitStep/step1';
 import RouteButton from './RouteButton';
 import InfoSection from './InfoSection';
 import GrayBox from './GrayBox';
+import StatsSummaryCard from './StatsSummaryCard';
 
 // Cards
 import HelperCard from './cards/HelperCard';
@@ -20,6 +21,7 @@ export {
   RouteButton,
   InfoSection,
   GrayBox,
+  StatsSummaryCard,
   HelperCard,
   HelperSelectInfoCard,
   HelperEmptyCard,
