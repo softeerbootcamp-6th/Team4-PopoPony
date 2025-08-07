@@ -165,6 +165,10 @@ INSERT INTO recruit (
 
       (10, 5, 1, 5, '2025-08-10', '09:00:00', '11:30:00',
        '진료', '날씨에 따라 우산 챙겨주세요.', 33000, 'DONE',
+       CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+
+      (11, 2, 1, 2, '2025-08-11', '10:00:00', '12:30:00',
+       '정기검진', '처방전 잘 챙겨주세요.', 29000, 'DONE',
        CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 ALTER TABLE recruit ALTER COLUMN id RESTART WITH 11;
@@ -206,7 +210,9 @@ INSERT INTO escort (
 
       (8, 9, 4, 4, '병원 방문 준비 중입니다.', 'PREPARING', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 
-      (9, 8, 3, 5, '진료실 입장 대기 중입니다.', 'IN_TREATMENT', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+      (9, 8, 3, 5, '진료실 입장 대기 중입니다.', 'IN_TREATMENT', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+
+      (10, 11, 2, 2, '예정보다 빨리 도착했습니다.', 'DONE', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 ALTER TABLE escort ALTER COLUMN id RESTART WITH 10;
 
@@ -348,4 +354,3 @@ INSERT INTO image_attachment (
       (10, 7, 'https://example.com/report7_img1.jpg', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 ALTER TABLE image_attachment ALTER COLUMN id RESTART WITH 11;
-
