@@ -83,11 +83,6 @@ const DetailTab = () => {
         <div className='flex flex-col gap-[1.6rem]'>
           <h3 className='subtitle-18-bold text-text-neutral-primary'>진료시 참고 사항</h3>
           <div className='flex flex-col gap-[2rem]'>
-            <InfoSection title='특이사항'>
-              <GrayBox>
-                <span>이가 많이 없으셔서 발음하시는 게 불편하세요.</span>
-              </GrayBox>
-            </InfoSection>
             <InfoSection title='동행 목적'>
               <GrayBox>
                 <span>이가 많이 없으셔서 발음하시는 게 불편하세요.</span>
