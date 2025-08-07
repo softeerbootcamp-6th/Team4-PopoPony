@@ -1,27 +1,26 @@
 package com.todoc.server.domain.helper.service;
 
-import com.todoc.server.common.enumeration.Gender;
-import com.todoc.server.domain.auth.entity.Auth;
+import com.todoc.server.common.enumeration.SatisfactionLevel;
 import com.todoc.server.domain.escort.service.EscortService;
-import com.todoc.server.domain.helper.entity.Helper;
 import com.todoc.server.domain.helper.web.dto.response.HelperDetailResponse;
+import com.todoc.server.domain.helper.web.dto.response.HelperSimpleResponse;
 import com.todoc.server.domain.review.service.PositiveFeedbackChoiceService;
 import com.todoc.server.domain.review.service.ReviewService;
+import com.todoc.server.domain.review.web.dto.response.PositiveFeedbackStatResponse;
+import com.todoc.server.domain.review.web.dto.response.ReviewSimpleResponse;
 import com.todoc.server.domain.review.web.dto.response.ReviewStatResponse;
-import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.MockitoAnnotations;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.BDDMockito.given;
 
-@ExtendWith(MockitoExtension.class)
 class HelperFacadeServiceTest {
 
     @InjectMocks
@@ -29,66 +28,63 @@ class HelperFacadeServiceTest {
 
     @Mock
     private HelperService helperService;
+
     @Mock
     private EscortService escortService;
+
     @Mock
     private ReviewService reviewService;
+
     @Mock
     private PositiveFeedbackChoiceService positiveFeedbackChoiceService;
-    @Mock
-    private CertificateService certificateService;
 
-    @Test
-    @DisplayName("도우미의 userId에 해당하는 데이터가 존재하는 경우")
-    void getHelperDetailByUserId_success() {
-        // given
-        Long userId = 1L;
-        Helper dummyHelper = new Helper();
-        Auth dummyAuth = new Auth();
-        dummyAuth.setId(1L);
-        dummyAuth.setName("김민수");
-        dummyAuth.setGender(Gender.MALE);
-        dummyAuth.setContact("010-1234-5678");
-        dummyAuth.setBirthDate(LocalDate.of(1995, 3, 15));
-        dummyHelper.setAuth(dummyAuth);
-        dummyHelper.setId(1L);
-        dummyHelper.setImageUrl("https://img.jpg");
-        dummyHelper.setShortBio("마음을 편하게 해주는 동행을 추구합니다.");
-
-        when(helperService.getHelperByUserId(userId)).thenReturn(dummyHelper);
-        when(escortService.getCountByHelperUserId(1L)).thenReturn(2L);
-        when(reviewService.getReviewStatByUserId(1L)).thenReturn(new ReviewStatResponse(1L, 89, 11, 0));
-        when(positiveFeedbackChoiceService.getPositiveFeedbackStatByHelperUserId(1L)).thenReturn(List.of());
-        when(reviewService.getLatestReviewsByHelperUserId(1L)).thenReturn(List.of());
-        when(certificateService.getHelperByUserId(1L)).thenReturn(List.of("간호조무사 자격증", "응급처치 교육 수료증"));
-
-        // strengthList는 Json 문자열이므로 미리 설정
-        dummyHelper.setStrength("[\"유연한 일정 조율\", \"의사소통 능력 우수\"]");
-
-        // when
-        HelperDetailResponse response = helperFacadeService.getHelperDetailByUserId(userId);
-
-        // then
-        assertEquals("김민수", response.getName());
-        assertEquals(2L, response.getEscortCount());
-        assertEquals(List.of("유연한 일정 조율", "의사소통 능력 우수"), response.getStrengthList());
-        assertEquals(List.of("간호조무사 자격증", "응급처치 교육 수료증"), response.getCertificateList());
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
     }
 
     @Test
-    @DisplayName("도우미의 userId에 해당하는 데이터가 존재하지 않는 경우 예외 발생")
-    void getHelperDetailByUserId_notFound() {
+    void getHelperDetailByUserId_정상조회() {
         // given
-        Long invalidUserId = 999L;
-        when(helperService.getHelperByUserId(invalidUserId))
-                .thenThrow(new IllegalArgumentException("해당 도우미를 찾을 수 없습니다."));
+        Long userId = 1L;
 
-        // when & then
-        IllegalArgumentException exception = assertThrows(
-                IllegalArgumentException.class,
-                () -> helperFacadeService.getHelperDetailByUserId(invalidUserId)
+        HelperSimpleResponse helperSimple = HelperSimpleResponse.builder()
+                .authId(userId)
+                .helperProfileId(10L)
+                .name("홍길동")
+                .age(30)
+                .gender(null)
+                .shortBio("따뜻한 도우미")
+                .contact("010-0000-0000")
+                .strengthList(List.of("친절함"))
+                .certificateList(List.of("자격증1"))
+                .imageUrl("https://example.com/profile.jpg")
+                .build();
+
+        ReviewStatResponse reviewStat = new ReviewStatResponse(13L, 89, 11, 0);
+        List<PositiveFeedbackStatResponse> feedbackStats = List.of(
+                new PositiveFeedbackStatResponse("친절함", 3L),
+                new PositiveFeedbackStatResponse("시간엄수", 2L)
+        );
+        List<ReviewSimpleResponse> latestReviews = List.of(
+                new ReviewSimpleResponse(1L, SatisfactionLevel.GOOD, "좋았어요", LocalDateTime.now().minusDays(30)),
+                new ReviewSimpleResponse(2L, SatisfactionLevel.AVERAGE, "무난했어요", LocalDateTime.now().minusDays(15))
         );
 
-        assertEquals("해당 도우미를 찾을 수 없습니다.", exception.getMessage());
+        given(helperService.getHelperSimpleByHelperProfileId(userId)).willReturn(helperSimple);
+        given(escortService.getCountByHelperUserId(userId)).willReturn(3L);
+        given(reviewService.getReviewStatByUserId(userId)).willReturn(reviewStat);
+        given(positiveFeedbackChoiceService.getPositiveFeedbackStatByHelperUserId(userId)).willReturn(feedbackStats);
+        given(reviewService.getLatestReviewsByHelperUserId(userId)).willReturn(latestReviews);
+
+        // when
+        HelperDetailResponse result = helperFacadeService.getHelperDetailByUserId(userId);
+
+        // then
+        assertThat(result.getHelperSimple()).isEqualTo(helperSimple);
+        assertThat(result.getEscortCount()).isEqualTo(3L);
+        assertThat(result.getReviewStat()).isEqualTo(reviewStat);
+        assertThat(result.getPositiveFeedbackStatList()).hasSize(2);
+        assertThat(result.getLatestReviewList()).hasSize(2);
     }
 }

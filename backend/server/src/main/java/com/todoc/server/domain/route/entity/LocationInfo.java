@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.SQLRestriction;
 
 import java.math.BigDecimal;
 
@@ -13,6 +14,7 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @NoArgsConstructor
+@SQLRestriction("deleted_at is NULL")
 public class LocationInfo extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -81,7 +83,7 @@ public class LocationInfo extends BaseEntity {
         StringBuilder sb = new StringBuilder().append(upperAddrName);
 
         if (middleAddrName != null && !middleAddrName.isBlank()) {
-            sb.append(middleAddrName).append(" ");
+            sb.append(" ").append(middleAddrName).append(" ");
         }
 
         if (roadName != null && !roadName.isBlank()) {
@@ -108,7 +110,7 @@ public class LocationInfo extends BaseEntity {
         StringBuilder sb = new StringBuilder().append(upperAddrName);
 
         if (middleAddrName != null && !middleAddrName.isBlank()) {
-            sb.append(middleAddrName).append(" ");
+            sb.append(" ").append(middleAddrName).append(" ");
         }
 
         if (lowerAddrName != null && !lowerAddrName.isBlank()) {

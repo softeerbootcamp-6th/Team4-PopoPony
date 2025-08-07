@@ -12,9 +12,11 @@ import java.util.List;
 @Schema(description = "도우미 정보 요약본 응답 DTO")
 public class HelperSimpleResponse {
 
-    @NotNull
-    @Schema(description = "도우미 ID")
-    private Long helperId;
+    @Schema(description = "도우미 Auth ID")
+    private Long authId;
+
+    @Schema(description = "도우미 프로필 ID")
+    private Long helperProfileId;
 
     @NotNull
     @Schema(description = "프로필 이미지 URL")
@@ -32,6 +34,13 @@ public class HelperSimpleResponse {
     @Schema(description = "나이")
     private Integer age;
 
+    @Schema(description = "한 줄 소개")
+    private String shortBio;
+
+    @NotNull
+    @Schema(description = "연락처")
+    private String contact;
+
     @NotNull
     @Schema(description = "자격증 목록")
     private List<String> certificateList;
@@ -41,13 +50,16 @@ public class HelperSimpleResponse {
     private List<String> strengthList;
 
     @Builder
-    public HelperSimpleResponse(Long helperId, String imageUrl, String name, Gender gender, Integer age,
-                                List<String> certificateList, List<String> strengthList) {
-        this.helperId = helperId;
+    public HelperSimpleResponse(Long authId, Long helperProfileId, String imageUrl, String name, Gender gender, Integer age,
+                                String shortBio, String contact, List<String> certificateList, List<String> strengthList) {
+        this.authId = authId;
+        this.helperProfileId = helperProfileId;
         this.imageUrl = imageUrl;
         this.name = name;
         this.gender = gender;
         this.age = age;
+        this.shortBio = shortBio;
+        this.contact = contact;
         this.certificateList = certificateList;
         this.strengthList = strengthList;
     }

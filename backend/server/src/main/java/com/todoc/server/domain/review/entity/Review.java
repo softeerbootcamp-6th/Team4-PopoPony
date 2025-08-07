@@ -5,12 +5,17 @@ import com.todoc.server.common.entity.BaseEntity;
 import com.todoc.server.domain.auth.entity.Auth;
 import com.todoc.server.domain.escort.entity.Recruit;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.SQLRestriction;
 
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
+@SQLRestriction("deleted_at is NULL")
 public class Review extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,4 +42,14 @@ public class Review extends BaseEntity {
 
     @Column(name = "short_comment")
     private String shortComment;
+
+    @Builder
+    public Review(Recruit recruit, Auth customer, Auth helper, SatisfactionLevel satisfactionLevel, String negativeFeedback, String shortComment) {
+        this.recruit = recruit;
+        this.customer = customer;
+        this.helper = helper;
+        this.satisfactionLevel = satisfactionLevel;
+        this.negativeFeedback = negativeFeedback;
+        this.shortComment = shortComment;
+    }
 }

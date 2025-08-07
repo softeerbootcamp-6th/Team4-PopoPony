@@ -1,5 +1,6 @@
 package com.todoc.server.domain.route.web.dto.response;
 
+import com.todoc.server.domain.route.entity.LocationInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
@@ -31,5 +32,14 @@ public class LocationInfoSimpleResponse {
         this.placeName = placeName;
         this.address = address;
         this.detailAddress = detailAddress;
+    }
+
+    public static LocationInfoSimpleResponse from(LocationInfo locationInfo) {
+        return LocationInfoSimpleResponse.builder()
+                .locationInfoId(locationInfo.getId())
+                .placeName(locationInfo.getPlaceName())
+                .address(locationInfo.getFullRoadAddress())
+                .detailAddress(locationInfo.getDetailAddress())
+                .build();
     }
 }
