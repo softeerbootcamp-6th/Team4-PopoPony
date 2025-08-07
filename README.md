@@ -7,23 +7,6 @@
 <br />
 <br />
 
-## 🧐 서비스 배경
-
-<img width="100%" alt="프로젝트 배경" src="https://github.com/user-attachments/assets/f89aab1c-9211-43a7-928d-f5684bae6af9" />
-<img width="100%" alt="문제 정의" src="https://github.com/user-attachments/assets/5c67ac6f-10ed-4982-8eb1-1a4ada8b7640" />
-
-## 💁 서비스 소개 및 주요 기능
-
-<img width="100%" alt="서비스 개요" src="https://github.com/user-attachments/assets/1f3a8cd2-d0de-41bf-b0a9-cb6bd761f0cd" />
-<img width="100%" alt="서비스 플로우" src="https://github.com/user-attachments/assets/2ffc9698-8143-4848-a102-02117b8bdffd" />
-
-## 🪧 서비스 로드맵
-
-<img width="100%" alt="단계별 로드맵" src="https://github.com/user-attachments/assets/da12145a-47ec-4a66-b5f2-5285149c3c12" />
-
-<br />
-<br />
-
 ## 👩🏻‍💻🧑🏻‍💻 토닥 Developers
 
 <br/>
@@ -70,6 +53,73 @@
 <br />
 <br />
 
+## 🧐 서비스 배경
+
+<img width="100%" alt="프로젝트 배경" src="https://github.com/user-attachments/assets/f89aab1c-9211-43a7-928d-f5684bae6af9" />
+<img width="100%" alt="문제 정의" src="https://github.com/user-attachments/assets/5c67ac6f-10ed-4982-8eb1-1a4ada8b7640" />
+
+## 💁 서비스 소개 및 주요 기능
+
+<img width="100%" alt="서비스 개요" src="https://github.com/user-attachments/assets/1f3a8cd2-d0de-41bf-b0a9-cb6bd761f0cd" />
+<img width="100%" alt="서비스 플로우" src="https://github.com/user-attachments/assets/2ffc9698-8143-4848-a102-02117b8bdffd" />
+
+## 🪧 서비스 로드맵
+
+<img width="100%" alt="단계별 로드맵" src="https://github.com/user-attachments/assets/da12145a-47ec-4a66-b5f2-5285149c3c12" />
+
+<br />
+<br />
+
+
+## 🧩 팀 포포포니 소개
+
+> 가장 친하고, 가장 잘하고, 가장 재밌는 팀 **'포포포니'** 입니다.
+> 
+> 함께 만들어가며, 함께 성장합니다.
+
+---
+
+### 🔹 컨벤션
+- 개발 전, [📎 컨벤션 문서](./wiki/코드-컨벤션) 를 확인해주세요.
+
+---
+
+### 🔹 코드 작성 & 리뷰 규칙
+- 모든 작업은 **Pull Request(PR)** 로 진행합니다.
+- 최소 1명 이상 리뷰 필수 → 24시간 내 피드백 💬
+- 스타일보다 **로직과 안정성 중심**의 리뷰
+
+---
+
+### 🔹 데일리 스크럼
+- ⏰ 평일 오전 10시 6분 / 주말 11시
+- ✏️ 빠르게 공유: 오늘 할 일 / 요청 사항 / 이슈
+- ❌ 불참 시, 누구든 파악할 수 있게 공유 남기기
+
+---
+
+### 🔹 협업 툴 사용법
+
+| Tool | 사용 목적 |
+|------|-----------|
+| 🧠 **Notion** | 회의록, 기획서, 데일리 등 문서화 |
+| 💬 **Slack** | 실시간 커뮤니케이션 & 일정 조율 |
+| 🐙 **GitHub** | 코드 관리 + 칸반 보드 + PR & 리뷰 관리 |
+
+---
+
+### 🔹 서로 바라는 점
+- 말을 많이 하자!
+- 의견은 과감하게 제시!
+- 모르면 모른다고, 알면 아는 만큼 공유
+- 항상 긍정적으로 개발하기 😊
+- 🍚 밥 땐 일 얘기 금지! → 일 얘기 할거면 밥값 내기
+
+<br />
+<br />
+
+
+
 ## 🛠️ 기술 스택
 
 <table width="100%">
@@ -107,3 +157,95 @@
   </tbody>
 </table>
 <br />
+<br />
+
+
+## 🗂️ 폴더구조
+
+<details>
+<summary > 백엔드 폴더 구조 보기 </summary>
+```
+```
+</details>
+
+
+<details>
+<summary > 프론트엔드 폴더 구조 보기 </summary>
+
+```
+frontend
+├── 📁 dist/
+├── 📁 node_modules/
+├── 📁 public/
+├── 📁 src/
+│   ├── 📁 assets/
+│   ├── 📁 features/
+│   │   ├── 📁 auth/
+│   │   │   ├── 📁 apis/
+│   │   │   ├── 📁 components/
+│   │   │   ├── 📁 hooks/
+│   │   │   ├── 📁 types/
+│   │   │   └── 📁 utils/
+│   │   ├── 📁 customer/
+│   │   ├── 📁 dashboard/
+│   │   └── 📁 helper/
+│   │
+│   ├── 📁 routes/
+│   │   ├── 📁 customer/
+│   │   ├── 📁 dashboard/
+│   │   ├── 📁 helper/
+│   │   ├── 📁 login/
+│   │   ├── __root.tsx
+│   │   └── index.tsx
+│   │
+│   ├── 📁 shared/
+│   │   ├── 📁 apis/
+│   │   ├── 📁 components/
+│   │   ├── 📁 hooks/
+│   │   ├── 📁 types/
+│   │   └── 📁 utils/
+│   │
+│   ├── main.tsx
+│   ├── routeTree.gen.ts
+│   ├── styles.css
+│   └── vite-env.d.ts
+│
+├── .cta.json
+├── .gitignore
+├── .prettierignore
+├── .prettierrc
+├── eslint.config.mjs
+├── index.html
+├── package.json
+├── pnpm-lock.yaml
+├── README.md
+├── tsconfig.json
+├── vercel.json
+└── vite.config.ts
+```
+
+</details>
+
+<br/>
+<br/>
+
+## 😵‍💫 포포포니 트러블슈팅
+
+
+| 제목            | 작성자 | 키워드 |
+| --------------- | ---- | ------ |
+| [트러블슈팅1]() |      |        |
+| [트러블슈팅2]() |      |        |
+| [트러블슈팅3]() |      |        |
+| [트러블슈팅4]() |      |        |
+
+> 더 많은 트러블은 [여기](./)에서 확인하세요! 🧯
+
+<br/>
+<br/>
+
+
+---
+
+📚 더 자세한 내용은 [팀 위키 문서](./wiki)를 참고해주세요.  
+컨벤션, 작업 전략, 도메인 정의, 문서 템플릿 등이 정리되어 있습니다.
