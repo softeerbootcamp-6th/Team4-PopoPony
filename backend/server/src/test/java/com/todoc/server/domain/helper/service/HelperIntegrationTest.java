@@ -44,6 +44,7 @@ public class HelperIntegrationTest {
         assertThat(response.getReviewStat().getGoodRate()).isEqualTo(100);
         assertThat(response.getPositiveFeedbackStatList().size()).isEqualTo(3);
         assertThat(response.getLatestReviewList().getFirst().getShortComment()).isEqualTo("말벗도 되어주셔서 감사했어요.");
+        assertThat(response.getLatestReviewList().getFirst().getSatisfactionLevel()).isEqualTo("좋았어요");
         assertThat(response.getEscortCount()).isEqualTo(2);
     }
 
