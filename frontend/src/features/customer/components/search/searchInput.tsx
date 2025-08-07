@@ -54,8 +54,8 @@ const SearchInput: React.FC<SearchInputProps> = ({
           disabled
             ? 'bg-background-disabled border-stroke-neutral-light cursor-not-allowed'
             : isFocused
-              ? 'border-stroke-neutral-dark bg-background-default-white'
-              : 'border-stroke-neutral-dark bg-background-default-white hover:border-stroke-neutral-dark'
+              ? 'border-neutral-80'
+              : 'border-stroke-neutral-dark'
         } `}>
         <input
           type='text'
