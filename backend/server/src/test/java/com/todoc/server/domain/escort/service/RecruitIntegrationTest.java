@@ -134,7 +134,7 @@ public class RecruitIntegrationTest {
 
         // then
         List<Recruit> all = recruitService.getAllRecruits();
-        int afterCount = recruitService.getAllRecruits().size();
+        int afterCount = all.size();
         assertThat(afterCount - beforeCount).isEqualTo(1);
 
         Recruit created = all.getLast();

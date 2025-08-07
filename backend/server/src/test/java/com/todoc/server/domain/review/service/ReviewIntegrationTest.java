@@ -87,6 +87,7 @@ public class ReviewIntegrationTest {
     void createReview_정상() {
 
         // given
+        int beforeCount = reviewService.getAllReviews().size();
         ReviewCreateRequest request = createSampleRequest();
 
         // when
@@ -94,7 +95,8 @@ public class ReviewIntegrationTest {
 
         // then
         List<Review> all = reviewService.getAllReviews();
-        assertThat(all.size()).isEqualTo(8);
+        int afterCount = all.size();
+        assertThat(afterCount - beforeCount).isEqualTo(1);
 
         Review created = all.getLast();
         assertThat(created.getShortComment()).isEqualTo("너무 감사드립니다!");
