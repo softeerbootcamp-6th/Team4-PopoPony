@@ -10,7 +10,7 @@ const PageLayout = ({ children }: PageLayoutProps) => {
   return (
     <div
       id='page-layout-container'
-      className='bg-background-default-white relative flex h-[100dvh] min-h-[100dvh] w-full max-w-[500px] min-w-[375px] flex-col'>
+      className='bg-background-default-white shadow-page relative flex h-[100dvh] min-h-[100dvh] w-full max-w-[500px] min-w-[375px] flex-col'>
       {children}
     </div>
   );
