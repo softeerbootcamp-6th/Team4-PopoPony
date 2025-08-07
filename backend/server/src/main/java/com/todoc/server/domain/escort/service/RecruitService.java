@@ -99,7 +99,6 @@ public class RecruitService {
                 .orElseThrow(RecruitNotFoundException::new);
     }
 
-    @Transactional
     public void cancelRecruit(Long recruitId) {
         Recruit recruit = recruitJpaRepository.findById(recruitId)
                 .orElseThrow(RecruitNotFoundException::new);
@@ -195,5 +194,9 @@ public class RecruitService {
 
     public List<Recruit> getAllRecruits() {
         return recruitJpaRepository.findAll();
+    }
+
+    public boolean existsById(Long recruitId) {
+        return recruitJpaRepository.existsById(recruitId);
     }
 }
