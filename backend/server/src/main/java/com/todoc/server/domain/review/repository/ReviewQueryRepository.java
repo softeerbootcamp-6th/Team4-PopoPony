@@ -45,7 +45,7 @@ public class ReviewQueryRepository {
                 .select(Projections.constructor(
                         ReviewSimpleResponse.class,
                         review.id,
-                        review.satisfactionLevel,
+                        review.satisfactionLevel.stringValue(),
                         review.shortComment,
                         review.createdAt
                 ))
@@ -65,7 +65,7 @@ public class ReviewQueryRepository {
                 .select(Projections.constructor(
                         ReviewSimpleResponse.class,
                         review.id,
-                        review.satisfactionLevel,
+                        review.satisfactionLevel.stringValue(),
                         review.shortComment,
                         review.createdAt
                 ))
