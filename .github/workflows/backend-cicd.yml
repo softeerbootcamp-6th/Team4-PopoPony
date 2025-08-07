@@ -7,6 +7,12 @@ on:
     paths:
       - "backend/**"
 
+env:
+  SPRING_PROFILE: prod
+  DB_URL: ${{ secrets.DB_URL }}
+  DB_USERNAME: ${{ secrets.DB_USERNAME }}
+  DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+
 jobs:
   deploy:
     runs-on: ubuntu-latest

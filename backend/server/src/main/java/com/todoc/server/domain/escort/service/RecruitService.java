@@ -1,15 +1,25 @@
 package com.todoc.server.domain.escort.service;
 
 import com.todoc.server.common.enumeration.RecruitStatus;
+import com.todoc.server.domain.customer.entity.Patient;
+import com.todoc.server.domain.customer.exception.PatientNotFoundException;
+import com.todoc.server.domain.customer.web.dto.response.PatientSimpleResponse;
 import com.todoc.server.domain.escort.entity.Recruit;
+import com.todoc.server.domain.escort.exception.RecruitInvalidCancelException;
+import com.todoc.server.domain.escort.exception.RecruitNotFoundException;
 import com.todoc.server.domain.escort.repository.RecruitJpaRepository;
 import com.todoc.server.domain.escort.repository.RecruitQueryRepository;
 import com.todoc.server.domain.escort.web.dto.request.RecruitCreateRequest;
+import com.todoc.server.domain.escort.web.dto.response.RecruitDetailResponse;
 import com.todoc.server.domain.escort.web.dto.response.RecruitListResponse;
 import com.todoc.server.domain.escort.web.dto.response.RecruitSimpleResponse;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+
+import com.todoc.server.domain.route.entity.Route;
+import com.todoc.server.domain.route.exception.RouteNotFoundException;
+import com.todoc.server.domain.route.web.dto.response.RouteSimpleResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -80,5 +90,67 @@ public class RecruitService {
                 .build();
 
         return recruitJpaRepository.save(recruit);
+    }
+
+    public Recruit getRecruitById(Long recruitId) {
+        return recruitJpaRepository.findById(recruitId)
+                .orElseThrow(RecruitNotFoundException::new);
+    }
+
+    @Transactional
+    public void cancelRecruit(Long recruitId) {
+        Recruit recruit = recruitJpaRepository.findById(recruitId)
+                .orElseThrow(RecruitNotFoundException::new);
+
+        // 매칭 완료된 동행 신청에 대한 예외 처리
+        if (recruit.getStatus() != RecruitStatus.MATCHING) {
+            throw new RecruitInvalidCancelException();
+        }
+
+        // soft delete
+        recruit.softDelete();
+    }
+
+    /**
+     * recruitId에 해당하는 동행 신청에 대한 상세 정보를 조회하는 함수
+     *
+     * @param recruitId 동행 신청의 ID
+     * @return 동행 신청 상세 정보 DTO(RecruitDetailResponse)
+     */
+    @Transactional(readOnly = true)
+    public RecruitDetailResponse getRecruitDetailByRecruitId(Long recruitId) {
+
+        // 1. 데이터 조회 (Recruit + Patient + Route)
+        Recruit recruit = recruitQueryRepository.getRecruitWithPatientAndRouteByRecruitId(recruitId);
+        if (recruit == null) {
+            throw new RecruitNotFoundException();
+        }
+
+        // 2. Patient → PatientSimpleResponse
+        Patient patient = recruit.getPatient();
+        if (patient == null) {
+            throw new PatientNotFoundException();
+        }
+        PatientSimpleResponse patientResponse = PatientSimpleResponse.from(patient);
+
+        // 3. Route → RouteSimpleResponse
+        Route route = recruit.getRoute();
+        if (route == null) {
+            throw new RouteNotFoundException();
+        }
+        RouteSimpleResponse routeResponse = RouteSimpleResponse.from(route);
+
+        // 4. Recruit → RecruitDetailResponse
+        return RecruitDetailResponse.builder()
+                .recruitId(recruit.getId())
+                .status(recruit.getStatus())
+                .escortDate(recruit.getEscortDate())
+                .estimatedMeetingTime(recruit.getEstimatedMeetingTime())
+                .estimatedReturnTime(recruit.getEstimatedReturnTime())
+                .route(routeResponse)
+                .patient(patientResponse)
+                .purpose(recruit.getPurpose())
+                .extraRequest(recruit.getExtraRequest())
+                .build();
     }
 }

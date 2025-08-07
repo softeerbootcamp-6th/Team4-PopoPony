@@ -9,7 +9,7 @@ import com.todoc.server.domain.route.entity.LocationInfo;
 import com.todoc.server.domain.route.entity.Route;
 import com.todoc.server.domain.route.service.LocationInfoService;
 import com.todoc.server.domain.route.service.RouteService;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
