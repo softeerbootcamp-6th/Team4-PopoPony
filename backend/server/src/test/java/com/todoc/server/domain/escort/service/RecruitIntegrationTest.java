@@ -134,10 +134,11 @@ public class RecruitIntegrationTest {
         List<Recruit> all = recruitService.getAllRecruits();
         assertThat(all.size()).isEqualTo(11);
 
-        Recruit created = all.get(all.size() - 1);
+        Recruit created = all.getLast();
         assertThat(created.getPatient()).isNotNull();
+        assertThat(created.getPatient().getName()).isEqualTo("홍길동");
         assertThat(created.getRoute()).isNotNull();
-        assertThat(created.getRoute().getMeetingLocationInfo()).isNotNull();
+        assertThat(created.getRoute().getMeetingLocationInfo().getPlaceName()).isEqualTo("강서병원");
     }
 
     @Test
