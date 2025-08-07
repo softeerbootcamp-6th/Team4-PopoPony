@@ -25,7 +25,7 @@ const ReportTab = () => {
         <PaymentFailedCard />
       </Tabs.TabsContentSection>
       <Tabs.TabsDivider />
-      <Tabs.TabsContentSection gap='3.6rem'>
+      <Tabs.TabsContentSection gap='gap-[3.6rem]'>
         {/* 동행 리포트 */}
         <div>
           <h3 className='subtitle-18-bold text-text-neutral-primary'>동행 리포트</h3>

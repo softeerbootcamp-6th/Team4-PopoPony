@@ -47,7 +47,7 @@ const DetailTab = () => {
       <Tabs.TabsDivider />
 
       {/* 환자 상태 */}
-      <Tabs.TabsContentSection gap='2.4rem'>
+      <Tabs.TabsContentSection gap='gap-[2.4rem]'>
         <div>
           <h3 className='subtitle-18-bold text-text-neutral-primary'>환자 상태</h3>
           <div className='mt-[1.2rem] flex flex-col gap-[2rem]'>
