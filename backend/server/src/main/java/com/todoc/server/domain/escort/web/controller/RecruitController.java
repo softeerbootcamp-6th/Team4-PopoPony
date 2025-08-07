@@ -111,7 +111,7 @@ public class RecruitController {
                 .imageUrl("https://example.com/images/sample.jpg")
                 .name("김토닥")
                 .age(80)
-                .gender(Gender.MALE)
+                .gender("남자")
                 .needsHelping(true)
                 .usesWheelchair(true)
                 .hasCognitiveIssue(true)

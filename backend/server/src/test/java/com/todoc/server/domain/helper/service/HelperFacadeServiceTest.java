@@ -1,7 +1,5 @@
 package com.todoc.server.domain.helper.service;
 
-import com.todoc.server.common.enumeration.Gender;
-import com.todoc.server.common.enumeration.SatisfactionLevel;
 import com.todoc.server.domain.escort.service.EscortService;
 import com.todoc.server.domain.helper.web.dto.response.HelperDetailResponse;
 import com.todoc.server.domain.helper.web.dto.response.HelperSimpleResponse;
@@ -11,7 +9,6 @@ import com.todoc.server.domain.review.web.dto.response.PositiveFeedbackStatRespo
 import com.todoc.server.domain.review.web.dto.response.ReviewSimpleResponse;
 import com.todoc.server.domain.review.web.dto.response.ReviewStatResponse;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -43,17 +40,18 @@ class HelperFacadeServiceTest {
     @InjectMocks
     private HelperFacadeService helperFacadeService;
 
-    private final Long helperProfileId = 1L;
-    private final Long authId = 10L;
+    @Test
+    void getHelperDetailByHelperProfileId_정상작동_검증() {
+        // given
+        Long helperProfileId = 1L;
+        Long authId = 10L;
 
-    @BeforeEach
-    void setUp() {
         when(helperService.getHelperSimpleByHelperProfileId(helperProfileId))
                 .thenReturn(HelperSimpleResponse.builder()
                         .helperProfileId(helperProfileId)
                         .name("홍길동")
                         .age(30)
-                        .gender(Gender.MALE)
+                        .gender("남자")
                         .build());
 
         when(helperService.getAuthIdByHelperProfileId(helperProfileId))
@@ -81,15 +79,12 @@ class HelperFacadeServiceTest {
         when(reviewService.getLatestReviewsByHelperUserId(authId))
                 .thenReturn(List.of(
                         ReviewSimpleResponse.builder()
-                                .satisfactionLevel(SatisfactionLevel.GOOD)
-                                .shortComment("좋았어요")
+                                .satisfactionLevel("좋았어요")
+                                .shortComment("정말 좋았습니다!!!")
                                 .createdAt(LocalDateTime.now().minusDays(1))
                                 .build()
                 ));
-    }
 
-    @Test
-    void getHelperDetailByHelperProfileId_정상작동_검증() {
         // when
         HelperDetailResponse response = helperFacadeService.getHelperDetailByHelperProfileId(helperProfileId);
 

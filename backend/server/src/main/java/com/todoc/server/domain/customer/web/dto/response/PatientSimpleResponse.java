@@ -28,8 +28,8 @@ public class PatientSimpleResponse {
     private String name;
 
     @NotNull
-    @Schema(description = "성별", allowableValues = {"MALE", "FEMALE"})
-    private Gender gender;
+    @Schema(description = "성별", allowableValues = {"남자", "여자"})
+    private String gender;
 
     @NotNull
     @Schema(description = "나이")
@@ -58,7 +58,7 @@ public class PatientSimpleResponse {
     private String communicationIssueDetail;
 
     @Builder
-    public PatientSimpleResponse(Long patientId, String imageUrl, String name, Gender gender, Integer age,
+    public PatientSimpleResponse(Long patientId, String imageUrl, String name, String gender, Integer age,
                                  Boolean needsHelping, Boolean usesWheelchair, Boolean hasCognitiveIssue, List<String> cognitiveIssueDetail,
                                  Boolean hasCommunicationIssue, String communicationIssueDetail) {
         this.patientId = patientId;
@@ -80,11 +80,14 @@ public class PatientSimpleResponse {
             cognitiveIssueDetail = JsonUtils.fromJson(patient.getCognitiveIssueDetail(), new TypeReference<>() {});
         }
 
+        // 성별 Enum에서 문자열로 변환
+        String gender = patient.getGender().getLabel();
+
         return PatientSimpleResponse.builder()
                 .patientId(patient.getId())
                 .imageUrl(patient.getImageUrl())
                 .name(patient.getName())
-                .gender(patient.getGender())
+                .gender(gender)
                 .age(patient.getAge())
                 .needsHelping(patient.getNeedsHelping())
                 .usesWheelchair(patient.getUsesWheelchair())

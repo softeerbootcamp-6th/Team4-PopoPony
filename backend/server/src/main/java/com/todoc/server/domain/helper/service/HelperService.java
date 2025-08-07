@@ -82,7 +82,7 @@ public class HelperService {
                 .helperProfileId(helperProfileId)
                 .imageUrl(imageUrl)
                 .name(name)
-                .gender(gender)
+                .gender(gender.getLabel())
                 .age(age)
                 .shortBio(shortBio)
                 .contact(contact)
