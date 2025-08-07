@@ -9,7 +9,7 @@ const DetailTab = () => {
   return (
     <>
       {/* 환자 및 동행 정보 */}
-      <Tabs.TabsCotentSection>
+      <Tabs.TabsContentSection>
         <div className='flex-start gap-[1.2rem]'>
           <img
             src='/images/default-profile.svg'
@@ -43,11 +43,11 @@ const DetailTab = () => {
           </div>
         </div>
         <RouteButton />
-      </Tabs.TabsCotentSection>
+      </Tabs.TabsContentSection>
       <Tabs.TabsDivider />
 
       {/* 환자 상태 */}
-      <Tabs.TabsCotentSection gap='2.4rem'>
+      <Tabs.TabsContentSection gap='2.4rem'>
         <div className='flex flex-col gap-[1.6rem]'>
           <h3 className='subtitle-18-bold text-text-neutral-primary'>환자 상태</h3>
           <div className='flex flex-col gap-[2rem]'>
@@ -117,7 +117,7 @@ const DetailTab = () => {
             <Modal.CloseButton onClick={closeModal}>돌아가기</Modal.CloseButton>
           </Modal.ButtonContainer>
         </Modal>
-      </Tabs.TabsCotentSection>
+      </Tabs.TabsContentSection>
     </>
   );
 };

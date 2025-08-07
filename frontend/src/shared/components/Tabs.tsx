@@ -57,7 +57,7 @@ const TabsContent = ({
   );
 };
 
-const TabsCotentSection = ({
+const TabsContentSection = ({
   children,
   gap = '1.6rem',
 }: {
@@ -74,7 +74,7 @@ const TabsDivider = () => {
 Tabs.TabsList = TabsList;
 Tabs.TabsTrigger = TabsTrigger;
 Tabs.TabsContent = TabsContent;
-Tabs.TabsCotentSection = TabsCotentSection;
+Tabs.TabsContentSection = TabsContentSection;
 Tabs.TabsDivider = TabsDivider;
 
 export default Tabs;

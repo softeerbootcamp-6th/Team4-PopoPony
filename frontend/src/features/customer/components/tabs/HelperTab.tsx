@@ -3,7 +3,7 @@ import { HelperCard, HelperEmptyCard, HelperSelectInfoCard } from '@customer/com
 
 const HelperTab = () => {
   return (
-    <Tabs.TabsCotentSection>
+    <Tabs.TabsContentSection>
       <HelperSelectInfoCard />
       <HelperEmptyCard />
       <HelperCard
@@ -42,7 +42,7 @@ const HelperTab = () => {
         }}
         onClick={(id) => console.log('헬퍼 카드 클릭:', id)}
       />
-    </Tabs.TabsCotentSection>
+    </Tabs.TabsContentSection>
   );
 };
 
