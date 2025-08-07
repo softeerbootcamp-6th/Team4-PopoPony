@@ -3,7 +3,7 @@ import { IcAlertCircle } from '@icons';
 const HelperSelectInfoCard = () => {
   return (
     <div className='bg-neutral-10 flex flex-col gap-[1rem] rounded-[0.8rem] p-[1.2rem]'>
-      <div className='flex-start gap-[0.8rem]'>
+      <div className='flex-start gap-[0.4rem]'>
         <IcAlertCircle />
         <span className='label2-14-bold text-text-neutral-secondary'>도우미를 선택해주세요.</span>
       </div>
