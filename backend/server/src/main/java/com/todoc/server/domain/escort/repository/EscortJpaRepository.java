@@ -6,4 +6,5 @@
     public interface EscortJpaRepository extends JpaRepository<Escort, String> {
         // helperId(도우미의 userId)로 개수 카운트
         Long countByHelperId(Long helperId);
+        Escort findByRecruitId(Long recruitId);
     }
