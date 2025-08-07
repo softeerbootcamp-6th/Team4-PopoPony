@@ -10,6 +10,7 @@ import IcCalendar from './calendar.svg?react';
 import IcCamera from './camera.svg?react';
 import IcCameraFill from './camera-fill.svg?react';
 import IcCheck from './check.svg?react';
+import IcCheckBox from './checkbox.svg?react';
 import IcCheckCircle from './check-circle.svg?react';
 import IcChevronDoubleLeft from './chevron-double-left.svg?react';
 import IcChevronDown from './chevron-down.svg?react';
@@ -80,6 +81,7 @@ export {
   IcCamera,
   IcCameraFill,
   IcCheck,
+  IcCheckBox,
   IcCheckCircle,
   IcChevronDoubleLeft,
   IcChevronDown,

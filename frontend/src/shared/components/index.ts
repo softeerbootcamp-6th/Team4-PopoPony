@@ -15,6 +15,10 @@ import StrengthTag from './StrengthTag';
 import Modal from './modal/Modal';
 import BottomSheet from './modal/BottomSheet';
 import PhotoUpload from './form/PhotoUpload';
+import ProgressIndicator from './ProgressIndicator';
+import Checkbox from './Checkbox';
+import ShowMapButton from './ShowMapButton';
+import Divider from './Divider';
 
 export {
   Button,
@@ -34,4 +38,8 @@ export {
   Modal,
   BottomSheet,
   PhotoUpload,
+  ProgressIndicator,
+  Checkbox,
+  ShowMapButton,
+  Divider,
 };

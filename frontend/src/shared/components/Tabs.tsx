@@ -18,7 +18,7 @@ const TabsList = ({ className, ...props }: React.ComponentProps<typeof TabsPrimi
     <TabsPrimitive.List
       data-slot='tabs-list'
       className={cn(
-        'bg-background-default-white text-neutral-assistive flex-center sticky top-0 z-10 rounded-lg',
+        'bg-background-default-white text-neutral-assistive flex-center sticky top-0 z-20 rounded-lg',
         className
       )}
       {...props}
@@ -57,8 +57,24 @@ const TabsContent = ({
   );
 };
 
+const TabsCotentSection = ({
+  children,
+  gap = '1.6rem',
+}: {
+  children: React.ReactNode;
+  gap?: string;
+}) => {
+  return <div className={cn('flex flex-col p-[2rem]', `gap-[${gap}]`)}>{children}</div>;
+};
+
+const TabsDivider = () => {
+  return <div className='bg-stroke-neutral-light h-[6px] w-full' />;
+};
+
 Tabs.TabsList = TabsList;
 Tabs.TabsTrigger = TabsTrigger;
 Tabs.TabsContent = TabsContent;
+Tabs.TabsCotentSection = TabsCotentSection;
+Tabs.TabsDivider = TabsDivider;
 
 export default Tabs;
