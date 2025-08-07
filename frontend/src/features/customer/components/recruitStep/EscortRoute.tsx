@@ -1,4 +1,4 @@
-import { useState, memo } from 'react';
+import { useState, memo, useEffect } from 'react';
 import type { RecruitStepProps } from '@customer/types';
 import { useNavigate } from '@tanstack/react-router';
 import { FormLayout } from '@layouts';
@@ -27,14 +27,40 @@ const routeFormSchema = z.object({
   meetingLocationDetail: locationDetailSchema,
   destinationDetail: locationDetailSchema,
   returnLocationDetail: locationDetailSchema,
+  isMeetingLocationSameAsDestination: z.boolean(),
 });
 
 const EscortRoute = memo(({ handleNextStep, handleBackStep }: RecruitStepProps) => {
   const { setValue } = useFormContext();
   const navigate = useNavigate();
-  const [isSameLocation, setIsSameLocation] = useState(false);
   const { values, fieldErrors, isFormValid, markFieldAsTouched } =
     useFormValidation(routeFormSchema);
+
+  useEffect(() => {
+    if (values.meetingLocationDetail && values.returnLocationDetail) {
+      const isSame =
+        values.meetingLocationDetail.placeName === values.returnLocationDetail.placeName &&
+        values.meetingLocationDetail.upperAddrName === values.returnLocationDetail.upperAddrName &&
+        values.meetingLocationDetail.middleAddrName ===
+          values.returnLocationDetail.middleAddrName &&
+        values.meetingLocationDetail.lowerAddrName === values.returnLocationDetail.lowerAddrName &&
+        values.meetingLocationDetail.firstAddrNo === values.returnLocationDetail.firstAddrNo &&
+        values.meetingLocationDetail.secondAddrNo === values.returnLocationDetail.secondAddrNo &&
+        values.meetingLocationDetail.roadName === values.returnLocationDetail.roadName &&
+        values.meetingLocationDetail.firstBuildingNo ===
+          values.returnLocationDetail.firstBuildingNo &&
+        values.meetingLocationDetail.detailAddress === values.returnLocationDetail.detailAddress;
+
+      if (isSame !== values.isMeetingLocationSameAsDestination) {
+        setValue('isMeetingLocationSameAsDestination', isSame);
+      }
+    }
+  }, [
+    values.meetingLocationDetail,
+    values.returnLocationDetail,
+    values.isMeetingLocationSameAsDestination,
+    setValue,
+  ]);
 
   const handleNavigate = (place: string) => {
     navigate({
@@ -54,7 +80,7 @@ const EscortRoute = memo(({ handleNextStep, handleBackStep }: RecruitStepProps) 
     return false;
   };
   const handleSameLocationChange = (checked: boolean) => {
-    setIsSameLocation(checked);
+    setValue('isMeetingLocationSameAsDestination', checked);
 
     if (checked && values.meetingLocationDetail) {
       // meetingLocationDetail의 모든 정보를 returnLocationDetail에 복사
@@ -161,8 +187,8 @@ const EscortRoute = memo(({ handleNextStep, handleBackStep }: RecruitStepProps) 
           <Checkbox
             label='만남 장소와 복귀 장소가 동일해요.'
             disabled={!handleCheckboxAble()}
-            checked={isSameLocation}
-            onChange={() => handleSameLocationChange(!isSameLocation)}
+            checked={values.isMeetingLocationSameAsDestination || false}
+            onChange={() => handleSameLocationChange(!values.isMeetingLocationSameAsDestination)}
           />
         </div>
       </FormLayout.Content>

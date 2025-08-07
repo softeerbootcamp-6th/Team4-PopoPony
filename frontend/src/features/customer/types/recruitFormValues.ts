@@ -46,6 +46,7 @@ export interface RouteFormValues {
   meetingLocationDetail: LocationDetail;
   destinationDetail: LocationDetail;
   returnLocationDetail: LocationDetail;
+  isMeetingLocationSameAsDestination: boolean;
 }
 
 export interface RequestFormValues {
