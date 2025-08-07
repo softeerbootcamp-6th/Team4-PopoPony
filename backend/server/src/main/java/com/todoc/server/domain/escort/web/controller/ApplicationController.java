@@ -37,12 +37,11 @@ public class ApplicationController {
 //        return Response.from(applicationFacadeService.getApplicationListByRecruitId(recruitId));
 
         HelperSimpleResponse helper = HelperSimpleResponse.builder()
-                .authId(1L)
                 .helperProfileId(1L)
                 .imageUrl("https://example.com/images/sample.jpg")
                 .name("최솔희")
                 .age(39)
-                .gender(Gender.FEMALE)
+                .gender("여자")
                 .shortBio("부모님처럼 모시겠습니다.")
                 .contact("010-1234-5678")
                 .certificateList(new ArrayList<>(List.of("간호사", "간호조무사", "요양보호사")))

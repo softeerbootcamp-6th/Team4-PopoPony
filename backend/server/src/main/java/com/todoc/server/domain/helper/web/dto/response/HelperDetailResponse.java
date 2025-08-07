@@ -4,6 +4,7 @@ import com.todoc.server.domain.review.web.dto.response.PositiveFeedbackStatRespo
 import com.todoc.server.domain.review.web.dto.response.ReviewSimpleResponse;
 import com.todoc.server.domain.review.web.dto.response.ReviewStatResponse;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -13,18 +14,23 @@ import java.util.List;
 @Schema(description = "도우미 상세 정보 응답 DTO")
 public class HelperDetailResponse {
 
+    @NotNull
     @Schema(description = "도우미 요약 정보")
     private HelperSimpleResponse helperSimple;
 
+    @NotNull
     @Schema(description = "총 동행자 수")
     private Long escortCount;
 
+    @NotNull
     @Schema(description = "도우미 리뷰 통계")
     private ReviewStatResponse reviewStat;
 
+    @NotNull
     @Schema(description = "후기 키워드 통계 목록")
     private List<PositiveFeedbackStatResponse> positiveFeedbackStatList;
 
+    @NotNull
     @Schema(description = "최신 후기 리스트")
     private List<ReviewSimpleResponse> latestReviewList;
 

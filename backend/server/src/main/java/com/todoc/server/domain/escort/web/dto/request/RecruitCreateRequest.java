@@ -1,6 +1,5 @@
 package com.todoc.server.domain.escort.web.dto.request;
 
-import com.todoc.server.common.enumeration.Gender;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 
@@ -35,8 +34,8 @@ public class RecruitCreateRequest {
         @Schema(description = "환자 나이", example = "81")
         private Integer age;
 
-        @Schema(description = "환자 성별", example = "GENDER.MALE")
-        private Gender gender;
+        @Schema(description = "환자 성별", example = "남자")
+        private String gender;
 
         @Schema(description = "환자 연락처", example = "010-1234-5678")
         private String phoneNumber;

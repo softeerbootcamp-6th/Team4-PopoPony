@@ -1,7 +1,8 @@
 package com.todoc.server.domain.customer.service;
 
-import com.todoc.server.domain.auth.entity.Auth;
+import com.todoc.server.common.enumeration.Gender;
 import com.todoc.server.domain.customer.entity.Patient;
+import com.todoc.server.domain.customer.exception.PatientGenderInvalidException;
 import com.todoc.server.domain.customer.repository.PatientRepository;
 import com.todoc.server.domain.escort.web.dto.request.RecruitCreateRequest;
 import lombok.RequiredArgsConstructor;
@@ -20,13 +21,15 @@ public class PatientService {
     // 예시 메서드
     public Patient register(RecruitCreateRequest.PatientDetail patientDetail) {
 
+        Gender gender = Gender.from(patientDetail.getGender()).orElseThrow(PatientGenderInvalidException::new);
+
         // 환자 정보를 Patient 엔티티로 변환하고 저장
         Patient patient = Patient.builder()
                 .latestLocation(null)
                 .name(patientDetail.getName())
                 .imageUrl(null)
                 .age(patientDetail.getAge())
-                .gender(patientDetail.getGender())
+                .gender(gender)
                 .contact(patientDetail.getPhoneNumber())
                 .needsHelping(patientDetail.isNeedsHelping())
                 .usesWheelchair(patientDetail.isUsesWheelchair())
