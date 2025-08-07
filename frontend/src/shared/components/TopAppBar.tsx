@@ -23,12 +23,11 @@ const TopAppBar = ({
     router.history.back();
   };
 
-  const backgroundClass = background
-    ? 'bg-[var(--color-background-default-white)]'
-    : 'bg-transparent';
+  const backgroundClass = background ? 'bg-background-default-white' : 'bg-transparent';
 
   return (
-    <header className={`flex-between h-[5.6rem] w-full px-[2rem] ${backgroundClass} ${className}`}>
+    <header
+      className={`flex-between z-20 h-[5.6rem] w-full px-[2rem] ${backgroundClass} ${className}`}>
       <div className='flex-start h-[4rem] w-[4rem]'>
         {showBack && (
           <button
