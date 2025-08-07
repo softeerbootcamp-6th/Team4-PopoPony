@@ -16,20 +16,12 @@ const SearchButton = ({ text, onClick, ...props }: SearchButtonProps) => {
       {...props}>
       <div className='relative box-border flex w-full shrink-0 flex-row content-stretch items-center justify-between p-0'>
         <div
-          className={`font-pretendard relative shrink-0 text-left leading-[0] tracking-[-0.032rem] text-nowrap not-italic ${
+          className={`relative shrink-0 text-left text-nowrap ${
             text ? 'text-neutral-90' : 'text-neutral-50'
           }`}>
-          <p className='adjustLetterSpacing block text-[1.6rem] leading-[1.5] font-medium whitespace-pre'>
-            {displayText}
-          </p>
+          <p className='body1-16-medium'>{displayText}</p>
         </div>
-        {!text && (
-          <div className='relative size-[2.4rem] shrink-0'>
-            <div className='absolute top-[12.5%] right-[9.19%] bottom-[9.17%] left-[12.5%]'>
-              <IcSearch className='[&_path]:fill-neutral-40 size-full' />
-            </div>
-          </div>
-        )}
+        {!text && <IcSearch className='[&_path]:fill-neutral-40 h-[2.4rem] w-[2.4rem]' />}
       </div>
     </button>
   );
