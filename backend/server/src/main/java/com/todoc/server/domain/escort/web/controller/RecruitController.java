@@ -4,6 +4,7 @@ import com.todoc.server.common.enumeration.Gender;
 import com.todoc.server.common.enumeration.RecruitStatus;
 import com.todoc.server.common.response.Response;
 import com.todoc.server.domain.customer.web.dto.response.PatientSimpleResponse;
+import com.todoc.server.domain.escort.service.RecruitFacadeService;
 import com.todoc.server.domain.escort.service.RecruitService;
 import com.todoc.server.domain.escort.web.dto.request.RecruitCreateRequest;
 import com.todoc.server.domain.escort.web.dto.response.RecruitDetailResponse;
@@ -13,8 +14,6 @@ import com.todoc.server.domain.escort.web.dto.response.RecruitSimpleResponse;
 import com.todoc.server.domain.route.web.dto.response.LocationInfoSimpleResponse;
 import com.todoc.server.domain.route.web.dto.response.RouteSimpleResponse;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -29,9 +28,10 @@ import java.util.List;
 @Tag(name = "recruits", description = "동행 신청 관련 API")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("api/recruits")
+@RequestMapping("/api/recruits")
 public class RecruitController {
 
+    private final RecruitFacadeService recruitFacadeService;
     private final RecruitService recruitService;
 
     @Operation(
@@ -39,11 +39,7 @@ public class RecruitController {
             description = "로그인한 고객이 신청한 동행 목록(진행중/완료)을 조회합니다.")
     @ApiResponse(
             responseCode = "200",
-            description = "동행 목록 조회 성공",
-            content = @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = Response.class)
-            ))
+            description = "동행 목록 조회 성공" )
     @GetMapping("/customer")
     public Response<RecruitListResponse> getRecruitListAsCustomer() {
         // TODO :: 원래라면 jwt 혹은 sessionId로부터 유저 정보를 조회해야 함
@@ -76,14 +72,11 @@ public class RecruitController {
             description = "recruitId에 해당하는 동행 신청의 상세 정보를 조회합니다.")
     @ApiResponse(
             responseCode = "200",
-            description = "동행 신청 상세 정보 조회 성공",
-            content = @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = Response.class)
-            ))
+            description = "동행 신청 상세 정보 조회 성공")
     @GetMapping("/{recruitId}")
     public Response<RecruitDetailResponse> getRecruitDetail(@PathVariable Long recruitId) {
-        // TODO :: recruitId에 해당하는 동행 신청을 검색
+
+//        return Response.from(recruitService.getRecruitDetailByRecruitId(recruitId));
 
         LocationInfoSimpleResponse meetingLocationInfo = LocationInfoSimpleResponse.builder()
                 .locationInfoId(1L)
@@ -118,7 +111,7 @@ public class RecruitController {
                 .imageUrl("https://example.com/images/sample.jpg")
                 .name("김토닥")
                 .age(80)
-                .gender(Gender.MALE)
+                .gender("남자")
                 .needsHelping(true)
                 .usesWheelchair(true)
                 .hasCognitiveIssue(true)
@@ -147,14 +140,12 @@ public class RecruitController {
             description = "recruitId에 해당하는 동행 신청의 결제 정보를 조회합니다.")
     @ApiResponse(
             responseCode = "200",
-            description = "동행 신청 결제 정보 조회 성공",
-            content = @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = Response.class)
-            ))
+            description = "동행 신청 결제 정보 조회 성공")
     @GetMapping("/{recruitId}/payments")
     public Response<RecruitPaymentResponse> getRecruitPayment(@PathVariable Long recruitId) {
         // TODO :: recruitId에 해당하는 동행 신청의 결제 금액을 계산
+
+//        return Response.from(recruitService.getRecruitPaymentByRecruitId(recruitId));
 
         LocationInfoSimpleResponse meetingLocationInfo = LocationInfoSimpleResponse.builder()
                 .locationInfoId(1L)
@@ -199,11 +190,7 @@ public class RecruitController {
             description = "로그인한 고객이 동행을 신청합니다.")
     @ApiResponse(
             responseCode = "200",
-            description = "동행 목록 신청 성공",
-            content = @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = Response.class)
-            ))
+            description = "동행 신청 성공")
     @PostMapping("")
     public Response<Void> createRecruit(@RequestBody RecruitCreateRequest requestDto) {
         // TODO :: 원래라면 jwt 혹은 sessionId로부터 유저 정보를 조회해야 함
@@ -212,21 +199,19 @@ public class RecruitController {
 
         // 각종 엔티티 생성
 
-
         return Response.from();
-
     }
 
     @Operation(
-            summary = "신청 취소",
-            description = "recruitId에 해당하는 신청을 취소합니다.")
+            summary = "동행 신청 취소",
+            description = "recruitId에 해당하는 동행 신청을 취소합니다.")
     @ApiResponse(
             responseCode = "200",
-            description = "신청 취소 성공",
-            content = @Content(schema = @Schema(implementation = Response.class)))
+            description = "동행 신청 취소 성공")
     @PatchMapping("/{recruitId}/cancel")
     public Response<Void> cancelRecruit(@PathVariable Long recruitId) {
-        // TODO :: recruitId에 해당하는 Recruit을 찾아, 취소 상태로 변경 후, Soft Delete
+
+        // recruitService.cancelRecruit(recruitId);
 
         return Response.from();
     }

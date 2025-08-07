@@ -2,6 +2,7 @@ package com.todoc.server.domain.review.web.dto.response;
 
 import com.todoc.server.common.enumeration.SatisfactionLevel;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -11,15 +12,19 @@ import java.util.Map;
 @Schema(description = "도우미 리뷰 통계 정보 DTO")
 public class ReviewStatResponse {
 
+    @NotNull
     @Schema(description = "총 리뷰 개수")
     private final Long reviewCount;
 
+    @NotNull
     @Schema(description = "좋았어요 비율")
     private final int goodRate;
 
+    @NotNull
     @Schema(description = "괜찮아요 비율")
     private final int averageRate;
 
+    @NotNull
     @Schema(description = "아쉬워요 비율")
     private final int badRate;
 

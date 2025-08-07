@@ -9,7 +9,7 @@ import com.todoc.server.domain.route.entity.LocationInfo;
 import com.todoc.server.domain.route.entity.Route;
 import com.todoc.server.domain.route.service.LocationInfoService;
 import com.todoc.server.domain.route.service.RouteService;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -30,22 +30,22 @@ public class RecruitFacadeService {
                 .build();
 
         // 환자 정보 저장 (생성 + 연관관계 설정)
-        Patient patient = patientService.register(request);
+        Patient patient = patientService.register(request.getPatientDetail());
         patient.setCustomer(customer);
 
         // 위치 정보 저장 (생성 + 연관관계 설정)
-        LocationInfo meetingLocation = locationInfoService.register(request);
-        LocationInfo hospitalLocation = locationInfoService.register(request);
-        LocationInfo returnLocation = locationInfoService.register(request);
+        LocationInfo meetingLocation = locationInfoService.register(request.getMeetingLocationDetail());
+        LocationInfo hospitalLocation = locationInfoService.register(request.getDestinationDetail());
+        LocationInfo returnLocation = locationInfoService.register(request.getReturnLocationDetail());
 
-        // 경로 정보 저장 (생성 + 연관관계 설정)
+        // TODO 경로 정보 저장 (생성 + 연관관계 설정) 수정해야함
         Route route = routeService.register(request);
         route.setMeetingLocationInfo(meetingLocation);
         route.setHospitalLocationInfo(hospitalLocation);
         route.setReturnLocationInfo(returnLocation);
 
         // 동행 신청 생성 (생성 + 연관관계 설정)
-        Recruit recruit = recruitService.register(request);
+        Recruit recruit = recruitService.register(request.getEscortDetail());
         recruit.setCustomer(customer);
         recruit.setPatient(patient);
         recruit.setRoute(route);

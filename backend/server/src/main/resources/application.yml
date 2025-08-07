@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: local
+    active: ${SPRING_PROFILE:local}
 
 springdoc:
   api-docs:
@@ -21,7 +21,6 @@ springdoc:
 
   paths-to-match:
     - /api/**
-    - /admin/**
 
   cache:
     disabled: true

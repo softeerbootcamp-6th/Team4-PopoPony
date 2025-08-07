@@ -2,12 +2,12 @@ import { IcRecognize, IcShoes, IcWheelchair } from '@icons';
 import Tag from './Tag';
 
 interface Props {
-  type: 'safety' | 'wheelchair' | 'care';
+  type: 'support' | 'wheelchair' | 'care';
 }
 
 const StrengthTag = ({ type }: Props) => {
   const typeMap = {
-    safety: { icon: <IcShoes />, label: '안전한 부축' },
+    support: { icon: <IcShoes />, label: '안전한 부축' },
     wheelchair: { icon: <IcWheelchair />, label: '휠체어 이동' },
     care: { icon: <IcRecognize />, label: '인지장애 케어' },
   };
