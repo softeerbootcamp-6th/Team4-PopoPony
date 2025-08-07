@@ -72,6 +72,7 @@ public class ReviewService {
         Review review = Review.builder()
                 .satisfactionLevel(satisfactionLevel)
                 .negativeFeedback(request.getSatisfactionComment())
+                .shortComment(request.getShortComment())
                 .build();
 
         return reviewJpaRepository.save(review);
@@ -90,5 +91,9 @@ public class ReviewService {
             throw new ReviewNotFoundException();
         }
         return response;
+    }
+
+    public List<Review> getAllReviews() {
+        return reviewJpaRepository.findAll();
     }
 }
