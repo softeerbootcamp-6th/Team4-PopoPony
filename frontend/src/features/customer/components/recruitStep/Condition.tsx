@@ -1,4 +1,4 @@
-import { TwoOptionSelector, LabeledSection, Button } from '@components';
+import { TwoOptionSelector, LabeledSection } from '@components';
 import { useFormContext } from 'react-hook-form';
 import { memo } from 'react';
 import { FormLayout } from '@layouts';
@@ -13,7 +13,7 @@ const conditionSchema = z.object({
   usesWheelchair: z.string(),
 });
 
-const Condition = memo(({ handleNextStep, handleBackStep }: RecruitStepProps) => {
+const Condition = memo(({ handleNextStep }: RecruitStepProps) => {
   const { values, fieldErrors, isFormValid, markFieldAsTouched } =
     useFormValidation(conditionSchema);
   const { getValues } = useFormContext();

@@ -1,10 +1,4 @@
-import {
-  TwoOptionSelector,
-  LabeledSection,
-  Button,
-  MultiOptionSelector,
-  FormInput,
-} from '@components';
+import { TwoOptionSelector, LabeledSection, MultiOptionSelector, FormInput } from '@components';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { memo, useEffect, useRef } from 'react';
 import { FormLayout } from '@layouts';
@@ -48,7 +42,7 @@ const CommunicationSchema = z
       path: ['communicationHelp'],
     }
   );
-const Communication = memo(({ handleNextStep, handleBackStep }: RecruitStepProps) => {
+const Communication = memo(({ handleNextStep }: RecruitStepProps) => {
   const { setValue, control } = useFormContext();
   const {
     values: communicationValues,

@@ -1,4 +1,4 @@
-import { useState, memo, useEffect } from 'react';
+import { memo, useEffect } from 'react';
 import type { RecruitStepProps } from '@customer/types';
 import { useNavigate } from '@tanstack/react-router';
 import { FormLayout } from '@layouts';
@@ -30,7 +30,7 @@ const routeFormSchema = z.object({
   isMeetingLocationSameAsDestination: z.boolean(),
 });
 
-const EscortRoute = memo(({ handleNextStep, handleBackStep }: RecruitStepProps) => {
+const EscortRoute = memo(({ handleNextStep }: RecruitStepProps) => {
   const { setValue } = useFormContext();
   const navigate = useNavigate();
   const { values, fieldErrors, isFormValid, markFieldAsTouched } =

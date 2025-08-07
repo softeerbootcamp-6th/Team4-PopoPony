@@ -1,5 +1,5 @@
 import type { RecruitStepProps } from '@customer/types';
-import { Button, FormTextarea, LabeledSection } from '@components';
+import { FormTextarea, LabeledSection } from '@components';
 import { FormLayout } from '@layouts';
 import { useFormValidation } from '@customer/hooks';
 import { z } from 'zod';
@@ -9,7 +9,7 @@ const requestFormSchema = z.object({
   escortNotes: z.string().optional(),
 });
 
-const Request = ({ handleNextStep, handleBackStep }: RecruitStepProps) => {
+const Request = ({ handleNextStep }: RecruitStepProps) => {
   const { values, fieldErrors, isFormValid, markFieldAsTouched } =
     useFormValidation(requestFormSchema);
 

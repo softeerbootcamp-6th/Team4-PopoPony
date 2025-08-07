@@ -1,5 +1,5 @@
 import { memo, useEffect } from 'react';
-import { FormInput, Button, LabeledSection } from '@components';
+import { FormInput, LabeledSection } from '@components';
 import { FormLayout } from '@layouts';
 import { z } from 'zod';
 import { useFormValidation } from '@customer/hooks';
@@ -52,7 +52,7 @@ const timeSchema = z
     }
   );
 
-const Time = memo(({ handleNextStep, handleBackStep }: RecruitStepProps) => {
+const Time = memo(({ handleNextStep }: RecruitStepProps) => {
   const { setValue } = useFormContext();
   const {
     values: timeValues,
