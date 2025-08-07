@@ -6,6 +6,7 @@ import Spinner from './Spinner';
 import TopAppBar from './TopAppBar';
 import TwoOptionSelector from './form/TwoOptionSelector';
 import FormInput from './TextField/FormInput';
+import FormTextarea from './TextField/FormTextarea';
 import Landing from './Landing';
 import Tabs from './Tabs';
 import EscortCard from './EscortCard';
@@ -16,9 +17,13 @@ import Modal from './modal/Modal';
 import BottomSheet from './modal/BottomSheet';
 import PhotoUpload from './form/PhotoUpload';
 import ProgressIndicator from './ProgressIndicator';
-import Checkbox from './Checkbox';
+import Checkbox from './checkbox/Checkbox';
 import ShowMapButton from './ShowMapButton';
 import Divider from './Divider';
+import MultiOptionSelector from './form/MultiOptionSelector';
+import CheckboxCircle from './checkbox/CheckboxCircle';
+import TermsModal from './modal/TermsModal';
+import Dot from './Dot';
 
 export {
   Button,
@@ -28,6 +33,7 @@ export {
   TopAppBar,
   TwoOptionSelector,
   FormInput,
+  FormTextarea,
   Landing,
   ProgressBar,
   Tabs,
@@ -42,4 +48,8 @@ export {
   Checkbox,
   ShowMapButton,
   Divider,
+  MultiOptionSelector,
+  CheckboxCircle,
+  TermsModal,
+  Dot,
 };

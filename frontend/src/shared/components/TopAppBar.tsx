@@ -23,9 +23,7 @@ const TopAppBar = ({
     router.history.back();
   };
 
-  const backgroundClass = background
-    ? 'bg-[var(--color-background-default-white)]'
-    : 'bg-transparent';
+  const backgroundClass = background ? 'bg-background-default-white' : 'bg-transparent';
 
   return (
     <header

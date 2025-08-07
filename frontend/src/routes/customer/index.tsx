@@ -1,4 +1,4 @@
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute, Link } from '@tanstack/react-router';
 import { PageLayout } from '@layouts';
 import { Button, EscortCard, Tabs } from '@components';
 import { IcPlusSideLeft } from '@icons';
@@ -18,10 +18,12 @@ function RouteComponent() {
               토닥과 함께 <br />
               안전하게 동행하세요!
             </h2>
-            <Button variant='assistive' size='md' onClick={() => {}}>
-              <IcPlusSideLeft />
-              <span className='text-text-neutral-primary'>새로운 동행 신청하기</span>
-            </Button>
+            <Link to='/customer/recruit/$step' params={{ step: 'profile' }}>
+              <Button variant='assistive' size='md'>
+                <IcPlusSideLeft />
+                <span className='text-text-neutral-primary'>새로운 동행 신청하기</span>
+              </Button>
+            </Link>
           </div>
           <img
             src='/images/home-graphic.svg'

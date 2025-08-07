@@ -1,8 +1,9 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { Button, ProgressBar, Modal, PhotoUpload } from '@components';
-import { useForm, FormProvider, type SubmitHandler } from 'react-hook-form';
+import { Button, ProgressBar, Modal, PhotoUpload, CheckboxCircle } from '@components';
+import { useForm, FormProvider } from 'react-hook-form';
 import type { HTMLAttributes } from 'react';
 import { useModal } from '@hooks';
+import { useState } from 'react';
 
 export const Route = createFileRoute('/components/')({
   component: RouteComponent,
@@ -19,11 +20,6 @@ type FormValues = {
 
 function RouteComponent() {
   const methods = useForm<FormValues>();
-  const watchAllFields = methods.watch();
-  console.log(watchAllFields);
-  const onSubmit: SubmitHandler<FormValues> = (data) => {
-    console.log('Final Data:', data);
-  };
   // Modal hooks
   const {
     isOpen: isSingleModalOpen,
@@ -40,6 +36,11 @@ function RouteComponent() {
     openModal: openConfirmModal,
     closeModal: closeConfirmModal,
   } = useModal();
+
+  // Checkbox states
+  const [checkbox1, setCheckbox1] = useState(false);
+  const [checkbox2, setCheckbox2] = useState(true);
+  const [checkbox3, setCheckbox3] = useState(false);
 
   interface SectionProps extends HTMLAttributes<HTMLDivElement> {
     title: string;
@@ -101,17 +102,6 @@ function RouteComponent() {
         <FormProvider {...methods}>
           <PhotoUpload name='photo' />
         </FormProvider>
-        <form onSubmit={methods.handleSubmit(onSubmit)}>
-          {/* register your input into the hook by invoking the "register" function */}
-          <input defaultValue='name' {...methods.register('name')} />
-
-          {/* include validation with required or other standard HTML validation rules */}
-          <input {...methods.register('price', { required: true })} />
-          {/* errors will return when field validation fails  */}
-          {methods.formState.errors.price && <span>This field is required</span>}
-
-          <input type='submit' />
-        </form>
       </Section>
 
       <Section title='ProgressBar'>
@@ -132,6 +122,18 @@ function RouteComponent() {
           <Button variant='assistive' size='md' onClick={openConfirmModal}>
             확인 모달
           </Button>
+        </div>
+      </Section>
+
+      <Section title='CheckboxCircle'>
+        <div className='flex flex-col gap-[1.6rem]'>
+          <div className='flex items-center gap-[1.6rem]'>
+            <CheckboxCircle checked={checkbox1} onChange={(e) => setCheckbox1(e.target.checked)} />
+            <CheckboxCircle checked={checkbox2} onChange={(e) => setCheckbox2(e.target.checked)} />
+            <CheckboxCircle checked={checkbox3} onChange={(e) => setCheckbox3(e.target.checked)} />
+            <CheckboxCircle disabled />
+            <CheckboxCircle checked disabled />
+          </div>
         </div>
       </Section>
       {/* Modal components */}
