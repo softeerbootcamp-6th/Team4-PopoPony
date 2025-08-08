@@ -2,8 +2,8 @@ package com.todoc.server.domain.review.service;
 
 import com.querydsl.core.Tuple;
 import com.todoc.server.common.enumeration.SatisfactionLevel;
-import com.todoc.server.common.enumeration.SatisfactionLevel;
 import com.todoc.server.domain.review.entity.Review;
+import com.todoc.server.domain.review.exception.ReviewNotFoundException;
 import com.todoc.server.domain.review.exception.SatisfactionInvalidException;
 import com.todoc.server.domain.review.repository.ReviewJpaRepository;
 import com.todoc.server.domain.review.repository.ReviewQueryRepository;
@@ -71,6 +71,7 @@ public class ReviewService {
         Review review = Review.builder()
                 .satisfactionLevel(satisfactionLevel)
                 .negativeFeedback(request.getSatisfactionComment())
+                .shortComment(request.getShortComment())
                 .build();
 
         return reviewJpaRepository.save(review);
@@ -84,6 +85,14 @@ public class ReviewService {
      */
     @Transactional(readOnly = true)
     public ReviewSimpleResponse getReviewSimpleByRecruitId(Long recruitId) {
-        return reviewQueryRepository.getReviewSimpleByRecruitId(recruitId);
+        ReviewSimpleResponse response = reviewQueryRepository.getReviewSimpleByRecruitId(recruitId);
+        if (response == null) {
+            throw new ReviewNotFoundException();
+        }
+        return response;
+    }
+
+    public List<Review> getAllReviews() {
+        return reviewJpaRepository.findAll();
     }
 }

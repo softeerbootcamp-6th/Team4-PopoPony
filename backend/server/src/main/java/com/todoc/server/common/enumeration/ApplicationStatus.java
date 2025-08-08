@@ -22,7 +22,7 @@ public enum ApplicationStatus {
      */
     public static Optional<ApplicationStatus> from(String value) {
         return Arrays.stream(values())
-                .filter(v -> v.name().equalsIgnoreCase(value))
+                .filter(v -> v.label.equalsIgnoreCase(value))
                 .findFirst();
     }
 }

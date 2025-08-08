@@ -3,15 +3,17 @@ package com.todoc.server.domain.review.service;
 import com.todoc.server.domain.auth.entity.Auth;
 import com.todoc.server.domain.auth.service.AuthService;
 import com.todoc.server.domain.escort.entity.Recruit;
+import com.todoc.server.domain.escort.exception.RecruitNotFoundException;
 import com.todoc.server.domain.escort.service.RecruitService;
 import com.todoc.server.domain.review.entity.PositiveFeedback;
 import com.todoc.server.domain.review.entity.Review;
 import com.todoc.server.domain.review.exception.PositiveFeedbackInternalServerException;
 import com.todoc.server.domain.review.exception.PositiveFeedbackInvalidException;
 import com.todoc.server.domain.review.web.dto.request.ReviewCreateRequest;
-import jakarta.transaction.Transactional;
+import com.todoc.server.domain.review.web.dto.response.ReviewSimpleResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -70,5 +72,20 @@ public class ReviewFacadeService {
                 }
             }
         }
+    }
+
+    /**
+     * recruitId로 신청한 동행의 리뷰 요약 정보를 조회하는 함수
+     *
+     * @param recruitId 동행 신청 ID
+     * @return ReviewSimpleResponse
+     */
+    @Transactional(readOnly = true)
+    public ReviewSimpleResponse getReviewSimpleByRecruitId(Long recruitId) {
+
+        if (!recruitService.existsById(recruitId)) {
+            throw new RecruitNotFoundException();
+        }
+        return reviewService.getReviewSimpleByRecruitId(recruitId);
     }
 }

@@ -1,6 +1,5 @@
 package com.todoc.server.domain.escort.web.controller;
 
-import com.todoc.server.common.enumeration.Gender;
 import com.todoc.server.common.response.Response;
 import com.todoc.server.domain.escort.service.ApplicationFacadeService;
 import com.todoc.server.domain.escort.web.dto.response.ApplicationListResponse;

@@ -1,7 +1,5 @@
 package com.todoc.server.domain.helper.web.controller;
 
-import com.todoc.server.common.enumeration.Gender;
-import com.todoc.server.common.enumeration.SatisfactionLevel;
 import com.todoc.server.common.response.Response;
 import com.todoc.server.domain.helper.service.HelperFacadeService;
 import com.todoc.server.domain.helper.web.dto.response.HelperDetailResponse;

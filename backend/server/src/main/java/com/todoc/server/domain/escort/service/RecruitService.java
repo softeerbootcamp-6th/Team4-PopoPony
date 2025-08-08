@@ -1,7 +1,6 @@
 package com.todoc.server.domain.escort.service;
 
 import com.todoc.server.common.enumeration.RecruitStatus;
-import com.todoc.server.common.util.DateTimeUtils;
 import com.todoc.server.common.util.FeeUtils;
 import com.todoc.server.domain.customer.entity.Patient;
 import com.todoc.server.domain.customer.exception.PatientNotFoundException;
@@ -100,7 +99,6 @@ public class RecruitService {
                 .orElseThrow(RecruitNotFoundException::new);
     }
 
-    @Transactional
     public void cancelRecruit(Long recruitId) {
         Recruit recruit = recruitJpaRepository.findById(recruitId)
                 .orElseThrow(RecruitNotFoundException::new);
@@ -146,7 +144,7 @@ public class RecruitService {
         // 4. Recruit → RecruitDetailResponse
         return RecruitDetailResponse.builder()
                 .recruitId(recruit.getId())
-                .status(recruit.getStatus())
+                .status(recruit.getStatus().getLabel())
                 .escortDate(recruit.getEscortDate())
                 .estimatedMeetingTime(recruit.getEstimatedMeetingTime())
                 .estimatedReturnTime(recruit.getEstimatedReturnTime())
@@ -192,5 +190,13 @@ public class RecruitService {
                 .baseFee(baseFee)
                 .expectedTaxiFee(expectedTaxiFee)
                 .build();
+    }
+
+    public List<Recruit> getAllRecruits() {
+        return recruitJpaRepository.findAll();
+    }
+
+    public boolean existsById(Long recruitId) {
+        return recruitJpaRepository.existsById(recruitId);
     }
 }
