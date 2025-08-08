@@ -58,8 +58,8 @@ export interface paths {
     options?: never;
     head?: never;
     /**
-     * 신청 취소
-     * @description recruitId에 해당하는 신청을 취소합니다.
+     * 동행 신청 취소
+     * @description recruitId에 해당하는 동행 신청을 취소합니다.
      */
     patch: operations['cancelRecruit'];
     trace?: never;
@@ -164,7 +164,7 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
-  '/api/helpers/{userId}': {
+  '/api/helpers/{helperProfileId}': {
     parameters: {
       query?: never;
       header?: never;
@@ -173,29 +173,9 @@ export interface paths {
     };
     /**
      * 도우미 상세 조회
-     * @description userId에 해당하는 도우미의 상세 정보를 조회합니다.
+     * @description helperProfileId에 해당하는 도우미의 상세 정보를 조회합니다.
      */
     get: operations['getHelperDetail'];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/helpers/recruits/{recruitId}': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    /**
-     * 신청에 지원한 도우미 목록 조회
-     * @description 특정 신청에 지원한 도우미 목록을 조회합니다.
-     */
-    get: operations['getHelperListAsRecruit'];
     put?: never;
     post?: never;
     delete?: never;
@@ -228,8 +208,100 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
   schemas: {
-    /** @description 동행 신청 요청 DTO */
-    RecruitCreateRequest: {
+    /** @description 동행 정보 */
+    EscortDetail: {
+      /**
+       * Format: date
+       * @description 동행 날짜
+       * @example 2025-08-01
+       */
+      escortDate?: string;
+      /**
+       * @description 만나는 시각
+       * @example 09:30:00
+       */
+      estimatedMeetingTime?: string;
+      /**
+       * @description 복귀 시각
+       * @example 12:30:00
+       */
+      estimatedReturnTime?: string;
+      /**
+       * @description 동행 목적
+       * @example 정기 진료
+       */
+      purpose?: string;
+      /**
+       * @description 기타 요청사항
+       * @example 약 수령도 대신 부탁드립니다.
+       */
+      extraRequest?: string;
+    };
+    /** @description 위치 정보 */
+    LocationDetail: {
+      /**
+       * @description 장소 이름
+       * @example 세종시청
+       */
+      placeName?: string;
+      /**
+       * @description 시/도
+       * @example 서울
+       */
+      upperAddrName?: string;
+      /**
+       * @description 시/군/구
+       * @example 강서구
+       */
+      middleAddrName?: string;
+      /**
+       * @description 읍/면/동
+       * @example 보람동
+       */
+      lowerAddrName?: string;
+      /**
+       * @description 지번 본번
+       * @example 123
+       */
+      firstAddrNo?: string;
+      /**
+       * @description 지번 부번
+       * @example 45
+       */
+      secondAddrNo?: string;
+      /**
+       * @description 도로명
+       * @example 보람로
+       */
+      roadName?: string;
+      /**
+       * @description 건물 본번
+       * @example 123
+       */
+      firstBuildingNo?: string;
+      /**
+       * @description 건물 부번
+       * @example 2
+       */
+      secondBuildingNo?: string;
+      /**
+       * @description 상세 주소
+       * @example 세종시청 본관 3층
+       */
+      detailAddress?: string;
+      /**
+       * @description 경도 (Longitude)
+       * @example 127.2581225
+       */
+      longitude?: number;
+      /**
+       * @description 위도 (Latitude)
+       * @example 36.4809912
+       */
+      latitude?: number;
+    };
+    /** @description 환자 상태 정보 */
+    PatientDetail: {
       /**
        * @description 환자 이미지 URL
        * @example https://example.com/patient.png
@@ -248,10 +320,9 @@ export interface components {
       age?: number;
       /**
        * @description 환자 성별
-       * @example GENDER.MALE
-       * @enum {string}
+       * @example 남자
        */
-      gender?: 'MALE' | 'FEMALE';
+      gender?: string;
       /**
        * @description 환자 연락처
        * @example 010-1234-5678
@@ -287,56 +358,17 @@ export interface components {
        * @example 이가 많이 없으셔서.. 천천히 이야기 들어주세요
        */
       communicationIssueDetail?: string;
-      /**
-       * Format: date
-       * @description 동행 날짜
-       * @example 2025-08-01
-       */
-      escortDate?: string;
-      /**
-       * @description 만나는 시각
-       * @example 09:30:00
-       */
-      estimatedMeetingTime?: string;
-      /**
-       * @description 복귀 시각
-       * @example 12:30:00
-       */
-      estimatedReturnTime?: string;
-      /** @description 만나는 장소 */
-      meetingLocation?: string;
-      /**
-       * @description 만나는 장소에 대한 추가 정보
-       * @example 103동 402호 현관 앞
-       */
-      meetingLocationInfo?: string;
-      /** @description 목적지 병원 */
-      destination?: string;
-      /**
-       * @description 방문하실 과
-       * @example 내과
-       */
-      destinationDetail?: string;
-      /** @description 복귀 장소 */
-      returnLocation?: string;
-      /**
-       * @description 복귀 장소에 대한 추가 정보
-       * @example 103동 402호 현관 앞
-       */
-      returnLocationDetail?: string;
-      /**
-       * @description 동행 목적
-       * @example 정기 진료
-       */
-      purpose?: string;
-      /**
-       * @description 기타 요청사항
-       * @example 약 수령도 대신 부탁드립니다.
-       */
-      extraRequest?: string;
+    };
+    /** @description 동행 신청 요청 DTO */
+    RecruitCreateRequest: {
+      patientDetail?: components['schemas']['PatientDetail'];
+      escortDetail?: components['schemas']['EscortDetail'];
+      meetingLocationDetail?: components['schemas']['LocationDetail'];
+      destinationDetail?: components['schemas']['LocationDetail'];
+      returnLocationDetail?: components['schemas']['LocationDetail'];
     };
     /** @description 공통 응답 포맷 */
-    Response: {
+    ResponseVoid: {
       /**
        * Format: int32
        * @description 직접 정의한 응답에 대한 code
@@ -356,19 +388,188 @@ export interface components {
       /** @description 응답 body 필드 */
       data?: unknown;
     };
+    /** @description 지원 목록 조회 응답 DTO */
+    ApplicationListResponse: {
+      /** @description 지원 목록 */
+      applicationList: components['schemas']['ApplicationSimpleResponse'][];
+    };
+    /** @description 지원 정보 요약본 응답 DTO */
+    ApplicationSimpleResponse: {
+      /**
+       * Format: int64
+       * @description 지원 ID
+       */
+      applicationId: number;
+      /** @description 도우미 요약 정보 */
+      helper: components['schemas']['HelperSimpleResponse'];
+    };
+    /** @description 도우미 정보 요약본 응답 DTO */
+    HelperSimpleResponse: {
+      /**
+       * Format: int64
+       * @description 도우미 프로필 ID
+       */
+      helperProfileId: number;
+      /** @description 프로필 이미지 URL */
+      imageUrl: string;
+      /** @description 성명 */
+      name: string;
+      /**
+       * @description 성별
+       * @enum {string}
+       */
+      gender: '남자' | '여자';
+      /**
+       * Format: int32
+       * @description 나이
+       */
+      age: number;
+      /** @description 한 줄 소개 */
+      shortBio?: string;
+      /** @description 연락처 */
+      contact: string;
+      /** @description 자격증 목록 */
+      certificateList: string[];
+      /** @description 강점 목록 */
+      strengthList: string[];
+    };
+    /** @description 공통 응답 포맷 */
+    ResponseApplicationListResponse: {
+      /**
+       * Format: int32
+       * @description 직접 정의한 응답에 대한 code
+       */
+      code?: number;
+      /**
+       * Format: int32
+       * @description 응답 상태에 대한 HTTP 상태 코드
+       * @example 200
+       */
+      status?: number;
+      /**
+       * @description 응답 상태에 대한 HTTP 메시지
+       * @example SUCCESS
+       */
+      message?: string;
+      /** @description 응답 body 필드 */
+      data?: components['schemas']['ApplicationListResponse'];
+    };
+    /** @description 공통 응답 포맷 */
+    ResponseReviewSimpleResponse: {
+      /**
+       * Format: int32
+       * @description 직접 정의한 응답에 대한 code
+       */
+      code?: number;
+      /**
+       * Format: int32
+       * @description 응답 상태에 대한 HTTP 상태 코드
+       * @example 200
+       */
+      status?: number;
+      /**
+       * @description 응답 상태에 대한 HTTP 메시지
+       * @example SUCCESS
+       */
+      message?: string;
+      /** @description 응답 body 필드 */
+      data?: components['schemas']['ReviewSimpleResponse'];
+    };
+    /** @description 도우미 후기 요약 정보 DTO */
+    ReviewSimpleResponse: {
+      /**
+       * Format: int64
+       * @description 리뷰 ID
+       */
+      reviewId: number;
+      /**
+       * @description 만족도
+       * @enum {string}
+       */
+      satisfactionLevel: '좋았어요' | '괜찮아요' | '아쉬워요';
+      /**
+       * Format: date-time
+       * @description 작성일
+       */
+      createdAt: string;
+      /** @description 한 줄 코멘트 */
+      shortComment?: string;
+    };
+    /** @description 리포트 상세 정보 응답 DTO */
+    ReportDetailResponse: {
+      /**
+       * Format: int64
+       * @description 리포트 ID
+       */
+      reportId: number;
+      /** @description 실제 만남 시각 */
+      actualMeetingTime: string;
+      /** @description 실제 복귀 시각 */
+      actualReturnTime: string;
+      /**
+       * Format: int32
+       * @description 초과한 시간
+       */
+      extraMinutes: number;
+      /** @description 다음 예약 존재 여부 */
+      hasNextAppointment: boolean;
+      /**
+       * Format: date-time
+       * @description 다음 예약 시각
+       */
+      nextAppointmentTime?: string;
+      /** @description 전달 내용 */
+      description?: string;
+      /**
+       * Format: int32
+       * @description 기존 결제금액
+       */
+      baseFee: number;
+      /**
+       * Format: int32
+       * @description 택시 요금
+       */
+      taxiFee: number;
+      /**
+       * Format: int32
+       * @description 이용 시간 초과 요금
+       */
+      extraTimeFee: number;
+    };
+    /** @description 공통 응답 포맷 */
+    ResponseReportDetailResponse: {
+      /**
+       * Format: int32
+       * @description 직접 정의한 응답에 대한 code
+       */
+      code?: number;
+      /**
+       * Format: int32
+       * @description 응답 상태에 대한 HTTP 상태 코드
+       * @example 200
+       */
+      status?: number;
+      /**
+       * @description 응답 상태에 대한 HTTP 메시지
+       * @example SUCCESS
+       */
+      message?: string;
+      /** @description 응답 body 필드 */
+      data?: components['schemas']['ReportDetailResponse'];
+    };
     /** @description 장소 요약 정보 DTO */
     LocationInfoSimpleResponse: {
       /**
        * Format: int64
        * @description 장소 ID
        */
-      locationInfoId?: number;
+      locationInfoId: number;
       /** @description 장소명(상호명 주소) */
-      placeName?: string;
+      placeName: string;
       /** @description 도로명 주소 */
-      address?: string;
+      address: string;
       /** @description 상세 주소 */
-      detailAddress?: string;
+      detailAddress: string;
     };
     /** @description 환자 요약 정보 조회 응답 DTO */
     PatientSimpleResponse: {
@@ -376,31 +577,31 @@ export interface components {
        * Format: int64
        * @description 환자 ID
        */
-      patientId?: number;
+      patientId: number;
       /** @description 프로필 이미지 URL */
-      imageUrl?: string;
+      imageUrl: string;
       /** @description 성명 */
-      name?: string;
+      name: string;
       /**
        * @description 성별
        * @enum {string}
        */
-      gender?: 'MALE' | 'FEMALE';
+      gender: '남자' | '여자';
       /**
        * Format: int32
        * @description 나이
        */
-      age?: number;
+      age: number;
       /** @description 부축 필요 여부 */
-      needsHelping?: boolean;
+      needsHelping: boolean;
       /** @description 휠체어 필요 여부 */
-      usesWheelchair?: boolean;
+      usesWheelchair: boolean;
       /** @description 인지 능력 문제 유무 */
-      hasCognitiveIssue?: boolean;
+      hasCognitiveIssue: boolean;
       /** @description 인지 능력 상세 설명 */
       cognitiveIssueDetail?: string[];
       /** @description 의사소통 문제 유무 */
-      hasCommunicationIssue?: boolean;
+      hasCommunicationIssue: boolean;
       /** @description 의사소통 상세 설명 */
       communicationIssueDetail?: string;
     };
@@ -410,36 +611,57 @@ export interface components {
        * Format: int64
        * @description 동행 신청 ID
        */
-      recruitId?: number;
+      recruitId: number;
       /**
        * @description 동행 신청의 진행 상태
        * @enum {string}
        */
-      status?: 'MATCHING' | 'COMPLETED' | 'IN_PROGRESS' | 'DONE';
+      status: 'MATCHING' | 'COMPLETED' | 'IN_PROGRESS' | 'DONE';
       /**
        * Format: date
        * @description 동행 날짜
        * @example 2025-08-01
        */
-      escortDate?: string;
+      escortDate: string;
       /**
        * @description 만나는 시각
        * @example 09:30:00
        */
-      estimatedMeetingTime?: string;
+      estimatedMeetingTime: string;
       /**
        * @description 복귀 시각
        * @example 12:30:00
        */
-      estimatedReturnTime?: string;
+      estimatedReturnTime: string;
       /** @description 경로 요약 정보 */
-      route?: components['schemas']['RouteSimpleResponse'];
+      route: components['schemas']['RouteSimpleResponse'];
       /** @description 환자 요약 정보 */
-      patient?: components['schemas']['PatientSimpleResponse'];
+      patient: components['schemas']['PatientSimpleResponse'];
       /** @description 동행 목적 */
       purpose?: string;
       /** @description 요청 사항 */
       extraRequest?: string;
+    };
+    /** @description 공통 응답 포맷 */
+    ResponseRecruitDetailResponse: {
+      /**
+       * Format: int32
+       * @description 직접 정의한 응답에 대한 code
+       */
+      code?: number;
+      /**
+       * Format: int32
+       * @description 응답 상태에 대한 HTTP 상태 코드
+       * @example 200
+       */
+      status?: number;
+      /**
+       * @description 응답 상태에 대한 HTTP 메시지
+       * @example SUCCESS
+       */
+      message?: string;
+      /** @description 응답 body 필드 */
+      data?: components['schemas']['RecruitDetailResponse'];
     };
     /** @description 경로 요약 정보 DTO */
     RouteSimpleResponse: {
@@ -447,20 +669,61 @@ export interface components {
        * Format: int64
        * @description 경로 ID
        */
-      routeId?: number;
+      routeId: number;
       /** @description 만남 장소 위치 정보 */
-      meetingLocationInfo?: components['schemas']['LocationInfoSimpleResponse'];
+      meetingLocationInfo: components['schemas']['LocationInfoSimpleResponse'];
       /** @description 병원 위치 정보 */
-      hospitalLocationInfo?: components['schemas']['LocationInfoSimpleResponse'];
+      hospitalLocationInfo: components['schemas']['LocationInfoSimpleResponse'];
       /** @description 복귀 장소 위치 정보 */
-      returnLocationInfo?: components['schemas']['LocationInfoSimpleResponse'];
+      returnLocationInfo: components['schemas']['LocationInfoSimpleResponse'];
+    };
+    /** @description 동행 신청 결제 정보 조회 응답 DTO */
+    RecruitPaymentResponse: {
+      /**
+       * Format: int64
+       * @description 동행 신청 ID
+       */
+      recruitId: number;
+      /** @description 경로 요약 정보 */
+      route: components['schemas']['RouteSimpleResponse'];
+      /**
+       * Format: int32
+       * @description 기본 결제 금액
+       */
+      baseFee: number;
+      /**
+       * Format: int32
+       * @description 예상 택시 요금
+       */
+      expectedTaxiFee: number;
+    };
+    /** @description 공통 응답 포맷 */
+    ResponseRecruitPaymentResponse: {
+      /**
+       * Format: int32
+       * @description 직접 정의한 응답에 대한 code
+       */
+      code?: number;
+      /**
+       * Format: int32
+       * @description 응답 상태에 대한 HTTP 상태 코드
+       * @example 200
+       */
+      status?: number;
+      /**
+       * @description 응답 상태에 대한 HTTP 메시지
+       * @example SUCCESS
+       */
+      message?: string;
+      /** @description 응답 body 필드 */
+      data?: components['schemas']['RecruitPaymentResponse'];
     };
     /** @description 동행 목록 조회 응답 DTO */
     RecruitListResponse: {
       /** @description 진행 중인 동행 목록 */
-      inProgressList?: components['schemas']['RecruitSimpleResponse'][];
+      inProgressList: components['schemas']['RecruitSimpleResponse'][];
       /** @description 완료된 동행 목록 */
-      completedList?: components['schemas']['RecruitSimpleResponse'][];
+      completedList: components['schemas']['RecruitSimpleResponse'][];
     };
     /** @description 동행 신청 정보 요약본 응답 DTO */
     RecruitSimpleResponse: {
@@ -468,7 +731,7 @@ export interface components {
        * Format: int64
        * @description 동행 신청 ID
        */
-      recruitId?: number;
+      recruitId: number;
       /**
        * Format: int64
        * @description 동행중인 경우, 동행 ID
@@ -478,32 +741,32 @@ export interface components {
        * @description 동행 신청의 진행 상태
        * @enum {string}
        */
-      status?: 'MATCHING' | 'COMPLETED' | 'IN_PROGRESS' | 'DONE';
+      status: 'MATCHING' | 'COMPLETED' | 'IN_PROGRESS' | 'DONE';
       /**
        * Format: int64
        * @description 지원한 도우미 수
        */
-      numberOfApplication?: number;
+      numberOfApplication: number;
       /**
        * Format: date
        * @description 동행 날짜
        * @example 2025-08-01
        */
-      escortDate?: string;
+      escortDate: string;
       /**
        * @description 만나는 시각
        * @example 09:30:00
        */
-      estimatedMeetingTime?: string;
+      estimatedMeetingTime: string;
       /**
        * @description 복귀 시각
        * @example 12:30:00
        */
-      estimatedReturnTime?: string;
+      estimatedReturnTime: string;
       /** @description 만나는 장소 */
-      departureLocation?: string;
+      departureLocation: string;
       /** @description 목적지 병원 */
-      destination?: string;
+      destination: string;
     };
     /** @description 공통 응답 포맷 */
     ResponseRecruitListResponse: {
@@ -525,6 +788,80 @@ export interface components {
       message?: string;
       /** @description 응답 body 필드 */
       data?: components['schemas']['RecruitListResponse'];
+    };
+    /** @description 도우미 상세 정보 응답 DTO */
+    HelperDetailResponse: {
+      /** @description 도우미 요약 정보 */
+      helperSimple: components['schemas']['HelperSimpleResponse'];
+      /**
+       * Format: int64
+       * @description 총 동행자 수
+       */
+      escortCount: number;
+      /** @description 도우미 리뷰 통계 */
+      reviewStat: components['schemas']['ReviewStatResponse'];
+      /** @description 후기 키워드 통계 목록 */
+      positiveFeedbackStatList: components['schemas']['PositiveFeedbackStatResponse'][];
+      /** @description 최신 후기 리스트 */
+      latestReviewList: components['schemas']['ReviewSimpleResponse'][];
+    };
+    /** @description 도우미 후기 좋았던점 통계 DTO */
+    PositiveFeedbackStatResponse: {
+      /**
+       * @description 좋았던점 키워드
+       * @example 친절해요
+       */
+      description: string;
+      /**
+       * Format: int64
+       * @description 해당 키워드의 개수
+       * @example 12
+       */
+      count: number;
+    };
+    /** @description 공통 응답 포맷 */
+    ResponseHelperDetailResponse: {
+      /**
+       * Format: int32
+       * @description 직접 정의한 응답에 대한 code
+       */
+      code?: number;
+      /**
+       * Format: int32
+       * @description 응답 상태에 대한 HTTP 상태 코드
+       * @example 200
+       */
+      status?: number;
+      /**
+       * @description 응답 상태에 대한 HTTP 메시지
+       * @example SUCCESS
+       */
+      message?: string;
+      /** @description 응답 body 필드 */
+      data?: components['schemas']['HelperDetailResponse'];
+    };
+    /** @description 도우미 리뷰 통계 정보 DTO */
+    ReviewStatResponse: {
+      /**
+       * Format: int64
+       * @description 총 리뷰 개수
+       */
+      reviewCount: number;
+      /**
+       * Format: int32
+       * @description 좋았어요 비율
+       */
+      goodRate: number;
+      /**
+       * Format: int32
+       * @description 괜찮아요 비율
+       */
+      averageRate: number;
+      /**
+       * Format: int32
+       * @description 아쉬워요 비율
+       */
+      badRate: number;
     };
   };
   responses: never;
@@ -548,13 +885,13 @@ export interface operations {
       };
     };
     responses: {
-      /** @description 동행 목록 신청 성공 */
+      /** @description 동행 신청 성공 */
       200: {
         headers: {
           [name: string]: unknown;
         };
         content: {
-          'application/json': components['schemas']['Response'];
+          '*/*': components['schemas']['ResponseVoid'];
         };
       };
     };
@@ -576,7 +913,7 @@ export interface operations {
           [name: string]: unknown;
         };
         content: {
-          'application/json': components['schemas']['Response'];
+          '*/*': components['schemas']['ResponseApplicationListResponse'];
         };
       };
     };
@@ -592,13 +929,13 @@ export interface operations {
     };
     requestBody?: never;
     responses: {
-      /** @description 신청 취소 성공 */
+      /** @description 동행 신청 취소 성공 */
       200: {
         headers: {
           [name: string]: unknown;
         };
         content: {
-          '*/*': components['schemas']['Response'];
+          '*/*': components['schemas']['ResponseVoid'];
         };
       };
     };
@@ -620,7 +957,7 @@ export interface operations {
           [name: string]: unknown;
         };
         content: {
-          'application/json': components['schemas']['Response'];
+          '*/*': components['schemas']['ResponseReviewSimpleResponse'];
         };
       };
     };
@@ -642,7 +979,7 @@ export interface operations {
           [name: string]: unknown;
         };
         content: {
-          'application/json': components['schemas']['Response'];
+          '*/*': components['schemas']['ResponseReportDetailResponse'];
         };
       };
     };
@@ -664,7 +1001,7 @@ export interface operations {
           [name: string]: unknown;
         };
         content: {
-          'application/json': components['schemas']['RecruitDetailResponse'];
+          '*/*': components['schemas']['ResponseRecruitDetailResponse'];
         };
       };
     };
@@ -686,7 +1023,7 @@ export interface operations {
           [name: string]: unknown;
         };
         content: {
-          'application/json': components['schemas']['Response'];
+          '*/*': components['schemas']['ResponseRecruitPaymentResponse'];
         };
       };
     };
@@ -716,7 +1053,7 @@ export interface operations {
       query?: never;
       header?: never;
       path: {
-        userId: number;
+        helperProfileId: number;
       };
       cookie?: never;
     };
@@ -728,29 +1065,7 @@ export interface operations {
           [name: string]: unknown;
         };
         content: {
-          'application/json': components['schemas']['Response'];
-        };
-      };
-    };
-  };
-  getHelperListAsRecruit: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        recruitId: number;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description 도우미 목록 조회 성공 */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['Response'];
+          '*/*': components['schemas']['ResponseHelperDetailResponse'];
         };
       };
     };
@@ -772,7 +1087,7 @@ export interface operations {
           [name: string]: unknown;
         };
         content: {
-          'application/json': components['schemas']['Response'];
+          '*/*': components['schemas']['ResponseApplicationListResponse'];
         };
       };
     };

@@ -1,3 +1,4 @@
+import getRecruitsCustomer from './getRecruitsCustomer';
 import { searchRoute } from './search';
 
-export { searchRoute };
+export { getRecruitsCustomer, searchRoute };
