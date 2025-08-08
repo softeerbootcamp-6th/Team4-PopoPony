@@ -1,29 +1,24 @@
 import { BottomSheet } from '@components';
 import { REGION_OPTIONS } from '@helper/types';
+import { useState } from 'react';
+import { useFormContext } from 'react-hook-form';
 
-// interface RegionBottomSheetProps {
-//   isOpen: boolean;
-//   onClose: () => void;
-// }
+interface RegionBottomSheetProps {
+  children: React.ReactNode;
+  name: string;
+}
 
-const RegionBottomSheet = ({ isOpen, onClose }: RegionBottomSheetProps) => {
+export const RegionBottomSheet = ({ children, name }: RegionBottomSheetProps) => {
+  const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
+  const { register } = useFormContext();
+
+  const getUniqueKey = (value: string, index: number): string => {
+    return `region-${value}-${index}`;
+  };
+
   return (
     <BottomSheet open={isBottomSheetOpen} onOpenChange={setIsBottomSheetOpen}>
-      <BottomSheet.Trigger asChild>
-        <button className='flex-between border-b-neutral-20 w-full border-b-2 pb-[0.8rem]'>
-          <p
-            className={`title-20-medium ${
-              values.region ? 'text-text-neutral-primary' : 'text-text-neutral-assistive'
-            }`}>
-            {REGION_OPTIONS.find((option) => option.value === values.region)?.value || '지역 선택'}
-          </p>
-          <IcChevronDown
-            className={`[&_path]:stroke-icon-neutral-secondary [&_path]:fill-icon-neutral-secondary h-[2.4rem] w-[2.4rem] ${
-              isBottomSheetOpen ? 'rotate-180' : ''
-            }`}
-          />
-        </button>
-      </BottomSheet.Trigger>
+      <BottomSheet.Trigger asChild>{children}</BottomSheet.Trigger>
       <BottomSheet.Content>
         <BottomSheet.Header>
           <BottomSheet.Title>지역을 선택해주세요</BottomSheet.Title>
@@ -42,7 +37,7 @@ const RegionBottomSheet = ({ isOpen, onClose }: RegionBottomSheetProps) => {
                   onClick={() => {
                     setIsBottomSheetOpen(false);
                   }}
-                  {...register('region')}
+                  {...register(name)}
                 />
                 <label
                   htmlFor={uniqueKey}
