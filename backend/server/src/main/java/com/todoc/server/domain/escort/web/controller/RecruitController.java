@@ -74,6 +74,9 @@ public class RecruitController {
     public Response<RecruitHistoryListResponse> getRecruitHistoryList() {
         // TODO :: 원래라면 jwt 혹은 sessionId로부터 유저 정보를 조회해야 함
         // 현재는 우선 userId = 1로 고정
+        //
+        // recruitService.getRecruitHistoryListByUserId(1L);
+
         RecruitHistorySimpleResponse dto = RecruitHistorySimpleResponse.builder()
                 .recruitId(1L)
                 .name("김토닥")
@@ -101,7 +104,9 @@ public class RecruitController {
             description = "이전 환자(동행)에 대한 기록 조회 성공 ")
     @GetMapping("/{recruitId}/history")
     public Response<RecruitHistoryDetailResponse> getRecruitHistory(@PathVariable Long recruitId) {
-
+        // TODO :: 원래라면 jwt 혹은 sessionId로부터 유저 정보를 조회해야 함
+        // 현재는 우선 userId = 1로 고정
+        // recruitService.getRecruitHistoryDetailByRecruitId(recruitId);
 
         RecruitHistoryDetailResponse.PatientDetail patientDetail = RecruitHistoryDetailResponse.PatientDetail.builder()
                 .patientId(1L)
