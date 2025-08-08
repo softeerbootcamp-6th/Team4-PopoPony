@@ -1,5 +1,4 @@
 import { useFormContext } from 'react-hook-form';
-import { IcCheck } from '@icons';
 
 interface Props {
   name: string;
@@ -12,7 +11,7 @@ const MultiOptionSelector = ({ name, options, showHelperText = true }: Props) =>
   const selectedValues = watch(name) || [];
 
   return (
-    <div className='flex flex-col gap-[0.8rem]'>
+    <div className='flex flex-wrap gap-[1rem]'>
       {options.map((option) => (
         <Option
           key={option.value}
@@ -23,7 +22,7 @@ const MultiOptionSelector = ({ name, options, showHelperText = true }: Props) =>
         />
       ))}
       {showHelperText && (
-        <p className='caption12-12-medium text-text-neutral-assistive'>*복수선택 가능</p>
+        <p className='caption12-12-medium text-text-neutral-assistive w-full'>*복수선택 가능</p>
       )}
     </div>
   );
@@ -45,7 +44,7 @@ const Option = ({
   return (
     <label
       htmlFor={`${name}-${value}`}
-      className={`flex-between flex cursor-pointer rounded px-[1.6rem] py-[1rem] transition-all duration-200 ${
+      className={`flex cursor-pointer rounded-[0.4rem] px-[1.6rem] py-[1rem] transition-all duration-200 ${
         isSelected
           ? 'bg-mint-5 border-mint-50 border'
           : 'border-stroke-neutral-dark hover:border-mint-50 border'
@@ -62,15 +61,6 @@ const Option = ({
           className={`body1-16-medium ${isSelected ? 'text-text-mint-on-primary' : 'text-text-neutral-primary'} `}>
           {label}
         </span>
-      </div>
-      <div className='flex h-[2.8rem] w-[2.8rem] items-center justify-center'>
-        <IcCheck
-          className={`h-[2.4rem] w-[2.4rem] ${
-            isSelected
-              ? '[&_path]:stroke-text-mint-on-primary'
-              : '[&_path]:stroke-icon-neutral-disabled'
-          } `}
-        />
       </div>
     </label>
   );

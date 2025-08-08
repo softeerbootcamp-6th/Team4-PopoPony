@@ -6,7 +6,7 @@ import { FormLayout } from '@layouts';
 import { LabeledSection, PhotoUpload, BottomSheet, Button } from '@components';
 import { IcChevronDown } from '@assets/icons';
 
-const Region = ({ handleNextStep: _handleNextStep }: ProfileStepProps) => {
+const Region = ({ handleNextStep }: ProfileStepProps) => {
   const { register } = useFormContext();
   const { values, fieldErrors, isFormValid } = useFormValidation(RegionFormSchema);
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
@@ -80,7 +80,7 @@ const Region = ({ handleNextStep: _handleNextStep }: ProfileStepProps) => {
         </LabeledSection>
       </FormLayout.Content>
       <FormLayout.Footer>
-        <Button variant='primary' disabled={!isFormValid}>
+        <Button variant='primary' onClick={handleNextStep} disabled={!isFormValid}>
           다음
         </Button>
       </FormLayout.Footer>

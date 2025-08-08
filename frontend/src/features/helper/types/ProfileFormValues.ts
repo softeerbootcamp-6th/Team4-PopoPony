@@ -28,10 +28,10 @@ export const STRENGTH_OPTIONS = [
 
 export const CERTIFICATE_OPTIONS = [
   '간호사',
+  '병원동행매니저',
   '요양보호사',
   '간호조무사',
   '간병사',
-  '병원동행메니저',
 ] as const;
 
 export const RegionFormSchema = z.object({
