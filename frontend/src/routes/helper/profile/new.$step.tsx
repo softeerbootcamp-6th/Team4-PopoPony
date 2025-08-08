@@ -53,7 +53,7 @@ function RouteComponent() {
                 <Region handleNextStep={nextStep} />
               </Step>
               <Step name='detail'>
-                <Detail handleNextStep={nextStep} />
+                <Detail />
               </Step>
             </Funnel>
           </FormProvider>
