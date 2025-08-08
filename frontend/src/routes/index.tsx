@@ -9,13 +9,13 @@ const landingButtonData = [
   {
     subtitle: '보호자 서비스',
     title: '병원 동행 신청하기',
-    image: '/images/hospital.png',
+    image: '/images/hospital.svg',
     link: '/customer',
   },
   {
     subtitle: '도우미 서비스',
     title: '일감 찾기',
-    image: '/images/work.png',
+    image: '/images/work.svg',
     link: '/helper',
   },
 ];
@@ -35,6 +35,13 @@ function App() {
               <Link
                 key={data.title}
                 to={data.link}
+                // TODO 삭제 필요
+                onClick={(e) => {
+                  if (data.link === '/helper') {
+                    e.preventDefault();
+                    alert('준비중인 기능이에요');
+                  }
+                }}
                 className='from-neutral-5 to-neutral-10 relative flex h-[12rem] w-full justify-between rounded-[2rem] bg-gradient-to-b p-[1.6rem]'>
                 <div className='z-10'>
                   <h3 className='body2-14-bold text-text-mint-primary'>{data.subtitle}</h3>

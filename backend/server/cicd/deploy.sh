@@ -66,3 +66,6 @@ sudo nginx -s reload
 
 echo "4. Stop $OTHER container"
 docker compose stop $OTHER
+
+echo "5. Remove old $OTHER container"
+docker compose rm -f $OTHER

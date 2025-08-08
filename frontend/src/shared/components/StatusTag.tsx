@@ -1,16 +1,18 @@
+import type { escortStatus } from '@types';
+
 interface Props {
-  status: 'matching' | 'matching-confirmed' | 'escort' | 'escort-completed';
+  status: escortStatus;
 }
 
 const StatusTag = ({ status }: Props) => {
   const statusMap = {
-    matching: { label: '매칭중', color: 'bg-background-light-yellow text-text-yellow-on-primary' },
-    'matching-confirmed': {
+    MATCHING: { label: '매칭중', color: 'bg-background-light-yellow text-text-yellow-on-primary' },
+    COMPLETED: {
       label: '매칭확정',
       color: 'bg-background-light-blue text-text-blue-on-primary',
     },
-    escort: { label: '동행중', color: 'bg-background-light-mint text-text-mint-on-primary' },
-    'escort-completed': {
+    IN_PROGRESS: { label: '동행중', color: 'bg-background-light-mint text-text-mint-on-primary' },
+    DONE: {
       label: '동행완료',
       color: 'bg-neutral-15 text-text-neutral-secondary',
     },
