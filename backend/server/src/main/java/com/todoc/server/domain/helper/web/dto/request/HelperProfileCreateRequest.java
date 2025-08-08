@@ -30,7 +30,7 @@ public class HelperProfileCreateRequest {
     @Schema(description = "환자 상태 정보")
     public static class CertificateInfo {
 
-        @Schema(description = "자격증 이미지 URL", example = "https://example.com/patient.png")
+        @Schema(description = "자격증 이미지 URL", example = "https://example.com/certificate.png")
         private String imageUrl;
 
         @Schema(description = "자격증 종류", example = "간호조무사")
