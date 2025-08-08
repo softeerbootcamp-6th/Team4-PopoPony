@@ -43,7 +43,7 @@ export type RegionFormValues = z.infer<typeof RegionFormSchema>;
 
 const CertificateItemSchema = z.object({
   type: z.enum(CERTIFICATE_OPTIONS),
-  imageUrl: z.string().min(1, '자격증 이미지 URL은 필수입니다'),
+  certificateImageUrl: z.string().min(1, '자격증 이미지 URL은 필수입니다'),
 });
 
 export const DetailFormSchema = z.object({
