@@ -2,7 +2,7 @@ import { TwoOptionSelector, LabeledSection, MultiOptionSelector, FormInput } fro
 import { useFormContext, useWatch } from 'react-hook-form';
 import { memo, useEffect, useRef } from 'react';
 import { FormLayout } from '@layouts';
-import { useFormValidation } from '@customer/hooks';
+import { useFormValidation } from '@hooks';
 import { z } from 'zod';
 import type { RecruitStepProps } from '@customer/types';
 import { COGNITIVE_ISSUES_OPTIONS } from '@customer/types';
