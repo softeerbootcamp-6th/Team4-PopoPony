@@ -24,11 +24,7 @@
 	    <img width="200" height="267" alt="이성훈" src="https://github.com/user-attachments/assets/d168c5c3-6a03-45d3-a6ee-27aa249fa3ac" />
 	  </td>
 	  <td>
-	    <img 
-	      alt="최재현" 
-	      src="https://github.com/user-attachments/assets/fcf6247a-e517-4a47-9d0b-7492fc572865" 
-	      style="width:200px; height:100%; object-fit:cover;" 
-	    />
+	    <img width="200" height="267" alt="최재현" src="https://github.com/user-attachments/assets/2c296511-21b1-4ccd-a446-53433ac06e7e" />
 	  </td>
 	  <td>
 		<img width="200" height="267" alt="배연준" src="https://github.com/user-attachments/assets/f82c8cde-d146-4027-9745-ad56550949d6" />
