@@ -116,6 +116,7 @@ public class RecruitService {
      * @param userId
      * @return 이전 동행 신청 목록 응답 DTO(RecruitHistoryListResponse) size = 5
      */
+    @Transactional(readOnly = true)
     public RecruitHistoryListResponse getRecruitHistoryListByUserId(Long userId) {
         List<RecruitHistorySimpleResponse> recruitList = recruitQueryRepository.findRecruitListSortedByUserId(userId, 5);
 
@@ -129,6 +130,7 @@ public class RecruitService {
      * @param recruitId
      * @return 동행 신청 상세 정보 DTO(RecruitHistoryDetailResponse)
      */
+    @Transactional(readOnly = true)
     public RecruitHistoryDetailResponse getRecruitHistoryDetailByRecruitId(Long recruitId) {
         RecruitHistoryDetailFlatDto recruitHistoryDetailFlatDto = recruitQueryRepository.getRecruitHistoryDetailByRecruitId(recruitId);
 
