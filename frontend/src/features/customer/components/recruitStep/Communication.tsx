@@ -1,4 +1,4 @@
-import { TwoOptionSelector, LabeledSection, MultiOptionSelector, FormInput } from '@components';
+import { TwoOptionSelector, LabeledSection, MultiOptionSelectorCol, FormInput } from '@components';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { memo, useEffect, useRef } from 'react';
 import { FormLayout } from '@layouts';
@@ -107,7 +107,7 @@ const Communication = memo(({ handleNextStep }: RecruitStepProps) => {
               !cognitiveFieldErrors.cognitiveIssues && !!cognitiveValues.cognitiveIssues?.length
             }>
             <div onClick={() => cognitiveMarkFieldAsTouched('cognitiveIssues')}>
-              <MultiOptionSelector
+              <MultiOptionSelectorCol
                 name='cognitiveIssues'
                 options={COGNITIVE_ISSUES_OPTIONS.map((option) => ({
                   label: option,
