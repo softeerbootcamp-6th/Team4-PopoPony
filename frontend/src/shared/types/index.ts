@@ -4,3 +4,5 @@ export interface TermsData {
   content: string;
   required: boolean;
 }
+
+export * from './escortType';

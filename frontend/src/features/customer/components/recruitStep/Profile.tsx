@@ -32,7 +32,7 @@ const Profile = memo(({ handleNextStep }: RecruitStepProps) => {
           <FormLayout.Title>동행할 환자의 기본정보를 입력해주세요</FormLayout.Title>
         </FormLayout.TitleWrapper>
 
-        <Button size='lg' variant='assistive'>
+        <Button size='lg' variant='assistive' onClick={() => alert('준비중인 기능이에요')}>
           이전 환자 정보 불러오기
         </Button>
 

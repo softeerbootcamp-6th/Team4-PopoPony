@@ -13,7 +13,7 @@ const Landing = () => {
         <p className='body1-18-medium-pc text-text-neutral-secondary mt-[1.6rem]'>
           {`믿을 수 있는 병원 동행 파트너 토닥과 함께,\n도우미 매칭부터 실시간 동행 확인까지 안심하고 이용해보세요.`}
         </p>
-        <img src='/images/landing.svg' alt='landing' className='mt-[2rem] w-[7.2rem]' />
+        <img src='/images/qrcode.webp' alt='website-qrcode' className='mt-[2rem] w-[10rem]' />
       </div>
     </div>
   );
