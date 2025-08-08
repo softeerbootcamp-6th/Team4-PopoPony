@@ -34,27 +34,27 @@ export const CERTIFICATE_OPTIONS = [
   '병원동행메니저',
 ] as const;
 
-export const regionFormSchema = z.object({
+export const RegionFormSchema = z.object({
   imageUrl: z.string().min(1),
   region: z.enum(REGION_OPTIONS.map((option) => option.value)),
 });
 
-export type RegionFormValues = z.infer<typeof regionFormSchema>;
+export type RegionFormValues = z.infer<typeof RegionFormSchema>;
 
-const certificateItemSchema = z.object({
+const CertificateItemSchema = z.object({
   type: z.enum(CERTIFICATE_OPTIONS),
   imageUrl: z.string().min(1, '자격증 이미지 URL은 필수입니다'),
 });
 
-export const detailFormSchema = z.object({
+export const DetailFormSchema = z.object({
   shortBio: z.string().min(1, '간단한 자기소개를 입력해주세요'),
   strengthList: z.array(z.enum(STRENGTH_OPTIONS)).max(3, '강점은 최대 3개까지 선택 가능합니다'),
   certificateList: z
-    .array(certificateItemSchema)
+    .array(CertificateItemSchema)
     .min(1, '최소 1개의 자격증을 선택해주세요')
     .max(5, '최대 5개의 자격증까지 선택 가능합니다'),
 });
 
-export type DetailFormValues = z.infer<typeof detailFormSchema>;
+export type DetailFormValues = z.infer<typeof DetailFormSchema>;
 
 export type ProfileFormValues = RegionFormValues & DetailFormValues;
