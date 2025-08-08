@@ -1,4 +1,4 @@
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute, Link } from '@tanstack/react-router';
 import { PageLayout } from '@layouts';
 import { Button, EscortCard, Tabs } from '@components';
 import { IcPlusSideLeft } from '@icons';
@@ -18,13 +18,15 @@ function RouteComponent() {
               토닥과 함께 <br />
               안전하게 동행하세요!
             </h2>
-            <Button variant='assistive' size='md' onClick={() => {}}>
-              <IcPlusSideLeft />
-              <span className='text-text-neutral-primary'>새로운 동행 신청하기</span>
-            </Button>
+            <Link to='/customer/recruit/$step' params={{ step: 'profile' }}>
+              <Button variant='assistive' size='md'>
+                <IcPlusSideLeft />
+                <span className='text-text-neutral-primary'>새로운 동행 신청하기</span>
+              </Button>
+            </Link>
           </div>
           <img
-            src='/images/home-graphic.png'
+            src='/images/home-graphic.svg'
             alt='home'
             className='absolute top-[-4.4rem] right-0 w-[24.8rem]'
           />
@@ -55,7 +57,7 @@ function RouteComponent() {
                   <EscortCard.Info type='location' text='꿈에그린아파트 → 서울아산병원' />
                   <EscortCard.Info type='price' text='123,456원' />
                 </EscortCard.InfoSection>
-                <EscortCard.Tag tags={['safety', 'wheelchair', 'care']} />
+                <EscortCard.Tag tags={['support', 'wheelchair', 'care']} />
               </EscortCard>
               <EscortCard>
                 <EscortCard.StatusHeader
@@ -83,7 +85,7 @@ function RouteComponent() {
                   <EscortCard.Info type='location' text='꿈에그린아파트 → 서울아산병원' />
                   <EscortCard.Info type='price' text='123,456원' />
                 </EscortCard.InfoSection>
-                <EscortCard.Tag tags={['safety', 'wheelchair', 'care']} />
+                <EscortCard.Tag tags={['support', 'wheelchair', 'care']} />
               </EscortCard>
               <EscortCard>
                 <EscortCard.StatusHeader
