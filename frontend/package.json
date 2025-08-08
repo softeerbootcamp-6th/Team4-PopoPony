@@ -8,7 +8,9 @@
     "format": "prettier --write \"**/*.{js,ts,tsx,jsx,mjs,hbs,json,css,md}\"",
     "build": "vite build && tsc",
     "check": "pnpm lint && pnpm format && pnpm build",
-    "openapi": "pnpm dlx openapi-typescript http://43.202.155.55/v3/api-docs --output ./src/shared/types/api/schema.d.ts && prettier --write ./src/shared/types/api/schema.d.ts"
+    "gen:openapi": "dotenv -e .env -- sh -c 'echo 📦 $OPENAPI_SPEC_URL && pnpm dlx openapi-typescript \"$OPENAPI_SPEC_URL\" --output ./src/shared/types/api/schema.d.ts'",
+    "format:openapi": "prettier --write ./src/shared/types/api/schema.d.ts",
+    "openapi": "pnpm gen:openapi && pnpm format:openapi"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.14",
@@ -43,6 +45,7 @@
     "@typescript-eslint/eslint-plugin": "^8.38.0",
     "@typescript-eslint/parser": "^8.38.0",
     "@vitejs/plugin-react": "^4.3.4",
+    "dotenv-cli": "^10.0.0",
     "eslint": "^9.32.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.3",
