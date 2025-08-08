@@ -71,7 +71,7 @@ public class RecruitController {
             responseCode = "200",
             description = "이전 환자(동행) 정보 목록 조회 성공")
     @GetMapping("/patients")
-    public Response<RecruitHistoryListResponse> getRecruitBeforeList() {
+    public Response<RecruitHistoryListResponse> getRecruitHistoryList() {
         // TODO :: 원래라면 jwt 혹은 sessionId로부터 유저 정보를 조회해야 함
         // 현재는 우선 userId = 1로 고정
         RecruitHistorySimpleResponse dto = RecruitHistorySimpleResponse.builder()
