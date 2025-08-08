@@ -3,7 +3,12 @@ import { IcCheck } from '@icons';
 
 interface Props {
   name: string;
-  options: { label: string; value: string }[];
+  options: {
+    label: string;
+    value: string;
+    icon?: React.ReactNode;
+    iconDisabled?: React.ReactNode;
+  }[];
   showHelperText?: boolean;
 }
 
@@ -20,6 +25,8 @@ const MultiOptionSelectorCol = ({ name, options, showHelperText = true }: Props)
           value={option.value}
           label={option.label}
           isSelected={selectedValues.includes(option.value)}
+          icon={option.icon}
+          iconDisabled={option.iconDisabled}
         />
       ))}
       {showHelperText && (
@@ -34,11 +41,15 @@ const Option = ({
   value,
   label,
   isSelected,
+  icon,
+  iconDisabled,
 }: {
   name: string;
   value: string;
   label: string;
   isSelected: boolean;
+  icon?: React.ReactNode;
+  iconDisabled?: React.ReactNode;
 }) => {
   const { register } = useFormContext();
 
@@ -58,6 +69,7 @@ const Option = ({
           {...register(name)}
           className='sr-only' // 숨겨진 체크박스
         />
+        {icon && (isSelected ? <>{icon}</> : iconDisabled ? <>{iconDisabled}</> : <>{icon}</>)}
         <span
           className={`body1-16-medium ${isSelected ? 'text-text-mint-on-primary' : 'text-text-neutral-primary'} `}>
           {label}
