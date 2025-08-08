@@ -45,6 +45,7 @@ public class ReviewIntegrationTest {
     @Autowired
     private ReviewService reviewService;
 
+    // TODO :: 주석 해제하기
 //    @Test
 //    @DisplayName("리뷰 요약 정보 조회 - 정상")
 //    void getReviewSimpleByRecruitId_정상() {

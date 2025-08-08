@@ -29,6 +29,7 @@ public class HelperIntegrationTest {
     @PersistenceContext
     private EntityManager em;
 
+    // TODO :: 주석 해제하기
 //    @Test
 //    @DisplayName("도우미 상세 정보 조회 - 정상")
 //    void getHelperDetailByHelperProfileId_정상() {
