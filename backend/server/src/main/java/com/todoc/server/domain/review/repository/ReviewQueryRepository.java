@@ -65,7 +65,6 @@ public class ReviewQueryRepository {
                 ))
                 .from(review)
                 .where(review.recruit.id.eq(recruitId))
-                .limit(1)
                 .fetchOne();
     }
 }

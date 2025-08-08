@@ -98,7 +98,7 @@ public class RecruitIntegrationTest {
 
         // then
         assertThat(response).isNotNull();
-        assertThat(response.getStatus()).isEqualTo(RecruitStatus.DONE);
+        assertThat(response.getStatus()).isEqualTo("완료된 동행");
         assertThat(response.getPatient().getName()).isEqualTo("김영희");
         assertThat(response.getPurpose()).isEqualTo("진료");
         assertThat(response.getRoute().getHospitalLocationInfo().getPlaceName()).isEqualTo("서울아산병원");
@@ -185,7 +185,7 @@ public class RecruitIntegrationTest {
         ReflectionTestUtils.setField(patient, "needsHelping", true);
         ReflectionTestUtils.setField(patient, "usesWheelchair", true);
         ReflectionTestUtils.setField(patient, "hasCognitiveIssue", true);
-        ReflectionTestUtils.setField(patient, "cognitiveIssueDetail", "판단에 도움이 필요해요");
+        ReflectionTestUtils.setField(patient, "cognitiveIssueDetail", List.of("판단에 도움이 필요해요"));
         ReflectionTestUtils.setField(patient, "hasCommunicationIssue", true);
         ReflectionTestUtils.setField(patient, "communicationIssueDetail", "이가 많이 없으셔서.. 천천히 이야기 들어주세요");
 
