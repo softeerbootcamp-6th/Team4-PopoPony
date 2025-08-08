@@ -2,6 +2,7 @@ package com.todoc.server.domain.helper.web.controller;
 
 import com.todoc.server.common.response.Response;
 import com.todoc.server.domain.helper.service.HelperFacadeService;
+import com.todoc.server.domain.helper.web.dto.request.HelperProfileCreateRequest;
 import com.todoc.server.domain.helper.web.dto.response.HelperDetailResponse;
 import com.todoc.server.domain.helper.web.dto.response.HelperSimpleResponse;
 import com.todoc.server.domain.review.web.dto.response.PositiveFeedbackStatResponse;
@@ -84,5 +85,18 @@ public class HelperController {
                 .build();
 
         return Response.from(mock);
+    }
+
+    @Operation(
+            summary = "도우미 프로필 등록",
+            description = "도우미의 프로필을 등록합니다.")
+    @ApiResponse(
+            responseCode = "200",
+            description = "도우미 프로필 등록 성공")
+    @PostMapping("")
+    public Response<Void> createHelperProfile(@RequestBody HelperProfileCreateRequest requestDto) {
+        // TODO :: jwt 혹은 sessionId로부터 유저 정보를 조회해야 함
+
+        return Response.from();
     }
 }
