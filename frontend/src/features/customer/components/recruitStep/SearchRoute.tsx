@@ -1,10 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { FormLayout } from '@layouts';
-import { searchRoute } from '@customer/apis';
 import { useFormContext } from 'react-hook-form';
 import { useLocation } from '@tanstack/react-router';
 import type { LocationDetail } from '@customer/types';
 import SearchInput from '../search/searchInput';
+import { searchResultData } from '@customer/mocks/searchRoute';
 
 interface SearchRouteProps {
   handleSelectRoute: () => void;
@@ -32,31 +32,31 @@ const SearchRoute = ({ handleSelectRoute }: SearchRouteProps) => {
 
   const place = getPlaceText(placeParam);
   const [searchValue, setSearchValue] = useState('');
-  const [searchResult, setSearchResult] = useState<LocationDetail[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  // const [searchResult, setSearchResult] = useState<LocationDetail[]>([]);
+  // const [isLoading, setIsLoading] = useState(false);
   const { setValue } = useFormContext();
 
-  const fetchSearchResult = async () => {
-    if (!searchValue.trim()) {
-      setSearchResult([]);
-      return;
-    }
+  // const fetchSearchResult = async () => {
+  //   if (!searchValue.trim()) {
+  //     setSearchResult([]);
+  //     return;
+  //   }
 
-    setIsLoading(true);
-    try {
-      const result = await searchRoute(searchValue);
-      setSearchResult(result);
-    } catch (error) {
-      console.error('검색 중 오류 발생:', error);
-      setSearchResult([]);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  //   setIsLoading(true);
+  //   try {
+  //     const result = await searchRoute(searchValue);
+  //     setSearchResult(result);
+  //   } catch (error) {
+  //     console.error('검색 중 오류 발생:', error);
+  //     setSearchResult([]);
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
 
-  useEffect(() => {
-    fetchSearchResult();
-  }, [searchValue]);
+  // useEffect(() => {
+  //   fetchSearchResult();
+  // }, [searchValue]);
 
   // place에 따른 form field 이름 결정
   const getFormFieldName = () => {
@@ -94,7 +94,7 @@ const SearchRoute = ({ handleSelectRoute }: SearchRouteProps) => {
     setValue(formFieldName, locationData);
 
     // 검색 결과 초기화 및 라우트 변경
-    setSearchResult([]);
+    // setSearchResult([]);
     setSearchValue('');
     handleSelectRoute();
   };
@@ -113,17 +113,17 @@ const SearchRoute = ({ handleSelectRoute }: SearchRouteProps) => {
           />
 
           {/* 로딩 상태 */}
-          {isLoading && (
+          {/* {isLoading && (
             <div className='mt-[1.6rem] p-[1.2rem] text-center text-gray-500'>검색 중...</div>
-          )}
+          )} */}
 
-          {searchResult.length > 0 && (
+          {searchResultData.length > 0 && (
             <div className='flex flex-col'>
-              {searchResult.map((result, index) => (
+              {searchResultData.map((result, index) => (
                 <button
                   key={`${result.placeName}-${index}`}
                   className='bg-neutral-0 border-stroke-neutral-light hover:bg-neutral-10 flex flex-col gap-[0.2rem] border-b-2 px-[2rem] py-[1.2rem] text-left transition-colors'
-                  onClick={() => handleSelectItem(result)}
+                  onClick={() => handleSelectItem({ ...result, detailAddress: '' })}
                   type='button'>
                   <h4 className='body1-16-medium text-text-neutral-primary'>{result.placeName}</h4>
                   <h5 className='body2-14-medium text-text-neutral-secondary'>
@@ -137,7 +137,7 @@ const SearchRoute = ({ handleSelectRoute }: SearchRouteProps) => {
           )}
 
           {/* 검색 결과가 없을 때 */}
-          {searchValue.trim() && !isLoading && searchResult.length === 0 && (
+          {searchValue.trim() && searchResultData.length === 0 && (
             <div className='text-text-neutral-assistive border-stroke-neutral-light mt-[1.6rem] rounded-lg border p-[1.2rem] text-center'>
               검색 결과가 없습니다.
             </div>
