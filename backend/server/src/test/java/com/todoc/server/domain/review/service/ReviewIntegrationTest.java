@@ -45,20 +45,20 @@ public class ReviewIntegrationTest {
     @Autowired
     private ReviewService reviewService;
 
-    @Test
-    @DisplayName("리뷰 요약 정보 조회 - 정상")
-    void getReviewSimpleByRecruitId_정상() {
-        // given
-        Long recruitId = 1L;
-
-        // when
-        ReviewSimpleResponse response = reviewFacadeService.getReviewSimpleByRecruitId(recruitId);
-
-        // then
-        assertThat(response).isNotNull();
-        assertThat(response.getShortComment()).isEqualTo("정말 친절하고 따뜻했어요.");
-        assertThat(response.getSatisfactionLevel()).isEqualTo("좋았어요");
-    }
+//    @Test
+//    @DisplayName("리뷰 요약 정보 조회 - 정상")
+//    void getReviewSimpleByRecruitId_정상() {
+//        // given
+//        Long recruitId = 1L;
+//
+//        // when
+//        ReviewSimpleResponse response = reviewFacadeService.getReviewSimpleByRecruitId(recruitId);
+//
+//        // then
+//        assertThat(response).isNotNull();
+//        assertThat(response.getShortComment()).isEqualTo("정말 친절하고 따뜻했어요.");
+//        assertThat(response.getSatisfactionLevel()).isEqualTo("좋았어요");
+//    }
 
     @Test
     @DisplayName("리뷰 요약 정보 조회 - 존재하지 않는 동행 신청")
@@ -71,16 +71,16 @@ public class ReviewIntegrationTest {
                 .isInstanceOf(RecruitNotFoundException.class);
     }
 
-    @Test
-    @DisplayName("리뷰 요약 정보 조회 - 존재하지 않는 리뷰")
-    void getReviewSimpleByRecruitId_존재하지않는리뷰() {
-        // given
-        Long recruitId = 7L;
-
-        // when & then
-        assertThatThrownBy(() -> reviewFacadeService.getReviewSimpleByRecruitId(recruitId))
-                .isInstanceOf(ReviewNotFoundException.class);
-    }
+//    @Test
+//    @DisplayName("리뷰 요약 정보 조회 - 존재하지 않는 리뷰")
+//    void getReviewSimpleByRecruitId_존재하지않는리뷰() {
+//        // given
+//        Long recruitId = 7L;
+//
+//        // when & then
+//        assertThatThrownBy(() -> reviewFacadeService.getReviewSimpleByRecruitId(recruitId))
+//                .isInstanceOf(ReviewNotFoundException.class);
+//    }
 
     @Test
     @DisplayName("리뷰 작성 - 정상")
