@@ -228,7 +228,7 @@ public class RecruitController {
 
         RecruitDetailResponse mock = RecruitDetailResponse.builder()
                 .recruitId(1L)
-                .status(RecruitStatus.MATCHING)
+                .status("매칭중")
                 .escortDate(LocalDate.now())
                 .estimatedMeetingTime(LocalTime.NOON)
                 .estimatedReturnTime(LocalTime.MIDNIGHT)

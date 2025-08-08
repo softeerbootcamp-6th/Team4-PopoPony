@@ -144,7 +144,7 @@ public class RecruitService {
         // 4. Recruit → RecruitDetailResponse
         return RecruitDetailResponse.builder()
                 .recruitId(recruit.getId())
-                .status(recruit.getStatus())
+                .status(recruit.getStatus().getLabel())
                 .escortDate(recruit.getEscortDate())
                 .estimatedMeetingTime(recruit.getEstimatedMeetingTime())
                 .estimatedReturnTime(recruit.getEstimatedReturnTime())

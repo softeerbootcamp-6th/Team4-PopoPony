@@ -33,6 +33,22 @@ public class ApplicationFacadeService {
     @Transactional(readOnly = true)
     public ApplicationListResponse getApplicationListByRecruitId(Long recruitId) {
 
+        /**
+         * Key : applicationId
+         * Value : Tuple 리스트
+         *
+         * Tuple에 포함된 값 (도우미 정보)
+         *      auth.id : Auth Id
+         *      auth.name : 성명
+         *      auth.birthDate : 생년월일
+         *      auth.gender : 성별
+         *      auth.contact : 연락처
+         *      helperProfile.id : 도우미 프로필 ID
+         *      helperProfile.imageUrl : 프로필 이미지 URL
+         *      helperProfile.strength : 강점 목록 (JSON 문자열) ex. "['안전한 부축으로 편안한 이동','인지 장애 어르신 맞춤 케어']"
+         *      helperProfile.shortBio : 한 줄 소개
+         *      certificate.type : 자격증 종류
+         */
         Map<Long, List<Tuple>> groupedByApplication = applicationService.getApplicationListByRecruitId(recruitId);
 
         if (groupedByApplication.isEmpty()) {
