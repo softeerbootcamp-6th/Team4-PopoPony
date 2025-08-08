@@ -6,6 +6,7 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: 'primary' | 'secondary' | 'assistive';
   size?: 'sm' | 'md' | 'lg';
   isLoading?: boolean;
+  className?: string;
 }
 
 const Button = ({
@@ -13,6 +14,7 @@ const Button = ({
   variant = 'primary',
   size = 'lg',
   isLoading,
+  className = '',
   children,
   ...props
 }: ButtonProps) => {
@@ -31,9 +33,9 @@ const Button = ({
   };
 
   const sizeStyle = {
-    sm: 'label2-14-bold h-[3.1rem] rounded-[0.4rem]',
-    md: 'body1-16-bold h-[4.8rem] rounded-[0.4rem]',
-    lg: 'subtitle-18-bold h-[5.6rem] rounded-[0.6rem]',
+    sm: 'label2-14-bold h-[3.1rem] min-h-[3.1rem] rounded-[0.4rem]',
+    md: 'body1-16-bold h-[4.8rem] min-h-[4.8rem] rounded-[0.4rem]',
+    lg: 'subtitle-18-bold h-[5.6rem] min-h-[5.6rem] rounded-[0.6rem]',
   };
 
   const spinnerSize = {
@@ -52,7 +54,7 @@ const Button = ({
     <button
       type='button'
       disabled={disabled}
-      className={`${baseStyle} ${disabled ? disabledVariantStyle[variant] : variantStyle[variant]} ${sizeStyle[size]}`}
+      className={`${baseStyle} ${disabled ? disabledVariantStyle[variant] : variantStyle[variant]} ${sizeStyle[size]} ${className}`}
       {...props}>
       <Spinner size={spinnerSize[size]} color={spinnerColor[variant]} isLoading={isLoading} />
       {!isLoading && <>{children}</>}

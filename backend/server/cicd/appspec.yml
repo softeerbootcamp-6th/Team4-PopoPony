@@ -4,8 +4,14 @@ os: linux
 files:
   - source: /
     destination: /home/ubuntu/app
+    overwrite: yes
 
 hooks:
+  BeforeInstall:
+    - location: cleanup.sh
+      timeout: 60
+      runas: ubuntu
+
   AfterInstall:
     - location: deploy.sh
       timeout: 100

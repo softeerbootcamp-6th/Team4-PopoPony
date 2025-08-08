@@ -26,36 +26,36 @@ repositories {
 }
 
 dependencies {
-	// ✅ Spring Boot 기본
+	// Spring Boot 기본
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 
-	// ✅ Validation
+	// Validation
 	implementation("org.springframework.boot:spring-boot-starter-validation")
 
-	// ✅ DB
-	implementation("com.h2database:h2")
+	// DB
 	implementation("mysql:mysql-connector-java:8.0.33")
+	testImplementation("com.h2database:h2")
 
-	// ✅ Lombok
+	// Lombok
 	compileOnly("org.projectlombok:lombok")
 	annotationProcessor("org.projectlombok:lombok")
 
-	// ✅ QueryDSL (jakarta 버전)
+	// QueryDSL (jakarta 버전)
 	implementation("com.querydsl:querydsl-jpa:${dependencyManagement.importedProperties["querydsl.version"]}:jakarta")
 	annotationProcessor("com.querydsl:querydsl-apt:${dependencyManagement.importedProperties["querydsl.version"]}:jakarta")
 	annotationProcessor("jakarta.persistence:jakarta.persistence-api")
 	annotationProcessor("jakarta.annotation:jakarta.annotation-api")
 
-	// ✅ JUnit5
+	// JUnit5
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
-	// ✅ Swagger
+	// Swagger
 	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.9")
 	implementation("org.apache.commons:commons-lang3:3.14.0")
 
-	// ✅ for health-check + 애플리케이션의 운영 및 모니터링 기능
+	// for health-check + 애플리케이션의 운영 및 모니터링 기능
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
 }
 
