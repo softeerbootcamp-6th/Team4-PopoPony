@@ -3,6 +3,7 @@ import { PageLayout } from '@layouts';
 import { type ProfileFormValues } from '@helper/types';
 import { useFunnel, useModal } from '@hooks';
 import { createFileRoute, useRouter } from '@tanstack/react-router';
+import { Region, Detail } from '@helper/components';
 import { FormProvider, useForm } from 'react-hook-form';
 
 export const Route = createFileRoute('/helper/profile/new/$step')({
@@ -45,7 +46,7 @@ function RouteComponent() {
         onClose={handleClose}
       />
       <PageLayout.Content>
-        <div className='flex-1 overflow-hidden'>
+        <div className='h-full flex-1 overflow-hidden'>
           <FormProvider {...methods}>
             <Funnel>
               <Step name='region'>
