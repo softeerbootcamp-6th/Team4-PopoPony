@@ -77,6 +77,7 @@ public class RecruitController {
         RecruitHistorySimpleResponse dto = RecruitHistorySimpleResponse.builder()
                 .recruitId(1L)
                 .name("김토닥")
+                .destination("서울성모병원")
                 .escortDate(LocalDate.now())
                 .build();
 
