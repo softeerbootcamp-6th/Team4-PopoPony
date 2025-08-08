@@ -4,9 +4,10 @@ interface Props {
   label: string;
   isChecked?: boolean;
   children: React.ReactNode;
+  message?: string;
 }
 
-const LabeledSection = ({ label, isChecked = false, children }: Props) => {
+const LabeledSection = ({ label, isChecked = false, children, message }: Props) => {
   return (
     <section className='flex w-full flex-col gap-[0.8rem]'>
       <div className='flex items-center'>
@@ -16,6 +17,7 @@ const LabeledSection = ({ label, isChecked = false, children }: Props) => {
         />
       </div>
       <div>{children}</div>
+      {!isChecked && message && <p className='body2-14-regular text-red-500'>{message}</p>}
     </section>
   );
 };

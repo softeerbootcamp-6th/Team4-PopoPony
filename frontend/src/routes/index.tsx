@@ -9,13 +9,13 @@ const landingButtonData = [
   {
     subtitle: '보호자 서비스',
     title: '병원 동행 신청하기',
-    image: '/images/hospital.png',
+    image: '/images/hospital.svg',
     link: '/customer',
   },
   {
     subtitle: '도우미 서비스',
     title: '일감 찾기',
-    image: '/images/work.png',
+    image: '/images/work.svg',
     link: '/helper',
   },
 ];
