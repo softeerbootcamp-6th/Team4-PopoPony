@@ -1,4 +1,4 @@
-import { ProgressBar, Modal } from '@components';
+import { Modal } from '@components';
 import { PageLayout } from '@layouts';
 import { type ProfileFormValues } from '@helper/types';
 import { useFunnel, useModal } from '@hooks';
@@ -17,7 +17,7 @@ function RouteComponent() {
   const { isOpen, openModal, closeModal } = useModal();
   const methods = useForm<ProfileFormValues>({ shouldUnregister: false });
 
-  const { Funnel, Step, nextStep, currentStep, handleBackStep } = useFunnel({
+  const { Funnel, Step, nextStep } = useFunnel({
     defaultStep: 'region',
     basePath: 'helper/profile/new',
     paramPath: '/helper/profile/new/$step',

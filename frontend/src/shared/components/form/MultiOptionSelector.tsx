@@ -62,7 +62,7 @@ const Option = ({
   isSelected: boolean;
   dataFormat: 'string' | 'object';
 }) => {
-  const { register, setValue, watch } = useFormContext();
+  const { setValue, watch } = useFormContext();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const currentValues = watch(name) || [];
