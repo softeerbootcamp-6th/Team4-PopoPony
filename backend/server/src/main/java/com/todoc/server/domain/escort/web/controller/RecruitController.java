@@ -14,6 +14,7 @@ import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -325,5 +326,70 @@ public class RecruitController {
         // recruitService.cancelRecruit(recruitId);
 
         return Response.from();
+    }
+
+    @Operation(
+        summary = "도우미의 동행 목록 조회",
+        description = "로그인한 도우미가 신청한 동행 목록(진행중/완료)을 조회합니다.")
+    @ApiResponse(
+        responseCode = "200",
+        description = "동행 목록 조회 성공" )
+    @GetMapping("/helper")
+    public Response<RecruitListResponse> getRecruitListAsHelper() {
+        // TODO :: 원래라면 jwt 혹은 sessionId로부터 유저 정보를 조회해야 함
+        // 현재는 우선 userId = 1로 고정
+
+        RecruitSimpleResponse dto = RecruitSimpleResponse.builder()
+            .recruitId(1L)
+            .status(RecruitStatus.MATCHING)
+            .numberOfApplication(3L)
+            .destination("서울아산병원")
+            .departureLocation("꿈에그린아파트")
+            .escortDate(LocalDate.now())
+            .estimatedMeetingTime(LocalTime.NOON)
+            .estimatedReturnTime(LocalTime.MIDNIGHT)
+            .build();
+
+        List<RecruitSimpleResponse> list = new ArrayList<>();
+        list.add(dto);
+        list.add(dto);
+
+        RecruitListResponse mock = RecruitListResponse.builder()
+            .completedList(list)
+            .inProgressList(list).build();
+
+        return Response.from(mock);
+    }
+
+    @Operation(
+        summary = "동행 지원 목록 검색",
+        description = "지역 및 날짜에 해당하는 동행 지원 목록을 검색합니다. datetime의 입력 형식 값은 (yyyy-mm-dd)입니다.")
+    @ApiResponse(
+        responseCode = "200",
+        description = "동행 지원 목록 조회 성공")
+    @GetMapping("")
+    public Response<RecruitSearchListResponse> getRecruitListBySearch(@RequestParam("area") String area, @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+        // TODO :: 원래라면 jwt 혹은 sessionId로부터 유저 정보를 조회해야 함
+        // 현재는 우선 userId = 1로 고정
+
+        RecruitSimpleResponse dto = RecruitSimpleResponse.builder()
+            .recruitId(1L)
+            .escortDate(date)
+            .estimatedMeetingTime(LocalTime.NOON)
+            .estimatedReturnTime(LocalTime.MIDNIGHT)
+            .departureLocation("꿈에그린아파트")
+            .destination("서울아산병원")
+            .estimatedPayment(123000L)
+            .patientIssues(new ArrayList<>(List.of("안전한 부축", "휠체어 이동")))
+            .build();
+
+        List<RecruitSimpleResponse> list = new ArrayList<>();
+        list.add(dto);
+        list.add(dto);
+
+        RecruitSearchListResponse mock = RecruitSearchListResponse.builder()
+            .inProgressList(list).build();
+
+        return Response.from(mock);
     }
 }
