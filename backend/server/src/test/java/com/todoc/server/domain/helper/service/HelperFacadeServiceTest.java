@@ -1,6 +1,8 @@
 package com.todoc.server.domain.helper.service;
 
 import com.todoc.server.domain.escort.service.EscortService;
+import com.todoc.server.domain.helper.entity.HelperProfile;
+import com.todoc.server.domain.helper.web.dto.request.HelperProfileCreateRequest;
 import com.todoc.server.domain.helper.web.dto.response.HelperDetailResponse;
 import com.todoc.server.domain.helper.web.dto.response.HelperSimpleResponse;
 import com.todoc.server.domain.review.service.PositiveFeedbackChoiceService;
@@ -12,6 +14,7 @@ import com.todoc.server.domain.review.web.dto.response.ReviewStatResponse;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 import static org.assertj.core.api.Assertions.*;
 
@@ -27,6 +30,9 @@ class HelperFacadeServiceTest {
 
     @Mock
     private HelperService helperService;
+
+    @Mock
+    private CertificateService certificateService;
 
     @Mock
     private EscortService escortService;
@@ -95,5 +101,20 @@ class HelperFacadeServiceTest {
         assertThat(response.getReviewStat().getAverageRate()).isEqualTo(29);
         assertThat(response.getPositiveFeedbackStatList()).hasSize(1);
         assertThat(response.getLatestReviewList()).hasSize(1);
+    }
+
+    @Test
+    void createHelperProfile_정상() {
+        // given
+        HelperProfileCreateRequest request = new HelperProfileCreateRequest();
+        HelperProfile helperProfile = HelperProfile.builder().build();
+        given(helperService.register(request)).willReturn(helperProfile);
+
+        // when
+        helperFacadeService.createHelperProfile(request);
+
+        // then
+        verify(helperService).register(request);
+        verify(certificateService).register(request.getCertificateInfoList().getFirst());
     }
 }
