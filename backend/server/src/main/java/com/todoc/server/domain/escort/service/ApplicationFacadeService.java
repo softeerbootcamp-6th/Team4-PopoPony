@@ -15,6 +15,7 @@ import com.todoc.server.domain.escort.exception.RecruitNotFoundException;
 import com.todoc.server.domain.escort.web.dto.response.ApplicationListResponse;
 import com.todoc.server.domain.escort.web.dto.response.ApplicationSimpleResponse;
 import com.todoc.server.domain.helper.service.HelperService;
+import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -155,5 +156,17 @@ public class ApplicationFacadeService {
                 .build();
 
         applicationService.save(application);
+    }
+
+    /**
+     * helperUserId를 바탕으로 지원 취소하기
+     * @param applicationId 동행 지원 ID
+     */
+    @Transactional
+    public void cancelApplicationToRecruit(Long applicationId) {
+
+        Application application = applicationService.getApplicationById(applicationId);
+
+        application.setDeletedAt(LocalDateTime.now());
     }
 }
