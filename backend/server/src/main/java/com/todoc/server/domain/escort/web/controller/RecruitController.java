@@ -45,7 +45,7 @@ public class RecruitController {
 
         RecruitSimpleResponse dto = RecruitSimpleResponse.builder()
                 .recruitId(1L)
-                .status(RecruitStatus.MATCHING)
+                .status("매칭중")
                 .numberOfApplication(3L)
                 .destination("서울아산병원")
                 .departureLocation("꿈에그린아파트")
@@ -341,7 +341,7 @@ public class RecruitController {
 
         RecruitSimpleResponse dto = RecruitSimpleResponse.builder()
             .recruitId(1L)
-            .status(RecruitStatus.MATCHING)
+            .status("매칭중")
             .numberOfApplication(3L)
             .destination("서울아산병원")
             .departureLocation("꿈에그린아파트")
