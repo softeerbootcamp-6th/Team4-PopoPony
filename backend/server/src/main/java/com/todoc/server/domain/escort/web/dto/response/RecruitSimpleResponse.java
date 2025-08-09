@@ -3,6 +3,7 @@ package com.todoc.server.domain.escort.web.dto.response;
 import com.todoc.server.common.enumeration.RecruitStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
+import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -49,8 +50,15 @@ public class RecruitSimpleResponse {
     @Schema(description = "목적지 병원")
     private String destination;
 
+    @NotNull
+    @Schema(description = "예상 급여", example = "123000")
+    private Long estimatedPayment;
+
+    @Schema(description = "환자가 가진 이슈", example = "['안전한 부축', '휠체어 이동']")
+    private List<String> patientIssues;
+
     @Builder
-    public RecruitSimpleResponse(Long recruitId, Long escortId, RecruitStatus status, Long numberOfApplication, LocalDate escortDate, LocalTime estimatedMeetingTime, LocalTime estimatedReturnTime, String departureLocation, String destination) {
+    public RecruitSimpleResponse(Long recruitId, Long escortId, RecruitStatus status, Long numberOfApplication, LocalDate escortDate, LocalTime estimatedMeetingTime, LocalTime estimatedReturnTime, String departureLocation, String destination, Long estimatedPayment, List<String> patientIssues) {
         this.recruitId = recruitId;
         this.escortId = escortId;
         this.status = status;
@@ -60,5 +68,7 @@ public class RecruitSimpleResponse {
         this.estimatedReturnTime = estimatedReturnTime;
         this.departureLocation = departureLocation;
         this.destination = destination;
+        this.estimatedPayment = estimatedPayment;
+        this.patientIssues = patientIssues;
     }
 }
