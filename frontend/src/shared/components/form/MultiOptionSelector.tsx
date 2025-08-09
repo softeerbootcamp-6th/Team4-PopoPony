@@ -3,7 +3,7 @@ import { useFormContext } from 'react-hook-form';
 /**
  * @param options 문자열 리스트
  * @param showHelperText 도움말 텍스트 표시 여부
- * @param dataFormat 데이터 저장 형식 ('string' | 'object')
+ * @param dataFormat 데이터 저장 형식 ('string' | 'object'), 그러나 CertificateItemSchema 형태로 저장되는 경우만 사용중
  */
 interface Props {
   name: string;
@@ -68,13 +68,11 @@ const Option = ({
     const currentValues = watch(name) || [];
 
     if (e.target.checked) {
-      // 선택된 경우
       if (dataFormat === 'object') {
         // CertificateItemSchema 형태로 추가
         const newItem = { type: value, certificateImageUrl: '' };
         setValue(name, [...currentValues, newItem]);
       } else {
-        // 문자열로 추가
         setValue(name, [...currentValues, value]);
       }
     } else {
@@ -106,7 +104,7 @@ const Option = ({
           id={`${name}-${value}`}
           checked={isSelected}
           onChange={handleChange}
-          className='sr-only' // 숨겨진 체크박스
+          className='sr-only'
         />
         <span
           className={`body1-16-medium ${isSelected ? 'text-text-mint-on-primary' : 'text-text-neutral-primary'} `}>
