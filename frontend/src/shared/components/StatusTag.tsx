@@ -10,19 +10,19 @@ const StatusTag = ({ status }: { status: StatusType }) => {
     escort: { label: '동행중', color: 'bg-background-light-mint text-text-mint-on-primary' },
     'on-meeting': {
       label: '대기중',
-      color: 'bg-background-light-blue text-text-blue-on-primary',
+      color: 'bg-background-light-mint text-text-mint-on-primary',
     },
     'going-to-hospital': {
       label: '병원 가는 중',
-      color: 'bg-background-light-blue text-text-blue-on-primary',
+      color: 'bg-background-light-mint text-text-mint-on-primary',
     },
     'in-treatment': {
       label: '진료중',
-      color: 'bg-background-light-blue text-text-blue-on-primary',
+      color: 'bg-background-light-mint text-text-mint-on-primary',
     },
     'returning-home': {
       label: '병원 돌아오는 중',
-      color: 'bg-background-light-blue text-text-blue-on-primary',
+      color: 'bg-background-light-mint text-text-mint-on-primaryy',
     },
     'escort-completed': {
       label: '동행완료',
