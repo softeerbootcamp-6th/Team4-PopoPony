@@ -1,6 +1,9 @@
 package com.todoc.server.domain.helper.service;
 
+import com.todoc.server.common.enumeration.Area;
+import com.todoc.server.domain.helper.entity.HelperProfile;
 import com.todoc.server.domain.helper.exception.HelperProfileNotFoundException;
+import com.todoc.server.domain.helper.web.dto.request.HelperProfileCreateRequest;
 import com.todoc.server.domain.helper.web.dto.response.HelperDetailResponse;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -11,10 +14,13 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import java.util.List;
+
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE) // 실제 DB 사용 시
@@ -25,6 +31,12 @@ public class HelperIntegrationTest {
 
     @Autowired
     private HelperFacadeService helperFacadeService;
+
+    @Autowired
+    private HelperService helperService;
+
+    @Autowired
+    private CertificateService certificateService;
 
     @PersistenceContext
     private EntityManager em;
@@ -58,5 +70,50 @@ public class HelperIntegrationTest {
         // when & then
         assertThatThrownBy(() -> helperFacadeService.getHelperDetailByHelperProfileId(helperProfileId))
                 .isInstanceOf(HelperProfileNotFoundException.class);
+    }
+
+    @Test
+    @DisplayName("도우미 프로필 등록 - 정상")
+    void createHelperProfile_정상() {
+        // given
+        HelperProfileCreateRequest request = createHelperProfileRequest();
+        int beforeCount = helperService.getAllHelperProfiles().size();
+
+        // when
+        helperFacadeService.createHelperProfile(request);
+
+        // then
+        List<HelperProfile> profiles = helperService.getAllHelperProfiles();
+        int afterCount = profiles.size();
+        assertThat(afterCount - beforeCount).isEqualTo(1);
+
+        HelperProfile profile = profiles.getLast();
+        assertThat(profile.getImageUrl()).isEqualTo("https://example.com/helper.png");
+        assertThat(profile.getShortBio()).isEqualTo("부모님처럼 모시겠습니다!");
+        assertThat(profile.getStrength()).isEqualTo("[\"안전한 부축으로 편안한 이동\",\"인지 장애 어르신 맞춤 케어\"]");
+        assertThat(profile.getArea()).isEqualTo(Area.SEOUL);
+
+        // 자격증 저장 확인
+        List<String> certificateTypeList = certificateService.getCertificateTypesByHelperProfileId(profile.getId());
+        assertThat(certificateTypeList).containsExactlyInAnyOrder("간호사 자격증", "응급구조사");
+    }
+
+    private HelperProfileCreateRequest createHelperProfileRequest() {
+        HelperProfileCreateRequest.CertificateInfo cert1 = new HelperProfileCreateRequest.CertificateInfo();
+        ReflectionTestUtils.setField(cert1, "imageUrl", "https://example.com/cert1.png");
+        ReflectionTestUtils.setField(cert1, "type", "간호사 자격증");
+
+        HelperProfileCreateRequest.CertificateInfo cert2 = new HelperProfileCreateRequest.CertificateInfo();
+        ReflectionTestUtils.setField(cert2, "imageUrl", "https://example.com/cert2.png");
+        ReflectionTestUtils.setField(cert2, "type", "응급구조사");
+
+        HelperProfileCreateRequest request = new HelperProfileCreateRequest();
+        ReflectionTestUtils.setField(request, "imageUrl", "https://example.com/helper.png");
+        ReflectionTestUtils.setField(request, "strengthList", List.of("안전한 부축으로 편안한 이동", "인지 장애 어르신 맞춤 케어"));
+        ReflectionTestUtils.setField(request, "shortBio", "부모님처럼 모시겠습니다!");
+        ReflectionTestUtils.setField(request, "area", "서울");
+        ReflectionTestUtils.setField(request, "certificateInfoList", List.of(cert1, cert2));
+
+        return request;
     }
 }

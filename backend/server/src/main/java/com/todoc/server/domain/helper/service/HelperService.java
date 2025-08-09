@@ -2,6 +2,7 @@ package com.todoc.server.domain.helper.service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.querydsl.core.Tuple;
+import com.todoc.server.common.enumeration.Area;
 import com.todoc.server.common.enumeration.Gender;
 import com.todoc.server.common.enumeration.RecruitStatus;
 import com.todoc.server.common.util.DateTimeUtils;
@@ -9,6 +10,7 @@ import com.todoc.server.common.util.JsonUtils;
 import com.todoc.server.domain.escort.entity.Recruit;
 import com.todoc.server.domain.escort.web.dto.request.RecruitCreateRequest;
 import com.todoc.server.domain.helper.entity.HelperProfile;
+import com.todoc.server.domain.helper.exception.HelperProfileAreaInvalidException;
 import com.todoc.server.domain.helper.exception.HelperProfileNotFoundException;
 import com.todoc.server.domain.helper.repository.HelperJpaRepository;
 import com.todoc.server.domain.helper.repository.HelperQueryRepository;
@@ -104,13 +106,20 @@ public class HelperService {
 
     public HelperProfile register(HelperProfileCreateRequest request) {
 
+        Area area = Area.from(request.getArea())
+                .orElseThrow(HelperProfileAreaInvalidException::new);
+
         HelperProfile helperProfile = HelperProfile.builder()
-                .area(request.getArea())
+                .area(area)
                 .strength(JsonUtils.toJson(request.getStrengthList()))
                 .shortBio(request.getShortBio())
                 .imageUrl(request.getImageUrl())
                 .build();
 
         return helperJpaRepository.save(helperProfile);
+    }
+
+    public List<HelperProfile> getAllHelperProfiles() {
+        return helperJpaRepository.findAll();
     }
 }
