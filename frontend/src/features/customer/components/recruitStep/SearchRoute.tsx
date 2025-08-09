@@ -11,7 +11,7 @@ interface SearchRouteProps {
 }
 
 // place 파라미터에 따른 텍스트 매핑
-const getPlaceText = (place?: string | null): '만남 장소를' | '병원을' | '복귀 장소를' => {
+const getPlaceText = (place?: string): '만남 장소를' | '병원을' | '복귀 장소를' => {
   switch (place) {
     case 'meeting':
       return '만남 장소를';
@@ -28,7 +28,7 @@ const SearchRoute = ({ handleSelectRoute }: SearchRouteProps) => {
   // URL에서 query parameter 파싱
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
-  const placeParam = searchParams.get('place');
+  const placeParam = searchParams.get('place') ?? '';
 
   const place = getPlaceText(placeParam);
   const [searchValue, setSearchValue] = useState('');

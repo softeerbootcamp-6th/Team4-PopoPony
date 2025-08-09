@@ -2,7 +2,7 @@ import { TwoOptionSelector, LabeledSection } from '@components';
 import { useFormContext } from 'react-hook-form';
 import { memo } from 'react';
 import { FormLayout } from '@layouts';
-import { useFormValidation } from '@customer/hooks';
+import { useFormValidation } from '@hooks';
 import { z } from 'zod';
 import type { RecruitStepProps } from '@customer/types';
 

@@ -12,9 +12,7 @@ const LabeledSection = ({ label, isChecked = false, children, message }: Props) 
     <section className='flex w-full flex-col gap-[0.8rem]'>
       <div className='flex items-center'>
         <h6 className='body1-16-bold text-neutral-90'>{label}</h6>
-        <IcCheck
-          className={`${isChecked ? '[&_path]:stroke-mint-50' : '[&_path]:stroke-neutral-90'}`}
-        />
+        {isChecked && <IcCheck className='[&_path]:stroke-mint-50' />}
       </div>
       <div>{children}</div>
       {!isChecked && message && <p className='body2-14-regular text-red-500'>{message}</p>}

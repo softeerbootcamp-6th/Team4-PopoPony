@@ -1,10 +1,6 @@
-import type { escortStatus } from '@types';
+import type { StatusType } from '@types';
 
-interface Props {
-  status: escortStatus;
-}
-
-const StatusTag = ({ status }: Props) => {
+const StatusTag = ({ status }: { status: StatusType }) => {
   const statusMap = {
     MATCHING: { label: '매칭중', color: 'bg-background-light-yellow text-text-yellow-on-primary' },
     COMPLETED: {
@@ -12,6 +8,22 @@ const StatusTag = ({ status }: Props) => {
       color: 'bg-background-light-blue text-text-blue-on-primary',
     },
     IN_PROGRESS: { label: '동행중', color: 'bg-background-light-mint text-text-mint-on-primary' },
+    ON_MEETING: {
+      label: '대기중',
+      color: 'bg-background-light-mint text-text-mint-on-primary',
+    },
+    GOING_TO_HOSPITAL: {
+      label: '병원 가는 중',
+      color: 'bg-background-light-mint text-text-mint-on-primary',
+    },
+    IN_TREATMENT: {
+      label: '진료중',
+      color: 'bg-background-light-mint text-text-mint-on-primary',
+    },
+    RETURNING_HOME: {
+      label: '병원 돌아오는 중',
+      color: 'bg-background-light-mint text-text-mint-on-primaryy',
+    },
     DONE: {
       label: '동행완료',
       color: 'bg-neutral-15 text-text-neutral-secondary',

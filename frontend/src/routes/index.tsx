@@ -35,13 +35,6 @@ function App() {
               <Link
                 key={data.title}
                 to={data.link}
-                // TODO 삭제 필요
-                onClick={(e) => {
-                  if (data.link === '/helper') {
-                    e.preventDefault();
-                    alert('준비중인 기능이에요');
-                  }
-                }}
                 className='from-neutral-5 to-neutral-10 relative flex h-[12rem] w-full justify-between rounded-[2rem] bg-gradient-to-b p-[1.6rem]'>
                 <div className='z-10'>
                   <h3 className='body2-14-bold text-text-mint-primary'>{data.subtitle}</h3>
