@@ -1,15 +1,17 @@
 package com.todoc.server.domain.escort.service;
 
+import com.todoc.server.common.enumeration.Gender;
 import com.todoc.server.common.enumeration.RecruitStatus;
+import com.todoc.server.domain.customer.entity.Patient;
 import com.todoc.server.domain.escort.entity.Recruit;
 import com.todoc.server.domain.escort.exception.RecruitInvalidCancelException;
 import com.todoc.server.domain.escort.exception.RecruitNotFoundException;
 import com.todoc.server.domain.escort.repository.RecruitJpaRepository;
 import com.todoc.server.domain.escort.repository.RecruitQueryRepository;
-import com.todoc.server.domain.escort.web.dto.response.RecruitListResponse;
-import com.todoc.server.domain.escort.web.dto.response.RecruitPaymentResponse;
-import com.todoc.server.domain.escort.web.dto.response.RecruitSimpleResponse;
+import com.todoc.server.domain.escort.repository.dto.RecruitHistoryDetailFlatDto;
+import com.todoc.server.domain.escort.web.dto.response.*;
 import com.todoc.server.domain.route.entity.LocationInfo;
+import org.assertj.core.api.Assertions;
 import com.todoc.server.domain.route.entity.Route;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -151,6 +153,62 @@ class RecruitServiceTest {
                 .isInstanceOf(RecruitInvalidCancelException.class);
     }
 
+    @Test
+    void getRecruitHistoryListByUserId_정상조회() {
+        // given
+        Long userId = 1L;
+        List<RecruitHistorySimpleResponse> mockList = Arrays.asList(
+                mock(RecruitHistorySimpleResponse.class),
+                mock(RecruitHistorySimpleResponse.class)
+        );
+        when(recruitQueryRepository.findRecruitListSortedByUserId(userId, 5)).thenReturn(mockList);
+
+        // when
+        RecruitHistoryListResponse result = recruitService.getRecruitHistoryListByUserId(userId);
+
+        // then
+        Assertions.assertThat(result.getBeforeList()).hasSize(2);
+    }
+
+    @Test
+    void getRecruitHistoryDetailByRecruitId_정상조회() {
+        // given
+        Long recruitId = 10L;
+        RecruitHistoryDetailFlatDto flatDto = mock(RecruitHistoryDetailFlatDto.class);
+        Patient patient = mock(Patient.class);
+
+        when(recruitQueryRepository.getRecruitHistoryDetailByRecruitId(recruitId)).thenReturn(flatDto);
+        when(flatDto.getPatient()).thenReturn(patient);
+        when(flatDto.getMeetingLocation()).thenReturn(mock(LocationInfo.class));
+        when(flatDto.getDestination()).thenReturn(mock(LocationInfo.class));
+        when(flatDto.getReturnLocation()).thenReturn(mock(LocationInfo.class));
+        when(patient.getCognitiveIssueDetail()).thenReturn("[]");
+        when(patient.getGender()).thenReturn(Gender.MALE);
+
+        // when
+        RecruitHistoryDetailResponse result = recruitService.getRecruitHistoryDetailByRecruitId(recruitId);
+
+        // then
+        assertNotNull(result);
+        assertNotNull(result.getPatientDetail());
+        assertNotNull(result.getMeetingLocationDetail());
+        assertNotNull(result.getDestinationDetail());
+        assertNotNull(result.getReturnLocationDetail());
+    }
+
+    @Test
+    void getRecruitHistoryDetailByRecruitId_존재하지않는경우_예외() {
+        // given
+        Long recruitId = 999L;
+        when(recruitQueryRepository.getRecruitHistoryDetailByRecruitId(recruitId)).thenReturn(null);
+
+        // when & then
+        assertThrows(RecruitNotFoundException.class, () -> {
+            recruitService.getRecruitHistoryDetailByRecruitId(recruitId);
+        });
+    }
+  
+  
     @Test
     void getRecruitPaymentByRecruitId_정상조회() {
         // given
