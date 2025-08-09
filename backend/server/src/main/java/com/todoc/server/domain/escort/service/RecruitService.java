@@ -10,11 +10,10 @@ import com.todoc.server.domain.escort.exception.RecruitInvalidCancelException;
 import com.todoc.server.domain.escort.exception.RecruitNotFoundException;
 import com.todoc.server.domain.escort.repository.RecruitJpaRepository;
 import com.todoc.server.domain.escort.repository.RecruitQueryRepository;
+import com.todoc.server.domain.escort.repository.dto.RecruitHistoryDetailFlatDto;
 import com.todoc.server.domain.escort.web.dto.request.RecruitCreateRequest;
-import com.todoc.server.domain.escort.web.dto.response.RecruitDetailResponse;
-import com.todoc.server.domain.escort.web.dto.response.RecruitListResponse;
-import com.todoc.server.domain.escort.web.dto.response.RecruitPaymentResponse;
-import com.todoc.server.domain.escort.web.dto.response.RecruitSimpleResponse;
+import com.todoc.server.domain.escort.web.dto.response.*;
+
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -110,6 +109,54 @@ public class RecruitService {
 
         // soft delete
         recruit.softDelete();
+    }
+
+    /**
+     * userId에 해당하는 고객의 이전 동행 신청 목록을 조회하는 함수
+     * @param userId
+     * @return 이전 동행 신청 목록 응답 DTO(RecruitHistoryListResponse) size = 5
+     */
+    @Transactional(readOnly = true)
+    public RecruitHistoryListResponse getRecruitHistoryListByUserId(Long userId) {
+        List<RecruitHistorySimpleResponse> recruitList = recruitQueryRepository.findRecruitListSortedByUserId(userId, 5);
+
+        return RecruitHistoryListResponse.builder()
+                .beforeList(recruitList)
+                .build();
+    }
+
+    /**
+     * recruitId에 해당하는 동행 신청에 대한 상세 정보를 조회하는 함수 (Request 형식과 동일한 형식의 Response DTO)
+     * @param recruitId
+     * @return 동행 신청 상세 정보 DTO(RecruitHistoryDetailResponse)
+     */
+    @Transactional(readOnly = true)
+    public RecruitHistoryDetailResponse getRecruitHistoryDetailByRecruitId(Long recruitId) {
+        RecruitHistoryDetailFlatDto recruitHistoryDetailFlatDto = recruitQueryRepository.getRecruitHistoryDetailByRecruitId(recruitId);
+
+        if (recruitHistoryDetailFlatDto == null) {
+            throw new RecruitNotFoundException();
+        }
+
+        // 환자 정보
+        Patient patient = recruitHistoryDetailFlatDto.getPatient();
+        RecruitHistoryDetailResponse.PatientDetail patientDetail =
+                RecruitHistoryDetailResponse.PatientDetail.from(patient);
+
+        // 위치 정보
+        RecruitHistoryDetailResponse.LocationDetail meetingLocationDetail = RecruitHistoryDetailResponse.LocationDetail
+                .from(recruitHistoryDetailFlatDto.getMeetingLocation());
+        RecruitHistoryDetailResponse.LocationDetail destinationDetail = RecruitHistoryDetailResponse.LocationDetail
+                .from(recruitHistoryDetailFlatDto.getDestination());
+        RecruitHistoryDetailResponse.LocationDetail returnLocationDetail = RecruitHistoryDetailResponse.LocationDetail
+                .from(recruitHistoryDetailFlatDto.getReturnLocation());
+
+        return RecruitHistoryDetailResponse.builder()
+                .patientDetail(patientDetail)
+                .meetingLocationDetail(meetingLocationDetail)
+                .destinationDetail(destinationDetail)
+                .returnLocationDetail(returnLocationDetail)
+                .build();
     }
 
     /**
