@@ -1,6 +1,5 @@
 package com.todoc.server.domain.helper.web.dto.request;
 
-import com.todoc.server.common.enumeration.Area;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 
@@ -21,7 +20,7 @@ public class HelperProfileCreateRequest {
 
     @Schema(description = "만족도", allowableValues = {"서울", "부산", "대구", "인천", "광주", "대전", "울산", "세종시",
             "경기", "강원", "충북", "충남", "전북", "전남", "경북", "경남", "제주"})
-    private Area area;
+    private String area;
 
     @Schema(description = "자격증 정보 목록")
     private List<CertificateInfo> certificateInfoList;
