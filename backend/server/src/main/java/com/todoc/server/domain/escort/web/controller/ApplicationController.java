@@ -97,11 +97,11 @@ public class ApplicationController {
     @ApiResponse(
         responseCode = "200",
         description = "동행 지원 취소 성공")
-    @PatchMapping("/recruits/{recruitId}")
-    public Response<Void> cancelApplicationToRecruit(@PathVariable Long recruitId) {
+    @PatchMapping("/{applicationId}")
+    public Response<Void> cancelApplicationToRecruit(@PathVariable Long applicationId) {
         // TODO :: Recruit ID를 받아, 해당 일감에 지원
 
-        // applicationFacadeService.cancelApplicationToRecruit(recruitId);
+        // applicationFacadeService.cancelApplicationToRecruit(applicationId);
 
         return Response.from();
     }
