@@ -4,11 +4,13 @@ import com.querydsl.core.Tuple;
 import com.todoc.server.common.enumeration.ApplicationStatus;
 import com.todoc.server.common.enumeration.EscortStatus;
 import com.todoc.server.common.enumeration.RecruitStatus;
+import com.todoc.server.domain.auth.entity.Auth;
 import com.todoc.server.domain.escort.entity.Application;
 import com.todoc.server.domain.escort.entity.Escort;
 import com.todoc.server.domain.escort.entity.Recruit;
 import com.todoc.server.domain.escort.exception.ApplicationInvalidSelectException;
 import com.todoc.server.domain.escort.exception.ApplicationNotFoundException;
+import com.todoc.server.domain.escort.exception.RecruitInvalidException;
 import com.todoc.server.domain.escort.exception.RecruitNotFoundException;
 import com.todoc.server.domain.escort.web.dto.response.ApplicationListResponse;
 import com.todoc.server.domain.escort.web.dto.response.ApplicationSimpleResponse;
@@ -123,5 +125,35 @@ public class ApplicationFacadeService {
                 .status(EscortStatus.PREPARING)
                 .build();
         escortService.save(escort);
+    }
+
+    /**
+     * helperUserId를 바탕으로 recruitId에 해당하는 동행에 지원 신청하기
+     * @param recruitId 동행(일감) ID
+     * @param helperUserId 도우미의 userId
+     */
+    @Transactional
+    public void applyApplicationToRecruit(Long recruitId, Long helperUserId) {
+
+        // TODO :: 세션 혹은 JWT로부터 고객 정보 가져오기
+        Auth helper = Auth.builder()
+            .id(1L)
+            .build();
+
+
+        Recruit recruit = recruitService.getRecruitById(recruitId);
+
+        // 매칭중인 '동행 신청'에만 지원할 수 있음
+        if (recruit.getStatus() != RecruitStatus.MATCHING) {
+            throw new RecruitInvalidException();
+        }
+
+        Application application = Application.builder()
+                .recruit(recruit)
+                .helper(helper)
+                .status(ApplicationStatus.PENDING)
+                .build();
+
+        applicationService.save(application);
     }
 }

@@ -36,4 +36,8 @@ public class ApplicationService {
     public List<Application> getApplicationsInSameRecruit(Long applicationId) {
         return applicationQueryRepository.findAllApplicationsOfRecruitByApplicationId(applicationId);
     }
+
+    public Application save(Application application) {
+        return applicationJpaRepository.save(application);
+    }
 }
