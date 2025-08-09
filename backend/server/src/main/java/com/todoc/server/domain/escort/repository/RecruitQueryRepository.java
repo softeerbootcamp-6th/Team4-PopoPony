@@ -1,6 +1,5 @@
 package com.todoc.server.domain.escort.repository;
 
-import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.todoc.server.domain.route.entity.QLocationInfo;

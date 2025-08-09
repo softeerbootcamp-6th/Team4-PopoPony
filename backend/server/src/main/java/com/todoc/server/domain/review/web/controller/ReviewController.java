@@ -1,6 +1,5 @@
 package com.todoc.server.domain.review.web.controller;
 
-import com.todoc.server.common.enumeration.SatisfactionLevel;
 import com.todoc.server.common.response.Response;
 import com.todoc.server.domain.review.service.ReviewService;
 import com.todoc.server.domain.review.web.dto.response.ReviewSimpleResponse;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Tag(name = "reviews", description = "도우미 리뷰 관련 API")

@@ -2,29 +2,29 @@ import type { StatusType } from '@types';
 
 const StatusTag = ({ status }: { status: StatusType }) => {
   const statusMap = {
-    matching: { label: '매칭중', color: 'bg-background-light-yellow text-text-yellow-on-primary' },
-    'matching-confirmed': {
+    MATCHING: { label: '매칭중', color: 'bg-background-light-yellow text-text-yellow-on-primary' },
+    COMPLETED: {
       label: '매칭확정',
       color: 'bg-background-light-blue text-text-blue-on-primary',
     },
-    escort: { label: '동행중', color: 'bg-background-light-mint text-text-mint-on-primary' },
-    'on-meeting': {
+    IN_PROGRESS: { label: '동행중', color: 'bg-background-light-mint text-text-mint-on-primary' },
+    ON_MEETING: {
       label: '대기중',
       color: 'bg-background-light-mint text-text-mint-on-primary',
     },
-    'going-to-hospital': {
+    GOING_TO_HOSPITAL: {
       label: '병원 가는 중',
       color: 'bg-background-light-mint text-text-mint-on-primary',
     },
-    'in-treatment': {
+    IN_TREATMENT: {
       label: '진료중',
       color: 'bg-background-light-mint text-text-mint-on-primary',
     },
-    'returning-home': {
+    RETURNING_HOME: {
       label: '병원 돌아오는 중',
       color: 'bg-background-light-mint text-text-mint-on-primaryy',
     },
-    'escort-completed': {
+    DONE: {
       label: '동행완료',
       color: 'bg-neutral-15 text-text-neutral-secondary',
     },

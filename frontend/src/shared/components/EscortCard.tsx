@@ -9,7 +9,12 @@ type Props = {
 
 const EscortCard = ({ children }: Props) => {
   return (
-    <div className='bg-background-default-white border-stroke-neutral-dark shadow-card flex w-full flex-col gap-[1.2rem] rounded-[0.8rem] border p-[1.6rem]'>
+    <div
+      className='bg-background-default-white border-stroke-neutral-dark shadow-card flex w-full cursor-pointer flex-col gap-[1.2rem] rounded-[0.8rem] border p-[1.6rem]'
+      // TODO: 삭제 필요
+      onClick={() => {
+        alert('준비중인 기능이예요');
+      }}>
       {children}
     </div>
   );

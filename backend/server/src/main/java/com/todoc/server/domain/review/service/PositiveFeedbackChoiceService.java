@@ -40,4 +40,8 @@ public class PositiveFeedbackChoiceService {
 
         return positiveFeedbackChoiceJpaRepository.save(positiveFeedbackChoice);
     }
+
+    public List<PositiveFeedbackChoice> getAllPositiveFeedbackChoice() {
+        return positiveFeedbackChoiceJpaRepository.findAll();
+    }
 }

@@ -6,6 +6,7 @@ import lombok.Getter;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 @Getter
 @Schema(description = "동행 신청 요청 DTO")
@@ -50,7 +51,7 @@ public class RecruitCreateRequest {
         private boolean hasCognitiveIssue;
 
         @Schema(description = "인지능력 이슈가 있다면, 디테일 설명", example = "['판단에 도움이 필요해요', '기억하거나 이해하는 것이 어려워요]")
-        private String cognitiveIssueDetail;
+        private List<String> cognitiveIssueDetail;
 
         @Schema(description = "의사소통 이슈가 있는지", example = "true")
         private boolean hasCommunicationIssue;

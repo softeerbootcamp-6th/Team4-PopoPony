@@ -45,7 +45,7 @@ function RouteComponent() {
         </Tabs>
       </PageLayout.Content>
       <PageLayout.Footer>
-        <Button onClick={() => {}}>도우미 후기 남기기</Button>
+        <Button onClick={() => alert('준비중인 기능이에요')}>도우미 후기 남기기</Button>
       </PageLayout.Footer>
     </PageLayout>
   );
