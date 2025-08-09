@@ -16,7 +16,9 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -80,7 +82,10 @@ public class HelperFacadeService {
         helperProfile.setLatestLocation(null);
 
         // 자격증 정보 저장
-        for (HelperProfileCreateRequest.CertificateInfo certificateInfo : requestDto.getCertificateInfoList()) {
+        List<HelperProfileCreateRequest.CertificateInfo> certificateInfoList = Optional.ofNullable(requestDto.getCertificateInfoList())
+                        .orElse(Collections.emptyList());
+
+        for (HelperProfileCreateRequest.CertificateInfo certificateInfo : certificateInfoList) {
             Certificate certificate = certificateService.register(certificateInfo);
             certificate.setHelperProfile(helperProfile);
         }

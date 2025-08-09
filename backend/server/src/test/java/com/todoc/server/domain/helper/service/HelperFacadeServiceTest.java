@@ -1,6 +1,7 @@
 package com.todoc.server.domain.helper.service;
 
 import com.todoc.server.domain.escort.service.EscortService;
+import com.todoc.server.domain.helper.entity.Certificate;
 import com.todoc.server.domain.helper.entity.HelperProfile;
 import com.todoc.server.domain.helper.web.dto.request.HelperProfileCreateRequest;
 import com.todoc.server.domain.helper.web.dto.response.HelperDetailResponse;
@@ -21,8 +22,10 @@ import static org.assertj.core.api.Assertions.*;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @ExtendWith(MockitoExtension.class)
@@ -107,14 +110,26 @@ class HelperFacadeServiceTest {
     void createHelperProfile_정상() {
         // given
         HelperProfileCreateRequest request = new HelperProfileCreateRequest();
+        List<HelperProfileCreateRequest.CertificateInfo> certs = new ArrayList<>();
+        for (int i = 1; i <= 2; i++) {
+            HelperProfileCreateRequest.CertificateInfo certificateInfo = new HelperProfileCreateRequest.CertificateInfo();
+            ReflectionTestUtils.setField(certificateInfo, "imageUrl", "https://example.com/cert" + i + ".png");
+            ReflectionTestUtils.setField(certificateInfo, "type", "자격증" + i);
+            certs.add(certificateInfo);
+        }
+        ReflectionTestUtils.setField(request, "certificateInfoList", certs);
+
         HelperProfile helperProfile = HelperProfile.builder().build();
         given(helperService.register(request)).willReturn(helperProfile);
 
         // when
+        when(certificateService.register(any(HelperProfileCreateRequest.CertificateInfo.class)))
+                .thenReturn(new Certificate(), new Certificate()); // 호출 2번 대비
+
         helperFacadeService.createHelperProfile(request);
 
         // then
         verify(helperService).register(request);
-        verify(certificateService).register(request.getCertificateInfoList().getFirst());
+        verify(certificateService, times(2)).register(any(HelperProfileCreateRequest.CertificateInfo.class));
     }
 }
