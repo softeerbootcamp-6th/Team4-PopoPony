@@ -108,6 +108,8 @@ public class RecruitQueryRepository {
                 .join(route.meetingLocationInfo, meetingLocation)
                 .join(route.hospitalLocationInfo, hospitalLocation)
                 .join(route.returnLocationInfo, returnLocation)
+                .where(recruit.id.eq(recruitId))
+                .fetchOne();
       }
   
     /**
