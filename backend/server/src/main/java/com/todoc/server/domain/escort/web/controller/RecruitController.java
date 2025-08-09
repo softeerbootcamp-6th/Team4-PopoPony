@@ -348,6 +348,8 @@ public class RecruitController {
             .escortDate(LocalDate.now())
             .estimatedMeetingTime(LocalTime.NOON)
             .estimatedReturnTime(LocalTime.MIDNIGHT)
+            .estimatedPayment(123000L)
+            .patientIssues(new ArrayList<>(List.of("안전한 부축", "휠체어 이동")))
             .build();
 
         List<RecruitSimpleResponse> list = new ArrayList<>();
@@ -368,7 +370,7 @@ public class RecruitController {
         responseCode = "200",
         description = "동행 지원 목록 조회 성공")
     @GetMapping("")
-    public Response<RecruitSearchListResponse> getRecruitListBySearch(@RequestParam("area") String area, @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+    public Response<RecruitSearchListResponse> getRecruitListBySearch(@RequestParam("area") String area, @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
         // TODO :: 원래라면 jwt 혹은 sessionId로부터 유저 정보를 조회해야 함
         // 현재는 우선 userId = 1로 고정
 
