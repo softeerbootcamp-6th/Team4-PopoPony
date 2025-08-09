@@ -339,6 +339,8 @@ public class RecruitController {
         // TODO :: 원래라면 jwt 혹은 sessionId로부터 유저 정보를 조회해야 함
         // 현재는 우선 userId = 1로 고정
 
+        // recruitService.getRecruitListAsHelperByUserId(1L)
+
         RecruitSimpleResponse dto = RecruitSimpleResponse.builder()
             .recruitId(1L)
             .status("매칭중")

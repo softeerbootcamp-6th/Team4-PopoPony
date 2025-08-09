@@ -1,5 +1,6 @@
 package com.todoc.server.domain.escort.service;
 
+import com.todoc.server.common.enumeration.ApplicationStatus;
 import com.todoc.server.common.enumeration.RecruitStatus;
 import com.todoc.server.common.util.FeeUtils;
 import com.todoc.server.domain.customer.entity.Patient;
@@ -11,6 +12,7 @@ import com.todoc.server.domain.escort.exception.RecruitNotFoundException;
 import com.todoc.server.domain.escort.repository.RecruitJpaRepository;
 import com.todoc.server.domain.escort.repository.RecruitQueryRepository;
 import com.todoc.server.domain.escort.repository.dto.RecruitHistoryDetailFlatDto;
+import com.todoc.server.domain.escort.repository.dto.RecruitSimpleFlatDto;
 import com.todoc.server.domain.escort.web.dto.request.RecruitCreateRequest;
 import com.todoc.server.domain.escort.web.dto.response.*;
 
@@ -237,6 +239,74 @@ public class RecruitService {
                 .baseFee(baseFee)
                 .expectedTaxiFee(expectedTaxiFee)
                 .build();
+    }
+
+    /**
+     * 도우미 입장에서 홈 화면에서 '동행 신청' 목록을 조회하는 함수
+     * <ul>
+     *   <li>1. 동행 신청 목록을 진행중인 목록과 완료된 목록으로 분리하여 제공</li>
+     *   <li>2. 진행중인 목록: '동행중' 상태를 최상단에 표시, 동행일 오름차순 정렬</li>
+     *   <li>3. 완료된 목록: 동행일 내림차순 정렬</li>
+     * </ul>
+     * @param helperUserId (helperUserId)
+     * @return 분리된 '동행 신청 목록'응답 DTO
+     */
+    @Transactional(readOnly = true)
+    public RecruitListResponse getRecruitListAsHelperByUserId(Long helperUserId) {
+        // 도우미가 지원한 동행 신청 목록중 Application Status가 PENDING, MATCHED인 동행 신청 목록을 조회함 (FAILED 제외)
+        List<RecruitSimpleFlatDto> rawFlatDtoList =
+            recruitQueryRepository.findListByHelperUserIdAndApplicationStatus(helperUserId, List.of(ApplicationStatus.MATCHED, ApplicationStatus.PENDING));
+
+        // RecruitSimpleFlatDto를 RecruitSimpleResponse로 변환
+        List<RecruitSimpleResponse> rawList = new ArrayList<>();
+        for (RecruitSimpleFlatDto flatDto: rawFlatDtoList) {
+
+            RecruitSimpleResponse recruitSimpleResponse = RecruitSimpleResponse.builder()
+                    .recruitId(flatDto.getRecruitId())
+                    .escortId(flatDto.getEscortId())
+                    .status(flatDto.getStatus().getLabel())
+                    .numberOfApplication(flatDto.getNumberOfApplication())
+                    .escortDate(flatDto.getEscortDate())
+                    .estimatedMeetingTime(flatDto.getEstimatedMeetingTime())
+                    .estimatedReturnTime(flatDto.getEstimatedReturnTime())
+                    .departureLocation(flatDto.getMeetingLocationName())
+                    .destination(flatDto.getHospitalLocationName())
+                    .estimatedPayment(flatDto.getEstimatedFee())
+                    .patientIssues(new ArrayList<>())
+                    .build();
+
+        }
+
+        List<RecruitSimpleResponse> inProgressList = new ArrayList<>();
+        List<RecruitSimpleResponse> completedList = new ArrayList<>();
+
+        // 진행중인 목록과 완료된 목록 분리
+        for (RecruitSimpleResponse recruit : rawList) {
+            if (RecruitStatus.from(recruit.getStatus()).get() == RecruitStatus.DONE) {
+                completedList.add(recruit);
+            } else {
+                inProgressList.add(recruit);
+            }
+        }
+
+        // 진행중인 목록의 경우, 진행중인 목록 먼저 필터링 하고, 이후에 동행일 기준 오름차순 정렬
+        inProgressList.sort(Comparator
+            .comparing((RecruitSimpleResponse r) -> RecruitStatus.from(r.getStatus()).get() != RecruitStatus.IN_PROGRESS)
+            .thenComparing(RecruitSimpleResponse::getEscortDate)
+        );
+
+        // 완료된 목록의 경우 동행일 기준 내림차순 정렬
+        completedList.sort(Comparator
+            .comparing(RecruitSimpleResponse::getEscortDate, Comparator.reverseOrder())
+        );
+
+        // DTO 구성
+        RecruitListResponse result = RecruitListResponse.builder()
+            .inProgressList(inProgressList)
+            .completedList(completedList)
+            .build();
+
+        return result;
     }
 
     public List<Recruit> getAllRecruits() {
