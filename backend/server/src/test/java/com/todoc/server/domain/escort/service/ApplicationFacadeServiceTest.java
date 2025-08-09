@@ -1,6 +1,14 @@
 package com.todoc.server.domain.escort.service;
 
 import com.querydsl.core.Tuple;
+import com.todoc.server.common.enumeration.ApplicationStatus;
+import com.todoc.server.common.enumeration.RecruitStatus;
+import com.todoc.server.domain.auth.entity.Auth;
+import com.todoc.server.domain.escort.entity.Application;
+import com.todoc.server.domain.escort.entity.Escort;
+import com.todoc.server.domain.escort.entity.Recruit;
+import com.todoc.server.domain.escort.exception.ApplicationInvalidSelectException;
+import com.todoc.server.domain.escort.exception.ApplicationNotFoundException;
 import com.todoc.server.domain.escort.web.dto.response.ApplicationListResponse;
 import com.todoc.server.domain.escort.web.dto.response.ApplicationSimpleResponse;
 import com.todoc.server.domain.helper.service.HelperService;
@@ -17,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -28,8 +37,11 @@ class ApplicationFacadeServiceTest {
     @Mock
     private HelperService helperService;
 
+    @Mock
+    private EscortService escortService;
+
     @InjectMocks
-    private ApplicationFacadeService facadeService;
+    private ApplicationFacadeService applicationFacadeService;
 
     private Long recruitId;
     private Long applicationId;
@@ -70,7 +82,7 @@ class ApplicationFacadeServiceTest {
                 .thenReturn(mockHelperResponse);
 
         // when
-        ApplicationListResponse response = facadeService.getApplicationListByRecruitId(recruitId);
+        ApplicationListResponse response = applicationFacadeService.getApplicationListByRecruitId(recruitId);
 
         // then
         assertThat(response).isNotNull();
@@ -82,5 +94,72 @@ class ApplicationFacadeServiceTest {
 
         verify(applicationService).getApplicationListByRecruitId(recruitId);
         verify(helperService).buildHelperSimpleByHelperProfileId(mockTuples);
+    }
+
+    @Test
+    void selectApplication_정상적으로_매칭된다() {
+        // given
+        Long selectedApplicationId = 1L;
+        Recruit recruit = Recruit.builder().id(10L).status(RecruitStatus.MATCHING).build();
+
+        Application selected = Application.builder()
+                .id(1L)
+                .status(ApplicationStatus.PENDING)
+                .recruit(recruit)
+                .helper(new Auth())
+                .build();
+
+        Application other = Application.builder()
+                .id(2L)
+                .status(ApplicationStatus.PENDING)
+                .recruit(recruit)
+                .helper(new Auth())
+                .build();
+
+        List<Application> applications = List.of(selected, other);
+        when(applicationService.getApplicationsInSameRecruit(selectedApplicationId)).thenReturn(applications);
+
+        // when
+        applicationFacadeService.selectApplication(selectedApplicationId);
+
+        // then
+        assertThat(selected.getStatus()).isEqualTo(ApplicationStatus.MATCHED);
+        assertThat(other.getStatus()).isEqualTo(ApplicationStatus.FAILED);
+        assertThat(recruit.getStatus()).isEqualTo(RecruitStatus.COMPLETED);
+        verify(escortService, times(1)).save(any(Escort.class));
+    }
+
+    @Test
+    void selectApplication_대기중_아닌_상태가_있으면_예외() {
+        // given
+        Long selectedApplicationId = 1L;
+        Recruit recruit = Recruit.builder().id(10L).status(RecruitStatus.MATCHING).build();
+
+        Application selected = Application.builder()
+                .id(1L)
+                .status(ApplicationStatus.MATCHED)  // 이미 매칭됨
+                .recruit(recruit)
+                .helper(new Auth())
+                .build();
+
+        List<Application> applications = List.of(selected);
+        when(applicationService.getApplicationsInSameRecruit(selectedApplicationId)).thenReturn(applications);
+
+        // when & then
+        assertThrows(ApplicationInvalidSelectException.class, () -> {
+            applicationFacadeService.selectApplication(selectedApplicationId);
+        });
+    }
+
+    @Test
+    void selectApplication_지원이_없으면_예외() {
+        // given
+        Long selectedApplicationId = 1L;
+        when(applicationService.getApplicationsInSameRecruit(selectedApplicationId)).thenReturn(List.of());
+
+        // when & then
+        assertThrows(ApplicationNotFoundException.class, () -> {
+            applicationFacadeService.selectApplication(selectedApplicationId);
+        });
     }
 }

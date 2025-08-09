@@ -29,7 +29,7 @@ public enum EscortStatus {
      */
     public static Optional<EscortStatus> from(String value) {
         return Arrays.stream(values())
-                .filter(v -> v.name().equalsIgnoreCase(value))
+                .filter(v -> v.label.equalsIgnoreCase(value))
                 .findFirst();
     }
 }

@@ -5,12 +5,15 @@ import com.todoc.server.common.entity.BaseEntity;
 import com.todoc.server.domain.auth.entity.Auth;
 import com.todoc.server.domain.latestlocation.entity.LatestLocation;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
 public class HelperProfile extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,4 +38,16 @@ public class HelperProfile extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     private Area area;
+
+    @Builder
+    public HelperProfile(Long id, Auth auth, LatestLocation latestLocation, String imageUrl,
+                         String strength, String shortBio, Area area) {
+        this.id = id;
+        this.auth = auth;
+        this.latestLocation = latestLocation;
+        this.imageUrl = imageUrl;
+        this.strength = strength;
+        this.shortBio = shortBio;
+        this.area = area;
+    }
 }

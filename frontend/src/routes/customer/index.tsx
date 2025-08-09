@@ -2,12 +2,17 @@ import { createFileRoute, Link } from '@tanstack/react-router';
 import { PageLayout } from '@layouts';
 import { Button, EscortCard, Tabs } from '@components';
 import { IcPlusSideLeft } from '@icons';
+import { getRecruitsCustomer } from '@customer/apis';
+import { dateFormat, timeFormat } from '@utils';
 
 export const Route = createFileRoute('/customer/')({
   component: RouteComponent,
 });
 
 function RouteComponent() {
+  const { data: escortData } = getRecruitsCustomer();
+  const { inProgressList, completedList } = escortData?.data ?? {};
+
   return (
     <PageLayout>
       <PageLayout.Content>
@@ -45,65 +50,58 @@ function RouteComponent() {
           </Tabs.TabsList>
           <Tabs.TabsContent value='신청'>
             <div className='flex-col-start gap-[1.2rem] p-[2rem]'>
-              <EscortCard>
-                <EscortCard.StatusHeader
-                  status='matching'
-                  text='3명이 현재 지원 중이에요!'
-                  title='7월 22일 (토), 서울아산병원'
-                />
-                <EscortCard.Divider />
-                <EscortCard.InfoSection>
-                  <EscortCard.Info type='time' text='7월 22일(토) 12시 ~ 15시' />
-                  <EscortCard.Info type='location' text='꿈에그린아파트 → 서울아산병원' />
-                  <EscortCard.Info type='price' text='123,456원' />
-                </EscortCard.InfoSection>
-                <EscortCard.Tag tags={['support', 'wheelchair', 'care']} />
-              </EscortCard>
-              <EscortCard>
-                <EscortCard.StatusHeader
-                  status='matching'
-                  text='동행번호 NO.12394O4L'
-                  title='7월 22일 (토), 서울아산병원'
-                />
-                <EscortCard.Divider />
-                <EscortCard.InfoSection>
-                  <EscortCard.Info type='time' text='7월 22일(토) 12시 ~ 15시' />
-                  <EscortCard.Info type='location' text='꿈에그린아파트 → 서울아산병원' />
-                  <EscortCard.Info type='price' text='123,456원' />
-                </EscortCard.InfoSection>
-                <EscortCard.Button onClick={() => {}} />
-              </EscortCard>
-              <EscortCard>
-                <EscortCard.StatusHeader
-                  status='matching'
-                  text='동행번호 NO.12394O4L'
-                  title='7월 22일 (토), 서울아산병원'
-                />
-                <EscortCard.Divider />
-                <EscortCard.InfoSection>
-                  <EscortCard.Info type='time' text='7월 22일(토) 12시 ~ 15시' />
-                  <EscortCard.Info type='location' text='꿈에그린아파트 → 서울아산병원' />
-                  <EscortCard.Info type='price' text='123,456원' />
-                </EscortCard.InfoSection>
-                <EscortCard.Tag tags={['support', 'wheelchair', 'care']} />
-              </EscortCard>
-              <EscortCard>
-                <EscortCard.StatusHeader
-                  status='matching'
-                  text='동행번호 NO.12394O4L'
-                  title='7월 22일 (토), 서울아산병원'
-                />
-                <EscortCard.Divider />
-                <EscortCard.InfoSection>
-                  <EscortCard.Info type='time' text='7월 22일(토) 12시 ~ 15시' />
-                  <EscortCard.Info type='location' text='꿈에그린아파트 → 서울아산병원' />
-                  <EscortCard.Info type='price' text='123,456원' />
-                </EscortCard.InfoSection>
-                <EscortCard.Button onClick={() => {}} />
-              </EscortCard>
+              {inProgressList?.map((escort) => {
+                const escortDate = dateFormat(escort.escortDate, 'MM월 dd일(eee)');
+                return (
+                  <EscortCard key={escort.escortId}>
+                    <EscortCard.StatusHeader
+                      status={escort.status}
+                      text={`${escort.numberOfApplication}명이 현재 지원 중이에요!`}
+                      title={`${escortDate} ${escort.destination}`}
+                    />
+                    <EscortCard.Divider />
+                    <EscortCard.InfoSection>
+                      <EscortCard.Info
+                        type='time'
+                        text={`${escortDate} ${timeFormat(escort.estimatedMeetingTime)} ~ ${timeFormat(escort.estimatedReturnTime)}`}
+                      />
+                      <EscortCard.Info
+                        type='location'
+                        text={`${escort.departureLocation} → ${escort.destination}`}
+                      />
+                    </EscortCard.InfoSection>
+                  </EscortCard>
+                );
+              })}
             </div>
           </Tabs.TabsContent>
-          <Tabs.TabsContent value='완료'>Change your 완료 here.</Tabs.TabsContent>
+          <Tabs.TabsContent value='완료'>
+            <div className='flex-col-start gap-[1.2rem] p-[2rem]'>
+              {completedList?.map((escort) => {
+                const escortDate = dateFormat(escort.escortDate, 'MM월 dd일(eee)');
+                return (
+                  <EscortCard key={escort.escortId}>
+                    <EscortCard.StatusHeader
+                      status={escort.status}
+                      text={`${escort.numberOfApplication}명이 현재 지원 중이에요!`}
+                      title={`${escortDate} ${escort.destination}`}
+                    />
+                    <EscortCard.Divider />
+                    <EscortCard.InfoSection>
+                      <EscortCard.Info
+                        type='time'
+                        text={`${escortDate} ${timeFormat(escort.estimatedMeetingTime)} ~ ${timeFormat(escort.estimatedReturnTime)}`}
+                      />
+                      <EscortCard.Info
+                        type='location'
+                        text={`${escort.departureLocation} → ${escort.destination}`}
+                      />
+                    </EscortCard.InfoSection>
+                  </EscortCard>
+                );
+              })}
+            </div>
+          </Tabs.TabsContent>
         </Tabs>
       </PageLayout.Content>
     </PageLayout>

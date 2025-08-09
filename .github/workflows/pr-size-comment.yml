@@ -30,7 +30,7 @@ jobs:
               /^backend\/.*\/target\//, /^backend\/.*\/build\//, 
               /^backend\/.*\/pom\.xml$/, /^backend\/.*\/build\.gradle/, /^backend\/.*\/settings\.gradle/,
               /^backend\/.*\.(properties|yml|yaml)$/, 
-              /^frontend\/public\//, /^frontend\/src\/assets\//
+              /^frontend\/public\//, /^frontend\/src\/assets\// , /^frontend\/src\/shared\/types\/api\/schema\.d\.ts$/
             ];
 
             const filteredFiles = files.filter(file => !excludedPatterns.some(pattern => pattern.test(file.filename)));

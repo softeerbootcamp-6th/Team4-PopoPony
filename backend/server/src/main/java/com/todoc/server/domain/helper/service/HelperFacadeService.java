@@ -1,6 +1,9 @@
 package com.todoc.server.domain.helper.service;
 
+import com.todoc.server.domain.auth.entity.Auth;
 import com.todoc.server.domain.escort.service.EscortService;
+import com.todoc.server.domain.helper.entity.HelperProfile;
+import com.todoc.server.domain.helper.web.dto.request.HelperProfileCreateRequest;
 import com.todoc.server.domain.helper.web.dto.response.HelperDetailResponse;
 import com.todoc.server.domain.helper.web.dto.response.HelperSimpleResponse;
 import com.todoc.server.domain.review.service.PositiveFeedbackChoiceService;
@@ -23,6 +26,7 @@ public class HelperFacadeService {
     private final EscortService escortService;
     private final ReviewService reviewService;
     private final PositiveFeedbackChoiceService positiveFeedbackChoiceService;
+    private final CertificateService certificateService;
 
     /**
      * helperProfileId에 해당하는 도우미의 상세 정보를 조회하는 함수
@@ -55,5 +59,26 @@ public class HelperFacadeService {
                 .positiveFeedbackStatList(positiveFeedbackStat)
                 .latestReviewList(latestReviews)
                 .build();
+    }
+
+    /**
+     * 도우미 프로필 정보를 등록하는 함수
+     */
+    @Transactional
+    public void createHelperProfile(HelperProfileCreateRequest requestDto) {
+
+        HelperProfile helperProfile = helperService.register(requestDto);
+
+        // TODO :: 세션 혹은 JWT로부터 고객 정보 가져오기
+        Auth auth = Auth.builder()
+                .id(1L)
+                .build();
+        helperProfile.setAuth(auth);
+
+        // TODO :: 마지막 위치 정보 가져오기
+        helperProfile.setLatestLocation(null);
+
+        // 자격증 정보 저장
+        certificateService.register(requestDto.getCertificateInfoList(), helperProfile);
     }
 }

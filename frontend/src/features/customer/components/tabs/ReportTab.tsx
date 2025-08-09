@@ -16,7 +16,7 @@ const ReportTab = () => {
             certificates: ['간호사', '간호조무사'],
             tags: ['support', 'wheelchair', 'care'],
           }}
-          onClick={(id) => console.log('헬퍼 카드 클릭:', id)}
+          onClick={() => alert('준비중인 기능이에요')}
         />
       </Tabs.TabsContentSection>
       <Tabs.TabsDivider />

@@ -3,11 +3,16 @@ package com.todoc.server.domain.helper.service;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.querydsl.core.Tuple;
 import com.todoc.server.common.enumeration.Gender;
+import com.todoc.server.common.enumeration.RecruitStatus;
 import com.todoc.server.common.util.DateTimeUtils;
 import com.todoc.server.common.util.JsonUtils;
+import com.todoc.server.domain.escort.entity.Recruit;
+import com.todoc.server.domain.escort.web.dto.request.RecruitCreateRequest;
+import com.todoc.server.domain.helper.entity.HelperProfile;
 import com.todoc.server.domain.helper.exception.HelperProfileNotFoundException;
 import com.todoc.server.domain.helper.repository.HelperJpaRepository;
 import com.todoc.server.domain.helper.repository.HelperQueryRepository;
+import com.todoc.server.domain.helper.web.dto.request.HelperProfileCreateRequest;
 import com.todoc.server.domain.helper.web.dto.response.HelperSimpleResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -95,5 +100,17 @@ public class HelperService {
     public Long getAuthIdByHelperProfileId(Long helperProfileId) {
         return helperJpaRepository.findAuthIdByHelperProfileId(helperProfileId)
                 .orElseThrow(HelperProfileNotFoundException::new);
+    }
+
+    public HelperProfile register(HelperProfileCreateRequest request) {
+
+        HelperProfile helperProfile = HelperProfile.builder()
+                .area(request.getArea())
+                .strength(JsonUtils.toJson(request.getStrengthList()))
+                .shortBio(request.getShortBio())
+                .imageUrl(request.getImageUrl())
+                .build();
+
+        return helperJpaRepository.save(helperProfile);
     }
 }

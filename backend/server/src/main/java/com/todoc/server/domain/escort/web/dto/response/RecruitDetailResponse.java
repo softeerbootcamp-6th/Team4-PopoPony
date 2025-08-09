@@ -1,6 +1,5 @@
 package com.todoc.server.domain.escort.web.dto.response;
 
-import com.todoc.server.common.enumeration.RecruitStatus;
 import com.todoc.server.domain.customer.web.dto.response.PatientSimpleResponse;
 import com.todoc.server.domain.route.web.dto.response.RouteSimpleResponse;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -19,10 +18,9 @@ public class RecruitDetailResponse {
     @Schema(description = "동행 신청 ID")
     private Long recruitId;
 
-    // 매칭중, 매칭완료, 동행중, 완료된 동행
     @NotNull
-    @Schema(description = "동행 신청의 진행 상태", allowableValues = {"MATCHING", "COMPLETED", "IN_PROGRESS", "DONE"})
-    private RecruitStatus status;
+    @Schema(description = "동행 신청의 진행 상태", allowableValues = {"매칭중", "매칭완료", "동행중", "완료된 동행"})
+    private String status;
 
     @NotNull
     @Schema(description = "동행 날짜", example = "2025-08-01")
@@ -51,7 +49,7 @@ public class RecruitDetailResponse {
     private String extraRequest;
 
     @Builder
-    public RecruitDetailResponse(Long recruitId, RecruitStatus status, LocalDate escortDate, LocalTime estimatedMeetingTime,
+    public RecruitDetailResponse(Long recruitId, String status, LocalDate escortDate, LocalTime estimatedMeetingTime,
                                  LocalTime estimatedReturnTime, RouteSimpleResponse route, PatientSimpleResponse patient,
                                  String purpose, String extraRequest) {
         this.recruitId = recruitId;
