@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import { Button, StatusTag, StrengthTag } from '@components';
 import { IcChevronRightSecondary, IcClockFill, IcCoinFill, IcMarkFill } from '@icons';
+import type { StatusType } from '@types';
 
 type Props = {
   children: React.ReactNode;
@@ -15,7 +16,7 @@ const EscortCard = ({ children }: Props) => {
 };
 
 interface CardStatusHeaderProps {
-  status?: 'matching' | 'matching-confirmed' | 'escort' | 'escort-completed';
+  status?: StatusType;
   text: string;
   title: string;
 }
