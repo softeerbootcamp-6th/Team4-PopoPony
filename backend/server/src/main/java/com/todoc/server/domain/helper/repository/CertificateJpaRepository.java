@@ -9,6 +9,6 @@ import java.util.List;
 
 public interface CertificateJpaRepository extends JpaRepository<Certificate, Long> {
 
-    @Query(value = "SELECT type FROM certificate WHERE helper_id = :helperId", nativeQuery = true)
-    List<String> findTypesByHelperId(@Param("helperId") Long helperId);
+    @Query(value = "SELECT type FROM certificate WHERE helper_profile_id = :helperProfileId", nativeQuery = true)
+    List<String> findTypesByHelperProfileId(@Param("helperProfileId") Long helperId);
 }

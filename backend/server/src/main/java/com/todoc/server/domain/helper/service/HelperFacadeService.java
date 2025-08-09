@@ -2,6 +2,7 @@ package com.todoc.server.domain.helper.service;
 
 import com.todoc.server.domain.auth.entity.Auth;
 import com.todoc.server.domain.escort.service.EscortService;
+import com.todoc.server.domain.helper.entity.Certificate;
 import com.todoc.server.domain.helper.entity.HelperProfile;
 import com.todoc.server.domain.helper.web.dto.request.HelperProfileCreateRequest;
 import com.todoc.server.domain.helper.web.dto.response.HelperDetailResponse;
@@ -71,7 +72,7 @@ public class HelperFacadeService {
 
         // TODO :: 세션 혹은 JWT로부터 고객 정보 가져오기
         Auth auth = Auth.builder()
-                .id(1L)
+                .id(6L)
                 .build();
         helperProfile.setAuth(auth);
 
@@ -79,6 +80,9 @@ public class HelperFacadeService {
         helperProfile.setLatestLocation(null);
 
         // 자격증 정보 저장
-        certificateService.register(requestDto.getCertificateInfoList(), helperProfile);
+        for (HelperProfileCreateRequest.CertificateInfo certificateInfo : requestDto.getCertificateInfoList()) {
+            Certificate certificate = certificateService.register(certificateInfo);
+            certificate.setHelperProfile(helperProfile);
+        }
     }
 }
