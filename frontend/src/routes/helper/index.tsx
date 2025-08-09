@@ -197,7 +197,7 @@ function RouteComponent() {
               <div className='flex-1'>
                 <Link
                   to={hasProfile ? '/helper/profile' : '/helper/profile/new/$step'}
-                  params={{ step: 'profile' }}>
+                  params={{ step: 'region' }}>
                   <Button variant='assistive' size='md'>
                     <span className='text-text-neutral-primary'>
                       {hasProfile ? '프로필 바로가기' : '프로필 작성하기'}
