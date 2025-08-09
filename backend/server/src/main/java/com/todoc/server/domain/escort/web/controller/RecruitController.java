@@ -233,7 +233,7 @@ public class RecruitController {
 
         RecruitDetailResponse mock = RecruitDetailResponse.builder()
                 .recruitId(1L)
-                .status(RecruitStatus.MATCHING)
+                .status("매칭중")
                 .escortDate(LocalDate.now())
                 .estimatedMeetingTime(LocalTime.NOON)
                 .estimatedReturnTime(LocalTime.MIDNIGHT)
@@ -255,6 +255,8 @@ public class RecruitController {
     @GetMapping("/{recruitId}/payments")
     public Response<RecruitPaymentResponse> getRecruitPayment(@PathVariable Long recruitId) {
         // TODO :: recruitId에 해당하는 동행 신청의 결제 금액을 계산
+
+//        return Response.from(recruitService.getRecruitPaymentByRecruitId(recruitId));
 
         LocationInfoSimpleResponse meetingLocationInfo = LocationInfoSimpleResponse.builder()
                 .locationInfoId(1L)
@@ -319,7 +321,8 @@ public class RecruitController {
             description = "동행 신청 취소 성공")
     @PatchMapping("/{recruitId}/cancel")
     public Response<Void> cancelRecruit(@PathVariable Long recruitId) {
-        recruitService.cancelRecruit(recruitId);
+
+        // recruitService.cancelRecruit(recruitId);
 
         return Response.from();
     }

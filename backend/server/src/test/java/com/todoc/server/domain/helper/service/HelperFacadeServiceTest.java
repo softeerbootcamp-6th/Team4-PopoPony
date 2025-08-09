@@ -79,7 +79,7 @@ class HelperFacadeServiceTest {
         when(reviewService.getLatestReviewsByHelperUserId(authId))
                 .thenReturn(List.of(
                         ReviewSimpleResponse.builder()
-                                .satisfactionLevel("좋았어요")
+                                .satisfactionLevel("GOOD")
                                 .shortComment("정말 좋았습니다!!!")
                                 .createdAt(LocalDateTime.now().minusDays(1))
                                 .build()

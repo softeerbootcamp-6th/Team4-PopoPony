@@ -37,7 +37,7 @@ public class ReviewSimpleResponse {
     @Builder
     public ReviewSimpleResponse(Long reviewId, String satisfactionLevel, LocalDateTime createdAt, String shortComment, List<String> positiveFeedbackList) {
         this.reviewId = reviewId;
-        this.satisfactionLevel = satisfactionLevel;
+        this.satisfactionLevel = SatisfactionLevel.valueOf(satisfactionLevel).getLabel();
         this.createdAt = createdAt;
         this.positiveFeedbackList = positiveFeedbackList;
         this.shortComment = shortComment;

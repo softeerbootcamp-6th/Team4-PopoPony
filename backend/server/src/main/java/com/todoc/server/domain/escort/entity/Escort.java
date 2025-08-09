@@ -4,13 +4,16 @@ import com.todoc.server.common.entity.BaseEntity;
 import com.todoc.server.common.enumeration.EscortStatus;
 import com.todoc.server.domain.auth.entity.Auth;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.SQLRestriction;
 
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
 @SQLRestriction("deleted_at is NULL")
 public class Escort extends BaseEntity {
     @Id
@@ -33,4 +36,14 @@ public class Escort extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     private EscortStatus status;
+
+    @Builder
+    public Escort(Long id, Recruit recruit, Auth customer, Auth helper, String memo, EscortStatus status) {
+        this.id = id;
+        this.recruit = recruit;
+        this.customer = customer;
+        this.helper = helper;
+        this.memo = memo;
+        this.status = status;
+    }
 }

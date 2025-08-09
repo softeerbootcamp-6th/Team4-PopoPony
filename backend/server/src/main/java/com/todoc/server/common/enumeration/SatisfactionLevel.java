@@ -26,7 +26,7 @@ public enum SatisfactionLevel {
      */
     public static Optional<SatisfactionLevel> from(String value) {
         return Arrays.stream(values())
-                .filter(v -> v.name().equalsIgnoreCase(value))
+                .filter(v -> v.label.equalsIgnoreCase(value))
                 .findFirst();
     }
 }
