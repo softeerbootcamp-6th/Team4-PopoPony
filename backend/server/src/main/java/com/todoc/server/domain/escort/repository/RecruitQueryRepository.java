@@ -2,7 +2,9 @@ package com.todoc.server.domain.escort.repository;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.todoc.server.common.enumeration.ApplicationStatus;
 import com.todoc.server.domain.escort.repository.dto.RecruitHistoryDetailFlatDto;
+import com.todoc.server.domain.escort.repository.dto.RecruitSimpleFlatDto;
 import com.todoc.server.domain.escort.web.dto.response.RecruitHistorySimpleResponse;
 import com.todoc.server.domain.route.entity.QLocationInfo;
 import java.util.List;
@@ -130,5 +132,40 @@ public class RecruitQueryRepository {
                 .join(route.returnLocationInfo, returnLocation).fetchJoin()
                 .where(recruit.id.eq(recruitId))
                 .fetchOne();
+    }
+
+    /**
+     * HelperUserId로 신청한 동행 목록 조회 (도우미 userId와 신청 상태를 기준으로 필터링)
+     */
+    public List<RecruitSimpleFlatDto> findListByHelperUserIdAndApplicationStatus(Long helperUserId, List<ApplicationStatus> status) {
+
+        return queryFactory
+            .select(Projections.constructor(RecruitSimpleFlatDto.class,
+                recruit.id,
+                escort.id,
+                recruit.status,
+                application.count(),
+                recruit.escortDate,
+                recruit.estimatedMeetingTime,
+                recruit.estimatedReturnTime,
+                meetingLocation.placeName,
+                hospitalLocation.placeName,
+                recruit.estimatedFee,
+                patient.needsHelping,
+                patient.usesWheelchair,
+                patient.hasCognitiveIssue,
+                patient.hasCommunicationIssue
+            ))
+            .from(recruit)
+            .join(application).on(application.recruit.eq(recruit))
+            .leftJoin(escort).on(escort.recruit.eq(recruit))
+            .join(recruit.route, route)
+            .join(route.meetingLocationInfo, meetingLocation)
+            .join(route.hospitalLocationInfo, hospitalLocation)
+            .join(recruit.patient, patient)
+            .where(application.helper.id.eq(helperUserId)
+                .and(application.status.in(status)))
+            .groupBy(recruit.id)
+            .fetch();
     }
 }
