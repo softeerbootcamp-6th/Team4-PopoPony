@@ -1,9 +1,9 @@
 export type StatusType =
-  | 'matching'
-  | 'matching-confirmed'
-  | 'escort'
-  | 'on-meeting'
-  | 'going-to-hospital'
-  | 'in-treatment'
-  | 'returning-home'
-  | 'escort-completed';
+  | 'MATCHING'
+  | 'COMPLETED'
+  | 'IN_PROGRESS'
+  | 'ON_MEETING'
+  | 'GOING_TO_HOSPITAL'
+  | 'IN_TREATMENT'
+  | 'RETURNING_HOME'
+  | 'DONE';
