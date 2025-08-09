@@ -164,7 +164,8 @@ public class RecruitQueryRepository {
             .join(route.hospitalLocationInfo, hospitalLocation)
             .join(recruit.patient, patient)
             .where(application.helper.id.eq(helperUserId)
-                .and(application.status.in(status)))
+                .and(application.status.in(status))
+                .and(application.deletedAt.isNull()))
             .groupBy(recruit.id)
             .fetch();
     }
