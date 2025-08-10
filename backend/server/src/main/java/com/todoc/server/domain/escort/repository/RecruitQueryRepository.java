@@ -1,6 +1,7 @@
 package com.todoc.server.domain.escort.repository;
 
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.todoc.server.common.enumeration.ApplicationStatus;
 import com.todoc.server.common.enumeration.RecruitStatus;
@@ -188,9 +189,22 @@ public class RecruitQueryRepository {
             .join(recruit.patient, patient).fetchJoin()
             .join(route.meetingLocationInfo, meetingLocation).fetchJoin()
             .join(route.hospitalLocationInfo, hospitalLocation).fetchJoin()
-            .where(route.meetingLocationInfo.upperAddrName.eq(area)
-                .and(recruit.escortDate.between(startDate, endDate))
+            .where(areaEq(area)
+                .and(escortDateBetween(startDate, endDate))
                 .and(recruit.status.in(status)))
             .fetch();
+    }
+
+    private BooleanExpression areaEq(String area) {
+        return (area != null && !area.isBlank())
+            ? meetingLocation.upperAddrName.eq(area)
+            : null; // null이면 where에서 무시
+    }
+
+    private BooleanExpression escortDateBetween(LocalDate start, LocalDate end) {
+        if (start != null && end != null) return recruit.escortDate.between(start, end);
+        if (start != null) return recruit.escortDate.goe(start);
+        if (end != null) return recruit.escortDate.loe(end);
+        return null;
     }
 }
