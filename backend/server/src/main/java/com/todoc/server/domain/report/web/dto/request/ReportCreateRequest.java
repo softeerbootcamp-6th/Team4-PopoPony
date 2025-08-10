@@ -1,5 +1,6 @@
 package com.todoc.server.domain.report.web.dto.request;
 
+import com.todoc.server.common.dto.request.ImageCreateRequest;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -31,31 +32,10 @@ public class ReportCreateRequest {
     private String description;
 
     @Schema(description = "첨부 이미지 목록(최대 2장)")
-    private List<ImageCreateRequest> images;
+    private List<ImageCreateRequest> imageCreateRequestList;
 
     @Schema(description = "택시 요금 정보")
-    private TaxiFeeCreateRequest taxiFee;
-
-    @Getter
-    @Schema(description = "S3에 업로드 완료된 이미지 메타데이터")
-    public static class ImageCreateRequest {
-
-        @NotNull
-        @Schema(description = "S3 오브젝트 키(버킷 내부 경로). presigned 업로드 시 사용했던 key 그대로 전달")
-        private String s3Key;
-
-        @NotNull
-        @Schema(description = "원본 Content-Type (이미지 MIME 타입)")
-        private String contentType;
-
-        @NotNull
-        @Schema(description = "파일 크기(byte)")
-        private Long size;
-
-        @NotNull
-        @Schema(description = "무결성 해시(일반적으로 S3 ETag)")
-        private String checksum;
-    }
+    private TaxiFeeCreateRequest taxiFeeCreateRequest;
 
     @Getter
     @Schema(description = "리포트에 포함되는 택시 요금 정보")

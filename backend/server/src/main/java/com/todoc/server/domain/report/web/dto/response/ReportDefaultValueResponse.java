@@ -2,6 +2,7 @@ package com.todoc.server.domain.report.web.dto.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
+import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalTime;
@@ -21,4 +22,11 @@ public class ReportDefaultValueResponse {
     @NotNull
     @Schema(description = "동행 중 메모", example = "증상 전보다 많이 호전됨")
     private String memo;
+
+    @Builder
+    public ReportDefaultValueResponse(LocalTime actualMeetingTime, LocalTime actualReturnTime, String memo) {
+        this.actualMeetingTime = actualMeetingTime;
+        this.actualReturnTime = actualReturnTime;
+        this.memo = memo;
+    }
 }
