@@ -380,6 +380,7 @@ public class RecruitController {
         RecruitSimpleResponse dto = RecruitSimpleResponse.builder()
             .recruitId(1L)
             .escortDate(date)
+            .status(RecruitStatus.MATCHING)
             .estimatedMeetingTime(LocalTime.NOON)
             .estimatedReturnTime(LocalTime.MIDNIGHT)
             .departureLocation("꿈에그린아파트")
