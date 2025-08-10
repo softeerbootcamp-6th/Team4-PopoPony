@@ -39,7 +39,12 @@ public class RecruitQueryRepository {
                 recruit.estimatedMeetingTime,
                 recruit.estimatedReturnTime,
                 meetingLocation.placeName,
-                hospitalLocation.placeName
+                hospitalLocation.placeName,
+                recruit.estimatedFee,
+                patient.needsHelping,
+                patient.usesWheelchair,
+                patient.hasCognitiveIssue,
+                patient.hasCommunicationIssue
             ))
             .from(recruit)
             .leftJoin(application).on(application.recruit.eq(recruit))
@@ -47,6 +52,7 @@ public class RecruitQueryRepository {
             .join(recruit.route, route)
             .join(route.meetingLocationInfo, meetingLocation)
             .join(route.hospitalLocationInfo, hospitalLocation)
+            .join(recruit.patient, patient)
             .where(recruit.customer.id.eq(userId))
             .groupBy(recruit.id)
             .fetch();
