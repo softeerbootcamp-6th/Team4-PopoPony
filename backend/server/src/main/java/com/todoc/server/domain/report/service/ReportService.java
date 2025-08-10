@@ -14,6 +14,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
+import java.util.List;
+
 import static com.todoc.server.domain.escort.entity.QRecruit.recruit;
 import static com.todoc.server.domain.report.entity.QReport.report;
 import static com.todoc.server.domain.report.entity.QTaxiFee.taxiFee;
@@ -75,5 +78,13 @@ public class ReportService {
                 .build();
 
         return reportJpaRepository.save(report);
+    }
+
+    public long getCount() {
+        return reportJpaRepository.count();
+    }
+
+    public List<Report> getAllReports() {
+        return reportJpaRepository.findAll();
     }
 }
