@@ -1,13 +1,15 @@
 package com.todoc.server.common.entity;
 
+import com.todoc.server.common.dto.request.ImageCreateRequest;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
+@Embeddable
 @Getter
 @Setter
-@MappedSuperclass
-public abstract class ImageObject extends BaseEntity {
+@NoArgsConstructor
+@AllArgsConstructor
+public class ImageMeta extends BaseEntity {
 
     @Column(name = "s3_key", length = 1024, nullable = false)
     protected String s3Key;
@@ -20,4 +22,8 @@ public abstract class ImageObject extends BaseEntity {
 
     @Column(name = "checksum", length = 64)
     protected String checksum;
+
+    public static ImageMeta from(ImageCreateRequest dto) {
+        return new ImageMeta(dto.getS3Key(), dto.getContentType(), dto.getSize(), dto.getChecksum());
+    }
 }
