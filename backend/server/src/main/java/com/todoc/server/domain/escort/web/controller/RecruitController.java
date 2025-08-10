@@ -375,13 +375,16 @@ public class RecruitController {
         responseCode = "200",
         description = "동행 지원 목록 조회 성공")
     @GetMapping("")
-    public Response<RecruitSearchListResponse> getRecruitListBySearch(@RequestParam("area") String area, @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+    public Response<RecruitSearchListResponse> getRecruitListBySearch(
+        @RequestParam("area") String area,
+        @RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+        @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate){
         // TODO :: 원래라면 jwt 혹은 sessionId로부터 유저 정보를 조회해야 함
         // 현재는 우선 userId = 1로 고정
 
         RecruitSimpleResponse dto = RecruitSimpleResponse.builder()
             .recruitId(1L)
-            .escortDate(date)
+            .escortDate(LocalDate.now())
             .status(RecruitStatus.MATCHING)
             .estimatedMeetingTime(LocalTime.NOON)
             .estimatedReturnTime(LocalTime.MIDNIGHT)

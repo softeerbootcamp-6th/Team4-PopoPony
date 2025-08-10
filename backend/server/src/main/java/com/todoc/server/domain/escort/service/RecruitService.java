@@ -15,6 +15,8 @@ import com.todoc.server.domain.escort.repository.dto.RecruitHistoryDetailFlatDto
 import com.todoc.server.domain.escort.web.dto.request.RecruitCreateRequest;
 import com.todoc.server.domain.escort.web.dto.response.*;
 
+import com.todoc.server.domain.route.exception.LocationNotFoundException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -286,6 +288,69 @@ public class RecruitService {
             .build();
 
         return result;
+    }
+
+    /**
+     * 지역/날짜에 따른 동행 신청 목록을 조회하는 함수
+     * <ul>
+     *   <li>1. 만남 장소 기준으로 필터링</li>
+     *   <li>2. 동행일 오름차순 정렬 + 가까운 기준 정렬</li>
+     * </ul>
+     * @param area String
+     * @param startDate LocalDate
+     * @param endDate LocalDate
+     * @return 검색되는 '동행 신청 목록'응답 DTO
+     */
+    public RecruitSearchListResponse getRecruitListBySearch(String area, LocalDate startDate, LocalDate endDate) {
+        List<Recruit> recruitList = recruitQueryRepository.findListByDateRangeAndStatus(area, startDate, endDate, List.of(RecruitStatus.MATCHING));
+
+
+        // 동행일 기준으로 오름차순 + 만남 장소 기준으로 필터링
+        recruitList = recruitList.stream()
+            .sorted(Comparator
+                .comparing(Recruit::getEscortDate))
+            // TODO 가까운 기준??
+            .toList();
+
+        // DTO 구성
+
+        List<RecruitSimpleResponse> inProgressList = new ArrayList<>();
+        for (Recruit recruit : recruitList) {
+            if (recruit.getRoute() == null) {
+                throw new RouteNotFoundException();
+            }
+
+            if (recruit.getRoute().getMeetingLocationInfo() == null || recruit.getRoute().getHospitalLocationInfo() == null) {
+                throw new LocationNotFoundException();
+            }
+
+            if (recruit.getPatient() == null) {
+                throw new PatientNotFoundException();
+            }
+
+            RecruitSimpleResponse dto = RecruitSimpleResponse.builder()
+                .recruitId(recruit.getId())
+                .escortId(null)
+                .status(recruit.getStatus())
+                .numberOfApplication(0L)
+                .escortDate(recruit.getEscortDate())
+                .estimatedMeetingTime(recruit.getEstimatedMeetingTime())
+                .estimatedReturnTime(recruit.getEstimatedReturnTime())
+                .departureLocation(recruit.getRoute().getMeetingLocationInfo().getPlaceName())
+                .destination(recruit.getRoute().getHospitalLocationInfo().getPlaceName())
+                .estimatedPayment(recruit.getEstimatedFee())
+                .needsHelping(recruit.getPatient().getNeedsHelping())
+                .usesWheelchair(recruit.getPatient().getUsesWheelchair())
+                .hasCognitiveIssue(recruit.getPatient().getHasCognitiveIssue())
+                .hasCommunicationIssue(recruit.getPatient().getHasCommunicationIssue())
+                .build();
+
+            inProgressList.add(dto);
+        }
+
+        return RecruitSearchListResponse.builder()
+            .inProgressList(inProgressList)
+            .build();
     }
 
     public List<Recruit> getAllRecruits() {
