@@ -1,5 +1,6 @@
 package com.todoc.server.domain.escort.service;
 
+import com.todoc.server.common.enumeration.ApplicationStatus;
 import com.todoc.server.common.enumeration.Gender;
 import com.todoc.server.common.enumeration.RecruitStatus;
 import com.todoc.server.domain.customer.entity.Patient;
@@ -11,6 +12,8 @@ import com.todoc.server.domain.escort.repository.RecruitQueryRepository;
 import com.todoc.server.domain.escort.repository.dto.RecruitHistoryDetailFlatDto;
 import com.todoc.server.domain.escort.web.dto.response.*;
 import com.todoc.server.domain.route.entity.LocationInfo;
+import java.util.ArrayList;
+import java.util.Map;
 import org.assertj.core.api.Assertions;
 import com.todoc.server.domain.route.entity.Route;
 import org.junit.jupiter.api.DisplayName;
@@ -276,5 +279,102 @@ class RecruitServiceTest {
         // when & then
         assertThatThrownBy(() -> recruitService.getRecruitPaymentByRecruitId(999L))
                 .isInstanceOf(RecruitNotFoundException.class);
+    }
+
+    @Test
+    @DisplayName("고객 입장에서 동행 신청 목록 조회 - 진행중인 목록과 완료된 목록 분리 및 정렬")
+    void getRecruitListAsHelperByUserId_정상_분리_정렬() {
+        // given
+        Long helperUserId = 7L;
+
+        RecruitSimpleResponse r1 = new RecruitSimpleResponse(1L, 1L, RecruitStatus.IN_PROGRESS, 2L, LocalDate.of(2024, 6, 3), LocalTime.NOON, LocalTime.MIDNIGHT, "서울역", "병원A", 10000, true, false, false, true);
+        RecruitSimpleResponse r2 = new RecruitSimpleResponse(2L, null, RecruitStatus.MATCHING, 3L, LocalDate.of(2024, 6, 4), LocalTime.NOON, LocalTime.MIDNIGHT, "학동역", "병원B", 10000, true, false, false, true);
+        RecruitSimpleResponse r3 = new RecruitSimpleResponse(3L, 3L, RecruitStatus.COMPLETED, 4L, LocalDate.of(2024, 6, 2), LocalTime.NOON, LocalTime.MIDNIGHT, "시청역", "병원C", 10000, true, false, false, true);
+        RecruitSimpleResponse r4 = new RecruitSimpleResponse(4L, 4L, RecruitStatus.DONE, 5L, LocalDate.of(2024, 6, 4), LocalTime.NOON, LocalTime.MIDNIGHT, "강남역", "병원D", 10000, true, false, false, true);
+        RecruitSimpleResponse r5 = new RecruitSimpleResponse(5L, 5L, RecruitStatus.DONE, 6L, LocalDate.of(2024, 5, 30), LocalTime.NOON, LocalTime.MIDNIGHT, "교대역", "병원E", 10000, true, false, false, true);
+
+        when(recruitQueryRepository.findListByHelperUserIdAndApplicationStatus(
+            eq(helperUserId), eq(List.of(ApplicationStatus.MATCHED, ApplicationStatus.PENDING))))
+            .thenReturn(List.of(r1, r2, r3, r4, r5));
+
+        // when
+        RecruitListResponse result = recruitService.getRecruitListAsHelperByUserId(helperUserId);
+
+        // then
+        assertEquals(3, result.getInProgressList().size()); // MATCHING(매칭중) 1 + COMPLETED(매칭완료) 1 + IN_PROGRESS(동행중) 1
+        assertEquals(2, result.getCompletedList().size());  // DONE 2
+
+        // 진행중 목록
+        List<RecruitSimpleResponse> inProgress = result.getInProgressList();
+
+        assertEquals(1L, inProgress.get(0).getRecruitId());  // r1 (동행중이므로 첫번째로 와야함)
+        assertEquals(RecruitStatus.IN_PROGRESS, inProgress.get(0).getStatus());
+        assertEquals(LocalDate.of(2024, 6, 3), inProgress.get(0).getEscortDate());
+
+        assertEquals(3L, inProgress.get(1).getRecruitId()); // r3 (매칭중/매칭완료 상태의 경우 동행일 기준 오름차순이므로 r3가 두번째로 와야함)
+        assertEquals(RecruitStatus.COMPLETED, inProgress.get(1).getStatus());
+        assertEquals(LocalDate.of(2024, 6, 2), inProgress.get(1).getEscortDate());
+
+        assertEquals(2L, inProgress.get(2).getRecruitId()); // r2 (동행중 상태가 아님, 동행일 기준 오름차순이므로 마지막에 와야함)
+        assertEquals(RecruitStatus.MATCHING, inProgress.get(2).getStatus());
+        assertEquals(LocalDate.of(2024, 6, 4), inProgress.get(2).getEscortDate());
+
+        // 완료 목록
+        List<RecruitSimpleResponse> completed = result.getCompletedList();
+
+        assertEquals(4L, completed.get(0).getRecruitId());  // r4 (최신순으로 와야 하므로)
+        assertEquals(5L, completed.get(1).getRecruitId());  // r5
+    }
+
+    @Test
+    @DisplayName("검색 - 지역/날짜로 조회 후 escortDate 오름차순 정렬 및 DTO 매핑")
+    void getRecruitListBySearch_정상조회_정렬_매핑() {
+        // given
+        String area = "서울";
+        LocalDate d1 = LocalDate.of(2024, 6, 1);
+        LocalDate d2 = LocalDate.of(2024, 6, 2);
+
+        LocationInfo meet = LocationInfo.builder().placeName("만남장소").upperAddrName(area).build();
+        LocationInfo hosp = LocationInfo.builder().placeName("병원A").upperAddrName(area).build();
+        Route route = Route.builder().meetingLocationInfo(meet).hospitalLocationInfo(hosp).build();
+
+        Patient p = Patient.builder().needsHelping(true).usesWheelchair(false)
+            .hasCognitiveIssue(false).hasCommunicationIssue(true).build();
+
+        Recruit r1 = Recruit.builder().id(1L).status(RecruitStatus.MATCHING).escortDate(d2).estimatedMeetingTime(LocalTime.of(9, 30)).estimatedReturnTime(LocalTime.of(11, 30)).estimatedFee(75000).route(route).patient(p).build();
+
+        Recruit r2 = Recruit.builder().id(2L).status(RecruitStatus.MATCHING).escortDate(d1).estimatedMeetingTime(LocalTime.of(10, 0)).estimatedReturnTime(LocalTime.of(12, 0)).estimatedFee(123000).route(route).patient(p).build();
+
+        Recruit r3 = Recruit.builder().id(3L).status(RecruitStatus.MATCHING).escortDate(d2).estimatedMeetingTime(LocalTime.of(14, 0)).estimatedReturnTime(LocalTime.of(16, 0)).estimatedFee(98000).route(route).patient(p).build();
+
+        when(recruitQueryRepository.findListByDateRangeAndStatus(
+            eq(area), eq(d1), eq(d2), eq(List.of(RecruitStatus.MATCHING))
+        )).thenReturn(List.of(r1, r3, r2));  // 섞어서 반환
+
+
+        // when
+        RecruitSearchListResponse res = recruitService.getRecruitListBySearch(area, d1, d2);
+
+
+        // then
+        Map<LocalDate, List<RecruitSimpleResponse>> map = res.getInProgressMap();
+
+        assertEquals(2, map.size());  // 날짜가 2종류 뿐이므로
+
+        List<LocalDate> keys = new ArrayList<>(map.keySet());
+        assertEquals(d1, keys.get(0));  // 키 순서: d1 -> d2 (서비스에서 escortDate 오름차순 정렬 후 그룹핑)
+        assertEquals(d2, keys.get(1));
+
+        // d1 그룹 검증
+        List<RecruitSimpleResponse> g1 = map.get(d1);
+        assertEquals(1, g1.size());
+        RecruitSimpleResponse day1Item = g1.get(0);  // 2024-06-01에 해당하는 RecruitSimpleResponse
+        assertEquals(2L, day1Item.getRecruitId());
+        assertEquals("만남장소", day1Item.getDepartureLocation());
+        assertEquals("병원A", day1Item.getDestination());
+        assertEquals(123000, day1Item.getEstimatedPayment());
+
+        List<RecruitSimpleResponse> g2 = map.get(d2);
+        assertEquals(2, g2.size());
     }
 }
