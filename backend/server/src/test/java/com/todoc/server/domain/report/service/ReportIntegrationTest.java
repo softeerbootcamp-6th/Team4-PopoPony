@@ -11,8 +11,6 @@ import com.todoc.server.domain.report.entity.TaxiReceiptImage;
 import com.todoc.server.domain.report.web.dto.request.ReportCreateRequest;
 import com.todoc.server.domain.report.web.dto.response.ReportDefaultValueResponse;
 import com.todoc.server.domain.report.web.dto.response.ReportDetailResponse;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
