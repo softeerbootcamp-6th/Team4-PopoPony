@@ -3,9 +3,11 @@ package com.todoc.server.domain.escort.repository;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.todoc.server.common.enumeration.ApplicationStatus;
+import com.todoc.server.common.enumeration.RecruitStatus;
 import com.todoc.server.domain.escort.repository.dto.RecruitHistoryDetailFlatDto;
 import com.todoc.server.domain.escort.web.dto.response.RecruitHistorySimpleResponse;
 import com.todoc.server.domain.route.entity.QLocationInfo;
+import java.time.LocalDate;
 import java.util.List;
 import com.todoc.server.domain.escort.entity.Recruit;
 import com.todoc.server.domain.escort.web.dto.response.RecruitSimpleResponse;
@@ -172,6 +174,23 @@ public class RecruitQueryRepository {
                 .and(application.status.in(status))
                 .and(application.deletedAt.isNull()))
             .groupBy(recruit.id)
+            .fetch();
+    }
+
+    /**
+     * 시작일과 종료일 사이에 해당하는 동행 신청 목록 조회 (페치조인)
+     */
+    public List<Recruit> findListByDateRangeAndStatus(String area, LocalDate startDate, LocalDate endDate, List<RecruitStatus> status) {
+
+        return queryFactory
+            .selectFrom(recruit)
+            .join(recruit.route, route).fetchJoin()
+            .join(recruit.patient, patient).fetchJoin()
+            .join(route.meetingLocationInfo, meetingLocation).fetchJoin()
+            .join(route.hospitalLocationInfo, hospitalLocation).fetchJoin()
+            .where(route.meetingLocationInfo.upperAddrName.eq(area)
+                .and(recruit.escortDate.between(startDate, endDate))
+                .and(recruit.status.in(status)))
             .fetch();
     }
 }
