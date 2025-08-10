@@ -7,10 +7,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -51,5 +48,39 @@ public class ReportController {
                 .build();
 
         return Response.from(mock);
+    }
+
+    @Operation(
+            summary = "리포트 등록애 필요한 기본값 조회",
+            description = "리포트를 등록에 필요한 기본값을 조회합니다.")
+    @ApiResponse(
+            responseCode = "200",
+            description = "리포트 등록에 필요한 기본값 조회 성공")
+    @PostMapping("recruits/{recruitId}")
+    public Response<Void> getReportDefaultValueOnRecruit(@PathVariable Long recruitId) {
+        // TODO :: 신청 ID를 받아, 해당 신청에 대한 리포트를 작성하기 위해 필요한 기본값 조회
+
+//        return Response.from(reportService.getReportDetailByRecruitId(recruitId));
+
+
+
+        return Response.from();
+    }
+
+    @Operation(
+            summary = "동행 신청에 대한 리포트 등록",
+            description = "특정 동행 신청에 대한 리포트를 등록합니다.")
+    @ApiResponse(
+            responseCode = "200",
+            description = "리포트 등록 성공")
+    @PostMapping("recruits/{recruitId}/default")
+    public Response<Void> createReportOnRecruit(@PathVariable Long recruitId) {
+        // TODO :: 신청 ID를 받아, 해당 신청에 대한 리포트를 작성
+
+//        return Response.from(reportService.getReportDetailByRecruitId(recruitId));
+
+
+
+        return Response.from();
     }
 }
