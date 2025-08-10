@@ -4,7 +4,9 @@ import com.todoc.server.common.entity.BaseEntity;
 import com.todoc.server.domain.auth.entity.Auth;
 import com.todoc.server.domain.escort.entity.Recruit;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.SQLRestriction;
 
@@ -14,6 +16,7 @@ import java.time.LocalTime;
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
 @SQLRestriction("deleted_at is NULL")
 public class Report extends BaseEntity {
     @Id
@@ -45,4 +48,14 @@ public class Report extends BaseEntity {
     private LocalDateTime nextAppointmentTime;
 
     private String description;
+
+    @Builder
+    public Report(LocalTime actualMeetingTime, LocalTime actualReturnTime, Boolean hasNextAppointment,
+                  LocalDateTime nextAppointmentTime, String description) {
+        this.actualMeetingTime = actualMeetingTime;
+        this.actualReturnTime = actualReturnTime;
+        this.hasNextAppointment = hasNextAppointment;
+        this.nextAppointmentTime = nextAppointmentTime;
+        this.description = description;
+    }
 }
