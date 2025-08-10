@@ -52,11 +52,11 @@ class RecruitServiceTest {
     public void getRecruitListAsCustomerByUserId_ShouldReturnSortedRecruitList() {
         // given
         Long userId = 1L;
-        RecruitSimpleResponse inProgress1 = new RecruitSimpleResponse(1L,1L, "동행중", 2L, LocalDate.of(2024, 6, 3), LocalTime.NOON, LocalTime.MIDNIGHT, "서울역", "병원A", 10000L, List.of());
-        RecruitSimpleResponse inProgress2 = new RecruitSimpleResponse(1L, 2L, "동행중", 2L, LocalDate.of(2024, 6, 1), LocalTime.NOON, LocalTime.MIDNIGHT, "서울역", "병원A", 10000L, List.of());
-        RecruitSimpleResponse inProgress3 = new RecruitSimpleResponse(2L, null, "매칭중", 3L, LocalDate.of(2024, 6, 2), LocalTime.NOON, LocalTime.MIDNIGHT, "학동역", "병원B", 10000L, List.of());
-        RecruitSimpleResponse done1 = new RecruitSimpleResponse(3L, null, "동행완료", 2L, LocalDate.of(2024, 5, 30), LocalTime.NOON, LocalTime.MIDNIGHT, "서울역", "병원C", 10000L, List.of());
-        RecruitSimpleResponse done2 = new RecruitSimpleResponse(4L, null, "동행완료", 1L, LocalDate.of(2024, 6, 4), LocalTime.NOON, LocalTime.MIDNIGHT, "학동역", "병원D", 10000L, List.of());
+        RecruitSimpleResponse inProgress1 = new RecruitSimpleResponse(1L,1L, RecruitStatus.IN_PROGRESS, 2L, LocalDate.of(2024, 6, 3), LocalTime.NOON, LocalTime.MIDNIGHT, "서울역", "병원A", 10000, true, false, false, true);
+        RecruitSimpleResponse inProgress2 = new RecruitSimpleResponse(1L, 2L, RecruitStatus.IN_PROGRESS, 2L, LocalDate.of(2024, 6, 1), LocalTime.NOON, LocalTime.MIDNIGHT, "서울역", "병원A", 10000, true, false, false, true);
+        RecruitSimpleResponse inProgress3 = new RecruitSimpleResponse(2L, null, RecruitStatus.MATCHING, 3L, LocalDate.of(2024, 6, 2), LocalTime.NOON, LocalTime.MIDNIGHT, "학동역", "병원B", 10000, true, false, false, true);
+        RecruitSimpleResponse done1 = new RecruitSimpleResponse(3L, null, RecruitStatus.DONE, 2L, LocalDate.of(2024, 5, 30), LocalTime.NOON, LocalTime.MIDNIGHT, "서울역", "병원C", 10000, true, false, false, true);
+        RecruitSimpleResponse done2 = new RecruitSimpleResponse(4L, null, RecruitStatus.DONE, 1L, LocalDate.of(2024, 6, 4), LocalTime.NOON, LocalTime.MIDNIGHT, "학동역", "병원D", 10000, true, false, false, true);
 
         List<RecruitSimpleResponse> mockList = Arrays.asList(inProgress2, done1, inProgress1, done2, inProgress3);
 

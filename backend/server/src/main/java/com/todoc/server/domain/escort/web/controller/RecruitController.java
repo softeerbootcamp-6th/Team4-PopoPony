@@ -350,8 +350,11 @@ public class RecruitController {
             .escortDate(LocalDate.now())
             .estimatedMeetingTime(LocalTime.NOON)
             .estimatedReturnTime(LocalTime.MIDNIGHT)
-            .estimatedPayment(123000L)
-            .patientIssues(new ArrayList<>(List.of("안전한 부축", "휠체어 이동")))
+            .estimatedPayment(123000)
+            .needsHelping(true)
+            .hasCommunicationIssue(true)
+            .hasCognitiveIssue(true)
+            .usesWheelchair(true)
             .build();
 
         List<RecruitSimpleResponse> list = new ArrayList<>();
@@ -379,12 +382,16 @@ public class RecruitController {
         RecruitSimpleResponse dto = RecruitSimpleResponse.builder()
             .recruitId(1L)
             .escortDate(date)
+            .status(RecruitStatus.MATCHING)
             .estimatedMeetingTime(LocalTime.NOON)
             .estimatedReturnTime(LocalTime.MIDNIGHT)
             .departureLocation("꿈에그린아파트")
             .destination("서울아산병원")
-            .estimatedPayment(123000L)
-            .patientIssues(new ArrayList<>(List.of("안전한 부축", "휠체어 이동")))
+            .estimatedPayment(123000)
+            .needsHelping(true)
+            .hasCommunicationIssue(true)
+            .hasCognitiveIssue(true)
+            .usesWheelchair(true)
             .build();
 
         List<RecruitSimpleResponse> list = new ArrayList<>();

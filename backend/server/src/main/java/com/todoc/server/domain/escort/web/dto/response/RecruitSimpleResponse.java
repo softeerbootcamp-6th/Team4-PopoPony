@@ -23,8 +23,8 @@ public class RecruitSimpleResponse {
 
     // 매칭중, 매칭완료, 동행중
     @NotNull
-    @Schema(description = "동행 신청의 진행 상태", allowableValues = {"매칭중", "매칭완료", "동행중", "동행완료"})
-    private String status;
+    @Schema(description = "동행 신청의 진행 상태", allowableValues = {"MATCHING", "COMPLETED", "IN_PROGRESS", "DONE"})
+    private RecruitStatus status;
 
     @NotNull
     @Schema(description = "지원한 도우미 수")
@@ -52,13 +52,26 @@ public class RecruitSimpleResponse {
 
     @NotNull
     @Schema(description = "예상 급여", example = "123000")
-    private Long estimatedPayment;
+    private Integer estimatedPayment;
 
-    @Schema(description = "환자가 가진 이슈", example = "['안전한 부축', '휠체어 이동']")
-    private List<String> patientIssues;
+    @NotNull
+    @Schema(description = "부축이 필요한지", example = "true")
+    private Boolean needsHelping;
+
+    @NotNull
+    @Schema(description = "휠체어를 이용하고 있는지", example = "true")
+    private Boolean usesWheelchair;
+
+    @NotNull
+    @Schema(description = "인지능력 이슈가 있는지", example = "true")
+    private Boolean hasCognitiveIssue;
+
+    @NotNull
+    @Schema(description = "의사소통 이슈가 있는지", example = "true")
+    private Boolean hasCommunicationIssue;
 
     @Builder
-    public RecruitSimpleResponse(Long recruitId, Long escortId, String status, Long numberOfApplication, LocalDate escortDate, LocalTime estimatedMeetingTime, LocalTime estimatedReturnTime, String departureLocation, String destination, Long estimatedPayment, List<String> patientIssues) {
+    public RecruitSimpleResponse(Long recruitId, Long escortId, RecruitStatus status, Long numberOfApplication, LocalDate escortDate, LocalTime estimatedMeetingTime, LocalTime estimatedReturnTime, String departureLocation, String destination, Integer estimatedPayment, Boolean needsHelping, Boolean usesWheelchair, Boolean hasCognitiveIssue, Boolean hasCommunicationIssue) {
         this.recruitId = recruitId;
         this.escortId = escortId;
         this.status = status;
@@ -69,6 +82,9 @@ public class RecruitSimpleResponse {
         this.departureLocation = departureLocation;
         this.destination = destination;
         this.estimatedPayment = estimatedPayment;
-        this.patientIssues = patientIssues;
+        this.needsHelping = needsHelping;
+        this.usesWheelchair = usesWheelchair;
+        this.hasCognitiveIssue = hasCognitiveIssue;
+        this.hasCommunicationIssue = hasCommunicationIssue;
     }
 }
