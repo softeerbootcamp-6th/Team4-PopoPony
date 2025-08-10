@@ -13,16 +13,12 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class TaxiReceiptImageService {
 
-    private final TaxiReceiptImageJpaRepository taxiReceiptImageJpaRepository;
+    private TaxiReceiptImageJpaRepository taxiReceiptImageJpaRepository;
 
     public TaxiReceiptImage register(ImageCreateRequest imageCreateRequest) {
         TaxiReceiptImage taxiReceiptImage = new TaxiReceiptImage();
         taxiReceiptImage.setImageMeta(ImageMeta.from(imageCreateRequest));
 
         return taxiReceiptImageJpaRepository.save(taxiReceiptImage);
-    }
-
-    public long getCount() {
-        return taxiReceiptImageJpaRepository.count();
     }
 }

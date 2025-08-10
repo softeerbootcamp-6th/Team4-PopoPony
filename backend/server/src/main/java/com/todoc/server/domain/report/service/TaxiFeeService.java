@@ -39,8 +39,4 @@ public class TaxiFeeService {
 
         return taxiFeeJpaRepository.save(taxiFee);
     }
-
-    public long getCount() {
-        return taxiFeeJpaRepository.count();
-    }
 }
