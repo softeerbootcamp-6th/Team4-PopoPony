@@ -52,9 +52,6 @@ public class ReportIntegrationTest {
     @Autowired
     private TaxiReceiptImageService taxiReceiptImageService;
 
-    @PersistenceContext
-    private EntityManager em;
-
     @Test
     @DisplayName("리포트 상세 정보 조회 - 정상")
     void getReportDetailByRecruitId_정상() {
