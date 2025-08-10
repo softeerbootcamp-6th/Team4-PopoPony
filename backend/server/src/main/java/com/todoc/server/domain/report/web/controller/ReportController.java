@@ -51,12 +51,12 @@ public class ReportController {
     }
 
     @Operation(
-            summary = "리포트 등록애 필요한 기본값 조회",
+            summary = "리포트 등록에 필요한 기본값 조회",
             description = "리포트를 등록에 필요한 기본값을 조회합니다.")
     @ApiResponse(
             responseCode = "200",
             description = "리포트 등록에 필요한 기본값 조회 성공")
-    @PostMapping("recruits/{recruitId}")
+    @GetMapping("recruits/{recruitId}/default")
     public Response<Void> getReportDefaultValueOnRecruit(@PathVariable Long recruitId) {
         // TODO :: 신청 ID를 받아, 해당 신청에 대한 리포트를 작성하기 위해 필요한 기본값 조회
 
@@ -73,7 +73,7 @@ public class ReportController {
     @ApiResponse(
             responseCode = "200",
             description = "리포트 등록 성공")
-    @PostMapping("recruits/{recruitId}/default")
+    @PostMapping("recruits/{recruitId}")
     public Response<Void> createReportOnRecruit(@PathVariable Long recruitId) {
         // TODO :: 신청 ID를 받아, 해당 신청에 대한 리포트를 작성
 
