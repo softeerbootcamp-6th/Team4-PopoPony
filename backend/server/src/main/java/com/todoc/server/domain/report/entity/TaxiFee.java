@@ -18,7 +18,7 @@ public class TaxiFee extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "report_id")
     private Report report;
 
@@ -26,14 +26,14 @@ public class TaxiFee extends BaseEntity {
     private Integer departureFee;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "departure_receipt_image")
+    @JoinColumn(name = "departure_receipt_image_id")
     private TaxiReceiptImage departureReceiptImage;
 
     @Column(name = "return_fee")
     private Integer returnFee;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "return_receipt_image")
+    @JoinColumn(name = "return_receipt_image_id")
     private TaxiReceiptImage returnReceiptImage;
 
     @Builder
