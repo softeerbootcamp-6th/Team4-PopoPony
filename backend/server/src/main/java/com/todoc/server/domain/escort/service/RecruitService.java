@@ -19,11 +19,14 @@ import com.todoc.server.domain.route.exception.LocationNotFoundException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import com.todoc.server.domain.route.entity.Route;
 import com.todoc.server.domain.route.exception.RouteNotFoundException;
 import com.todoc.server.domain.route.web.dto.response.RouteSimpleResponse;
+import java.util.Map;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -313,8 +316,7 @@ public class RecruitService {
             .toList();
 
         // DTO 구성
-
-        List<RecruitSimpleResponse> inProgressList = new ArrayList<>();
+        List<RecruitSimpleResponse> dtoList = new ArrayList<>();
         for (Recruit recruit : recruitList) {
             if (recruit.getRoute() == null) {
                 throw new RouteNotFoundException();
@@ -345,11 +347,19 @@ public class RecruitService {
                 .hasCommunicationIssue(recruit.getPatient().getHasCommunicationIssue())
                 .build();
 
-            inProgressList.add(dto);
+            dtoList.add(dto);
         }
 
+        // 날짜별로 그룹핑
+         Map<LocalDate, List<RecruitSimpleResponse>> dtoGroupByDate = dtoList.stream()
+             .collect(Collectors.groupingBy(
+                 RecruitSimpleResponse::getEscortDate,
+                 LinkedHashMap::new,
+                 Collectors.toList()
+             ));
+
         return RecruitSearchListResponse.builder()
-            .inProgressList(inProgressList)
+            .inProgressMap(dtoGroupByDate)
             .build();
     }
 
