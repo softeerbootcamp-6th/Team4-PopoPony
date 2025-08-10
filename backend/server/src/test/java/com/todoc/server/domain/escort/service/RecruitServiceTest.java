@@ -282,7 +282,7 @@ class RecruitServiceTest {
     }
 
     @Test
-    @DisplayName("고객 입장에서 동행 신청 목록 조회 - 진행중인 목록과 완료된 목록 분리 및 정렬")
+    @DisplayName("도우미 입장에서 동행 신청 목록 조회 - 진행중인 목록과 완료된 목록 분리 및 정렬")
     void getRecruitListAsHelperByUserId_정상_분리_정렬() {
         // given
         Long helperUserId = 7L;
