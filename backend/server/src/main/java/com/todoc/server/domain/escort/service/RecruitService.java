@@ -12,7 +12,6 @@ import com.todoc.server.domain.escort.exception.RecruitNotFoundException;
 import com.todoc.server.domain.escort.repository.RecruitJpaRepository;
 import com.todoc.server.domain.escort.repository.RecruitQueryRepository;
 import com.todoc.server.domain.escort.repository.dto.RecruitHistoryDetailFlatDto;
-import com.todoc.server.domain.escort.repository.dto.RecruitSimpleFlatDto;
 import com.todoc.server.domain.escort.web.dto.request.RecruitCreateRequest;
 import com.todoc.server.domain.escort.web.dto.response.*;
 
@@ -54,7 +53,7 @@ public class RecruitService {
 
         // 진행중인 목록과 완료된 목록 분리
         for (RecruitSimpleResponse recruit : rawList) {
-            if (RecruitStatus.from(recruit.getStatus()).get() == RecruitStatus.DONE) {
+            if (recruit.getStatus() == RecruitStatus.DONE) {
                 completedList.add(recruit);
             } else {
                 inProgressList.add(recruit);
@@ -63,7 +62,7 @@ public class RecruitService {
 
         // 진행중인 목록의 경우, 진행중인 목록 먼저 필터링 하고, 이후에 동행일 기준 오름차순 정렬
         inProgressList.sort(Comparator
-            .comparing((RecruitSimpleResponse r) -> RecruitStatus.from(r.getStatus()).get() != RecruitStatus.IN_PROGRESS)
+            .comparing((RecruitSimpleResponse r) -> r.getStatus() != RecruitStatus.IN_PROGRESS)
             .thenComparing(RecruitSimpleResponse::getEscortDate)
         );
 
@@ -254,35 +253,15 @@ public class RecruitService {
     @Transactional(readOnly = true)
     public RecruitListResponse getRecruitListAsHelperByUserId(Long helperUserId) {
         // 도우미가 지원한 동행 신청 목록중 Application Status가 PENDING, MATCHED인 동행 신청 목록을 조회함 (FAILED 제외)
-        List<RecruitSimpleFlatDto> rawFlatDtoList =
+        List<RecruitSimpleResponse> rawList =
             recruitQueryRepository.findListByHelperUserIdAndApplicationStatus(helperUserId, List.of(ApplicationStatus.MATCHED, ApplicationStatus.PENDING));
-
-        // RecruitSimpleFlatDto를 RecruitSimpleResponse로 변환
-        List<RecruitSimpleResponse> rawList = new ArrayList<>();
-        for (RecruitSimpleFlatDto flatDto: rawFlatDtoList) {
-
-            RecruitSimpleResponse recruitSimpleResponse = RecruitSimpleResponse.builder()
-                    .recruitId(flatDto.getRecruitId())
-                    .escortId(flatDto.getEscortId())
-                    .status(flatDto.getStatus().getLabel())
-                    .numberOfApplication(flatDto.getNumberOfApplication())
-                    .escortDate(flatDto.getEscortDate())
-                    .estimatedMeetingTime(flatDto.getEstimatedMeetingTime())
-                    .estimatedReturnTime(flatDto.getEstimatedReturnTime())
-                    .departureLocation(flatDto.getMeetingLocationName())
-                    .destination(flatDto.getHospitalLocationName())
-                    .estimatedPayment(flatDto.getEstimatedFee())
-                    .patientIssues(new ArrayList<>())
-                    .build();
-
-        }
 
         List<RecruitSimpleResponse> inProgressList = new ArrayList<>();
         List<RecruitSimpleResponse> completedList = new ArrayList<>();
 
         // 진행중인 목록과 완료된 목록 분리
         for (RecruitSimpleResponse recruit : rawList) {
-            if (RecruitStatus.from(recruit.getStatus()).get() == RecruitStatus.DONE) {
+            if (recruit.getStatus() == RecruitStatus.DONE) {
                 completedList.add(recruit);
             } else {
                 inProgressList.add(recruit);
@@ -291,7 +270,7 @@ public class RecruitService {
 
         // 진행중인 목록의 경우, 진행중인 목록 먼저 필터링 하고, 이후에 동행일 기준 오름차순 정렬
         inProgressList.sort(Comparator
-            .comparing((RecruitSimpleResponse r) -> RecruitStatus.from(r.getStatus()).get() != RecruitStatus.IN_PROGRESS)
+            .comparing((RecruitSimpleResponse r) -> r.getStatus() != RecruitStatus.IN_PROGRESS)
             .thenComparing(RecruitSimpleResponse::getEscortDate)
         );
 

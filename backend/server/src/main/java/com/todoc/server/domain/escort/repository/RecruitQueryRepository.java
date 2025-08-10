@@ -4,7 +4,6 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.todoc.server.common.enumeration.ApplicationStatus;
 import com.todoc.server.domain.escort.repository.dto.RecruitHistoryDetailFlatDto;
-import com.todoc.server.domain.escort.repository.dto.RecruitSimpleFlatDto;
 import com.todoc.server.domain.escort.web.dto.response.RecruitHistorySimpleResponse;
 import com.todoc.server.domain.route.entity.QLocationInfo;
 import java.util.List;
@@ -143,10 +142,10 @@ public class RecruitQueryRepository {
     /**
      * HelperUserId로 신청한 동행 목록 조회 (도우미 userId와 신청 상태를 기준으로 필터링)
      */
-    public List<RecruitSimpleFlatDto> findListByHelperUserIdAndApplicationStatus(Long helperUserId, List<ApplicationStatus> status) {
+    public List<RecruitSimpleResponse> findListByHelperUserIdAndApplicationStatus(Long helperUserId, List<ApplicationStatus> status) {
 
         return queryFactory
-            .select(Projections.constructor(RecruitSimpleFlatDto.class,
+            .select(Projections.constructor(RecruitSimpleResponse.class,
                 recruit.id,
                 escort.id,
                 recruit.status,
