@@ -22,12 +22,14 @@ public class TaxiFee extends BaseEntity {
     @Column(name = "departure_fee")
     private Integer departureFee;
 
-    @Column(name = "departure_receipt_image_url")
-    private String departureReceiptImageUrl;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "departure_receipt_image")
+    private TaxiReceiptImage departureReceiptImage;
 
     @Column(name = "return_fee")
     private Integer returnFee;
 
-    @Column(name = "return_receipt_image_url")
-    private String returnReceiptImageUrl;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "return_receipt_image")
+    private TaxiReceiptImage returnReceiptImage;
 }
