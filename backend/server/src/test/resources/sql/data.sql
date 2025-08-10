@@ -329,7 +329,6 @@ VALUES
 
 ALTER TABLE taxi_receipt_image ALTER COLUMN id RESTART WITH 115;
 
--- ✅ taxi_fee는 URL 컬럼 대신 FK로
 INSERT INTO taxi_fee (
     id, report_id,
     departure_fee, departure_receipt_image_id,
