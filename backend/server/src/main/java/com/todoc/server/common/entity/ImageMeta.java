@@ -6,21 +6,20 @@ import lombok.*;
 
 @Embeddable
 @Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ImageMeta extends BaseEntity {
+public class ImageMeta {
 
-    @Column(name = "s3_key", length = 1024, nullable = false)
+    @Column(name = "s3_key", nullable = false)
     protected String s3Key;
 
-    @Column(name = "content_type", length = 128)
+    @Column(name = "content_type")
     protected String contentType;
 
     @Column(name = "size_bytes")
     protected Long size;
 
-    @Column(name = "checksum", length = 64)
+    @Column(name = "checksum")
     protected String checksum;
 
     public static ImageMeta from(ImageCreateRequest dto) {
