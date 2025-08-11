@@ -6,7 +6,7 @@ import { useFormContext } from 'react-hook-form';
 import { FormInput, LabeledSection, Dot, Checkbox } from '@components';
 import { SearchButton } from '@customer/components';
 import { z } from 'zod';
-import { useFormValidation } from '@customer/hooks';
+import { useFormValidation } from '@hooks';
 
 const locationDetailSchema = z.object({
   placeName: z.string(),

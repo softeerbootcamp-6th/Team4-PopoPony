@@ -2,7 +2,7 @@ import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { PageLayout, FormLayout } from '@layouts';
 import { Button } from '@components';
 
-export const Route = createFileRoute('/customer/recruit/completed')({
+export const Route = createFileRoute('/helper/profile/new/completed')({
   component: RouteComponent,
 });
 
@@ -31,20 +31,22 @@ function RouteComponent() {
                   <source src='/video/process_completed.webm' type='video/webm' />
                 </video>
               </div>
-              <FormLayout.TitleWrapper>
-                <FormLayout.Title>동행 신청이 완료되었어요!</FormLayout.Title>
-                <FormLayout.SubTitle className='text-center'>
-                  도우미가 지원하면 <br />
-                  선택하실 수 있도록 알려드려요!
-                </FormLayout.SubTitle>
-              </FormLayout.TitleWrapper>
+              <div className='text-center'>
+                <FormLayout.TitleWrapper>
+                  <FormLayout.Title>프로필 작성이 완료되었어요!</FormLayout.Title>
+                  <FormLayout.SubTitle className='text-center'>
+                    프로필은 일감찾기 메인 화면의 <br />
+                    우측 상단에서 언제든지 수정가능합니다.
+                  </FormLayout.SubTitle>
+                </FormLayout.TitleWrapper>
+              </div>
             </div>
           </FormLayout.Content>
         </FormLayout>
       </PageLayout.Content>
       <PageLayout.Footer>
-        <Button variant='primary' className='w-full' onClick={() => navigate({ to: '/customer' })}>
-          신청 내역 보기
+        <Button variant='primary' onClick={() => navigate({ to: '/helper' })}>
+          일감찾기 홈으로 가기
         </Button>
       </PageLayout.Footer>
     </PageLayout>
