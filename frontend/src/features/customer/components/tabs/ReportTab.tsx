@@ -1,5 +1,11 @@
 import { Tabs, Divider } from '@components';
-import { HelperCard, InfoSection, PaymentFailedCard, ReportInfoCard } from '@customer/components';
+import {
+  HelperCard,
+  InfoSection,
+  PaymentFailedCard,
+  ReportInfoCard,
+  WarningBox,
+} from '@customer/components';
 import { IcAlertCircle } from '@icons';
 
 const ReportTab = () => {
@@ -80,12 +86,7 @@ const ReportTab = () => {
                 </span>
                 <span className='label3-12-medium text-text-neutral-secondary'>20,000원</span>
               </div>
-              <div className='flex-start bg-background-light-red gap-[0.8rem] rounded-[0.6rem] p-[1rem]'>
-                <IcAlertCircle className='[&_path]:fill-icon-red-primary' width={16} height={16} />
-                <span className='caption1-12-medium text-text-red-primary'>
-                  이용시간 초과요금은 15분에 5천원이에요.
-                </span>
-              </div>
+              <WarningBox text='이용시간 초과요금은 15분에 5천원이에요.' />
             </div>
           </div>
         </div>
