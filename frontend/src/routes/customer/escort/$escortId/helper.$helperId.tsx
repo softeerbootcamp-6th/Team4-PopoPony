@@ -1,6 +1,7 @@
-import { Button, StrengthTag, Tabs, Tag } from '@components';
+import { Button, Modal, StrengthTag, Tabs } from '@components';
 import { getHelperById } from '@customer/apis';
 import { KeywordTag, ReviewCard, SatisfactionGraph, StatsSummaryCard } from '@customer/components';
+import { useModal } from '@hooks';
 import { IcPhoneFill, IcVerified } from '@icons';
 import { PageLayout } from '@layouts';
 import { createFileRoute } from '@tanstack/react-router';
@@ -11,12 +12,10 @@ export const Route = createFileRoute('/customer/escort/$escortId/helper/$helperI
 });
 
 function RouteComponent() {
+  const { isOpen, openModal, closeModal } = useModal();
   const { helperId } = Route.useParams();
-
   const { data } = getHelperById(Number(helperId));
-
   const { helperSimple, escortCount = 0, reviewStat } = data?.data || {};
-
   const { imageUrl, name, gender, age, shortBio, contact, certificateList, strengthList } =
     helperSimple || {};
 
@@ -121,8 +120,22 @@ function RouteComponent() {
         </Tabs>
       </PageLayout.Content>
       <PageLayout.Footer>
-        <Button onClick={() => {}}>도우미 선택하기</Button>
+        <Button onClick={openModal}>도우미 선택하기</Button>
       </PageLayout.Footer>
+      <Modal isOpen={isOpen} onClose={closeModal}>
+        <Modal.Title>{name}님을 선택하시겠어요?</Modal.Title>
+        <Modal.Content>선택 후에는 도우미를 변경할 수 없어요.</Modal.Content>
+        <Modal.ButtonContainer>
+          <Modal.ConfirmButton
+            onClick={() => {
+              alert('준비중인 기능이에요');
+              closeModal();
+            }}>
+            선택하기
+          </Modal.ConfirmButton>
+          <Modal.CloseButton onClick={closeModal}>돌아가기</Modal.CloseButton>
+        </Modal.ButtonContainer>
+      </Modal>
     </PageLayout>
   );
 }
