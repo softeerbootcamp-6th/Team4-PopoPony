@@ -36,57 +36,8 @@ public class HelperController {
             description = "도우미 상세 정보 조회 성공")
     @GetMapping("/{helperProfileId}")
     public Response<HelperDetailResponse> getHelperDetail(@PathVariable Long helperProfileId) {
-        // TODO :: 도우미의 helperProfileId를 받아, 해당 도우미의 상세 정보를 생성
 
-//        return Response.from(helperFacadeService.getHelperDetailByHelperProfileId(helperProfileId));
-
-        List<PositiveFeedbackStatResponse> positiveFeedbackList = new ArrayList<>();
-        positiveFeedbackList.add(new PositiveFeedbackStatResponse("친절해요", 3L));
-        positiveFeedbackList.add(new PositiveFeedbackStatResponse("책임감", 5L));
-        positiveFeedbackList.add(new PositiveFeedbackStatResponse("소통이 잘돼요", 1L));
-
-        ReviewSimpleResponse review = ReviewSimpleResponse.builder()
-                .reviewId(1L)
-                .satisfactionLevel("좋았어요")
-                .createdAt(LocalDateTime.now().minusDays(30))
-                .shortComment("너무 잘해주시고 부모님을 집에 무사히 모셔주셔서...")
-                .build();
-
-        List<ReviewSimpleResponse> reviewList = new ArrayList<>();
-        reviewList.add(review);
-        reviewList.add(review);
-        reviewList.add(review);
-        reviewList.add(review);
-        reviewList.add(review);
-
-        ReviewStatResponse reviewStat = ReviewStatResponse.builder()
-                .reviewCount(13L)
-                .goodRate(89)
-                .averageRate(11)
-                .badRate(0)
-                .build();
-
-        HelperSimpleResponse helperSimple = HelperSimpleResponse.builder()
-                .helperProfileId(1L)
-                .imageUrl("https://example.com/images/sample.jpg")
-                .name("최솔희")
-                .age(39)
-                .gender("여자")
-                .contact("010-1234-5678")
-                .shortBio("부모님처럼 모시겠습니다.")
-                .certificateList(new ArrayList<>(List.of("간호사", "간호조무사", "요양보호사")))
-                .strengthList(new ArrayList<>(List.of("안전한 부축", "휠체어 이동", "인지장애 케어")))
-                .build();
-
-        HelperDetailResponse mock = HelperDetailResponse.builder()
-                .helperSimple(helperSimple)
-                .escortCount(20L)
-                .reviewStat(reviewStat)
-                .positiveFeedbackStatList(positiveFeedbackList)
-                .latestReviewList(reviewList)
-                .build();
-
-        return Response.from(mock);
+        return Response.from(helperFacadeService.getHelperDetailByHelperProfileId(helperProfileId));
     }
 
     @Operation(
@@ -97,7 +48,6 @@ public class HelperController {
             description = "도우미 프로필 등록 성공")
     @PostMapping("")
     public Response<Void> createHelperProfile(@LoginUser SessionAuth auth, @RequestBody HelperProfileCreateRequest requestDto) {
-        // TODO :: jwt 혹은 sessionId로부터 유저 정보를 조회해야 함
 
         helperFacadeService.createHelperProfile(auth.id(), requestDto);
 
