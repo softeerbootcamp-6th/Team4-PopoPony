@@ -58,7 +58,7 @@ public class RecruitService {
 
         // 진행중인 목록과 완료된 목록 분리
         for (RecruitSimpleResponse recruit : rawList) {
-            if (recruit.getStatus() == RecruitStatus.DONE) {
+            if (RecruitStatus.from(recruit.getStatus()).get() == RecruitStatus.DONE) {
                 completedList.add(recruit);
             } else {
                 inProgressList.add(recruit);
@@ -67,7 +67,7 @@ public class RecruitService {
 
         // 진행중인 목록의 경우, 진행중인 목록 먼저 필터링 하고, 이후에 동행일 기준 오름차순 정렬
         inProgressList.sort(Comparator
-            .comparing((RecruitSimpleResponse r) -> r.getStatus() != RecruitStatus.IN_PROGRESS)
+            .comparing((RecruitSimpleResponse r) -> RecruitStatus.from(r.getStatus()).get() != RecruitStatus.IN_PROGRESS)
             .thenComparing(RecruitSimpleResponse::getEscortDate)
         );
 
@@ -266,7 +266,7 @@ public class RecruitService {
 
         // 진행중인 목록과 완료된 목록 분리
         for (RecruitSimpleResponse recruit : rawList) {
-            if (recruit.getStatus() == RecruitStatus.DONE) {
+            if (RecruitStatus.from(recruit.getStatus()).get() == RecruitStatus.DONE) {
                 completedList.add(recruit);
             } else {
                 inProgressList.add(recruit);
@@ -275,7 +275,7 @@ public class RecruitService {
 
         // 진행중인 목록의 경우, 진행중인 목록 먼저 필터링 하고, 이후에 동행일 기준 오름차순 정렬
         inProgressList.sort(Comparator
-            .comparing((RecruitSimpleResponse r) -> r.getStatus() != RecruitStatus.IN_PROGRESS)
+            .comparing((RecruitSimpleResponse r) -> RecruitStatus.from(r.getStatus()).get() != RecruitStatus.IN_PROGRESS)
             .thenComparing(RecruitSimpleResponse::getEscortDate)
         );
 
@@ -333,7 +333,7 @@ public class RecruitService {
             RecruitSimpleResponse dto = RecruitSimpleResponse.builder()
                 .recruitId(recruit.getId())
                 .escortId(null)
-                .status(recruit.getStatus())
+                .status(recruit.getStatus().getLabel())
                 .numberOfApplication(0L)
                 .escortDate(recruit.getEscortDate())
                 .estimatedMeetingTime(recruit.getEstimatedMeetingTime())
