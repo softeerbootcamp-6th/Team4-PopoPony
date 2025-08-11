@@ -85,7 +85,7 @@ class ReportFacadeServiceTest {
         when(taxiReceiptImageService.register(ret)).thenReturn(retImg);
 
         TaxiFee taxiFee = mock(TaxiFee.class);
-        when(taxiFeeService.register(feeReq, depImg, retImg)).thenReturn(taxiFee);
+        when(taxiFeeService.register(feeReq)).thenReturn(taxiFee);
 
         // when
         reportFacadeService.createReport(req, recruitId);
@@ -104,7 +104,7 @@ class ReportFacadeServiceTest {
         // 영수증 저장 + 택시요금 저장 및 setReport 호출 검증
         verify(taxiReceiptImageService).register(dep);
         verify(taxiReceiptImageService).register(ret);
-        verify(taxiFeeService).register(feeReq, depImg, retImg);
+        verify(taxiFeeService).register(feeReq);
         verify(taxiFee).setReport(persistedReport);
 
         // 상호작용 횟수 검증
