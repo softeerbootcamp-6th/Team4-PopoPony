@@ -23,8 +23,8 @@ public class RecruitSimpleResponse {
 
     // 매칭중, 매칭완료, 동행중
     @NotNull
-    @Schema(description = "동행 신청의 진행 상태", allowableValues = {"MATCHING", "COMPLETED", "IN_PROGRESS", "DONE"})
-    private RecruitStatus status;
+    @Schema(description = "동행 신청의 진행 상태", allowableValues = {"매칭중", "매칭완료", "동행중", "완료된 동행"})
+    private String status;
 
     @NotNull
     @Schema(description = "지원한 도우미 수")
@@ -71,10 +71,28 @@ public class RecruitSimpleResponse {
     private Boolean hasCommunicationIssue;
 
     @Builder
-    public RecruitSimpleResponse(Long recruitId, Long escortId, RecruitStatus status, Long numberOfApplication, LocalDate escortDate, LocalTime estimatedMeetingTime, LocalTime estimatedReturnTime, String departureLocation, String destination, Integer estimatedPayment, Boolean needsHelping, Boolean usesWheelchair, Boolean hasCognitiveIssue, Boolean hasCommunicationIssue) {
+    public RecruitSimpleResponse(Long recruitId, Long escortId, String status, Long numberOfApplication, LocalDate escortDate, LocalTime estimatedMeetingTime, LocalTime estimatedReturnTime, String departureLocation, String destination, Integer estimatedPayment, Boolean needsHelping, Boolean usesWheelchair, Boolean hasCognitiveIssue, Boolean hasCommunicationIssue) {
         this.recruitId = recruitId;
         this.escortId = escortId;
         this.status = status;
+        this.numberOfApplication = numberOfApplication;
+        this.escortDate = escortDate;
+        this.estimatedMeetingTime = estimatedMeetingTime;
+        this.estimatedReturnTime = estimatedReturnTime;
+        this.departureLocation = departureLocation;
+        this.destination = destination;
+        this.estimatedPayment = estimatedPayment;
+        this.needsHelping = needsHelping;
+        this.usesWheelchair = usesWheelchair;
+        this.hasCognitiveIssue = hasCognitiveIssue;
+        this.hasCommunicationIssue = hasCommunicationIssue;
+    }
+
+    @Builder
+    public RecruitSimpleResponse(Long recruitId, Long escortId, RecruitStatus status, Long numberOfApplication, LocalDate escortDate, LocalTime estimatedMeetingTime, LocalTime estimatedReturnTime, String departureLocation, String destination, Integer estimatedPayment, Boolean needsHelping, Boolean usesWheelchair, Boolean hasCognitiveIssue, Boolean hasCommunicationIssue) {
+        this.recruitId = recruitId;
+        this.escortId = escortId;
+        this.status = status.getLabel();
         this.numberOfApplication = numberOfApplication;
         this.escortDate = escortDate;
         this.estimatedMeetingTime = estimatedMeetingTime;
