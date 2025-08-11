@@ -155,7 +155,7 @@ const getEscortListNumber = (escortData: EscortData[]) => {
  */
 const refineEscortData = (escortData: EscortData): RefinedEscortData => {
   const statusText = statusMessageMap[escortData.status].text;
-  const title = getEscortTitle(escortData.escortDate, escortData.destinationPlaceName);
+  const title = getEscortTitle(escortData.escortDate) + ', ' + escortData.destinationPlaceName;
   const startTime = timeFormat(escortData.estimatedMeetingTime);
   const endTime = timeFormat(escortData.estimatedReturnTime);
   const dateText = dateFormat(escortData.escortDate, 'M월 d일(eee)');
