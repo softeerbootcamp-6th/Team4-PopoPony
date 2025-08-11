@@ -8,17 +8,27 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Component
 @RequiredArgsConstructor
 @Transactional
 public class ImageAttachmentService {
 
-    private ImageAttachmentJpaRepository imageAttachmentJpaRepository;
+    private final ImageAttachmentJpaRepository imageAttachmentJpaRepository;
 
     public ImageAttachment register(ImageCreateRequest imageCreateRequest) {
 
         ImageAttachment imageAttachment = new ImageAttachment();
         imageAttachment.setImageMeta(ImageMeta.from(imageCreateRequest));
         return imageAttachmentJpaRepository.save(imageAttachment);
+    }
+
+    public long getCount() {
+        return imageAttachmentJpaRepository.count();
+    }
+
+    public List<ImageAttachment> getImageAttachmentsByReportId(Long reportId) {
+        return imageAttachmentJpaRepository.findByReportId(reportId);
     }
 }
