@@ -17,7 +17,7 @@ const SatisfactionGraph = ({ goodRate, averageRate, badRate }: Props) => {
       label: '괜찮아요',
       rate: averageRate,
       color: 'bg-yellow-50',
-      icon: '/images/status-normal.svg',
+      icon: '/images/status-average.svg',
       alt: 'average',
     },
     {
