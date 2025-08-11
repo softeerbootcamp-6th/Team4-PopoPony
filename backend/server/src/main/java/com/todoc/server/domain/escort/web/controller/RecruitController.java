@@ -13,7 +13,10 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -325,5 +328,125 @@ public class RecruitController {
         // recruitService.cancelRecruit(recruitId);
 
         return Response.from();
+    }
+
+    @Operation(
+        summary = "도우미의 동행 목록 조회",
+        description = "로그인한 도우미가 신청한 동행 목록(진행중/완료)을 조회합니다.")
+    @ApiResponse(
+        responseCode = "200",
+        description = "동행 목록 조회 성공" )
+    @GetMapping("/helper")
+    public Response<RecruitListResponse> getRecruitListAsHelper() {
+        // TODO :: 원래라면 jwt 혹은 sessionId로부터 유저 정보를 조회해야 함
+        // 현재는 우선 userId = 1로 고정
+
+        // recruitService.getRecruitListAsHelperByUserId(1L)
+
+        RecruitSimpleResponse dto = RecruitSimpleResponse.builder()
+            .recruitId(1L)
+            .status(RecruitStatus.MATCHING)
+            .numberOfApplication(3L)
+            .destination("서울아산병원")
+            .departureLocation("꿈에그린아파트")
+            .escortDate(LocalDate.now())
+            .estimatedMeetingTime(LocalTime.NOON)
+            .estimatedReturnTime(LocalTime.MIDNIGHT)
+            .estimatedPayment(123000)
+            .needsHelping(true)
+            .hasCommunicationIssue(true)
+            .hasCognitiveIssue(true)
+            .usesWheelchair(true)
+            .build();
+
+        List<RecruitSimpleResponse> list = new ArrayList<>();
+        list.add(dto);
+        list.add(dto);
+
+        RecruitListResponse mock = RecruitListResponse.builder()
+            .completedList(list)
+            .inProgressList(list).build();
+
+        return Response.from(mock);
+    }
+
+    @Operation(
+        summary = "동행 지원 목록 검색",
+        description = "지역 및 날짜에 해당하는 동행 지원 목록을 검색합니다. datetime의 입력 형식 값은 (yyyy-mm-dd)입니다.")
+    @ApiResponse(
+        responseCode = "200",
+        description = "동행 지원 목록 조회 성공")
+    @GetMapping("")
+    public Response<RecruitSearchListResponse> getRecruitListBySearch(
+        @RequestParam(required = false, name = "area") String area,
+        @RequestParam(required = false, name = "startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+        @RequestParam(required = false, name = "endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate){
+        // TODO :: 원래라면 jwt 혹은 sessionId로부터 유저 정보를 조회해야 함
+        // 현재는 우선 userId = 1로 고정
+
+        LocalDate d1 = LocalDate.now();
+        LocalDate d2 = d1.plusDays(1);
+
+        RecruitSimpleResponse dto1 = RecruitSimpleResponse.builder()
+            .recruitId(1L)
+            .escortId(null)
+            .status(RecruitStatus.MATCHING)
+            .numberOfApplication(0L)
+            .escortDate(d1)
+            .estimatedMeetingTime(LocalTime.of(10, 0))
+            .estimatedReturnTime(LocalTime.of(12, 0))
+            .departureLocation("꿈에그린아파트")
+            .destination("서울아산병원")
+            .estimatedPayment(123000)
+            .needsHelping(true)
+            .hasCommunicationIssue(true)
+            .hasCognitiveIssue(false)
+            .usesWheelchair(true)
+            .build();
+
+        RecruitSimpleResponse dto2 = RecruitSimpleResponse.builder()
+            .recruitId(2L)
+            .escortId(null)
+            .status(RecruitStatus.MATCHING)
+            .numberOfApplication(0L)
+            .escortDate(d1)
+            .estimatedMeetingTime(LocalTime.of(14, 0))
+            .estimatedReturnTime(LocalTime.of(16, 0))
+            .departureLocation("래미안아파트")
+            .destination("삼성서울병원")
+            .estimatedPayment(98000)
+            .needsHelping(false)
+            .hasCommunicationIssue(false)
+            .hasCognitiveIssue(true)
+            .usesWheelchair(false)
+            .build();
+
+        RecruitSimpleResponse dto3 = RecruitSimpleResponse.builder()
+            .recruitId(3L)
+            .escortId(null)
+            .status(RecruitStatus.MATCHING)
+            .numberOfApplication(0L)
+            .escortDate(d2)
+            .estimatedMeetingTime(LocalTime.of(9, 30))
+            .estimatedReturnTime(LocalTime.of(11, 30))
+            .departureLocation("강남N타워")
+            .destination("세브란스병원")
+            .estimatedPayment(75000)
+            .needsHelping(true)
+            .hasCommunicationIssue(false)
+            .hasCognitiveIssue(false)
+            .usesWheelchair(false)
+            .build();
+
+        Map<LocalDate, List<RecruitSimpleResponse>> groups = new LinkedHashMap<>();
+        groups.computeIfAbsent(d1, k -> new ArrayList<>()).add(dto1);
+        groups.computeIfAbsent(d1, k -> new ArrayList<>()).add(dto2);
+        groups.computeIfAbsent(d2, k -> new ArrayList<>()).add(dto3);
+
+        RecruitSearchListResponse mock = RecruitSearchListResponse.builder()
+            .inProgressMap(groups)
+            .build();
+
+        return Response.from(mock);
     }
 }
