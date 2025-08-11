@@ -1,6 +1,6 @@
 import { $api } from '@apis';
 
-const postLogin = async () => {
+const postLogin = () => {
   return $api.useMutation('post', '/api/auth/login');
 };
 
