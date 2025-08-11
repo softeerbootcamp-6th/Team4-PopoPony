@@ -22,20 +22,25 @@ export const profileSchema = z.object({
 export type ProfileFormValues = z.infer<typeof profileSchema>;
 
 export const conditionSchema = z.object({
-  needsHelping: z.boolean(),
-  usesWheelchair: z.boolean(),
+  needsHelping: z.enum(['true', 'false'], { message: '부축 여부를 선택해주세요' }),
+  usesWheelchair: z.enum(['true', 'false'], { message: '휠체어 사용 여부를 선택해주세요' }),
 });
 
 export type ConditionFormValues = z.infer<typeof conditionSchema>;
 
+export type ConditionPostValues = Omit<ConditionFormValues, 'needsHelping' | 'usesWheelchair'> & {
+  needsHelping: boolean;
+  usesWheelchair: boolean;
+};
+
 export const CognitiveSchema = z
   .object({
-    hasCognitiveIssue: z.boolean(),
+    hasCognitiveIssue: z.enum(['true', 'false'], { message: '인지 능력 여부를 선택해주세요' }),
     cognitiveIssueDetail: z.array(z.string()).optional(),
   })
   .refine(
     (data) => {
-      if (data.hasCognitiveIssue) {
+      if (data.hasCognitiveIssue === 'true') {
         return data.cognitiveIssueDetail && data.cognitiveIssueDetail.length > 0;
       }
       return true;
@@ -47,12 +52,14 @@ export const CognitiveSchema = z
   );
 export const CommunicationSchema = z
   .object({
-    hasCommunicationIssue: z.boolean(),
+    hasCommunicationIssue: z.enum(['true', 'false'], {
+      message: '의사소통 능력 여부를 선택해주세요',
+    }),
     communicationIssueDetail: z.string().optional(),
   })
   .refine(
     (data) => {
-      if (data.hasCommunicationIssue) {
+      if (data.hasCommunicationIssue === 'true') {
         return data.communicationIssueDetail && data.communicationIssueDetail.length >= 10;
       }
       return true;
@@ -66,6 +73,14 @@ export const CommunicationSchema = z
 export const IntegratedCommSchema = z.intersection(CognitiveSchema, CommunicationSchema);
 
 export type CommunicationFormValues = z.infer<typeof IntegratedCommSchema>;
+
+export type CommunicationPostValues = Omit<
+  CommunicationFormValues,
+  'hasCognitiveIssue' | 'hasCommunicationIssue'
+> & {
+  hasCognitiveIssue: boolean;
+  hasCommunicationIssue: boolean;
+};
 
 export const dateSchema = z.object({
   escortDate: z
@@ -149,13 +164,19 @@ export const requestFormSchema = z.object({
 export type RequestFormValues = z.infer<typeof requestFormSchema>;
 
 // 전체 폼 타입 (백엔드 스키마와 일치)
-export interface RecruitFormValues {
-  patientDetail: ProfileFormValues & ConditionFormValues & CommunicationFormValues;
+export interface RecruitPostFormValues {
+  patientDetail: ProfileFormValues & ConditionPostValues & CommunicationPostValues;
   escortDetail: TimeFormValues & RequestFormValues;
   meetingLocationDetail: LocationDetail;
   destinationDetail: LocationDetail;
   returnLocationDetail: LocationDetail;
 }
+export type RecruitFormValues = ProfileFormValues &
+  ConditionFormValues &
+  CommunicationFormValues &
+  TimeFormValues &
+  RequestFormValues &
+  RouteFormValues;
 
 // 인지 문제 옵션들
 export const COGNITIVE_ISSUES_OPTIONS = [
