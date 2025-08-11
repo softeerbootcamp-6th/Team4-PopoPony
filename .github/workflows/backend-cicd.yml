@@ -5,7 +5,6 @@ on:
     branches: [ main ]
     paths:
       - "backend/**"
-      - "backend/server/cicd/**"
 
 jobs:
   build-and-deploy:
@@ -28,19 +27,20 @@ jobs:
           username: seonghooni0327
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+      - name: Pull cache from DockerHub
+        run: docker pull seonghooni0327/myapp:latest || true
 
       - name: Build & push Docker image (arm64)
         run: |
           IMAGE=seonghooni0327/myapp
           TAG=${{ github.sha }}
-          docker buildx build \
-            --platform linux/arm64 \
+          docker build --platform linux/arm64 \
+            --cache-from=$IMAGE:latest \
             -t $IMAGE:latest \
             -t $IMAGE:$TAG \
-            -f backend/server/cicd/Dockerfile backend/server \
-            --push
+            -f backend/server/cicd/Dockerfile backend/server
+          docker push $IMAGE:latest
+          docker push $IMAGE:$TAG
 
       - name: Make deployment bundle for CodeDeploy
         run: |
