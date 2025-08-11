@@ -2,7 +2,7 @@ import { createFileRoute, Link } from '@tanstack/react-router';
 import { PageLayout } from '@layouts';
 import { Button, EscortCard, Tabs } from '@components';
 import type { StatusType } from '@types';
-import { dateFormat, timeFormat, getEscortTitle } from '@utils';
+import { dateFormat, timeFormat } from '@utils';
 
 export const Route = createFileRoute('/helper/')({
   component: RouteComponent,
@@ -129,7 +129,8 @@ const statusMessageMap: Record<StatusType, string> = {
  */
 const refineEscortData = (escortData: EscortData): RefinedEscortData => {
   const statusText = statusMessageMap[escortData.status];
-  const title = getEscortTitle(escortData.escortDate) + ', ' + escortData.destinationPlaceName;
+  const title =
+    dateFormat(escortData.escortDate, 'M월 d일 (eee)') + ', ' + escortData.destinationPlaceName;
   const startTime = timeFormat(escortData.estimatedMeetingTime);
   const endTime = timeFormat(escortData.estimatedReturnTime);
   const dateText = dateFormat(escortData.escortDate, 'M월 d일(eee)');
