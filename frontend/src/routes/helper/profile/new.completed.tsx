@@ -45,7 +45,7 @@ function RouteComponent() {
         </FormLayout>
       </PageLayout.Content>
       <PageLayout.Footer>
-        <Button variant='primary' className='w-full' onClick={() => navigate({ to: '/helper' })}>
+        <Button variant='primary' onClick={() => navigate({ to: '/helper' })}>
           일감찾기 홈으로 가기
         </Button>
       </PageLayout.Footer>
