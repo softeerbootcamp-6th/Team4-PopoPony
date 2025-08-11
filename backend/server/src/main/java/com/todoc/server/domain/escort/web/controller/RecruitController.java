@@ -46,30 +46,9 @@ public class RecruitController {
     @GetMapping("/customer")
     public Response<RecruitListResponse> getRecruitListAsCustomer(@LoginUser SessionAuth auth) {
 
-        // TODO :: 원래라면 jwt 혹은 sessionId로부터 유저 정보를 조회해야 함
-        // 현재는 우선 userId = 1로 고정
-        String loginId = auth.loginId();
+        RecruitListResponse dto = recruitService.getRecruitListAsCustomerByUserId(auth.id());
 
-        RecruitSimpleResponse dto = RecruitSimpleResponse.builder()
-                .recruitId(1L)
-                .status("매칭중")
-                .numberOfApplication(3L)
-                .destination("서울아산병원")
-                .departureLocation("꿈에그린아파트")
-                .escortDate(LocalDate.now())
-                .estimatedMeetingTime(LocalTime.NOON)
-                .estimatedReturnTime(LocalTime.MIDNIGHT)
-                .build();
-
-        List<RecruitSimpleResponse> list = new ArrayList<>();
-        list.add(dto);
-        list.add(dto);
-
-        RecruitListResponse mock = RecruitListResponse.builder()
-                .completedList(list)
-                .inProgressList(list).build();
-
-        return Response.from(mock);
+        return Response.from(dto);
     }
 
     @Operation(
@@ -79,29 +58,11 @@ public class RecruitController {
             responseCode = "200",
             description = "이전 환자(동행) 정보 목록 조회 성공")
     @GetMapping("/patients")
-    public Response<RecruitHistoryListResponse> getRecruitHistoryList() {
-        // TODO :: 원래라면 jwt 혹은 sessionId로부터 유저 정보를 조회해야 함
-        // 현재는 우선 userId = 1로 고정
-        //
-        // recruitService.getRecruitHistoryListByUserId(1L);
+    public Response<RecruitHistoryListResponse> getRecruitHistoryList(@LoginUser SessionAuth auth) {
 
-        RecruitHistorySimpleResponse dto = RecruitHistorySimpleResponse.builder()
-                .recruitId(1L)
-                .name("김토닥")
-                .destination("서울성모병원")
-                .escortDate(LocalDate.now())
-                .build();
+        RecruitHistoryListResponse dto = recruitService.getRecruitHistoryListByUserId(auth.id());
 
-        List<RecruitHistorySimpleResponse> list = new ArrayList<>();
-        for (int i=0; i<5; i++) {
-            list.add(dto);
-        }
-
-        RecruitHistoryListResponse mock = RecruitHistoryListResponse.builder()
-                .beforeList(list)
-                .build();
-
-        return Response.from(mock);
+        return Response.from(dto);
     }
 
     @Operation(
@@ -112,78 +73,10 @@ public class RecruitController {
             description = "이전 환자(동행)에 대한 기록 조회 성공 ")
     @GetMapping("/{recruitId}/history")
     public Response<RecruitHistoryDetailResponse> getRecruitHistory(@PathVariable Long recruitId) {
-        // TODO :: 원래라면 jwt 혹은 sessionId로부터 유저 정보를 조회해야 함
-        // 현재는 우선 userId = 1로 고정
-        // recruitService.getRecruitHistoryDetailByRecruitId(recruitId);
 
-        RecruitHistoryDetailResponse.PatientDetail patientDetail = RecruitHistoryDetailResponse.PatientDetail.builder()
-                .patientId(1L)
-                .imageUrl("")
-                .name("홍길동")
-                .age(75)
-                .gender("남자")
-                .phoneNumber("010-1234-5678")
-                .needsHelping(true)
-                .usesWheelchair(true)
-                .hasCognitiveIssue(true)
-                .cognitiveIssueDetail(new ArrayList<>(List.of("판단에 도움이 필요해요")))
-                .hasCommunicationIssue(true)
-                .communicationIssueDetail("이가 많이 없으셔서 발음하시는 게 불편하세요")
-                .build();
+        RecruitHistoryDetailResponse dto = recruitService.getRecruitHistoryDetailByRecruitId(recruitId);
 
-        RecruitHistoryDetailResponse.LocationDetail meetingLocationDetail = RecruitHistoryDetailResponse.LocationDetail.builder()
-                .placeName("홍짬뽕")
-                .upperAddrName("서울")
-                .middleAddrName("강서구")
-                .lowerAddrName("보람동")
-                .firstAddrNo("123")
-                .secondAddrNo("45")
-                .roadName("보람로")
-                .firstBuildingNo("456")
-                .secondBuildingNo("5")
-                .detailAddress("식당 정문")
-                .longitude(BigDecimal.valueOf(127.2581225))
-                .latitude(BigDecimal.valueOf(36.1234567))
-                .build();
-
-        RecruitHistoryDetailResponse.LocationDetail destinationDetail = RecruitHistoryDetailResponse.LocationDetail.builder()
-                .placeName("홍짬뽕")
-                .upperAddrName("서울")
-                .middleAddrName("강서구")
-                .lowerAddrName("보람동")
-                .firstAddrNo("123")
-                .secondAddrNo("45")
-                .roadName("보람로")
-                .firstBuildingNo("456")
-                .secondBuildingNo("5")
-                .detailAddress("식당 정문")
-                .longitude(BigDecimal.valueOf(127.2581225))
-                .latitude(BigDecimal.valueOf(36.1234567))
-                .build();
-
-        RecruitHistoryDetailResponse.LocationDetail returnLocationDetail = RecruitHistoryDetailResponse.LocationDetail.builder()
-                .placeName("홍짬뽕")
-                .upperAddrName("서울")
-                .middleAddrName("강서구")
-                .lowerAddrName("보람동")
-                .firstAddrNo("123")
-                .secondAddrNo("45")
-                .roadName("보람로")
-                .firstBuildingNo("456")
-                .secondBuildingNo("5")
-                .detailAddress("식당 정문")
-                .longitude(BigDecimal.valueOf(127.2581225))
-                .latitude(BigDecimal.valueOf(36.1234567))
-                .build();
-
-        RecruitHistoryDetailResponse mock = RecruitHistoryDetailResponse.builder()
-                .patientDetail(patientDetail)
-                .meetingLocationDetail(meetingLocationDetail)
-                .destinationDetail(destinationDetail)
-                .returnLocationDetail(returnLocationDetail)
-                .build();
-
-        return Response.from(mock);
+        return Response.from(dto);
     }
 
     @Operation(
@@ -195,63 +88,7 @@ public class RecruitController {
     @GetMapping("/{recruitId}")
     public Response<RecruitDetailResponse> getRecruitDetail(@PathVariable Long recruitId) {
 
-//        return Response.from(recruitService.getRecruitDetailByRecruitId(recruitId));
-
-        LocationInfoSimpleResponse meetingLocationInfo = LocationInfoSimpleResponse.builder()
-                .locationInfoId(1L)
-                .placeName("신촌역 3번 출구")
-                .address("서울특별시 서대문구 연세로 2")
-                .detailAddress("출구 앞 파란 의자 근처")
-                .build();
-
-        LocationInfoSimpleResponse hospitalLocationInfo = LocationInfoSimpleResponse.builder()
-                .locationInfoId(1L)
-                .placeName("서울성모병원")
-                .address("서울특별시 서초구 반포대로 222")
-                .detailAddress("본관 3층 내과 외래")
-                .build();
-
-        LocationInfoSimpleResponse returnLocationInfo = LocationInfoSimpleResponse.builder()
-                .locationInfoId(1L)
-                .placeName("신촌역 3번 출구")
-                .address("서울특별시 서대문구 연세로 2")
-                .detailAddress("출구 앞 파란 의자 근처")
-                .build();
-
-        RouteSimpleResponse route = RouteSimpleResponse.builder()
-                .routeId(1L)
-                .meetingLocationInfo(meetingLocationInfo)
-                .hospitalLocationInfo(hospitalLocationInfo)
-                .returnLocationInfo(returnLocationInfo)
-                .build();
-
-        PatientSimpleResponse patient = PatientSimpleResponse.builder()
-                .patientId(1L)
-                .imageUrl("https://example.com/images/sample.jpg")
-                .name("김토닥")
-                .age(80)
-                .gender("남자")
-                .needsHelping(true)
-                .usesWheelchair(true)
-                .hasCognitiveIssue(true)
-                .cognitiveIssueDetail(new ArrayList<>(List.of("판단에 도움이 필요해요", "기억하거나 이해하는 것이 어려워요")))
-                .hasCommunicationIssue(true)
-                .communicationIssueDetail("이가 많이 없으셔서 발음하시는 게 불편하세요")
-                .build();
-
-        RecruitDetailResponse mock = RecruitDetailResponse.builder()
-                .recruitId(1L)
-                .status("매칭중")
-                .escortDate(LocalDate.now())
-                .estimatedMeetingTime(LocalTime.NOON)
-                .estimatedReturnTime(LocalTime.MIDNIGHT)
-                .route(route)
-                .patient(patient)
-                .purpose("고혈압 정기 검진")
-                .extraRequest("다음 정기 검진 예약 꼭 잡아주세요!")
-                .build();
-
-        return Response.from(mock);
+        return Response.from(recruitService.getRecruitDetailByRecruitId(recruitId));
     }
 
     @Operation(
@@ -262,46 +99,8 @@ public class RecruitController {
             description = "동행 신청 결제 정보 조회 성공")
     @GetMapping("/{recruitId}/payments")
     public Response<RecruitPaymentResponse> getRecruitPayment(@PathVariable Long recruitId) {
-        // TODO :: recruitId에 해당하는 동행 신청의 결제 금액을 계산
 
-//        return Response.from(recruitService.getRecruitPaymentByRecruitId(recruitId));
-
-        LocationInfoSimpleResponse meetingLocationInfo = LocationInfoSimpleResponse.builder()
-                .locationInfoId(1L)
-                .placeName("신촌역 3번 출구")
-                .address("서울특별시 서대문구 연세로 2")
-                .detailAddress("출구 앞 파란 의자 근처")
-                .build();
-
-        LocationInfoSimpleResponse hospitalLocationInfo = LocationInfoSimpleResponse.builder()
-                .locationInfoId(1L)
-                .placeName("서울성모병원")
-                .address("서울특별시 서초구 반포대로 222")
-                .detailAddress("본관 3층 내과 외래")
-                .build();
-
-        LocationInfoSimpleResponse returnLocationInfo = LocationInfoSimpleResponse.builder()
-                .locationInfoId(1L)
-                .placeName("신촌역 3번 출구")
-                .address("서울특별시 서대문구 연세로 2")
-                .detailAddress("출구 앞 파란 의자 근처")
-                .build();
-
-        RouteSimpleResponse route = RouteSimpleResponse.builder()
-                .routeId(1L)
-                .meetingLocationInfo(meetingLocationInfo)
-                .hospitalLocationInfo(hospitalLocationInfo)
-                .returnLocationInfo(returnLocationInfo)
-                .build();
-
-        RecruitPaymentResponse mock = RecruitPaymentResponse.builder()
-                .recruitId(1L)
-                .route(route)
-                .baseFee(30000)
-                .expectedTaxiFee(100000)
-                .build();
-
-        return Response.from(mock);
+        return Response.from(recruitService.getRecruitPaymentByRecruitId(recruitId));
     }
 
     @Operation(
@@ -311,12 +110,9 @@ public class RecruitController {
             responseCode = "200",
             description = "동행 신청 성공")
     @PostMapping("")
-    public Response<Void> createRecruit(@RequestBody RecruitCreateRequest requestDto) {
-        // TODO :: 원래라면 jwt 혹은 sessionId로부터 유저 정보를 조회해야 함
-        // 현재는 우선 userId = 1로 고정
+    public Response<Void> createRecruit(@LoginUser SessionAuth auth, @RequestBody RecruitCreateRequest requestDto) {
 
-
-        // 각종 엔티티 생성
+        recruitFacadeService.createRecruit(auth.id(), requestDto);
 
         return Response.from();
     }
@@ -330,7 +126,7 @@ public class RecruitController {
     @PatchMapping("/{recruitId}/cancel")
     public Response<Void> cancelRecruit(@PathVariable Long recruitId) {
 
-        // recruitService.cancelRecruit(recruitId);
+        recruitService.cancelRecruit(recruitId);
 
         return Response.from();
     }
@@ -342,37 +138,14 @@ public class RecruitController {
         responseCode = "200",
         description = "동행 목록 조회 성공" )
     @GetMapping("/helper")
-    public Response<RecruitListResponse> getRecruitListAsHelper() {
+    public Response<RecruitListResponse> getRecruitListAsHelper(@LoginUser SessionAuth auth) {
         // TODO :: 원래라면 jwt 혹은 sessionId로부터 유저 정보를 조회해야 함
         // 현재는 우선 userId = 1로 고정
 
-        // recruitService.getRecruitListAsHelperByUserId(1L)
+        RecruitListResponse dto = recruitService.getRecruitListAsHelperByUserId(
+            auth.id());
 
-        RecruitSimpleResponse dto = RecruitSimpleResponse.builder()
-            .recruitId(1L)
-            .status("매칭중")
-            .numberOfApplication(3L)
-            .destination("서울아산병원")
-            .departureLocation("꿈에그린아파트")
-            .escortDate(LocalDate.now())
-            .estimatedMeetingTime(LocalTime.NOON)
-            .estimatedReturnTime(LocalTime.MIDNIGHT)
-            .estimatedPayment(123000)
-            .needsHelping(true)
-            .hasCommunicationIssue(true)
-            .hasCognitiveIssue(true)
-            .usesWheelchair(true)
-            .build();
-
-        List<RecruitSimpleResponse> list = new ArrayList<>();
-        list.add(dto);
-        list.add(dto);
-
-        RecruitListResponse mock = RecruitListResponse.builder()
-            .completedList(list)
-            .inProgressList(list).build();
-
-        return Response.from(mock);
+        return Response.from(dto);
     }
 
     @Operation(
@@ -386,72 +159,9 @@ public class RecruitController {
         @RequestParam(required = false, name = "area") String area,
         @RequestParam(required = false, name = "startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
         @RequestParam(required = false, name = "endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate){
-        // TODO :: 원래라면 jwt 혹은 sessionId로부터 유저 정보를 조회해야 함
-        // 현재는 우선 userId = 1로 고정
 
-        LocalDate d1 = LocalDate.now();
-        LocalDate d2 = d1.plusDays(1);
+        RecruitSearchListResponse dto = recruitService.getRecruitListBySearch(area, startDate, endDate);
 
-        RecruitSimpleResponse dto1 = RecruitSimpleResponse.builder()
-            .recruitId(1L)
-            .escortId(null)
-            .status("매칭중")
-            .numberOfApplication(0L)
-            .escortDate(d1)
-            .estimatedMeetingTime(LocalTime.of(10, 0))
-            .estimatedReturnTime(LocalTime.of(12, 0))
-            .departureLocation("꿈에그린아파트")
-            .destination("서울아산병원")
-            .estimatedPayment(123000)
-            .needsHelping(true)
-            .hasCommunicationIssue(true)
-            .hasCognitiveIssue(false)
-            .usesWheelchair(true)
-            .build();
-
-        RecruitSimpleResponse dto2 = RecruitSimpleResponse.builder()
-            .recruitId(2L)
-            .escortId(null)
-            .status("매칭중")
-            .numberOfApplication(0L)
-            .escortDate(d1)
-            .estimatedMeetingTime(LocalTime.of(14, 0))
-            .estimatedReturnTime(LocalTime.of(16, 0))
-            .departureLocation("래미안아파트")
-            .destination("삼성서울병원")
-            .estimatedPayment(98000)
-            .needsHelping(false)
-            .hasCommunicationIssue(false)
-            .hasCognitiveIssue(true)
-            .usesWheelchair(false)
-            .build();
-
-        RecruitSimpleResponse dto3 = RecruitSimpleResponse.builder()
-            .recruitId(3L)
-            .escortId(null)
-            .status("매칭중")
-            .numberOfApplication(0L)
-            .escortDate(d2)
-            .estimatedMeetingTime(LocalTime.of(9, 30))
-            .estimatedReturnTime(LocalTime.of(11, 30))
-            .departureLocation("강남N타워")
-            .destination("세브란스병원")
-            .estimatedPayment(75000)
-            .needsHelping(true)
-            .hasCommunicationIssue(false)
-            .hasCognitiveIssue(false)
-            .usesWheelchair(false)
-            .build();
-
-        Map<LocalDate, List<RecruitSimpleResponse>> groups = new LinkedHashMap<>();
-        groups.computeIfAbsent(d1, k -> new ArrayList<>()).add(dto1);
-        groups.computeIfAbsent(d1, k -> new ArrayList<>()).add(dto2);
-        groups.computeIfAbsent(d2, k -> new ArrayList<>()).add(dto3);
-
-        RecruitSearchListResponse mock = RecruitSearchListResponse.builder()
-            .inProgressMap(groups)
-            .build();
-
-        return Response.from(mock);
+        return Response.from(dto);
     }
 }

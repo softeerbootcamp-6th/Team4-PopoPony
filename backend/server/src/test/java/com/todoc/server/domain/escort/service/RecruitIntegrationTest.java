@@ -125,12 +125,13 @@ public class RecruitIntegrationTest {
     @DisplayName("동행 신청 생성 - 정상")
     void createRecruit_정상생성() {
         // given
+        Long authId = 1L;
         int beforeCount = recruitService.getAllRecruits().size();
 
         RecruitCreateRequest request = createSampleRequest();
 
         // when
-        recruitFacadeService.createRecruit(request);
+        recruitFacadeService.createRecruit(authId, request);
 
         // then
         List<Recruit> all = recruitService.getAllRecruits();

@@ -1,6 +1,7 @@
 package com.todoc.server.domain.escort.service;
 
 import com.todoc.server.domain.auth.entity.Auth;
+import com.todoc.server.domain.auth.service.AuthService;
 import com.todoc.server.domain.customer.entity.Patient;
 import com.todoc.server.domain.customer.service.PatientService;
 import com.todoc.server.domain.escort.entity.Recruit;
@@ -22,12 +23,11 @@ public class RecruitFacadeService {
     private final PatientService patientService;
     private final LocationInfoService locationInfoService;
     private final RouteService routeService;
+    private final AuthService authService;
 
-    public void createRecruit(RecruitCreateRequest request) {
+    public void createRecruit(Long authId, RecruitCreateRequest request) {
         // TODO :: 세션 혹은 JWT로부터 고객 정보 가져오기
-        Auth customer = Auth.builder()
-                .id(1L)
-                .build();
+        Auth customer = authService.getAuthById(authId);
 
         // 환자 정보 저장 (생성 + 연관관계 설정)
         Patient patient = patientService.register(request.getPatientDetail());
