@@ -1,5 +1,5 @@
 {
-  "include": ["src", "vite.config.ts"],
+  "include": ["src", "vite.config.ts", "public/video"],
 
   "compilerOptions": {
     "target": "ES2022",
@@ -25,7 +25,6 @@
     "paths": {
       "@icons": ["src/assets/icons"],
       "@assets/*": ["src/assets/*"],
-      "@video": ["src/assets/video"],
       "@apis": ["src/shared/apis"],
       "@layouts": ["src/shared/layouts"],
       "@components": ["src/shared/components"],

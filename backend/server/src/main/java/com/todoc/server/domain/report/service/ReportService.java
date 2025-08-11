@@ -8,10 +8,13 @@ import com.todoc.server.domain.report.entity.Report;
 import com.todoc.server.domain.report.entity.TaxiFee;
 import com.todoc.server.domain.report.repository.ReportJpaRepository;
 import com.todoc.server.domain.report.repository.ReportQueryRepository;
+import com.todoc.server.domain.report.web.dto.request.ReportCreateRequest;
 import com.todoc.server.domain.report.web.dto.response.ReportDetailResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 import static com.todoc.server.domain.escort.entity.QRecruit.recruit;
 import static com.todoc.server.domain.report.entity.QReport.report;
@@ -61,5 +64,26 @@ public class ReportService {
                 .extraTimeFee(Math.max(extraFee, 0))
                 .taxiFee((tf != null ? tf.getDepartureFee() : 0) + (tf != null ? tf.getReturnFee() : 0))
                 .build();
+    }
+
+    public Report register(ReportCreateRequest requestDto) {
+
+        Report report = Report.builder()
+                .actualMeetingTime(requestDto.getActualMeetingTime())
+                .actualReturnTime(requestDto.getActualReturnTime())
+                .hasNextAppointment(requestDto.getHasNextAppointment())
+                .nextAppointmentTime(requestDto.getNextAppointmentTime())
+                .description(requestDto.getDescription())
+                .build();
+
+        return reportJpaRepository.save(report);
+    }
+
+    public long getCount() {
+        return reportJpaRepository.count();
+    }
+
+    public List<Report> getAllReports() {
+        return reportJpaRepository.findAll();
     }
 }

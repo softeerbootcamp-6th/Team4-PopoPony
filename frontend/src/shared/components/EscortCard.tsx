@@ -1,8 +1,7 @@
 import type { ReactNode } from 'react';
 import { Button, StatusTag, StrengthTag } from '@components';
 import { IcChevronRightSecondary, IcClockFill, IcCoinFill, IcMarkFill } from '@icons';
-import { useNavigate } from '@tanstack/react-router';
-import type { escortStatus } from '@types';
+import type { StatusType } from '@types';
 
 type Props = {
   children: React.ReactNode;
@@ -14,14 +13,16 @@ const EscortCard = ({ children }: Props) => {
     <div
       className='bg-background-default-white border-stroke-neutral-dark shadow-card flex w-full cursor-pointer flex-col gap-[1.2rem] rounded-[0.8rem] border p-[1.6rem]'
       // TODO: 삭제 필요
-      onClick={() => navigate({ to: '/customer/escort/$escortId', params: { escortId: '1' } })}>
+      onClick={() => {
+        alert('준비중인 기능이예요');
+      }}>
       {children}
     </div>
   );
 };
 
 interface CardStatusHeaderProps {
-  status?: escortStatus;
+  status?: StatusType;
   text: string;
   title: string;
 }

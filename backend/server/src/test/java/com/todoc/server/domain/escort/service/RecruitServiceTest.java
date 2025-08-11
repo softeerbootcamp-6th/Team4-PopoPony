@@ -1,15 +1,20 @@
 package com.todoc.server.domain.escort.service;
 
+import com.todoc.server.common.enumeration.ApplicationStatus;
+import com.todoc.server.common.enumeration.Gender;
 import com.todoc.server.common.enumeration.RecruitStatus;
+import com.todoc.server.domain.customer.entity.Patient;
 import com.todoc.server.domain.escort.entity.Recruit;
 import com.todoc.server.domain.escort.exception.RecruitInvalidCancelException;
 import com.todoc.server.domain.escort.exception.RecruitNotFoundException;
 import com.todoc.server.domain.escort.repository.RecruitJpaRepository;
 import com.todoc.server.domain.escort.repository.RecruitQueryRepository;
-import com.todoc.server.domain.escort.web.dto.response.RecruitListResponse;
-import com.todoc.server.domain.escort.web.dto.response.RecruitPaymentResponse;
-import com.todoc.server.domain.escort.web.dto.response.RecruitSimpleResponse;
+import com.todoc.server.domain.escort.repository.dto.RecruitHistoryDetailFlatDto;
+import com.todoc.server.domain.escort.web.dto.response.*;
 import com.todoc.server.domain.route.entity.LocationInfo;
+import java.util.ArrayList;
+import java.util.Map;
+import org.assertj.core.api.Assertions;
 import com.todoc.server.domain.route.entity.Route;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -50,11 +55,11 @@ class RecruitServiceTest {
     public void getRecruitListAsCustomerByUserId_ShouldReturnSortedRecruitList() {
         // given
         Long userId = 1L;
-        RecruitSimpleResponse inProgress1 = new RecruitSimpleResponse(1L,1L, RecruitStatus.IN_PROGRESS, 2L, LocalDate.of(2024, 6, 3), LocalTime.NOON, LocalTime.MIDNIGHT, "서울역", "병원A");
-        RecruitSimpleResponse inProgress2 = new RecruitSimpleResponse(1L, 2L, RecruitStatus.IN_PROGRESS, 2L, LocalDate.of(2024, 6, 1), LocalTime.NOON, LocalTime.MIDNIGHT, "서울역", "병원A");
-        RecruitSimpleResponse inProgress3 = new RecruitSimpleResponse(2L, null, RecruitStatus.MATCHING, 3L, LocalDate.of(2024, 6, 2), LocalTime.NOON, LocalTime.MIDNIGHT, "학동역", "병원B");
-        RecruitSimpleResponse done1 = new RecruitSimpleResponse(3L, null, RecruitStatus.DONE, 2L, LocalDate.of(2024, 5, 30), LocalTime.NOON, LocalTime.MIDNIGHT, "서울역", "병원C");
-        RecruitSimpleResponse done2 = new RecruitSimpleResponse(4L, null, RecruitStatus.DONE, 1L, LocalDate.of(2024, 6, 4), LocalTime.NOON, LocalTime.MIDNIGHT, "학동역", "병원D");
+        RecruitSimpleResponse inProgress1 = new RecruitSimpleResponse(1L,1L, "동행중", 2L, LocalDate.of(2024, 6, 3), LocalTime.NOON, LocalTime.MIDNIGHT, "서울역", "병원A", 10000, true, false, false, true);
+        RecruitSimpleResponse inProgress2 = new RecruitSimpleResponse(1L, 2L, "동행중", 2L, LocalDate.of(2024, 6, 1), LocalTime.NOON, LocalTime.MIDNIGHT, "서울역", "병원A", 10000, true, false, false, true);
+        RecruitSimpleResponse inProgress3 = new RecruitSimpleResponse(2L, null, "매칭중", 3L, LocalDate.of(2024, 6, 2), LocalTime.NOON, LocalTime.MIDNIGHT, "학동역", "병원B", 10000, true, false, false, true);
+        RecruitSimpleResponse done1 = new RecruitSimpleResponse(3L, null, "동행완료", 2L, LocalDate.of(2024, 5, 30), LocalTime.NOON, LocalTime.MIDNIGHT, "서울역", "병원C", 10000, true, false, false, true);
+        RecruitSimpleResponse done2 = new RecruitSimpleResponse(4L, null, "동행완료", 1L, LocalDate.of(2024, 6, 4), LocalTime.NOON, LocalTime.MIDNIGHT, "학동역", "병원D", 10000, true, false, false, true);
 
         List<RecruitSimpleResponse> mockList = Arrays.asList(inProgress2, done1, inProgress1, done2, inProgress3);
 
@@ -68,11 +73,11 @@ class RecruitServiceTest {
         assertEquals(2, result.getCompletedList().size());
 
         // 진행중인 목록: IN_PROGRESS가 최상단, 날짜 오름차순
-        assertEquals(RecruitStatus.IN_PROGRESS, result.getInProgressList().get(0).getStatus());
+        assertEquals("동행중", result.getInProgressList().get(0).getStatus());
         assertTrue(result.getInProgressList().get(0).getEscortDate().isBefore(result.getInProgressList().get(1).getEscortDate()));
 
         // 완료된 목록: 날짜 내림차순
-        assertEquals(RecruitStatus.DONE, result.getCompletedList().get(0).getStatus());
+        assertEquals("동행완료", result.getCompletedList().get(0).getStatus());
         assertTrue(result.getCompletedList().get(0).getEscortDate().isAfter(result.getCompletedList().get(1).getEscortDate()));
     }
 
@@ -152,6 +157,62 @@ class RecruitServiceTest {
     }
 
     @Test
+    void getRecruitHistoryListByUserId_정상조회() {
+        // given
+        Long userId = 1L;
+        List<RecruitHistorySimpleResponse> mockList = Arrays.asList(
+                mock(RecruitHistorySimpleResponse.class),
+                mock(RecruitHistorySimpleResponse.class)
+        );
+        when(recruitQueryRepository.findRecruitListSortedByUserId(userId, 5)).thenReturn(mockList);
+
+        // when
+        RecruitHistoryListResponse result = recruitService.getRecruitHistoryListByUserId(userId);
+
+        // then
+        Assertions.assertThat(result.getBeforeList()).hasSize(2);
+    }
+
+    @Test
+    void getRecruitHistoryDetailByRecruitId_정상조회() {
+        // given
+        Long recruitId = 10L;
+        RecruitHistoryDetailFlatDto flatDto = mock(RecruitHistoryDetailFlatDto.class);
+        Patient patient = mock(Patient.class);
+
+        when(recruitQueryRepository.getRecruitHistoryDetailByRecruitId(recruitId)).thenReturn(flatDto);
+        when(flatDto.getPatient()).thenReturn(patient);
+        when(flatDto.getMeetingLocation()).thenReturn(mock(LocationInfo.class));
+        when(flatDto.getDestination()).thenReturn(mock(LocationInfo.class));
+        when(flatDto.getReturnLocation()).thenReturn(mock(LocationInfo.class));
+        when(patient.getCognitiveIssueDetail()).thenReturn("[]");
+        when(patient.getGender()).thenReturn(Gender.MALE);
+
+        // when
+        RecruitHistoryDetailResponse result = recruitService.getRecruitHistoryDetailByRecruitId(recruitId);
+
+        // then
+        assertNotNull(result);
+        assertNotNull(result.getPatientDetail());
+        assertNotNull(result.getMeetingLocationDetail());
+        assertNotNull(result.getDestinationDetail());
+        assertNotNull(result.getReturnLocationDetail());
+    }
+
+    @Test
+    void getRecruitHistoryDetailByRecruitId_존재하지않는경우_예외() {
+        // given
+        Long recruitId = 999L;
+        when(recruitQueryRepository.getRecruitHistoryDetailByRecruitId(recruitId)).thenReturn(null);
+
+        // when & then
+        assertThrows(RecruitNotFoundException.class, () -> {
+            recruitService.getRecruitHistoryDetailByRecruitId(recruitId);
+        });
+    }
+  
+  
+    @Test
     void getRecruitPaymentByRecruitId_정상조회() {
         // given
         LocationInfo meetingLocation = LocationInfo.builder()
@@ -218,5 +279,102 @@ class RecruitServiceTest {
         // when & then
         assertThatThrownBy(() -> recruitService.getRecruitPaymentByRecruitId(999L))
                 .isInstanceOf(RecruitNotFoundException.class);
+    }
+
+    @Test
+    @DisplayName("도우미 입장에서 동행 신청 목록 조회 - 진행중인 목록과 완료된 목록 분리 및 정렬")
+    void getRecruitListAsHelperByUserId_정상_분리_정렬() {
+        // given
+        Long helperUserId = 7L;
+
+        RecruitSimpleResponse r1 = new RecruitSimpleResponse(1L, 1L, "동행중", 2L, LocalDate.of(2024, 6, 3), LocalTime.NOON, LocalTime.MIDNIGHT, "서울역", "병원A", 10000, true, false, false, true);
+        RecruitSimpleResponse r2 = new RecruitSimpleResponse(2L, null, "매칭중", 3L, LocalDate.of(2024, 6, 4), LocalTime.NOON, LocalTime.MIDNIGHT, "학동역", "병원B", 10000, true, false, false, true);
+        RecruitSimpleResponse r3 = new RecruitSimpleResponse(3L, 3L, "매칭완료", 4L, LocalDate.of(2024, 6, 2), LocalTime.NOON, LocalTime.MIDNIGHT, "시청역", "병원C", 10000, true, false, false, true);
+        RecruitSimpleResponse r4 = new RecruitSimpleResponse(4L, 4L, "동행완료", 5L, LocalDate.of(2024, 6, 4), LocalTime.NOON, LocalTime.MIDNIGHT, "강남역", "병원D", 10000, true, false, false, true);
+        RecruitSimpleResponse r5 = new RecruitSimpleResponse(5L, 5L, "동행완료", 6L, LocalDate.of(2024, 5, 30), LocalTime.NOON, LocalTime.MIDNIGHT, "교대역", "병원E", 10000, true, false, false, true);
+
+        when(recruitQueryRepository.findListByHelperUserIdAndApplicationStatus(
+            eq(helperUserId), eq(List.of(ApplicationStatus.MATCHED, ApplicationStatus.PENDING))))
+            .thenReturn(List.of(r1, r2, r3, r4, r5));
+
+        // when
+        RecruitListResponse result = recruitService.getRecruitListAsHelperByUserId(helperUserId);
+
+        // then
+        assertEquals(3, result.getInProgressList().size()); // MATCHING(매칭중) 1 + COMPLETED(매칭완료) 1 + IN_PROGRESS(동행중) 1
+        assertEquals(2, result.getCompletedList().size());  // DONE 2
+
+        // 진행중 목록
+        List<RecruitSimpleResponse> inProgress = result.getInProgressList();
+
+        assertEquals(1L, inProgress.get(0).getRecruitId());  // r1 (동행중이므로 첫번째로 와야함)
+        assertEquals("동행중", inProgress.get(0).getStatus());
+        assertEquals(LocalDate.of(2024, 6, 3), inProgress.get(0).getEscortDate());
+
+        assertEquals(3L, inProgress.get(1).getRecruitId()); // r3 (매칭중/매칭완료 상태의 경우 동행일 기준 오름차순이므로 r3가 두번째로 와야함)
+        assertEquals("매칭완료", inProgress.get(1).getStatus());
+        assertEquals(LocalDate.of(2024, 6, 2), inProgress.get(1).getEscortDate());
+
+        assertEquals(2L, inProgress.get(2).getRecruitId()); // r2 (동행중 상태가 아님, 동행일 기준 오름차순이므로 마지막에 와야함)
+        assertEquals("매칭중", inProgress.get(2).getStatus());
+        assertEquals(LocalDate.of(2024, 6, 4), inProgress.get(2).getEscortDate());
+
+        // 완료 목록
+        List<RecruitSimpleResponse> completed = result.getCompletedList();
+
+        assertEquals(4L, completed.get(0).getRecruitId());  // r4 (최신순으로 와야 하므로)
+        assertEquals(5L, completed.get(1).getRecruitId());  // r5
+    }
+
+    @Test
+    @DisplayName("검색 - 지역/날짜로 조회 후 escortDate 오름차순 정렬 및 DTO 매핑")
+    void getRecruitListBySearch_정상조회_정렬_매핑() {
+        // given
+        String area = "서울";
+        LocalDate d1 = LocalDate.of(2024, 6, 1);
+        LocalDate d2 = LocalDate.of(2024, 6, 2);
+
+        LocationInfo meet = LocationInfo.builder().placeName("만남장소").upperAddrName(area).build();
+        LocationInfo hosp = LocationInfo.builder().placeName("병원A").upperAddrName(area).build();
+        Route route = Route.builder().meetingLocationInfo(meet).hospitalLocationInfo(hosp).build();
+
+        Patient p = Patient.builder().needsHelping(true).usesWheelchair(false)
+            .hasCognitiveIssue(false).hasCommunicationIssue(true).build();
+
+        Recruit r1 = Recruit.builder().id(1L).status(RecruitStatus.MATCHING).escortDate(d2).estimatedMeetingTime(LocalTime.of(9, 30)).estimatedReturnTime(LocalTime.of(11, 30)).estimatedFee(75000).route(route).patient(p).build();
+
+        Recruit r2 = Recruit.builder().id(2L).status(RecruitStatus.MATCHING).escortDate(d1).estimatedMeetingTime(LocalTime.of(10, 0)).estimatedReturnTime(LocalTime.of(12, 0)).estimatedFee(123000).route(route).patient(p).build();
+
+        Recruit r3 = Recruit.builder().id(3L).status(RecruitStatus.MATCHING).escortDate(d2).estimatedMeetingTime(LocalTime.of(14, 0)).estimatedReturnTime(LocalTime.of(16, 0)).estimatedFee(98000).route(route).patient(p).build();
+
+        when(recruitQueryRepository.findListByDateRangeAndStatus(
+            eq(area), eq(d1), eq(d2), eq(List.of(RecruitStatus.MATCHING))
+        )).thenReturn(List.of(r1, r3, r2));  // 섞어서 반환
+
+
+        // when
+        RecruitSearchListResponse res = recruitService.getRecruitListBySearch(area, d1, d2);
+
+
+        // then
+        Map<LocalDate, List<RecruitSimpleResponse>> map = res.getInProgressMap();
+
+        assertEquals(2, map.size());  // 날짜가 2종류 뿐이므로
+
+        List<LocalDate> keys = new ArrayList<>(map.keySet());
+        assertEquals(d1, keys.get(0));  // 키 순서: d1 -> d2 (서비스에서 escortDate 오름차순 정렬 후 그룹핑)
+        assertEquals(d2, keys.get(1));
+
+        // d1 그룹 검증
+        List<RecruitSimpleResponse> g1 = map.get(d1);
+        assertEquals(1, g1.size());
+        RecruitSimpleResponse day1Item = g1.get(0);  // 2024-06-01에 해당하는 RecruitSimpleResponse
+        assertEquals(2L, day1Item.getRecruitId());
+        assertEquals("만남장소", day1Item.getDepartureLocation());
+        assertEquals("병원A", day1Item.getDestination());
+        assertEquals(123000, day1Item.getEstimatedPayment());
+
+        List<RecruitSimpleResponse> g2 = map.get(d2);
+        assertEquals(2, g2.size());
     }
 }

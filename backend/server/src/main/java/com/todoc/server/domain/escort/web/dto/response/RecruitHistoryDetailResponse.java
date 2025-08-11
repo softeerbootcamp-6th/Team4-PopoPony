@@ -1,5 +1,9 @@
 package com.todoc.server.domain.escort.web.dto.response;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.todoc.server.common.util.JsonUtils;
+import com.todoc.server.domain.customer.entity.Patient;
+import com.todoc.server.domain.route.entity.LocationInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
@@ -70,6 +74,27 @@ public class RecruitHistoryDetailResponse {
         @Schema(description = "의사소통 이슈가 있다면, 디테일 설명", example = "이가 많이 없으셔서.. 천천히 이야기 들어주세요")
         private String communicationIssueDetail;
 
+        public static PatientDetail from(Patient patient) {
+
+            List<String> cognitiveIssueDetail = JsonUtils.fromJson(patient.getCognitiveIssueDetail(), new TypeReference<>() {});
+            String gender = patient.getGender().getLabel();
+
+            return PatientDetail.builder()
+                    .patientId(patient.getId())
+                    .imageUrl(patient.getImageUrl())
+                    .name(patient.getName())
+                    .age(patient.getAge())
+                    .gender(gender)
+                    .phoneNumber(patient.getContact())
+                    .needsHelping(patient.getNeedsHelping())
+                    .usesWheelchair(patient.getUsesWheelchair())
+                    .hasCognitiveIssue(patient.getHasCognitiveIssue())
+                    .cognitiveIssueDetail(cognitiveIssueDetail)
+                    .hasCommunicationIssue(patient.getHasCommunicationIssue())
+                    .communicationIssueDetail(patient.getCommunicationIssueDetail())
+                    .build();
+        }
+
         @Builder
         public PatientDetail(Long patientId, String imageUrl, String name, Integer age, String gender, String phoneNumber,
                              boolean needsHelping, boolean usesWheelchair, boolean hasCognitiveIssue,
@@ -127,6 +152,23 @@ public class RecruitHistoryDetailResponse {
 
         @Schema(description = "위도 (Latitude)", example = "36.4809912")
         private BigDecimal latitude;
+
+        public static LocationDetail from(LocationInfo locationInfo) {
+            return LocationDetail.builder()
+                    .placeName(locationInfo.getPlaceName())
+                    .upperAddrName(locationInfo.getUpperAddrName())
+                    .middleAddrName(locationInfo.getMiddleAddrName())
+                    .lowerAddrName(locationInfo.getLowerAddrName())
+                    .firstAddrNo(locationInfo.getFirstAddrNo())
+                    .secondAddrNo(locationInfo.getSecondAddrNo())
+                    .roadName(locationInfo.getRoadName())
+                    .firstBuildingNo(locationInfo.getFirstBuildingNo())
+                    .secondBuildingNo(locationInfo.getSecondBuildingNo())
+                    .detailAddress(locationInfo.getDetailAddress())
+                    .longitude(locationInfo.getLongitude())
+                    .latitude(locationInfo.getLatitude())
+                    .build();
+        }
 
         @Builder
         public LocationDetail(String placeName, String upperAddrName, String middleAddrName, String lowerAddrName,

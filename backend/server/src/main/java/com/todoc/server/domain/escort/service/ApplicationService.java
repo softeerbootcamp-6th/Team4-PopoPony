@@ -2,6 +2,7 @@ package com.todoc.server.domain.escort.service;
 
 import com.querydsl.core.Tuple;
 import com.todoc.server.domain.escort.entity.Application;
+import com.todoc.server.domain.escort.exception.ApplicationNotFoundException;
 import com.todoc.server.domain.escort.repository.ApplicationJpaRepository;
 import com.todoc.server.domain.escort.repository.ApplicationQueryRepository;
 import lombok.RequiredArgsConstructor;
@@ -35,5 +36,19 @@ public class ApplicationService {
     @Transactional
     public List<Application> getApplicationsInSameRecruit(Long applicationId) {
         return applicationQueryRepository.findAllApplicationsOfRecruitByApplicationId(applicationId);
+    }
+
+    public Application getMatchedApplicationByRecruitId(Long recruitId) {
+        return applicationQueryRepository.findMatchedApplicationByRecruitId(recruitId)
+                .orElseThrow(ApplicationNotFoundException::new);
+    }
+  
+    public Application save(Application application) {
+        return applicationJpaRepository.save(application);
+    }
+
+    public Application getApplicationById(Long applicationId) {
+        return applicationJpaRepository.findById(applicationId)
+            .orElseThrow(ApplicationNotFoundException::new);
     }
 }

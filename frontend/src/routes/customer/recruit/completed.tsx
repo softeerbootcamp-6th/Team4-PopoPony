@@ -1,7 +1,6 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { PageLayout, FormLayout } from '@layouts';
 import { Button } from '@components';
-import { okVideo } from '@assets/video';
 
 export const Route = createFileRoute('/customer/recruit/completed')({
   component: RouteComponent,
@@ -29,12 +28,7 @@ function RouteComponent() {
                   muted
                   loop
                   playsInline>
-                  <source src={okVideo} type='video/webm' />
-                  <img
-                    src={okVideo}
-                    alt='동행 완료 애니메이션'
-                    className='h-full w-full rounded-[1.2rem] object-contain'
-                  />
+                  <source src='/video/process_completed.webm' type='video/webm' />
                 </video>
               </div>
               <FormLayout.TitleWrapper>

@@ -1,6 +1,7 @@
 package com.todoc.server.domain.escort.service;
 
 import com.todoc.server.domain.escort.entity.Escort;
+import com.todoc.server.domain.escort.exception.EscortNotFoundException;
 import com.todoc.server.domain.escort.repository.EscortJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,5 +22,10 @@ public class EscortService {
     @Transactional
     public void save(Escort escort) {
         escortJpaRepository.save(escort);
+    }
+
+    public Escort getByRecruitId(Long recruitId) {
+        return escortJpaRepository.findByRecruitId(recruitId)
+                .orElseThrow(EscortNotFoundException::new);
     }
 }

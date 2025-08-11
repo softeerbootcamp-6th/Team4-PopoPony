@@ -162,7 +162,38 @@
 
 <details>
 <summary > 백엔드 폴더 구조 보기 </summary>
+	
 ```
+com.todoc.server
+├─ 📁 common/
+│  ├─ 📁 config/
+│  ├─ 📁 entity/
+│  ├─ 📁 enumeration/
+│  ├─ 📁 exception/
+│  │  ├─ 📁 base/
+│  │  └─ 📁 global/
+│  ├─ 📁 response/
+│  └─ 📁 util/
+│
+└─ 📁 domain/
+   ├─ 📁 auth/
+   │  ├─ 📁 entity/
+   │  ├─ 📁 exception/
+   │  ├─ 📁 repository/
+   │  ├─ 📁 service/
+   │  └─ 📁 web/
+   │     ├─ 📁 controller/
+   │     └─ 📁 dto/
+   │        ├─ 📁 request/
+   │        └─ 📁 response/
+   │
+   ├─ 📁 customer (...)
+   ├─ 📁 escort (...)
+   ├─ 📁 helper (...)
+   ├─ 📁 latestlocation (...)
+   ├─ 📁 report (...)
+   ├─ 📁 review (...)
+   └─ 📁 route (...)
 ```
 </details>
 

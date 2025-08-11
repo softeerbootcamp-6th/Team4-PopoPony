@@ -3,12 +3,14 @@ package com.todoc.server.domain.escort.repository;
 import com.querydsl.core.Tuple;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.todoc.server.common.enumeration.ApplicationStatus;
 import com.todoc.server.domain.escort.entity.Application;
 import com.todoc.server.domain.escort.entity.QApplication;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.todoc.server.domain.escort.entity.QApplication.application;
 import static com.todoc.server.domain.auth.entity.QAuth.auth;
@@ -71,5 +73,23 @@ public class ApplicationQueryRepository {
                                 .where(a1.id.eq(applicationId))
                 ))
                 .fetch();
+    }
+
+    /**
+     * 동행 신청과 매칭된 지원을 조회합니다.
+     *
+     * @param recruitId 동행 신청 ID
+     * @return recruitId의 동행 신청과 매칭된 지원(Optional)
+     */
+    public Optional<Application> findMatchedApplicationByRecruitId(Long recruitId) {
+        // recruitId로 단일 조회, Recruit fetch join
+        Application result = queryFactory
+                .selectFrom(application)
+                .join(application.recruit, recruit).fetchJoin()
+                .where(recruit.id.eq(recruitId),
+                        application.status.eq(ApplicationStatus.MATCHED))
+                .fetchOne();
+
+        return Optional.ofNullable(result);
     }
 }

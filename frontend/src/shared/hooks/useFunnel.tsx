@@ -1,7 +1,7 @@
 import { type ReactElement, type ReactNode, useEffect, useState } from 'react';
 import { useParams, useRouter } from '@tanstack/react-router';
+import type { FunnelRoute } from '@types';
 
-type FunnelRoute = '/customer/recruit/$step';
 interface UseFunnelProps {
   defaultStep: string;
   basePath: string;
