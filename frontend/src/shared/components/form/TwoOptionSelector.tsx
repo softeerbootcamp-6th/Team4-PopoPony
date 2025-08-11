@@ -1,47 +1,30 @@
-import { useFormContext, useWatch } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 
 interface Props {
   name: string;
   leftOption: { label: string; value: string };
   rightOption: { label: string; value: string };
 }
-
+const getUniqueId = (name: string, value: string) => {
+  return `${name}-${value}`;
+};
 const TwoOptionSelector = ({ name, leftOption, rightOption }: Props) => {
-  const { register, setValue } = useFormContext();
-  const currentValue = useWatch({ name });
-
-  const parseValue = (value: string) => {
-    if (value === 'true') {
-      return true;
-    } else if (value === 'false') {
-      return false;
-    }
-    return value;
-  };
+  const { register } = useFormContext();
 
   const options = [leftOption, rightOption];
 
-  const getUniqueId = (value: string) => {
-    return `${name}-${value}`;
-  };
-
   return (
     <div className='body1-16-medium text-neutral-90 flex-between gap-[2rem]'>
-      {options.map((option) => {
-        const uniqueId = getUniqueId(option.value);
+      {options.map((option, index) => {
+        const uniqueId = getUniqueId(name, option.value);
         return (
-          <div key={uniqueId} className='w-full'>
+          <div key={index} className='w-full'>
             <input
               type='radio'
               id={uniqueId}
               value={option.value}
               className='peer hidden'
-              checked={parseValue(option.value) === currentValue}
-              {...register(name, {
-                onChange: (e) => {
-                  setValue(name, parseValue(e.target.value));
-                },
-              })}
+              {...register(name)}
             />
             <label
               htmlFor={uniqueId}
