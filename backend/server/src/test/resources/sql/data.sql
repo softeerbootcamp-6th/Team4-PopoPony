@@ -310,48 +310,60 @@ ALTER TABLE report ALTER COLUMN id RESTART WITH 8;
 
 
 
+INSERT INTO taxi_receipt_image (id, s3_key, content_type, size_bytes, checksum, created_at, updated_at)
+VALUES
+(101, 'https://example.com/receipt1_depart.jpg', 'image/jpeg', 102400, '"etag-dep-1"', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(102, 'https://example.com/receipt1_return.jpg', 'image/jpeg', 204800, '"etag-ret-1"', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(103, 'https://example.com/receipt2_depart.jpg', 'image/jpeg', 102400, '"etag-dep-2"', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(104, 'https://example.com/receipt2_return.jpg', 'image/jpeg', 204800, '"etag-ret-2"', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(105, 'https://example.com/receipt3_depart.jpg', 'image/jpeg', 102400, '"etag-dep-3"', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(106, 'https://example.com/receipt3_return.jpg', 'image/jpeg', 204800, '"etag-ret-3"', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(107, 'https://example.com/receipt4_depart.jpg', 'image/jpeg', 102400, '"etag-dep-4"', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(108, 'https://example.com/receipt4_return.jpg', 'image/jpeg', 204800, '"etag-ret-4"', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(109, 'https://example.com/receipt5_depart.jpg', 'image/jpeg', 102400, '"etag-dep-5"', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(110, 'https://example.com/receipt5_return.jpg', 'image/jpeg', 204800, '"etag-ret-5"', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(111, 'https://example.com/receipt6_depart.jpg', 'image/jpeg', 102400, '"etag-dep-6"', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(112, 'https://example.com/receipt6_return.jpg', 'image/jpeg', 204800, '"etag-ret-6"', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(113, 'https://example.com/receipt7_depart.jpg', 'image/jpeg', 102400, '"etag-dep-7"', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(114, 'https://example.com/receipt7_return.jpg', 'image/jpeg', 204800, '"etag-ret-7"', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+ALTER TABLE taxi_receipt_image ALTER COLUMN id RESTART WITH 115;
+
 INSERT INTO taxi_fee (
     id, report_id,
-    departure_fee, departure_receipt_image_url,
-    return_fee, return_receipt_image_url,
+    departure_fee, departure_receipt_image_id,
+    return_fee,    return_receipt_image_id,
     created_at, updated_at
 ) VALUES
-      (1, 1, 8500, 'https://example.com/receipt1_depart.jpg', 9200, 'https://example.com/receipt1_return.jpg', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-
-      (2, 2, 7800, 'https://example.com/receipt2_depart.jpg', 8100, 'https://example.com/receipt2_return.jpg', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-
-      (3, 3, 7900, 'https://example.com/receipt3_depart.jpg', 8800, 'https://example.com/receipt3_return.jpg', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-
-      (4, 4, 10000, 'https://example.com/receipt4_depart.jpg', 9700, 'https://example.com/receipt4_return.jpg', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-
-      (5, 5, 6700, 'https://example.com/receipt5_depart.jpg', 7300, 'https://example.com/receipt5_return.jpg', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-
-      (6, 6, 9100, 'https://example.com/receipt6_depart.jpg', 9400, 'https://example.com/receipt6_return.jpg', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-
-      (7, 7, 8900, 'https://example.com/receipt7_depart.jpg', 9100, 'https://example.com/receipt7_return.jpg', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+      (1, 1, 8500, 101, 9200, 102, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+      (2, 2, 7800, 103, 8100, 104, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+      (3, 3, 7900, 105, 8800, 106, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+      (4, 4, 10000, 107, 9700, 108, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+      (5, 5, 6700, 109, 7300, 110, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+      (6, 6, 9100, 111, 9400, 112, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+      (7, 7, 8900, 113, 9100, 114, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 ALTER TABLE taxi_fee ALTER COLUMN id RESTART WITH 8;
 
 
 
-INSERT INTO image_attachment (
-    id, report_id, image_url, created_at, updated_at
-) VALUES
-      (1, 1, 'https://example.com/report1_img1.jpg', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-      (2, 1, 'https://example.com/report1_img2.jpg', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+INSERT INTO image_attachment (id, report_id, s3_key, content_type, size_bytes, checksum, created_at, updated_at)
+VALUES
+(1, 1, 'https://example.com/report1_img1.jpg', 'image/jpeg', 123456, '"etag-p1"', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(2, 1, 'https://example.com/report1_img2.jpg', 'image/jpeg', 234567, '"etag-p2"', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 
-      (3, 2, 'https://example.com/report2_img1.jpg', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(3, 2, 'https://example.com/report2_img1.jpg', 'image/jpeg', 111111, '"etag-21"', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 
-      (4, 3, 'https://example.com/report3_img1.jpg', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-      (5, 3, 'https://example.com/report3_img2.jpg', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(4, 3, 'https://example.com/report3_img1.jpg', 'image/jpeg', 222222, '"etag-31"', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(5, 3, 'https://example.com/report3_img2.jpg', 'image/jpeg', 333333, '"etag-32"', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 
-      (6, 4, 'https://example.com/report4_img1.jpg', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(6, 4, 'https://example.com/report4_img1.jpg', 'image/jpeg', 444444, '"etag-41"', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 
-      (7, 5, 'https://example.com/report5_img1.jpg', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(7, 5, 'https://example.com/report5_img1.jpg', 'image/jpeg', 555555, '"etag-51"', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 
-      (8, 6, 'https://example.com/report6_img1.jpg', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-      (9, 6, 'https://example.com/report6_img2.jpg', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(8, 6, 'https://example.com/report6_img1.jpg', 'image/jpeg', 666666, '"etag-61"', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(9, 6, 'https://example.com/report6_img2.jpg', 'image/jpeg', 777777, '"etag-62"', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 
-      (10, 7, 'https://example.com/report7_img1.jpg', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+(10, 7, 'https://example.com/report7_img1.jpg', 'image/jpeg', 888888, '"etag-71"', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 ALTER TABLE image_attachment ALTER COLUMN id RESTART WITH 11;

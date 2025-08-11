@@ -38,6 +38,11 @@ public class ApplicationService {
         return applicationQueryRepository.findAllApplicationsOfRecruitByApplicationId(applicationId);
     }
 
+    public Application getMatchedApplicationByRecruitId(Long recruitId) {
+        return applicationQueryRepository.findMatchedApplicationByRecruitId(recruitId)
+                .orElseThrow(ApplicationNotFoundException::new);
+    }
+  
     public Application save(Application application) {
         return applicationJpaRepository.save(application);
     }

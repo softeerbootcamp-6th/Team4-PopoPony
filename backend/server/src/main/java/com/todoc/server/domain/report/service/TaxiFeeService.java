@@ -1,8 +1,10 @@
 package com.todoc.server.domain.report.service;
 
 import com.todoc.server.domain.report.entity.TaxiFee;
+import com.todoc.server.domain.report.entity.TaxiReceiptImage;
 import com.todoc.server.domain.report.exception.TaxiFeeNotFoundException;
 import com.todoc.server.domain.report.repository.TaxiFeeJpaRepository;
+import com.todoc.server.domain.report.web.dto.request.ReportCreateRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,5 +26,17 @@ public class TaxiFeeService {
     public TaxiFee getTaxiFeeByRecruitId(Long reportId) {
         return taxiFeeJpaRepository.findByReportId(reportId)
                 .orElseThrow(TaxiFeeNotFoundException::new);
+    }
+
+    public TaxiFee register(ReportCreateRequest.TaxiFeeCreateRequest requestDto, TaxiReceiptImage departureReceipt, TaxiReceiptImage returnReceipt) {
+
+        TaxiFee taxiFee = TaxiFee.builder()
+                .departureFee(requestDto.getDepartureFee())
+                .departureReceiptImage(departureReceipt)
+                .returnFee(requestDto.getReturnFee())
+                .returnReceiptImage(returnReceipt)
+                .build();
+
+        return taxiFeeJpaRepository.save(taxiFee);
     }
 }

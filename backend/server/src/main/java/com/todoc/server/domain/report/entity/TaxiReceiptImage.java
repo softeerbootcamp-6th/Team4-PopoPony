@@ -11,14 +11,10 @@ import org.hibernate.annotations.SQLRestriction;
 @Getter
 @Setter
 @SQLRestriction("deleted_at is NULL")
-public class ImageAttachment extends BaseEntity {
+public class TaxiReceiptImage extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "report_id")
-    private Report report;
 
     @Embedded
     private ImageMeta imageMeta;
