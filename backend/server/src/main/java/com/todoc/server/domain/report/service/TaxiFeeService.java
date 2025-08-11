@@ -28,13 +28,11 @@ public class TaxiFeeService {
                 .orElseThrow(TaxiFeeNotFoundException::new);
     }
 
-    public TaxiFee register(ReportCreateRequest.TaxiFeeCreateRequest requestDto, TaxiReceiptImage departureReceipt, TaxiReceiptImage returnReceipt) {
+    public TaxiFee register(ReportCreateRequest.TaxiFeeCreateRequest requestDto) {
 
         TaxiFee taxiFee = TaxiFee.builder()
                 .departureFee(requestDto.getDepartureFee())
-                .departureReceiptImage(departureReceipt)
                 .returnFee(requestDto.getReturnFee())
-                .returnReceiptImage(returnReceipt)
                 .build();
 
         return taxiFeeJpaRepository.save(taxiFee);
