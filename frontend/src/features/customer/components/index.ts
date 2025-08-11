@@ -10,6 +10,8 @@ import SearchRoute from './recruitStep/SearchRoute';
 import Request from './recruitStep/Request';
 import { Final } from './recruitStep/Final';
 import CardWrapper from './Card/CardWrapper';
+import PaymentCard from './PaymentCard';
+import WarningBox from './WarningBox';
 
 // Cards
 import HelperCard from './cards/HelperCard';
@@ -48,4 +50,6 @@ export {
   Final,
   CardWrapper,
   SearchButton,
+  PaymentCard,
+  WarningBox,
 };
