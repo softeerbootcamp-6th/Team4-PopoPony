@@ -4,7 +4,7 @@ import { StatsSummaryCard } from '@customer/components';
 import { IcPhoneFill, IcVerified } from '@icons';
 import { PageLayout } from '@layouts';
 import { createFileRoute } from '@tanstack/react-router';
-import type { escortStrength } from '@types';
+import type { EscortStrength } from '@types';
 
 export const Route = createFileRoute('/customer/escort/$escortId/helper/$helperId')({
   component: RouteComponent,
@@ -86,7 +86,7 @@ function RouteComponent() {
                 <ul className='flex flex-wrap gap-[0.8rem]'>
                   {strengthList?.map((strength) => (
                     <li key={strength}>
-                      <StrengthTag type={strength as escortStrength} />
+                      <StrengthTag type={strength as EscortStrength} />
                     </li>
                   ))}
                 </ul>

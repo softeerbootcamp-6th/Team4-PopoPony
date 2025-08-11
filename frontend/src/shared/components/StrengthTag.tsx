@@ -1,9 +1,9 @@
 import { IcRecognize, IcShoes, IcWheelchair } from '@icons';
-import type { escortStrength } from '@types';
+import type { EscortStrength } from '@types';
 import Tag from './Tag';
 
 interface Props {
-  type: escortStrength;
+  type: EscortStrength;
 }
 
 const StrengthTag = ({ type }: Props) => {
