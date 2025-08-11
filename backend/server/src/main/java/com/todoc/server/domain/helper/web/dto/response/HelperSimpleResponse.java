@@ -1,6 +1,5 @@
 package com.todoc.server.domain.helper.web.dto.response;
 
-import com.todoc.server.common.enumeration.Gender;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
@@ -12,9 +11,7 @@ import java.util.List;
 @Schema(description = "도우미 정보 요약본 응답 DTO")
 public class HelperSimpleResponse {
 
-    @Schema(description = "도우미 Auth ID")
-    private Long authId;
-
+    @NotNull
     @Schema(description = "도우미 프로필 ID")
     private Long helperProfileId;
 
@@ -27,8 +24,8 @@ public class HelperSimpleResponse {
     private String name;
 
     @NotNull
-    @Schema(description = "성별", allowableValues = {"MALE", "FEMALE"})
-    private Gender gender;
+    @Schema(description = "성별", allowableValues = {"남자", "여자"})
+    private String gender;
 
     @NotNull
     @Schema(description = "나이")
@@ -50,9 +47,8 @@ public class HelperSimpleResponse {
     private List<String> strengthList;
 
     @Builder
-    public HelperSimpleResponse(Long authId, Long helperProfileId, String imageUrl, String name, Gender gender, Integer age,
+    public HelperSimpleResponse(Long helperProfileId, String imageUrl, String name, String gender, Integer age,
                                 String shortBio, String contact, List<String> certificateList, List<String> strengthList) {
-        this.authId = authId;
         this.helperProfileId = helperProfileId;
         this.imageUrl = imageUrl;
         this.name = name;

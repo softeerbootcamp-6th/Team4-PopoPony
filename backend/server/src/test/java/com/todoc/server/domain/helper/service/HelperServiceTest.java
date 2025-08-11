@@ -40,7 +40,6 @@ class HelperServiceTest {
 
     @BeforeEach
     void setUp() {
-        when(tuple1.get(auth.id)).thenReturn(1L);
         when(tuple1.get(auth.name)).thenReturn("홍길동");
         when(tuple1.get(auth.birthDate)).thenReturn(LocalDate.of(1990, 1, 1));
         when(tuple1.get(auth.gender)).thenReturn(Gender.MALE);
@@ -82,7 +81,7 @@ class HelperServiceTest {
         List<Tuple> tuples = List.of(tuple1, tuple2);
 
         // when
-        HelperSimpleResponse result = helperService.buildHelperSimpleByHelperId(tuples);
+        HelperSimpleResponse result = helperService.buildHelperSimpleByHelperProfileId(tuples);
 
         // then
         assertThat(result.getName()).isEqualTo("홍길동");

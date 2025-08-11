@@ -1,7 +1,9 @@
 package com.todoc.server.domain.customer.service;
 
 import com.todoc.server.common.enumeration.Gender;
+import com.todoc.server.common.util.JsonUtils;
 import com.todoc.server.domain.customer.entity.Patient;
+import com.todoc.server.domain.customer.exception.PatientGenderInvalidException;
 import com.todoc.server.domain.customer.repository.PatientRepository;
 import com.todoc.server.domain.escort.web.dto.request.RecruitCreateRequest;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +22,7 @@ public class PatientService {
     // 예시 메서드
     public Patient register(RecruitCreateRequest.PatientDetail patientDetail) {
 
-        Gender gender = Gender.valueOf(patientDetail.getGender());
+        Gender gender = Gender.from(patientDetail.getGender()).orElseThrow(PatientGenderInvalidException::new);
 
         // 환자 정보를 Patient 엔티티로 변환하고 저장
         Patient patient = Patient.builder()
@@ -33,7 +35,7 @@ public class PatientService {
                 .needsHelping(patientDetail.isNeedsHelping())
                 .usesWheelchair(patientDetail.isUsesWheelchair())
                 .hasCognitiveIssue(patientDetail.isHasCognitiveIssue())
-                .cognitiveIssueDetail(patientDetail.getCognitiveIssueDetail())
+                .cognitiveIssueDetail(JsonUtils.toJson(patientDetail.getCognitiveIssueDetail()))
                 .hasCommunicationIssue(patientDetail.isHasCommunicationIssue())
                 .communicationIssueDetail(patientDetail.getCommunicationIssueDetail())
                 .build();

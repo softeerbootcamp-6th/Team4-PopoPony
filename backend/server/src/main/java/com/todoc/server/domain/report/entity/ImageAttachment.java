@@ -1,6 +1,7 @@
 package com.todoc.server.domain.report.entity;
 
 import com.todoc.server.common.entity.BaseEntity;
+import com.todoc.server.common.entity.ImageMeta;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,6 +20,6 @@ public class ImageAttachment extends BaseEntity {
     @JoinColumn(name = "report_id")
     private Report report;
 
-    @Column(name = "image_url")
-    private String imageUrl;
+    @Embedded
+    private ImageMeta imageMeta;
 }

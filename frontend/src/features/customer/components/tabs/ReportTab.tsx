@@ -5,7 +5,7 @@ import { IcAlertCircle } from '@icons';
 const ReportTab = () => {
   return (
     <>
-      <Tabs.TabsCotentSection>
+      <Tabs.TabsContentSection>
         <HelperCard
           helper={{
             id: '1',
@@ -16,16 +16,16 @@ const ReportTab = () => {
             certificates: ['간호사', '간호조무사'],
             tags: ['support', 'wheelchair', 'care'],
           }}
-          onClick={(id) => console.log('헬퍼 카드 클릭:', id)}
+          onClick={() => alert('준비중인 기능이에요')}
         />
-      </Tabs.TabsCotentSection>
+      </Tabs.TabsContentSection>
       <Tabs.TabsDivider />
-      <Tabs.TabsCotentSection>
+      <Tabs.TabsContentSection>
         <ReportInfoCard />
         <PaymentFailedCard />
-      </Tabs.TabsCotentSection>
+      </Tabs.TabsContentSection>
       <Tabs.TabsDivider />
-      <Tabs.TabsCotentSection gap='3.6rem'>
+      <Tabs.TabsContentSection gap='gap-[3.6rem]'>
         {/* 동행 리포트 */}
         <div>
           <h3 className='subtitle-18-bold text-text-neutral-primary'>동행 리포트</h3>
@@ -89,7 +89,7 @@ const ReportTab = () => {
             </div>
           </div>
         </div>
-      </Tabs.TabsCotentSection>
+      </Tabs.TabsContentSection>
     </>
   );
 };

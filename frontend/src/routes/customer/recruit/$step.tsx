@@ -1,100 +1,111 @@
-import { TwoOptionSelector, ProgressBar } from '@components';
+import { ProgressBar, Modal } from '@components';
 import { PageLayout } from '@layouts';
 import { type RecruitFormValues } from '@customer/types';
-import { useFunnel } from '@hooks';
-import { createFileRoute } from '@tanstack/react-router';
-import { FormProvider, useForm, type SubmitHandler } from 'react-hook-form';
-import { Step1 } from '@customer/components';
+import { useFunnel, useModal } from '@hooks';
+import { createFileRoute, useRouter } from '@tanstack/react-router';
+import { FormProvider, useForm } from 'react-hook-form';
+import {
+  Profile,
+  Condition,
+  Communication,
+  Time,
+  EscortRoute,
+  SearchRoute,
+  Request,
+  Final,
+} from '@customer/components';
 
 export const Route = createFileRoute('/customer/recruit/$step')({
   component: RouteComponent,
 });
 
-const stepList = ['기본정보', '보행상태', '의사소통', '동행시간', '동행경로', '요청사항'];
+const stepList = ['profile', 'condition', 'communication', 'time', 'route', 'request', 'final'];
 
 function RouteComponent() {
+  const router = useRouter();
+  const { isOpen, openModal, closeModal } = useModal();
   const methods = useForm<RecruitFormValues>({ shouldUnregister: false });
 
-  const onSubmit: SubmitHandler<RecruitFormValues> = (data) => {
-    console.log('Final Data:', data);
-  };
-
-  const { Funnel, Step, nextStep, currentStep } = useFunnel({
-    defaultStep: '기본정보',
+  const { Funnel, Step, nextStep, currentStep, handleBackStep } = useFunnel({
+    defaultStep: 'profile',
     basePath: 'customer/recruit',
     paramPath: '/customer/recruit/$step',
+    stepList: stepList,
   });
 
-  // 다음 스텝으로 이동하는 함수
-  const handleNextStep = () => {
-    const currentIndex = stepList.indexOf(currentStep);
-    if (currentIndex < stepList.length - 1) {
-      const nextStepName = stepList[currentIndex + 1];
-      nextStep(nextStepName);
-    } else {
-      // 마지막 스텝에서는 제출
-      methods.handleSubmit(onSubmit)();
-    }
+  const handleClose = () => {
+    openModal();
   };
 
-  // // Footer 버튼 텍스트 결정
-  // const getButtonLabel = () => {
-  //   const currentIndex = stepList.indexOf(currentStep);
-  //   return currentIndex === stepList.length - 1 ? '제출' : '다음';
-  // };
+  const handleApproveClose = () => {
+    closeModal();
+    router.navigate({ to: '/customer' });
+  };
+
+  const handleDenyClose = () => {
+    closeModal();
+  };
 
   return (
-    <PageLayout>
+    <PageLayout
+      background={currentStep === 'final' ? 'bg-neutral-10' : 'bg-background-default-white'}>
       <PageLayout.Header
         title='동행 신청하기'
-        showBack={currentStep !== '기본정보'}
+        showBack={currentStep.includes('searchRoute')}
         showClose={true}
-        background={true}
+        onClose={handleClose}
+        background={currentStep === 'final' ? false : true}
       />
       <PageLayout.Content>
         <div className='flex h-full flex-col'>
-          <div className='flex-shrink-0 pb-[2rem]'>
-            <ProgressBar
-              maxStep={stepList.length}
-              currentStep={stepList.indexOf(currentStep) + 1}
-            />
-          </div>
+          {currentStep !== 'final' && !currentStep.includes('searchRoute') ? (
+            <div className='flex-shrink-0 px-[2rem] pb-[2rem]'>
+              <ProgressBar
+                maxStep={stepList.length - 1}
+                currentStep={stepList.indexOf(currentStep) + 1}
+              />
+            </div>
+          ) : null}
           <div className='flex-1 overflow-hidden'>
             <FormProvider {...methods}>
               <Funnel>
-                <Step name='기본정보'>
-                  <Step1 handleNextStep={handleNextStep} />
+                <Step name='profile'>
+                  <Profile handleNextStep={nextStep} />
                 </Step>
-                <Step name='보행상태'>
-                  <div>step2</div>
-                  <TwoOptionSelector
-                    name='needsPhysicalSupport'
-                    leftOption={{ label: '필요해요', value: true }}
-                    rightOption={{ label: '필요없어요', value: false }}
-                  />
-                  <TwoOptionSelector
-                    name='usesWheelchair'
-                    leftOption={{ label: '이용하고 있어요', value: true }}
-                    rightOption={{ label: '이용하지 않아요', value: false }}
-                  />
+                <Step name='condition'>
+                  <Condition handleNextStep={nextStep} handleBackStep={handleBackStep} />
                 </Step>
-                <Step name='의사소통'>
-                  <div>step3</div>
-                  <TwoOptionSelector
-                    name='communicationAbility'
-                    leftOption={{ label: '왼쪽', value: 'step3-left' }}
-                    rightOption={{ label: '오른쪽', value: 'step3-right' }}
-                  />
+                <Step name='communication'>
+                  <Communication handleNextStep={nextStep} handleBackStep={handleBackStep} />
                 </Step>
-
-                <Step name='step4'>
-                  <div>마지막</div>
+                <Step name='time'>
+                  <Time handleNextStep={nextStep} handleBackStep={handleBackStep} />
+                </Step>
+                <Step name='route'>
+                  <EscortRoute handleNextStep={nextStep} handleBackStep={handleBackStep} />
+                </Step>
+                <Step name='searchRoute'>
+                  <SearchRoute handleSelectRoute={handleBackStep} />
+                </Step>
+                <Step name='request'>
+                  <Request handleNextStep={nextStep} handleBackStep={handleBackStep} />
+                </Step>
+                <Step name='final'>
+                  <Final handleNextStep={nextStep} handleBackStep={handleBackStep} />
                 </Step>
               </Funnel>
             </FormProvider>
           </div>
         </div>
       </PageLayout.Content>
+
+      <Modal isOpen={isOpen} onClose={handleDenyClose}>
+        <Modal.Title>동행 신청을 중단하시겠어요?</Modal.Title>
+        <Modal.ButtonContainer>
+          <Modal.ConfirmButton onClick={handleApproveClose}>네</Modal.ConfirmButton>
+          <Modal.CloseButton onClick={handleDenyClose}>아니오</Modal.CloseButton>
+        </Modal.ButtonContainer>
+      </Modal>
     </PageLayout>
   );
 }

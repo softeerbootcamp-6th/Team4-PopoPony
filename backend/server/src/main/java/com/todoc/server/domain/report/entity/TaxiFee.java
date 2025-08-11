@@ -2,32 +2,46 @@ package com.todoc.server.domain.report.entity;
 
 import com.todoc.server.common.entity.BaseEntity;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.SQLRestriction;
 
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
 @SQLRestriction("deleted_at is NULL")
 public class TaxiFee extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "report_id")
     private Report report;
 
     @Column(name = "departure_fee")
     private Integer departureFee;
 
-    @Column(name = "departure_receipt_image_url")
-    private String departureReceiptImageUrl;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "departure_receipt_image_id")
+    private TaxiReceiptImage departureReceiptImage;
 
     @Column(name = "return_fee")
     private Integer returnFee;
 
-    @Column(name = "return_receipt_image_url")
-    private String returnReceiptImageUrl;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "return_receipt_image_id")
+    private TaxiReceiptImage returnReceiptImage;
+
+    @Builder
+    public TaxiFee(Integer departureFee, TaxiReceiptImage departureReceiptImage,
+                   Integer returnFee, TaxiReceiptImage returnReceiptImage) {
+        this.departureFee = departureFee;
+        this.departureReceiptImage = departureReceiptImage;
+        this.returnFee = returnFee;
+        this.returnReceiptImage = returnReceiptImage;
+    }
 }

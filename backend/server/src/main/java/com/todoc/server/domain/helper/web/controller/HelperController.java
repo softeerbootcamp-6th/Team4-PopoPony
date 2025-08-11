@@ -1,9 +1,8 @@
 package com.todoc.server.domain.helper.web.controller;
 
-import com.todoc.server.common.enumeration.Gender;
-import com.todoc.server.common.enumeration.SatisfactionLevel;
 import com.todoc.server.common.response.Response;
 import com.todoc.server.domain.helper.service.HelperFacadeService;
+import com.todoc.server.domain.helper.web.dto.request.HelperProfileCreateRequest;
 import com.todoc.server.domain.helper.web.dto.response.HelperDetailResponse;
 import com.todoc.server.domain.helper.web.dto.response.HelperSimpleResponse;
 import com.todoc.server.domain.review.web.dto.response.PositiveFeedbackStatResponse;
@@ -29,15 +28,15 @@ public class HelperController {
 
     @Operation(
             summary = "도우미 상세 조회",
-            description = "userId에 해당하는 도우미의 상세 정보를 조회합니다.")
+            description = "helperProfileId에 해당하는 도우미의 상세 정보를 조회합니다.")
     @ApiResponse(
             responseCode = "200",
             description = "도우미 상세 정보 조회 성공")
-    @GetMapping("/{userId}")
-    public Response<HelperDetailResponse> getHelperDetail(@PathVariable Long userId) {
-        // TODO :: 도우미의 userId를 받아, 해당 도우미의 상세 정보를 생성
+    @GetMapping("/{helperProfileId}")
+    public Response<HelperDetailResponse> getHelperDetail(@PathVariable Long helperProfileId) {
+        // TODO :: 도우미의 helperProfileId를 받아, 해당 도우미의 상세 정보를 생성
 
-//        return Response.from(helperFacadeService.getHelperDetailByUserId(userId));
+//        return Response.from(helperFacadeService.getHelperDetailByHelperProfileId(helperProfileId));
 
         List<PositiveFeedbackStatResponse> positiveFeedbackList = new ArrayList<>();
         positiveFeedbackList.add(new PositiveFeedbackStatResponse("친절해요", 3L));
@@ -46,7 +45,7 @@ public class HelperController {
 
         ReviewSimpleResponse review = ReviewSimpleResponse.builder()
                 .reviewId(1L)
-                .satisfactionLevel(SatisfactionLevel.GOOD)
+                .satisfactionLevel("좋았어요")
                 .createdAt(LocalDateTime.now().minusDays(30))
                 .shortComment("너무 잘해주시고 부모님을 집에 무사히 모셔주셔서...")
                 .build();
@@ -66,12 +65,11 @@ public class HelperController {
                 .build();
 
         HelperSimpleResponse helperSimple = HelperSimpleResponse.builder()
-                .authId(1L)
                 .helperProfileId(1L)
                 .imageUrl("https://example.com/images/sample.jpg")
                 .name("최솔희")
                 .age(39)
-                .gender(Gender.FEMALE)
+                .gender("여자")
                 .contact("010-1234-5678")
                 .shortBio("부모님처럼 모시겠습니다.")
                 .certificateList(new ArrayList<>(List.of("간호사", "간호조무사", "요양보호사")))
@@ -87,5 +85,18 @@ public class HelperController {
                 .build();
 
         return Response.from(mock);
+    }
+
+    @Operation(
+            summary = "도우미 프로필 등록",
+            description = "도우미의 프로필을 등록합니다.")
+    @ApiResponse(
+            responseCode = "200",
+            description = "도우미 프로필 등록 성공")
+    @PostMapping("")
+    public Response<Void> createHelperProfile(@RequestBody HelperProfileCreateRequest requestDto) {
+        // TODO :: jwt 혹은 sessionId로부터 유저 정보를 조회해야 함
+
+        return Response.from();
     }
 }

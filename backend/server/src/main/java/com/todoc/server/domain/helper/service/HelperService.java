@@ -2,12 +2,19 @@ package com.todoc.server.domain.helper.service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.querydsl.core.Tuple;
+import com.todoc.server.common.enumeration.Area;
 import com.todoc.server.common.enumeration.Gender;
+import com.todoc.server.common.enumeration.RecruitStatus;
 import com.todoc.server.common.util.DateTimeUtils;
 import com.todoc.server.common.util.JsonUtils;
+import com.todoc.server.domain.escort.entity.Recruit;
+import com.todoc.server.domain.escort.web.dto.request.RecruitCreateRequest;
+import com.todoc.server.domain.helper.entity.HelperProfile;
+import com.todoc.server.domain.helper.exception.HelperProfileAreaInvalidException;
 import com.todoc.server.domain.helper.exception.HelperProfileNotFoundException;
 import com.todoc.server.domain.helper.repository.HelperJpaRepository;
 import com.todoc.server.domain.helper.repository.HelperQueryRepository;
+import com.todoc.server.domain.helper.web.dto.request.HelperProfileCreateRequest;
 import com.todoc.server.domain.helper.web.dto.response.HelperSimpleResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -42,14 +49,14 @@ public class HelperService {
         if (tuples.isEmpty()) {
             throw new HelperProfileNotFoundException();
         }
-        return buildHelperSimpleByHelperId(tuples);
+        return buildHelperSimpleByHelperProfileId(tuples);
     }
 
-    public HelperSimpleResponse buildHelperSimpleByHelperId(List<Tuple> tuples) {
+    @Transactional(readOnly = true)
+    public HelperSimpleResponse buildHelperSimpleByHelperProfileId(List<Tuple> tuples) {
 
         // 1. 필드 추출
         Tuple first = tuples.getFirst();
-        Long authId = first.get(auth.id);
         Long helperProfileId = first.get(helperProfile.id);
         String name = first.get(auth.name);
         LocalDate birthDate = first.get(auth.birthDate);
@@ -79,16 +86,40 @@ public class HelperService {
 
         // 5. 응답 객체 생성
         return HelperSimpleResponse.builder()
-                .authId(authId)
                 .helperProfileId(helperProfileId)
                 .imageUrl(imageUrl)
                 .name(name)
-                .gender(gender)
+                .gender(gender.getLabel())
                 .age(age)
                 .shortBio(shortBio)
                 .contact(contact)
                 .strengthList(strengthList)
                 .certificateList(certificateList)
                 .build();
+    }
+
+    @Transactional(readOnly = true)
+    public Long getAuthIdByHelperProfileId(Long helperProfileId) {
+        return helperJpaRepository.findAuthIdByHelperProfileId(helperProfileId)
+                .orElseThrow(HelperProfileNotFoundException::new);
+    }
+
+    public HelperProfile register(HelperProfileCreateRequest request) {
+
+        Area area = Area.from(request.getArea())
+                .orElseThrow(HelperProfileAreaInvalidException::new);
+
+        HelperProfile helperProfile = HelperProfile.builder()
+                .area(area)
+                .strength(JsonUtils.toJson(request.getStrengthList()))
+                .shortBio(request.getShortBio())
+                .imageUrl(request.getImageUrl())
+                .build();
+
+        return helperJpaRepository.save(helperProfile);
+    }
+
+    public List<HelperProfile> getAllHelperProfiles() {
+        return helperJpaRepository.findAll();
     }
 }
