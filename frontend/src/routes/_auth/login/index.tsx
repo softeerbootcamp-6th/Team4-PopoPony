@@ -2,7 +2,7 @@ import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { LoginForm } from '@auth/components';
 import type { LoginFormValues } from '@auth/types';
 import { PageLayout } from '@layouts';
-import { postLogin } from '@auth/apis';
+import { getMe, postLogin } from '@auth/apis';
 
 export const Route = createFileRoute('/_auth/login/')({
   component: RouteComponent,
@@ -10,12 +10,16 @@ export const Route = createFileRoute('/_auth/login/')({
 
 function RouteComponent() {
   const navigate = useNavigate();
-  const { mutate: mutateLogin } = postLogin();
+  const { mutate } = postLogin();
+  const { refetch } = getMe();
 
   const handleLogin = async (data: LoginFormValues) => {
     try {
-      console.log('Login data:', data);
-      await navigate({ to: '/' });
+      mutate({
+        body: {
+          ...data,
+        },
+      });
     } catch (error) {
       console.error('Login failed:', error);
     }
@@ -37,6 +41,12 @@ function RouteComponent() {
           <div className='flex w-full flex-col gap-[3.2rem]'>
             <LoginForm onSubmit={handleLogin} isLoading={false} />
           </div>
+          <button
+            onClick={() => {
+              refetch();
+            }}>
+            테스트
+          </button>
         </div>
       </div>
     </PageLayout>
