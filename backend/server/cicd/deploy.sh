@@ -35,13 +35,13 @@ if ! docker image inspect myapp:latest > /dev/null 2>&1; then
   docker build -t myapp:latest .
 fi
 
-echo "2. Start $TARGET container with environment variables"
-# 환경변수 전달
-docker compose up -d --build \
-  -e DB_URL="$DB_URL" \
-  -e DB_USERNAME="$DB_USERNAME" \
-  -e DB_PASSWORD="$DB_PASSWORD" \
-  $TARGET
+echo "2. Start $TARGET container (using EC2 environment variables)"
+export SPRING_PROFILE=prod
+export DB_URL="$DB_URL"
+export DB_USERNAME="$DB_USERNAME"
+export DB_PASSWORD="$DB_PASSWORD"
+
+docker compose up -d --build $TARGET
 
 SERVER_ADDRESS="http://localhost:$TARGET_PORT/actuator/health"
 echo "3. Health check ($SERVER_ADDRESS)"
