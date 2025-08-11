@@ -1,5 +1,6 @@
 package com.todoc.server.domain.helper.web.dto.request;
 
+import com.todoc.server.common.dto.request.ImageCreateRequest;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 
@@ -10,7 +11,7 @@ import java.util.List;
 public class HelperProfileCreateRequest {
 
     @Schema(description = "도우미 프로필 이미지 URL", example = "https://example.com/helper.png")
-    private String imageUrl;
+    private ImageCreateRequest profileImageCreateRequest;
 
     @Schema(description = "강점 목록", example = "['안전한 부축으로 편안한 이동', '인지 장애 어르신 맞춤 케어']")
     private List<String> strengthList;
@@ -30,7 +31,7 @@ public class HelperProfileCreateRequest {
     public static class CertificateInfo {
 
         @Schema(description = "자격증 이미지 URL", example = "https://example.com/certificate.png")
-        private String imageUrl;
+        private ImageCreateRequest certificateImageCreateRequest;
 
         @Schema(description = "자격증 종류", example = "간호조무사")
         private String type;

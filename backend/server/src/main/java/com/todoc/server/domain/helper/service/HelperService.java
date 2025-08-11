@@ -4,11 +4,9 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.querydsl.core.Tuple;
 import com.todoc.server.common.enumeration.Area;
 import com.todoc.server.common.enumeration.Gender;
-import com.todoc.server.common.enumeration.RecruitStatus;
 import com.todoc.server.common.util.DateTimeUtils;
+import com.todoc.server.common.util.ImageUrlUtils;
 import com.todoc.server.common.util.JsonUtils;
-import com.todoc.server.domain.escort.entity.Recruit;
-import com.todoc.server.domain.escort.web.dto.request.RecruitCreateRequest;
 import com.todoc.server.domain.helper.entity.HelperProfile;
 import com.todoc.server.domain.helper.exception.HelperProfileAreaInvalidException;
 import com.todoc.server.domain.helper.exception.HelperProfileNotFoundException;
@@ -16,6 +14,7 @@ import com.todoc.server.domain.helper.repository.HelperJpaRepository;
 import com.todoc.server.domain.helper.repository.HelperQueryRepository;
 import com.todoc.server.domain.helper.web.dto.request.HelperProfileCreateRequest;
 import com.todoc.server.domain.helper.web.dto.response.HelperSimpleResponse;
+import com.todoc.server.domain.image.entity.ImageFile;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -63,7 +62,7 @@ public class HelperService {
         Gender gender = first.get(auth.gender);
         String contact = first.get(auth.contact);
 
-        String imageUrl = first.get(helperProfile.imageUrl);
+        ImageFile helperProfileImage = first.get(helperProfile.helperProfileImage);
         String shortBio = first.get(helperProfile.shortBio);
         String strengthJson = first.get(helperProfile.strength);
 
@@ -87,7 +86,7 @@ public class HelperService {
         // 5. 응답 객체 생성
         return HelperSimpleResponse.builder()
                 .helperProfileId(helperProfileId)
-                .imageUrl(imageUrl)
+                .imageUrl(ImageUrlUtils.getImageUrl(helperProfileImage.getId()))
                 .name(name)
                 .gender(gender.getLabel())
                 .age(age)
@@ -113,7 +112,6 @@ public class HelperService {
                 .area(area)
                 .strength(JsonUtils.toJson(request.getStrengthList()))
                 .shortBio(request.getShortBio())
-                .imageUrl(request.getImageUrl())
                 .build();
 
         return helperJpaRepository.save(helperProfile);
