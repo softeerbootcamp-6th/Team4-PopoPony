@@ -25,6 +25,7 @@ const MultiOptionSelector = ({
     <div className='flex flex-wrap gap-[1rem]'>
       {options.map((option) => {
         // selectedValues가 객체 배열인 경우 (CertificateItemSchema)
+        
         const isSelected =
           dataFormat === 'object' && Array.isArray(selectedValues) && selectedValues.length > 0
             ? selectedValues.some((item) =>
