@@ -24,16 +24,21 @@ const MultiOptionSelector = ({
   return (
     <div className='flex flex-wrap gap-[1rem]'>
       {options.map((option) => {
-        // selectedValues가 객체 배열인 경우 (CertificateItemSchema)
-        
-        const isSelected =
-          dataFormat === 'object' && Array.isArray(selectedValues) && selectedValues.length > 0
-            ? selectedValues.some((item) =>
-                typeof item === 'object' && item !== null && 'type' in item
-                  ? item.type === option
-                  : item === option
-              )
-            : selectedValues.includes(option);
+        let isSelected = false;
+
+        if (dataFormat === 'object' && Array.isArray(selectedValues) && selectedValues.length) {
+          // selectedValues가 객체 배열인 경우 (CertificateItemSchema)
+          isSelected = selectedValues.some((item) => {
+            if (typeof item === 'object' && item !== null && 'type' in item) {
+              return item.type === option;
+            } else {
+              return item === option;
+            }
+          });
+        } else {
+          // selectedValues가 단순 문자열 배열인 경우
+          isSelected = selectedValues.includes(option);
+        }
 
         return (
           <Option
@@ -80,9 +85,11 @@ const Option = ({
       // 해제된 경우: 해당 타입의 항목 제거
       const filteredValues = currentValues.filter((item: unknown) => {
         if (dataFormat === 'object') {
-          return typeof item === 'object' && item !== null && 'type' in item
-            ? (item as { type: string }).type !== value
-            : item !== value;
+          if (typeof item === 'object' && item !== null && 'type' in item) {
+            return (item as { type: string }).type !== value;
+          } else {
+            return item !== value;
+          }
         } else {
           return item !== value;
         }
