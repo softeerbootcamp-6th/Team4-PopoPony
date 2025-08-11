@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { IcCamera, IcEdit } from '@icons';
+import type { ImageType } from '@types';
 
 interface Props {
   name: string;
@@ -9,18 +10,18 @@ interface Props {
 const PhotoUpload = ({ name }: Props) => {
   const { setValue, watch } = useFormContext();
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [imageSrc, setImageSrc] = useState<string>(''); // blob URL or dataURL
-  const currentValue = watch(name) as string | undefined;
+  const [imageSrc, setImageSrc] = useState<ImageType | null>(null); // null로 초기화
+  const currentValue = watch(name) as ImageType | undefined;
 
   // 미리보기 소스: 로컬 상태 우선, 없으면 폼 값 사용
-  const previewSrc = imageSrc || currentValue || '';
-  const hasImage = Boolean(previewSrc);
+  const previewSrc = imageSrc || currentValue;
+  const hasImage = Boolean(previewSrc?.imageUrl);
 
   // blob URL 정리
   useEffect(() => {
     return () => {
-      if (imageSrc && imageSrc.startsWith('blob:')) {
-        URL.revokeObjectURL(imageSrc);
+      if (imageSrc?.imageUrl && imageSrc.imageUrl.startsWith('blob:')) {
+        URL.revokeObjectURL(imageSrc.imageUrl);
       }
     };
   }, [imageSrc]);
@@ -34,17 +35,17 @@ const PhotoUpload = ({ name }: Props) => {
       e.target.value = '';
       return;
     }
-    if (file.size > 5 * 1024 * 1024) {
-      alert('파일 크기는 5MB 이하여야 합니다.');
+    if (file.size > 10 * 1024 * 1024) {
+      alert('파일 크기는 10MB 이하여야 합니다.');
       e.target.value = '';
       return;
     }
 
-    // ✅ FileReader 대신 blob URL 사용
     const blobUrl = URL.createObjectURL(file);
-    setImageSrc(blobUrl);
+    const objectImageSrc = { imageUrl: blobUrl };
+    setImageSrc(objectImageSrc);
     // 폼에도 같은 값을 저장(업로드 전 임시 프리뷰용이라면 blobUrl을 저장)
-    setValue(name, blobUrl, { shouldValidate: true, shouldDirty: true });
+    setValue(name, objectImageSrc, { shouldValidate: true, shouldDirty: true });
 
     // 같은 파일 재선택 가능하게 초기화
     e.target.value = '';
@@ -74,10 +75,10 @@ const PhotoUpload = ({ name }: Props) => {
             ? ''
             : 'bg-neutral-10 border-neutral-20 border-[1.5px] border-dashed hover:opacity-80 active:scale-95'
         }`}>
-        {/* ✅ previewSrc 기준으로 렌더 */}
-        {previewSrc && (
+        {/* ✅ previewSrc가 있고 imageUrl이 있을 때만 렌더 */}
+        {previewSrc?.imageUrl && (
           <img
-            src={previewSrc}
+            src={previewSrc.imageUrl}
             alt='미리보기'
             className='absolute inset-0 h-full w-full rounded-full object-cover'
           />

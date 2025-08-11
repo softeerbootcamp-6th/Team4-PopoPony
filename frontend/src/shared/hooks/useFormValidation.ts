@@ -36,13 +36,13 @@ export function useFormValidation<S extends z.ZodObject<Record<string, z.ZodType
     setIsFormValid(formResult.success);
 
     // TODO: 디버깅을 위한 콘솔 로그이므로, 추후 삭제
-    // console.log('=== Form Validation Debug ===');
-    // console.log('Current Values:', currentValues);
-    // console.log('Form Valid:', formResult.success);
+    console.log('=== Form Validation Debug ===');
+    console.log('Current Values:', values);
+    console.log('Form Valid:', formResult.success);
 
-    // if (!formResult.success) {
-    //   console.log('Validation Errors:', formResult.error.issues);
-    // }
+    if (!formResult.success) {
+      console.log('Validation Errors:', formResult.error.issues);
+    }
 
     // 에러 맵핑
     const errors: FieldErrors<T> = {};
