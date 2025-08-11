@@ -33,7 +33,7 @@ interface RefinedEscortData {
   locationText: string;
 }
 
-const escortData: EscortData[] = [
+const inProgressList: EscortData[] = [
   {
     id: 1,
     status: 'MATCHING',
@@ -63,7 +63,7 @@ const escortData: EscortData[] = [
   },
   {
     id: 4,
-    status: 'ON_MEETING',
+    status: 'MEETING',
     escortDate: '2025-07-25',
     estimatedMeetingTime: '09:00:00',
     estimatedReturnTime: '12:00:00',
@@ -72,7 +72,7 @@ const escortData: EscortData[] = [
   },
   {
     id: 5,
-    status: 'GOING_TO_HOSPITAL',
+    status: 'HEADING_TO_HOSPITAL',
     escortDate: '2025-07-26',
     estimatedMeetingTime: '11:00:00',
     estimatedReturnTime: '14:00:00',
@@ -90,13 +90,16 @@ const escortData: EscortData[] = [
   },
   {
     id: 7,
-    status: 'RETURNING_HOME',
+    status: 'RETURNING',
     escortDate: '2025-07-28',
     estimatedMeetingTime: '08:30:00',
     estimatedReturnTime: '11:30:00',
     meetingPlaceName: '푸르지오아파트',
     destinationPlaceName: '한양대병원',
   },
+];
+
+const completedList: EscortData[] = [
   {
     id: 8,
     status: 'DONE',
@@ -117,19 +120,6 @@ const statusMessageMap: Record<StatusType, string> = {
   IN_TREATMENT: '병원에서 진료중입니다.',
   RETURNING: '안전하게 복귀해주세요.',
   DONE: '동행번호 NO.12394O4L',
-};
-
-//TODO: 추후 api나왔을 땐 이 작업을 api단에서 해서, 필요한 상수들은 거기서 계산하도록 해도 될듯..?
-/**
- * escortData를 받아서 필요한 데이터를 추출하여 반환 -> 나중에 API 연동 시 이 함수 삭제 혹은 이용
- * @param escortData - 동행 데이터
- * @returns 완료된 동행 길이, 매칭중인 동행 길이
- */
-const getEscortListNumber = (escortData: EscortData[]) => {
-  const escortListLength = escortData.length;
-  const completedEscortListLength = escortData.filter((escort) => escort.status === 'DONE').length;
-  const matchingEscortListLength = escortListLength - completedEscortListLength;
-  return { completedEscortListLength, matchingEscortListLength };
 };
 
 /**
@@ -159,13 +149,8 @@ const refineEscortData = (escortData: EscortData): RefinedEscortData => {
 function RouteComponent() {
   const hasProfile = false;
   //TODO: 추후 api call로 전환
-  const escortListData = escortData;
-  const { completedEscortListLength, matchingEscortListLength } =
-    getEscortListNumber(escortListData);
-
-  // 상태별로 데이터 분류
-  const matchingEscorts = escortListData.filter((escort) => escort.status !== 'DONE');
-  const completedEscorts = escortListData.filter((escort) => escort.status === 'DONE');
+  const inProgressListData = inProgressList;
+  const completedListData = completedList;
 
   return (
     <PageLayout>
@@ -211,19 +196,19 @@ function RouteComponent() {
             <Tabs.TabsTrigger value='신청'>
               신청
               <span className='group-data-[state=active]:text-text-mint-primary'>
-                {matchingEscortListLength}
+                {inProgressListData.length}
               </span>
             </Tabs.TabsTrigger>
             <Tabs.TabsTrigger value='완료'>
               완료
               <span className='group-data-[state=active]:text-text-mint-primary'>
-                {completedEscortListLength}
+                {completedListData.length}
               </span>
             </Tabs.TabsTrigger>
           </Tabs.TabsList>
           <Tabs.TabsContent value='신청'>
             <div className='flex-col-start gap-[1.2rem] p-[2rem]'>
-              {matchingEscorts.map((escort) => {
+              {inProgressListData.map((escort) => {
                 const refinedData = refineEscortData(escort);
                 return (
                   <EscortCard key={escort.id}>
@@ -238,10 +223,10 @@ function RouteComponent() {
                       <EscortCard.Info type='location' text={refinedData.locationText} />
                     </EscortCard.InfoSection>
                     <EscortCard.Tag tags={['support', 'wheelchair', 'care']} />
-                    {(refinedData.status === 'ON_MEETING' ||
-                      refinedData.status === 'GOING_TO_HOSPITAL' ||
+                    {(refinedData.status === 'MEETING' ||
+                      refinedData.status === 'HEADING_TO_HOSPITAL' ||
                       refinedData.status === 'IN_TREATMENT' ||
-                      refinedData.status === 'RETURNING_HOME') && (
+                      refinedData.status === 'RETURNING') && (
                       <EscortCard.Button onClick={() => {}} />
                     )}
                   </EscortCard>
@@ -251,7 +236,7 @@ function RouteComponent() {
           </Tabs.TabsContent>
           <Tabs.TabsContent value='완료'>
             <div className='flex-col-start gap-[1.2rem] p-[2rem]'>
-              {completedEscorts.map((escort) => {
+              {completedListData.map((escort) => {
                 const refinedData = refineEscortData(escort);
                 return (
                   <EscortCard key={escort.id}>

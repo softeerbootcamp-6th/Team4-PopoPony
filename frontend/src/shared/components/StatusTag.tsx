@@ -8,11 +8,11 @@ const StatusTag = ({ status }: { status: StatusType }) => {
       color: 'bg-background-light-blue text-text-blue-on-primary',
     },
     IN_PROGRESS: { label: '동행중', color: 'bg-background-light-mint text-text-mint-on-primary' },
-    ON_MEETING: {
+    MEETING: {
       label: '동행중',
       color: 'bg-background-light-mint text-text-mint-on-primary',
     },
-    GOING_TO_HOSPITAL: {
+    HEADING_TO_HOSPITAL: {
       label: '동행중',
       color: 'bg-background-light-mint text-text-mint-on-primary',
     },
@@ -20,7 +20,7 @@ const StatusTag = ({ status }: { status: StatusType }) => {
       label: '동행중',
       color: 'bg-background-light-mint text-text-mint-on-primary',
     },
-    RETURNING_HOME: {
+    RETURNING: {
       label: '동행중',
       color: 'bg-background-light-mint text-text-mint-on-primary',
     },
