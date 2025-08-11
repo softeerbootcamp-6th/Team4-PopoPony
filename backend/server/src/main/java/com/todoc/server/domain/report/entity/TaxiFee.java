@@ -1,6 +1,7 @@
 package com.todoc.server.domain.report.entity;
 
 import com.todoc.server.common.entity.BaseEntity;
+import com.todoc.server.domain.image.entity.ImageFile;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -27,18 +28,18 @@ public class TaxiFee extends BaseEntity {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "departure_receipt_image_id")
-    private TaxiReceiptImage departureReceiptImage;
+    private ImageFile departureReceiptImage;
 
     @Column(name = "return_fee")
     private Integer returnFee;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "return_receipt_image_id")
-    private TaxiReceiptImage returnReceiptImage;
+    private ImageFile returnReceiptImage;
 
     @Builder
-    public TaxiFee(Integer departureFee, TaxiReceiptImage departureReceiptImage,
-                   Integer returnFee, TaxiReceiptImage returnReceiptImage) {
+    public TaxiFee(Integer departureFee, ImageFile departureReceiptImage,
+                   Integer returnFee, ImageFile returnReceiptImage) {
         this.departureFee = departureFee;
         this.departureReceiptImage = departureReceiptImage;
         this.returnFee = returnFee;

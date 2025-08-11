@@ -8,10 +8,10 @@ import com.todoc.server.domain.escort.entity.Escort;
 import com.todoc.server.domain.escort.entity.Recruit;
 import com.todoc.server.domain.escort.service.ApplicationService;
 import com.todoc.server.domain.escort.service.EscortService;
+import com.todoc.server.domain.image.entity.ImageFile;
 import com.todoc.server.domain.report.entity.ImageAttachment;
 import com.todoc.server.domain.report.entity.Report;
 import com.todoc.server.domain.report.entity.TaxiFee;
-import com.todoc.server.domain.report.entity.TaxiReceiptImage;
 import com.todoc.server.domain.report.web.dto.request.ReportCreateRequest;
 import com.todoc.server.domain.report.web.dto.request.ReportCreateRequest.TaxiFeeCreateRequest;
 import com.todoc.server.domain.report.web.dto.response.ReportDefaultValueResponse;
@@ -76,16 +76,16 @@ class ReportFacadeServiceTest {
 
         ImageAttachment att1 = mock(ImageAttachment.class);
         ImageAttachment att2 = mock(ImageAttachment.class);
-        when(imageAttachmentService.register(img1)).thenReturn(att1);
-        when(imageAttachmentService.register(img2)).thenReturn(att2);
+        when(imageAttachmentService.register()).thenReturn(att1);
+        when(imageAttachmentService.register()).thenReturn(att2);
 
-        TaxiReceiptImage depImg = mock(TaxiReceiptImage.class);
-        TaxiReceiptImage retImg = mock(TaxiReceiptImage.class);
+        ImageFile depImg = mock(ImageFile.class);
+        ImageFile retImg = mock(ImageFile.class);
         when(taxiReceiptImageService.register(dep)).thenReturn(depImg);
         when(taxiReceiptImageService.register(ret)).thenReturn(retImg);
 
         TaxiFee taxiFee = mock(TaxiFee.class);
-        when(taxiFeeService.register(feeReq, depImg, retImg)).thenReturn(taxiFee);
+        when(taxiFeeService.register(feeReq)).thenReturn(taxiFee);
 
         // when
         reportFacadeService.createReport(req, recruitId);
@@ -96,15 +96,15 @@ class ReportFacadeServiceTest {
         assertThat(persistedReport.getHelper()).isSameAs(helper);
 
         // 첨부 이미지 setReport 호출 검증
-        verify(imageAttachmentService).register(img1);
-        verify(imageAttachmentService).register(img2);
+        verify(imageAttachmentService).register();
+        verify(imageAttachmentService).register();
         verify(att1).setReport(persistedReport);
         verify(att2).setReport(persistedReport);
 
         // 영수증 저장 + 택시요금 저장 및 setReport 호출 검증
         verify(taxiReceiptImageService).register(dep);
         verify(taxiReceiptImageService).register(ret);
-        verify(taxiFeeService).register(feeReq, depImg, retImg);
+        verify(taxiFeeService).register(feeReq);
         verify(taxiFee).setReport(persistedReport);
 
         // 상호작용 횟수 검증

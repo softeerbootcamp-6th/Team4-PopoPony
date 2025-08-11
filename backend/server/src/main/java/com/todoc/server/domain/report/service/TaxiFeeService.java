@@ -1,7 +1,7 @@
 package com.todoc.server.domain.report.service;
 
+import com.todoc.server.domain.image.entity.ImageFile;
 import com.todoc.server.domain.report.entity.TaxiFee;
-import com.todoc.server.domain.report.entity.TaxiReceiptImage;
 import com.todoc.server.domain.report.exception.TaxiFeeNotFoundException;
 import com.todoc.server.domain.report.repository.TaxiFeeJpaRepository;
 import com.todoc.server.domain.report.web.dto.request.ReportCreateRequest;
@@ -28,13 +28,11 @@ public class TaxiFeeService {
                 .orElseThrow(TaxiFeeNotFoundException::new);
     }
 
-    public TaxiFee register(ReportCreateRequest.TaxiFeeCreateRequest requestDto, TaxiReceiptImage departureReceipt, TaxiReceiptImage returnReceipt) {
+    public TaxiFee register(ReportCreateRequest.TaxiFeeCreateRequest requestDto) {
 
         TaxiFee taxiFee = TaxiFee.builder()
                 .departureFee(requestDto.getDepartureFee())
-                .departureReceiptImage(departureReceipt)
                 .returnFee(requestDto.getReturnFee())
-                .returnReceiptImage(returnReceipt)
                 .build();
 
         return taxiFeeJpaRepository.save(taxiFee);
