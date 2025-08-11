@@ -1,8 +1,8 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
-import { useState } from 'react';
 import { LoginForm } from '@auth/components';
 import type { LoginFormValues } from '@auth/types';
 import { PageLayout } from '@layouts';
+import { postLogin } from '@auth/apis';
 
 export const Route = createFileRoute('/_auth/login/')({
   component: RouteComponent,
@@ -10,22 +10,14 @@ export const Route = createFileRoute('/_auth/login/')({
 
 function RouteComponent() {
   const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState(false);
+  const { mutate: mutateLogin } = postLogin();
 
   const handleLogin = async (data: LoginFormValues) => {
-    setIsLoading(true);
-
     try {
-      // TODO: 실제 로그인 API 호출
       console.log('Login data:', data);
-
-      // 로그인 성공 시 메인 페이지로 이동
       await navigate({ to: '/' });
     } catch (error) {
       console.error('Login failed:', error);
-      // TODO: 에러 처리 (토스트 메시지 등)
-    } finally {
-      setIsLoading(false);
     }
   };
 
