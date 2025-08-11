@@ -1,11 +1,12 @@
 import { type ReactElement, type ReactNode, useEffect, useState } from 'react';
-import { useNavigate, useParams } from '@tanstack/react-router';
+import { useParams, useRouter } from '@tanstack/react-router';
+import type { FunnelRoute } from '@types';
 
-type FunnelRoute = '/customer/recruit/$step';
 interface UseFunnelProps {
   defaultStep: string;
   basePath: string;
   paramPath: FunnelRoute;
+  stepList: string[];
 }
 interface StepProps {
   name: string;
@@ -16,9 +17,9 @@ interface FunnelProps {
   children: Array<ReactElement<StepProps>>;
 }
 
-export const useFunnel = ({ defaultStep, basePath, paramPath }: UseFunnelProps) => {
+export const useFunnel = ({ defaultStep, basePath, paramPath, stepList }: UseFunnelProps) => {
   const [step, setStep] = useState(defaultStep);
-  const navigate = useNavigate();
+  const router = useRouter();
   const { step: urlStep } = useParams({ from: paramPath });
 
   useEffect(() => {
@@ -36,11 +37,18 @@ export const useFunnel = ({ defaultStep, basePath, paramPath }: UseFunnelProps) 
 
     return <>{targetStep}</>;
   };
-
-  const nextStep = (next: string) => {
-    setStep(next);
-    navigate({ to: `/${basePath}/${next}` });
+  const handleBackStep = () => {
+    router.history.back();
   };
 
-  return { Funnel, Step, setStep, nextStep, currentStep: step } as const;
+  const nextStep = () => {
+    const currentIndex = stepList.indexOf(step);
+    if (currentIndex < stepList.length - 1) {
+      const nextStepName = stepList[currentIndex + 1];
+      setStep(nextStepName);
+      router.navigate({ to: `/${basePath}/${nextStepName}` });
+    }
+  };
+
+  return { Funnel, Step, setStep, nextStep, currentStep: step, handleBackStep } as const;
 };

@@ -1,5 +1,5 @@
 {
-  "include": ["src", "vite.config.ts"],
+  "include": ["src", "vite.config.ts", "public/video"],
 
   "compilerOptions": {
     "target": "ES2022",
@@ -24,12 +24,14 @@
     "baseUrl": ".",
     "paths": {
       "@icons": ["src/assets/icons"],
+      "@assets/*": ["src/assets/*"],
       "@apis": ["src/shared/apis"],
       "@layouts": ["src/shared/layouts"],
       "@components": ["src/shared/components"],
       "@hooks": ["src/shared/hooks"],
       "@types": ["src/shared/types"],
       "@utils": ["src/shared/utils"],
+      "@constants": ["src/shared/constants"],
       "@auth/*": ["src/features/auth/*"],
       "@customer/*": ["src/features/customer/*"],
       "@dashboard/*": ["src/features/dashboard/*"],

@@ -64,17 +64,17 @@ const BottomSheetContent = ({
     <SheetPrimitive.Portal container={container}>
       <SheetPrimitive.Overlay
         data-slot='bottom-sheet-overlay'
-        className={cn('bg-color-black-opacity-40 absolute inset-0 z-50', className)}
+        className={cn('bg-black-opacity-60 absolute inset-0 z-50', className)}
       />
       <SheetPrimitive.Content
         data-slot='bottom-sheet-content'
         className={cn(
-          'shadow-bottom-sheet bg-background-default-white absolute inset-x-0 bottom-0 z-50 h-auto rounded-t-[1.2rem] border-t',
+          'shadow-bottom-sheet bg-background-default-white absolute inset-x-0 bottom-0 z-50 h-auto rounded-t-[1.2rem]',
           className
         )}
         {...props}>
         {children}
-        <SheetPrimitive.Close className='absolute top-[1.6rem] right-[1.6rem] rounded-[0.8rem] p-[0.8rem] opacity-70 transition-opacity hover:opacity-100 focus:ring-2 focus:ring-[var(--color-background-default-mint)] focus:ring-offset-2 focus:outline-none disabled:pointer-events-none'>
+        <SheetPrimitive.Close className='absolute top-[1.6rem] right-[1.6rem] rounded-[0.8rem] p-[0.8rem] opacity-70 transition-opacity hover:opacity-100 disabled:pointer-events-none'>
           <XIcon className='text-text-neutral-primary h-[2rem] w-[2rem]' />
           <span className='sr-only'>닫기</span>
         </SheetPrimitive.Close>
@@ -92,7 +92,7 @@ const BottomSheetHeader = ({ className, children, ...props }: BottomSheetHeaderP
   return (
     <div
       data-slot='bottom-sheet-header'
-      className={cn('flex flex-col gap-[0.6rem] p-[2rem] pb-[1.2rem]', className)}
+      className={cn('flex flex-col gap-[1.5rem] p-[2rem] pb-[1.2rem]', className)}
       {...props}>
       {children}
     </div>

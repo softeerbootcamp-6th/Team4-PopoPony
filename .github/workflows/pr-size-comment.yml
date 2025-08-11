@@ -1,0 +1,85 @@
+name: PR Size Notifier
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+permissions:
+  pull-requests: read
+  issues: write
+
+jobs:
+  check-pr-size:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Calculate PR size and comment
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.FORKED_REPO_TOKEN }}
+          script: |
+            const pr = context.payload.pull_request;
+            const { data: files } = await github.rest.pulls.listFiles({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: pr.number,
+            });
+
+            // 제외할 파일 패턴 (프론트 + 백엔드)
+            const excludedPatterns = [
+              /^frontend\/package-lock\.json$/, /^frontend\/.*\.lock$/, /^docs\//,
+              /^backend\/.*\/target\//, /^backend\/.*\/build\//, 
+              /^backend\/.*\/pom\.xml$/, /^backend\/.*\/build\.gradle/, /^backend\/.*\/settings\.gradle/,
+              /^backend\/.*\.(properties|yml|yaml)$/, 
+              /^frontend\/public\//, /^frontend\/src\/assets\// , /^frontend\/src\/shared\/types\/api\/schema\.d\.ts$/
+            ];
+
+            const filteredFiles = files.filter(file => !excludedPatterns.some(pattern => pattern.test(file.filename)));
+
+            const totalAdditions = filteredFiles.reduce((sum, file) => sum + file.additions, 0);
+            const totalDeletions = filteredFiles.reduce((sum, file) => sum + file.deletions, 0);
+            const totalChanges = totalAdditions + totalDeletions;
+
+            let sizeLabel, message;
+
+            if (totalAdditions <= 50) {
+              sizeLabel = 'XS';
+              message = `✅ 작은 변경입니다. (+${totalAdditions}/-${totalDeletions}, 총 ${totalChanges}줄) 빠르게 리뷰할 수 있어요.`;
+            } else if (totalAdditions <= 200) {
+              sizeLabel = 'S';
+              message = `👍 적절한 크기입니다. (+${totalAdditions}/-${totalDeletions}, 총 ${totalChanges}줄) 리뷰하기 좋네요.`;
+            } else if (totalAdditions <= 500) {
+              sizeLabel = 'M';
+              message = `ℹ️ 다소 큰 PR입니다. (+${totalAdditions}/-${totalDeletions}, 총 ${totalChanges}줄) 집중해서 리뷰해 주세요.`;
+            } else if (totalAdditions <= 1000) {
+              sizeLabel = 'L';
+              message = `⚠️ 큰 변경사항입니다. (+${totalAdditions}/-${totalDeletions}, 총 ${totalChanges}줄) 리뷰에 시간이 좀 걸릴 수 있어요.`;
+            } else {
+              sizeLabel = 'XL';
+              message = `🚨 매우 큰 PR입니다. (+${totalAdditions}/-${totalDeletions}, 총 ${totalChanges}줄) 가능하다면 작업을 나눠서 제출해 주세요.`;
+            }
+
+            const marker = '<!-- pr-size-marker -->';
+
+            // 기존 코멘트 있으면 삭제
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: pr.number,
+            });
+
+            const existingComment = comments.find(c => c.body.includes(marker));
+            if (existingComment) {
+              await github.rest.issues.deleteComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existingComment.id,
+              });
+            }
+
+            // 새 코멘트 작성
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: pr.number,
+              body: `${marker}\n### 🔍 PR 크기 체크 결과 (${sizeLabel})\n${message}`
+            });

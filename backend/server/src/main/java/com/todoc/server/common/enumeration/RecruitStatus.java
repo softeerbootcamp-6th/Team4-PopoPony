@@ -10,7 +10,7 @@ public enum RecruitStatus {
     MATCHING("매칭중"),
     COMPLETED("매칭완료"),
     IN_PROGRESS("동행중"),
-    DONE("완료된 동행");
+    DONE("동행완료");
 
     private final String label;
 
@@ -26,7 +26,7 @@ public enum RecruitStatus {
      */
     public static Optional<RecruitStatus> from(String value) {
         return Arrays.stream(values())
-                .filter(v -> v.name().equalsIgnoreCase(value))
+                .filter(v -> v.label.equalsIgnoreCase(value))
                 .findFirst();
     }
 }

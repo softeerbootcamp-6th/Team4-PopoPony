@@ -1,6 +1,9 @@
 package com.todoc.server.domain.helper.service;
 
 import com.todoc.server.domain.escort.service.EscortService;
+import com.todoc.server.domain.helper.entity.Certificate;
+import com.todoc.server.domain.helper.entity.HelperProfile;
+import com.todoc.server.domain.helper.web.dto.request.HelperProfileCreateRequest;
 import com.todoc.server.domain.helper.web.dto.response.HelperDetailResponse;
 import com.todoc.server.domain.helper.web.dto.response.HelperSimpleResponse;
 import com.todoc.server.domain.review.service.PositiveFeedbackChoiceService;
@@ -12,14 +15,17 @@ import com.todoc.server.domain.review.web.dto.response.ReviewStatResponse;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 import static org.assertj.core.api.Assertions.*;
 
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @ExtendWith(MockitoExtension.class)
@@ -27,6 +33,9 @@ class HelperFacadeServiceTest {
 
     @Mock
     private HelperService helperService;
+
+    @Mock
+    private CertificateService certificateService;
 
     @Mock
     private EscortService escortService;
@@ -79,7 +88,7 @@ class HelperFacadeServiceTest {
         when(reviewService.getLatestReviewsByHelperUserId(authId))
                 .thenReturn(List.of(
                         ReviewSimpleResponse.builder()
-                                .satisfactionLevel("좋았어요")
+                                .satisfactionLevel("GOOD")
                                 .shortComment("정말 좋았습니다!!!")
                                 .createdAt(LocalDateTime.now().minusDays(1))
                                 .build()
@@ -95,5 +104,32 @@ class HelperFacadeServiceTest {
         assertThat(response.getReviewStat().getAverageRate()).isEqualTo(29);
         assertThat(response.getPositiveFeedbackStatList()).hasSize(1);
         assertThat(response.getLatestReviewList()).hasSize(1);
+    }
+
+    @Test
+    void createHelperProfile_정상() {
+        // given
+        HelperProfileCreateRequest request = new HelperProfileCreateRequest();
+        List<HelperProfileCreateRequest.CertificateInfo> certs = new ArrayList<>();
+        for (int i = 1; i <= 2; i++) {
+            HelperProfileCreateRequest.CertificateInfo certificateInfo = new HelperProfileCreateRequest.CertificateInfo();
+            ReflectionTestUtils.setField(certificateInfo, "imageUrl", "https://example.com/cert" + i + ".png");
+            ReflectionTestUtils.setField(certificateInfo, "type", "자격증" + i);
+            certs.add(certificateInfo);
+        }
+        ReflectionTestUtils.setField(request, "certificateInfoList", certs);
+
+        HelperProfile helperProfile = HelperProfile.builder().build();
+        given(helperService.register(request)).willReturn(helperProfile);
+
+        // when
+        when(certificateService.register(any(HelperProfileCreateRequest.CertificateInfo.class)))
+                .thenReturn(new Certificate(), new Certificate()); // 호출 2번 대비
+
+        helperFacadeService.createHelperProfile(request);
+
+        // then
+        verify(helperService).register(request);
+        verify(certificateService, times(2)).register(any(HelperProfileCreateRequest.CertificateInfo.class));
     }
 }

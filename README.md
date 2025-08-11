@@ -19,21 +19,20 @@
     <th> 배연준 <a href="https://github.com/yjbae3974"><br/><img src="https://img.shields.io/badge/Github-181717?style=flat-square&logo=Github&logoColor=white"/></a></th>
     <th> 유태승 <a href="https://github.com/gudusol"><br/><img src="https://img.shields.io/badge/Github-181717?style=flat-square&logo=Github&logoColor=white"/></a></th>
     <tr>
-    <td> 팀원 소개 </td>
-    	<td>
-        <img width="200" alt="이성훈" src="https://github.com/user-attachments/assets/fcf6247a-e517-4a47-9d0b-7492fc572865" />
-      </td>
-    	<td>
-        <img width="200" alt="최재현" src="https://github.com/user-attachments/assets/fcf6247a-e517-4a47-9d0b-7492fc572865" />
-     </td>
-      <td>
-        <img width="200" alt="배연준" src="https://github.com/user-attachments/assets/fcf6247a-e517-4a47-9d0b-7492fc572865" />
-      </td>
-    	<td>
-        <img width="200" alt="유태승" src="https://github.com/user-attachments/assets/fcf6247a-e517-4a47-9d0b-7492fc572865" />
-     </td>
-    </tr>
-    <tr>
+	  <td>팀원 소개</td>
+	  <td>
+	    <img width="200" height="267" alt="이성훈" src="https://github.com/user-attachments/assets/d168c5c3-6a03-45d3-a6ee-27aa249fa3ac" />
+	  </td>
+	  <td>
+	    <img width="200" height="267" alt="최재현" src="https://github.com/user-attachments/assets/2c296511-21b1-4ccd-a446-53433ac06e7e" />
+	  </td>
+	  <td>
+		<img width="200" height="267" alt="배연준" src="https://github.com/user-attachments/assets/f82c8cde-d146-4027-9745-ad56550949d6" />
+	  </td>
+	  <td>
+   		<img width="200" height="267" alt="유태승" src="https://github.com/user-attachments/assets/11aa5d0f-fe8f-44ad-b483-e84793869dad" />
+	  </td>
+	</tr>
 	<td> 역할 </td>
 	<td>
 		<p align="center">Web Backend</p>
@@ -113,7 +112,7 @@
 - 의견은 과감하게 제시!
 - 모르면 모른다고, 알면 아는 만큼 공유
 - 항상 긍정적으로 개발하기 😊
-- 🍚 밥 땐 일 얘기 금지! → 일 얘기 할거면 밥값 내기
+- 🍚 밥 땐 일 얘기 금지!
 
 <br />
 <br />
@@ -151,7 +150,6 @@
         <img src="https://img.shields.io/badge/TailwindCSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white" alt="TailwindCSS" />
         <img src="https://img.shields.io/badge/TanStack%20Router-FF4154?style=for-the-badge&logo=reactrouter&logoColor=white" alt="TanStack Router" />
         <img src="https://img.shields.io/badge/TanStack%20Query-FF4154?style=for-the-badge&logo=reactquery&logoColor=white" alt="TanStack Query" />
-	<img src="https://img.shields.io/badge/AWS-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white" alt="AWS" />
       </td>
     </tr>
   </tbody>
@@ -164,7 +162,38 @@
 
 <details>
 <summary > 백엔드 폴더 구조 보기 </summary>
+	
 ```
+com.todoc.server
+├─ 📁 common/
+│  ├─ 📁 config/
+│  ├─ 📁 entity/
+│  ├─ 📁 enumeration/
+│  ├─ 📁 exception/
+│  │  ├─ 📁 base/
+│  │  └─ 📁 global/
+│  ├─ 📁 response/
+│  └─ 📁 util/
+│
+└─ 📁 domain/
+   ├─ 📁 auth/
+   │  ├─ 📁 entity/
+   │  ├─ 📁 exception/
+   │  ├─ 📁 repository/
+   │  ├─ 📁 service/
+   │  └─ 📁 web/
+   │     ├─ 📁 controller/
+   │     └─ 📁 dto/
+   │        ├─ 📁 request/
+   │        └─ 📁 response/
+   │
+   ├─ 📁 customer (...)
+   ├─ 📁 escort (...)
+   ├─ 📁 helper (...)
+   ├─ 📁 latestlocation (...)
+   ├─ 📁 report (...)
+   ├─ 📁 review (...)
+   └─ 📁 route (...)
 ```
 </details>
 
@@ -247,5 +276,5 @@ frontend
 
 ---
 
-📚 더 자세한 내용은 [팀 위키 문서](./wiki)를 참고해주세요.  
+📚 더 자세한 내용은 [팀 위키 문서](https://github.com/softeerbootcamp-6th/Team4-PopoPony/wiki)를 참고해주세요.  
 컨벤션, 작업 전략, 도메인 정의, 문서 템플릿 등이 정리되어 있습니다.

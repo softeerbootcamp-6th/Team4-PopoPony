@@ -1,6 +1,7 @@
 package com.todoc.server.domain.customer.service;
 
 import com.todoc.server.common.enumeration.Gender;
+import com.todoc.server.common.util.JsonUtils;
 import com.todoc.server.domain.customer.entity.Patient;
 import com.todoc.server.domain.customer.exception.PatientGenderInvalidException;
 import com.todoc.server.domain.customer.repository.PatientRepository;
@@ -34,7 +35,7 @@ public class PatientService {
                 .needsHelping(patientDetail.isNeedsHelping())
                 .usesWheelchair(patientDetail.isUsesWheelchair())
                 .hasCognitiveIssue(patientDetail.isHasCognitiveIssue())
-                .cognitiveIssueDetail(patientDetail.getCognitiveIssueDetail())
+                .cognitiveIssueDetail(JsonUtils.toJson(patientDetail.getCognitiveIssueDetail()))
                 .hasCommunicationIssue(patientDetail.isHasCommunicationIssue())
                 .communicationIssueDetail(patientDetail.getCommunicationIssueDetail())
                 .build();

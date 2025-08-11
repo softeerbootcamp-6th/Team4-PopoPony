@@ -57,6 +57,9 @@ dependencies {
 
 	// for health-check + 애플리케이션의 운영 및 모니터링 기능
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
+
+	// 로그인 비밀번호 처리
+	implementation("org.mindrot:jbcrypt:0.4")
 }
 
 val querydslDir = layout.buildDirectory.dir("generated/querydsl")
