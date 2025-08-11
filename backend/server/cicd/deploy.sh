@@ -30,11 +30,18 @@ else
   exit 1
 fi
 
-echo "1. Build image (if not exists)"
-docker build -t myapp:${TAG} .
+echo "1. Build image (only if not exists)"
+if ! docker image inspect myapp:latest > /dev/null 2>&1; then
+  docker build -t myapp:latest .
+fi
 
-echo "2. Start $TARGET container"
-docker compose up -d $TARGET
+echo "2. Start $TARGET container with environment variables"
+# 환경변수 전달
+docker compose up -d --build \
+  -e DB_URL="$DB_URL" \
+  -e DB_USERNAME="$DB_USERNAME" \
+  -e DB_PASSWORD="$DB_PASSWORD" \
+  $TARGET
 
 SERVER_ADDRESS="http://localhost:$TARGET_PORT/actuator/health"
 echo "3. Health check ($SERVER_ADDRESS)"
@@ -59,6 +66,5 @@ docker compose rm -v -f $OTHER
 
 echo "6. Clean up unused Docker resources"
 docker image prune -f
-docker volume prune -f
 docker container prune -f
 docker network prune -f
