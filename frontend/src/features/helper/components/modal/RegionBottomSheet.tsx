@@ -12,7 +12,6 @@ const RegionBottomSheet = ({ children, name }: RegionBottomSheetProps) => {
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
   const { register } = useFormContext();
 
-
   return (
     <BottomSheet open={isBottomSheetOpen} onOpenChange={setIsBottomSheetOpen}>
       <BottomSheet.Trigger asChild>{children}</BottomSheet.Trigger>

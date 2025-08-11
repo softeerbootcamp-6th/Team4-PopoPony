@@ -71,13 +71,11 @@ const Detail = () => {
             values.certificateList.length > 0
           }
           message={fieldErrors.certificateList}>
-          <div onClick={() => markFieldAsTouched('certificateList')}>
-            <MultiOptionSelector
-              name='certificateList'
-              options={CERTIFICATE_OPTIONS}
-              dataFormat='object'
-            />
-          </div>
+          <MultiOptionSelector
+            name='certificateList'
+            options={CERTIFICATE_OPTIONS}
+            dataFormat='object'
+          />
         </LabeledSection>
         <Divider />
         {values.certificateList && values.certificateList.length > 0 && (

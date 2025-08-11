@@ -24,6 +24,7 @@ import MultiOptionSelector from './form/MultiOptionSelector';
 import MultiOptionSelectorCol from './form/MultiOptionSelectorCol';
 import CheckboxCircle from './checkbox/CheckboxCircle';
 import TermsModal from './modal/TermsModal';
+import TermsBottomSheet from './modal/TermsBottomSheet';
 import Dot from './Dot';
 
 export {
@@ -53,5 +54,6 @@ export {
   MultiOptionSelectorCol,
   CheckboxCircle,
   TermsModal,
+  TermsBottomSheet,
   Dot,
 };
