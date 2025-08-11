@@ -112,10 +112,10 @@ const statusMessageMap: Record<StatusType, string> = {
   MATCHING: '아직 매칭 확정되지 않았어요!',
   COMPLETED: '매칭이 확정되었어요!',
   IN_PROGRESS: '동행이 진행중입니다!',
-  ON_MEETING: '동행자에게 이동해주세요.',
-  GOING_TO_HOSPITAL: '병원으로 이동해주세요.',
+  MEETING: '동행자에게 이동해주세요.',
+  HEADING_TO_HOSPITAL: '병원으로 이동해주세요.',
   IN_TREATMENT: '병원에서 진료중입니다.',
-  RETURNING_HOME: '안전하게 복귀해주세요.',
+  RETURNING: '안전하게 복귀해주세요.',
   DONE: '동행번호 NO.12394O4L',
 };
 
