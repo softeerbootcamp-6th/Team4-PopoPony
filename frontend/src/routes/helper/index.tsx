@@ -108,31 +108,15 @@ const escortData: EscortData[] = [
   },
 ];
 
-const statusMessageMap: Record<StatusType, { text: string }> = {
-  MATCHING: {
-    text: '아직 매칭 확정되지 않았어요!',
-  },
-  COMPLETED: {
-    text: '매칭이 확정되었어요!',
-  },
-  IN_PROGRESS: {
-    text: '동행이 진행중입니다!',
-  },
-  ON_MEETING: {
-    text: '동행자에게 이동해주세요.',
-  },
-  GOING_TO_HOSPITAL: {
-    text: '병원으로 이동해주세요.',
-  },
-  IN_TREATMENT: {
-    text: '병원에서 진료중입니다.',
-  },
-  RETURNING_HOME: {
-    text: '안전하게 복귀해주세요.',
-  },
-  DONE: {
-    text: '동행번호 NO.12394O4L',
-  },
+const statusMessageMap: Record<StatusType, string> = {
+  MATCHING: '아직 매칭 확정되지 않았어요!',
+  COMPLETED: '매칭이 확정되었어요!',
+  IN_PROGRESS: '동행이 진행중입니다!',
+  ON_MEETING: '동행자에게 이동해주세요.',
+  GOING_TO_HOSPITAL: '병원으로 이동해주세요.',
+  IN_TREATMENT: '병원에서 진료중입니다.',
+  RETURNING_HOME: '안전하게 복귀해주세요.',
+  DONE: '동행번호 NO.12394O4L',
 };
 
 //TODO: 추후 api나왔을 땐 이 작업을 api단에서 해서, 필요한 상수들은 거기서 계산하도록 해도 될듯..?
@@ -154,7 +138,7 @@ const getEscortListNumber = (escortData: EscortData[]) => {
  * @returns 필요한 데이터를 정제한 데이터
  */
 const refineEscortData = (escortData: EscortData): RefinedEscortData => {
-  const statusText = statusMessageMap[escortData.status].text;
+  const statusText = statusMessageMap[escortData.status];
   const title = getEscortTitle(escortData.escortDate) + ', ' + escortData.destinationPlaceName;
   const startTime = timeFormat(escortData.estimatedMeetingTime);
   const endTime = timeFormat(escortData.estimatedReturnTime);
@@ -206,7 +190,8 @@ function RouteComponent() {
                 </Link>
               </div>
               <div className='flex-1'>
-                <Link to='/helper/escort'>
+                {/* TODO: 추후 동행 상세 페이지 연동 시 수정 */}
+                <Link to='/helper/escort/$escortId' params={{ escortId: '1' }}>
                   <Button size='md'>
                     <span className='text-text-neutral-0'>일감찾기</span>
                   </Button>
