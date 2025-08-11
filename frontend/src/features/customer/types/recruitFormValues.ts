@@ -1,30 +1,29 @@
 // 폼 단계별 타입 정의
 export interface ProfileFormValues {
-  patientName: string; // 환자 이름
-  patientSex: 'male' | 'female';
-  patientAge: number;
-  patientContact: string;
-  profileImageUrl: string; // 프로필 이미지
+  imageUrl: string; // 프로필 이미지
+  name: string; // 환자 이름
+  age: number;
+  gender: '남자' | '여자';
+  phoneNumber: string;
 }
 
 export interface ConditionFormValues {
-  //TODO: 나중에 boolean으로 변경해야 할 확률 높음
-  needsPhysicalSupport: 'true' | 'false';
-  usesWheelchair: 'true' | 'false';
+  needsHelping: boolean;
+  usesWheelchair: boolean;
 }
 
 export interface CommunicationFormValues {
-  cognitiveAbility: 'good' | 'bad';
-  cognitiveIssues?: string[]; //체크박스 다중 선택
-  communicationAbility: 'good' | 'bad';
-  communicationHelp?: string; //단순 텍스트
+  hasCognitiveIssue: boolean;
+  cognitiveIssueDetail?: string[]; // 체크박스 다중 선택
+  hasCommunicationIssue: boolean;
+  communicationIssueDetail?: string; // 단순 텍스트
 }
 
 export interface TimeFormValues {
   escortDate: string;
-  escortStartTime: string;
-  escortEndTime: string;
-  escortDuration: number;
+  estimatedMeetingTime: string;
+  estimatedReturnTime: string;
+  escortDuration: number; // 얘는 백엔드에서 보낼 때
 }
 
 export interface LocationDetail {
@@ -46,21 +45,21 @@ export interface RouteFormValues {
   meetingLocationDetail: LocationDetail;
   destinationDetail: LocationDetail;
   returnLocationDetail: LocationDetail;
-  isMeetingLocationSameAsDestination: boolean;
 }
 
 export interface RequestFormValues {
-  escortPurpose: string;
-  escortNotes: string;
+  purpose: string;
+  extraRequest: string;
 }
 
-// 전체 폼 타입
-export type RecruitFormValues = ProfileFormValues &
-  ConditionFormValues &
-  CommunicationFormValues &
-  TimeFormValues &
-  RouteFormValues &
-  RequestFormValues;
+// 전체 폼 타입 (백엔드 스키마와 일치)
+export interface RecruitFormValues {
+  patientDetail: ProfileFormValues & ConditionFormValues & CommunicationFormValues;
+  escortDetail: TimeFormValues & RequestFormValues;
+  meetingLocationDetail: LocationDetail;
+  destinationDetail: LocationDetail;
+  returnLocationDetail: LocationDetail;
+}
 
 // 인지 문제 옵션들
 export const COGNITIVE_ISSUES_OPTIONS = [
