@@ -13,6 +13,7 @@ import CardWrapper from './Card/CardWrapper';
 import StatsSummaryCard from './StatsSummaryCard';
 import SatisfactionGraph from './SatisfactionGraph';
 import KeywordTag from './KeywordTag';
+import ReviewCard from './ReviewCard';
 
 // Cards
 import HelperCard from './cards/HelperCard';
@@ -54,4 +55,5 @@ export {
   SearchButton,
   SatisfactionGraph,
   KeywordTag,
+  ReviewCard,
 };

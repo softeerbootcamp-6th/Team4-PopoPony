@@ -1,6 +1,6 @@
-import { Button, StrengthTag, Tabs } from '@components';
+import { Button, StrengthTag, Tabs, Tag } from '@components';
 import { getHelperById } from '@customer/apis';
-import { SatisfactionGraph, StatsSummaryCard } from '@customer/components';
+import { KeywordTag, ReviewCard, SatisfactionGraph, StatsSummaryCard } from '@customer/components';
 import { IcPhoneFill, IcVerified } from '@icons';
 import { PageLayout } from '@layouts';
 import { createFileRoute } from '@tanstack/react-router';
@@ -108,6 +108,13 @@ function RouteComponent() {
             <Tabs.TabsContentSection>
               <div className='flex flex-col gap-[1.6rem]'>
                 <h3 className='subtitle-18-bold text-text-neutral-primary'>동행후기</h3>
+                <KeywordTag text='소통이 잘돼요' count={10} />
+                <div className='flex gap-[1.6rem] overflow-x-auto'>
+                  <ReviewCard status='good' date='2025-01-01' content='소통이 잘돼요' />
+                  <ReviewCard status='average' date='2025-01-01' content='소통이 잘돼요' />
+                  <ReviewCard status='bad' date='2025-01-01' content='소통이 잘돼요' />
+                  <ReviewCard status='good' date='2025-01-01' content='소통이 잘돼요' />
+                </div>
               </div>
             </Tabs.TabsContentSection>
           </Tabs.TabsContent>
