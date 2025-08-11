@@ -15,7 +15,7 @@ interface EscortData {
   id: number;
   status: StatusType;
   escortDate: string;
-  estimatedMettingTime: string;
+  estimatedMeetingTime: string;
   estimatedReturnTime: string;
   meetingPlaceName: string;
   destinationPlaceName: string;
@@ -38,7 +38,7 @@ const escortData: EscortData[] = [
     id: 1,
     status: 'MATCHING',
     escortDate: '2025-07-22',
-    estimatedMettingTime: '12:00:00',
+    estimatedMeetingTime: '12:00:00',
     estimatedReturnTime: '15:00:00',
     meetingPlaceName: '꿈에그린아파트',
     destinationPlaceName: '서울아산병원',
@@ -47,7 +47,7 @@ const escortData: EscortData[] = [
     id: 2,
     status: 'COMPLETED',
     escortDate: '2025-07-23',
-    estimatedMettingTime: '10:30:00',
+    estimatedMeetingTime: '10:30:00',
     estimatedReturnTime: '13:30:00',
     meetingPlaceName: '래미안아파트',
     destinationPlaceName: '삼성서울병원',
@@ -56,7 +56,7 @@ const escortData: EscortData[] = [
     id: 3,
     status: 'COMPLETED',
     escortDate: '2025-07-24',
-    estimatedMettingTime: '11:00:00',
+    estimatedMeetingTime: '11:00:00',
     estimatedReturnTime: '14:00:00',
     meetingPlaceName: '래미안아파트',
     destinationPlaceName: '삼성서울병원',
@@ -65,7 +65,7 @@ const escortData: EscortData[] = [
     id: 4,
     status: 'ON_MEETING',
     escortDate: '2025-07-25',
-    estimatedMettingTime: '09:00:00',
+    estimatedMeetingTime: '09:00:00',
     estimatedReturnTime: '12:00:00',
     meetingPlaceName: '자이아파트',
     destinationPlaceName: '강남세브란스병원',
@@ -74,7 +74,7 @@ const escortData: EscortData[] = [
     id: 5,
     status: 'GOING_TO_HOSPITAL',
     escortDate: '2025-07-26',
-    estimatedMettingTime: '11:00:00',
+    estimatedMeetingTime: '11:00:00',
     estimatedReturnTime: '14:00:00',
     meetingPlaceName: '롯데캐슬아파트',
     destinationPlaceName: '서울대병원',
@@ -83,7 +83,7 @@ const escortData: EscortData[] = [
     id: 6,
     status: 'IN_TREATMENT',
     escortDate: '2025-07-27',
-    estimatedMettingTime: '13:30:00',
+    estimatedMeetingTime: '13:30:00',
     estimatedReturnTime: '16:30:00',
     meetingPlaceName: '힐스테이트아파트',
     destinationPlaceName: '고려대안암병원',
@@ -92,7 +92,7 @@ const escortData: EscortData[] = [
     id: 7,
     status: 'RETURNING_HOME',
     escortDate: '2025-07-28',
-    estimatedMettingTime: '08:30:00',
+    estimatedMeetingTime: '08:30:00',
     estimatedReturnTime: '11:30:00',
     meetingPlaceName: '푸르지오아파트',
     destinationPlaceName: '한양대병원',
@@ -101,7 +101,7 @@ const escortData: EscortData[] = [
     id: 8,
     status: 'DONE',
     escortDate: '2025-07-29',
-    estimatedMettingTime: '15:00:00',
+    estimatedMeetingTime: '15:00:00',
     estimatedReturnTime: '18:00:00',
     meetingPlaceName: '아크로리버파크',
     destinationPlaceName: '성모병원',
@@ -156,7 +156,7 @@ const getEscortListNumber = (escortData: EscortData[]) => {
 const refineEscortData = (escortData: EscortData): RefinedEscortData => {
   const statusText = statusMessageMap[escortData.status].text;
   const title = getEscortTitle(escortData.escortDate, escortData.destinationPlaceName);
-  const startTime = timeFormat(escortData.estimatedMettingTime);
+  const startTime = timeFormat(escortData.estimatedMeetingTime);
   const endTime = timeFormat(escortData.estimatedReturnTime);
   const dateText = dateFormat(escortData.escortDate, 'M월 d일(eee)');
   const timeText = `${dateText} ${startTime} ~ ${endTime}`;

@@ -6,7 +6,7 @@ interface Props {
   certificateImages?: Record<string, string>;
 }
 
-export const CertificateImageUploader = ({ selectedCertificates }: Props) => {
+const CertificateImageUploader = ({ selectedCertificates }: Props) => {
   const { setValue, watch } = useFormContext();
   const certificateList = watch('certificateList') || [];
 
@@ -78,3 +78,5 @@ export const CertificateImageUploader = ({ selectedCertificates }: Props) => {
     </div>
   );
 };
+
+export default CertificateImageUploader;

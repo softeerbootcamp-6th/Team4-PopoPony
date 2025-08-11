@@ -9,20 +9,20 @@ const StatusTag = ({ status }: { status: StatusType }) => {
     },
     IN_PROGRESS: { label: '동행중', color: 'bg-background-light-mint text-text-mint-on-primary' },
     ON_MEETING: {
-      label: '대기중',
+      label: '동행중',
       color: 'bg-background-light-mint text-text-mint-on-primary',
     },
     GOING_TO_HOSPITAL: {
-      label: '병원 가는 중',
+      label: '동행중',
       color: 'bg-background-light-mint text-text-mint-on-primary',
     },
     IN_TREATMENT: {
-      label: '진료중',
+      label: '동행중',
       color: 'bg-background-light-mint text-text-mint-on-primary',
     },
     RETURNING_HOME: {
-      label: '병원 돌아오는 중',
-      color: 'bg-background-light-mint text-text-mint-on-primaryy',
+      label: '동행중',
+      color: 'bg-background-light-mint text-text-mint-on-primary',
     },
     DONE: {
       label: '동행완료',

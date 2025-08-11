@@ -8,7 +8,7 @@ interface RegionBottomSheetProps {
   name: string;
 }
 
-export const RegionBottomSheet = ({ children, name }: RegionBottomSheetProps) => {
+const RegionBottomSheet = ({ children, name }: RegionBottomSheetProps) => {
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
   const { register } = useFormContext();
 
@@ -52,3 +52,5 @@ export const RegionBottomSheet = ({ children, name }: RegionBottomSheetProps) =>
     </BottomSheet>
   );
 };
+
+export default RegionBottomSheet;
