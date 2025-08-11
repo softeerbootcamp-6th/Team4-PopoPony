@@ -12,9 +12,6 @@ const RegionBottomSheet = ({ children, name }: RegionBottomSheetProps) => {
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
   const { register } = useFormContext();
 
-  const getUniqueKey = (value: string, index: number): string => {
-    return `region-${value}-${index}`;
-  };
 
   return (
     <BottomSheet open={isBottomSheetOpen} onOpenChange={setIsBottomSheetOpen}>
@@ -25,13 +22,11 @@ const RegionBottomSheet = ({ children, name }: RegionBottomSheetProps) => {
         </BottomSheet.Header>
         <div className='grid grid-cols-3 gap-x-[0.8rem] gap-y-[1.2rem] p-[2rem]'>
           {REGION_OPTIONS.map((option, index) => {
-            const uniqueKey = getUniqueKey(option.value, index);
-
             return (
-              <div key={uniqueKey} className='w-full'>
+              <div key={index} className='w-full'>
                 <input
                   type='radio'
-                  id={uniqueKey}
+                  id={index.toString()}
                   value={option.value}
                   className='peer hidden'
                   onClick={() => {
@@ -40,7 +35,7 @@ const RegionBottomSheet = ({ children, name }: RegionBottomSheetProps) => {
                   {...register(name)}
                 />
                 <label
-                  htmlFor={uniqueKey}
+                  htmlFor={index.toString()}
                   className='border-neutral-20 peer-checked:border-mint-60 peer-checked:bg-mint-5 peer-checked:text-mint-70 flex-center body1-16-medium text-neutral-90 h-[4.8rem] w-full cursor-pointer rounded-[0.6rem] border'>
                   {option.label}
                 </label>
