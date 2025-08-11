@@ -3,6 +3,7 @@ package com.todoc.server.domain.customer.entity;
 import com.todoc.server.common.enumeration.Gender;
 import com.todoc.server.common.entity.BaseEntity;
 import com.todoc.server.domain.auth.entity.Auth;
+import com.todoc.server.domain.image.entity.ImageFile;
 import com.todoc.server.domain.latestlocation.entity.LatestLocation;
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -31,8 +32,9 @@ public class Patient extends BaseEntity {
 
     private String name;
 
-    @Column(name = "image_url")
-    private String imageUrl;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "patient_profile_id")
+    private ImageFile patientProfileImage;
 
     private Integer age;
 
@@ -61,13 +63,13 @@ public class Patient extends BaseEntity {
     private String communicationIssueDetail;
 
     @Builder
-    public Patient(Auth customer, LatestLocation latestLocation, String name, String imageUrl,
+    public Patient(Auth customer, LatestLocation latestLocation, String name, ImageFile patientProfileImage,
                    Integer age, Gender gender, String contact, Boolean needsHelping, Boolean usesWheelchair,
                    Boolean hasCognitiveIssue, String cognitiveIssueDetail, Boolean hasCommunicationIssue, String communicationIssueDetail) {
         this.customer = customer;
         this.latestLocation = latestLocation;
         this.name = name;
-        this.imageUrl = imageUrl;
+        this.patientProfileImage = patientProfileImage;
         this.age = age;
         this.gender = gender;
         this.contact = contact;

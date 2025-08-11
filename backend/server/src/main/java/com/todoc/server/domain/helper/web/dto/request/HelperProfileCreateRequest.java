@@ -10,7 +10,7 @@ import java.util.List;
 @Schema(description = "도우미 프로필 등록 요청 DTO")
 public class HelperProfileCreateRequest {
 
-    @Schema(description = "도우미 프로필 이미지 URL", example = "https://example.com/helper.png")
+    @Schema(description = "도우미 프로필 이미지 정보")
     private ImageCreateRequest profileImageCreateRequest;
 
     @Schema(description = "강점 목록", example = "['안전한 부축으로 편안한 이동', '인지 장애 어르신 맞춤 케어']")

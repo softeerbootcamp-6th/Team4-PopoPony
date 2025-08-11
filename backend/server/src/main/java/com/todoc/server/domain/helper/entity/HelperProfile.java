@@ -29,6 +29,7 @@ public class HelperProfile extends BaseEntity {
     private LatestLocation latestLocation;
 
     @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "helper_profile_id")
     private ImageFile helperProfileImage;
 
     @Column(columnDefinition = "json")

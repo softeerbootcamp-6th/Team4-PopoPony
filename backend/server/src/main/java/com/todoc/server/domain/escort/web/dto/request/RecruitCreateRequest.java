@@ -1,5 +1,6 @@
 package com.todoc.server.domain.escort.web.dto.request;
 
+import com.todoc.server.common.dto.request.ImageCreateRequest;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 
@@ -26,8 +27,8 @@ public class RecruitCreateRequest {
     @Schema(description = "환자 상태 정보")
     public static class PatientDetail {
 
-        @Schema(description = "환자 이미지 URL", example = "https://example.com/patient.png")
-        private String imageUrl;
+        @Schema(description = "환자 프로필 이미지 정보")
+        private ImageCreateRequest profileImageCreateRequest;
 
         @Schema(description = "환자 이름", example = "홍길동")
         private String name;

@@ -1,6 +1,7 @@
 package com.todoc.server.domain.customer.web.dto.response;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.todoc.server.common.util.ImageUrlUtils;
 import com.todoc.server.common.util.JsonUtils;
 import com.todoc.server.domain.customer.entity.Patient;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -88,7 +89,7 @@ public class PatientSimpleResponse {
 
         return PatientSimpleResponse.builder()
                 .patientId(patient.getId())
-                .imageUrl(patient.getImageUrl())
+                .imageUrl(ImageUrlUtils.getImageUrl(patient.getPatientProfileImage().getId()))
                 .name(patient.getName())
                 .gender(gender)
                 .age(patient.getAge())
