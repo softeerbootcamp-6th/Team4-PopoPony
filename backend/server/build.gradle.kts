@@ -57,6 +57,11 @@ dependencies {
 
 	// for health-check + 애플리케이션의 운영 및 모니터링 기능
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
+
+	// S3
+	implementation(platform("software.amazon.awssdk:bom:2.25.66"))
+	implementation("software.amazon.awssdk:s3")
+	implementation("software.amazon.awssdk:sts")
 }
 
 val querydslDir = layout.buildDirectory.dir("generated/querydsl")
