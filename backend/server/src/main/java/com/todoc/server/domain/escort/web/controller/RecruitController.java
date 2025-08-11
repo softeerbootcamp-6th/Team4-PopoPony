@@ -2,6 +2,9 @@ package com.todoc.server.domain.escort.web.controller;
 
 import com.todoc.server.common.enumeration.RecruitStatus;
 import com.todoc.server.common.response.Response;
+import com.todoc.server.domain.auth.entity.Auth;
+import com.todoc.server.domain.auth.service.SessionAuth;
+import com.todoc.server.domain.auth.web.LoginUser;
 import com.todoc.server.domain.customer.web.dto.response.PatientSimpleResponse;
 import com.todoc.server.domain.escort.service.RecruitFacadeService;
 import com.todoc.server.domain.escort.service.RecruitService;
@@ -39,9 +42,11 @@ public class RecruitController {
             responseCode = "200",
             description = "동행 목록 조회 성공" )
     @GetMapping("/customer")
-    public Response<RecruitListResponse> getRecruitListAsCustomer() {
+    public Response<RecruitListResponse> getRecruitListAsCustomer(@LoginUser SessionAuth auth) {
+
         // TODO :: 원래라면 jwt 혹은 sessionId로부터 유저 정보를 조회해야 함
         // 현재는 우선 userId = 1로 고정
+        String loginId = auth.loginId();
 
         RecruitSimpleResponse dto = RecruitSimpleResponse.builder()
                 .recruitId(1L)
