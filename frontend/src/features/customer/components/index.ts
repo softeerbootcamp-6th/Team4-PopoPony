@@ -11,6 +11,7 @@ import Request from './recruitStep/Request';
 import { Final } from './recruitStep/Final';
 import CardWrapper from './Card/CardWrapper';
 import StatsSummaryCard from './StatsSummaryCard';
+import SatisfactionGraph from './SatisfactionGraph';
 
 // Cards
 import HelperCard from './cards/HelperCard';
@@ -50,4 +51,5 @@ export {
   Final,
   CardWrapper,
   SearchButton,
+  SatisfactionGraph,
 };

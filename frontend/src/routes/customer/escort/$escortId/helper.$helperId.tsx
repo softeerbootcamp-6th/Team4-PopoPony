@@ -1,6 +1,6 @@
 import { Button, StrengthTag, Tabs } from '@components';
 import { getHelperById } from '@customer/apis';
-import { StatsSummaryCard } from '@customer/components';
+import { SatisfactionGraph, StatsSummaryCard } from '@customer/components';
 import { IcPhoneFill, IcVerified } from '@icons';
 import { PageLayout } from '@layouts';
 import { createFileRoute } from '@tanstack/react-router';
@@ -59,7 +59,7 @@ function RouteComponent() {
           </div>
         </div>
 
-        <Tabs defaultValue='자기소개'>
+        <Tabs defaultValue='동행후기'>
           <Tabs.TabsList>
             <Tabs.TabsTrigger value='자기소개'>자기소개</Tabs.TabsTrigger>
             <Tabs.TabsTrigger value='동행후기'>동행후기</Tabs.TabsTrigger>
@@ -93,7 +93,24 @@ function RouteComponent() {
               </div>
             </Tabs.TabsContentSection>
           </Tabs.TabsContent>
-          <Tabs.TabsContent value='동행후기'></Tabs.TabsContent>
+          <Tabs.TabsContent value='동행후기'>
+            <Tabs.TabsContentSection>
+              <div className='flex flex-col gap-[1.6rem]'>
+                <h3 className='subtitle-18-bold text-text-neutral-primary'>지원자 만족도</h3>
+                <SatisfactionGraph
+                  goodRate={reviewStat?.goodRate || 0}
+                  averageRate={reviewStat?.averageRate || 0}
+                  badRate={reviewStat?.badRate || 0}
+                />
+              </div>
+            </Tabs.TabsContentSection>
+            <Tabs.TabsDivider />
+            <Tabs.TabsContentSection>
+              <div className='flex flex-col gap-[1.6rem]'>
+                <h3 className='subtitle-18-bold text-text-neutral-primary'>동행후기</h3>
+              </div>
+            </Tabs.TabsContentSection>
+          </Tabs.TabsContent>
         </Tabs>
       </PageLayout.Content>
       <PageLayout.Footer>
