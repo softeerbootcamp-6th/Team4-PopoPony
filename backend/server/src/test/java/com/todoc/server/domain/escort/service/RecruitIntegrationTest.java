@@ -98,7 +98,7 @@ public class RecruitIntegrationTest {
 
         // then
         assertThat(response).isNotNull();
-        assertThat(response.getStatus()).isEqualTo("완료된 동행");
+        assertThat(response.getStatus()).isEqualTo("동행완료");
         assertThat(response.getPatient().getName()).isEqualTo("김영희");
         assertThat(response.getPurpose()).isEqualTo("진료");
         assertThat(response.getRoute().getHospitalLocationInfo().getPlaceName()).isEqualTo("서울아산병원");
