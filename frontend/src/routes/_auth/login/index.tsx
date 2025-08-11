@@ -25,7 +25,6 @@ function RouteComponent() {
     <PageLayout>
       <div className='bg-background-default-white flex min-h-screen items-center justify-center px-[2.0rem]'>
         <div className='flex w-full max-w-[40.0rem] flex-col items-center gap-[4.8rem]'>
-          {/* Logo Section */}
           <div className='flex flex-col items-center gap-[1.6rem]'>
             <div className='bg-mint-50 flex h-[8.0rem] w-[8.0rem] items-center justify-center rounded-[1.6rem]'>
               <span className='display-32-bold text-neutral-0'>토닥</span>
@@ -35,16 +34,8 @@ function RouteComponent() {
             </h1>
           </div>
 
-          {/* Login Form Section */}
           <div className='flex w-full flex-col gap-[3.2rem]'>
-            <div className='text-center'>
-              <h2 className='subtitle-18-bold text-text-neutral-primary mb-[0.8rem]'>로그인</h2>
-              <p className='body1-16-medium text-text-neutral-secondary'>
-                계정 정보를 입력해 주세요
-              </p>
-            </div>
-
-            <LoginForm onSubmit={handleLogin} isLoading={isLoading} />
+            <LoginForm onSubmit={handleLogin} isLoading={false} />
           </div>
         </div>
       </div>
