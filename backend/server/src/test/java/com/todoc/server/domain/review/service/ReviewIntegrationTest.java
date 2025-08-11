@@ -88,11 +88,12 @@ public class ReviewIntegrationTest {
     void createReview_정상() {
 
         // given
+        Long authId = 1L;
         int beforeCount = reviewService.getAllReviews().size();
         ReviewCreateRequest request = createSampleRequest();
 
         // when
-        reviewFacadeService.createReview(request);
+        reviewFacadeService.createReview(authId, request);
 
         // then
         List<Review> all = reviewService.getAllReviews();

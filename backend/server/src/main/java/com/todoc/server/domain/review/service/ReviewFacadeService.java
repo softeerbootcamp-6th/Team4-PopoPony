@@ -28,10 +28,9 @@ public class ReviewFacadeService {
     private final PositiveFeedbackService positiveFeedbackService;
     private final PositiveFeedbackChoiceService positiveFeedbackChoiceService;
 
-    public void createReview(ReviewCreateRequest request) {
+    public void createReview(Long authId, ReviewCreateRequest request) {
 
-        // TODO :: 세션 혹은 JWT로부터 고객 정보 가져오기
-        Auth customer = null;
+        Auth customer = authService.getAuthById(authId);
 
         Auth helper = authService.getAuthById(request.getHelperId());
 
