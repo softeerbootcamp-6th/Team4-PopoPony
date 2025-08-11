@@ -1,25 +1,22 @@
 package com.todoc.server.domain.report.service;
 
-import com.querydsl.core.Tuple;
 import com.todoc.server.common.util.DateTimeUtils;
 import com.todoc.server.common.util.FeeUtils;
+import com.todoc.server.common.util.ImageUrlUtils;
 import com.todoc.server.domain.escort.entity.Recruit;
 import com.todoc.server.domain.report.entity.Report;
 import com.todoc.server.domain.report.entity.TaxiFee;
 import com.todoc.server.domain.report.repository.ReportJpaRepository;
 import com.todoc.server.domain.report.repository.ReportQueryRepository;
+import com.todoc.server.domain.report.repository.dto.ReportDetailFlatDto;
 import com.todoc.server.domain.report.web.dto.request.ReportCreateRequest;
 import com.todoc.server.domain.report.web.dto.response.ReportDetailResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
-
-import static com.todoc.server.domain.escort.entity.QRecruit.recruit;
-import static com.todoc.server.domain.report.entity.QReport.report;
-import static com.todoc.server.domain.report.entity.QTaxiFee.taxiFee;
 
 @Component
 @RequiredArgsConstructor
@@ -39,10 +36,11 @@ public class ReportService {
     public ReportDetailResponse getReportDetailByRecruitId(Long recruitId) {
 
         // 1. 데이터 조회 (Report + TaxiFee + Recruit)
-        Tuple tuple = reportQueryRepository.getReportDetailByRecruitId(recruitId);
-        Report r = tuple.get(report);
-        TaxiFee tf = tuple.get(taxiFee);
-        Recruit rc = tuple.get(recruit);
+        ReportDetailFlatDto reportDetailFlatDto = reportQueryRepository.getReportDetailByRecruitId(recruitId);
+        Report r = reportDetailFlatDto.getReport();
+        TaxiFee tf = reportDetailFlatDto.getTaxiFee();
+        Recruit rc = reportDetailFlatDto.getRecruit();
+        List<Long> imageIdList = reportDetailFlatDto.getImageIdList();
 
         // 2. 시간 및 요금 계산
         int actualDuration = DateTimeUtils.getMinuteDifference(r.getActualMeetingTime(), r.getActualReturnTime());
@@ -52,6 +50,12 @@ public class ReportService {
         int baseFee = FeeUtils.calculateTotalFee(rc.getEstimatedMeetingTime(), rc.getEstimatedReturnTime());
         int extraFee = FeeUtils.calculateTotalFee(r.getActualMeetingTime(), r.getActualReturnTime()) - baseFee;
 
+        // 3. 이미지 URL 리스트 생성
+        List<String> imageAttachmentList = new ArrayList<>();
+        for (Long imageId : imageIdList) {
+            imageAttachmentList.add(ImageUrlUtils.getImageUrl(imageId));
+        }
+
         // 3. 응답 생성
         return ReportDetailResponse.builder()
                 .reportId(r.getId())
@@ -60,6 +64,7 @@ public class ReportService {
                 .extraMinutes(Math.max(extraMinutes, 0))
                 .hasNextAppointment(r.getHasNextAppointment())
                 .nextAppointmentTime(r.getNextAppointmentTime())
+                .imageAttachmentList(imageAttachmentList)
                 .description(r.getDescription())
                 .baseFee(baseFee)
                 .extraTimeFee(Math.max(extraFee, 0))

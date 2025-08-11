@@ -3,6 +3,7 @@ package com.todoc.server.domain.report.repository;
 import com.querydsl.core.Tuple;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.todoc.server.domain.escort.exception.RecruitNotFoundException;
+import com.todoc.server.domain.report.repository.dto.ReportDetailFlatDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,6 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 import static com.todoc.server.domain.report.entity.QReport.report;
 import static com.todoc.server.domain.report.entity.QTaxiFee.taxiFee;
 import static com.todoc.server.domain.escort.entity.QRecruit.recruit;
+import static com.todoc.server.domain.report.entity.QImageAttachment.imageAttachment;
+import static com.todoc.server.domain.image.entity.QImageFile.imageFile;
 
 @RequiredArgsConstructor
 @Repository
@@ -18,9 +21,10 @@ public class ReportQueryRepository {
 
     private final JPAQueryFactory queryFactory;
 
-    public Tuple getReportDetailByRecruitId(Long recruitId) {
+    @Transactional(readOnly = true)
+    public ReportDetailFlatDto getReportDetailByRecruitId(Long recruitId) {
 
-        Tuple tuple = queryFactory
+        var tuple = queryFactory
                 .select(report, taxiFee, recruit)
                 .from(report)
                 .join(report.recruit, recruit)
@@ -31,6 +35,18 @@ public class ReportQueryRepository {
         if (tuple == null || tuple.get(recruit) == null) {
             throw new RecruitNotFoundException();
         }
-        return tuple;
+
+        Long reportId = tuple.get(report).getId();
+
+        // 첨부 이미지 ID들만 조회 (정렬 기준은 상황에 맞게)
+        java.util.List<Long> imageIds = queryFactory
+                .select(imageFile.id)
+                .from(imageAttachment)
+                .join(imageAttachment.imageFile, imageFile)
+                .where(imageAttachment.report.id.eq(reportId))
+                .orderBy(imageAttachment.id.asc()) // position 컬럼 있으면 그걸로 정렬
+                .fetch();
+
+        return new ReportDetailFlatDto(tuple.get(report), tuple.get(taxiFee), tuple.get(recruit), imageIds);
     }
 }
