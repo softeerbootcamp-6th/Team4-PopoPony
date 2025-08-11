@@ -1,6 +1,8 @@
 package com.todoc.server.domain.helper.web.controller;
 
 import com.todoc.server.common.response.Response;
+import com.todoc.server.domain.auth.service.SessionAuth;
+import com.todoc.server.domain.auth.web.LoginUser;
 import com.todoc.server.domain.helper.service.HelperFacadeService;
 import com.todoc.server.domain.helper.web.dto.request.HelperProfileCreateRequest;
 import com.todoc.server.domain.helper.web.dto.response.HelperDetailResponse;
@@ -94,8 +96,10 @@ public class HelperController {
             responseCode = "200",
             description = "도우미 프로필 등록 성공")
     @PostMapping("")
-    public Response<Void> createHelperProfile(@RequestBody HelperProfileCreateRequest requestDto) {
+    public Response<Void> createHelperProfile(@LoginUser SessionAuth auth, @RequestBody HelperProfileCreateRequest requestDto) {
         // TODO :: jwt 혹은 sessionId로부터 유저 정보를 조회해야 함
+
+        helperFacadeService.createHelperProfile(auth.id(), requestDto);
 
         return Response.from();
     }
