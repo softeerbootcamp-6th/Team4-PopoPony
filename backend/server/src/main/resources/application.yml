@@ -2,6 +2,13 @@ spring:
   profiles:
     active: ${SPRING_PROFILE:local}
 
+server:
+  servlet:
+    session:
+      cookie:
+#        secure: true         # HTTPS 필수
+        same-site: none      # none, lax, strict
+
 springdoc:
   api-docs:
     enabled: true                   # API 문서(`/v3/api-docs`) 활성화 여부

@@ -1,73 +1,62 @@
-name: Backend CI/CD
+name: Backend CI/CD (DockerHub + CodeDeploy)
 
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
     paths:
       - "backend/**"
 
-env:
-  SPRING_PROFILE: prod
-  DB_URL: ${{ secrets.DB_URL }}
-  DB_USERNAME: ${{ secrets.DB_USERNAME }}
-  DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-
 jobs:
-  deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Set up JDK
-        uses: actions/setup-java@v3
-        with:
-          distribution: 'temurin'
-          java-version: '21'
-
-      - name: Create .env file
-        run: |
-          echo "SPRING_PROFILE=prod" >> .env
-          echo "DB_URL=\"jdbc:mysql://todoc-mysql.cepzz0lcdts0.ap-northeast-2.rds.amazonaws.com:3306/todoc?characterEncoding=UTF-8&serverTimezone=Asia/Seoul\"" >> .env
-          echo "DB_USERNAME=${{ secrets.DB_USERNAME }}" >> .env
-          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
-
-      - name: Build with Gradle
-        run: |
-          cd backend/server
-          ./gradlew clean build
-
-      - name: Package for deployment
-        run: |
-          mkdir -p deploy/
-          cp backend/server/cicd/appspec.yml deploy/
-          cp backend/server/cicd/*.sh deploy/
-          cp backend/server/build/libs/server-0.0.1-SNAPSHOT.jar deploy/
-          cp backend/server/cicd/Dockerfile deploy/
-          cp backend/server/cicd/docker-compose.yml deploy/
-          cp .env deploy/
-          cd deploy
-          zip -r deployment-package.zip . .env
+        uses: actions/checkout@v4
 
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
+        uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ap-northeast-2
 
-      - name: Upload to S3
-        run: |
-          aws s3 cp ./deploy/deployment-package.zip s3://todoc-s3-bucket/deployment-package.zip
+      - name: Log in to DockerHub
+        uses: docker/login-action@v3
+        with:
+          username: seonghooni0327
+          password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Deploy to EC2 with CodeDeploy
+      - name: Pull cache from DockerHub
+        run: docker pull seonghooni0327/myapp:latest || true
+
+      - name: Build & push Docker image (arm64)
+        run: |
+          IMAGE=seonghooni0327/myapp
+          TAG=${{ github.sha }}
+          docker build --platform linux/arm64 \
+            --cache-from=$IMAGE:latest \
+            -t $IMAGE:latest \
+            -t $IMAGE:$TAG \
+            -f backend/server/cicd/Dockerfile backend/server
+          docker push $IMAGE:latest
+          docker push $IMAGE:$TAG
+
+      - name: Make deployment bundle for CodeDeploy
+        run: |
+          mkdir -p bundle
+          cp backend/server/cicd/appspec.yml bundle/
+          cp backend/server/cicd/deploy.sh bundle/
+          cp backend/server/cicd/docker-compose.yml bundle/
+          cd bundle && zip -r $GITHUB_WORKSPACE/deploy.zip .
+
+      - name: Upload to S3
+        run: aws s3 cp $GITHUB_WORKSPACE/deploy.zip s3://todoc-s3-bucket/deploy.zip
+
+      - name: Trigger CodeDeploy
         run: |
           aws deploy create-deployment \
             --application-name todoc-codedeploy \
             --deployment-group-name ToDocAppCodeDeploy \
-            --deployment-config-name CodeDeployDefault.OneAtATime \
-            --s3-location bucket=todoc-s3-bucket,bundleType=zip,key=deployment-package.zip \
+            --s3-location bucket=todoc-s3-bucket,bundleType=zip,key=deploy.zip \
             --region ap-northeast-2
-

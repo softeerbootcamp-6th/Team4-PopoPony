@@ -1,32 +1,14 @@
-version: '3.8'
-
-x-common-environment: &common-env
-  SPRING_PROFILE: ${SPRING_PROFILE}
-  DB_URL: ${DB_URL}
-  DB_USERNAME: ${DB_USERNAME}
-  DB_PASSWORD: ${DB_PASSWORD}
-
-x-common-logging: &common-logging
-  driver: "json-file"
-  options:
-    max-size: "10m"
-    max-file: "3"
-
-x-common-service: &common-service
-  image: myapp:latest
-  restart: always
-  logging: *common-logging
-  environment: *common-env
+version: "3.8"
 
 services:
-  blue:
-    <<: *common-service
-    container_name: blue
+  app:
+    image: seonghooni0327/myapp:latest
+    container_name: app
     ports:
-      - "8081:8080"
-
-  green:
-    <<: *common-service
-    container_name: green
-    ports:
-      - "8082:8080"
+      - "8080:8080"
+    environment:
+      SPRING_PROFILE: prod
+      DB_URL: ${DB_URL}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+    restart: always
