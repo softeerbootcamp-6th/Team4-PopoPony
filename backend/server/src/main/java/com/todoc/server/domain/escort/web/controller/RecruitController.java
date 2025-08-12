@@ -2,6 +2,9 @@ package com.todoc.server.domain.escort.web.controller;
 
 import com.todoc.server.common.enumeration.RecruitStatus;
 import com.todoc.server.common.response.Response;
+import com.todoc.server.domain.auth.entity.Auth;
+import com.todoc.server.domain.auth.service.SessionAuth;
+import com.todoc.server.domain.auth.web.LoginUser;
 import com.todoc.server.domain.customer.web.dto.response.PatientSimpleResponse;
 import com.todoc.server.domain.escort.service.RecruitFacadeService;
 import com.todoc.server.domain.escort.service.RecruitService;
@@ -41,13 +44,15 @@ public class RecruitController {
             responseCode = "200",
             description = "동행 목록 조회 성공" )
     @GetMapping("/customer")
-    public Response<RecruitListResponse> getRecruitListAsCustomer() {
+    public Response<RecruitListResponse> getRecruitListAsCustomer(@LoginUser SessionAuth auth) {
+
         // TODO :: 원래라면 jwt 혹은 sessionId로부터 유저 정보를 조회해야 함
         // 현재는 우선 userId = 1로 고정
+        String loginId = auth.loginId();
 
         RecruitSimpleResponse dto = RecruitSimpleResponse.builder()
                 .recruitId(1L)
-                .status(RecruitStatus.MATCHING)
+                .status("매칭중")
                 .numberOfApplication(3L)
                 .destination("서울아산병원")
                 .departureLocation("꿈에그린아파트")
@@ -345,7 +350,7 @@ public class RecruitController {
 
         RecruitSimpleResponse dto = RecruitSimpleResponse.builder()
             .recruitId(1L)
-            .status(RecruitStatus.MATCHING)
+            .status("매칭중")
             .numberOfApplication(3L)
             .destination("서울아산병원")
             .departureLocation("꿈에그린아파트")
@@ -390,7 +395,7 @@ public class RecruitController {
         RecruitSimpleResponse dto1 = RecruitSimpleResponse.builder()
             .recruitId(1L)
             .escortId(null)
-            .status(RecruitStatus.MATCHING)
+            .status("매칭중")
             .numberOfApplication(0L)
             .escortDate(d1)
             .estimatedMeetingTime(LocalTime.of(10, 0))
@@ -407,7 +412,7 @@ public class RecruitController {
         RecruitSimpleResponse dto2 = RecruitSimpleResponse.builder()
             .recruitId(2L)
             .escortId(null)
-            .status(RecruitStatus.MATCHING)
+            .status("매칭중")
             .numberOfApplication(0L)
             .escortDate(d1)
             .estimatedMeetingTime(LocalTime.of(14, 0))
@@ -424,7 +429,7 @@ public class RecruitController {
         RecruitSimpleResponse dto3 = RecruitSimpleResponse.builder()
             .recruitId(3L)
             .escortId(null)
-            .status(RecruitStatus.MATCHING)
+            .status("매칭중")
             .numberOfApplication(0L)
             .escortDate(d2)
             .estimatedMeetingTime(LocalTime.of(9, 30))

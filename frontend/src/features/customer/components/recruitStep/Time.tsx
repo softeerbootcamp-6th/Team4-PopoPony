@@ -2,7 +2,7 @@ import { memo, useEffect } from 'react';
 import { FormInput, LabeledSection } from '@components';
 import { FormLayout } from '@layouts';
 import { z } from 'zod';
-import { useFormValidation } from '@customer/hooks';
+import { useFormValidation } from '@hooks';
 import type { RecruitStepProps } from '@customer/types';
 import { IcAlertCircle } from '@icons';
 import { useFormContext } from 'react-hook-form';

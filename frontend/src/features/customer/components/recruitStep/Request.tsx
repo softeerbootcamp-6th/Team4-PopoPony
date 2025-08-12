@@ -1,7 +1,7 @@
 import type { RecruitStepProps } from '@customer/types';
 import { FormTextarea, LabeledSection } from '@components';
 import { FormLayout } from '@layouts';
-import { useFormValidation } from '@customer/hooks';
+import { useFormValidation } from '@hooks';
 import { z } from 'zod';
 
 const requestFormSchema = z.object({
