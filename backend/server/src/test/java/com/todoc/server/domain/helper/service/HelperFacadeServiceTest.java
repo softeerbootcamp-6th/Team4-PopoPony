@@ -3,6 +3,7 @@ package com.todoc.server.domain.helper.service;
 import com.todoc.server.domain.auth.entity.Auth;
 import com.todoc.server.domain.auth.service.AuthService;
 import com.todoc.server.domain.escort.service.EscortService;
+import com.todoc.server.domain.helper.entity.Certificate;
 import com.todoc.server.domain.helper.entity.HelperProfile;
 import com.todoc.server.domain.helper.web.dto.request.HelperProfileCreateRequest;
 import com.todoc.server.domain.helper.web.dto.response.HelperDetailResponse;
@@ -121,7 +122,6 @@ class HelperFacadeServiceTest {
         List<HelperProfileCreateRequest.CertificateInfo> certs = new ArrayList<>();
         for (int i = 1; i <= 2; i++) {
             HelperProfileCreateRequest.CertificateInfo certificateInfo = new HelperProfileCreateRequest.CertificateInfo();
-            ReflectionTestUtils.setField(certificateInfo, "imageUrl", "https://example.com/cert" + i + ".png");
             ReflectionTestUtils.setField(certificateInfo, "type", "자격증" + i);
 
             var imageCreateRequest = new com.todoc.server.common.dto.request.ImageCreateRequest();
