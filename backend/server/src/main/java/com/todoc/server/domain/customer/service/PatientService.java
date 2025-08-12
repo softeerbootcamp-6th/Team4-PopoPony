@@ -28,7 +28,6 @@ public class PatientService {
         Patient patient = Patient.builder()
                 .latestLocation(null)
                 .name(patientDetail.getName())
-                .imageUrl(null)
                 .age(patientDetail.getAge())
                 .gender(gender)
                 .contact(patientDetail.getPhoneNumber())

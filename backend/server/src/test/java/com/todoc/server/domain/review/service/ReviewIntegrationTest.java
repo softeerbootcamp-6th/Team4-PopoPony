@@ -5,7 +5,7 @@ import com.todoc.server.domain.review.entity.PositiveFeedbackChoice;
 import com.todoc.server.domain.review.entity.Review;
 import com.todoc.server.domain.review.exception.ReviewNotFoundException;
 import com.todoc.server.domain.review.web.dto.request.ReviewCreateRequest;
-import com.todoc.server.domain.review.web.dto.response.ReviewSimpleResponse;
+import com.todoc.server.domain.review.web.dto.response.ReviewDetailResponse;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.DisplayName;
@@ -45,21 +45,21 @@ public class ReviewIntegrationTest {
     @Autowired
     private ReviewService reviewService;
 
-    // TODO :: 주석 해제하기
-//    @Test
-//    @DisplayName("리뷰 요약 정보 조회 - 정상")
-//    void getReviewSimpleByRecruitId_정상() {
-//        // given
-//        Long recruitId = 1L;
-//
-//        // when
-//        ReviewSimpleResponse response = reviewFacadeService.getReviewSimpleByRecruitId(recruitId);
-//
-//        // then
-//        assertThat(response).isNotNull();
-//        assertThat(response.getShortComment()).isEqualTo("정말 친절하고 따뜻했어요.");
-//        assertThat(response.getSatisfactionLevel()).isEqualTo("좋았어요");
-//    }
+    @Test
+    @DisplayName("리뷰 상세 정보 조회 - 정상")
+    void getReviewDetailByRecruitId() {
+        // given
+        Long recruitId = 1L;
+
+        // when
+        ReviewDetailResponse response = reviewFacadeService.getReviewDetailByRecruitId(recruitId);
+
+        // then
+        assertThat(response).isNotNull();
+        assertThat(response.getShortComment()).isEqualTo("정말 친절하고 따뜻했어요.");
+        assertThat(response.getSatisfactionLevel()).isEqualTo("좋았어요");
+        assertThat(response.getPositiveFeedbackList()).isEqualTo(List.of("친절해요", "소통이 잘돼요", "능숙해요"));
+    }
 
     @Test
     @DisplayName("리뷰 요약 정보 조회 - 존재하지 않는 동행 신청")
@@ -68,31 +68,32 @@ public class ReviewIntegrationTest {
         Long recruitId = 999L;
 
         // when & then
-        assertThatThrownBy(() -> reviewFacadeService.getReviewSimpleByRecruitId(recruitId))
+        assertThatThrownBy(() -> reviewFacadeService.getReviewDetailByRecruitId(recruitId))
                 .isInstanceOf(RecruitNotFoundException.class);
     }
 
-//    @Test
-//    @DisplayName("리뷰 요약 정보 조회 - 존재하지 않는 리뷰")
-//    void getReviewSimpleByRecruitId_존재하지않는리뷰() {
-//        // given
-//        Long recruitId = 7L;
-//
-//        // when & then
-//        assertThatThrownBy(() -> reviewFacadeService.getReviewSimpleByRecruitId(recruitId))
-//                .isInstanceOf(ReviewNotFoundException.class);
-//    }
+    @Test
+    @DisplayName("리뷰 요약 정보 조회 - 존재하지 않는 리뷰")
+    void getReviewSimpleByRecruitId_존재하지않는리뷰() {
+        // given
+        Long recruitId = 7L;
+
+        // when & then
+        assertThatThrownBy(() -> reviewFacadeService.getReviewDetailByRecruitId(recruitId))
+                .isInstanceOf(ReviewNotFoundException.class);
+    }
 
     @Test
     @DisplayName("리뷰 작성 - 정상")
     void createReview_정상() {
 
         // given
+        Long authId = 1L;
         int beforeCount = reviewService.getAllReviews().size();
         ReviewCreateRequest request = createSampleRequest();
 
         // when
-        reviewFacadeService.createReview(request);
+        reviewFacadeService.createReview(authId, request);
 
         // then
         List<Review> all = reviewService.getAllReviews();

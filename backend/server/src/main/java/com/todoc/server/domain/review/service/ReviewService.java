@@ -7,7 +7,9 @@ import com.todoc.server.domain.review.exception.ReviewNotFoundException;
 import com.todoc.server.domain.review.exception.SatisfactionInvalidException;
 import com.todoc.server.domain.review.repository.ReviewJpaRepository;
 import com.todoc.server.domain.review.repository.ReviewQueryRepository;
+import com.todoc.server.domain.review.repository.dto.ReviewDetailFlatDto;
 import com.todoc.server.domain.review.web.dto.request.ReviewCreateRequest;
+import com.todoc.server.domain.review.web.dto.response.ReviewDetailResponse;
 import com.todoc.server.domain.review.web.dto.response.ReviewSimpleResponse;
 import com.todoc.server.domain.review.web.dto.response.ReviewStatResponse;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -84,12 +87,28 @@ public class ReviewService {
      * @return ReviewSimpleResponse
      */
     @Transactional(readOnly = true)
-    public ReviewSimpleResponse getReviewSimpleByRecruitId(Long recruitId) {
-        ReviewSimpleResponse response = reviewQueryRepository.getReviewSimpleByRecruitId(recruitId);
-        if (response == null) {
+    public ReviewDetailResponse getReviewDetailByRecruitId(Long recruitId) {
+
+        List<ReviewDetailFlatDto> rows = reviewQueryRepository.getReviewDetailByRecruitId(recruitId);
+        if (rows.isEmpty()) {
             throw new ReviewNotFoundException();
         }
-        return response;
+
+        ReviewDetailFlatDto first = rows.getFirst();
+
+        List<String> feedbacks = rows.stream()
+                .map(ReviewDetailFlatDto::getPositiveFeedbackDesc)
+                .filter(Objects::nonNull)
+                .distinct()
+                .toList();
+
+        return ReviewDetailResponse.builder()
+                .reviewId(first.getReviewId())
+                .satisfactionLevel(first.getSatisfactionLevel())
+                .createdAt(first.getCreatedAt())
+                .shortComment(first.getShortComment())
+                .positiveFeedbackList(feedbacks)
+                .build();
     }
 
     public List<Review> getAllReviews() {

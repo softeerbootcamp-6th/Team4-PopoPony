@@ -20,12 +20,3 @@ export const timeFormat = (time: string): string => {
   const parsedTime = parse(time, 'HH:mm:ss', new Date());
   return format(parsedTime, 'aaa h시', { locale: ko });
 };
-
-/**
- * 날짜에서 한글 요일이 포함된 제목 포맷 생성. escort card 제목 만들 때 사용
- * @param date - 날짜 문자열 (예: "2025-07-22")
- * @returns "7월 22일 (화)" 형태의 날짜 문자열
- */
-export const getEscortTitle = (date: string): string => {
-  return dateFormat(date, 'M월 d일 (eee)');
-};

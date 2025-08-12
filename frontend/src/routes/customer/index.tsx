@@ -16,9 +16,11 @@ function RouteComponent() {
   return (
     <PageLayout>
       <PageLayout.Content>
-        <div className='bg-neutral-10 relative h-full max-h-[22rem] px-[2rem] py-[1rem] pb-[2rem]'>
+        <div className='bg-neutral-10 relative h-full max-h-[22rem] p-[2rem]'>
           <div className='absolute z-10'>
-            <img src='/images/logo-text.svg' alt='logo-text' className='w-[4rem]' />
+            <Link to='/'>
+              <img src='/images/logo-text.svg' alt='logo-text' className='w-[4rem]' />
+            </Link>
             <h2 className='headline-24-bold text-text-neutral-primary mt-[2.4rem] mb-[3rem]'>
               토닥과 함께 <br />
               안전하게 동행하세요!

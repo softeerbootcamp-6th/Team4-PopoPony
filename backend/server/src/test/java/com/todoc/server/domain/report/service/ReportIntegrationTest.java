@@ -4,10 +4,10 @@ import com.todoc.server.common.dto.request.ImageCreateRequest;
 import com.todoc.server.domain.auth.entity.Auth;
 import com.todoc.server.domain.escort.exception.EscortNotFoundException;
 import com.todoc.server.domain.escort.exception.RecruitNotFoundException;
+import com.todoc.server.domain.image.entity.ImageFile;
 import com.todoc.server.domain.report.entity.ImageAttachment;
 import com.todoc.server.domain.report.entity.Report;
 import com.todoc.server.domain.report.entity.TaxiFee;
-import com.todoc.server.domain.report.entity.TaxiReceiptImage;
 import com.todoc.server.domain.report.web.dto.request.ReportCreateRequest;
 import com.todoc.server.domain.report.web.dto.response.ReportDefaultValueResponse;
 import com.todoc.server.domain.report.web.dto.response.ReportDetailResponse;
@@ -46,9 +46,6 @@ public class ReportIntegrationTest {
 
     @Autowired
     private TaxiFeeService taxiFeeService;
-
-    @Autowired
-    private TaxiReceiptImageService taxiReceiptImageService;
 
     @Test
     @DisplayName("리포트 상세 정보 조회 - 정상")
@@ -128,7 +125,6 @@ public class ReportIntegrationTest {
 
         long beforeReportCount = reportService.getCount();
         long beforeImageAttachmentCount  = imageAttachmentService.getCount();
-        long beforeReceiptImageCount = taxiReceiptImageService.getCount();
         long beforeTaxiFeeCount = taxiFeeService.getCount();
 
         // when
@@ -137,7 +133,6 @@ public class ReportIntegrationTest {
         // then
         assertThat(reportService.getCount()).isEqualTo(beforeReportCount + 1);
         assertThat(imageAttachmentService.getCount()).isEqualTo(beforeImageAttachmentCount + 2);
-        assertThat(taxiReceiptImageService.getCount()).isEqualTo(beforeReceiptImageCount + 2);
         assertThat(taxiFeeService.getCount()).isEqualTo(beforeTaxiFeeCount + 1);
 
         Report saved = reportService.getAllReports().stream()
@@ -161,15 +156,15 @@ public class ReportIntegrationTest {
 
         List<ImageAttachment> imageAttachmentList = imageAttachmentService.getImageAttachmentsByReportId(saved.getId());
         assertThat(imageAttachmentList.size()).isEqualTo(2);
-        assertThat(imageAttachmentList.stream().map(a -> a.getImageMeta().getS3Key()))
+        assertThat(imageAttachmentList.stream().map(a -> a.getImageFile().getImageMeta().getS3Key()))
                 .containsExactlyInAnyOrder("reports/9/p1.jpg", "reports/9/p2.jpg");
 
         TaxiFee fee = taxiFeeService.getTaxiFeeByRecruitId(saved.getId());
         assertThat(fee.getDepartureFee()).isEqualTo(8700);
         assertThat(fee.getReturnFee()).isEqualTo(9200);
 
-        TaxiReceiptImage depImg = fee.getDepartureReceiptImage();
-        TaxiReceiptImage retImg = fee.getReturnReceiptImage();
+        ImageFile depImg = fee.getDepartureReceiptImage();
+        ImageFile retImg = fee.getReturnReceiptImage();
         assertThat(depImg).isNotNull();
         assertThat(retImg).isNotNull();
         assertThat(depImg.getImageMeta().getS3Key()).isEqualTo("reports/9/receipt-dep.jpg");

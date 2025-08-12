@@ -12,6 +12,10 @@ import { Final } from './recruitStep/Final';
 import CardWrapper from './Card/CardWrapper';
 import PaymentCard from './PaymentCard';
 import WarningBox from './WarningBox';
+import StatsSummaryCard from './StatsSummaryCard';
+import SatisfactionGraph from './SatisfactionGraph';
+import KeywordTag from './KeywordTag';
+import ReviewCard from './ReviewCard';
 
 // Cards
 import HelperCard from './cards/HelperCard';
@@ -32,6 +36,7 @@ export {
   RouteButton,
   InfoSection,
   GrayBox,
+  StatsSummaryCard,
   HelperCard,
   HelperSelectInfoCard,
   HelperEmptyCard,
@@ -52,4 +57,7 @@ export {
   SearchButton,
   PaymentCard,
   WarningBox,
+  SatisfactionGraph,
+  KeywordTag,
+  ReviewCard,
 };

@@ -8,6 +8,7 @@ import lombok.Getter;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.List;
 
 @Getter
 @Schema(description = "리포트 상세 정보 응답 DTO")
@@ -37,6 +38,9 @@ public class ReportDetailResponse {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime nextAppointmentTime;
 
+    @Schema(description = "첨부 이미지 URL 목록")
+    private List<String> imageAttachmentList;
+
     @Schema(description = "전달 내용")
     private String description;
 
@@ -55,13 +59,14 @@ public class ReportDetailResponse {
     @Builder
     public ReportDetailResponse(Long reportId, LocalTime actualMeetingTime, LocalTime actualReturnTime,
                                 Integer extraMinutes, Boolean hasNextAppointment, LocalDateTime nextAppointmentTime,
-                                String description, Integer baseFee, Integer taxiFee, Integer extraTimeFee) {
+                                List<String> imageAttachmentList, String description, Integer baseFee, Integer taxiFee, Integer extraTimeFee) {
         this.reportId = reportId;
         this.actualMeetingTime = actualMeetingTime;
         this.actualReturnTime = actualReturnTime;
         this.extraMinutes = extraMinutes;
         this.hasNextAppointment = hasNextAppointment;
         this.nextAppointmentTime = nextAppointmentTime;
+        this.imageAttachmentList = imageAttachmentList;
         this.description = description;
         this.baseFee = baseFee;
         this.taxiFee = taxiFee;
