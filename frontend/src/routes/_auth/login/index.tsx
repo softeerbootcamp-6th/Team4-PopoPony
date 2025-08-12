@@ -1,40 +1,12 @@
-import { createFileRoute, useNavigate } from '@tanstack/react-router';
+import { createFileRoute } from '@tanstack/react-router';
 import { LoginForm } from '@auth/components';
-import type { LoginFormValues } from '@auth/types';
 import { PageLayout } from '@layouts';
-import { postLogin } from '@auth/apis';
-import { authStorage } from '@auth/utils';
 
 export const Route = createFileRoute('/_auth/login/')({
   component: RouteComponent,
 });
 
 function RouteComponent() {
-  const navigate = useNavigate();
-  const { mutate } = postLogin();
-
-  const handleLogin = async (data: LoginFormValues) => {
-    try {
-      mutate(
-        {
-          body: {
-            ...data,
-          },
-        },
-        {
-          onSuccess: () => {
-            authStorage.setIsLoggedIn(true);
-            navigate({
-              to: '/',
-            });
-          },
-        }
-      );
-    } catch (error) {
-      console.error('Login failed:', error);
-    }
-  };
-
   return (
     <PageLayout>
       <div className='bg-background-default-white flex min-h-screen items-center justify-center px-[2.0rem]'>
@@ -49,7 +21,7 @@ function RouteComponent() {
           </div>
 
           <div className='flex w-full flex-col gap-[3.2rem]'>
-            <LoginForm onSubmit={handleLogin} isLoading={false} />
+            <LoginForm />
           </div>
         </div>
       </div>
