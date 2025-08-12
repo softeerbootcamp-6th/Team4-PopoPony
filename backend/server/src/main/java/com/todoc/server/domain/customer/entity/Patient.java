@@ -33,7 +33,7 @@ public class Patient extends BaseEntity {
     private String name;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "patient_profile_id")
+    @JoinColumn(name = "patient_profile_image_id")
     private ImageFile patientProfileImage;
 
     private Integer age;
