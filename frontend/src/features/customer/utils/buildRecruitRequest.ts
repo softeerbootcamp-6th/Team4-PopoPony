@@ -18,7 +18,7 @@ export const buildRecruitCreateRequest = (formData: RecruitFormValues): RecruitC
       needsHelping: parseStringToBoolean(formData.needsHelping),
       usesWheelchair: parseStringToBoolean(formData.usesWheelchair),
       hasCognitiveIssue: parseStringToBoolean(formData.hasCognitiveIssue),
-      cognitiveIssueDetail: formData.cognitiveIssueDetail, //이거 string[]맞음.
+      cognitiveIssueDetail: formData.cognitiveIssueDetail,
       hasCommunicationIssue: parseStringToBoolean(formData.hasCommunicationIssue),
       communicationIssueDetail: formData.communicationIssueDetail,
     },
