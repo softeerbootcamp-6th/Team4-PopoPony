@@ -7,6 +7,7 @@ import com.todoc.server.domain.image.web.dto.response.PresignBatchResponse;
 import com.todoc.server.domain.image.web.dto.response.PresignItemResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.CacheControl;
@@ -17,6 +18,7 @@ import java.net.URI;
 import java.util.List;
 import java.util.UUID;
 
+@Tag(name = "s3", description = "S3 관련 API")
 @RestController
 @RequestMapping("/api/images")
 @RequiredArgsConstructor
