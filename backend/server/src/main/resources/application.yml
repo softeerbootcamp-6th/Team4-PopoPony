@@ -49,3 +49,6 @@ upload:
   presign:
     put-expire-seconds: 600   # 업로드 URL 유효기간(초)
     get-expire-seconds: 600   # 다운로드 URL 유효기간(초)
+
+tmap:
+  app-key: ${TMAP_API_KEY:}
