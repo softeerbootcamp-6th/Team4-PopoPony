@@ -1,6 +1,8 @@
 package com.todoc.server.domain.escort.web.controller;
 
 import com.todoc.server.common.response.Response;
+import com.todoc.server.domain.auth.service.SessionAuth;
+import com.todoc.server.domain.auth.web.LoginUser;
 import com.todoc.server.domain.escort.service.ApplicationFacadeService;
 import com.todoc.server.domain.escort.web.dto.response.ApplicationListResponse;
 import com.todoc.server.domain.escort.web.dto.response.ApplicationSimpleResponse;
@@ -30,35 +32,8 @@ public class ApplicationController {
             description = "지원 목록 조회 성공")
     @GetMapping("/recruits/{recruitId}")
     public Response<ApplicationListResponse> getApplicationListAsRecruit(@PathVariable Long recruitId) {
-        // TODO :: 신청 ID를 받아, 해당 신청에 대한 지원들을 검색
 
-//        return Response.from(applicationFacadeService.getApplicationListByRecruitId(recruitId));
-
-        HelperSimpleResponse helper = HelperSimpleResponse.builder()
-                .helperProfileId(1L)
-                .imageUrl("https://example.com/images/sample.jpg")
-                .name("최솔희")
-                .age(39)
-                .gender("여자")
-                .shortBio("부모님처럼 모시겠습니다.")
-                .contact("010-1234-5678")
-                .certificateList(new ArrayList<>(List.of("간호사", "간호조무사", "요양보호사")))
-                .strengthList(new ArrayList<>(List.of("안전한 부축", "휠체어 이동", "인지장애 케어")))
-                .build();
-
-        ApplicationSimpleResponse application = ApplicationSimpleResponse.builder()
-                .applicationId(1L)
-                .helper(helper)
-                .build();
-
-        List<ApplicationSimpleResponse> list = new ArrayList<>();
-        list.add(application);
-        list.add(application);
-
-        ApplicationListResponse mock = ApplicationListResponse.builder()
-                .applicationList(list).build();
-
-        return Response.from(mock);
+        return Response.from(applicationFacadeService.getApplicationListByRecruitId(recruitId));
     }
 
     @Operation(
@@ -69,9 +44,8 @@ public class ApplicationController {
             description = "지원 선택 성공")
     @PostMapping("/{applicationId}/select")
     public Response<ApplicationListResponse> selectApplication(@PathVariable Long applicationId) {
-        // TODO :: 지원 ID를 받아, 지원과 신청의 상태를 바꾸고 동행 생성
 
-//        applicationFacadeService.selectApplication(applicationId);
+        applicationFacadeService.selectApplication(applicationId);
 
         return Response.from();
     }
@@ -83,10 +57,9 @@ public class ApplicationController {
         responseCode = "200",
         description = "동행 지원 성공")
     @PostMapping("/recruits/{recruitId}")
-    public Response<Void> applyApplicationToRecruit(@PathVariable Long recruitId) {
-        // TODO :: Recruit ID를 받아, 해당 일감에 지원
+    public Response<Void> applyApplicationToRecruit(@LoginUser SessionAuth auth, @PathVariable Long recruitId) {
 
-        // applicationFacadeService.applyApplicaitonToRecruit(recruitId);
+        applicationFacadeService.applyApplicationToRecruit(recruitId, auth.id());
 
         return Response.from();
     }
@@ -99,9 +72,8 @@ public class ApplicationController {
         description = "동행 지원 취소 성공")
     @PatchMapping("/{applicationId}")
     public Response<Void> cancelApplicationToRecruit(@PathVariable Long applicationId) {
-        // TODO :: Recruit ID를 받아, 해당 일감에 지원
 
-        // applicationFacadeService.cancelApplicationToRecruit(applicationId);
+         applicationFacadeService.cancelApplicationToRecruit(applicationId);
 
         return Response.from();
     }

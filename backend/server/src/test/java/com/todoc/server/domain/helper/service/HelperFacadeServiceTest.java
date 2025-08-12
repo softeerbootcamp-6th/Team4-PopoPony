@@ -1,5 +1,7 @@
 package com.todoc.server.domain.helper.service;
 
+import com.todoc.server.domain.auth.entity.Auth;
+import com.todoc.server.domain.auth.service.AuthService;
 import com.todoc.server.domain.escort.service.EscortService;
 import com.todoc.server.domain.helper.entity.HelperProfile;
 import com.todoc.server.domain.helper.web.dto.request.HelperProfileCreateRequest;
@@ -45,6 +47,9 @@ class HelperFacadeServiceTest {
 
     @Mock
     private PositiveFeedbackChoiceService positiveFeedbackChoiceService;
+
+    @Mock
+    private AuthService authService;
 
     @Mock
     private ImageFileService imageFileService;
@@ -116,6 +121,7 @@ class HelperFacadeServiceTest {
         List<HelperProfileCreateRequest.CertificateInfo> certs = new ArrayList<>();
         for (int i = 1; i <= 2; i++) {
             HelperProfileCreateRequest.CertificateInfo certificateInfo = new HelperProfileCreateRequest.CertificateInfo();
+            ReflectionTestUtils.setField(certificateInfo, "imageUrl", "https://example.com/cert" + i + ".png");
             ReflectionTestUtils.setField(certificateInfo, "type", "자격증" + i);
 
             var imageCreateRequest = new com.todoc.server.common.dto.request.ImageCreateRequest();
@@ -130,15 +136,20 @@ class HelperFacadeServiceTest {
         }
         ReflectionTestUtils.setField(request, "certificateInfoList", certs);
 
+        Long authId = 1L;
+        Auth auth = Auth.builder()
+                .id(authId)
+                .build();
+
         HelperProfile helperProfile = HelperProfile.builder().build();
         given(helperService.register(request)).willReturn(helperProfile);
+        given(authService.getAuthById(authId)).willReturn(auth);
 
         when(certificateService.register(any(HelperProfileCreateRequest.CertificateInfo.class)))
-                .thenReturn(new com.todoc.server.domain.helper.entity.Certificate(),
-                        new com.todoc.server.domain.helper.entity.Certificate());
+                .thenReturn(new Certificate(), new Certificate()); // 호출 2번 대비
 
         // when
-        helperFacadeService.createHelperProfile(request);
+        helperFacadeService.createHelperProfile(authId, request);
 
         // then
         verify(helperService).register(request);
