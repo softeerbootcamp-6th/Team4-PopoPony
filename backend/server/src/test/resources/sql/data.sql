@@ -140,11 +140,11 @@ INSERT INTO location_info (
     first_no, second_no, road_name, first_building_no, second_building_no,
     detail_address, longitude, latitude, created_at, updated_at
 ) VALUES
-      (1, '서울삼성병원', '서울특별시', '강남구', '일원동', '50', '0', '일원로', '81', '', '외래센터', 127.084, 37.489, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-      (2, '서울아산병원', '서울특별시', '송파구', '풍납동', '388', '0', '올림픽로43길', '88', '', '응급센터', 127.107, 37.527, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-      (3, '서울대병원', '서울특별시', '종로구', '연건동', '28', '0', '대학로', '101', '', '본관', 126.998, 37.580, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-      (4, '신촌세브란스병원', '서울특별시', '서대문구', '신촌동', '134', '0', '연세로', '50', '', '본관', 126.936, 37.563, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-      (5, '한양대병원', '서울특별시', '성동구', '행당동', '17', '0', '왕십리로', '222', '', '입원센터', 127.045, 37.557, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+      (1, '서울삼성병원', '서울', '강남구', '일원동', '50', '0', '일원로', '81', '', '외래센터', 127.084, 37.489, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+      (2, '서울아산병원', '서울', '송파구', '풍납동', '388', '0', '올림픽로43길', '88', '', '응급센터', 127.107, 37.527, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+      (3, '서울대병원', '서울', '종로구', '연건동', '28', '0', '대학로', '101', '', '본관', 126.998, 37.580, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+      (4, '신촌세브란스병원', '서울', '서대문구', '신촌동', '134', '0', '연세로', '50', '', '본관', 126.936, 37.563, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+      (5, '한양대병원', '서울', '성동구', '행당동', '17', '0', '왕십리로', '222', '', '입원센터', 127.045, 37.557, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 ALTER TABLE location_info ALTER COLUMN id RESTART WITH 6;
 
