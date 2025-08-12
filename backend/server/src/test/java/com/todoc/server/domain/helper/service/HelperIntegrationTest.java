@@ -99,21 +99,41 @@ public class HelperIntegrationTest {
     }
 
     private HelperProfileCreateRequest createHelperProfileRequest() {
+        // 자격증 1
         HelperProfileCreateRequest.CertificateInfo cert1 = new HelperProfileCreateRequest.CertificateInfo();
-        ReflectionTestUtils.setField(cert1, "imageUrl", "https://example.com/cert1.png");
+        ReflectionTestUtils.setField(cert1, "certificateImageCreateRequest", image(
+                "uploads/certs/cert1.jpg", "image/jpeg", 123_456L, "\"etag-cert1\""
+        ));
         ReflectionTestUtils.setField(cert1, "type", "간호사 자격증");
 
+        // 자격증 2
         HelperProfileCreateRequest.CertificateInfo cert2 = new HelperProfileCreateRequest.CertificateInfo();
-        ReflectionTestUtils.setField(cert2, "imageUrl", "https://example.com/cert2.png");
+        ReflectionTestUtils.setField(cert2, "certificateImageCreateRequest", image(
+                "uploads/certs/cert2.jpg", "image/jpeg", 234_567L, "\"etag-cert2\""
+        ));
         ReflectionTestUtils.setField(cert2, "type", "응급구조사");
 
         HelperProfileCreateRequest request = new HelperProfileCreateRequest();
-        ReflectionTestUtils.setField(request, "imageUrl", "https://example.com/helper.png");
-        ReflectionTestUtils.setField(request, "strengthList", List.of("안전한 부축으로 편안한 이동", "인지 장애 어르신 맞춤 케어"));
+        ReflectionTestUtils.setField(request, "profileImageCreateRequest", image(
+                "uploads/helpers/profile.png", "image/png", 99_999L, "\"etag-profile\""
+        ));
+        ReflectionTestUtils.setField(request, "strengthList",
+                List.of("안전한 부축으로 편안한 이동", "인지 장애 어르신 맞춤 케어"));
         ReflectionTestUtils.setField(request, "shortBio", "부모님처럼 모시겠습니다!");
-        ReflectionTestUtils.setField(request, "area", "서울");
+        ReflectionTestUtils.setField(request, "area", "서울"); // 서버에서 Area.from("서울") 처리
         ReflectionTestUtils.setField(request, "certificateInfoList", List.of(cert1, cert2));
 
         return request;
+    }
+
+    private com.todoc.server.common.dto.request.ImageCreateRequest image(
+            String s3Key, String contentType, long size, String checksum
+    ) {
+        var dto = new com.todoc.server.common.dto.request.ImageCreateRequest();
+        ReflectionTestUtils.setField(dto, "s3Key", s3Key);
+        ReflectionTestUtils.setField(dto, "contentType", contentType);
+        ReflectionTestUtils.setField(dto, "size", size);
+        ReflectionTestUtils.setField(dto, "checksum", checksum);
+        return dto;
     }
 }
