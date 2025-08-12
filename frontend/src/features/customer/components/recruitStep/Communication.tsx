@@ -32,7 +32,7 @@ const Communication = memo(({ handleNextStep }: RecruitStepProps) => {
   // 값이 'good'으로 변경될 때만 초기화
   useEffect(() => {
     if (
-      cognitiveValues.hasCognitiveIssue === 'true' &&
+      cognitiveValues.hasCognitiveIssue === 'false' &&
       prevCognitiveAbility.current !== cognitiveAbility
     ) {
       setValue('cognitiveIssueDetail', []);
@@ -42,7 +42,7 @@ const Communication = memo(({ handleNextStep }: RecruitStepProps) => {
 
   useEffect(() => {
     if (
-      communicationValues.hasCommunicationIssue === 'true' &&
+      communicationValues.hasCommunicationIssue === 'false' &&
       prevCommunicationAbility.current !== communicationAbility
     ) {
       setValue('communicationIssueDetail', '');
