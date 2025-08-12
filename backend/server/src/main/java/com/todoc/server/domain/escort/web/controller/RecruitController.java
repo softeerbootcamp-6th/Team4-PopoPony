@@ -1,23 +1,16 @@
 package com.todoc.server.domain.escort.web.controller;
 
-import com.todoc.server.common.enumeration.RecruitStatus;
 import com.todoc.server.common.response.Response;
-import com.todoc.server.domain.auth.entity.Auth;
 import com.todoc.server.domain.auth.service.SessionAuth;
 import com.todoc.server.domain.auth.web.LoginUser;
-import com.todoc.server.domain.customer.web.dto.response.PatientSimpleResponse;
 import com.todoc.server.domain.escort.service.RecruitFacadeService;
 import com.todoc.server.domain.escort.service.RecruitService;
 import com.todoc.server.domain.escort.web.dto.request.RecruitCreateRequest;
 import com.todoc.server.domain.escort.web.dto.response.*;
-import com.todoc.server.domain.route.web.dto.response.LocationInfoSimpleResponse;
-import com.todoc.server.domain.route.web.dto.response.RouteSimpleResponse;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
@@ -110,7 +103,7 @@ public class RecruitController {
             responseCode = "200",
             description = "동행 신청 성공")
     @PostMapping("")
-    public Response<Void> createRecruit(@LoginUser SessionAuth auth, @RequestBody RecruitCreateRequest requestDto) {
+    public Response<Void> createRecruit(@LoginUser SessionAuth auth, @RequestBody RecruitCreateRequest requestDto) throws IOException {
 
         recruitFacadeService.createRecruit(auth.id(), requestDto);
 

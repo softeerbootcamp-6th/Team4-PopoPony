@@ -2,6 +2,7 @@ package com.todoc.server.domain.route.service;
 
 import com.todoc.server.domain.escort.web.dto.request.RecruitCreateRequest;
 import com.todoc.server.domain.route.entity.Route;
+import com.todoc.server.domain.route.exception.RouteNotFoundException;
 import com.todoc.server.domain.route.repository.RouteRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -21,5 +22,10 @@ public class RouteService {
                 .build();
 
         return routeRepository.save(route);
+    }
+
+    public Route getById(Long routeId) {
+        return routeRepository.findById(routeId)
+                .orElseThrow(RouteNotFoundException::new);
     }
 }
