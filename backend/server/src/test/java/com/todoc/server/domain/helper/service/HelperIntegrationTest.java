@@ -78,9 +78,10 @@ public class HelperIntegrationTest {
         // given
         HelperProfileCreateRequest request = createHelperProfileRequest();
         int beforeCount = helperService.getAllHelperProfiles().size();
+        Long authId = 1L;
 
         // when
-        helperFacadeService.createHelperProfile(request);
+        helperFacadeService.createHelperProfile(authId, request);
 
         // then
         List<HelperProfile> profiles = helperService.getAllHelperProfiles();

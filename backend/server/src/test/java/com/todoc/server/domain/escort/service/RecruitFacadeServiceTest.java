@@ -1,6 +1,7 @@
 package com.todoc.server.domain.escort.service;
 
 import com.todoc.server.domain.auth.entity.Auth;
+import com.todoc.server.domain.auth.service.AuthService;
 import com.todoc.server.domain.customer.entity.Patient;
 import com.todoc.server.domain.customer.service.PatientService;
 import com.todoc.server.domain.escort.entity.Recruit;
@@ -27,6 +28,8 @@ class RecruitFacadeServiceTest {
     @Mock
     private RouteService routeService;
     @Mock
+    private AuthService authService;
+    @Mock
     private ImageFileService imageFileService;
 
     @InjectMocks
@@ -41,6 +44,9 @@ class RecruitFacadeServiceTest {
     @DisplayName("동행 신청 생성 시 의존성 호출 및 연관관계 설정 확인")
     void createRecruit() {
         // given
+        Long authId = 1L;
+        Auth auth = mock(Auth.class);
+
         RecruitCreateRequest request = mock(RecruitCreateRequest.class);
         RecruitCreateRequest.PatientDetail patientDetail = mock(RecruitCreateRequest.PatientDetail.class);
         RecruitCreateRequest.EscortDetail escortDetail = mock(RecruitCreateRequest.EscortDetail.class);
@@ -67,9 +73,10 @@ class RecruitFacadeServiceTest {
         when(locationInfoService.register(returnLocationDetail)).thenReturn(returnLocation);
         when(routeService.register(request)).thenReturn(route);
         when(recruitService.register(escortDetail)).thenReturn(recruit);
+        when(authService.getAuthById(authId)).thenReturn(auth);
 
         // when
-        recruitFacadeService.createRecruit(request);
+        recruitFacadeService.createRecruit(authId, request);
 
         // then
         verify(patientService).register(patientDetail);
