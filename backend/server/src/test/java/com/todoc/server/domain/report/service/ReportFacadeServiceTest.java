@@ -9,6 +9,7 @@ import com.todoc.server.domain.escort.entity.Recruit;
 import com.todoc.server.domain.escort.service.ApplicationService;
 import com.todoc.server.domain.escort.service.EscortService;
 import com.todoc.server.domain.image.entity.ImageFile;
+import com.todoc.server.domain.image.service.ImageFileService;
 import com.todoc.server.domain.report.entity.ImageAttachment;
 import com.todoc.server.domain.report.entity.Report;
 import com.todoc.server.domain.report.entity.TaxiFee;
@@ -39,8 +40,8 @@ class ReportFacadeServiceTest {
     @Mock private EscortService escortService;
     @Mock private ApplicationService applicationService;
     @Mock private TaxiFeeService taxiFeeService;
-    @Mock private TaxiReceiptImageService taxiReceiptImageService;
     @Mock private ImageAttachmentService imageAttachmentService;
+    @Mock private ImageFileService imageFileService;
 
     @Test
     @DisplayName("createReport - 성공(첨부 2장, 영수증 2장, 택시요금 1건)")
@@ -57,16 +58,15 @@ class ReportFacadeServiceTest {
         ReportCreateRequest req = reportReq(
                 LocalTime.of(9, 40), LocalTime.of(11, 35),
                 true, LocalDateTime.of(2025, 8, 30, 10, 0),
-                "단위테스트", List.of(img1, img2), feeReq
+                "다음 진료 예약 잡았습니다.", List.of(img1, img2), feeReq
         );
 
-        // mock 엔티티들
         Report persistedReport = new Report();
         when(reportService.register(any())).thenReturn(persistedReport);
 
         Recruit recruit = new Recruit();
         Auth customer = new Auth(); ReflectionTestUtils.setField(customer, "id", 4L);
-        Auth helper   = new Auth(); ReflectionTestUtils.setField(helper,   "id", 4L);
+        Auth helper   = new Auth(); ReflectionTestUtils.setField(helper,   "id", 5L);
         ReflectionTestUtils.setField(recruit, "customer", customer);
 
         Application app = mock(Application.class);
@@ -74,15 +74,22 @@ class ReportFacadeServiceTest {
         when(app.getHelper()).thenReturn(helper);
         when(applicationService.getMatchedApplicationByRecruitId(recruitId)).thenReturn(app);
 
+        // 첨부 이미지 파일 생성
+        ImageFile imgFile1 = mock(ImageFile.class);
+        ImageFile imgFile2 = mock(ImageFile.class);
+        when(imageFileService.register(img1)).thenReturn(imgFile1);
+        when(imageFileService.register(img2)).thenReturn(imgFile2);
+
+        // 첨부 엔티티 생성(두 번 호출 순서대로 att1, att2)
         ImageAttachment att1 = mock(ImageAttachment.class);
         ImageAttachment att2 = mock(ImageAttachment.class);
-        when(imageAttachmentService.register()).thenReturn(att1);
-        when(imageAttachmentService.register()).thenReturn(att2);
+        when(imageAttachmentService.register()).thenReturn(att1, att2);
 
+        // 영수증 이미지 파일 생성
         ImageFile depImg = mock(ImageFile.class);
         ImageFile retImg = mock(ImageFile.class);
-        when(taxiReceiptImageService.register(dep)).thenReturn(depImg);
-        when(taxiReceiptImageService.register(ret)).thenReturn(retImg);
+        when(imageFileService.register(dep)).thenReturn(depImg);
+        when(imageFileService.register(ret)).thenReturn(retImg);
 
         TaxiFee taxiFee = mock(TaxiFee.class);
         when(taxiFeeService.register(feeReq)).thenReturn(taxiFee);
@@ -90,26 +97,32 @@ class ReportFacadeServiceTest {
         // when
         reportFacadeService.createReport(req, recruitId);
 
-        // then: report 필드 세팅 확인
+        // then
         assertThat(persistedReport.getRecruit()).isSameAs(recruit);
         assertThat(persistedReport.getCustomer()).isSameAs(customer);
         assertThat(persistedReport.getHelper()).isSameAs(helper);
 
-        // 첨부 이미지 setReport 호출 검증
-        verify(imageAttachmentService).register();
-        verify(imageAttachmentService).register();
+        // 첨부 이미지 — 파일 생성 & 첨부 엔티티 매핑
+        verify(imageFileService).register(img1);
+        verify(imageFileService).register(img2);
+        verify(imageAttachmentService, times(2)).register();
         verify(att1).setReport(persistedReport);
+        verify(att1).setImageFile(imgFile1);
         verify(att2).setReport(persistedReport);
+        verify(att2).setImageFile(imgFile2);
 
-        // 영수증 저장 + 택시요금 저장 및 setReport 호출 검증
-        verify(taxiReceiptImageService).register(dep);
-        verify(taxiReceiptImageService).register(ret);
+        // 영수증 — 파일 생성 & 택시요금 매핑
+        verify(imageFileService).register(dep);
+        verify(imageFileService).register(ret);
         verify(taxiFeeService).register(feeReq);
         verify(taxiFee).setReport(persistedReport);
+        verify(taxiFee).setDepartureReceiptImage(depImg);
+        verify(taxiFee).setReturnReceiptImage(retImg);
 
-        // 상호작용 횟수 검증
-        verify(applicationService, times(1)).getMatchedApplicationByRecruitId(recruitId);
-        verify(reportService, times(1)).register(any());
+        verify(applicationService).getMatchedApplicationByRecruitId(recruitId);
+        verify(reportService).register(any());
+        verifyNoMoreInteractions(applicationService, reportService, taxiFeeService,
+                imageAttachmentService, imageFileService);
     }
 
     @Test

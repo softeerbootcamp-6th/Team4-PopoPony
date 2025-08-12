@@ -3,6 +3,7 @@ package com.todoc.server.domain.report.repository.dto;
 import com.todoc.server.domain.escort.entity.Recruit;
 import com.todoc.server.domain.report.entity.Report;
 import com.todoc.server.domain.report.entity.TaxiFee;
+import lombok.Builder;
 import lombok.Getter;
 
 import java.util.List;
@@ -18,6 +19,7 @@ public class ReportDetailFlatDto {
 
     private List<Long> imageIdList;
 
+    @Builder
     public ReportDetailFlatDto(Report report, TaxiFee taxiFee, Recruit recruit, List<Long> imageIdList) {
         this.report = report;
         this.taxiFee = taxiFee;

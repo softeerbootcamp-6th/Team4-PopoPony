@@ -38,13 +38,12 @@ public class ReportQueryRepository {
 
         Long reportId = tuple.get(report).getId();
 
-        // 첨부 이미지 ID들만 조회 (정렬 기준은 상황에 맞게)
         java.util.List<Long> imageIds = queryFactory
                 .select(imageFile.id)
                 .from(imageAttachment)
                 .join(imageAttachment.imageFile, imageFile)
                 .where(imageAttachment.report.id.eq(reportId))
-                .orderBy(imageAttachment.id.asc()) // position 컬럼 있으면 그걸로 정렬
+                .orderBy(imageAttachment.id.asc())
                 .fetch();
 
         return new ReportDetailFlatDto(tuple.get(report), tuple.get(taxiFee), tuple.get(recruit), imageIds);
