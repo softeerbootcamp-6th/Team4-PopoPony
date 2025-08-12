@@ -1,1 +1,4 @@
-export type FunnelRoute = '/customer/recruit/$step' | '/helper/profile/new/$step';
+export type FunnelRoute =
+  | '/customer/recruit/$step'
+  | '/helper/profile/new/$step'
+  | '/customer/escort/$escortId/review/$step';
