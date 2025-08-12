@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import { Button, StatusTag, StrengthTag } from '@components';
 import { IcChevronRightSecondary, IcClockFill, IcCoinFill, IcMarkFill } from '@icons';
-import type { StatusType, EscortStrength } from '@types';
+import type { RecruitStatus, EscortStrength } from '@types';
 
 type Props = {
   children: React.ReactNode;
@@ -21,7 +21,7 @@ const EscortCard = ({ children }: Props) => {
 };
 
 interface CardStatusHeaderProps {
-  status?: StatusType;
+  status?: RecruitStatus;
   text: string;
   title: string;
 }
