@@ -31,41 +31,6 @@ const FormInput = ({
 
   const finalDescription = type === 'cost' ? '원' : description;
 
-  const handleChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      const inputEl = e.target;
-      const previousValue = inputEl.value;
-      const caretIndex = inputEl.selectionStart ?? previousValue.length;
-
-      // 문자열에서 커서 이전 숫자 이외의 문자 제거하고 길이 구하는 코드
-      const digitsBeforeCaret = previousValue.slice(0, caretIndex).replace(/\D/g, '').length;
-
-      const formattedValue = formatValue(previousValue, type);
-      inputEl.value = formattedValue;
-
-      if (type === 'contact') {
-        let seenDigits = 0;
-        let newCaret = formattedValue.length;
-        for (let i = 0; i < formattedValue.length; i += 1) {
-          if (/\d/.test(formattedValue[i])) {
-            seenDigits += 1;
-          }
-          if (seenDigits === digitsBeforeCaret) {
-            newCaret = i + 1;
-            break;
-          }
-        }
-        // DOM업데이트가 완료된 후 커서 위치 설정(자연스럽게 하기 위함)
-        requestAnimationFrame(() => {
-          try {
-            inputEl.setSelectionRange(newCaret, newCaret);
-          } catch {}
-        });
-      }
-    },
-    [type]
-  );
-
   if (type === 'date' || type === 'time') {
     const { onChange, onBlur, ...registerProps } = register(name);
     const [hasValue, setHasValue] = useState(false);
@@ -112,6 +77,14 @@ const FormInput = ({
   }
 
   const { onChange, ...registerProps } = register(name);
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const formattedValue = formatValue(e.target.value, type);
+    e.target.value = formattedValue;
+    onChange(e);
+    if (validation) {
+      validation();
+    }
+  };
 
   return (
     <div
@@ -122,10 +95,6 @@ const FormInput = ({
         placeholder={placeholder}
         onChange={(e) => {
           handleChange(e);
-          onChange(e);
-          if (validation) {
-            validation();
-          }
         }}
         {...registerProps}
         {...props}
