@@ -1,30 +1,14 @@
-import type { StatusType } from '@types';
+import type { RecruitStatus } from '@types';
 
-const StatusTag = ({ status }: { status: StatusType }) => {
+const StatusTag = ({ status }: { status: RecruitStatus }) => {
   const statusMap = {
-    MATCHING: { label: '매칭중', color: 'bg-background-light-yellow text-text-yellow-on-primary' },
-    COMPLETED: {
+    매칭중: { label: '매칭중', color: 'bg-background-light-yellow text-text-yellow-on-primary' },
+    매칭완료: {
       label: '매칭확정',
       color: 'bg-background-light-blue text-text-blue-on-primary',
     },
-    IN_PROGRESS: { label: '동행중', color: 'bg-background-light-mint text-text-mint-on-primary' },
-    MEETING: {
-      label: '동행중',
-      color: 'bg-background-light-mint text-text-mint-on-primary',
-    },
-    HEADING_TO_HOSPITAL: {
-      label: '동행중',
-      color: 'bg-background-light-mint text-text-mint-on-primary',
-    },
-    IN_TREATMENT: {
-      label: '동행중',
-      color: 'bg-background-light-mint text-text-mint-on-primary',
-    },
-    RETURNING: {
-      label: '동행중',
-      color: 'bg-background-light-mint text-text-mint-on-primary',
-    },
-    DONE: {
+    동행중: { label: '동행중', color: 'bg-background-light-mint text-text-mint-on-primary' },
+    동행완료: {
       label: '동행완료',
       color: 'bg-neutral-15 text-text-neutral-secondary',
     },
