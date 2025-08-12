@@ -36,12 +36,13 @@ const SatisfactionGraph = ({ goodRate, averageRate, badRate }: Props) => {
           <span>{item.label}</span>
           {item.color && item.icon ? (
             <div className='relative flex h-full flex-1 items-center'>
-              <div className='bg-neutral-20 absolute top-1/2 h-[0.8rem] w-full -translate-y-1/2 rounded-full'></div>
+              <div className='bg-neutral-20 absolute top-1/2 h-[0.8rem] w-full -translate-y-1/2 rounded-full' />
               {item.rate > 0 && (
                 <>
                   <div
                     className={`${item.color} absolute top-1/2 left-0 h-[0.8rem] -translate-y-1/2 rounded-full`}
-                    style={{ width: `${item.rate}%` }}></div>
+                    style={{ width: `${item.rate}%` }}
+                  />
                   <img
                     src={item.icon}
                     alt={item.alt}
