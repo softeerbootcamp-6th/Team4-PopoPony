@@ -45,6 +45,22 @@ public class S3Controller {
         return Response.from(new PresignBatchResponse(items));
     }
 
+    @Operation(
+            summary = "이미지 브라우저 표시용 Presigned URL 리다이렉션",
+            description = "이미지를 브라우저에 표시할 수 있는 presigned URL로 리다이렉션합니다.")
+    @ApiResponse(
+            responseCode = "200",
+            description = "Presigned URL 리다이렉션 성공")
+    @GetMapping("/{imageFileId}/presigned")
+    public ResponseEntity<Void> getPresignedUrl(@PathVariable Long imageFileId) {
+
+        return ResponseEntity.status(302)
+                .location(URI.create(s3Service.createPresignedGetById(imageFileId)))
+                .cacheControl(CacheControl.noStore().cachePrivate())
+                .header("Pragma", "no-cache")
+                .build();
+    }
+
     /**
      * 파일 확장자 추론
      */
@@ -54,15 +70,5 @@ public class S3Controller {
         if (contentType.contains("jpeg") || contentType.contains("jpg")) return "jpg";
         if (contentType.contains("webp")) return "webp";
         return "bin";
-    }
-
-    @GetMapping("/{imageFileId}/presigned")
-    public ResponseEntity<Void> getPresignedUrl(@PathVariable Long imageFileId) {
-
-        return ResponseEntity.status(302)
-                .location(URI.create(s3Service.createPresignedGetById(imageFileId)))
-                .cacheControl(CacheControl.noStore().cachePrivate())
-                .header("Pragma", "no-cache")
-                .build();
     }
 }
