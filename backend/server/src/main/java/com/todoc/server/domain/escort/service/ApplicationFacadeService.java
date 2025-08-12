@@ -5,6 +5,7 @@ import com.todoc.server.common.enumeration.ApplicationStatus;
 import com.todoc.server.common.enumeration.EscortStatus;
 import com.todoc.server.common.enumeration.RecruitStatus;
 import com.todoc.server.domain.auth.entity.Auth;
+import com.todoc.server.domain.auth.service.AuthService;
 import com.todoc.server.domain.escort.entity.Application;
 import com.todoc.server.domain.escort.entity.Escort;
 import com.todoc.server.domain.escort.entity.Recruit;
@@ -32,6 +33,7 @@ public class ApplicationFacadeService {
     private final HelperService helperService;
     private final EscortService escortService;
     private final RecruitService recruitService;
+    private final AuthService authService;
 
     @Transactional(readOnly = true)
     public ApplicationListResponse getApplicationListByRecruitId(Long recruitId) {
@@ -136,11 +138,7 @@ public class ApplicationFacadeService {
     @Transactional
     public void applyApplicationToRecruit(Long recruitId, Long helperUserId) {
 
-        // TODO :: 세션 혹은 JWT로부터 고객 정보 가져오기
-        Auth helper = Auth.builder()
-            .id(1L)
-            .build();
-
+        Auth helper = authService.getAuthById(helperUserId);
 
         Recruit recruit = recruitService.getRecruitById(recruitId);
 

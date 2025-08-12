@@ -4,6 +4,7 @@ import com.querydsl.core.Tuple;
 import com.todoc.server.common.enumeration.ApplicationStatus;
 import com.todoc.server.common.enumeration.RecruitStatus;
 import com.todoc.server.domain.auth.entity.Auth;
+import com.todoc.server.domain.auth.service.AuthService;
 import com.todoc.server.domain.escort.entity.Application;
 import com.todoc.server.domain.escort.entity.Escort;
 import com.todoc.server.domain.escort.entity.Recruit;
@@ -44,6 +45,9 @@ class ApplicationFacadeServiceTest {
 
     @Mock
     private EscortService escortService;
+
+    @Mock
+    private AuthService authService;
 
     @InjectMocks
     private ApplicationFacadeService applicationFacadeService;
@@ -180,7 +184,12 @@ class ApplicationFacadeServiceTest {
             .status(RecruitStatus.IN_PROGRESS) // MATCHING 아님
             .build();
 
+        Auth auth = Auth.builder()
+            .id(helperUserId)
+            .build();
+
         given(recruitService.getRecruitById(recruitId)).willReturn(recruit);
+        given(authService.getAuthById(helperUserId)).willReturn(auth);
 
         // when & then
         assertThrows(RecruitInvalidException.class, () -> {
