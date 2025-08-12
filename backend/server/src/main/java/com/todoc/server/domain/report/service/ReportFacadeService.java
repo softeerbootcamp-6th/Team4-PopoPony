@@ -26,17 +26,17 @@ import java.util.List;
 @Transactional
 public class ReportFacadeService {
 
-    private ReportService reportService;
-    private EscortService escortService;
-    private ApplicationService applicationService;
-    private TaxiFeeService taxiFeeService;
-    private TaxiReceiptImageService taxiReceiptImageService;
-    private ImageAttachmentService imageAttachmentService;
+    private final ReportService reportService;
+    private final EscortService escortService;
+    private final ApplicationService applicationService;
+    private final TaxiFeeService taxiFeeService;
+    private final TaxiReceiptImageService taxiReceiptImageService;
+    private final ImageAttachmentService imageAttachmentService;
 
     /**
      * 동행 리포트를 등록할 때 필요한 기본값을 조회
      */
-    @Transactional
+    @Transactional(readOnly = true)
     public ReportDefaultValueResponse getReportDefaultValue(Long recruitId) {
 
         Escort escort = escortService.getByRecruitId(recruitId);
@@ -79,9 +79,11 @@ public class ReportFacadeService {
 
         // 3. 택시 요금 정보 등록
         TaxiReceiptImage departureReceipt = taxiReceiptImageService.register(requestDto.getTaxiFeeCreateRequest().getDepartureReceipt());
-        TaxiReceiptImage returnReceipt = taxiReceiptImageService.register(requestDto.getTaxiFeeCreateRequest().getDepartureReceipt());
+        TaxiReceiptImage returnReceipt = taxiReceiptImageService.register(requestDto.getTaxiFeeCreateRequest().getReturnReceipt());
 
-        TaxiFee taxiFee = taxiFeeService.register(requestDto.getTaxiFeeCreateRequest(), departureReceipt, returnReceipt);
+        TaxiFee taxiFee = taxiFeeService.register(requestDto.getTaxiFeeCreateRequest());
         taxiFee.setReport(report);
+        taxiFee.setDepartureReceiptImage(departureReceipt);
+        taxiFee.setReturnReceiptImage(returnReceipt);
     }
 }

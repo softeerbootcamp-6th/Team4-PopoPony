@@ -2,6 +2,7 @@ package com.todoc.server.domain.escort.service;
 
 import com.todoc.server.common.enumeration.ApplicationStatus;
 import com.todoc.server.common.enumeration.RecruitStatus;
+import com.todoc.server.common.util.DateTimeUtils;
 import com.todoc.server.common.util.FeeUtils;
 import com.todoc.server.domain.customer.entity.Patient;
 import com.todoc.server.domain.customer.exception.PatientNotFoundException;

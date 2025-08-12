@@ -8,6 +8,7 @@ type Props = {
 };
 
 const EscortCard = ({ children }: Props) => {
+  const navigate = useNavigate();
   return (
     <div
       className='bg-background-default-white border-stroke-neutral-dark shadow-card flex w-full cursor-pointer flex-col gap-[1.2rem] rounded-[0.8rem] border p-[1.6rem]'
