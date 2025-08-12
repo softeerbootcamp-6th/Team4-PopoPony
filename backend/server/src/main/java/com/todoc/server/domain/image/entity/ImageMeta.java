@@ -1,8 +1,11 @@
-package com.todoc.server.common.entity;
+package com.todoc.server.domain.image.entity;
 
 import com.todoc.server.common.dto.request.ImageCreateRequest;
-import jakarta.persistence.*;
-import lombok.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Embeddable
 @Getter

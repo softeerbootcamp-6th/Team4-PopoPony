@@ -1,6 +1,7 @@
 package com.todoc.server.domain.escort.web.dto.response;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.todoc.server.common.util.ImageUrlUtils;
 import com.todoc.server.common.util.JsonUtils;
 import com.todoc.server.domain.customer.entity.Patient;
 import com.todoc.server.domain.route.entity.LocationInfo;
@@ -81,7 +82,7 @@ public class RecruitHistoryDetailResponse {
 
             return PatientDetail.builder()
                     .patientId(patient.getId())
-                    .imageUrl(patient.getImageUrl())
+                    .imageUrl(ImageUrlUtils.getImageUrl(patient.getPatientProfileImage().getId()))
                     .name(patient.getName())
                     .age(patient.getAge())
                     .gender(gender)

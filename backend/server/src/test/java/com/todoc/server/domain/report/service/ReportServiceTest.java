@@ -1,13 +1,12 @@
 package com.todoc.server.domain.report.service;
 
-import com.querydsl.core.Tuple;
 import com.todoc.server.common.util.DateTimeUtils;
 import com.todoc.server.common.util.FeeUtils;
 import com.todoc.server.domain.escort.entity.Recruit;
 import com.todoc.server.domain.report.entity.Report;
 import com.todoc.server.domain.report.entity.TaxiFee;
-import com.todoc.server.domain.report.repository.ReportJpaRepository;
 import com.todoc.server.domain.report.repository.ReportQueryRepository;
+import com.todoc.server.domain.report.repository.dto.ReportDetailFlatDto;
 import com.todoc.server.domain.report.web.dto.response.ReportDetailResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,6 +18,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
@@ -28,12 +28,6 @@ class ReportServiceTest {
 
     @Mock
     private ReportQueryRepository reportQueryRepository;
-
-    @Mock
-    private ReportJpaRepository reportJpaRepository;
-
-    @Mock
-    private Tuple tuple;
 
     @InjectMocks
     private ReportService reportService;
@@ -65,10 +59,17 @@ class ReportServiceTest {
         taxiFee.setDepartureFee(5000);
         taxiFee.setReturnFee(7000);
 
-        when(tuple.get(com.todoc.server.domain.report.entity.QReport.report)).thenReturn(report);
-        when(tuple.get(com.todoc.server.domain.report.entity.QTaxiFee.taxiFee)).thenReturn(taxiFee);
-        when(tuple.get(com.todoc.server.domain.escort.entity.QRecruit.recruit)).thenReturn(recruit);
-        when(reportQueryRepository.getReportDetailByRecruitId(recruitId)).thenReturn(tuple);
+        List<Long> imageIds = List.of(101L, 102L, 103L);
+
+        ReportDetailFlatDto flat = ReportDetailFlatDto.builder()
+                .report(report)
+                .taxiFee(taxiFee)
+                .recruit(recruit)
+                .imageIdList(imageIds)
+                .build();
+
+        when(reportQueryRepository.getReportDetailByRecruitId(recruitId))
+                .thenReturn(flat);
 
         // 정적 유틸 클래스 mocking
         try (

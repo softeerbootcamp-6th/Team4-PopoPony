@@ -1,11 +1,11 @@
 package com.todoc.server.domain.helper.service;
 
 import com.todoc.server.domain.escort.service.EscortService;
-import com.todoc.server.domain.helper.entity.Certificate;
 import com.todoc.server.domain.helper.entity.HelperProfile;
 import com.todoc.server.domain.helper.web.dto.request.HelperProfileCreateRequest;
 import com.todoc.server.domain.helper.web.dto.response.HelperDetailResponse;
 import com.todoc.server.domain.helper.web.dto.response.HelperSimpleResponse;
+import com.todoc.server.domain.image.service.ImageFileService;
 import com.todoc.server.domain.review.service.PositiveFeedbackChoiceService;
 import com.todoc.server.domain.review.service.ReviewService;
 import com.todoc.server.domain.review.web.dto.response.PositiveFeedbackStatResponse;
@@ -45,6 +45,9 @@ class HelperFacadeServiceTest {
 
     @Mock
     private PositiveFeedbackChoiceService positiveFeedbackChoiceService;
+
+    @Mock
+    private ImageFileService imageFileService;
 
     @InjectMocks
     private HelperFacadeService helperFacadeService;
@@ -113,8 +116,16 @@ class HelperFacadeServiceTest {
         List<HelperProfileCreateRequest.CertificateInfo> certs = new ArrayList<>();
         for (int i = 1; i <= 2; i++) {
             HelperProfileCreateRequest.CertificateInfo certificateInfo = new HelperProfileCreateRequest.CertificateInfo();
-            ReflectionTestUtils.setField(certificateInfo, "imageUrl", "https://example.com/cert" + i + ".png");
             ReflectionTestUtils.setField(certificateInfo, "type", "자격증" + i);
+
+            var imageCreateRequest = new com.todoc.server.common.dto.request.ImageCreateRequest();
+            ReflectionTestUtils.setField(imageCreateRequest, "s3Key",       "helpers/1/cert-" + i + ".jpg");
+            ReflectionTestUtils.setField(imageCreateRequest, "contentType", "image/jpeg");
+            ReflectionTestUtils.setField(imageCreateRequest, "size",        12345L * i);
+            ReflectionTestUtils.setField(imageCreateRequest, "checksum",    "\"etag-cert-" + i + "\"");
+
+            ReflectionTestUtils.setField(certificateInfo, "certificateImageCreateRequest", imageCreateRequest);
+
             certs.add(certificateInfo);
         }
         ReflectionTestUtils.setField(request, "certificateInfoList", certs);
@@ -122,10 +133,11 @@ class HelperFacadeServiceTest {
         HelperProfile helperProfile = HelperProfile.builder().build();
         given(helperService.register(request)).willReturn(helperProfile);
 
-        // when
         when(certificateService.register(any(HelperProfileCreateRequest.CertificateInfo.class)))
-                .thenReturn(new Certificate(), new Certificate()); // 호출 2번 대비
+                .thenReturn(new com.todoc.server.domain.helper.entity.Certificate(),
+                        new com.todoc.server.domain.helper.entity.Certificate());
 
+        // when
         helperFacadeService.createHelperProfile(request);
 
         // then

@@ -11,33 +11,75 @@ ALTER TABLE auth ALTER COLUMN id RESTART WITH 7;
 
 
 
+INSERT INTO image_file (id, s3_key, content_type, size_bytes, checksum, created_at, updated_at)
+VALUES (1, 'patients/1.jpg', 'image/jpeg', 0, 'e1', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+       (2, 'patients/2.jpg', 'image/jpeg', 0, 'e2', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+       (3, 'patients/3.jpg', 'image/jpeg', 0, 'e3', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+       (4, 'patients/4.jpg', 'image/jpeg', 0, 'e4', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+       (5, 'patients/5.jpg', 'image/jpeg', 0, 'e5', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+       (6, 'certs/1.jpg', 'image/jpeg', 0, 'e1', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+       (7, 'certs/2.jpg', 'image/jpeg', 0, 'e2', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+       (8, 'certs/3.jpg', 'image/jpeg', 0, 'e3', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+       (9, 'certs/4.jpg', 'image/jpeg', 0, 'e4', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+       (10, 'certs/5.jpg', 'image/jpeg', 0, 'e5', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+       (11, 'certs/6.jpg', 'image/jpeg', 0, 'e6', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+       (12, 'certs/7.jpg', 'image/jpeg', 0, 'e7', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+       (101, 'https://example.com/receipt1_depart.jpg', 'image/jpeg', 102400, '"etag-dep-1"', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+       (102, 'https://example.com/receipt1_return.jpg', 'image/jpeg', 204800, '"etag-ret-1"', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+       (103, 'https://example.com/receipt2_depart.jpg', 'image/jpeg', 102400, '"etag-dep-2"', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+       (104, 'https://example.com/receipt2_return.jpg', 'image/jpeg', 204800, '"etag-ret-2"', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+       (105, 'https://example.com/receipt3_depart.jpg', 'image/jpeg', 102400, '"etag-dep-3"', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+       (106, 'https://example.com/receipt3_return.jpg', 'image/jpeg', 204800, '"etag-ret-3"', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+       (107, 'https://example.com/receipt4_depart.jpg', 'image/jpeg', 102400, '"etag-dep-4"', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+       (108, 'https://example.com/receipt4_return.jpg', 'image/jpeg', 204800, '"etag-ret-4"', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+       (109, 'https://example.com/receipt5_depart.jpg', 'image/jpeg', 102400, '"etag-dep-5"', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+       (110, 'https://example.com/receipt5_return.jpg', 'image/jpeg', 204800, '"etag-ret-5"', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+       (111, 'https://example.com/receipt6_depart.jpg', 'image/jpeg', 102400, '"etag-dep-6"', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+       (112, 'https://example.com/receipt6_return.jpg', 'image/jpeg', 204800, '"etag-ret-6"', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+       (113, 'https://example.com/receipt7_depart.jpg', 'image/jpeg', 102400, '"etag-dep-7"', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+       (114, 'https://example.com/receipt7_return.jpg', 'image/jpeg', 204800, '"etag-ret-7"', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+       (201, 'https://example.com/report1_img1.jpg', 'image/jpeg', 123456, '"etag-p1"',  CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+       (202, 'https://example.com/report1_img2.jpg', 'image/jpeg', 234567, '"etag-p2"',  CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+       (203, 'https://example.com/report2_img1.jpg', 'image/jpeg', 111111, '"etag-21"',  CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+       (204, 'https://example.com/report3_img1.jpg', 'image/jpeg', 222222, '"etag-31"',  CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+       (205, 'https://example.com/report3_img2.jpg', 'image/jpeg', 333333, '"etag-32"',  CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+       (206, 'https://example.com/report4_img1.jpg', 'image/jpeg', 444444, '"etag-41"',  CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+       (207, 'https://example.com/report5_img1.jpg', 'image/jpeg', 555555, '"etag-51"',  CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+       (208, 'https://example.com/report6_img1.jpg', 'image/jpeg', 666666, '"etag-61"',  CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+       (209, 'https://example.com/report6_img2.jpg', 'image/jpeg', 777777, '"etag-62"',  CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+       (210, 'https://example.com/report7_img1.jpg', 'image/jpeg', 888888, '"etag-71"',  CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+ALTER TABLE image_file ALTER COLUMN id RESTART WITH 211;
+
+
+
 INSERT INTO patient (
-    id, customer_id, latest_location_id, name, image_url, age, gender, contact,
+    id, customer_id, latest_location_id, name, patient_profile_image_id, age, gender, contact,
     needs_helping, uses_wheelchair, has_cognitive_issue, cognitive_issue_detail,
     has_communication_issue, communication_issue_detail,
     created_at, updated_at
 ) VALUES
-      (1, 1, NULL, '김영희', 'https://example.com/img1.jpg', 78, 'FEMALE', '010-1111-2222',
+      (1, 1, NULL, '김영희', 1, 78, 'FEMALE', '010-1111-2222',
        true, true, true, '["판단에 도움이 필요해요", "기억하거나 이해하는 것이 어려워요"]' FORMAT JSON,
        true, '말이 느리고 단어를 잘 잊음',
        CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 
-      (2, 2, NULL, '박철수', 'https://example.com/img2.jpg', 82, 'MALE', '010-2222-3333',
+      (2, 2, NULL, '박철수', 2, 82, 'MALE', '010-2222-3333',
        true, false, false, NULL,
        false, NULL,
        CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 
-      (3, 3, NULL, '최은주', 'https://example.com/img3.jpg', 76, 'FEMALE', '010-3333-4444',
+      (3, 3, NULL, '최은주', 3, 76, 'FEMALE', '010-3333-4444',
        false, false, true, '["상황 파악에 도움이 필요해요"]' FORMAT JSON,
        true, '청각 장애로 의사소통 어려움',
        CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 
-      (4, 4, NULL, '정재훈', 'https://example.com/img4.jpg', 85, 'MALE', '010-4444-5555',
+      (4, 4, NULL, '정재훈', 4, 85, 'MALE', '010-4444-5555',
        true, true, true, '["기억하거나 이해하는 것이 어려워요", "상황 파악에 도움이 필요해요"]' FORMAT JSON,
        false, NULL,
        CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 
-      (5, 5, NULL, '이수진', 'https://example.com/img5.jpg', 79, 'FEMALE', '010-5555-6666',
+      (5, 5, NULL, '이수진', 5, 79, 'FEMALE', '010-5555-6666',
        false, false, false, NULL,
        false, NULL,
        CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
@@ -47,30 +89,30 @@ ALTER TABLE patient ALTER COLUMN id RESTART WITH 6;
 
 
 INSERT INTO helper_profile (
-    id, auth_id, latest_location_id, image_url, strength, short_bio, area,
+    id, auth_id, latest_location_id, helper_profile_image_id, strength, short_bio, area,
     created_at, updated_at
 ) VALUES
-      (1, 1, NULL, 'https://example.com/helper1.jpg',
+      (1, 1, NULL, 1,
        '["유연한 일정 조율", "의사소통 능력 우수"]' FORMAT JSON,
        '마음을 편하게 해주는 동행을 추구합니다.',
        'SEOUL', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 
-      (2, 2, NULL, 'https://example.com/helper2.jpg',
+      (2, 2, NULL, 2,
        '["응급 상황 대처 경험", "노약자 돌봄 경험 풍부"]' FORMAT JSON,
        '의료 기관 봉사 경험이 있습니다.',
        'BUSAN', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 
-      (3, 3, NULL, 'https://example.com/helper3.jpg',
+      (3, 3, NULL, 3,
        '["친절한 태도", "기본적인 수화 가능"]' FORMAT JSON,
        '언어 소통이 어려운 분들과도 편하게 대화합니다.',
        'DAEGU', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 
-      (4, 4, NULL, 'https://example.com/helper4.jpg',
+      (4, 4, NULL, 4,
        '["체력 좋음", "운전 가능"]' FORMAT JSON,
        '거동이 불편하신 분들을 도와드린 경험이 많습니다.',
        'INCHEON', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 
-      (5, 5, NULL, 'https://example.com/helper5.jpg',
+      (5, 5, NULL, 5,
        '["시간 약속 철저", "장거리 이동도 가능"]' FORMAT JSON,
        '도심 외곽 지역도 지원 가능합니다.',
        'GWANGJU', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
@@ -79,15 +121,15 @@ ALTER TABLE helper_profile ALTER COLUMN id RESTART WITH 6;
 
 
 
-INSERT INTO certificate (id, helper_profile_id, type, image_url, created_at, updated_at)
+INSERT INTO certificate (id, helper_profile_id, type, certificate_image_id, created_at, updated_at)
 VALUES
-    (1, 1, '간호조무사 자격증', 'https://example.com/cert/helper1_nurse_assistant.jpg', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-    (2, 1, '응급처치 교육 수료증', 'https://example.com/cert/helper1_emergency.jpg', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-    (3, 2, '사회복지사 자격증', 'https://example.com/cert/helper2_social_worker.jpg', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-    (4, 3, '수화 통역사 자격증', 'https://example.com/cert/helper3_sign_language.jpg', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-    (5, 4, '요양보호사 자격증', 'https://example.com/cert/helper4_caregiver.jpg', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-    (6, 4, '운전면허증', 'https://example.com/cert/helper4_driver.jpg', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-    (7, 5, '시간관리 교육 수료증', 'https://example.com/cert/helper5_time_management.jpg', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+    (1, 1, '간호조무사 자격증', 6, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    (2, 1, '응급처치 교육 수료증', 7, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    (3, 2, '사회복지사 자격증', 8, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    (4, 3, '수화 통역사 자격증', 9, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    (5, 4, '요양보호사 자격증', 10, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    (6, 4, '운전면허증', 11, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    (7, 5, '시간관리 교육 수료증', 12, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 ALTER TABLE certificate ALTER COLUMN id RESTART WITH 8;
 
@@ -98,11 +140,11 @@ INSERT INTO location_info (
     first_no, second_no, road_name, first_building_no, second_building_no,
     detail_address, longitude, latitude, created_at, updated_at
 ) VALUES
-      (1, '서울삼성병원', '서울특별시', '강남구', '일원동', '50', '0', '일원로', '81', '', '외래센터', 127.084, 37.489, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-      (2, '서울아산병원', '서울특별시', '송파구', '풍납동', '388', '0', '올림픽로43길', '88', '', '응급센터', 127.107, 37.527, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-      (3, '서울대병원', '서울특별시', '종로구', '연건동', '28', '0', '대학로', '101', '', '본관', 126.998, 37.580, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-      (4, '신촌세브란스병원', '서울특별시', '서대문구', '신촌동', '134', '0', '연세로', '50', '', '본관', 126.936, 37.563, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-      (5, '한양대병원', '서울특별시', '성동구', '행당동', '17', '0', '왕십리로', '222', '', '입원센터', 127.045, 37.557, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+      (1, '서울삼성병원', '서울', '강남구', '일원동', '50', '0', '일원로', '81', '', '외래센터', 127.084, 37.489, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+      (2, '서울아산병원', '서울', '송파구', '풍납동', '388', '0', '올림픽로43길', '88', '', '응급센터', 127.107, 37.527, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+      (3, '서울대병원', '서울', '종로구', '연건동', '28', '0', '대학로', '101', '', '본관', 126.998, 37.580, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+      (4, '신촌세브란스병원', '서울', '서대문구', '신촌동', '134', '0', '연세로', '50', '', '본관', 126.936, 37.563, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+      (5, '한양대병원', '서울', '성동구', '행당동', '17', '0', '왕십리로', '222', '', '입원센터', 127.045, 37.557, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 ALTER TABLE location_info ALTER COLUMN id RESTART WITH 6;
 
@@ -310,25 +352,6 @@ ALTER TABLE report ALTER COLUMN id RESTART WITH 8;
 
 
 
-INSERT INTO taxi_receipt_image (id, s3_key, content_type, size_bytes, checksum, created_at, updated_at)
-VALUES
-(101, 'https://example.com/receipt1_depart.jpg', 'image/jpeg', 102400, '"etag-dep-1"', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(102, 'https://example.com/receipt1_return.jpg', 'image/jpeg', 204800, '"etag-ret-1"', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(103, 'https://example.com/receipt2_depart.jpg', 'image/jpeg', 102400, '"etag-dep-2"', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(104, 'https://example.com/receipt2_return.jpg', 'image/jpeg', 204800, '"etag-ret-2"', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(105, 'https://example.com/receipt3_depart.jpg', 'image/jpeg', 102400, '"etag-dep-3"', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(106, 'https://example.com/receipt3_return.jpg', 'image/jpeg', 204800, '"etag-ret-3"', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(107, 'https://example.com/receipt4_depart.jpg', 'image/jpeg', 102400, '"etag-dep-4"', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(108, 'https://example.com/receipt4_return.jpg', 'image/jpeg', 204800, '"etag-ret-4"', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(109, 'https://example.com/receipt5_depart.jpg', 'image/jpeg', 102400, '"etag-dep-5"', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(110, 'https://example.com/receipt5_return.jpg', 'image/jpeg', 204800, '"etag-ret-5"', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(111, 'https://example.com/receipt6_depart.jpg', 'image/jpeg', 102400, '"etag-dep-6"', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(112, 'https://example.com/receipt6_return.jpg', 'image/jpeg', 204800, '"etag-ret-6"', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(113, 'https://example.com/receipt7_depart.jpg', 'image/jpeg', 102400, '"etag-dep-7"', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(114, 'https://example.com/receipt7_return.jpg', 'image/jpeg', 204800, '"etag-ret-7"', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
-
-ALTER TABLE taxi_receipt_image ALTER COLUMN id RESTART WITH 115;
-
 INSERT INTO taxi_fee (
     id, report_id,
     departure_fee, departure_receipt_image_id,
@@ -347,23 +370,17 @@ ALTER TABLE taxi_fee ALTER COLUMN id RESTART WITH 8;
 
 
 
-INSERT INTO image_attachment (id, report_id, s3_key, content_type, size_bytes, checksum, created_at, updated_at)
+INSERT INTO image_attachment (id, report_id, image_id, created_at, updated_at)
 VALUES
-(1, 1, 'https://example.com/report1_img1.jpg', 'image/jpeg', 123456, '"etag-p1"', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(2, 1, 'https://example.com/report1_img2.jpg', 'image/jpeg', 234567, '"etag-p2"', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-
-(3, 2, 'https://example.com/report2_img1.jpg', 'image/jpeg', 111111, '"etag-21"', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-
-(4, 3, 'https://example.com/report3_img1.jpg', 'image/jpeg', 222222, '"etag-31"', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(5, 3, 'https://example.com/report3_img2.jpg', 'image/jpeg', 333333, '"etag-32"', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-
-(6, 4, 'https://example.com/report4_img1.jpg', 'image/jpeg', 444444, '"etag-41"', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-
-(7, 5, 'https://example.com/report5_img1.jpg', 'image/jpeg', 555555, '"etag-51"', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-
-(8, 6, 'https://example.com/report6_img1.jpg', 'image/jpeg', 666666, '"etag-61"', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(9, 6, 'https://example.com/report6_img2.jpg', 'image/jpeg', 777777, '"etag-62"', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-
-(10, 7, 'https://example.com/report7_img1.jpg', 'image/jpeg', 888888, '"etag-71"', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+(1,  1, 201, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(2,  1, 202, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(3,  2, 203, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(4,  3, 204, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(5,  3, 205, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(6,  4, 206, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(7,  5, 207, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(8,  6, 208, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(9,  6, 209, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(10, 7, 210, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 ALTER TABLE image_attachment ALTER COLUMN id RESTART WITH 11;

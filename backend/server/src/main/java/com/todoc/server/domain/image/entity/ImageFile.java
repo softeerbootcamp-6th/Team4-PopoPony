@@ -1,7 +1,6 @@
-package com.todoc.server.domain.report.entity;
+package com.todoc.server.domain.image.entity;
 
 import com.todoc.server.common.entity.BaseEntity;
-import com.todoc.server.common.entity.ImageMeta;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,7 +10,8 @@ import org.hibernate.annotations.SQLRestriction;
 @Getter
 @Setter
 @SQLRestriction("deleted_at is NULL")
-public class TaxiReceiptImage extends BaseEntity {
+public class ImageFile extends BaseEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

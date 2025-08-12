@@ -3,6 +3,7 @@ package com.todoc.server.domain.helper.entity;
 import com.todoc.server.common.enumeration.Area;
 import com.todoc.server.common.entity.BaseEntity;
 import com.todoc.server.domain.auth.entity.Auth;
+import com.todoc.server.domain.image.entity.ImageFile;
 import com.todoc.server.domain.latestlocation.entity.LatestLocation;
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -27,8 +28,9 @@ public class HelperProfile extends BaseEntity {
     @JoinColumn(name = "latest_location_id")
     private LatestLocation latestLocation;
 
-    @Column(name = "image_url")
-    private String imageUrl;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "helper_profile_image_id")
+    private ImageFile helperProfileImage;
 
     @Column(columnDefinition = "json")
     private String strength;
@@ -40,12 +42,12 @@ public class HelperProfile extends BaseEntity {
     private Area area;
 
     @Builder
-    public HelperProfile(Long id, Auth auth, LatestLocation latestLocation, String imageUrl,
+    public HelperProfile(Long id, Auth auth, LatestLocation latestLocation, ImageFile helperProfileImage,
                          String strength, String shortBio, Area area) {
         this.id = id;
         this.auth = auth;
         this.latestLocation = latestLocation;
-        this.imageUrl = imageUrl;
+        this.helperProfileImage = helperProfileImage;
         this.strength = strength;
         this.shortBio = shortBio;
         this.area = area;
