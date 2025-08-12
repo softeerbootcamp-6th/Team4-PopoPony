@@ -15,7 +15,7 @@ const PaymentCard = ({ usageFee, estimatedTaxiFare }: Props) => {
         <div className='flex-between mt-[0.4rem]'>
           <span className='body1-16-bold text-text-neutral-primary'>기본 이용요금(3시간)</span>
           <span className='body1-16-medium text-text-neutral-primary'>
-            ${usageFee.toLocaleString()}원
+            {usageFee.toLocaleString()}원
           </span>
         </div>
       </div>
@@ -25,13 +25,13 @@ const PaymentCard = ({ usageFee, estimatedTaxiFare }: Props) => {
         <div className='flex-between mt-[0.4rem]'>
           <span className='body1-16-bold text-text-neutral-primary'>택시 이용요금(예상)</span>
           <span className='body1-16-medium text-text-neutral-primary'>
-            ${estimatedTaxiFare.toLocaleString()}원
+            {estimatedTaxiFare.toLocaleString()}원
           </span>
         </div>
         <div className='flex-between mt-[0.4rem]'>
           <span className='body1-16-bold text-text-neutral-primary'>예상 최종금액</span>
           <span className='body1-16-medium text-text-neutral-primary'>
-            ${totalFee.toLocaleString()}원
+            {totalFee.toLocaleString()}원
           </span>
         </div>
       </div>
