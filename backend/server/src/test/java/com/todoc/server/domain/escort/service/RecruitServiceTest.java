@@ -2,6 +2,7 @@ package com.todoc.server.domain.escort.service;
 
 import com.todoc.server.common.enumeration.Gender;
 import com.todoc.server.common.enumeration.RecruitStatus;
+import com.todoc.server.common.util.ImageUrlUtils;
 import com.todoc.server.domain.customer.entity.Patient;
 import com.todoc.server.domain.escort.entity.Recruit;
 import com.todoc.server.domain.escort.exception.RecruitInvalidCancelException;
@@ -10,6 +11,7 @@ import com.todoc.server.domain.escort.repository.RecruitJpaRepository;
 import com.todoc.server.domain.escort.repository.RecruitQueryRepository;
 import com.todoc.server.domain.escort.repository.dto.RecruitHistoryDetailFlatDto;
 import com.todoc.server.domain.escort.web.dto.response.*;
+import com.todoc.server.domain.image.entity.ImageFile;
 import com.todoc.server.domain.route.entity.LocationInfo;
 import org.assertj.core.api.Assertions;
 import com.todoc.server.domain.route.entity.Route;
@@ -17,6 +19,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
 import org.mockito.MockitoAnnotations;
 
 import java.math.BigDecimal;
@@ -182,18 +185,33 @@ class RecruitServiceTest {
         when(flatDto.getMeetingLocation()).thenReturn(mock(LocationInfo.class));
         when(flatDto.getDestination()).thenReturn(mock(LocationInfo.class));
         when(flatDto.getReturnLocation()).thenReturn(mock(LocationInfo.class));
-        when(patient.getCognitiveIssueDetail()).thenReturn("[]");
+
+        // 환자 필드 스텁
+        when(patient.getName()).thenReturn("홍길동");
+        when(patient.getContact()).thenReturn("010-1234-5678");
         when(patient.getGender()).thenReturn(Gender.MALE);
+        when(patient.getCognitiveIssueDetail()).thenReturn("[]");
 
-        // when
-        RecruitHistoryDetailResponse result = recruitService.getRecruitHistoryDetailByRecruitId(recruitId);
+        // 이미지 스텁 (핵심)
+        ImageFile img = mock(ImageFile.class);
+        when(img.getId()).thenReturn(3001L);
+        when(patient.getPatientProfileImage()).thenReturn(img);
 
-        // then
-        assertNotNull(result);
-        assertNotNull(result.getPatientDetail());
-        assertNotNull(result.getMeetingLocationDetail());
-        assertNotNull(result.getDestinationDetail());
-        assertNotNull(result.getReturnLocationDetail());
+        try (MockedStatic<ImageUrlUtils> urlMock = mockStatic(ImageUrlUtils.class)) {
+            urlMock.when(() -> ImageUrlUtils.getImageUrl(3001L))
+                    .thenReturn("http://image.test/patient-3001.jpg");
+
+            // when
+            RecruitHistoryDetailResponse result = recruitService.getRecruitHistoryDetailByRecruitId(recruitId);
+
+            // then
+            assertNotNull(result);
+            assertNotNull(result.getPatientDetail());
+            assertNotNull(result.getMeetingLocationDetail());
+            assertNotNull(result.getDestinationDetail());
+            assertNotNull(result.getReturnLocationDetail());
+            assertThat(result.getPatientDetail().getImageUrl()).isEqualTo("http://image.test/patient-3001.jpg");
+        }
     }
 
     @Test

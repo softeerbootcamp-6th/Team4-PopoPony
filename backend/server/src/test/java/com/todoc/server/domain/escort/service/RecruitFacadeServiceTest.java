@@ -5,6 +5,7 @@ import com.todoc.server.domain.customer.entity.Patient;
 import com.todoc.server.domain.customer.service.PatientService;
 import com.todoc.server.domain.escort.entity.Recruit;
 import com.todoc.server.domain.escort.web.dto.request.RecruitCreateRequest;
+import com.todoc.server.domain.image.service.ImageFileService;
 import com.todoc.server.domain.route.entity.LocationInfo;
 import com.todoc.server.domain.route.entity.Route;
 import com.todoc.server.domain.route.service.LocationInfoService;
@@ -25,6 +26,8 @@ class RecruitFacadeServiceTest {
     private LocationInfoService locationInfoService;
     @Mock
     private RouteService routeService;
+    @Mock
+    private ImageFileService imageFileService;
 
     @InjectMocks
     private RecruitFacadeService recruitFacadeService;
@@ -87,5 +90,6 @@ class RecruitFacadeServiceTest {
         verify(recruit).setRoute(route);
         verify(recruit).setEstimatedFee(null);
 
+        verify(imageFileService).register(any());
     }
 }

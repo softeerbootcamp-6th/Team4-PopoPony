@@ -42,24 +42,24 @@ public class HelperIntegrationTest {
     private EntityManager em;
 
     // TODO :: 주석 해제하기
-//    @Test
-//    @DisplayName("도우미 상세 정보 조회 - 정상")
-//    void getHelperDetailByHelperProfileId_정상() {
-//        // given
-//        Long helperProfileId = 4L;
-//
-//        // when
-//        HelperDetailResponse response = helperFacadeService.getHelperDetailByHelperProfileId(helperProfileId);
-//
-//        // then
-//        assertThat(response).isNotNull();
-//        assertThat(response.getHelperSimple().getName()).isEqualTo("최유진");
-//        assertThat(response.getReviewStat().getGoodRate()).isEqualTo(100);
-//        assertThat(response.getPositiveFeedbackStatList().size()).isEqualTo(3);
-//        assertThat(response.getLatestReviewList().getFirst().getShortComment()).isEqualTo("말벗도 되어주셔서 감사했어요.");
-//        assertThat(response.getLatestReviewList().getFirst().getSatisfactionLevel()).isEqualTo("좋았어요");
-//        assertThat(response.getEscortCount()).isEqualTo(2);
-//    }
+    @Test
+    @DisplayName("도우미 상세 정보 조회 - 정상")
+    void getHelperDetailByHelperProfileId_정상() {
+        // given
+        Long helperProfileId = 4L;
+
+        // when
+        HelperDetailResponse response = helperFacadeService.getHelperDetailByHelperProfileId(helperProfileId);
+
+        // then
+        assertThat(response).isNotNull();
+        assertThat(response.getHelperSimple().getName()).isEqualTo("최유진");
+        assertThat(response.getReviewStat().getGoodRate()).isEqualTo(100);
+        assertThat(response.getPositiveFeedbackStatList().size()).isEqualTo(3);
+        assertThat(response.getLatestReviewList().getFirst().getShortComment()).isEqualTo("말벗도 되어주셔서 감사했어요.");
+        assertThat(response.getLatestReviewList().getFirst().getSatisfactionLevel()).isEqualTo("좋았어요");
+        assertThat(response.getEscortCount()).isEqualTo(2);
+    }
 
     @Test
     @DisplayName("도우미 상세 정보 조회 - 존재하지 않는 도우미")
@@ -88,7 +88,7 @@ public class HelperIntegrationTest {
         assertThat(afterCount - beforeCount).isEqualTo(1);
 
         HelperProfile profile = profiles.getLast();
-        assertThat(profile.getImageUrl()).isEqualTo("https://example.com/helper.png");
+        assertThat(profile.getHelperProfileImage().getImageMeta().getContentType()).isEqualTo("image/png");
         assertThat(profile.getShortBio()).isEqualTo("부모님처럼 모시겠습니다!");
         assertThat(profile.getStrength()).isEqualTo("[\"안전한 부축으로 편안한 이동\",\"인지 장애 어르신 맞춤 케어\"]");
         assertThat(profile.getArea()).isEqualTo(Area.SEOUL);

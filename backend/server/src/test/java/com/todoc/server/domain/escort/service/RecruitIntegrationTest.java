@@ -1,6 +1,6 @@
 package com.todoc.server.domain.escort.service;
 
-import com.todoc.server.common.enumeration.RecruitStatus;
+import com.todoc.server.common.dto.request.ImageCreateRequest;
 import com.todoc.server.domain.escort.entity.Recruit;
 import com.todoc.server.domain.escort.exception.RecruitInvalidCancelException;
 import com.todoc.server.domain.escort.exception.RecruitNotFoundException;
@@ -175,9 +175,16 @@ public class RecruitIntegrationTest {
     private RecruitCreateRequest createSampleRequest() {
         RecruitCreateRequest request = new RecruitCreateRequest();
 
+        // Image
+        ImageCreateRequest profileImage = new ImageCreateRequest();
+        ReflectionTestUtils.setField(profileImage, "s3Key", "reports/9/p1.jpg");
+        ReflectionTestUtils.setField(profileImage, "contentType", "image/jpeg");
+        ReflectionTestUtils.setField(profileImage, "size", 111111L);
+        ReflectionTestUtils.setField(profileImage, "checksum", "\"etag-9-1\"");
+
         // Patient
         RecruitCreateRequest.PatientDetail patient = new RecruitCreateRequest.PatientDetail();
-        ReflectionTestUtils.setField(patient, "imageUrl", "https://example.com/patient.png");
+        ReflectionTestUtils.setField(patient, "profileImageCreateRequest", profileImage);
         ReflectionTestUtils.setField(patient, "name", "홍길동");
         ReflectionTestUtils.setField(patient, "age", 81);
         ReflectionTestUtils.setField(patient, "gender", "남자");

@@ -100,76 +100,76 @@ public class ReportIntegrationTest {
                 .isInstanceOf(EscortNotFoundException.class);
     }
 
-//    @Test
-//    @Transactional
-//    @DisplayName("리포트 등록 - 첨부 2장 + 택시요금/영수증 포함 정상 저장")
-//    void createReport_success() {
-//        Long recruitId = 9L;
-//
-//        // given
-//        ImageCreateRequest img1 = image("reports/9/p1.jpg", "image/jpeg", 111_111L, "\"etag-9-1\"");
-//        ImageCreateRequest img2 = image("reports/9/p2.jpg", "image/jpeg", 222_222L, "\"etag-9-2\"");
-//        ImageCreateRequest dep  = image("reports/9/receipt-dep.jpg", "image/jpeg", 55_000L, "\"etag-dep-9\"");
-//        ImageCreateRequest ret  = image("reports/9/receipt-ret.jpg", "image/jpeg", 66_000L, "\"etag-ret-9\"");
-//
-//        ReportCreateRequest.TaxiFeeCreateRequest feeReq = taxiFeeReq(8700, dep, 9200, ret);
-//        ReportCreateRequest req = reportReq(
-//                LocalTime.of(9, 40),
-//                LocalTime.of(11, 35),
-//                true,
-//                LocalDateTime.of(2025, 8, 30, 10, 0),
-//                "통합테스트 등록 케이스",
-//                List.of(img1, img2),
-//                feeReq
-//        );
-//
-//        long beforeReportCount = reportService.getCount();
-//        long beforeImageAttachmentCount  = imageAttachmentService.getCount();
-//        long beforeTaxiFeeCount = taxiFeeService.getCount();
-//
-//        // when
-//        reportFacadeService.createReport(req, recruitId);
-//
-//        // then
-//        assertThat(reportService.getCount()).isEqualTo(beforeReportCount + 1);
-//        assertThat(imageAttachmentService.getCount()).isEqualTo(beforeImageAttachmentCount + 2);
-//        assertThat(taxiFeeService.getCount()).isEqualTo(beforeTaxiFeeCount + 1);
-//
-//        Report saved = reportService.getAllReports().stream()
-//                .filter(r -> r.getRecruit() != null && r.getRecruit().getId().equals(recruitId))
-//                .reduce((first, second) -> second)
-//                .orElseThrow();
-//
-//        assertThat(saved.getActualMeetingTime()).isEqualTo(LocalTime.of(9, 40));
-//        assertThat(saved.getActualReturnTime()).isEqualTo(LocalTime.of(11, 35));
-//        assertThat(saved.getHasNextAppointment()).isTrue();
-//        assertThat(saved.getNextAppointmentTime()).isEqualTo(LocalDateTime.of(2025, 8, 30, 10, 0));
-//
-//        assertThat(saved.getRecruit()).isNotNull();
-//        assertThat(saved.getRecruit().getId()).isEqualTo(recruitId);
-//        Auth customer = saved.getCustomer();
-//        Auth helper = saved.getHelper();
-//        assertThat(customer).isNotNull();
-//        assertThat(helper).isNotNull();
-//        assertThat(customer.getId()).isEqualTo(4L);
-//        assertThat(helper.getId()).isEqualTo(4L);
-//
-//        List<ImageAttachment> imageAttachmentList = imageAttachmentService.getImageAttachmentsByReportId(saved.getId());
-//        assertThat(imageAttachmentList.size()).isEqualTo(2);
-//        assertThat(imageAttachmentList.stream().map(a -> a.getImageMeta().getS3Key()))
-//                .containsExactlyInAnyOrder("reports/9/p1.jpg", "reports/9/p2.jpg");
-//
-//        TaxiFee fee = taxiFeeService.getTaxiFeeByRecruitId(saved.getId());
-//        assertThat(fee.getDepartureFee()).isEqualTo(8700);
-//        assertThat(fee.getReturnFee()).isEqualTo(9200);
-//
-//        ImageFile depImg = fee.getDepartureReceiptImage();
-//        ImageFile retImg = fee.getReturnReceiptImage();
-//        assertThat(depImg).isNotNull();
-//        assertThat(retImg).isNotNull();
-//        assertThat(depImg.getImageMeta().getS3Key()).isEqualTo("reports/9/receipt-dep.jpg");
-//        assertThat(retImg.getImageMeta().getS3Key()).isEqualTo("reports/9/receipt-ret.jpg");
-//    }
+    @Test
+    @Transactional
+    @DisplayName("리포트 등록 - 첨부 2장 + 택시요금/영수증 포함 정상 저장")
+    void createReport_success() {
+        Long recruitId = 9L;
+
+        // given
+        ImageCreateRequest img1 = image("reports/9/p1.jpg", "image/jpeg", 111_111L, "\"etag-9-1\"");
+        ImageCreateRequest img2 = image("reports/9/p2.jpg", "image/jpeg", 222_222L, "\"etag-9-2\"");
+        ImageCreateRequest dep  = image("reports/9/receipt-dep.jpg", "image/jpeg", 55_000L, "\"etag-dep-9\"");
+        ImageCreateRequest ret  = image("reports/9/receipt-ret.jpg", "image/jpeg", 66_000L, "\"etag-ret-9\"");
+
+        ReportCreateRequest.TaxiFeeCreateRequest feeReq = taxiFeeReq(8700, dep, 9200, ret);
+        ReportCreateRequest req = reportReq(
+                LocalTime.of(9, 40),
+                LocalTime.of(11, 35),
+                true,
+                LocalDateTime.of(2025, 8, 30, 10, 0),
+                "통합테스트 등록 케이스",
+                List.of(img1, img2),
+                feeReq
+        );
+
+        long beforeReportCount = reportService.getCount();
+        long beforeImageAttachmentCount  = imageAttachmentService.getCount();
+        long beforeTaxiFeeCount = taxiFeeService.getCount();
+
+        // when
+        reportFacadeService.createReport(req, recruitId);
+
+        // then
+        assertThat(reportService.getCount()).isEqualTo(beforeReportCount + 1);
+        assertThat(imageAttachmentService.getCount()).isEqualTo(beforeImageAttachmentCount + 2);
+        assertThat(taxiFeeService.getCount()).isEqualTo(beforeTaxiFeeCount + 1);
+
+        Report saved = reportService.getAllReports().stream()
+                .filter(r -> r.getRecruit() != null && r.getRecruit().getId().equals(recruitId))
+                .reduce((first, second) -> second)
+                .orElseThrow();
+
+        assertThat(saved.getActualMeetingTime()).isEqualTo(LocalTime.of(9, 40));
+        assertThat(saved.getActualReturnTime()).isEqualTo(LocalTime.of(11, 35));
+        assertThat(saved.getHasNextAppointment()).isTrue();
+        assertThat(saved.getNextAppointmentTime()).isEqualTo(LocalDateTime.of(2025, 8, 30, 10, 0));
+
+        assertThat(saved.getRecruit()).isNotNull();
+        assertThat(saved.getRecruit().getId()).isEqualTo(recruitId);
+        Auth customer = saved.getCustomer();
+        Auth helper = saved.getHelper();
+        assertThat(customer).isNotNull();
+        assertThat(helper).isNotNull();
+        assertThat(customer.getId()).isEqualTo(4L);
+        assertThat(helper.getId()).isEqualTo(4L);
+
+        List<ImageAttachment> imageAttachmentList = imageAttachmentService.getImageAttachmentsByReportId(saved.getId());
+        assertThat(imageAttachmentList.size()).isEqualTo(2);
+        assertThat(imageAttachmentList.stream().map(a -> a.getImageFile().getImageMeta().getS3Key()))
+                .containsExactlyInAnyOrder("reports/9/p1.jpg", "reports/9/p2.jpg");
+
+        TaxiFee fee = taxiFeeService.getTaxiFeeByRecruitId(saved.getId());
+        assertThat(fee.getDepartureFee()).isEqualTo(8700);
+        assertThat(fee.getReturnFee()).isEqualTo(9200);
+
+        ImageFile depImg = fee.getDepartureReceiptImage();
+        ImageFile retImg = fee.getReturnReceiptImage();
+        assertThat(depImg).isNotNull();
+        assertThat(retImg).isNotNull();
+        assertThat(depImg.getImageMeta().getS3Key()).isEqualTo("reports/9/receipt-dep.jpg");
+        assertThat(retImg.getImageMeta().getS3Key()).isEqualTo("reports/9/receipt-ret.jpg");
+    }
 
     private ReportCreateRequest reportReq(
             LocalTime actualMeetingTime,
