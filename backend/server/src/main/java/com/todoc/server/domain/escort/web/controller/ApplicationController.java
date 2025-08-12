@@ -77,34 +77,4 @@ public class ApplicationController {
 
         return Response.from();
     }
-
-    @Operation(
-        summary = "동행(일감) 지원하기",
-        description = "로그인한 도우미가 동행에 지원합니다. recruitId를 통해 지원할 동행(일감)을 선택합니다.")
-    @ApiResponse(
-        responseCode = "200",
-        description = "동행 지원 성공")
-    @PostMapping("/recruits/{recruitId}")
-    public Response<Void> applyApplicationToRecruit(@PathVariable Long recruitId) {
-        // TODO :: Recruit ID를 받아, 해당 일감에 지원
-
-        // applicationFacadeService.applyApplicaitonToRecruit(recruitId);
-
-        return Response.from();
-    }
-
-    @Operation(
-        summary = "동행(일감) 취소하기",
-        description = "로그인한 도우미가 동행(일감)을 취소합니다. recruitId를 통해 취소할 동행(일감)을 선택합니다.")
-    @ApiResponse(
-        responseCode = "200",
-        description = "동행 지원 취소 성공")
-    @PatchMapping("/{applicationId}")
-    public Response<Void> cancelApplicationToRecruit(@PathVariable Long applicationId) {
-        // TODO :: Recruit ID를 받아, 해당 일감에 지원
-
-        // applicationFacadeService.cancelApplicationToRecruit(applicationId);
-
-        return Response.from();
-    }
 }

@@ -53,17 +53,4 @@ public class HelperController {
 
         return Response.from();
     }
-
-    @Operation(
-            summary = "도우미 프로필 등록",
-            description = "도우미의 프로필을 등록합니다.")
-    @ApiResponse(
-            responseCode = "200",
-            description = "도우미 프로필 등록 성공")
-    @PostMapping("")
-    public Response<Void> createHelperProfile(@RequestBody HelperProfileCreateRequest requestDto) {
-        // TODO :: jwt 혹은 sessionId로부터 유저 정보를 조회해야 함
-
-        return Response.from();
-    }
 }
