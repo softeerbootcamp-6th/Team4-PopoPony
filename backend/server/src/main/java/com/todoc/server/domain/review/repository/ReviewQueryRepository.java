@@ -3,12 +3,15 @@ package com.todoc.server.domain.review.repository;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.todoc.server.domain.review.repository.dto.ReviewDetailFlatDto;
 import com.todoc.server.domain.review.web.dto.response.ReviewSimpleResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+import static com.todoc.server.domain.review.entity.QPositiveFeedback.positiveFeedback;
+import static com.todoc.server.domain.review.entity.QPositiveFeedbackChoice.positiveFeedbackChoice;
 import static com.todoc.server.domain.review.entity.QReview.review;
 
 @Repository
@@ -40,8 +43,8 @@ public class ReviewQueryRepository {
                         ReviewSimpleResponse.class,
                         review.id,
                         review.satisfactionLevel.stringValue(),
-                        review.shortComment,
-                        review.createdAt
+                        review.createdAt,
+                        review.shortComment
                 ))
                 .from(review)
                 .where(review.helper.id.eq(userId))
@@ -53,18 +56,22 @@ public class ReviewQueryRepository {
     /**
      * recruitId로 신청한 동행의 리뷰 요약 정보를 조회
      */
-    public ReviewSimpleResponse getReviewSimpleByRecruitId(Long recruitId) {
+    public List<ReviewDetailFlatDto> getReviewDetailByRecruitId(Long recruitId) {
 
         return queryFactory
                 .select(Projections.constructor(
-                        ReviewSimpleResponse.class,
+                        ReviewDetailFlatDto.class,
                         review.id,
                         review.satisfactionLevel.stringValue(),
+                        review.createdAt,
                         review.shortComment,
-                        review.createdAt
+                        positiveFeedback.description
                 ))
                 .from(review)
+                .leftJoin(positiveFeedbackChoice).on(positiveFeedbackChoice.review.eq(review))
+                .leftJoin(positiveFeedbackChoice.positiveFeedback, positiveFeedback)
                 .where(review.recruit.id.eq(recruitId))
-                .fetchOne();
+                .orderBy(review.createdAt.desc())
+                .fetch();
     }
 }

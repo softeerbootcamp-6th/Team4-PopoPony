@@ -1,7 +1,7 @@
 package com.todoc.server.domain.report.entity;
 
 import com.todoc.server.common.entity.BaseEntity;
-import com.todoc.server.common.entity.ImageMeta;
+import com.todoc.server.domain.image.entity.ImageFile;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -20,6 +20,7 @@ public class ImageAttachment extends BaseEntity {
     @JoinColumn(name = "report_id")
     private Report report;
 
-    @Embedded
-    private ImageMeta imageMeta;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="image_id")
+    private ImageFile imageFile;
 }

@@ -9,10 +9,11 @@ import com.todoc.server.domain.escort.entity.Recruit;
 import com.todoc.server.domain.escort.exception.RecruitNotFoundException;
 import com.todoc.server.domain.escort.service.ApplicationService;
 import com.todoc.server.domain.escort.service.EscortService;
+import com.todoc.server.domain.image.entity.ImageFile;
+import com.todoc.server.domain.image.service.ImageFileService;
 import com.todoc.server.domain.report.entity.ImageAttachment;
 import com.todoc.server.domain.report.entity.Report;
 import com.todoc.server.domain.report.entity.TaxiFee;
-import com.todoc.server.domain.report.entity.TaxiReceiptImage;
 import com.todoc.server.domain.report.web.dto.request.ReportCreateRequest;
 import com.todoc.server.domain.report.web.dto.response.ReportDefaultValueResponse;
 import lombok.RequiredArgsConstructor;
@@ -30,8 +31,8 @@ public class ReportFacadeService {
     private final EscortService escortService;
     private final ApplicationService applicationService;
     private final TaxiFeeService taxiFeeService;
-    private final TaxiReceiptImageService taxiReceiptImageService;
     private final ImageAttachmentService imageAttachmentService;
+    private final ImageFileService imageFileService;
 
     /**
      * 동행 리포트를 등록할 때 필요한 기본값을 조회
@@ -73,13 +74,15 @@ public class ReportFacadeService {
         // 2. 첨부 이미지 등록
         List<ImageCreateRequest> imageCreateRequestList = requestDto.getImageCreateRequestList();
         for (ImageCreateRequest imageCreateRequest : imageCreateRequestList) {
-            ImageAttachment imageAttachment = imageAttachmentService.register(imageCreateRequest);
+            ImageFile imageFile = imageFileService.register(imageCreateRequest);
+            ImageAttachment imageAttachment = imageAttachmentService.register();
             imageAttachment.setReport(report);
+            imageAttachment.setImageFile(imageFile);
         }
 
         // 3. 택시 요금 정보 등록
-        TaxiReceiptImage departureReceipt = taxiReceiptImageService.register(requestDto.getTaxiFeeCreateRequest().getDepartureReceipt());
-        TaxiReceiptImage returnReceipt = taxiReceiptImageService.register(requestDto.getTaxiFeeCreateRequest().getReturnReceipt());
+        ImageFile departureReceipt = imageFileService.register(requestDto.getTaxiFeeCreateRequest().getDepartureReceipt());
+        ImageFile returnReceipt = imageFileService.register(requestDto.getTaxiFeeCreateRequest().getReturnReceipt());
 
         TaxiFee taxiFee = taxiFeeService.register(requestDto.getTaxiFeeCreateRequest());
         taxiFee.setReport(report);

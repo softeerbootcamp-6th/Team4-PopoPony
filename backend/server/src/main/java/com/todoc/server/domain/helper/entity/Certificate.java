@@ -1,6 +1,7 @@
 package com.todoc.server.domain.helper.entity;
 
 import com.todoc.server.common.entity.BaseEntity;
+import com.todoc.server.domain.image.entity.ImageFile;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -24,13 +25,14 @@ public class Certificate extends BaseEntity {
 
     private String type;
 
-    @Column(name = "image_url")
-    private String imageUrl;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "certificate_image_id")
+    private ImageFile certificateImage;
 
     @Builder
-    public Certificate(HelperProfile helperProfile, String type, String imageUrl) {
+    public Certificate(HelperProfile helperProfile, String type, ImageFile certificateImage) {
         this.helperProfile = helperProfile;
         this.type = type;
-        this.imageUrl = imageUrl;
+        this.certificateImage = certificateImage;
     }
 }

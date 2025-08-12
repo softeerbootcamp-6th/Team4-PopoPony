@@ -1,14 +1,12 @@
 package com.todoc.server.domain.helper.service;
 
 import com.todoc.server.domain.helper.entity.Certificate;
-import com.todoc.server.domain.helper.entity.HelperProfile;
 import com.todoc.server.domain.helper.repository.CertificateJpaRepository;
 import com.todoc.server.domain.helper.web.dto.request.HelperProfileCreateRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -32,7 +30,6 @@ public class CertificateService {
     public Certificate register(HelperProfileCreateRequest.CertificateInfo certificateInfo) {
         Certificate certificate = Certificate.builder()
                 .type(certificateInfo.getType())
-                .imageUrl(certificateInfo.getImageUrl())
                 .build();
         return certificateJpaRepository.save(certificate);
     }

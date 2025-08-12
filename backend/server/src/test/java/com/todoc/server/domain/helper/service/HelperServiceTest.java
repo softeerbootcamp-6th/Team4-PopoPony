@@ -4,6 +4,7 @@ import com.querydsl.core.Tuple;
 import com.todoc.server.common.enumeration.Gender;
 import com.todoc.server.domain.helper.repository.HelperQueryRepository;
 import com.todoc.server.domain.helper.web.dto.response.HelperSimpleResponse;
+import com.todoc.server.domain.image.entity.ImageFile;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -24,17 +25,13 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class HelperServiceTest {
 
-    @Mock
-    private HelperQueryRepository helperQueryRepository;
+    @Mock private HelperQueryRepository helperQueryRepository;
 
     @InjectMocks
     private HelperService helperService;
 
-    @Mock
-    private Tuple tuple1;
-
-    @Mock
-    private Tuple tuple2;
+    @Mock private Tuple tuple1;
+    @Mock private Tuple tuple2;
 
     private final Long helperProfileId = 123L;
 
@@ -46,9 +43,12 @@ class HelperServiceTest {
         when(tuple1.get(auth.contact)).thenReturn("010-1111-2222");
 
         when(tuple1.get(helperProfile.id)).thenReturn(helperProfileId);
-        when(tuple1.get(helperProfile.imageUrl)).thenReturn("http://image.com/photo.jpg");
         when(tuple1.get(helperProfile.shortBio)).thenReturn("도우미 소개입니다");
         when(tuple1.get(helperProfile.strength)).thenReturn("[\"친절함\", \"정확함\"]");
+
+        ImageFile imageFile = mock(ImageFile.class);
+        when(imageFile.getId()).thenReturn(999L);
+        when(tuple1.get(helperProfile.helperProfileImage)).thenReturn(imageFile);
 
         when(tuple1.get(certificate.type)).thenReturn("간호조무사");
         when(tuple2.get(certificate.type)).thenReturn("응급처치");
@@ -72,6 +72,7 @@ class HelperServiceTest {
         assertThat(response.getStrengthList()).contains("친절함", "정확함");
         assertThat(response.getCertificateList()).containsExactlyInAnyOrder("간호조무사", "응급처치");
         assertThat(response.getShortBio()).isEqualTo("도우미 소개입니다");
+        assertThat(response.getImageUrl()).isEqualTo("/api/images/999/presigned");
     }
 
     @Test

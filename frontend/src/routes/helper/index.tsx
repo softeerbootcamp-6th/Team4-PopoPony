@@ -1,8 +1,8 @@
 import { createFileRoute, Link } from '@tanstack/react-router';
 import { PageLayout } from '@layouts';
 import { Button, EscortCard, Tabs } from '@components';
-import type { StatusType } from '@types';
-import { dateFormat, timeFormat, getEscortTitle } from '@utils';
+import type { RecruitStatus } from '@types';
+import { dateFormat, timeFormat } from '@utils';
 
 export const Route = createFileRoute('/helper/')({
   component: RouteComponent,
@@ -13,7 +13,7 @@ export const Route = createFileRoute('/helper/')({
  */
 interface EscortData {
   id: number;
-  status: StatusType;
+  status: RecruitStatus;
   escortDate: string;
   estimatedMeetingTime: string;
   estimatedReturnTime: string;
@@ -26,7 +26,7 @@ interface EscortData {
  */
 interface RefinedEscortData {
   id: number;
-  status: StatusType;
+  status: RecruitStatus;
   statusText: string;
   title: string;
   timeText: string;
@@ -36,7 +36,7 @@ interface RefinedEscortData {
 const inProgressList: EscortData[] = [
   {
     id: 1,
-    status: 'MATCHING',
+    status: '매칭중',
     escortDate: '2025-07-22',
     estimatedMeetingTime: '12:00:00',
     estimatedReturnTime: '15:00:00',
@@ -45,7 +45,7 @@ const inProgressList: EscortData[] = [
   },
   {
     id: 2,
-    status: 'COMPLETED',
+    status: '매칭완료',
     escortDate: '2025-07-23',
     estimatedMeetingTime: '10:30:00',
     estimatedReturnTime: '13:30:00',
@@ -54,7 +54,7 @@ const inProgressList: EscortData[] = [
   },
   {
     id: 3,
-    status: 'COMPLETED',
+    status: '동행중',
     escortDate: '2025-07-24',
     estimatedMeetingTime: '11:00:00',
     estimatedReturnTime: '14:00:00',
@@ -63,7 +63,7 @@ const inProgressList: EscortData[] = [
   },
   {
     id: 4,
-    status: 'MEETING',
+    status: '동행중',
     escortDate: '2025-07-25',
     estimatedMeetingTime: '09:00:00',
     estimatedReturnTime: '12:00:00',
@@ -72,7 +72,7 @@ const inProgressList: EscortData[] = [
   },
   {
     id: 5,
-    status: 'HEADING_TO_HOSPITAL',
+    status: '동행중',
     escortDate: '2025-07-26',
     estimatedMeetingTime: '11:00:00',
     estimatedReturnTime: '14:00:00',
@@ -81,7 +81,7 @@ const inProgressList: EscortData[] = [
   },
   {
     id: 6,
-    status: 'IN_TREATMENT',
+    status: '동행중',
     escortDate: '2025-07-27',
     estimatedMeetingTime: '13:30:00',
     estimatedReturnTime: '16:30:00',
@@ -90,7 +90,7 @@ const inProgressList: EscortData[] = [
   },
   {
     id: 7,
-    status: 'RETURNING',
+    status: '동행중',
     escortDate: '2025-07-28',
     estimatedMeetingTime: '08:30:00',
     estimatedReturnTime: '11:30:00',
@@ -102,7 +102,7 @@ const inProgressList: EscortData[] = [
 const completedList: EscortData[] = [
   {
     id: 8,
-    status: 'DONE',
+    status: '동행완료',
     escortDate: '2025-07-29',
     estimatedMeetingTime: '15:00:00',
     estimatedReturnTime: '18:00:00',
@@ -111,15 +111,11 @@ const completedList: EscortData[] = [
   },
 ];
 
-const statusMessageMap: Record<StatusType, string> = {
-  MATCHING: '아직 매칭 확정되지 않았어요!',
-  COMPLETED: '매칭이 확정되었어요!',
-  IN_PROGRESS: '동행이 진행중입니다!',
-  MEETING: '동행자에게 이동해주세요.',
-  HEADING_TO_HOSPITAL: '병원으로 이동해주세요.',
-  IN_TREATMENT: '병원에서 진료중입니다.',
-  RETURNING: '안전하게 복귀해주세요.',
-  DONE: '동행번호 NO.12394O4L',
+const statusMessageMap: Record<RecruitStatus, string> = {
+  매칭중: '아직 매칭 확정되지 않았어요!',
+  매칭완료: '매칭이 확정되었어요!',
+  동행중: '동행이 진행중입니다!',
+  동행완료: '동행번호 NO.12394O4L',
 };
 
 /**
@@ -129,7 +125,8 @@ const statusMessageMap: Record<StatusType, string> = {
  */
 const refineEscortData = (escortData: EscortData): RefinedEscortData => {
   const statusText = statusMessageMap[escortData.status];
-  const title = getEscortTitle(escortData.escortDate) + ', ' + escortData.destinationPlaceName;
+  const title =
+    dateFormat(escortData.escortDate, 'M월 d일 (eee)') + ', ' + escortData.destinationPlaceName;
   const startTime = timeFormat(escortData.estimatedMeetingTime);
   const endTime = timeFormat(escortData.estimatedReturnTime);
   const dateText = dateFormat(escortData.escortDate, 'M월 d일(eee)');
@@ -155,9 +152,11 @@ function RouteComponent() {
   return (
     <PageLayout>
       <PageLayout.Content>
-        <div className='bg-neutral-10 relative h-full max-h-[22rem] px-[2rem] py-[1rem] pb-[2rem]'>
+        <div className='bg-neutral-10 relative h-full max-h-[22rem] p-[2rem]'>
           <div className='absolute z-10 w-[calc(100%-4rem)]'>
-            <img src='/images/logo-text.svg' alt='logo-text' className='w-[4rem]' />
+            <Link to='/'>
+              <img src='/images/logo-text.svg' alt='logo-text' className='w-[4rem]' />
+            </Link>
             <h2 className='headline-24-bold text-text-neutral-primary mt-[2.4rem] mb-[3rem]'>
               토닥과 함께 <br />
               안전하게 동행하세요!
@@ -222,13 +221,8 @@ function RouteComponent() {
                       <EscortCard.Info type='time' text={refinedData.timeText} />
                       <EscortCard.Info type='location' text={refinedData.locationText} />
                     </EscortCard.InfoSection>
-                    <EscortCard.Tag tags={['support', 'wheelchair', 'care']} />
-                    {(refinedData.status === 'MEETING' ||
-                      refinedData.status === 'HEADING_TO_HOSPITAL' ||
-                      refinedData.status === 'IN_TREATMENT' ||
-                      refinedData.status === 'RETURNING') && (
-                      <EscortCard.Button onClick={() => {}} />
-                    )}
+                    <EscortCard.Tag tags={['안전한 부축', '휠체어 이동', '인지장애 케어']} />
+                    {refinedData.status === '동행중' && <EscortCard.Button onClick={() => {}} />}
                   </EscortCard>
                 );
               })}
@@ -250,7 +244,7 @@ function RouteComponent() {
                       <EscortCard.Info type='time' text={refinedData.timeText} />
                       <EscortCard.Info type='location' text={refinedData.locationText} />
                     </EscortCard.InfoSection>
-                    <EscortCard.Tag tags={['support', 'wheelchair', 'care']} />
+                    <EscortCard.Tag tags={['안전한 부축', '휠체어 이동', '인지장애 케어']} />
                   </EscortCard>
                 );
               })}
