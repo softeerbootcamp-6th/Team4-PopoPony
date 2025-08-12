@@ -14,7 +14,12 @@ export const profileSchema = z.object({
       },
       { message: '올바른 나이를 입력해주세요' }
     ),
-  phoneNumber: z.string().min(12, { message: '숫자만 입력해주세요' }),
+  phoneNumber: z
+    .string()
+    .min(12, { message: '숫자만 입력해주세요' })
+    .refine((val) => val.replace(/\D/g, '').startsWith('010'), {
+      message: '연락처는 010으로 시작해야 합니다.',
+    }),
   gender: z.enum(['남자', '여자'], { message: '성별을 선택해주세요' }),
   imageUrl: imageSchema,
 });
