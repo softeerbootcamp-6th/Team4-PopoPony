@@ -8,10 +8,11 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
-@Schema(description = "도우미 후기 요약 정보 DTO")
-public class ReviewSimpleResponse {
+@Schema(description = "도우미 후기 상세 정보 DTO")
+public class ReviewDetailResponse {
 
     @NotNull
     @Schema(description = "리뷰 ID")
@@ -26,14 +27,19 @@ public class ReviewSimpleResponse {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createdAt;
 
+    @NotNull
+    @Schema(description = "긍정 피드백 목록", example = "['친절해요', '리포트가 자세해요']")
+    private List<String> positiveFeedbackList;
+
     @Schema(description = "한 줄 코멘트")
     private String shortComment;
 
     @Builder
-    public ReviewSimpleResponse(Long reviewId, String satisfactionLevel, LocalDateTime createdAt, String shortComment) {
+    public ReviewDetailResponse(Long reviewId, String satisfactionLevel, LocalDateTime createdAt, String shortComment, List<String> positiveFeedbackList) {
         this.reviewId = reviewId;
         this.satisfactionLevel = SatisfactionLevel.valueOf(satisfactionLevel).getLabel();
         this.createdAt = createdAt;
+        this.positiveFeedbackList = positiveFeedbackList;
         this.shortComment = shortComment;
     }
 }
