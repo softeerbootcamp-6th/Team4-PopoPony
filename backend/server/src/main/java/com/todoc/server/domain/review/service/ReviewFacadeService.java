@@ -11,7 +11,6 @@ import com.todoc.server.domain.review.exception.PositiveFeedbackInternalServerEx
 import com.todoc.server.domain.review.exception.PositiveFeedbackInvalidException;
 import com.todoc.server.domain.review.web.dto.request.ReviewCreateRequest;
 import com.todoc.server.domain.review.web.dto.response.ReviewDetailResponse;
-import com.todoc.server.domain.review.web.dto.response.ReviewSimpleResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;

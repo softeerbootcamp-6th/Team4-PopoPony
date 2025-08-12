@@ -23,7 +23,7 @@ public class RecruitSimpleResponse {
 
     // 매칭중, 매칭완료, 동행중
     @NotNull
-    @Schema(description = "동행 신청의 진행 상태", allowableValues = {"매칭중", "매칭완료", "동행중", "완료된 동행"})
+    @Schema(description = "동행 신청의 진행 상태", allowableValues = {"매칭중", "매칭완료", "동행중", "동행완료"})
     private String status;
 
     @NotNull

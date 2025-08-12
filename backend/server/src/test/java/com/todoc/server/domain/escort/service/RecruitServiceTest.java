@@ -228,8 +228,8 @@ class RecruitServiceTest {
             recruitService.getRecruitHistoryDetailByRecruitId(recruitId);
         });
     }
-  
-  
+
+
     @Test
     void getRecruitPaymentByRecruitId_정상조회() {
         // given

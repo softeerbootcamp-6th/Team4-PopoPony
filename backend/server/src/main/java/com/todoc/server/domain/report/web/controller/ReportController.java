@@ -65,4 +65,38 @@ public class ReportController {
 
         return Response.from();
     }
+
+    @Operation(
+            summary = "리포트 등록에 필요한 기본값 조회",
+            description = "리포트를 등록에 필요한 기본값을 조회합니다.")
+    @ApiResponse(
+            responseCode = "200",
+            description = "리포트 등록에 필요한 기본값 조회 성공")
+    @GetMapping("recruits/{recruitId}/default")
+    public Response<Void> getReportDefaultValueOnRecruit(@PathVariable Long recruitId) {
+        // TODO :: 신청 ID를 받아, 해당 신청에 대한 리포트를 작성하기 위해 필요한 기본값 조회
+
+//        return Response.from(reportService.getReportDetailByRecruitId(recruitId));
+
+
+
+        return Response.from();
+    }
+
+    @Operation(
+            summary = "동행 신청에 대한 리포트 등록",
+            description = "특정 동행 신청에 대한 리포트를 등록합니다.")
+    @ApiResponse(
+            responseCode = "200",
+            description = "리포트 등록 성공")
+    @PostMapping("recruits/{recruitId}")
+    public Response<Void> createReportOnRecruit(@PathVariable Long recruitId) {
+        // TODO :: 신청 ID를 받아, 해당 신청에 대한 리포트를 작성
+
+//        return Response.from(reportService.getReportDetailByRecruitId(recruitId));
+
+
+
+        return Response.from();
+    }
 }
