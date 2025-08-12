@@ -1,5 +1,6 @@
 import { StrengthTag, Tag } from '@components';
 import { IcChevronRightSecondary } from '@icons';
+import type { EscortStrength } from '@types';
 
 interface Helper {
   id: string;
@@ -8,7 +9,7 @@ interface Helper {
   gender: '남' | '여';
   profileImage?: string;
   certificates: string[];
-  tags: ('support' | 'wheelchair' | 'care')[];
+  tags: EscortStrength[];
 }
 
 interface HelperCardProps {

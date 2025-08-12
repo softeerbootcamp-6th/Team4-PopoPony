@@ -223,7 +223,7 @@ function RouteComponent() {
                       <EscortCard.Info type='time' text={refinedData.timeText} />
                       <EscortCard.Info type='location' text={refinedData.locationText} />
                     </EscortCard.InfoSection>
-                    <EscortCard.Tag tags={['support', 'wheelchair', 'care']} />
+                    <EscortCard.Tag tags={['안전한 부축', '휠체어 이동', '인지장애 케어']} />
                     {(refinedData.status === 'MEETING' ||
                       refinedData.status === 'HEADING_TO_HOSPITAL' ||
                       refinedData.status === 'IN_TREATMENT' ||
@@ -251,7 +251,7 @@ function RouteComponent() {
                       <EscortCard.Info type='time' text={refinedData.timeText} />
                       <EscortCard.Info type='location' text={refinedData.locationText} />
                     </EscortCard.InfoSection>
-                    <EscortCard.Tag tags={['support', 'wheelchair', 'care']} />
+                    <EscortCard.Tag tags={['안전한 부축', '휠체어 이동', '인지장애 케어']} />
                   </EscortCard>
                 );
               })}

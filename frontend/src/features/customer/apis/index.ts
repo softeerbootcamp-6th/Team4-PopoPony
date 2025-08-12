@@ -3,6 +3,7 @@ import getRecruitById from './getRecruitById';
 import getPaymentById from './getPaymentById';
 import postRecruit from './postRecruit';
 import patchCancelRecruit from './patchCancelRecruit';
+import getHelperById from './getHelperById';
 
 // TODO: 추후 삭제
 import { searchRoute } from './search';
@@ -14,4 +15,5 @@ export {
   postRecruit,
   patchCancelRecruit,
   searchRoute,
+  getHelperById,
 };

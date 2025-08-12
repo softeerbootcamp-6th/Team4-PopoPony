@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import { Button, StatusTag, StrengthTag } from '@components';
 import { IcChevronRightSecondary, IcClockFill, IcCoinFill, IcMarkFill } from '@icons';
-import type { StatusType } from '@types';
+import type { StatusType, EscortStrength } from '@types';
 
 type Props = {
   children: React.ReactNode;
@@ -65,7 +65,7 @@ const CardInfo = ({ type, text }: CardInfoProps) => {
   );
 };
 
-const CardTags = ({ tags }: { tags: ('support' | 'wheelchair' | 'care')[] }) => {
+const CardTags = ({ tags }: { tags: EscortStrength[] }) => {
   return (
     <div className='flex-start gap-[0.4rem]'>
       {tags.map((tag) => (
