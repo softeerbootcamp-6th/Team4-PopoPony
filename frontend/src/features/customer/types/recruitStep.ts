@@ -1,1 +1,1 @@
-export type RecruitStepProps = { handleNextStep: () => void; handleBackStep?: () => void };
+export type RecruitStepProps = { handleNextStep?: () => void; handleBackStep?: () => void };

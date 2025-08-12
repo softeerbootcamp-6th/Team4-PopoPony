@@ -168,6 +168,10 @@
     white-space: pre-line;
   }
 
+  strong {
+    font-weight: inherit
+  }
+
   button {
     cursor: pointer;
   }

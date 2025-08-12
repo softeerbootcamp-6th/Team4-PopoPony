@@ -1,11 +1,9 @@
-import React from 'react'
+import { type RecruitStepProps } from '@customer/types';
 
-type Props = {}
+interface CommentProps extends RecruitStepProps {}
 
-const Comment = (props: Props) => {
-  return (
-    <div>Comment</div>
-  )
-}
+const Comment = ({ handleNextStep, handleBackStep }: CommentProps) => {
+  return <div>Comment</div>;
+};
 
-export default Comment
+export default Comment;

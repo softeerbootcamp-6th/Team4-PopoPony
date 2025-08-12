@@ -1,11 +1,9 @@
-import React from 'react'
+import { type RecruitStepProps } from '@customer/types';
 
-type Props = {}
+interface DetailProps extends RecruitStepProps {}
 
-const Detail = (props: Props) => {
-  return (
-    <div>Detail</div>
-  )
-}
+const Detail = ({ handleNextStep, handleBackStep }: DetailProps) => {
+  return <div>Detail</div>;
+};
 
-export default Detail
+export default Detail;
