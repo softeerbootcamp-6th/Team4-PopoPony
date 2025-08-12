@@ -4,18 +4,18 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import type { QueryClient } from '@tanstack/react-query';
 import { Landing } from '@components';
 import { RootLayout } from '@layouts';
-import { isLoggedIn } from '@auth/utils';
+import { authStorage } from '@auth/utils';
 
 interface MyRouterContext {
   queryClient: QueryClient;
 }
 
 export const Route = createRootRouteWithContext<MyRouterContext>()({
-  beforeLoad: async ({ location }) => {
+  beforeLoad: ({ location }) => {
     if (location.pathname === '/login') {
       return;
     }
-    if (!(await isLoggedIn())) {
+    if (!authStorage.getIsLoggedIn()) {
       throw redirect({
         to: '/login',
       });

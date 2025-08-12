@@ -3,6 +3,7 @@ import { LoginForm } from '@auth/components';
 import type { LoginFormValues } from '@auth/types';
 import { PageLayout } from '@layouts';
 import { postLogin } from '@auth/apis';
+import { authStorage } from '@auth/utils';
 
 export const Route = createFileRoute('/_auth/login/')({
   component: RouteComponent,
@@ -22,6 +23,7 @@ function RouteComponent() {
         },
         {
           onSuccess: () => {
+            authStorage.setIsLoggedIn(true);
             navigate({
               to: '/',
             });
