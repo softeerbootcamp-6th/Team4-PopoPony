@@ -5,7 +5,9 @@ interface Props {
   leftOption: { label: string; value: string };
   rightOption: { label: string; value: string };
 }
-
+const getUniqueId = (name: string, value: string) => {
+  return `${name}-${value}`;
+};
 const TwoOptionSelector = ({ name, leftOption, rightOption }: Props) => {
   const { register } = useFormContext();
 
@@ -14,17 +16,18 @@ const TwoOptionSelector = ({ name, leftOption, rightOption }: Props) => {
   return (
     <div className='body1-16-medium text-neutral-90 flex-between gap-[2rem]'>
       {options.map((option, index) => {
+        const uniqueId = getUniqueId(name, option.value);
         return (
           <div key={index} className='w-full'>
             <input
               type='radio'
-              id={index.toString()}
+              id={uniqueId}
               value={option.value}
               className='peer hidden'
               {...register(name)}
             />
             <label
-              htmlFor={index.toString()}
+              htmlFor={uniqueId}
               className='border-neutral-20 peer-checked:border-mint-60 peer-checked:bg-mint-5 peer-checked:text-mint-70 flex-center h-[4.8rem] w-full cursor-pointer rounded-[0.4rem] border'>
               {option.label}
             </label>

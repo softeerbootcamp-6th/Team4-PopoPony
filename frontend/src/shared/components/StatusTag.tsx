@@ -1,4 +1,3 @@
-
 import type { StatusType } from '@types';
 
 const StatusTag = ({ status }: { status: StatusType }) => {

@@ -1,4 +1,3 @@
-import { formatValue } from './formatValue';
-
-export { formatValue };
 export * from './date';
+export * from './formatValue';
+export * from './parseType';
