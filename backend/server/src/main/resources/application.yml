@@ -6,7 +6,7 @@ server:
   servlet:
     session:
       cookie:
-#        secure: true         # HTTPS 필수
+        secure: true         # HTTPS 필수
         same-site: none      # none, lax, strict
 
 springdoc:
