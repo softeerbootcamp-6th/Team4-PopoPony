@@ -14,7 +14,7 @@ export const buildRecruitCreateRequest = (formData: RecruitFormValues): RecruitC
       name: formData.name,
       age: Number(formData.age),
       gender: formData.gender,
-      phoneNumber: formData.phoneNumber,
+      phoneNumber: formData.phoneNumber.replace(/-/g, ''),
       needsHelping: parseStringToBoolean(formData.needsHelping),
       usesWheelchair: parseStringToBoolean(formData.usesWheelchair),
       hasCognitiveIssue: parseStringToBoolean(formData.hasCognitiveIssue),
