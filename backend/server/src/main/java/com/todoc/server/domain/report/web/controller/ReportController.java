@@ -6,6 +6,7 @@ import com.todoc.server.domain.auth.web.LoginUser;
 import com.todoc.server.domain.report.service.ReportFacadeService;
 import com.todoc.server.domain.report.service.ReportService;
 import com.todoc.server.domain.report.web.dto.request.ReportCreateRequest;
+import com.todoc.server.domain.report.web.dto.response.ReportDefaultValueResponse;
 import com.todoc.server.domain.report.web.dto.response.ReportDetailResponse;
 import com.todoc.server.domain.review.service.ReviewFacadeService;
 import com.todoc.server.domain.review.web.dto.request.ReviewCreateRequest;
@@ -46,9 +47,9 @@ public class ReportController {
             responseCode = "200",
             description = "리포트 등록에 필요한 기본값 조회 성공")
     @GetMapping("recruits/{recruitId}/default")
-    public Response<ReportDetailResponse> getReportDefaultValueOnRecruit(@PathVariable Long recruitId) {
+    public Response<ReportDefaultValueResponse> getReportDefaultValueOnRecruit(@PathVariable Long recruitId) {
 
-        return Response.from(reportService.getReportDetailByRecruitId(recruitId));
+        return Response.from(reportFacadeService.getReportDefaultValue(recruitId));
     }
 
     @Operation(

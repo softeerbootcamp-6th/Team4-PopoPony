@@ -139,8 +139,6 @@ public class RecruitController {
         description = "동행 목록 조회 성공" )
     @GetMapping("/helper")
     public Response<RecruitListResponse> getRecruitListAsHelper(@LoginUser SessionAuth auth) {
-        // TODO :: 원래라면 jwt 혹은 sessionId로부터 유저 정보를 조회해야 함
-        // 현재는 우선 userId = 1로 고정
 
         RecruitListResponse dto = recruitService.getRecruitListAsHelperByUserId(
             auth.id());
