@@ -2,7 +2,7 @@ import { TwoOptionSelector, FormInput, LabeledSection, PhotoUpload, Button } fro
 import { memo } from 'react';
 import { FormLayout } from '@layouts';
 import { z } from 'zod';
-import { useFormValidation } from '@customer/hooks';
+import { useFormValidation } from '@hooks';
 import type { RecruitStepProps } from '@customer/types';
 
 const profileSchema = z.object({

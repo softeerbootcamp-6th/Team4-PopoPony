@@ -1,6 +1,8 @@
 package com.todoc.server.domain.escort.service;
 
+import com.todoc.server.common.enumeration.ApplicationStatus;
 import com.todoc.server.common.enumeration.RecruitStatus;
+import com.todoc.server.common.util.DateTimeUtils;
 import com.todoc.server.common.util.FeeUtils;
 import com.todoc.server.domain.customer.entity.Patient;
 import com.todoc.server.domain.customer.exception.PatientNotFoundException;
@@ -14,13 +16,18 @@ import com.todoc.server.domain.escort.repository.dto.RecruitHistoryDetailFlatDto
 import com.todoc.server.domain.escort.web.dto.request.RecruitCreateRequest;
 import com.todoc.server.domain.escort.web.dto.response.*;
 
+import com.todoc.server.domain.route.exception.LocationNotFoundException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import com.todoc.server.domain.route.entity.Route;
 import com.todoc.server.domain.route.exception.RouteNotFoundException;
 import com.todoc.server.domain.route.web.dto.response.RouteSimpleResponse;
+import java.util.Map;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -52,7 +59,7 @@ public class RecruitService {
 
         // 진행중인 목록과 완료된 목록 분리
         for (RecruitSimpleResponse recruit : rawList) {
-            if (recruit.getStatus() == RecruitStatus.DONE) {
+            if (RecruitStatus.from(recruit.getStatus()).get() == RecruitStatus.DONE) {
                 completedList.add(recruit);
             } else {
                 inProgressList.add(recruit);
@@ -61,7 +68,7 @@ public class RecruitService {
 
         // 진행중인 목록의 경우, 진행중인 목록 먼저 필터링 하고, 이후에 동행일 기준 오름차순 정렬
         inProgressList.sort(Comparator
-            .comparing((RecruitSimpleResponse r) -> r.getStatus() != RecruitStatus.IN_PROGRESS)
+            .comparing((RecruitSimpleResponse r) -> RecruitStatus.from(r.getStatus()).get() != RecruitStatus.IN_PROGRESS)
             .thenComparing(RecruitSimpleResponse::getEscortDate)
         );
 
@@ -237,6 +244,124 @@ public class RecruitService {
                 .baseFee(baseFee)
                 .expectedTaxiFee(expectedTaxiFee)
                 .build();
+    }
+
+    /**
+     * 도우미 입장에서 홈 화면에서 '동행 신청' 목록을 조회하는 함수
+     * <ul>
+     *   <li>1. 동행 신청 목록을 진행중인 목록과 완료된 목록으로 분리하여 제공</li>
+     *   <li>2. 진행중인 목록: '동행중' 상태를 최상단에 표시, 동행일 오름차순 정렬</li>
+     *   <li>3. 완료된 목록: 동행일 내림차순 정렬</li>
+     * </ul>
+     * @param helperUserId (helperUserId)
+     * @return 분리된 '동행 신청 목록'응답 DTO
+     */
+    @Transactional(readOnly = true)
+    public RecruitListResponse getRecruitListAsHelperByUserId(Long helperUserId) {
+        // 도우미가 지원한 동행 신청 목록중 Application Status가 PENDING, MATCHED인 동행 신청 목록을 조회함 (FAILED 제외)
+        List<RecruitSimpleResponse> rawList =
+            recruitQueryRepository.findListByHelperUserIdAndApplicationStatus(helperUserId, List.of(ApplicationStatus.MATCHED, ApplicationStatus.PENDING));
+
+        List<RecruitSimpleResponse> inProgressList = new ArrayList<>();
+        List<RecruitSimpleResponse> completedList = new ArrayList<>();
+
+        // 진행중인 목록과 완료된 목록 분리
+        for (RecruitSimpleResponse recruit : rawList) {
+            if (RecruitStatus.from(recruit.getStatus()).get() == RecruitStatus.DONE) {
+                completedList.add(recruit);
+            } else {
+                inProgressList.add(recruit);
+            }
+        }
+
+        // 진행중인 목록의 경우, 진행중인 목록 먼저 필터링 하고, 이후에 동행일 기준 오름차순 정렬
+        inProgressList.sort(Comparator
+            .comparing((RecruitSimpleResponse r) -> RecruitStatus.from(r.getStatus()).get() != RecruitStatus.IN_PROGRESS)
+            .thenComparing(RecruitSimpleResponse::getEscortDate)
+        );
+
+        // 완료된 목록의 경우 동행일 기준 내림차순 정렬
+        completedList.sort(Comparator
+            .comparing(RecruitSimpleResponse::getEscortDate, Comparator.reverseOrder())
+        );
+
+        // DTO 구성
+        RecruitListResponse result = RecruitListResponse.builder()
+            .inProgressList(inProgressList)
+            .completedList(completedList)
+            .build();
+
+        return result;
+    }
+
+    /**
+     * 지역/날짜에 따른 동행 신청 목록을 조회하는 함수
+     * <ul>
+     *   <li>1. 만남 장소 기준으로 필터링</li>
+     *   <li>2. 동행일 오름차순 정렬 + 가까운 기준 정렬</li>
+     * </ul>
+     * @param area String
+     * @param startDate LocalDate
+     * @param endDate LocalDate
+     * @return 검색되는 '동행 신청 목록'응답 DTO
+     */
+    public RecruitSearchListResponse getRecruitListBySearch(String area, LocalDate startDate, LocalDate endDate) {
+        List<Recruit> recruitList = recruitQueryRepository.findListByDateRangeAndStatus(area, startDate, endDate, List.of(RecruitStatus.MATCHING));
+
+
+        // 동행일 기준으로 오름차순 + 만남 장소 기준으로 필터링
+        recruitList = recruitList.stream()
+            .sorted(Comparator
+                .comparing(Recruit::getEscortDate))
+            // TODO 가까운 기준??
+            .toList();
+
+        // DTO 구성
+        List<RecruitSimpleResponse> dtoList = new ArrayList<>();
+        for (Recruit recruit : recruitList) {
+            if (recruit.getRoute() == null) {
+                throw new RouteNotFoundException();
+            }
+
+            if (recruit.getRoute().getMeetingLocationInfo() == null || recruit.getRoute().getHospitalLocationInfo() == null) {
+                throw new LocationNotFoundException();
+            }
+
+            if (recruit.getPatient() == null) {
+                throw new PatientNotFoundException();
+            }
+
+            RecruitSimpleResponse dto = RecruitSimpleResponse.builder()
+                .recruitId(recruit.getId())
+                .escortId(null)
+                .status(recruit.getStatus().getLabel())
+                .numberOfApplication(0L)
+                .escortDate(recruit.getEscortDate())
+                .estimatedMeetingTime(recruit.getEstimatedMeetingTime())
+                .estimatedReturnTime(recruit.getEstimatedReturnTime())
+                .departureLocation(recruit.getRoute().getMeetingLocationInfo().getPlaceName())
+                .destination(recruit.getRoute().getHospitalLocationInfo().getPlaceName())
+                .estimatedPayment(recruit.getEstimatedFee())
+                .needsHelping(recruit.getPatient().getNeedsHelping())
+                .usesWheelchair(recruit.getPatient().getUsesWheelchair())
+                .hasCognitiveIssue(recruit.getPatient().getHasCognitiveIssue())
+                .hasCommunicationIssue(recruit.getPatient().getHasCommunicationIssue())
+                .build();
+
+            dtoList.add(dto);
+        }
+
+        // 날짜별로 그룹핑
+         Map<LocalDate, List<RecruitSimpleResponse>> dtoGroupByDate = dtoList.stream()
+             .collect(Collectors.groupingBy(
+                 RecruitSimpleResponse::getEscortDate,
+                 LinkedHashMap::new,
+                 Collectors.toList()
+             ));
+
+        return RecruitSearchListResponse.builder()
+            .inProgressMap(dtoGroupByDate)
+            .build();
     }
 
     public List<Recruit> getAllRecruits() {

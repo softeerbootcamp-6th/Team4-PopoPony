@@ -62,6 +62,9 @@ dependencies {
 	implementation(platform("software.amazon.awssdk:bom:2.25.66"))
 	implementation("software.amazon.awssdk:s3")
 	implementation("software.amazon.awssdk:sts")
+
+	// 로그인 비밀번호 처리
+	implementation("org.mindrot:jbcrypt:0.4")
 }
 
 val querydslDir = layout.buildDirectory.dir("generated/querydsl")

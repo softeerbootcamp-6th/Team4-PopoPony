@@ -66,7 +66,7 @@ class ReportFacadeServiceTest {
 
         Recruit recruit = new Recruit();
         Auth customer = new Auth(); ReflectionTestUtils.setField(customer, "id", 4L);
-        Auth helper   = new Auth(); ReflectionTestUtils.setField(helper,   "id", 5L);
+        Auth helper = new Auth(); ReflectionTestUtils.setField(helper,   "id", 5L);
         ReflectionTestUtils.setField(recruit, "customer", customer);
 
         Application app = mock(Application.class);

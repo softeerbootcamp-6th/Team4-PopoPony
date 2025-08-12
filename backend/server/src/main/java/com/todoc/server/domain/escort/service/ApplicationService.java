@@ -42,4 +42,13 @@ public class ApplicationService {
         return applicationQueryRepository.findMatchedApplicationByRecruitId(recruitId)
                 .orElseThrow(ApplicationNotFoundException::new);
     }
+  
+    public Application save(Application application) {
+        return applicationJpaRepository.save(application);
+    }
+
+    public Application getApplicationById(Long applicationId) {
+        return applicationJpaRepository.findById(applicationId)
+            .orElseThrow(ApplicationNotFoundException::new);
+    }
 }
