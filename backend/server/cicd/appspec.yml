@@ -3,10 +3,16 @@ os: linux
 files:
   - source: ./deploy.sh
     destination: /home/ubuntu/app
+    overwrite: true
   - source: ./docker-compose.yml
     destination: /home/ubuntu/app
+    overwrite: true
 
 hooks:
+  BeforeInstall:
+    - location: cleanup.sh
+      timeout: 60
+      runas: ubuntu
   AfterInstall:
     - location: deploy.sh
       timeout: 600
