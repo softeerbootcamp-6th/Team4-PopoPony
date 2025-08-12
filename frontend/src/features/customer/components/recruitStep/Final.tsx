@@ -15,7 +15,7 @@ import type { RecruitStepProps } from '@customer/types';
 import { postRecruit } from '@customer/apis';
 import { buildRecruitCreateRequest } from '@customer/utils';
 
-export function Final({ handleBackStep }: RecruitStepProps) {
+function Final({ handleBackStep }: RecruitStepProps) {
   const { getValues } = useFormContext<RecruitFormValues>();
   const formData = getValues();
   const navigate = useNavigate();
@@ -223,3 +223,5 @@ export function Final({ handleBackStep }: RecruitStepProps) {
     </>
   );
 }
+
+export default Final;
