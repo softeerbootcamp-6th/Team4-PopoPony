@@ -1,10 +1,13 @@
 package com.todoc.server.domain.escort.service;
 
 import com.todoc.server.domain.auth.entity.Auth;
+import com.todoc.server.domain.auth.service.AuthService;
 import com.todoc.server.domain.customer.entity.Patient;
 import com.todoc.server.domain.customer.service.PatientService;
 import com.todoc.server.domain.escort.entity.Recruit;
 import com.todoc.server.domain.escort.web.dto.request.RecruitCreateRequest;
+import com.todoc.server.domain.image.entity.ImageFile;
+import com.todoc.server.domain.image.service.ImageFileService;
 import com.todoc.server.domain.route.entity.LocationInfo;
 import com.todoc.server.domain.route.entity.Route;
 import com.todoc.server.domain.route.service.LocationInfoService;
@@ -22,16 +25,19 @@ public class RecruitFacadeService {
     private final PatientService patientService;
     private final LocationInfoService locationInfoService;
     private final RouteService routeService;
+    private final AuthService authService;
+    private final ImageFileService imageFileService;
 
-    public void createRecruit(RecruitCreateRequest request) {
-        // TODO :: 세션 혹은 JWT로부터 고객 정보 가져오기
-        Auth customer = Auth.builder()
-                .id(1L)
-                .build();
+    public void createRecruit(Long authId, RecruitCreateRequest request) {
+
+        Auth customer = authService.getAuthById(authId);
 
         // 환자 정보 저장 (생성 + 연관관계 설정)
         Patient patient = patientService.register(request.getPatientDetail());
         patient.setCustomer(customer);
+
+        ImageFile profileImage = imageFileService.register(request.getPatientDetail().getProfileImageCreateRequest());
+        patient.setPatientProfileImage(profileImage);
 
         // 위치 정보 저장 (생성 + 연관관계 설정)
         LocationInfo meetingLocation = locationInfoService.register(request.getMeetingLocationDetail());

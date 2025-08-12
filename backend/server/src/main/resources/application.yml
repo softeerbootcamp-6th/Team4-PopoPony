@@ -35,3 +35,17 @@ management:
   endpoint:
     health:
       show-details: never
+
+aws:
+  s3:
+    bucket: todoc-s3-bucket
+    region: ap-northeast-2
+    uploads-prefix: uploads/
+    # 아래 두 값은 로컬스택/미니오 쓸 때만 사용 (실AWS면 빼거나 주석)
+    # endpoint: http://localhost:4566
+    # path-style-access: true
+
+upload:
+  presign:
+    put-expire-seconds: 600   # 업로드 URL 유효기간(초)
+    get-expire-seconds: 600   # 다운로드 URL 유효기간(초)

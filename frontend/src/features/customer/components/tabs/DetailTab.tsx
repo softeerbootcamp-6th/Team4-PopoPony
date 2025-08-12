@@ -2,6 +2,7 @@ import { StrengthTag, Tabs, Divider, Button, Modal } from '@components';
 import { InfoSection, RouteButton, GrayBox } from '@customer/components';
 import { useModal } from '@hooks';
 import { IcCheck } from '@icons';
+import type { EscortStrength } from '@types';
 
 const DetailTab = () => {
   const { isOpen, openModal, closeModal } = useModal();
@@ -53,8 +54,8 @@ const DetailTab = () => {
           <div className='mt-[1.2rem] flex flex-col gap-[2rem]'>
             <InfoSection title='보행 상태'>
               <div className='flex-start gap-[0.4rem]'>
-                {['support', 'wheelchair'].map((tag) => (
-                  <StrengthTag key={tag} type={tag as 'support' | 'wheelchair' | 'care'} />
+                {['안전한 부축', '휠체어 이동', '인지장애 케어'].map((tag) => (
+                  <StrengthTag key={tag} type={tag as EscortStrength} />
                 ))}
               </div>
             </InfoSection>

@@ -24,7 +24,7 @@ public class HelperQueryRepository {
         return queryFactory
                 .select(
                         helperProfile.id,
-                        helperProfile.imageUrl,
+                        helperProfile.helperProfileImage,
                         helperProfile.strength,
                         helperProfile.shortBio,
                         auth.id,

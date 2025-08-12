@@ -35,7 +35,7 @@ public class ApplicationQueryRepository {
                 .select(
                         application.id,
                         helperProfile.id,
-                        helperProfile.imageUrl,
+                        helperProfile.helperProfileImage,
                         auth.id,
                         auth.name,
                         auth.birthDate,

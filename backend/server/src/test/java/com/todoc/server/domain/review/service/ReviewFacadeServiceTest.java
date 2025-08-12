@@ -47,9 +47,12 @@ class ReviewFacadeServiceTest {
     void createReview_success() {
         // given
         ReviewCreateRequest request = mock(ReviewCreateRequest.class);
+        Auth customer = mock(Auth.class);
         Auth helper = mock(Auth.class);
         Recruit recruit = mock(Recruit.class);
         Review review = mock(Review.class);
+
+        Long authId = 2L;
 
         when(request.getHelperId()).thenReturn(1L);
         when(request.getRecruitId()).thenReturn(2L);
@@ -76,7 +79,7 @@ class ReviewFacadeServiceTest {
             pfStatic.when(() -> PositiveFeedback.isValid("책임감")).thenReturn(true);
 
             // when
-            reviewFacadeService.createReview(request);
+            reviewFacadeService.createReview(authId, request);
 
             // then
             verify(reviewService).register(request);
@@ -90,6 +93,8 @@ class ReviewFacadeServiceTest {
     @DisplayName("리뷰 생성 실패 - 긍정 피드백 개수가 8개가 아닐 때")
     void createReview_PositiveFeedbackIsNotEight() {
         // given
+        Long authId = 1L;
+
         ReviewCreateRequest request = mock(ReviewCreateRequest.class);
         when(request.getPositiveFeedbackList()).thenReturn(List.of("친절해요"));
         when(request.getHelperId()).thenReturn(1L);
@@ -103,7 +108,7 @@ class ReviewFacadeServiceTest {
 
         // when & then
         assertThrows(PositiveFeedbackInternalServerException.class, () -> {
-            reviewFacadeService.createReview(request);
+            reviewFacadeService.createReview(authId, request);
         });
     }
 
@@ -111,6 +116,8 @@ class ReviewFacadeServiceTest {
     @DisplayName("리뷰 생성 실패 - 긍정 피드백이 잘못된 값일 때")
     void createReview_FeedbackIsInvalid() {
         // given
+        Long authId = 1L;
+
         ReviewCreateRequest request = mock(ReviewCreateRequest.class);
         when(request.getPositiveFeedbackList()).thenReturn(Collections.singletonList("게임을 잘해요"));
         when(request.getHelperId()).thenReturn(1L);
@@ -137,7 +144,7 @@ class ReviewFacadeServiceTest {
 
             // when & then
             assertThrows(PositiveFeedbackInvalidException.class, () -> {
-                reviewFacadeService.createReview(request);
+                reviewFacadeService.createReview(authId, request);
             });
         }
     }

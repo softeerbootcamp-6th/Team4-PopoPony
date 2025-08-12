@@ -10,6 +10,7 @@ import com.todoc.server.domain.review.entity.Review;
 import com.todoc.server.domain.review.exception.PositiveFeedbackInternalServerException;
 import com.todoc.server.domain.review.exception.PositiveFeedbackInvalidException;
 import com.todoc.server.domain.review.web.dto.request.ReviewCreateRequest;
+import com.todoc.server.domain.review.web.dto.response.ReviewDetailResponse;
 import com.todoc.server.domain.review.web.dto.response.ReviewSimpleResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -28,10 +29,9 @@ public class ReviewFacadeService {
     private final PositiveFeedbackService positiveFeedbackService;
     private final PositiveFeedbackChoiceService positiveFeedbackChoiceService;
 
-    public void createReview(ReviewCreateRequest request) {
+    public void createReview(Long authId, ReviewCreateRequest request) {
 
-        // TODO :: 세션 혹은 JWT로부터 고객 정보 가져오기
-        Auth customer = null;
+        Auth customer = authService.getAuthById(authId);
 
         Auth helper = authService.getAuthById(request.getHelperId());
 
@@ -78,14 +78,14 @@ public class ReviewFacadeService {
      * recruitId로 신청한 동행의 리뷰 요약 정보를 조회하는 함수
      *
      * @param recruitId 동행 신청 ID
-     * @return ReviewSimpleResponse
+     * @return ReviewDetailResponse
      */
     @Transactional(readOnly = true)
-    public ReviewSimpleResponse getReviewSimpleByRecruitId(Long recruitId) {
+    public ReviewDetailResponse getReviewDetailByRecruitId(Long recruitId) {
 
         if (!recruitService.existsById(recruitId)) {
             throw new RecruitNotFoundException();
         }
-        return reviewService.getReviewSimpleByRecruitId(recruitId);
+        return reviewService.getReviewDetailByRecruitId(recruitId);
     }
 }

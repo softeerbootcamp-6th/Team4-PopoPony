@@ -36,6 +36,7 @@
       "@customer/*": ["src/features/customer/*"],
       "@dashboard/*": ["src/features/dashboard/*"],
       "@helper/*": ["src/features/helper/*"],
+      "@schema": ["src/shared/types/api/schema"],
       "@/*": ["src/*"]
     }
   }
