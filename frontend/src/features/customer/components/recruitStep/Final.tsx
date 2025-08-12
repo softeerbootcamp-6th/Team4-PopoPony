@@ -4,11 +4,8 @@ import type {
   ProfileFormValues,
   ConditionFormValues,
   CommunicationFormValues,
-  ConditionPostValues,
-  CommunicationPostValues,
   TimeFormValues,
   RouteFormValues,
-  RecruitPostFormValues,
 } from '@customer/types';
 import { CardWrapper } from '@customer/components';
 import { Button, TermsBottomSheet } from '@components';
