@@ -834,7 +834,16 @@ export interface components {
        * @description 동행 신청의 진행 상태
        * @enum {string}
        */
-      status: '매칭중' | '매칭완료' | '동행중' | '동행완료';
+      status:
+        | 'MATCHING'
+        | 'COMPLETED'
+        | 'IN_PROGRESS'
+        | 'MEETING'
+        | 'HEADING_TO_HOSPITAL'
+        | 'IN_TREATMENT'
+        | 'RETURNING'
+        | 'DONE';
+
       /**
        * Format: int64
        * @description 지원한 도우미 수
@@ -997,7 +1006,16 @@ export interface components {
        * @description 동행 신청의 진행 상태
        * @enum {string}
        */
-      status: '매칭중' | '매칭완료' | '동행중' | '동행완료';
+      status:
+        | 'MATCHING'
+        | 'COMPLETED'
+        | 'IN_PROGRESS'
+        | 'MEETING'
+        | 'HEADING_TO_HOSPITAL'
+        | 'IN_TREATMENT'
+        | 'RETURNING'
+        | 'DONE';
+
       /**
        * Format: date
        * @description 동행 날짜
