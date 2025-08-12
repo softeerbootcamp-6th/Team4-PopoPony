@@ -11,11 +11,11 @@ interface MyRouterContext {
 }
 
 export const Route = createRootRouteWithContext<MyRouterContext>()({
-  beforeLoad: ({ location }) => {
+  beforeLoad: async ({ location }) => {
     if (location.pathname === '/login') {
       return;
     }
-    if (!authStorage.getIsLoggedIn()) {
+    if (!(await authStorage.getIsLoggedIn())) {
       throw redirect({
         to: '/login',
       });

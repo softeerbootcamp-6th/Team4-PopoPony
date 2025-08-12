@@ -14,10 +14,13 @@ const createAuthStorage = () => {
     }
   };
 
-  checkAuth();
-
   return {
-    getIsLoggedIn: () => isLoggedIn,
+    getIsLoggedIn: async () => {
+      if (!isLoggedIn) {
+        await checkAuth();
+      }
+      return isLoggedIn;
+    },
     setIsLoggedIn: (value: boolean) => {
       isLoggedIn = value;
     },
