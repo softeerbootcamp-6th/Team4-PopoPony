@@ -834,15 +834,7 @@ export interface components {
        * @description 동행 신청의 진행 상태
        * @enum {string}
        */
-      status:
-        | 'MATCHING'
-        | 'COMPLETED'
-        | 'IN_PROGRESS'
-        | 'MEETING'
-        | 'HEADING_TO_HOSPITAL'
-        | 'IN_TREATMENT'
-        | 'RETURNING'
-        | 'DONE';
+      status: '매칭중' | '매칭완료' | '동행중' | '동행완료';
       /**
        * Format: int64
        * @description 지원한 도우미 수
@@ -1005,15 +997,7 @@ export interface components {
        * @description 동행 신청의 진행 상태
        * @enum {string}
        */
-      status:
-        | 'MATCHING'
-        | 'COMPLETED'
-        | 'IN_PROGRESS'
-        | 'MEETING'
-        | 'HEADING_TO_HOSPITAL'
-        | 'IN_TREATMENT'
-        | 'RETURNING'
-        | 'DONE';
+      status: '매칭중' | '매칭완료' | '동행중' | '동행완료';
       /**
        * Format: date
        * @description 동행 날짜
@@ -1217,11 +1201,6 @@ export interface components {
       message: string;
       /** @description 응답 body 필드 */
       data?: components['schemas']['RecruitListResponse'];
-    };
-    SessionAuth: {
-      /** Format: int64 */
-      id?: number;
-      loginId?: string;
     };
     /** @description 도우미 상세 정보 응답 DTO */
     HelperDetailResponse: {
@@ -1708,9 +1687,7 @@ export interface operations {
   };
   getRecruitListAsCustomer: {
     parameters: {
-      query: {
-        auth: components['schemas']['SessionAuth'];
-      };
+      query?: never;
       header?: never;
       path?: never;
       cookie?: never;
