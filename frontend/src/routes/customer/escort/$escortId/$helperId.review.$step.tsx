@@ -5,9 +5,8 @@ import { ProgressBar, Modal } from '@components';
 import { Summary, Detail, Comment } from '@customer/components';
 import { FormProvider, useForm } from 'react-hook-form';
 import { type EscortReviewFormValues } from '@customer/types';
-import { getHelperById } from '@customer/apis';
 
-export const Route = createFileRoute('/customer/escort/$escortId/review/$step')({
+export const Route = createFileRoute('/customer/escort/$escortId/$helperId/review/$step')({
   component: RouteComponent,
 });
 
@@ -18,10 +17,10 @@ function RouteComponent() {
   const { escortId } = Route.useParams();
   const methods = useForm<EscortReviewFormValues>({ shouldUnregister: false });
   const { isOpen, openModal, closeModal } = useModal();
-  const { Funnel, Step, nextStep, currentStep, handleBackStep } = useFunnel({
+  const { Funnel, Step, nextStep, currentStep } = useFunnel({
     defaultStep: 'summary',
-    basePath: '/customer/escort/$escortId/review',
-    paramPath: '/customer/escort/$escortId/review/$step',
+    basePath: '/customer/escort/$escortId/$helperId/review',
+    paramPath: '/customer/escort/$escortId/$helperId/review/$step',
     stepList: stepList,
   });
   // const { data: helperDetail } = getHelperById(Number(escortId));
@@ -59,23 +58,21 @@ function RouteComponent() {
             <FormProvider {...methods}>
               <Funnel>
                 <Step name='summary'>
-                  <Summary
-                    name={helperName}
-                    handleNextStep={nextStep}
-                    handleBackStep={handleBackStep}
-                  />
+                  <Summary name={helperName} handleNextStep={nextStep} />
                 </Step>
                 <Step name='detail'>
-                  <Detail handleNextStep={nextStep} handleBackStep={handleBackStep} />
+                  <Detail name={helperName} handleNextStep={nextStep} />
                 </Step>
                 <Step name='comment'>
-                  {/* <Comment
-                handleNextStep={() => {
-                  router.navigate({ to: '/customer/escort/$escortId/completed' });
-                }}
-                handleBackStep={handleBackStep}
-              /> */}
-                  <div></div>
+                  <Comment
+                    escortId={escortId}
+                    handleNextStep={() => {
+                      router.navigate({
+                        to: '/customer/escort/$escortId/completed',
+                        params: { escortId },
+                      });
+                    }}
+                  />
                 </Step>
               </Funnel>
             </FormProvider>
