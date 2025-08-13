@@ -43,11 +43,15 @@ function RouteComponent() {
           <Tabs.TabsList>
             <Tabs.TabsTrigger value='신청'>
               신청
-              <span className='group-data-[state=active]:text-text-mint-primary'>5</span>
+              <span className='group-data-[state=active]:text-text-mint-primary'>
+                {inProgressList?.length || 0}
+              </span>
             </Tabs.TabsTrigger>
             <Tabs.TabsTrigger value='완료'>
               완료
-              <span className='group-data-[state=active]:text-text-mint-primary'>3</span>
+              <span className='group-data-[state=active]:text-text-mint-primary'>
+                {completedList?.length || 0}
+              </span>
             </Tabs.TabsTrigger>
           </Tabs.TabsList>
           <Tabs.TabsContent value='신청'>
