@@ -13,14 +13,20 @@ public class AuthInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         // 프리플라이트는 인증 없이 통과
-        if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
+        String method = request.getMethod();
+        String uri = request.getRequestURI();
+
+        if ("OPTIONS".equalsIgnoreCase(method)) {
             return true;
         }
 
-        String uri = request.getRequestURI();
+        // 1) POST 요청 중 '/api/auth/login'만 인증 없이 허용
+        if ("POST".equalsIgnoreCase(method) && uri.equals("/api/auth/login")) {
+            return true;
+        }
 
-        // 화이트리스트
-        if (uri.startsWith("/api/auth") || uri.startsWith("v3/api-docs") || uri.startsWith("/swagger-ui")) {
+        // 2) Swagger, API 문서 등 화이트리스트
+        if (uri.startsWith("/api/auth") || uri.startsWith("/v3/api-docs") || uri.startsWith("/swagger-ui")) {
             return true;
         }
 
