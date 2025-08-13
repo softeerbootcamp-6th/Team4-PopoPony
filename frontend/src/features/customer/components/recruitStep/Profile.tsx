@@ -21,10 +21,10 @@ const Profile = memo(({ handleNextStep }: FunnelStepProps) => {
 
         <LabeledSection
           label='프로필 이미지'
-          isChecked={!fieldErrors.imageUrl && !!values.imageUrl}
-          message={fieldErrors.imageUrl}>
+          isChecked={!fieldErrors.profileImageCreateRequest && !!values.profileImageCreateRequest}
+          message={fieldErrors.profileImageCreateRequest}>
           <div className='flex-center w-full'>
-            <PhotoUpload name='imageUrl' />
+            <PhotoUpload name='profileImageCreateRequest' prefix='uploads/patient' />
           </div>
         </LabeledSection>
 
@@ -90,5 +90,4 @@ const Profile = memo(({ handleNextStep }: FunnelStepProps) => {
   );
 });
 
-Profile.displayName = 'Profile';
 export default Profile;

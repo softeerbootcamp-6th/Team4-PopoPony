@@ -17,7 +17,7 @@ const Region = ({ handleNextStep }: ProfileStepProps) => {
           <FormLayout.Title>프로필을 작성해주세요</FormLayout.Title>
         </FormLayout.TitleWrapper>
         <div className='flex-center w-full'>
-          <PhotoUpload name='imageUrl' />
+          <PhotoUpload name='imageUrl' prefix='uploads/helper' />
         </div>
         <LabeledSection
           label='선호 활동 지역'
