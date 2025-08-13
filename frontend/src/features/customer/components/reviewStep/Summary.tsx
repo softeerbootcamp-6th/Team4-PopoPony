@@ -11,7 +11,7 @@ interface SummaryProps extends RecruitStepProps {
 
 const Summary = ({ name, handleNextStep, handleBackStep }: SummaryProps) => {
   const { register, setValue } = useFormContext();
-  const { values, fieldErrors, isFormValid, markFieldAsTouched } = useFormValidation(summarySchema);
+  const { values, isFormValid, markFieldAsTouched } = useFormValidation(summarySchema);
   const satisfactionIcon = {
     [satisfactionLevel[0]]: { label: 'good', text: '특별히 불편했던 점이 없었어요' },
     [satisfactionLevel[1]]: { label: 'average', text: '나쁘지는 않았지만 조금 아쉬웠어요' },

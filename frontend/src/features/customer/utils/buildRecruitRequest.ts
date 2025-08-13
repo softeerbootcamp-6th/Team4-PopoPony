@@ -10,7 +10,12 @@ type RecruitCreateJson = NonNullable<
 export const buildRecruitCreateRequest = (formData: RecruitFormValues): RecruitCreateJson => {
   const requestBody: RecruitCreateJson = {
     patientDetail: {
-      imageUrl: formData.imageUrl.imageUrl,
+      profileImageCreateRequest: {
+        s3Key: formData.imageUrl.imageUrl,
+        contentType: 'image/jpeg',
+        size: 100,
+        checksum: formData.imageUrl.imageUrl,
+      },
       name: formData.name,
       age: Number(formData.age),
       gender: formData.gender,

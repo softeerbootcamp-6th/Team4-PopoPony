@@ -1,11 +1,50 @@
-import { TwoOptionSelector, FormInput, LabeledSection, PhotoUpload, Button } from '@components';
-import { memo } from 'react';
+import {
+  TwoOptionSelector,
+  FormInput,
+  LabeledSection,
+  PhotoUpload,
+  Button,
+  BottomSheet,
+} from '@components';
+import { memo, useState } from 'react';
 import { FormLayout } from '@layouts';
 import { useFormValidation } from '@hooks';
 import { type RecruitStepProps, profileSchema } from '@customer/types';
+import { getPastPatientInfo, getPastPatientInfoDetail } from '@customer/apis';
+import { IcRadioOff, IcRadioOn } from '@assets/icons';
+import { useFormContext } from 'react-hook-form';
 
 const Profile = memo(({ handleNextStep }: RecruitStepProps) => {
+  const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
+  const [selectedPatientId, setSelectedPatientId] = useState<number | null>(null);
+  const [isPatientIdConfirmed, setIsPatientIdConfirmed] = useState(false);
   const { values, fieldErrors, isFormValid, markFieldAsTouched } = useFormValidation(profileSchema);
+  const { data } = getPastPatientInfo();
+  const { data: detailData } = getPastPatientInfoDetail(selectedPatientId, isPatientIdConfirmed);
+  const pastPatientInfo = data?.data?.beforeList || [];
+  const { setValue } = useFormContext();
+
+  const onSelectPatient = () => {
+    setIsPatientIdConfirmed(true);
+    if (selectedPatientId) {
+      const { patientDetail, meetingLocationDetail, destinationDetail, returnLocationDetail } =
+        data?.data || {};
+      setValue('name', patientDetail?.name);
+      setValue('age', patientDetail?.age);
+      setValue('gender', patientDetail?.gender);
+      setValue('phoneNumber', patientDetail?.phoneNumber);
+      setValue('needsHelping', patientDetail?.needsHelping);
+      setValue('usesWheelchair', patientDetail?.usesWheelchair);
+      setValue('hasCognitiveIssue', patientDetail?.hasCognitiveIssue);
+      setValue('cognitiveIssueDetail', patientDetail?.cognitiveIssueDetail);
+      setValue('hasCommunicationIssue', patientDetail?.hasCommunicationIssue);
+      setValue('communicationIssueDetail', patientDetail?.communicationIssueDetail);
+      setValue('meetingLocationDetail', meetingLocationDetail);
+      setValue('destinationDetail', destinationDetail);
+      setValue('returnLocationDetail', returnLocationDetail);
+    }
+    setIsBottomSheetOpen(false);
+  };
 
   return (
     <FormLayout>
@@ -13,10 +52,55 @@ const Profile = memo(({ handleNextStep }: RecruitStepProps) => {
         <FormLayout.TitleWrapper>
           <FormLayout.Title>동행할 환자의 기본정보를 입력해주세요</FormLayout.Title>
         </FormLayout.TitleWrapper>
-
-        <Button size='lg' variant='assistive' onClick={() => alert('준비중인 기능이에요')}>
-          이전 환자 정보 불러오기
-        </Button>
+        {pastPatientInfo.length > 0 && (
+          <BottomSheet open={isBottomSheetOpen} onOpenChange={setIsBottomSheetOpen}>
+            <BottomSheet.Trigger asChild>
+              <Button size='lg' variant='assistive'>
+                이전 환자 정보 불러오기
+              </Button>
+            </BottomSheet.Trigger>
+            <BottomSheet.Content>
+              <BottomSheet.Header>
+                <BottomSheet.Title>이전 환자 정보</BottomSheet.Title>
+              </BottomSheet.Header>
+              <div className='flex flex-col'>
+                {pastPatientInfo.map((patient) => (
+                  <div
+                    className='flex-between border-stroke-neutral-dark mx-[2rem] border-b py-[1.2rem]'
+                    key={patient.recruitId}>
+                    <input
+                      type='radio'
+                      id={String(patient.recruitId)}
+                      value={patient.recruitId}
+                      className='peer hidden'
+                      checked={selectedPatientId === patient.recruitId}
+                    />
+                    <label
+                      htmlFor={String(patient.recruitId)}
+                      onClick={() => setSelectedPatientId(patient.recruitId)}
+                      className='flex items-center gap-[0.8rem]'>
+                      {selectedPatientId === patient.recruitId ? <IcRadioOn /> : <IcRadioOff />}
+                      <p className='body1-16-bold text-text-neutral-primary'>{patient.name}</p>
+                      <p className='body2-14-medium text-text-neutral-secondary'>
+                        {patient.destination}
+                      </p>
+                    </label>
+                    <p className='label2-14-medium text-neutral-assitive'>{patient.escortDate}</p>
+                  </div>
+                ))}
+              </div>
+              <BottomSheet.Footer>
+                <Button
+                  variant='primary'
+                  onClick={onSelectPatient}
+                  className='w-full'
+                  disabled={!selectedPatientId}>
+                  선택하기
+                </Button>
+              </BottomSheet.Footer>
+            </BottomSheet.Content>
+          </BottomSheet>
+        )}
 
         <LabeledSection
           label='프로필 이미지'

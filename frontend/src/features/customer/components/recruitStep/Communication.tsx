@@ -124,7 +124,7 @@ const Communication = memo(({ handleNextStep }: RecruitStepProps) => {
       </FormLayout.Content>
       <FormLayout.Footer>
         <FormLayout.FooterPrevNext
-          handleClickNext={handleNextStep}
+          handleClickNext={handleNextStep as () => void}
           disabled={!communicationIsFormValid || !cognitiveIsFormValid}
         />
       </FormLayout.Footer>

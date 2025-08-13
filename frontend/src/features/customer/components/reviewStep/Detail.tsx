@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { type RecruitStepProps, detailOption } from '@customer/types';
 import { FormLayout } from '@layouts';
 import { useFormValidation } from '@hooks';
@@ -12,8 +11,7 @@ interface DetailProps extends RecruitStepProps {
 
 const Detail = ({ name, handleNextStep }: DetailProps) => {
   const { setValue } = useFormContext();
-  const [isDisabled, setIsDisabled] = useState(false);
-  const { values, isFormValid, markFieldAsTouched } = useFormValidation(detailSchema);
+  const { values, isFormValid } = useFormValidation(detailSchema);
 
   return (
     <FormLayout>
@@ -31,7 +29,6 @@ const Detail = ({ name, handleNextStep }: DetailProps) => {
           showHelperText={false}
           dataFormat='string'
           max={3}
-          disabled={isDisabled}
         />
         <Checkbox
           label='장점이 없었어요'

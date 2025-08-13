@@ -5,6 +5,8 @@ import postRecruit from './postRecruit';
 import patchCancelRecruit from './patchCancelRecruit';
 import getHelperById from './getHelperById';
 import postHelperReview from './postHelperReview';
+import getPastPatientInfo from './getPastPatientInfo';
+import getPastPatientInfoDetail from './getPastPatientInfoDetail';
 
 // TODO: 추후 삭제
 import { searchRoute } from './search';
@@ -18,4 +20,6 @@ export {
   searchRoute,
   getHelperById,
   postHelperReview,
+  getPastPatientInfo,
+  getPastPatientInfoDetail,
 };
