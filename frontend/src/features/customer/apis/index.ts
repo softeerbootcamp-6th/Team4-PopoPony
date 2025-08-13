@@ -7,6 +7,7 @@ import getHelperById from './getHelperById';
 import postHelperReview from './postHelperReview';
 import getPastPatientInfo from './getPastPatientInfo';
 import getPastPatientInfoDetail from './getPastPatientInfoDetail';
+import getPresignedImage from './getPresignedImage';
 
 // TODO: 추후 삭제
 import { searchRoute } from './search';
@@ -22,4 +23,5 @@ export {
   postHelperReview,
   getPastPatientInfo,
   getPastPatientInfoDetail,
+  getPresignedImage,
 };
