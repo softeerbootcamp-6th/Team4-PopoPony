@@ -2,7 +2,6 @@ package com.todoc.server.domain.report.service;
 
 import com.todoc.server.domain.image.entity.ImageFile;
 import com.todoc.server.domain.report.entity.TaxiFee;
-import com.todoc.server.domain.report.entity.TaxiReceiptImage;
 import com.todoc.server.domain.report.exception.TaxiFeeNotFoundException;
 import com.todoc.server.domain.report.repository.TaxiFeeJpaRepository;
 import com.todoc.server.domain.report.web.dto.request.ReportCreateRequest;
