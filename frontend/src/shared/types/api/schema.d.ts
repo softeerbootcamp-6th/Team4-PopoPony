@@ -700,8 +700,17 @@ export interface components {
     };
     /** @description 여러 파일에 대해 S3 업로드용 Presigned URL 발급을 요청하는 DTO */
     PresignBatchRequest: {
-      /** @description S3 Object Key의 접두 경로(prefix) */
-      prefix: string;
+      /**
+       * @description S3 Object Key의 접두 경로(prefix)
+       * @enum {string}
+       */
+      prefix:
+        | 'uploads/certificate'
+        | 'uploads/helper'
+        | 'uploads/patient'
+        | 'uploads/report'
+        | 'uploads/taxi'
+        | 'uploads/test';
       /** @description Presigned URL을 발급할 파일들의 메타데이터 목록 */
       files: components['schemas']['FileSpec'][];
     };
@@ -1559,16 +1568,18 @@ export interface operations {
   };
   createReview: {
     parameters: {
-      query: {
-        request: components['schemas']['ReviewCreateRequest'];
-      };
+      query?: never;
       header?: never;
       path: {
         recruitId: number;
       };
       cookie?: never;
     };
-    requestBody?: never;
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['ReviewCreateRequest'];
+      };
+    };
     responses: {
       /** @description 도우미 리뷰 등록 성공 */
       200: {
@@ -1658,7 +1669,7 @@ export interface operations {
       path?: never;
       cookie?: never;
     };
-    requestBody?: {
+    requestBody: {
       content: {
         'application/json': components['schemas']['RecruitCreateRequest'];
       };
