@@ -1,8 +1,10 @@
-import { createFileRoute, Link } from '@tanstack/react-router';
+import { createFileRoute, Link, useNavigate } from '@tanstack/react-router';
 import { PageLayout } from '@layouts';
 import { Button, EscortCard, Tabs } from '@components';
 import type { RecruitStatus } from '@types';
 import { dateFormat, timeFormat } from '@utils';
+import { getRecruitList } from '@helper/apis';
+import type { RecruitListResponse, RecruitSimpleResponse } from '@helper/types';
 
 export const Route = createFileRoute('/helper/')({
   component: RouteComponent,
@@ -11,15 +13,7 @@ export const Route = createFileRoute('/helper/')({
 /**
  * @description 필요한 동행 데이터 타입
  */
-interface EscortData {
-  id: number;
-  status: RecruitStatus;
-  escortDate: string;
-  estimatedMeetingTime: string;
-  estimatedReturnTime: string;
-  meetingPlaceName: string;
-  destinationPlaceName: string;
-}
+type EscortData = RecruitListResponse;
 
 /**
  * @description 동행 데이터를 추출하여 정제 후 반환
@@ -33,84 +27,6 @@ interface RefinedEscortData {
   locationText: string;
 }
 
-const inProgressList: EscortData[] = [
-  {
-    id: 1,
-    status: '매칭중',
-    escortDate: '2025-07-22',
-    estimatedMeetingTime: '12:00:00',
-    estimatedReturnTime: '15:00:00',
-    meetingPlaceName: '꿈에그린아파트',
-    destinationPlaceName: '서울아산병원',
-  },
-  {
-    id: 2,
-    status: '매칭완료',
-    escortDate: '2025-07-23',
-    estimatedMeetingTime: '10:30:00',
-    estimatedReturnTime: '13:30:00',
-    meetingPlaceName: '래미안아파트',
-    destinationPlaceName: '삼성서울병원',
-  },
-  {
-    id: 3,
-    status: '동행중',
-    escortDate: '2025-07-24',
-    estimatedMeetingTime: '11:00:00',
-    estimatedReturnTime: '14:00:00',
-    meetingPlaceName: '래미안아파트',
-    destinationPlaceName: '삼성서울병원',
-  },
-  {
-    id: 4,
-    status: '동행중',
-    escortDate: '2025-07-25',
-    estimatedMeetingTime: '09:00:00',
-    estimatedReturnTime: '12:00:00',
-    meetingPlaceName: '자이아파트',
-    destinationPlaceName: '강남세브란스병원',
-  },
-  {
-    id: 5,
-    status: '동행중',
-    escortDate: '2025-07-26',
-    estimatedMeetingTime: '11:00:00',
-    estimatedReturnTime: '14:00:00',
-    meetingPlaceName: '롯데캐슬아파트',
-    destinationPlaceName: '서울대병원',
-  },
-  {
-    id: 6,
-    status: '동행중',
-    escortDate: '2025-07-27',
-    estimatedMeetingTime: '13:30:00',
-    estimatedReturnTime: '16:30:00',
-    meetingPlaceName: '힐스테이트아파트',
-    destinationPlaceName: '고려대안암병원',
-  },
-  {
-    id: 7,
-    status: '동행중',
-    escortDate: '2025-07-28',
-    estimatedMeetingTime: '08:30:00',
-    estimatedReturnTime: '11:30:00',
-    meetingPlaceName: '푸르지오아파트',
-    destinationPlaceName: '한양대병원',
-  },
-];
-
-const completedList: EscortData[] = [
-  {
-    id: 8,
-    status: '동행완료',
-    escortDate: '2025-07-29',
-    estimatedMeetingTime: '15:00:00',
-    estimatedReturnTime: '18:00:00',
-    meetingPlaceName: '아크로리버파크',
-    destinationPlaceName: '성모병원',
-  },
-];
-
 const statusMessageMap: Record<RecruitStatus, string> = {
   매칭중: '아직 매칭 확정되지 않았어요!',
   매칭완료: '매칭이 확정되었어요!',
@@ -123,18 +39,17 @@ const statusMessageMap: Record<RecruitStatus, string> = {
  * @param escortData - 각각의 동행 데이터
  * @returns 필요한 데이터를 정제한 데이터
  */
-const refineEscortData = (escortData: EscortData): RefinedEscortData => {
+const refineEscortData = (escortData: RecruitSimpleResponse): RefinedEscortData => {
   const statusText = statusMessageMap[escortData.status];
-  const title =
-    dateFormat(escortData.escortDate, 'M월 d일 (eee)') + ', ' + escortData.destinationPlaceName;
+  const title = dateFormat(escortData.escortDate, 'M월 d일 (eee)') + ', ' + escortData.destination;
   const startTime = timeFormat(escortData.estimatedMeetingTime);
   const endTime = timeFormat(escortData.estimatedReturnTime);
   const dateText = dateFormat(escortData.escortDate, 'M월 d일(eee)');
   const timeText = `${dateText} ${startTime} ~ ${endTime}`;
-  const locationText = `${escortData.meetingPlaceName} → ${escortData.destinationPlaceName}`;
+  const locationText = `${escortData.departureLocation} → ${escortData.destination}`;
 
   return {
-    id: escortData.id,
+    id: escortData.recruitId,
     status: escortData.status,
     statusText,
     title,
@@ -146,8 +61,18 @@ const refineEscortData = (escortData: EscortData): RefinedEscortData => {
 function RouteComponent() {
   const hasProfile = false;
   //TODO: 추후 api call로 전환
-  const inProgressListData = inProgressList;
-  const completedListData = completedList;
+  const { data: recruitListData } = getRecruitList();
+  const { inProgressList: inProgressListData, completedList: completedListData } =
+    recruitListData?.data ?? {};
+  const navigate = useNavigate();
+  const handleEscortCardClick = (recruitId: number) => {
+    navigate({
+      to: '/helper/escort/$escortId',
+      params: {
+        escortId: recruitId.toString(),
+      },
+    });
+  };
 
   return (
     <PageLayout>
@@ -195,22 +120,24 @@ function RouteComponent() {
             <Tabs.TabsTrigger value='신청'>
               신청
               <span className='group-data-[state=active]:text-text-mint-primary'>
-                {inProgressListData.length}
+                {inProgressListData?.length || 0}
               </span>
             </Tabs.TabsTrigger>
             <Tabs.TabsTrigger value='완료'>
               완료
               <span className='group-data-[state=active]:text-text-mint-primary'>
-                {completedListData.length}
+                {completedListData?.length || 0}
               </span>
             </Tabs.TabsTrigger>
           </Tabs.TabsList>
           <Tabs.TabsContent value='신청'>
             <div className='flex-col-start gap-[1.2rem] p-[2rem]'>
-              {inProgressListData.map((escort) => {
+              {inProgressListData?.map((escort) => {
                 const refinedData = refineEscortData(escort);
                 return (
-                  <EscortCard key={escort.id}>
+                  <EscortCard
+                    key={escort.recruitId}
+                    onClick={() => handleEscortCardClick(escort.recruitId)}>
                     <EscortCard.StatusHeader
                       status={refinedData.status}
                       text={refinedData.statusText}
@@ -230,10 +157,12 @@ function RouteComponent() {
           </Tabs.TabsContent>
           <Tabs.TabsContent value='완료'>
             <div className='flex-col-start gap-[1.2rem] p-[2rem]'>
-              {completedListData.map((escort) => {
+              {completedListData?.map((escort) => {
                 const refinedData = refineEscortData(escort);
                 return (
-                  <EscortCard key={escort.id}>
+                  <EscortCard
+                    key={escort.recruitId}
+                    onClick={() => handleEscortCardClick(escort.recruitId)}>
                     <EscortCard.StatusHeader
                       status={refinedData.status}
                       text={refinedData.statusText}
