@@ -6,11 +6,11 @@ import {
   Button,
   BottomSheet,
 } from '@components';
-import React, { memo, useState } from 'react';
+import { memo, useState, useEffect } from 'react';
 import { FormLayout } from '@layouts';
 import { useFormValidation } from '@hooks';
 import { type RecruitStepProps, profileSchema } from '@customer/types';
-import { getPastPatientInfo, getPastPatientInfoDetail } from '@customer/apis';
+import { getPastPatientInfo, getPastPatientInfoDetail, getPresignedImage } from '@customer/apis';
 import { IcRadioOff, IcRadioOn } from '@assets/icons';
 import { useFormContext } from 'react-hook-form';
 import { booleanToString } from '@utils';
@@ -34,7 +34,7 @@ const Profile = memo(({ handleNextStep }: RecruitStepProps) => {
   };
 
   // 데이터가 도착했을 때에만 폼에 세팅하고 로그 출력
-  React.useEffect(() => {
+  useEffect(() => {
     if (!isPatientIdConfirmed || !selectedPatientId) return;
     if (!detailData) return;
     console.log('pastPatient detailData:', detailData);
@@ -43,7 +43,6 @@ const Profile = memo(({ handleNextStep }: RecruitStepProps) => {
     setValue('name', patientDetail?.name);
     setValue('age', patientDetail?.age);
     setValue('gender', patientDetail?.gender);
-    //임시
     setValue('profileImageCreateRequest', {
       imageUrl: patientDetail?.imageUrl,
     });
