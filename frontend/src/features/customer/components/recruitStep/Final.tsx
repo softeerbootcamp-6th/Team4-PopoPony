@@ -46,9 +46,7 @@ export function Final({ handleBackStep }: RecruitStepProps) {
     gender: formData.gender,
     age: formData.age,
     phoneNumber: formData.phoneNumber,
-    imageUrl: {
-      imageUrl: formData.imageUrl.imageUrl,
-    },
+    profileImageCreateRequest: formData.profileImageCreateRequest,
   };
 
   const conditionData: ConditionFormValues = {

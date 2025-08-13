@@ -21,7 +21,7 @@ export const profileSchema = z.object({
       message: '연락처는 010으로 시작해야 합니다.',
     }),
   gender: z.enum(['남자', '여자'], { message: '성별을 선택해주세요' }),
-  imageUrl: imageSchema,
+  profileImageCreateRequest: imageSchema,
 });
 
 export type ProfileFormValues = z.infer<typeof profileSchema>;
