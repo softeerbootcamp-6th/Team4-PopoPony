@@ -1,5 +1,6 @@
 package com.todoc.server.domain.image.web.dto.request;
 
+import com.todoc.server.common.enumeration.S3Prefix;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -12,7 +13,13 @@ import java.util.List;
 public class PresignBatchRequest {
 
     @NotBlank
-    @Schema(description = "S3 Object Key의 접두 경로(prefix)")
+    @Schema(description = "S3 Object Key의 접두 경로(prefix)",
+            allowableValues = {"uploads/certificate",
+                    "uploads/helper",
+                    "uploads/patient",
+                    "uploads/report",
+                    "uploads/taxi",
+                    "uploads/test"})
     private String prefix;
 
     @NotNull
