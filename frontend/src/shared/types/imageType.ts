@@ -1,14 +1,13 @@
 import { z } from 'zod';
 
 // TODO: 추후 schema 타입으로 수정
-export type ImagePrefix = {
-  patient: 'uploads/patient';
-  helper: 'uploads/helper';
-  certificate: 'uploads/certificate';
-  report: 'uploads/report';
-  taxi: 'uploads/taxi';
-  test: 'uploads/test';
-};
+export type ImagePrefix =
+  | 'uploads/certificate'
+  | 'uploads/helper'
+  | 'uploads/patient'
+  | 'uploads/report'
+  | 'uploads/taxi'
+  | 'uploads/test';
 
 export const imageSchema = z.object({
   s3Key: z.string(),
