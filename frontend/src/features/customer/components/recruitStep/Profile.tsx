@@ -23,7 +23,7 @@ const Profile = memo(({ handleNextStep }: RecruitStepProps) => {
           isChecked={!fieldErrors.imageUrl && !!values.imageUrl}
           message={fieldErrors.imageUrl}>
           <div className='flex-center w-full'>
-            <PhotoUpload name='imageUrl' prefix='patient-profiles' />
+            <PhotoUpload name='imageUrl' prefix='uploads/patient' />
           </div>
         </LabeledSection>
 
@@ -89,5 +89,4 @@ const Profile = memo(({ handleNextStep }: RecruitStepProps) => {
   );
 });
 
-Profile.displayName = 'Profile';
 export default Profile;
