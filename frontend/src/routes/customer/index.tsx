@@ -4,6 +4,7 @@ import { Button, EscortCard, Tabs } from '@components';
 import { IcPlusSideLeft } from '@icons';
 import { getRecruitsCustomer } from '@customer/apis';
 import { dateFormat, timeFormat } from '@utils';
+import { useNavigate } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/customer/')({
   component: RouteComponent,
@@ -12,6 +13,15 @@ export const Route = createFileRoute('/customer/')({
 function RouteComponent() {
   const { data: escortData } = getRecruitsCustomer();
   const { inProgressList, completedList } = escortData?.data ?? {};
+  const navigate = useNavigate();
+  const handleEscortCardClick = (recruitId: number) => {
+    navigate({
+      to: '/customer/escort/$escortId',
+      params: {
+        escortId: recruitId.toString(),
+      },
+    });
+  };
 
   return (
     <PageLayout>
@@ -59,7 +69,9 @@ function RouteComponent() {
               {inProgressList?.map((escort) => {
                 const escortDate = dateFormat(escort.escortDate, 'MM월 dd일(eee)');
                 return (
-                  <EscortCard key={escort.escortId}>
+                  <EscortCard
+                    key={escort.recruitId}
+                    onClick={() => handleEscortCardClick(escort.recruitId)}>
                     <EscortCard.StatusHeader
                       status={escort.status}
                       text={`${escort.numberOfApplication}명이 현재 지원 중이에요!`}
@@ -86,7 +98,9 @@ function RouteComponent() {
               {completedList?.map((escort) => {
                 const escortDate = dateFormat(escort.escortDate, 'MM월 dd일(eee)');
                 return (
-                  <EscortCard key={escort.escortId}>
+                  <EscortCard
+                    key={escort.recruitId}
+                    onClick={() => handleEscortCardClick(escort.recruitId)}>
                     <EscortCard.StatusHeader
                       status={escort.status}
                       text={`${escort.numberOfApplication}명이 현재 지원 중이에요!`}
