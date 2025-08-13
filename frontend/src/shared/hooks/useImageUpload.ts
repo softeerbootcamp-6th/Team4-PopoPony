@@ -1,41 +1,22 @@
 import { useState, useCallback } from 'react';
-import type { ImageUploadResult, ImageUploadOptions } from '@types';
+import type { ImageUploadResult, ImagePrefix } from '@types';
 import { postPresignedUrl, putS3Upload } from '@apis';
 import { calculateMD5 } from '@utils';
 
 export interface UseImageUploadReturn {
-  uploadImage: (file: File, options?: ImageUploadOptions) => Promise<ImageUploadResult>;
+  uploadImage: (file: File, prefix: ImagePrefix) => Promise<ImageUploadResult>;
   isUploading: boolean;
 }
-
-const DEFAULT_OPTIONS: Required<ImageUploadOptions> = {
-  prefix: 'uploads',
-  allowedTypes: ['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'image/svg+xml'],
-};
 
 export const useImageUpload = (): UseImageUploadReturn => {
   const [isUploading, setIsUploading] = useState(false);
 
   const { mutateAsync: getPresignedUrl } = postPresignedUrl();
 
-  const validateFile = useCallback((file: File, options: Required<ImageUploadOptions>): void => {
-    // 파일 타입 검증
-    if (!options.allowedTypes.includes(file.type)) {
-      throw new Error(
-        `지원하지 않는 파일 형식입니다. 지원 형식: ${options.allowedTypes.join(', ')}`
-      );
-    }
-  }, []);
-
   const uploadImage = useCallback(
-    async (file: File, userOptions?: ImageUploadOptions): Promise<ImageUploadResult> => {
-      const options = { ...DEFAULT_OPTIONS, ...userOptions };
-
+    async (file: File, prefix: ImagePrefix): Promise<ImageUploadResult> => {
       try {
         setIsUploading(true);
-
-        // 1. 파일 검증
-        validateFile(file, options);
 
         // 2. MD5 checksum 계산
         const checksum = await calculateMD5(file);
@@ -48,7 +29,7 @@ export const useImageUpload = (): UseImageUploadReturn => {
         // 3. Presigned URL 요청
         const presignedResponse = await getPresignedUrl({
           body: {
-            prefix: options.prefix,
+            prefix,
             files: [
               {
                 ...imageData,
@@ -89,7 +70,7 @@ export const useImageUpload = (): UseImageUploadReturn => {
         setIsUploading(false);
       }
     },
-    [validateFile, getPresignedUrl]
+    [getPresignedUrl]
   );
 
   return {

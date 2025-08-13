@@ -2,13 +2,14 @@ import React, { useRef } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { IcCamera, IcEdit } from '@icons';
 import { useImageUpload } from '@hooks';
+import type { ImagePrefix } from '@types';
 
 interface Props {
   name: string;
-  prefix?: string;
+  prefix: ImagePrefix;
 }
 
-const PhotoUpload = ({ name, prefix = 'profile-images' }: Props) => {
+const PhotoUpload = ({ name, prefix }: Props) => {
   const { setValue, watch } = useFormContext();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -22,7 +23,7 @@ const PhotoUpload = ({ name, prefix = 'profile-images' }: Props) => {
     if (!file) return;
 
     try {
-      const { imageData, previewUrl } = await uploadImage(file, { prefix });
+      const { imageData, previewUrl } = await uploadImage(file, prefix);
       setValue(
         name,
         {
