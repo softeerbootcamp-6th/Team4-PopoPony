@@ -1,9 +1,10 @@
 import { z } from 'zod';
 
 export const imageSchema = z.object({
-  imageUrl: z.string().min(1, { message: '이미지를 선택해주세요' }),
-  //   s3_key: z.string().optional(),
-  //   md5: z.string().optional(),
+  s3Key: z.string(),
+  contentType: z.string(),
+  size: z.number(),
+  checksum: z.string(),
 });
 
 export type ImageType = z.infer<typeof imageSchema>;
@@ -28,14 +29,16 @@ export interface PresignedUrlResponse {
 }
 
 export interface ImageUploadResult {
-  imageUrl: string;
-  s3Key: string;
-  checksum: string;
+  imageData: {
+    s3Key: string;
+    contentType: string;
+    size: number;
+    checksum: string;
+  };
+  previewUrl: string;
 }
 
 export interface ImageUploadOptions {
   prefix?: string;
-  maxSizeBytes?: number;
   allowedTypes?: string[];
-  onProgress?: (progress: number) => void;
 }
