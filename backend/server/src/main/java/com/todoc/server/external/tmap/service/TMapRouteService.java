@@ -17,6 +17,11 @@ public class TMapRouteService {
     private final RestClient tmapRestClient;
     private final ObjectMapper objectMapper;
 
+    /**
+     * TMAP API를 호출하고, TMapRawResult에 응답 값을 저장
+     * @param request
+     * @return TMapRawResult에
+     */
     public TMapRawResult getRoute(RouteExternalRequest request) {
 
         // TMap에 경로 요청을 보내고 응답 받음

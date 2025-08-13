@@ -17,14 +17,14 @@ public class RouteService {
 
     public Route register(RecruitCreateRequest request) {
 
-        // TODO 경로 API 호출 뒤 적용해야 함.
         Route route = Route.builder()
                 .build();
 
         return routeRepository.save(route);
     }
 
-    public Route getById(Long routeId) {
+    public Route getRouteById(Long routeId) {
+
         return routeRepository.findById(routeId)
                 .orElseThrow(RouteNotFoundException::new);
     }

@@ -16,6 +16,7 @@ import com.todoc.server.domain.route.entity.RouteLeg;
 import com.todoc.server.domain.route.service.LocationInfoService;
 import com.todoc.server.domain.route.service.RouteLegService;
 import com.todoc.server.domain.route.service.RouteService;
+import com.todoc.server.external.tmap.exception.TMapInternalException;
 import com.todoc.server.external.tmap.service.TMapRouteParser;
 import com.todoc.server.external.tmap.service.TMapRouteService;
 import com.todoc.server.external.tmap.service.TMapRouteService.TMapRawResult;
@@ -43,87 +44,95 @@ public class RecruitFacadeService {
     private final TMapRouteParser tmapRouteParser;
 
 
-    public void createRecruit(Long authId, RecruitCreateRequest request) throws IOException{
+    public void createRecruit(Long authId, RecruitCreateRequest request) {
 
-        Auth customer = authService.getAuthById(authId);
+        try {
 
-        // 환자 정보 저장 (생성 + 연관관계 설정)
-        Patient patient = patientService.register(request.getPatientDetail());
-        patient.setCustomer(customer);
 
-        ImageFile profileImage = imageFileService.register(request.getPatientDetail().getProfileImageCreateRequest());
-        patient.setPatientProfileImage(profileImage);
+            Auth customer = authService.getAuthById(authId);
 
-        // 위치 정보 저장 (생성 + 연관관계 설정)
-        LocationInfo meetingLocation = locationInfoService.register(request.getMeetingLocationDetail());
-        LocationInfo hospitalLocation = locationInfoService.register(request.getDestinationDetail());
-        LocationInfo returnLocation = locationInfoService.register(request.getReturnLocationDetail());
+            // 환자 정보 저장 (생성 + 연관관계 설정)
+            Patient patient = patientService.register(request.getPatientDetail());
+            patient.setCustomer(customer);
 
-        // TODO 경로 정보 저장 (생성 + 연관관계 설정) 수정해야함
-        Route route = routeService.register(request);
-        route.setMeetingLocationInfo(meetingLocation);
-        route.setHospitalLocationInfo(hospitalLocation);
-        route.setReturnLocationInfo(returnLocation);
+            ImageFile profileImage = imageFileService.register(request.getPatientDetail().getProfileImageCreateRequest());
+            patient.setPatientProfileImage(profileImage);
 
-        // 4) Tmap 두 구간 호출 (미팅→병원, 병원→복귀)
-        RouteExternalRequest routeLegRequestForHospital = RouteExternalRequest.builder()
-            .startX(meetingLocation.getLongitude().toPlainString())
-            .startY(meetingLocation.getLatitude().toPlainString())
-            .endX(hospitalLocation.getLongitude().toPlainString())
-            .endY(hospitalLocation.getLatitude().toPlainString())
-            .reqCoordType("WGS84GEO").resCoordType("WGS84GEO")
-            .startName(meetingLocation.getFullRoadAddress())
-            .endName(hospitalLocation.getFullRoadAddress())
-            .build();
+            // 위치 정보 저장 (생성 + 연관관계 설정)
+            LocationInfo meetingLocation = locationInfoService.register(request.getMeetingLocationDetail());
+            LocationInfo hospitalLocation = locationInfoService.register(request.getDestinationDetail());
+            LocationInfo returnLocation = locationInfoService.register(request.getReturnLocationDetail());
 
-        RouteExternalRequest routeLegRequestForReturn = RouteExternalRequest.builder()
-            .startX(hospitalLocation.getLongitude().toPlainString())
-            .startY(hospitalLocation.getLatitude().toPlainString())
-            .endX(returnLocation.getLongitude().toPlainString())
-            .endY(returnLocation.getLatitude().toPlainString())
-            .reqCoordType("WGS84GEO").resCoordType("WGS84GEO")
-            .startName(hospitalLocation.getFullRoadAddress())
-            .endName(returnLocation.getFullRoadAddress())
-            .build();
+            Route route = routeService.register(request);
+            route.setMeetingLocationInfo(meetingLocation);
+            route.setHospitalLocationInfo(hospitalLocation);
+            route.setReturnLocationInfo(returnLocation);
 
-        TMapRawResult rawResultForHospital = tMapRouteService.getRoute(routeLegRequestForHospital);
-        TMapRawResult rawResultForReturn = tMapRouteService.getRoute(routeLegRequestForReturn);
+            // 4) Tmap 두 구간 호출 (미팅→병원, 병원→복귀)
+            RouteExternalRequest routeLegRequestForHospital = RouteExternalRequest.builder()
+                    .startX(meetingLocation.getLongitude().toPlainString())
+                    .startY(meetingLocation.getLatitude().toPlainString())
+                    .endX(hospitalLocation.getLongitude().toPlainString())
+                    .endY(hospitalLocation.getLatitude().toPlainString())
+                    .reqCoordType("WGS84GEO").resCoordType("WGS84GEO")
+                    .startName(meetingLocation.getFullRoadAddress())
+                    .endName(hospitalLocation.getFullRoadAddress())
+                    .build();
 
-        var routeLegSummaryForHospital = tmapRouteParser.parseSummaryFromRaw(rawResultForHospital.tmapJson());
-        var routeLegSummaryForReturn = tmapRouteParser.parseSummaryFromRaw(rawResultForReturn.tmapJson());
+            RouteExternalRequest routeLegRequestForReturn = RouteExternalRequest.builder()
+                    .startX(hospitalLocation.getLongitude().toPlainString())
+                    .startY(hospitalLocation.getLatitude().toPlainString())
+                    .endX(returnLocation.getLongitude().toPlainString())
+                    .endY(returnLocation.getLatitude().toPlainString())
+                    .reqCoordType("WGS84GEO").resCoordType("WGS84GEO")
+                    .startName(hospitalLocation.getFullRoadAddress())
+                    .endName(returnLocation.getFullRoadAddress())
+                    .build();
 
-        // 5) RouteLeg 생성, 연관관계 매핑
-        RouteLeg leg1 = RouteLeg.builder()
-            .route(route) // ★ 연관관계는 Facade에서
-            .legType(RouteLegType.MEETING_TO_HOSPITAL)
-            .totalDistance(routeLegSummaryForHospital.totalDistance())
-            .totalTime(routeLegSummaryForHospital.totalTime())
-            .totalFare(routeLegSummaryForHospital.totalFare())
-            .taxiFare(routeLegSummaryForHospital.taxiFare())
-            .usedFavoriteRouteVertices(rawResultForHospital.usedVertices())
-            .build();
-        routeLegService.save(leg1);
+            // 5) TMap API 호출
+            TMapRawResult rawResultForHospital = tMapRouteService.getRoute(routeLegRequestForHospital);
+            TMapRawResult rawResultForReturn = tMapRouteService.getRoute(routeLegRequestForReturn);
 
-        RouteLeg leg2 = RouteLeg.builder()
-            .route(route)
-            .legType(RouteLegType.HOSPITAL_TO_RETURN)
-            .totalDistance(routeLegSummaryForReturn.totalDistance())
-            .totalTime(routeLegSummaryForReturn.totalTime())
-            .totalFare(routeLegSummaryForReturn.totalFare())
-            .taxiFare(routeLegSummaryForReturn.taxiFare())
-            .usedFavoriteRouteVertices(rawResultForReturn.usedVertices())
-            .build();
-        routeLegService.save(leg2);
+            // 6) Tmap 결과 파싱
+            var routeLegSummaryForHospital = tmapRouteParser.parseSummaryFromRaw(rawResultForHospital.tmapJson());
+            var routeLegSummaryForReturn = tmapRouteParser.parseSummaryFromRaw(rawResultForReturn.tmapJson());
 
-        // 동행 신청 생성 (생성 + 연관관계 설정)
-        Recruit recruit = recruitService.register(request.getEscortDetail());
-        recruit.setCustomer(customer);
-        recruit.setPatient(patient);
-        recruit.setRoute(route);
+            // 7) RouteLeg 생성, 연관관계 매핑
+            RouteLeg leg1 = RouteLeg.builder()
+                    .route(route) // ★ 연관관계는 Facade에서
+                    .legType(RouteLegType.MEETING_TO_HOSPITAL)
+                    .totalDistance(routeLegSummaryForHospital.totalDistance())
+                    .totalTime(routeLegSummaryForHospital.totalTime())
+                    .totalFare(routeLegSummaryForHospital.totalFare())
+                    .taxiFare(routeLegSummaryForHospital.taxiFare())
+                    .usedFavoriteRouteVertices(rawResultForHospital.usedVertices())
+                    .build();
+            routeLegService.save(leg1);
 
-        // 금액 계산
-        Integer estimatedFee = FeeUtils.calculateTotalFee(request.getEscortDetail().getEstimatedMeetingTime(), request.getEscortDetail().getEstimatedReturnTime());
-        estimatedFee += routeLegSummaryForHospital.totalFare() + routeLegSummaryForReturn.totalFare();
-        recruit.setEstimatedFee(estimatedFee);
+            RouteLeg leg2 = RouteLeg.builder()
+                    .route(route)
+                    .legType(RouteLegType.HOSPITAL_TO_RETURN)
+                    .totalDistance(routeLegSummaryForReturn.totalDistance())
+                    .totalTime(routeLegSummaryForReturn.totalTime())
+                    .totalFare(routeLegSummaryForReturn.totalFare())
+                    .taxiFare(routeLegSummaryForReturn.taxiFare())
+                    .usedFavoriteRouteVertices(rawResultForReturn.usedVertices())
+                    .build();
+            routeLegService.save(leg2);
+
+            // 동행 신청 생성 (생성 + 연관관계 설정)
+            Recruit recruit = recruitService.register(request.getEscortDetail());
+            recruit.setCustomer(customer);
+            recruit.setPatient(patient);
+            recruit.setRoute(route);
+
+            // 금액 계산
+            Integer estimatedFee = FeeUtils.calculateTotalFee(request.getEscortDetail().getEstimatedMeetingTime(), request.getEscortDetail().getEstimatedReturnTime());
+            estimatedFee += routeLegSummaryForHospital.totalFare() + routeLegSummaryForReturn.totalFare();
+            recruit.setEstimatedFee(estimatedFee);
+        } catch (IOException e) {
+            // IOException 발생 시, 예외를 던져서 트랜잭션 롤백을 유도
+            throw new TMapInternalException();
+        }
     }
 }

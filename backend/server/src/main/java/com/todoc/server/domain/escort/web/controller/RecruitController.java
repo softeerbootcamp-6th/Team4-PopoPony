@@ -10,16 +10,11 @@ import com.todoc.server.domain.escort.web.dto.response.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Tag(name = "recruits", description = "동행 신청 관련 API")
 @RestController
@@ -103,7 +98,7 @@ public class RecruitController {
             responseCode = "200",
             description = "동행 신청 성공")
     @PostMapping("")
-    public Response<Void> createRecruit(@LoginUser SessionAuth auth, @RequestBody RecruitCreateRequest requestDto) throws IOException {
+    public Response<Void> createRecruit(@LoginUser SessionAuth auth, @RequestBody RecruitCreateRequest requestDto) {
 
         recruitFacadeService.createRecruit(auth.id(), requestDto);
 
