@@ -4,6 +4,7 @@ import getPaymentById from './getPaymentById';
 import postRecruit from './postRecruit';
 import patchCancelRecruit from './patchCancelRecruit';
 import getHelperById from './getHelperById';
+import postHelperReview from './postHelperReview';
 
 // TODO: 추후 삭제
 import { searchRoute } from './search';
@@ -16,4 +17,5 @@ export {
   patchCancelRecruit,
   searchRoute,
   getHelperById,
+  postHelperReview,
 };
