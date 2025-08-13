@@ -2,9 +2,10 @@ import { TwoOptionSelector, FormInput, LabeledSection, PhotoUpload, Button } fro
 import { memo } from 'react';
 import { FormLayout } from '@layouts';
 import { useFormValidation } from '@hooks';
-import { type RecruitStepProps, profileSchema } from '@customer/types';
+import { profileSchema } from '@customer/types';
+import type { FunnelStepProps } from '@types';
 
-const Profile = memo(({ handleNextStep }: RecruitStepProps) => {
+const Profile = memo(({ handleNextStep }: FunnelStepProps) => {
   const { values, fieldErrors, isFormValid, markFieldAsTouched } = useFormValidation(profileSchema);
 
   return (

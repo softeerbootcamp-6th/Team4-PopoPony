@@ -3,10 +3,10 @@ import { useFormContext, useWatch } from 'react-hook-form';
 import { memo, useEffect, useRef } from 'react';
 import { FormLayout } from '@layouts';
 import { useFormValidation } from '@hooks';
-import type { RecruitStepProps } from '@customer/types';
 import { COGNITIVE_ISSUES_OPTIONS, CognitiveSchema, CommunicationSchema } from '@customer/types';
+import type { FunnelStepProps } from '@types';
 
-const Communication = memo(({ handleNextStep }: RecruitStepProps) => {
+const Communication = memo(({ handleNextStep }: FunnelStepProps) => {
   const { setValue, control } = useFormContext();
   const {
     values: communicationValues,

@@ -3,4 +3,18 @@ import Detail from './profileSteps/Detail';
 import RegionBottomSheet from './modal/RegionBottomSheet';
 import CertificateImageUploader from './form/CertificateImageUploader';
 
-export { Region, Detail, RegionBottomSheet, CertificateImageUploader };
+import Time from './reportStep/Time';
+import Reservation from './reportStep/Reservation';
+import Taxi from './reportStep/Taxi';
+import ReportDetail from './reportStep/ReportDetail';
+
+export {
+  Region,
+  Detail,
+  RegionBottomSheet,
+  CertificateImageUploader,
+  Time,
+  Reservation,
+  Taxi,
+  ReportDetail,
+};
