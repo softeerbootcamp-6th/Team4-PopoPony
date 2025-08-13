@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import { useFormContext } from 'react-hook-form';
-import { IcCamera, IcCheckBox, IcCheckCircle, IcEdit } from '@icons';
+import { IcCheckBox, IcEdit } from '@icons';
 import { useImageUpload } from '@hooks';
 import type { ImagePrefix } from '@types';
 
