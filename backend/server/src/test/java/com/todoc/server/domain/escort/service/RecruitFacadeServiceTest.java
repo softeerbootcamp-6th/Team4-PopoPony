@@ -1,5 +1,6 @@
 package com.todoc.server.domain.escort.service;
 
+import com.todoc.server.IntegrationMockConfig;
 import com.todoc.server.domain.auth.entity.Auth;
 import com.todoc.server.domain.auth.service.AuthService;
 import com.todoc.server.domain.customer.entity.Patient;
@@ -11,12 +12,18 @@ import com.todoc.server.domain.route.entity.LocationInfo;
 import com.todoc.server.domain.route.entity.Route;
 import com.todoc.server.domain.route.service.LocationInfoService;
 import com.todoc.server.domain.route.service.RouteService;
+import com.todoc.server.external.tmap.service.TMapRouteService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
+import org.springframework.context.annotation.Import;
+
+import java.math.BigDecimal;
+
 import static org.mockito.Mockito.*;
 
+@Import(IntegrationMockConfig.class)
 class RecruitFacadeServiceTest {
 
     @Mock
@@ -31,6 +38,8 @@ class RecruitFacadeServiceTest {
     private AuthService authService;
     @Mock
     private ImageFileService imageFileService;
+    @Mock
+    private TMapRouteService tMapRouteService;
 
     @InjectMocks
     private RecruitFacadeService recruitFacadeService;
@@ -61,9 +70,19 @@ class RecruitFacadeServiceTest {
         when(request.getReturnLocationDetail()).thenReturn(returnLocationDetail);
 
         Patient patient = mock(Patient.class);
-        LocationInfo meetingLocation = mock(LocationInfo.class);
-        LocationInfo hospitalLocation = mock(LocationInfo.class);
-        LocationInfo returnLocation = mock(LocationInfo.class);
+        // 실제 좌표값을 가진 LocationInfo 생성
+        LocationInfo meetingLocation = new LocationInfo();
+        meetingLocation.setLongitude(new BigDecimal("127.2581225"));
+        meetingLocation.setLatitude(new BigDecimal("36.4809912"));
+
+        LocationInfo hospitalLocation = new LocationInfo();
+        hospitalLocation.setLongitude(new BigDecimal("126.9784043"));
+        hospitalLocation.setLatitude(new BigDecimal("37.5670240"));
+
+        LocationInfo returnLocation = new LocationInfo();
+        returnLocation.setLongitude(new BigDecimal("127.1234567"));
+        returnLocation.setLatitude(new BigDecimal("36.9876543"));
+
         Route route = mock(Route.class);
         Recruit recruit = mock(Recruit.class);
 
