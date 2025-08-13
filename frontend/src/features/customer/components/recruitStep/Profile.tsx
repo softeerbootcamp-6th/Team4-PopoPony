@@ -6,13 +6,14 @@ import {
   Button,
   BottomSheet,
 } from '@components';
-import { memo, useState } from 'react';
+import React, { memo, useState } from 'react';
 import { FormLayout } from '@layouts';
 import { useFormValidation } from '@hooks';
 import { type RecruitStepProps, profileSchema } from '@customer/types';
 import { getPastPatientInfo, getPastPatientInfoDetail } from '@customer/apis';
 import { IcRadioOff, IcRadioOn } from '@assets/icons';
 import { useFormContext } from 'react-hook-form';
+import { booleanToString } from '@utils';
 
 const Profile = memo(({ handleNextStep }: RecruitStepProps) => {
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
@@ -20,31 +21,44 @@ const Profile = memo(({ handleNextStep }: RecruitStepProps) => {
   const [isPatientIdConfirmed, setIsPatientIdConfirmed] = useState(false);
   const { values, fieldErrors, isFormValid, markFieldAsTouched } = useFormValidation(profileSchema);
   const { data } = getPastPatientInfo();
-  const { data: detailData } = getPastPatientInfoDetail(selectedPatientId, isPatientIdConfirmed);
+  const { data: detailData } = getPastPatientInfoDetail(
+    selectedPatientId as number,
+    isPatientIdConfirmed
+  );
   const pastPatientInfo = data?.data?.beforeList || [];
+
   const { setValue } = useFormContext();
 
   const onSelectPatient = () => {
     setIsPatientIdConfirmed(true);
-    if (selectedPatientId) {
-      const { patientDetail, meetingLocationDetail, destinationDetail, returnLocationDetail } =
-        data?.data || {};
-      setValue('name', patientDetail?.name);
-      setValue('age', patientDetail?.age);
-      setValue('gender', patientDetail?.gender);
-      setValue('phoneNumber', patientDetail?.phoneNumber);
-      setValue('needsHelping', patientDetail?.needsHelping);
-      setValue('usesWheelchair', patientDetail?.usesWheelchair);
-      setValue('hasCognitiveIssue', patientDetail?.hasCognitiveIssue);
-      setValue('cognitiveIssueDetail', patientDetail?.cognitiveIssueDetail);
-      setValue('hasCommunicationIssue', patientDetail?.hasCommunicationIssue);
-      setValue('communicationIssueDetail', patientDetail?.communicationIssueDetail);
-      setValue('meetingLocationDetail', meetingLocationDetail);
-      setValue('destinationDetail', destinationDetail);
-      setValue('returnLocationDetail', returnLocationDetail);
-    }
-    setIsBottomSheetOpen(false);
   };
+
+  // 데이터가 도착했을 때에만 폼에 세팅하고 로그 출력
+  React.useEffect(() => {
+    if (!isPatientIdConfirmed || !selectedPatientId) return;
+    if (!detailData) return;
+    console.log('pastPatient detailData:', detailData);
+    const { patientDetail, meetingLocationDetail, destinationDetail, returnLocationDetail } =
+      detailData?.data || {};
+    setValue('name', patientDetail?.name);
+    setValue('age', patientDetail?.age);
+    setValue('gender', patientDetail?.gender);
+    //임시
+    setValue('profileImageCreateRequest', {
+      imageUrl: patientDetail?.imageUrl,
+    });
+    setValue('phoneNumber', patientDetail?.phoneNumber);
+    setValue('needsHelping', booleanToString(patientDetail?.needsHelping));
+    setValue('usesWheelchair', booleanToString(patientDetail?.usesWheelchair));
+    setValue('hasCognitiveIssue', booleanToString(patientDetail?.hasCognitiveIssue));
+    setValue('cognitiveIssueDetail', patientDetail?.cognitiveIssueDetail);
+    setValue('hasCommunicationIssue', booleanToString(patientDetail?.hasCommunicationIssue));
+    setValue('communicationIssueDetail', patientDetail?.communicationIssueDetail);
+    setValue('meetingLocationDetail', meetingLocationDetail);
+    setValue('destinationDetail', destinationDetail);
+    setValue('returnLocationDetail', returnLocationDetail);
+    setIsBottomSheetOpen(false);
+  }, [detailData, isPatientIdConfirmed, selectedPatientId, setValue]);
 
   return (
     <FormLayout>
@@ -165,7 +179,8 @@ const Profile = memo(({ handleNextStep }: RecruitStepProps) => {
       </FormLayout.Content>
 
       <FormLayout.Footer>
-        <Button variant='primary' onClick={handleNextStep} disabled={!isFormValid}>
+        {/* TODO: 추후 PR반영되면 머지 후 s3 반영 */}
+        <Button variant='primary' onClick={handleNextStep} disabled={false}>
           다음
         </Button>
       </FormLayout.Footer>
