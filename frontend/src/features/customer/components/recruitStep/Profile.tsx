@@ -23,7 +23,7 @@ const Profile = memo(({ handleNextStep }: RecruitStepProps) => {
           isChecked={!fieldErrors.imageUrl && !!values.imageUrl}
           message={fieldErrors.imageUrl}>
           <div className='flex-center w-full'>
-            <PhotoUpload name='imageUrl' />
+            <PhotoUpload name='imageUrl' prefix='patient-profiles' />
           </div>
         </LabeledSection>
 
