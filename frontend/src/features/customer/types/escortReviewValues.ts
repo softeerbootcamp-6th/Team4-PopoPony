@@ -5,26 +5,36 @@ export const satisfactionLevel = ['좋았어요', '괜찮아요', '아쉬워요'
 export const summarySchema = z
   .object({
     satisfactionLevel: z.enum(satisfactionLevel),
-    statisfactionComment: z.string().optional(),
+    satisfactionComment: z.string().optional(),
   })
   .refine(
     (data) => {
-      if (data.satisfactionLevel === '괜찮아요') {
+      if (data.satisfactionLevel === '좋았어요') {
         return true;
-      } else {
-        return data.statisfactionComment && data.statisfactionComment.length >= 10;
       }
+      return !!data.satisfactionComment && data.satisfactionComment.length >= 10;
     },
     {
       message: '10자 이상 입력해주세요',
-      path: ['statisfactionComment'],
+      path: ['satisfactionComment'],
     }
   );
 
 export type SummaryFormValues = z.infer<typeof summarySchema>;
 
+export const detailOption = [
+  '친절해요',
+  '책임감',
+  '소통이 잘돼요',
+  '능숙해요',
+  '리포트가 자세해요',
+  '부축을 잘해요',
+  '진료 지식이 많아요',
+  '휠체어도 문제 없어요',
+] as const;
+
 export const detailSchema = z.object({
-  detailComment: z.array(z.string()).optional(),
+  detailComment: z.array(z.enum(detailOption)).max(3, { message: '최대 3개까지 선택할 수 있어요' }),
 });
 
 export type DetailFormValues = z.infer<typeof detailSchema>;
