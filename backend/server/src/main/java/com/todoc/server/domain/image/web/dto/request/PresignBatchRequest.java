@@ -12,7 +12,13 @@ import java.util.List;
 public class PresignBatchRequest {
 
     @NotBlank
-    @Schema(description = "S3 Object Key의 접두 경로(prefix)")
+    @Schema(description = "S3 Object Key의 접두 경로(prefix)",
+            allowableValues = {"uploads/certificate",
+                    "uploads/helper",
+                    "uploads/patient",
+                    "uploads/report",
+                    "uploads/taxi",
+                    "uploads/test"})
     private String prefix;
 
     @NotNull

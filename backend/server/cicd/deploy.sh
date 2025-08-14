@@ -1,71 +1,33 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -euo pipefail
 
-APP_DIR="/home/ubuntu/app"
-cd "$APP_DIR"
+APP_HOME="/home/ubuntu/app"
+cd "$APP_HOME"
 
-DEFAULT_CONF="/etc/nginx/nginx.conf"
-
-IS_BLUE=$(docker ps --format "{{.Names}}" | grep -w blue)
-IS_GREEN=$(docker ps --format "{{.Names}}" | grep -w green)
-
-# 상태 출력
-echo "현재 상태: BLUE=${IS_BLUE:+ON}, GREEN=${IS_GREEN:+ON}"
-
-# 1. 둘 다 안 떠 있을 경우 => blue 실행
-if [ -z "$IS_BLUE" ] && [ -z "$IS_GREEN" ]; then
-  echo "### 상태: 둘 다 꺼져 있음 => BLUE 실행 ###"
-  TARGET=blue
-  TARGET_PORT=8081
-  TARGET_CONF="/etc/nginx/nginx.blue.conf"
-  OTHER=green
-
-# 2. blue만 떠 있을 경우 => green 실행
-elif [ -n "$IS_BLUE" ] && [ -z "$IS_GREEN" ]; then
-  echo "### 상태: BLUE만 떠 있음 => GREEN 실행 ###"
-  TARGET=green
-  TARGET_PORT=8082
-  TARGET_CONF="/etc/nginx/nginx.green.conf"
-  OTHER=blue
-
-# 3. green만 떠 있을 경우 => blue 실행
-elif [ -z "$IS_BLUE" ] && [ -n "$IS_GREEN" ]; then
-  echo "### 상태: GREEN만 떠 있음 => BLUE 실행 ###"
-  TARGET=blue
-  TARGET_PORT=8081
-  TARGET_CONF="/etc/nginx/nginx.blue.conf"
-  OTHER=green
-
-# 4. 둘 다 떠 있음 => 에러 또는 선택적으로 처리
-else
-  echo "ERROR: BLUE와 GREEN 컨테이너가 둘 다 실행 중입니다."
-  echo "동시 실행은 허용되지 않으므로 스크립트를 종료합니다."
-  exit 1
+# 1) 환경변수 로딩 (/etc/environment 호환)
+if [ -f /etc/environment ]; then
+  # shellcheck disable=SC2046
+  export $(grep -v '^#' /etc/environment | xargs -d '\n' -I {} bash -lc 'echo {}' | xargs)
+fi
+if [ -f "$APP_HOME/.env" ]; then
+  export $(grep -v '^#' "$APP_HOME/.env" | xargs)
 fi
 
-# 공통 로직
-echo "1. Build and start $TARGET container"
-docker compose build $TARGET
-docker compose up -d $TARGET
+# 필수: DOCKER_USERNAME / DOCKER_PASSWORD 는 EC2에 미리 저장
+: "${DOCKER_USERNAME:?DOCKER_USERNAME not set}"
+: "${DOCKER_PASSWORD:?DOCKER_PASSWORD not set}"
 
-SERVER_ADDRESS="http://localhost:$TARGET_PORT/actuator/health"
-echo "2. Health check ($SERVER_ADDRESS)"
-while true; do
-  sleep 3
-  RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" $SERVER_ADDRESS)
-  if [ "$RESPONSE" -eq 200 ]; then
-    echo "Health check passed"
-    break
-  else
-    echo "Waiting for $TARGET to be healthy... (HTTP $RESPONSE)"
-  fi
-done
+echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
 
-echo "3. Reload nginx"
-sudo cp $TARGET_CONF $DEFAULT_CONF
-sudo nginx -s reload
+IMAGE="seonghooni0327/myapp:latest"
 
-echo "4. Stop $OTHER container"
-docker compose stop $OTHER
+# 2) 최신 이미지 pull
+docker pull "$IMAGE"
 
-echo "5. Remove old $OTHER container"
-docker compose rm -f $OTHER
+# 3) 컨테이너 무중단 근사치 업데이트 (compose up -d)
+docker compose -f "$APP_HOME/docker-compose.yml" up -d
+
+# 4) 쓰지 않는 이미지/볼륨 정리(용량 문제 예방)
+docker system prune -af
+
+echo "Deploy done."

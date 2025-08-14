@@ -1,18 +1,19 @@
 version: 0.0
 os: linux
-
 files:
-  - source: /
+  - source: ./deploy.sh
     destination: /home/ubuntu/app
-    overwrite: yes
+    overwrite: true
+  - source: ./docker-compose.yml
+    destination: /home/ubuntu/app
+    overwrite: true
 
 hooks:
   BeforeInstall:
     - location: cleanup.sh
       timeout: 60
       runas: ubuntu
-
   AfterInstall:
     - location: deploy.sh
-      timeout: 100
+      timeout: 600
       runas: ubuntu

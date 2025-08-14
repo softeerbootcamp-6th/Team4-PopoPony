@@ -10,6 +10,8 @@ import SearchRoute from './recruitStep/SearchRoute';
 import Request from './recruitStep/Request';
 import Final from './recruitStep/Final';
 import CardWrapper from './Card/CardWrapper';
+import PaymentCard from './PaymentCard';
+import WarningBox from './WarningBox';
 import StatsSummaryCard from './StatsSummaryCard';
 import SatisfactionGraph from './SatisfactionGraph';
 import KeywordTag from './KeywordTag';
@@ -56,6 +58,8 @@ export {
   Final,
   CardWrapper,
   SearchButton,
+  PaymentCard,
+  WarningBox,
   SatisfactionGraph,
   KeywordTag,
   ReviewCard,
