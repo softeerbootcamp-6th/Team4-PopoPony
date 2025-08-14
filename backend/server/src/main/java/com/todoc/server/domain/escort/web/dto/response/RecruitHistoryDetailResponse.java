@@ -4,6 +4,8 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.todoc.server.common.util.ImageUrlUtils;
 import com.todoc.server.common.util.JsonUtils;
 import com.todoc.server.domain.customer.entity.Patient;
+import com.todoc.server.domain.image.entity.ImageFile;
+import com.todoc.server.domain.image.entity.ImageMeta;
 import com.todoc.server.domain.route.entity.LocationInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
@@ -36,6 +38,22 @@ public class RecruitHistoryDetailResponse {
         @NotNull
         @Schema(description = "환자 이미지 URL", example = "https://example.com/patient.png")
         private String imageUrl;
+
+        @NotNull
+        @Schema(description = "S3 오브젝트 키(버킷 내부 경로). presigned 업로드 시 사용했던 key 그대로 전달")
+        private String s3Key;
+
+        @NotNull
+        @Schema(description = "원본 Content-Type (이미지 MIME 타입)")
+        private String contentType;
+
+        @NotNull
+        @Schema(description = "파일 크기(byte)")
+        private Long size;
+
+        @NotNull
+        @Schema(description = "무결성 해시(일반적으로 S3 ETag)")
+        private String checksum;
 
         @NotNull
         @Schema(description = "환자 이름", example = "홍길동")
@@ -79,10 +97,16 @@ public class RecruitHistoryDetailResponse {
 
             List<String> cognitiveIssueDetail = JsonUtils.fromJson(patient.getCognitiveIssueDetail(), new TypeReference<>() {});
             String gender = patient.getGender().getLabel();
+            ImageFile patientImage = patient.getPatientProfileImage();
+            ImageMeta imageMeta = patientImage.getImageMeta();
 
             return PatientDetail.builder()
                     .patientId(patient.getId())
-                    .imageUrl(ImageUrlUtils.getImageUrl(patient.getPatientProfileImage().getId()))
+                    .imageUrl(ImageUrlUtils.getImageUrl(patientImage.getId()))
+                    .s3Key(imageMeta.getS3Key())
+                    .contentType(imageMeta.getContentType())
+                    .size(imageMeta.getSize())
+                    .checksum(imageMeta.getChecksum())
                     .name(patient.getName())
                     .age(patient.getAge())
                     .gender(gender)
@@ -97,11 +121,13 @@ public class RecruitHistoryDetailResponse {
         }
 
         @Builder
-        public PatientDetail(Long patientId, String imageUrl, String name, Integer age, String gender, String phoneNumber,
-                             boolean needsHelping, boolean usesWheelchair, boolean hasCognitiveIssue,
-                             List<String> cognitiveIssueDetail, boolean hasCommunicationIssue, String communicationIssueDetail) {
+        public PatientDetail(Long patientId, String imageUrl, String s3Key, String contentType, Long size, String checksum, String name, Integer age, String gender, String phoneNumber, boolean needsHelping, boolean usesWheelchair, boolean hasCognitiveIssue, List<String> cognitiveIssueDetail, boolean hasCommunicationIssue, String communicationIssueDetail) {
             this.patientId = patientId;
             this.imageUrl = imageUrl;
+            this.s3Key = s3Key;
+            this.contentType = contentType;
+            this.size = size;
+            this.checksum = checksum;
             this.name = name;
             this.age = age;
             this.gender = gender;
