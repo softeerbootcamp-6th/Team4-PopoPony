@@ -6,6 +6,7 @@ import com.todoc.server.domain.escort.entity.Escort;
 import com.todoc.server.domain.escort.entity.Recruit;
 import com.todoc.server.domain.route.entity.LocationInfo;
 import com.todoc.server.domain.route.entity.Route;
+import com.todoc.server.domain.route.entity.RouteLeg;
 import lombok.Getter;
 
 @Getter
@@ -27,8 +28,10 @@ public class EscortDetailFlatDto {
 
     private LocationInfo returnLocation;
 
+    private RouteLeg routeLeg;
+
     public EscortDetailFlatDto(Escort escort, Recruit recruit, Auth customer, Patient patient, Route route,
-                               LocationInfo meetingLocation, LocationInfo hospitalLocation, LocationInfo returnLocation) {
+                               LocationInfo meetingLocation, LocationInfo hospitalLocation, LocationInfo returnLocation, RouteLeg routeLeg) {
         this.escort = escort;
         this.recruit = recruit;
         this.customer = customer;
@@ -37,5 +40,6 @@ public class EscortDetailFlatDto {
         this.meetingLocation = meetingLocation;
         this.hospitalLocation = hospitalLocation;
         this.returnLocation = returnLocation;
+        this.routeLeg = routeLeg;
     }
 }
