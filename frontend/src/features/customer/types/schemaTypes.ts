@@ -9,3 +9,5 @@ export type MeetingLocationDetail = components['schemas']['LocationDetail'];
 export type DestinationDetail = components['schemas']['LocationDetail'];
 export type ReturnLocationDetail = components['schemas']['LocationDetail'];
 export type RecruitCreateRequest = components['schemas']['RecruitCreateRequest'];
+export type RecruitListResponse = components['schemas']['RecruitListResponse'];
+export type RecruitSimpleResponse = components['schemas']['RecruitSimpleResponse'];
