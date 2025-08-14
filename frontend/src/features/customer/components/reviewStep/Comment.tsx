@@ -17,7 +17,7 @@ const Comment = ({ escortId, handleNextStep }: CommentProps) => {
   const { helperId } = useParams({
     from: '/customer/escort/$escortId/$helperId/review/$step',
   });
-  const { values, isFormValid } = useFormValidation(reviewSchema);
+  const { isFormValid } = useFormValidation(reviewSchema);
   const { mutate } = postHelperReview();
 
   const handleClickNext = () => {
@@ -27,16 +27,14 @@ const Comment = ({ escortId, handleNextStep }: CommentProps) => {
           path: {
             recruitId: Number(escortId),
           },
-          query: {
-            request: {
-              helperId: Number(helperId),
-              recruitId: Number(escortId),
-              satisfactionLevel: getValues('satisfactionLevel'),
-              satisfactionComment: getValues('satisfactionComment'),
-              positiveFeedbackList: getValues('detailComment'),
-              shortComment: getValues('reviewComment'),
-            },
-          },
+        },
+        body: {
+          helperId: Number(helperId),
+          recruitId: Number(escortId),
+          satisfactionLevel: getValues('satisfactionLevel'),
+          satisfactionComment: getValues('satisfactionComment'),
+          positiveFeedbackList: getValues('detailComment'),
+          shortComment: getValues('reviewComment'),
         },
       },
       {
@@ -50,14 +48,6 @@ const Comment = ({ escortId, handleNextStep }: CommentProps) => {
       }
     );
   };
-
-  //   body: {
-  //     helperId: Number(helperId),
-  //     satisfactionLevel: getValues('satisfactionLevel'),
-  //     satisfactionComment: getValues('satisfactionComment'),
-  //     detailComment: getValues('detailComment'),
-  //     reviewComment: getValues('reviewComment'),
-  //   },
 
   return (
     <FormLayout>
