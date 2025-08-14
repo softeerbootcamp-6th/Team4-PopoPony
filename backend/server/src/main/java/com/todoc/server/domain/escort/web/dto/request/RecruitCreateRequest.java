@@ -8,9 +8,12 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Getter
+@Getter @Setter
 @Schema(description = "동행 신청 요청 DTO")
+@NoArgsConstructor
 public class RecruitCreateRequest {
 
     private PatientDetail patientDetail;
@@ -23,7 +26,7 @@ public class RecruitCreateRequest {
 
     private LocationDetail returnLocationDetail;
 
-    @Getter
+    @Getter @Setter @NoArgsConstructor
     @Schema(description = "환자 상태 정보")
     public static class PatientDetail {
 
@@ -61,7 +64,7 @@ public class RecruitCreateRequest {
         private String communicationIssueDetail;
     }
 
-    @Getter
+    @Getter @Setter @NoArgsConstructor
     @Schema(description = "동행 정보")
     public static class EscortDetail {
 
@@ -81,7 +84,7 @@ public class RecruitCreateRequest {
         private String extraRequest;
     }
 
-    @Getter
+    @Getter @Setter @NoArgsConstructor
     @Schema(description = "위치 정보")
     public static class LocationDetail {
 
