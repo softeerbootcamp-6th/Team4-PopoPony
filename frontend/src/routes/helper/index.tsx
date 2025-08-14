@@ -4,20 +4,11 @@ import { Button, EscortCard, Tabs } from '@components';
 import type { RecruitStatus } from '@types';
 import { dateFormat, timeFormat } from '@utils';
 import { getRecruitList } from '@helper/apis';
-import type { RecruitListResponse, RecruitSimpleResponse } from '@helper/types';
+import type { RecruitSimpleResponse } from '@helper/types';
 
 export const Route = createFileRoute('/helper/')({
   component: RouteComponent,
 });
-
-/**
- * @description 필요한 동행 데이터 타입
- */
-type EscortData = RecruitListResponse;
-
-/**
- * @description 동행 데이터를 추출하여 정제 후 반환
- */
 interface RefinedEscortData {
   id: number;
   status: RecruitStatus;
@@ -34,11 +25,6 @@ const statusMessageMap: Record<RecruitStatus, string> = {
   동행완료: '동행번호 NO.12394O4L',
 };
 
-/**
- * escortData를 받아서 필요한 데이터를 추출하여 반환 -> 나중에 API 연동 시 이 함수 삭제 혹은 이용
- * @param escortData - 각각의 동행 데이터
- * @returns 필요한 데이터를 정제한 데이터
- */
 const refineEscortData = (escortData: RecruitSimpleResponse): RefinedEscortData => {
   const statusText = statusMessageMap[escortData.status];
   const title = dateFormat(escortData.escortDate, 'M월 d일 (eee)') + ', ' + escortData.destination;
@@ -148,7 +134,6 @@ function RouteComponent() {
                       <EscortCard.Info type='time' text={refinedData.timeText} />
                       <EscortCard.Info type='location' text={refinedData.locationText} />
                     </EscortCard.InfoSection>
-                    <EscortCard.Tag tags={['안전한 부축', '휠체어 이동', '인지장애 케어']} />
                     {refinedData.status === '동행중' && <EscortCard.Button onClick={() => {}} />}
                   </EscortCard>
                 );
@@ -173,7 +158,6 @@ function RouteComponent() {
                       <EscortCard.Info type='time' text={refinedData.timeText} />
                       <EscortCard.Info type='location' text={refinedData.locationText} />
                     </EscortCard.InfoSection>
-                    <EscortCard.Tag tags={['안전한 부축', '휠체어 이동', '인지장애 케어']} />
                   </EscortCard>
                 );
               })}
