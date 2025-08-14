@@ -13,6 +13,7 @@ import com.todoc.server.domain.escort.repository.RecruitQueryRepository;
 import com.todoc.server.domain.escort.repository.dto.RecruitHistoryDetailFlatDto;
 import com.todoc.server.domain.escort.web.dto.response.*;
 import com.todoc.server.domain.image.entity.ImageFile;
+import com.todoc.server.domain.image.entity.ImageMeta;
 import com.todoc.server.domain.route.entity.LocationInfo;
 import java.util.ArrayList;
 import java.util.Map;
@@ -197,8 +198,10 @@ class RecruitServiceTest {
 
         // 이미지 스텁 (핵심)
         ImageFile img = mock(ImageFile.class);
+        ImageMeta imageMeta = mock(ImageMeta.class);
         when(img.getId()).thenReturn(3001L);
         when(patient.getPatientProfileImage()).thenReturn(img);
+        when(img.getImageMeta()).thenReturn(imageMeta);
 
         try (MockedStatic<ImageUrlUtils> urlMock = mockStatic(ImageUrlUtils.class)) {
             urlMock.when(() -> ImageUrlUtils.getImageUrl(3001L))
