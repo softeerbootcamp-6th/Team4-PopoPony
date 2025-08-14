@@ -10,10 +10,12 @@ export type ImagePrefix =
   | 'uploads/test';
 
 export const imageSchema = z.object({
-  s3Key: z.string(),
-  contentType: z.string(),
-  size: z.number(),
-  checksum: z.string(),
+  //TODO: 추후 삭제
+  s3Key: z.string().optional(),
+  contentType: z.string().optional(),
+  size: z.number().optional(),
+  checksum: z.string().optional(),
+  previewUrl: z.string().optional(),
 });
 
 export type ImageType = z.infer<typeof imageSchema>;

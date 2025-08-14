@@ -170,7 +170,10 @@ const EscortRoute = memo(({ handleNextStep }: RecruitStepProps) => {
         </div>
       </FormLayout.Content>
       <FormLayout.Footer>
-        <FormLayout.FooterPrevNext handleClickNext={handleNextStep} disabled={!isFormValid} />
+        <FormLayout.FooterPrevNext
+          handleClickNext={handleNextStep as () => void}
+          disabled={!isFormValid}
+        />
       </FormLayout.Footer>
     </FormLayout>
   );
