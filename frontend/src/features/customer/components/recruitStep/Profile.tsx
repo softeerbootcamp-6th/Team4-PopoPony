@@ -10,10 +10,10 @@ import { memo, useState, useEffect } from 'react';
 import { FormLayout } from '@layouts';
 import { useFormValidation } from '@hooks';
 import { type RecruitStepProps, profileSchema } from '@customer/types';
-import { getPastPatientInfo, getPastPatientInfoDetail, getPresignedImage } from '@customer/apis';
+import { getPastPatientInfo, getPastPatientInfoDetail } from '@customer/apis';
 import { IcRadioOff, IcRadioOn } from '@assets/icons';
 import { useFormContext } from 'react-hook-form';
-import { booleanToString } from '@utils';
+import { booleanToString, numberToString, formatPhoneNumber } from '@utils';
 
 const Profile = memo(({ handleNextStep }: RecruitStepProps) => {
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
@@ -41,12 +41,16 @@ const Profile = memo(({ handleNextStep }: RecruitStepProps) => {
     const { patientDetail, meetingLocationDetail, destinationDetail, returnLocationDetail } =
       detailData?.data || {};
     setValue('name', patientDetail?.name);
-    setValue('age', patientDetail?.age);
+    setValue('age', numberToString(patientDetail?.age as number));
     setValue('gender', patientDetail?.gender);
     setValue('profileImageCreateRequest', {
-      previewUrl: import.meta.env.VITE_API_BASE_URL + patientDetail?.imageUrl,
+      s3Key: patientDetail?.s3Key,
+      contentType: patientDetail?.contentType,
+      size: patientDetail?.size,
+      checksum: patientDetail?.checksum,
     });
-    setValue('phoneNumber', patientDetail?.phoneNumber);
+    setValue('imageUrl', import.meta.env.VITE_API_BASE_URL + patientDetail?.imageUrl);
+    setValue('phoneNumber', formatPhoneNumber(patientDetail?.phoneNumber as string));
     setValue('needsHelping', booleanToString(patientDetail?.needsHelping));
     setValue('usesWheelchair', booleanToString(patientDetail?.usesWheelchair));
     setValue('hasCognitiveIssue', booleanToString(patientDetail?.hasCognitiveIssue));
@@ -179,7 +183,7 @@ const Profile = memo(({ handleNextStep }: RecruitStepProps) => {
 
       <FormLayout.Footer>
         {/* TODO: 추후 PR반영되면 머지 후 s3 반영 */}
-        <Button variant='primary' onClick={handleNextStep} disabled={false}>
+        <Button variant='primary' onClick={handleNextStep} disabled={!isFormValid}>
           다음
         </Button>
       </FormLayout.Footer>
