@@ -2,6 +2,7 @@ package com.todoc.server.domain.escort.service;
 
 import com.todoc.server.common.enumeration.EscortStatus;
 import com.todoc.server.common.enumeration.RecruitStatus;
+import com.todoc.server.common.enumeration.RouteLegType;
 import com.todoc.server.domain.auth.entity.Auth;
 import com.todoc.server.domain.customer.entity.Patient;
 import com.todoc.server.domain.customer.web.dto.response.PatientSimpleResponse;
@@ -14,13 +15,15 @@ import com.todoc.server.domain.escort.repository.EscortQueryRepository;
 import com.todoc.server.domain.escort.repository.dto.EscortDetailFlatDto;
 import com.todoc.server.domain.escort.web.dto.request.EscortMemoUpdateRequest;
 import com.todoc.server.domain.escort.web.dto.response.EscortDetailResponse;
-import com.todoc.server.domain.helper.entity.HelperProfile;
-import com.todoc.server.domain.route.entity.LocationInfo;
 import com.todoc.server.domain.route.entity.Route;
+import com.todoc.server.domain.route.entity.RouteLeg;
+import com.todoc.server.domain.route.exception.RouteLegNotFoundException;
 import com.todoc.server.domain.route.web.dto.response.RouteDetailResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -71,7 +74,7 @@ public class EscortService {
     }
 
     @Transactional
-    public void updateMeme(Long recruitId, EscortMemoUpdateRequest request) {
+    public void updateMemo(Long recruitId, EscortMemoUpdateRequest request) {
 
         Escort escort = getByRecruitId(recruitId);
         escort.setMemo(request.getMemo());
@@ -80,16 +83,33 @@ public class EscortService {
     @Transactional(readOnly = true)
     public EscortDetailResponse getEscortDetailByRecruitId(Long recruitId) {
 
-        EscortDetailFlatDto escortDetailFlatDto = escortQueryRepository.findEscortDetailByRecruitId(recruitId);
-        if (escortDetailFlatDto == null) {
+        List<EscortDetailFlatDto> escortDetailFlatDtoList = escortQueryRepository.findEscortDetailByRecruitId(recruitId);
+        if (escortDetailFlatDtoList.isEmpty()) {
             throw new EscortNotFoundException();
         }
 
-        Escort escort = escortDetailFlatDto.getEscort();
-        Recruit recruit = escortDetailFlatDto.getRecruit();
-        Auth customer = escortDetailFlatDto.getCustomer();
-        Patient patient = escortDetailFlatDto.getPatient();
-        Route route = escortDetailFlatDto.getRoute();
+        EscortDetailFlatDto first = escortDetailFlatDtoList.getFirst();
+        Escort escort = first.getEscort();
+        Recruit recruit = first.getRecruit();
+        Auth customer = first.getCustomer();
+        Patient patient = first.getPatient();
+        Route route = first.getRoute();
+        RouteLeg meetingToHospital = null;
+        RouteLeg hospitalToReturn = null;
+
+        for (EscortDetailFlatDto escortDetailFlatDto : escortDetailFlatDtoList) {
+            RouteLeg routeLeg = escortDetailFlatDto.getRouteLeg();
+            if (routeLeg.getLegType().equals(RouteLegType.HOSPITAL_TO_RETURN)) {
+                meetingToHospital = routeLeg;
+            }
+            else {
+                hospitalToReturn = routeLeg;
+            }
+        }
+
+        if (meetingToHospital == null ||  hospitalToReturn == null) {
+            throw new RouteLegNotFoundException();
+        }
 
         return EscortDetailResponse.builder()
                 .escortId(escort.getId())
@@ -101,7 +121,7 @@ public class EscortService {
                 .purpose(recruit.getPurpose())
                 .extraRequest(recruit.getExtraRequest())
                 .patient(PatientSimpleResponse.from(patient))
-                .route(RouteDetailResponse.from(route))
+                .route(RouteDetailResponse.from(route, meetingToHospital, hospitalToReturn))
                 .build();
     }
 }

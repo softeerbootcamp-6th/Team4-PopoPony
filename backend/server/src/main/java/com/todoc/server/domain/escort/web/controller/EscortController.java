@@ -55,8 +55,6 @@ public class EscortController {
     @GetMapping("/{recruitId}")
     public Response<EscortDetailResponse> getEscortDetailByRecruitId(@PathVariable Long recruitId) {
 
-        // return Response.from(escortService.getEscortDetailByRecruitId(recruitId));
-
-        return Response.from();
+        return Response.from(escortService.getEscortDetailByRecruitId(recruitId));
     }
 }
