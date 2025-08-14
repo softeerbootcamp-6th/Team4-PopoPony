@@ -7,6 +7,7 @@ import { PageLayout } from '@layouts';
 import type { components } from '@schema';
 import { createFileRoute, useRouter } from '@tanstack/react-router';
 import { FormProvider, useForm } from 'react-hook-form';
+import type { ImageUploadResult } from '@types';
 
 export const Route = createFileRoute('/helper/escort/$escortId/report/$step')({
   component: RouteComponent,
@@ -29,9 +30,16 @@ function RouteComponent() {
       methods.reset({
         actualMeetingTime: reportDefault.actualMeetingTime || '',
         actualReturnTime: reportDefault.actualReturnTime || '',
-        description: reportDefault.memo || '',
         hasNextAppointment: true,
         nextAppointmentTime: undefined,
+        description: reportDefault.memo || '',
+        imageCreateRequestList: [] as ImageUploadResult[],
+        taxiFeeCreateRequest: {
+          departureFee: 0,
+          departureReceipt: {} as ImageUploadResult,
+          returnFee: 0,
+          returnReceipt: {} as ImageUploadResult,
+        },
       });
     }
   }, [reportDefault, methods]);

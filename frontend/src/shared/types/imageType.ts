@@ -38,12 +38,10 @@ export interface PresignedUrlResponse {
 }
 
 export interface ImageUploadResult {
-  imageData: {
-    s3Key: string;
-    contentType: string;
-    size: number;
-    checksum: string;
-  };
+  s3Key: string;
+  contentType: string;
+  size: number;
+  checksum: string;
   previewUrl: string;
 }
 

@@ -55,10 +55,8 @@ export const useImageUpload = (): UseImageUploadReturn => {
 
         // 5. 결과 반환
         const result: ImageUploadResult = {
-          imageData: {
-            ...imageData,
-            s3Key,
-          },
+          ...imageData,
+          s3Key,
           previewUrl,
         };
 
