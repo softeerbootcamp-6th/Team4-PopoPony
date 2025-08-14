@@ -44,7 +44,7 @@ const Profile = memo(({ handleNextStep }: RecruitStepProps) => {
     setValue('age', patientDetail?.age);
     setValue('gender', patientDetail?.gender);
     setValue('profileImageCreateRequest', {
-      imageUrl: patientDetail?.imageUrl,
+      previewUrl: import.meta.env.VITE_API_BASE_URL + patientDetail?.imageUrl,
     });
     setValue('phoneNumber', patientDetail?.phoneNumber);
     setValue('needsHelping', booleanToString(patientDetail?.needsHelping));
