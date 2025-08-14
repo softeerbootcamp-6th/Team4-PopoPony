@@ -646,6 +646,7 @@ export interface components {
        * @description 환자 연락처
        * @example 010-1234-5678
        */
+      imageUrl?: string;
       phoneNumber?: string;
       /**
        * @description 부축이 필요한지
