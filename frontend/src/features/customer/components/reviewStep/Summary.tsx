@@ -9,23 +9,22 @@ interface SummaryProps extends RecruitStepProps {
   name: string;
 }
 
-const Summary = ({ name, handleNextStep, handleBackStep }: SummaryProps) => {
+const Summary = ({ name, handleNextStep }: SummaryProps) => {
   const { register, setValue } = useFormContext();
-  const { values, isFormValid, markFieldAsTouched } = useFormValidation(summarySchema);
+  const { values, isFormValid } = useFormValidation(summarySchema);
   const satisfactionIcon = {
     [satisfactionLevel[0]]: { label: 'good', text: '특별히 불편했던 점이 없었어요' },
     [satisfactionLevel[1]]: { label: 'average', text: '나쁘지는 않았지만 조금 아쉬웠어요' },
     [satisfactionLevel[2]]: { label: 'bad', text: '불편했던 점이 있었어요' },
   };
-  const handleOptionClick =
-    (level: (typeof satisfactionLevel)[number]) => (e: React.MouseEvent<HTMLLabelElement>) => {
-      if (values.satisfactionLevel === level) {
-        return;
-      } else {
-        setValue('satisfactionLevel', level);
-        setValue('satisfactionComment', '');
-      }
-    };
+  const handleOptionClick = (level: (typeof satisfactionLevel)[number]) => () => {
+    if (values.satisfactionLevel === level) {
+      return;
+    } else {
+      setValue('satisfactionLevel', level);
+      setValue('satisfactionComment', '');
+    }
+  };
   return (
     <FormLayout>
       <FormLayout.Content>
