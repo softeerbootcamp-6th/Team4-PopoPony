@@ -2,7 +2,7 @@ import { createFileRoute, Link } from '@tanstack/react-router';
 import { PageLayout } from '@layouts';
 import { Button, EscortCard, Tabs } from '@components';
 import { IcPlusSideLeft } from '@icons';
-import type { RecruitStatus, RecruitListResponse, RecruitSimpleResponse } from '@types';
+import type { RecruitSimpleResponse } from '@customer/types';
 import { getRecruitsCustomer } from '@customer/apis';
 import { dateFormat, timeFormat } from '@utils';
 import { useNavigate } from '@tanstack/react-router';
@@ -10,21 +10,6 @@ import { useNavigate } from '@tanstack/react-router';
 export const Route = createFileRoute('/customer/')({
   component: RouteComponent,
 });
-
-interface RefinedEscortData {
-  id: number;
-  status: RecruitStatus;
-  statusText: string;
-  title: string;
-  timeText: string;
-  locationText: string;
-}
-const statusMessageMap: Record<RecruitStatus, string> = {
-  매칭중: '명이 현재 지원중이예요!',
-  매칭완료: '매칭이 확정되었어요!',
-  동행중: '동행이 진행중입니다!',
-  동행완료: '동행번호',
-};
 
 const refineRecruitData = (recruitData: RecruitSimpleResponse) => {
   let statusText = '';
