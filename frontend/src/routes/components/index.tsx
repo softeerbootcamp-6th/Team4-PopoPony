@@ -100,7 +100,7 @@ function RouteComponent() {
 
       <Section title='LabeledSection/TwoOptionSelector'>
         <FormProvider {...methods}>
-          <PhotoUpload name='photo' />
+          <PhotoUpload name='photo' prefix='uploads/test' />
         </FormProvider>
       </Section>
 

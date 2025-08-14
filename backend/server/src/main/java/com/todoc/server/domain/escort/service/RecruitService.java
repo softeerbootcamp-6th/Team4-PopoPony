@@ -147,8 +147,8 @@ public class RecruitService {
 
         // 환자 정보
         Patient patient = recruitHistoryDetailFlatDto.getPatient();
-        RecruitHistoryDetailResponse.PatientDetail patientDetail =
-                RecruitHistoryDetailResponse.PatientDetail.from(patient);
+        RecruitHistoryDetailResponse.PatientDetailHistory patientDetail =
+                RecruitHistoryDetailResponse.PatientDetailHistory.from(patient);
 
         // 위치 정보
         RecruitHistoryDetailResponse.LocationDetail meetingLocationDetail = RecruitHistoryDetailResponse.LocationDetail
