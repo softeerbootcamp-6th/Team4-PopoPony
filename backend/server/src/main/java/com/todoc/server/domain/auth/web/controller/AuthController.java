@@ -37,7 +37,7 @@ public class AuthController {
         HttpSession session = request.getSession(true);
 
         session.setAttribute("AUTH_USER", auth);
-        session.setMaxInactiveInterval(2 * 60 * 60); // 2시간(초 단위)
+        session.setMaxInactiveInterval(24 * 60 * 60); // 2시간(초 단위)
 
         return Response.from(LoginResponse.from(auth));
     }
