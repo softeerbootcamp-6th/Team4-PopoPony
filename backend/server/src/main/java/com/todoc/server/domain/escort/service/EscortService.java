@@ -23,6 +23,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalTime;
 import java.util.List;
 
 @Service
@@ -49,9 +50,15 @@ public class EscortService {
     }
 
     @Transactional
-    public void proceedEscort(Long recruitId) {
+    public Escort getById(Long escortId) {
+        return escortJpaRepository.findById(escortId)
+                .orElseThrow(EscortNotFoundException::new);
+    }
 
-        Escort escort = getByRecruitId(recruitId);
+    @Transactional
+    public void proceedEscort(Long escortId) {
+
+        Escort escort = getById(escortId);
         EscortStatus currentStatus = escort.getStatus();
 
         EscortStatus[] statuses = EscortStatus.values();
@@ -61,7 +68,14 @@ public class EscortService {
             EscortStatus nextStatus = statuses[currentIndex + 1];
             escort.setStatus(nextStatus);
 
-            if (nextStatus == EscortStatus.DONE) {
+            // 동행 만남 완료
+            if (nextStatus == EscortStatus.HEADING_TO_HOSPITAL) {
+                escort.setActualMeetingTime(LocalTime.now());
+            }
+
+            // 동행 복귀 완료
+            if (nextStatus == EscortStatus.WRITING_REPORT) {
+                escort.setActualReturnTime(LocalTime.now());
                 Recruit recruit = escort.getRecruit();
                 recruit.setStatus(RecruitStatus.DONE);
             }
@@ -74,9 +88,9 @@ public class EscortService {
     }
 
     @Transactional
-    public void updateMemo(Long recruitId, EscortMemoUpdateRequest request) {
+    public void updateMemo(Long escortId, EscortMemoUpdateRequest request) {
 
-        Escort escort = getByRecruitId(recruitId);
+        Escort escort = getById(escortId);
         escort.setMemo(request.getMemo());
     }
 
