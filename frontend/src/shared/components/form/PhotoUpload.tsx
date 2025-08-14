@@ -23,12 +23,11 @@ const PhotoUpload = ({ name, prefix }: Props) => {
     if (!file) return;
 
     try {
-      const { imageData, previewUrl } = await uploadImage(file, prefix);
+      const imageData = await uploadImage(file, prefix);
       setValue(
         name,
         {
-          imageData,
-          previewUrl,
+          ...imageData,
         },
         { shouldValidate: true, shouldDirty: true }
       );

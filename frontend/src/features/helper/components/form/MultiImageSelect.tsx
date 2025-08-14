@@ -1,6 +1,6 @@
 import { useImageUpload } from '@hooks';
 import { IcButtonClose, IcCameraFill } from '@icons';
-import type { ImagePrefix, ImageType } from '@types';
+import type { ImagePrefix, ImageUploadResult } from '@types';
 import { useFormContext } from 'react-hook-form';
 
 interface Props {
@@ -9,16 +9,11 @@ interface Props {
   maxImageLength: number;
 }
 
-type ImageTypeWithPreview = {
-  imageData: ImageType;
-  previewUrl: string;
-};
-
 const MultiImageSelect = ({ name, prefix, maxImageLength = 2 }: Props) => {
   const { setValue, watch } = useFormContext();
   const { uploadImage } = useImageUpload();
 
-  const currentValue: ImageTypeWithPreview[] = watch(name) || [];
+  const currentValue: ImageUploadResult[] = watch(name) || [];
 
   const handleImageChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
@@ -28,8 +23,8 @@ const MultiImageSelect = ({ name, prefix, maxImageLength = 2 }: Props) => {
       try {
         const results = await Promise.all(
           allowedFiles.map(async (file) => {
-            const { imageData, previewUrl } = await uploadImage(file, prefix);
-            return { imageData, previewUrl };
+            const imageData = await uploadImage(file, prefix);
+            return imageData;
           })
         );
 
@@ -67,10 +62,8 @@ const MultiImageSelect = ({ name, prefix, maxImageLength = 2 }: Props) => {
         onChange={handleImageChange}
       />
       <div className='flex gap-[0.8rem]'>
-        {(currentValue || []).map((image, index: number) => (
-          <div
-            key={`${image.imageData.checksum} - ${index}`}
-            className='relative h-[8rem] w-[8rem]'>
+        {(currentValue || []).map((image: ImageUploadResult, index: number) => (
+          <div key={`${image.checksum} - ${index}`} className='relative h-[8rem] w-[8rem]'>
             <img
               src={image.previewUrl}
               alt={`미리보기 이미지 ${index + 1}`}
