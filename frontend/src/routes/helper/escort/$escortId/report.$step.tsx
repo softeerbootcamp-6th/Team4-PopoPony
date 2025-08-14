@@ -1,7 +1,10 @@
+import { useEffect } from 'react';
 import { Modal, ProgressBar } from '@components';
+import { getReportDefault } from '@helper/apis';
 import { ReportDetail, Reservation, Taxi, Time } from '@helper/components';
 import { useFunnel, useModal } from '@hooks';
 import { PageLayout } from '@layouts';
+import type { components } from '@schema';
 import { createFileRoute, useRouter } from '@tanstack/react-router';
 import { FormProvider, useForm } from 'react-hook-form';
 
@@ -10,11 +13,28 @@ export const Route = createFileRoute('/helper/escort/$escortId/report/$step')({
 });
 
 const stepList = ['time', 'reservation', 'taxi', 'detail'];
+type ReportCreateRequest = components['schemas']['ReportCreateRequest'];
 
 function RouteComponent() {
   const router = useRouter();
   const { isOpen, openModal, closeModal } = useModal();
-  const methods = useForm({ shouldUnregister: false });
+  const methods = useForm<ReportCreateRequest>({ shouldUnregister: false });
+  const { escortId } = Route.useParams();
+
+  const { data: reportDefaultResponse } = getReportDefault(Number(escortId));
+  const reportDefault = reportDefaultResponse?.data;
+
+  useEffect(() => {
+    if (reportDefault) {
+      methods.reset({
+        actualMeetingTime: reportDefault.actualMeetingTime || '',
+        actualReturnTime: reportDefault.actualReturnTime || '',
+        description: reportDefault.memo || '',
+        hasNextAppointment: false,
+        nextAppointmentTime: undefined,
+      });
+    }
+  }, [reportDefault, methods]);
 
   const { Funnel, Step, nextStep, currentStep, handleBackStep } = useFunnel({
     defaultStep: 'time',
