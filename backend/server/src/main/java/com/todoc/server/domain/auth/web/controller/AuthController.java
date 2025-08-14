@@ -36,8 +36,8 @@ public class AuthController {
         }
         HttpSession session = request.getSession(true);
 
-        // 3. 세션에 유저/CSRF 저장
         session.setAttribute("AUTH_USER", auth);
+        session.setMaxInactiveInterval(24 * 60 * 60); // 2시간(초 단위)
 
         return Response.from(LoginResponse.from(auth));
     }
