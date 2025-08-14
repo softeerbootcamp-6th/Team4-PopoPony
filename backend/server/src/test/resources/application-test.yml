@@ -11,3 +11,6 @@ spring:
     properties:
       hibernate:
         format_sql: true
+
+tmap:
+  api-key: ${TMAP_API_KEY:}
