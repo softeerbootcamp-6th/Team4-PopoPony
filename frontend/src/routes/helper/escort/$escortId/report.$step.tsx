@@ -30,7 +30,7 @@ function RouteComponent() {
         actualMeetingTime: reportDefault.actualMeetingTime || '',
         actualReturnTime: reportDefault.actualReturnTime || '',
         description: reportDefault.memo || '',
-        hasNextAppointment: false,
+        hasNextAppointment: true,
         nextAppointmentTime: undefined,
       });
     }
