@@ -1,21 +1,17 @@
 package com.todoc.server.domain.escort.repository;
 
-import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.todoc.server.domain.escort.repository.dto.EscortDetailFlatDto;
+import com.todoc.server.domain.escort.entity.Escort;
 import com.todoc.server.domain.route.entity.QLocationInfo;
-import com.todoc.server.domain.route.entity.RouteLeg;
+import com.todoc.server.domain.route.entity.QRouteLeg;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
 
 import static com.todoc.server.domain.auth.entity.QAuth.auth;
 import static com.todoc.server.domain.customer.entity.QPatient.patient;
 import static com.todoc.server.domain.escort.entity.QEscort.escort;
 import static com.todoc.server.domain.escort.entity.QRecruit.recruit;
 import static com.todoc.server.domain.route.entity.QRoute.route;
-import static com.todoc.server.domain.route.entity.QRouteLeg.routeLeg;
 
 @Repository
 @RequiredArgsConstructor
@@ -26,31 +22,24 @@ public class EscortQueryRepository {
     QLocationInfo meetingLocation = new QLocationInfo("meetingLocation");
     QLocationInfo hospitalLocation = new QLocationInfo("hospitalLocation");
     QLocationInfo returnLocation = new QLocationInfo("returnLocation");
+    QRouteLeg meetingToHospital = new QRouteLeg("meetingToHospital");
+    QRouteLeg hospitalToReturn = new QRouteLeg("hospitalToReturn");
 
-    public List<EscortDetailFlatDto> findEscortDetailByRecruitId(Long recruitId) {
+    public Escort findEscortDetailByRecruitId(Long recruitId) {
 
         return queryFactory
-                .select(Projections.constructor(EscortDetailFlatDto.class,
-                        escort,
-                        recruit,
-                        auth,
-                        patient,
-                        route,
-                        meetingLocation,
-                        hospitalLocation,
-                        returnLocation,
-                        routeLeg
-                ))
+                .select(escort)
                 .from(escort)
-                .join(escort.recruit, recruit)
-                .join(recruit.customer, auth)
-                .join(recruit.patient, patient)
-                .join(recruit.route, route)
-                .join(route.meetingLocationInfo, meetingLocation)
-                .join(route.hospitalLocationInfo, hospitalLocation)
-                .join(route.returnLocationInfo, returnLocation)
-                .join(routeLeg).on(routeLeg.route.eq(recruit.route))
+                .leftJoin(escort.recruit, recruit).fetchJoin()
+                .leftJoin(recruit.customer, auth).fetchJoin()
+                .leftJoin(recruit.patient, patient).fetchJoin()
+                .leftJoin(recruit.route, route).fetchJoin()
+                .leftJoin(route.meetingLocationInfo, meetingLocation).fetchJoin()
+                .leftJoin(route.hospitalLocationInfo, hospitalLocation).fetchJoin()
+                .leftJoin(route.returnLocationInfo, returnLocation).fetchJoin()
+                .leftJoin(route.meetingToHospital, meetingToHospital).fetchJoin()
+                .leftJoin(route.hospitalToReturn, hospitalToReturn).fetchJoin()
                 .where(escort.recruit.id.eq(recruitId))
-                .fetch();
+                .fetchOne();
     }
 }

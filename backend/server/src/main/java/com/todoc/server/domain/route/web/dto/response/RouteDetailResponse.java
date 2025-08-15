@@ -50,4 +50,18 @@ public class RouteDetailResponse {
                 .hospitalToReturnEstimatedTaxiFee(hospitalToReturn.getTaxiFare())
                 .build();
     }
+
+    public static RouteDetailResponse from(Route route) {
+
+        RouteLeg meetingToHospital = route.getMeetingToHospital();
+        RouteLeg hospitalToReturn = route.getHospitalToReturn();
+
+        return RouteDetailResponse.builder()
+                .routeSimple(RouteSimpleResponse.from(route))
+                .meetingToHospitalEstimatedTime(meetingToHospital.getTotalTime())
+                .meetingToHospitalEstimatedTaxiFee(meetingToHospital.getTaxiFare())
+                .hospitalToReturnEstimatedTime(hospitalToReturn.getTotalTime())
+                .hospitalToReturnEstimatedTaxiFee(hospitalToReturn.getTaxiFare())
+                .build();
+    }
 }
