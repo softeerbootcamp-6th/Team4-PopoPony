@@ -1,23 +1,29 @@
-import { Tabs } from '@components';
+import { Spinner, Tabs } from '@components';
 import { HelperCard, HelperEmptyCard, HelperSelectInfoCard } from '@customer/components';
+import { useParams } from '@tanstack/react-router';
+import { getApplicationListById } from '@customer/apis';
 
 const HelperTab = () => {
+  const { escortId } = useParams({ from: '/customer/escort/$escortId/' });
+  const { data: applicationList, isLoading } = getApplicationListById(Number(escortId));
+  console.log(applicationList);
+
+  if (isLoading) return <Spinner />;
+
   return (
     <Tabs.TabsContentSection>
-      <HelperSelectInfoCard />
-      <HelperEmptyCard />
-      <HelperCard
-        helper={{
-          id: '1',
-          name: '최솔희',
-          age: 39,
-          gender: '여',
-          profileImage: '/images/default-profile.svg',
-          certificates: ['간호사', '간호조무사'],
-          tags: ['안전한 부축', '휠체어 이동', '인지장애 케어'],
-        }}
-        onClick={() => alert('준비중인 기능이에요')}
-      />
+      {applicationList &&
+      applicationList.data &&
+      applicationList.data.applicationList.length > 0 ? (
+        <>
+          <HelperSelectInfoCard />
+          {applicationList.data.applicationList.map((application) => (
+            <HelperCard key={application.helper.helperProfileId} helper={application.helper} />
+          ))}
+        </>
+      ) : (
+        <HelperEmptyCard />
+      )}
     </Tabs.TabsContentSection>
   );
 };
