@@ -269,7 +269,7 @@ INSERT INTO escort (
       (6, 6, 1, 5, '약 다른 걸로 바꿔야 한다고 하네요.', 'DONE', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
       (7, 10, 5, 3, '주사 한 방 맞았습니다.', 'WRITING_REPORT', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 
-      (8, 9, 4, 4, '다음 주에 한 번 더 병원 가셔야된대요.', 'MEETING', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+      (8, 9, 4, 4, '다음 주에 한 번 더 병원 가셔야된대요.', 'PREPARING', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 
       (9, 8, 3, 5, '혈압 전보다 낮아지셨습니다.', 'RETURNING', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 
