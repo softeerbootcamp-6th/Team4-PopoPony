@@ -26,6 +26,7 @@ import CheckboxCircle from './checkbox/CheckboxCircle';
 import TermsModal from './modal/TermsModal';
 import TermsBottomSheet from './modal/TermsBottomSheet';
 import Dot from './Dot';
+import EmptyCard from './EmptyCard';
 
 export {
   Button,
@@ -56,4 +57,5 @@ export {
   TermsModal,
   TermsBottomSheet,
   Dot,
+  EmptyCard,
 };
