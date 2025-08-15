@@ -235,19 +235,19 @@ public class RecruitIntegrationTest {
 
         // 진행중: DONE 제외 날짜 오름차순
         var inProgress = res.getInProgressList();
-        assertThat(inProgress.stream().map(RecruitSimpleResponse::getStatus))
+        assertThat(inProgress.stream().map(RecruitSimpleResponse::getRecruitStatus))
                 .doesNotContain(RecruitStatus.DONE.getLabel());
         if (!inProgress.isEmpty()) {
             System.out.println(inProgress.size());
             for (RecruitSimpleResponse recruitSimpleResponse : inProgress) {
-                assertThat(recruitSimpleResponse.getStatus()).isNotEqualTo(RecruitStatus.DONE.getLabel());
+                assertThat(recruitSimpleResponse.getRecruitStatus()).isNotEqualTo(RecruitStatus.DONE.getLabel());
             }
             assertThat(inProgress).isSortedAccordingTo(Comparator.comparing(RecruitSimpleResponse::getEscortDate));
         }
 
         // 완료: 전부 DONE, 날짜 내림차순
         var completed = res.getCompletedList();
-        assertThat(completed.stream().map(RecruitSimpleResponse::getStatus))
+        assertThat(completed.stream().map(RecruitSimpleResponse::getRecruitStatus))
                 .allMatch(s -> s.equals(RecruitStatus.DONE.getLabel()));
         if (completed.size() > 1) {
             assertThat(completed).isSortedAccordingTo(
@@ -287,7 +287,7 @@ public class RecruitIntegrationTest {
                 assertThat(item.getDestination()).isNotBlank();
                 assertThat(item.getEstimatedMeetingTime()).isNotNull();
                 assertThat(item.getEstimatedReturnTime()).isNotNull();
-                assertThat(item.getStatus()).isEqualTo(RecruitStatus.MATCHING.getLabel());
+                assertThat(item.getRecruitStatus()).isEqualTo(RecruitStatus.MATCHING.getLabel());
             });
         });
     }
