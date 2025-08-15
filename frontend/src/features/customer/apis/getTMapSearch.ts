@@ -1,4 +1,4 @@
-// TMap POI 검색 API 함수
+import { useInfiniteQuery } from '@tanstack/react-query';
 
 interface TMapSearchParams {
   searchKeyword: string;
@@ -61,13 +61,13 @@ interface TMapSearchResponse {
   };
 }
 
-const getTMapSearch = async (params: TMapSearchParams): Promise<TMapSearchResponse> => {
+const fetchTMapSearch = async (params: TMapSearchParams): Promise<TMapSearchResponse> => {
   const searchParams = new URLSearchParams({
     version: (params.version || 1).toString(),
     format: 'json',
-    searchKeyword: params.searchKeyword, // URLSearchParams가 자동으로 인코딩하므로 encodeURIComponent 제거
+    searchKeyword: params.searchKeyword,
     page: (params.page || 1).toString(),
-    count: (params.count || 20).toString(),
+    count: (params.count || 10).toString(),
     resCoordType: params.resCoordType || 'WGS84GEO',
     searchType: params.searchType || 'all',
     searchtypCd: params.searchtypCd || 'A',
@@ -78,7 +78,6 @@ const getTMapSearch = async (params: TMapSearchParams): Promise<TMapSearchRespon
     appKey: import.meta.env.VITE_TMAP_API_KEY || '',
   });
 
-  // 선택적 파라미터 추가
   if (params.areaLLCode) searchParams.append('areaLLCode', params.areaLLCode);
   if (params.areaLMCode) searchParams.append('areaLMCode', params.areaLMCode);
   if (params.radius) searchParams.append('radius', params.radius);
@@ -96,6 +95,17 @@ const getTMapSearch = async (params: TMapSearchParams): Promise<TMapSearchRespon
     },
   });
 
+  if (response.status === 204) {
+    return {
+      searchPoiInfo: {
+        totalCount: '0',
+        count: '0',
+        page: '1',
+        pois: undefined,
+      },
+    };
+  }
+
   if (!response.ok) {
     throw new Error(`TMap API Error: ${response.status} ${response.statusText}`);
   }
@@ -103,5 +113,38 @@ const getTMapSearch = async (params: TMapSearchParams): Promise<TMapSearchRespon
   return response.json();
 };
 
-export default getTMapSearch;
+const useTMapSearch = (searchKeyword: string, enabled: boolean = true) => {
+  return useInfiniteQuery({
+    queryKey: ['tmap-search', searchKeyword],
+    queryFn: ({ pageParam = 1 }) =>
+      fetchTMapSearch({
+        searchKeyword,
+        page: pageParam,
+        count: 10,
+      }),
+    getNextPageParam: (lastPage, allPages) => {
+      const totalCount = parseInt(lastPage.searchPoiInfo.totalCount);
+      const currentPage = allPages.length;
+
+      if (currentPage * 10 < totalCount) {
+        return currentPage + 1;
+      }
+      return undefined;
+    },
+    initialPageParam: 1,
+    enabled: enabled && searchKeyword.trim().length > 0,
+    staleTime: 5 * 60 * 1000,
+
+    retry: (failureCount, error) => {
+      if (error.message.includes('204') || error.message.includes('4')) {
+        return false;
+      }
+      return failureCount < 2;
+    },
+    retryDelay: 1000,
+  });
+};
+
+export default useTMapSearch;
+export { fetchTMapSearch };
 export type { TMapSearchParams, TMapSearchResponse, TMapPOI };

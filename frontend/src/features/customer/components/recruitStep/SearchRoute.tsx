@@ -1,13 +1,14 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { FormLayout } from '@layouts';
 import { useFormContext } from 'react-hook-form';
 import { useLocation } from '@tanstack/react-router';
 import type { LocationDetail } from '@customer/types';
 import SearchInput from '../search/searchInput';
-import { searchResultData } from '@customer/mocks/searchRoute';
-import { Button } from '@components';
-import { getTMapSearch } from '@customer/apis';
+
+import useTMapSearch from '@customer/apis/getTMapSearch';
 import type { TMapPOI } from '@customer/apis/getTMapSearch';
+import { useDebounce } from '@hooks';
+import { Spinner } from '@components';
 
 interface SearchRouteProps {
   handleSelectRoute: () => void;
@@ -28,17 +29,29 @@ const getPlaceText = (place?: string): '만남 장소를' | '병원을' | '복�
 };
 
 const SearchRoute = ({ handleSelectRoute }: SearchRouteProps) => {
-  // URL에서 query parameter 파싱
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const placeParam = searchParams.get('place') ?? '';
 
   const place = getPlaceText(placeParam);
   const [searchValue, setSearchValue] = useState('');
-  const [searchResult, setSearchResult] = useState<TMapPOI[]>([]);
-  // const [isLoading, setIsLoading] = useState(false);
+  const debouncedSearchValue = useDebounce(searchValue, 300); // 500ms 디바운싱
+
+  const {
+    data: searchData,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isLoading,
+    isError,
+  } = useTMapSearch(debouncedSearchValue);
+
+  // 모든 페이지의 POI 데이터를 합쳐서 하나의 배열로 만듦
+  const allSearchResults =
+    searchData?.pages.flatMap((page) => page.searchPoiInfo.pois?.poi || []) || [];
 
   const { setValue } = useFormContext();
+  const loadMoreRef = useRef<HTMLDivElement>(null);
   // place에 따른 form field 이름 결정
   const getFormFieldName = () => {
     switch (place) {
@@ -53,10 +66,45 @@ const SearchRoute = ({ handleSelectRoute }: SearchRouteProps) => {
     }
   };
 
+  // 무한 스크롤을 위한 Intersection Observer 설정
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
+          fetchNextPage();
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (loadMoreRef.current) {
+      observer.observe(loadMoreRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
+
+  const convertToLocationDetail = useCallback((poi: TMapPOI): LocationDetail => {
+    return {
+      placeName: poi.name,
+      upperAddrName: poi.upperAddrName,
+      middleAddrName: poi.middleAddrName,
+      lowerAddrName: poi.lowerAddrName,
+      firstAddrNo: poi.firstNo,
+      secondAddrNo: poi.secondNo,
+      roadName: poi.roadName,
+      firstBuildingNo: poi.firstBuildNo,
+      secondBuildingNo: poi.secondBuildNo,
+      detailAddress: poi.detailAddrname || '',
+      longitude: parseFloat(poi.frontLon),
+      latitude: parseFloat(poi.frontLat),
+    };
+  }, []);
+
   // 검색 결과 선택 핸들러
-  const handleSelectItem = (selectedItem: LocationDetail) => {
+  const handleSelectItem = (poi: TMapPOI) => {
+    const selectedItem = convertToLocationDetail(poi);
     const formFieldName = getFormFieldName();
-    console.log();
 
     // detailAddress를 제외한 데이터를 form에 저장
     const locationData = {
@@ -81,12 +129,6 @@ const SearchRoute = ({ handleSelectRoute }: SearchRouteProps) => {
     handleSelectRoute();
   };
 
-  const handleClickSearch = async () => {
-    const result = await getTMapSearch({ searchKeyword: searchValue });
-    console.log(result);
-    setSearchResult(result.searchPoiInfo.pois?.poi ?? []);
-  };
-
   return (
     <FormLayout>
       <FormLayout.Content>
@@ -99,17 +141,22 @@ const SearchRoute = ({ handleSelectRoute }: SearchRouteProps) => {
             onValueChange={setSearchValue}
             placeholder='검색어를 입력해주세요'
           />
-          <Button type='button' onClick={handleClickSearch}>
-            검색
-          </Button>
 
-          {searchResult.length > 0 && (
-            <div className='flex flex-col'>
-              {searchResult.map((result, index) => (
+          <Spinner isLoading={isLoading && debouncedSearchValue.length > 0} />
+
+          {isError && debouncedSearchValue && (
+            <div className='body2-14-medium rounded-lg p-[1.2rem] text-center'>
+              검색 중 오류가 발생했습니다.
+            </div>
+          )}
+
+          {allSearchResults.length > 0 && (
+            <div className='flex max-h-[40rem] flex-col overflow-y-auto'>
+              {allSearchResults.map((result, index) => (
                 <button
-                  key={`${result.name}-${index}`}
+                  key={`${result.id}-${index}`}
                   className='bg-neutral-0 border-stroke-neutral-light hover:bg-neutral-10 flex flex-col gap-[0.2rem] border-b-2 px-[2rem] py-[1.2rem] text-left transition-colors'
-                  onClick={() => {}}
+                  onClick={() => handleSelectItem(result)}
                   type='button'>
                   <h4 className='body1-16-medium text-text-neutral-primary'>{result.name}</h4>
                   <h5 className='body2-14-medium text-text-neutral-secondary'>
@@ -119,15 +166,23 @@ const SearchRoute = ({ handleSelectRoute }: SearchRouteProps) => {
                   </h5>
                 </button>
               ))}
+
+              <div
+                ref={loadMoreRef}
+                className='mt-[1.6rem] flex h-[2rem] items-center justify-center'>
+                <Spinner isLoading={isFetchingNextPage} />
+              </div>
             </div>
           )}
 
-          {/* 검색 결과가 없을 때 */}
-          {searchValue.trim() && searchResultData.length === 0 && (
-            <div className='text-text-neutral-assistive border-stroke-neutral-light mt-[1.6rem] rounded-lg border p-[1.2rem] text-center'>
-              검색 결과가 없습니다.
-            </div>
-          )}
+          {debouncedSearchValue.trim() &&
+            !isLoading &&
+            !isError &&
+            allSearchResults.length === 0 && (
+              <div className='body2-14-medium rounded-lg p-[1.2rem] text-center'>
+                검색 결과가 없습니다.
+              </div>
+            )}
         </div>
       </FormLayout.Content>
     </FormLayout>
