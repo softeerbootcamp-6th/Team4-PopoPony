@@ -4,7 +4,7 @@
  * @param inputType input태그의 타입.
  * @returns
  */
-export const formatValue = (value: string, inputType: string) => {
+export const formatFormInputValue = (value: string, inputType: string) => {
   switch (inputType) {
     case 'contact':
       const numbers = value.replace(/[^0-9]/g, '');
