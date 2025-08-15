@@ -56,7 +56,7 @@ import IcPlusSideLeft from './plus-side-left.svg?react';
 import IcSearch from './search.svg?react';
 import IcSpinner from './Spiner.svg?react';
 import IcStarBadge from './star-badge.svg?react';
-import IcVariant34 from './Variant34.svg?react';
+import IcCurrentLocation from './current-location.svg?react';
 import IcVerified from './verified.svg?react';
 import IcVerifiedUser from './verified_user.svg?react';
 
@@ -127,7 +127,7 @@ export {
   IcSearch,
   IcSpinner,
   IcStarBadge,
-  IcVariant34,
+  IcCurrentLocation,
   IcVerified,
   IcVerifiedUser,
 
