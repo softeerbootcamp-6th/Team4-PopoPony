@@ -48,7 +48,7 @@ function RouteComponent() {
               <EscortCard.Info type='location' text={cardLocationText} />
             </EscortCard.InfoSection>
           </EscortCard>
-          <ProgressIndicator currentStatus='매칭중' />
+          <ProgressIndicator currentStatus={recruitData.data.status} />
         </div>
 
         <Tabs defaultValue='도우미'>
