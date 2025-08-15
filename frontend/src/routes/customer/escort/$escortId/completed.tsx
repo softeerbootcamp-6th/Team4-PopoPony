@@ -1,6 +1,8 @@
 import { Button, ShowMapButton } from '@components';
 import { PageLayout } from '@layouts';
-import { createFileRoute, useNavigate } from '@tanstack/react-router';
+import { createFileRoute, useNavigate, useParams } from '@tanstack/react-router';
+import { getRecruitById } from '@customer/apis';
+import { dateFormat, timeFormatWithOptionalMinutes, timeDuration } from '@utils';
 
 export const Route = createFileRoute('/customer/escort/$escortId/completed')({
   component: RouteComponent,
@@ -8,6 +10,9 @@ export const Route = createFileRoute('/customer/escort/$escortId/completed')({
 
 function RouteComponent() {
   const navigate = useNavigate();
+  const { escortId } = useParams({ from: '/customer/escort/$escortId/completed' });
+  const { data } = getRecruitById(Number(escortId));
+  const { escortDate, estimatedMeetingTime, estimatedReturnTime, route } = data?.data || {};
   return (
     <PageLayout background='bg-neutral-2'>
       <PageLayout.Header
@@ -39,16 +44,25 @@ function RouteComponent() {
           <div className='body2-14-medium mt-auto flex w-full flex-col gap-[0.8rem] px-[2.8rem] py-[2rem]'>
             <div className='flex-start gap-[2rem]'>
               <span className='text-text-neutral-primary'>동행 날짜</span>
-              <span className='text-text-neutral-secondary'>2025년 7월 22일 (토)</span>
+              <span className='text-text-neutral-secondary'>
+                {escortDate && dateFormat(escortDate, 'yyyy년 MM월 dd일 (eee)')}
+              </span>
             </div>
             <div className='flex-start gap-[2rem]'>
               <span className='text-text-neutral-primary'>동행 시간</span>
-              <span className='text-text-neutral-secondary'>오후 12시 ~ 3시 (3시간)</span>
+              <span className='text-text-neutral-secondary'>
+                {estimatedMeetingTime && timeFormatWithOptionalMinutes(estimatedMeetingTime)} ~{' '}
+                {estimatedReturnTime && timeFormatWithOptionalMinutes(estimatedReturnTime)} (
+                {estimatedMeetingTime &&
+                  estimatedReturnTime &&
+                  timeDuration(estimatedMeetingTime, estimatedReturnTime)}
+                )
+              </span>
             </div>
             <div className='flex-start gap-[2rem]'>
               <span className='text-text-neutral-primary'>방문 병원</span>
               <div>
-                <ShowMapButton businessAddress='서울아산병원' />
+                <ShowMapButton businessAddress={route?.hospitalLocationInfo?.placeName || ''} />
               </div>
             </div>
           </div>
