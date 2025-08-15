@@ -52,7 +52,7 @@ public class EscortController {
     @ApiResponse(
             responseCode = "200",
             description = "동행 상세 정보 조회 성공")
-    @GetMapping("/{recruitId}")
+    @GetMapping("/recruits/{recruitId}")
     public Response<EscortDetailResponse> getEscortDetailByRecruitId(@PathVariable Long recruitId) {
 
         return Response.from(escortService.getEscortDetailByRecruitId(recruitId));
