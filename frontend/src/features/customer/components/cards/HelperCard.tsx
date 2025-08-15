@@ -2,6 +2,8 @@ import { StrengthTag, Tag } from '@components';
 import { IcChevronRightSecondary } from '@icons';
 import type { EscortStrength } from '@types';
 import type { HelperSimpleResponse } from '@customer/types';
+import { STRENGTH_OPTIONS } from '@helper/types';
+import { formatImageUrl } from '@utils';
 
 interface HelperCardProps {
   helper: HelperSimpleResponse;
@@ -18,6 +20,20 @@ const formatCertificates = (certificates: string[]) => {
   return [...(visibleCerts || []), `+${hiddenCount}`];
 };
 
+type StrengthOption = (typeof STRENGTH_OPTIONS)[number];
+
+const sortStrengthList = (strengthList: string[]) => {
+  //순서 보장 sort 알고리즘
+  const orderMap = new Map<StrengthOption, number>(
+    STRENGTH_OPTIONS.map((label, index) => [label, index] as const)
+  );
+  return [...strengthList].sort((a, b) => {
+    const aOrder = orderMap.get(a as StrengthOption) ?? Number.MAX_SAFE_INTEGER;
+    const bOrder = orderMap.get(b as StrengthOption) ?? Number.MAX_SAFE_INTEGER;
+    return aOrder - bOrder;
+  });
+};
+
 export default function HelperCard({ helper, onClick }: HelperCardProps) {
   const { helperProfileId, name, age, gender, imageUrl, certificateList, strengthList } = helper;
   const displayCertificates = formatCertificates(certificateList);
@@ -32,9 +48,9 @@ export default function HelperCard({ helper, onClick }: HelperCardProps) {
       onClick={handleCardClick}>
       <div className='flex-center gap-[1.2rem]'>
         <img
-          src={imageUrl || '/images/default-profile.svg'}
+          src={formatImageUrl(imageUrl) || '/images/default-profile.svg'}
           alt={`${name} 프로필`}
-          className='w-[5.6rem h-[5.6rem] object-cover'
+          className='h-[5.6rem] w-[5.6rem] rounded-full object-cover'
         />
         <div className='flex flex-1 flex-col gap-[0.4rem]'>
           <div className='mb-1 flex items-center justify-between'>
@@ -44,7 +60,6 @@ export default function HelperCard({ helper, onClick }: HelperCardProps) {
                 ({age}세/{gender})
               </span>
             </div>
-
             <IcChevronRightSecondary />
           </div>
 
@@ -58,7 +73,7 @@ export default function HelperCard({ helper, onClick }: HelperCardProps) {
 
       <div className='flex-start mt-[1.2rem] gap-[0.4rem]'>
         {strengthList &&
-          strengthList.map((strength) => (
+          sortStrengthList(strengthList).map((strength) => (
             <StrengthTag key={strength} type={strength as EscortStrength} />
           ))}
       </div>

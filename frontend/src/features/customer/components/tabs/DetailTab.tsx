@@ -4,7 +4,7 @@ import { useModal } from '@hooks';
 import { IcCheck } from '@icons';
 import type { EscortStrength } from '@types';
 import type { RecruitDetailResponse } from '@customer/types';
-import { dateFormat, timeFormatWithOptionalMinutes, timeDuration } from '@utils';
+import { dateFormat, timeFormatWithOptionalMinutes, timeDuration, formatImageUrl } from '@utils';
 import { useNavigate, useParams } from '@tanstack/react-router';
 import { deleteRecruit } from '@customer/apis';
 
@@ -54,7 +54,7 @@ const DetailTab = ({ data }: { data: RecruitDetailResponse }) => {
       <Tabs.TabsContentSection>
         <div className='flex-start gap-[1.2rem]'>
           <img
-            src={import.meta.env.VITE_API_BASE_URL + data.patient.imageUrl}
+            src={formatImageUrl(data.patient.imageUrl)}
             alt='환자 프로필'
             className='h-[5.6rem] w-[5.6rem] rounded-full object-cover'
           />

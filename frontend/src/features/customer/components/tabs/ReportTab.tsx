@@ -17,7 +17,7 @@ const ReportTab = () => {
             id: '1',
             name: '최솔희',
             age: 39,
-            gender: '여',
+            gender: '여자',
             profileImage: '/images/default-profile.svg',
             certificates: ['간호사', '간호조무사'],
             tags: ['안전한 부축', '휠체어 이동', '인지장애 케어'],
