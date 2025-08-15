@@ -37,7 +37,6 @@ const Profile = memo(({ handleNextStep }: RecruitStepProps) => {
   useEffect(() => {
     if (!isPatientIdConfirmed || !selectedPatientId) return;
     if (!detailData) return;
-    console.log('pastPatient detailData:', detailData);
     const { patientDetail, meetingLocationDetail, destinationDetail, returnLocationDetail } =
       detailData?.data || {};
     setValue('name', patientDetail?.name);
