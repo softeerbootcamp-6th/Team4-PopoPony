@@ -18,3 +18,5 @@ export type RouteSimpleResponse = components['schemas']['RouteSimpleResponse'];
 export type PatientSimpleResponse = components['schemas']['PatientSimpleResponse'];
 export type LocationInfoSimpleResponse = components['schemas']['LocationInfoSimpleResponse'];
 export type HelperSimpleResponse = components['schemas']['HelperSimpleResponse'];
+export type PositiveFeedbackStatList =
+  components['schemas']['HelperDetailResponse']['positiveFeedbackStatList'];
