@@ -130,7 +130,7 @@ class EscortServiceTest {
         @DisplayName("허용 구간 외 상태에서는 EscortInvalidProceedException")
         void proceed_invalid_range() {
             Recruit recruit = makeRecruit(9L);
-            Escort escort = makeEscort(3L, EscortStatus.MEETING, recruit); // currentIndex==1
+            Escort escort = makeEscort(3L, EscortStatus.PREPARING, recruit);
             when(escortJpaRepository.findById(3L)).thenReturn(Optional.of(escort));
             assertThatThrownBy(() -> escortService.proceedEscort(3L))
                     .isInstanceOf(EscortInvalidProceedException.class);

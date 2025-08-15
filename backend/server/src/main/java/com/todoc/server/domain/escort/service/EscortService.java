@@ -64,7 +64,7 @@ public class EscortService {
         EscortStatus[] statuses = EscortStatus.values();
         int currentIndex = currentStatus.ordinal();
 
-        if (0 < currentIndex && currentIndex < statuses.length - 1) {
+        if (0 < currentIndex && currentIndex < statuses.length - 2) {
             EscortStatus nextStatus = statuses[currentIndex + 1];
             escort.setStatus(nextStatus);
 
