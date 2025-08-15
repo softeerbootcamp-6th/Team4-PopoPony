@@ -1,7 +1,8 @@
+import { useState } from 'react';
 import { EscortCard, ProgressIndicator, Tabs, Button } from '@components';
 import { DetailTab, HelperTab, ReportTab } from '@customer/components';
 import { PageLayout } from '@layouts';
-import { createFileRoute, useParams } from '@tanstack/react-router';
+import { createFileRoute, useParams, useNavigate } from '@tanstack/react-router';
 import type { RecruitDetailResponse } from '@customer/types';
 import { getRecruitById } from '@customer/apis';
 import { dateFormat, timeFormat } from '@utils';
@@ -22,6 +23,9 @@ const refineCardData = (recruitData: RecruitDetailResponse) => {
 };
 
 function RouteComponent() {
+  const navigate = useNavigate();
+  const [hasReview, setHasReview] = useState(false);
+  const [helperId, setHelperId] = useState<number | null>(null);
   const { escortId } = useParams({ from: '/customer/escort/$escortId/' });
 
   const { data: recruitData, isLoading } = getRecruitById(Number(escortId));
@@ -35,6 +39,13 @@ function RouteComponent() {
   const { statusText, cardTitle, cardTimeText, cardLocationText } = refineCardData(
     recruitData.data
   );
+  const handleReviewClick = () => {
+    navigate({
+      to: '/customer/escort/$escortId/$helperId/review/$step',
+      params: { escortId: escortId, helperId: helperId?.toString() || '', step: 'summary' },
+    });
+  };
+
   return (
     <PageLayout>
       <PageLayout.Header title='내역 상세보기' showBack />
@@ -61,19 +72,19 @@ function RouteComponent() {
             <Tabs.TabsTrigger value='신청 내역'>신청 내역</Tabs.TabsTrigger>
           </Tabs.TabsList>
           <Tabs.TabsContent value='도우미'>
-            <HelperTab />
+            <HelperTab status={recruitData.data.status} />
           </Tabs.TabsContent>
           <Tabs.TabsContent value='리포트'>
-            <ReportTab />
+            <ReportTab setHasReview={setHasReview} setHelperId={setHelperId} />
           </Tabs.TabsContent>
           <Tabs.TabsContent value='신청 내역'>
             <DetailTab data={recruitData.data} />
           </Tabs.TabsContent>
         </Tabs>
       </PageLayout.Content>
-      {recruitData.data.status === '동행완료' && (
+      {recruitData.data.status === '동행완료' && !hasReview && (
         <PageLayout.Footer>
-          <Button onClick={() => alert('준비중인 기능이에요')}>도우미 후기 남기기</Button>
+          <Button onClick={handleReviewClick}>도우미 후기 남기기</Button>
         </PageLayout.Footer>
       )}
     </PageLayout>
