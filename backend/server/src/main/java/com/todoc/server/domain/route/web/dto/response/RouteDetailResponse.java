@@ -2,6 +2,7 @@ package com.todoc.server.domain.route.web.dto.response;
 
 import com.todoc.server.domain.route.entity.Route;
 import com.todoc.server.domain.route.entity.RouteLeg;
+import com.todoc.server.domain.route.exception.RouteLegNotFoundException;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
@@ -55,6 +56,10 @@ public class RouteDetailResponse {
 
         RouteLeg meetingToHospital = route.getMeetingToHospital();
         RouteLeg hospitalToReturn = route.getHospitalToReturn();
+
+        if (meetingToHospital == null || hospitalToReturn == null) {
+            throw new RouteLegNotFoundException();
+        }
 
         return RouteDetailResponse.builder()
                 .routeSimple(RouteSimpleResponse.from(route))

@@ -192,8 +192,14 @@ class EscortServiceTest {
             LocationInfo m = makeLocationInfo(1L, "만남장소");
             LocationInfo h = makeLocationInfo(2L, "병원");
             LocationInfo r = makeLocationInfo(3L, "복귀장소");
-            RouteLeg meetingToHospital = new RouteLeg();
-            RouteLeg hospitalToReturn = new RouteLeg();
+            RouteLeg meetingToHospital = RouteLeg.builder()
+                    .totalTime(130)
+                    .taxiFare(14000)
+                    .build();
+            RouteLeg hospitalToReturn = RouteLeg.builder()
+                    .totalTime(150)
+                    .taxiFare(19000)
+                    .build();
             Route route = makeRoute(300L, m, h, r, meetingToHospital, hospitalToReturn);
             recruit.setRoute(route);
 
@@ -250,6 +256,7 @@ class EscortServiceTest {
             LocationInfo h = makeLocationInfo(2L, "병원");
             LocationInfo r = makeLocationInfo(3L, "복귀장소");
             RouteLeg meetingToHospital = new RouteLeg();
+            meetingToHospital.setTotalTime(170);
             RouteLeg hospitalToReturn = null;
             Route route = makeRoute(300L, m, h, r, meetingToHospital, hospitalToReturn);
             recruit.setRoute(route);
@@ -260,9 +267,7 @@ class EscortServiceTest {
             when(escortQueryRepository.findEscortDetailByRecruitId(100L))
                     .thenReturn(escort);
 
-            EscortDetailResponse resp = escortService.getEscortDetailByRecruitId(100L);
-
-            assertThatThrownBy(() -> escortService.getEscortDetailByRecruitId(1002L))
+            assertThatThrownBy(() -> escortService.getEscortDetailByRecruitId(100L))
                     .isInstanceOf(RouteLegNotFoundException.class);
         }
     }
