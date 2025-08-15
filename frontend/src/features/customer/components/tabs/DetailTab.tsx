@@ -5,9 +5,23 @@ import { IcCheck } from '@icons';
 import type { EscortStrength } from '@types';
 import type { RecruitDetailResponse } from '@customer/types';
 import { dateFormat, timeFormatWithOptionalMinutes, timeDuration } from '@utils';
+import { useNavigate, useParams } from '@tanstack/react-router';
+import { deleteRecruit } from '@customer/apis';
 
 const DetailTab = ({ data }: { data: RecruitDetailResponse }) => {
-  const { isOpen, openModal, closeModal } = useModal();
+  const navigate = useNavigate();
+  const { mutate } = deleteRecruit();
+  const { escortId } = useParams({ from: '/customer/escort/$escortId/' });
+  const {
+    isOpen: isDeleteRecruitOpen,
+    openModal: openDeleteRecruitModal,
+    closeModal: closeDeleteRecruitModal,
+  } = useModal();
+  const {
+    isOpen: isDeleteRecruitSuccessOpen,
+    openModal: openDeleteRecruitSuccessModal,
+    closeModal: closeDeleteRecruitSuccessModal,
+  } = useModal();
   const taglist = [];
   if (data.patient.needsHelping) {
     taglist.push('안전한 부축');
@@ -15,6 +29,24 @@ const DetailTab = ({ data }: { data: RecruitDetailResponse }) => {
   if (data.patient.usesWheelchair) {
     taglist.push('휠체어 이동');
   }
+
+  const handleDeleteRecruit = () => {
+    mutate(
+      {
+        params: {
+          path: { recruitId: Number(escortId) },
+        },
+      },
+      {
+        onSuccess: () => {
+          openDeleteRecruitSuccessModal();
+        },
+        onError: () => {
+          alert('동행 신청 취소에 실패했습니다.');
+        },
+      }
+    );
+  };
 
   return (
     <>
@@ -132,22 +164,34 @@ const DetailTab = ({ data }: { data: RecruitDetailResponse }) => {
         </div>
         {/* TODO:도우미 후기가 있으면 버튼 안 뜨기 */}
         {data.status !== '동행완료' && (
-          <Button variant='assistive' onClick={openModal}>
+          <Button variant='assistive' onClick={openDeleteRecruitModal}>
             신청 취소하기
           </Button>
         )}
-        <Modal isOpen={isOpen} onClose={closeModal}>
+        <Modal isOpen={isDeleteRecruitOpen} onClose={closeDeleteRecruitModal}>
           <Modal.Title>동행 신청을 취소하시겠어요?</Modal.Title>
           <Modal.Content>취소된 동행은 복구할 수 없어요.</Modal.Content>
           <Modal.ButtonContainer>
             <Modal.ConfirmButton
               onClick={() => {
-                alert('준비중인 기능이에요');
-                closeModal();
+                handleDeleteRecruit();
+                closeDeleteRecruitModal();
               }}>
               취소하기
             </Modal.ConfirmButton>
-            <Modal.CloseButton onClick={closeModal}>돌아가기</Modal.CloseButton>
+            <Modal.CloseButton onClick={closeDeleteRecruitModal}>돌아가기</Modal.CloseButton>
+          </Modal.ButtonContainer>
+        </Modal>
+        <Modal isOpen={isDeleteRecruitSuccessOpen} onClose={closeDeleteRecruitSuccessModal}>
+          <Modal.Title>동행 신청 취소가 완료되었습니다.</Modal.Title>
+          <Modal.ButtonContainer>
+            <Modal.ConfirmButton
+              onClick={() => {
+                navigate({ to: '/customer' });
+                closeDeleteRecruitSuccessModal();
+              }}>
+              홈으로 가기
+            </Modal.ConfirmButton>
           </Modal.ButtonContainer>
         </Modal>
       </Tabs.TabsContentSection>
