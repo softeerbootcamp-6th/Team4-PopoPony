@@ -51,7 +51,7 @@ function RouteComponent() {
           <ProgressIndicator currentStatus={recruitData.data.status} />
         </div>
 
-        <Tabs defaultValue='도우미'>
+        <Tabs defaultValue={recruitData.data.status === '동행완료' ? '리포트' : '도우미'}>
           <Tabs.TabsList>
             {recruitData.data.status !== '동행완료' ? (
               <Tabs.TabsTrigger value='도우미'>도우미</Tabs.TabsTrigger>
