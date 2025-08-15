@@ -1,24 +1,12 @@
 import { useEffect, useState } from 'react';
 import type { TMap } from '@types';
+import { routeVertices } from './routeData';
 
 const DEFAULT_ZOOM_LEVEL = 16;
 const INITIAL_LATITUDE = 37.566481622437934;
 const INITIAL_LONGITUDE = 126.98502302169841;
 const MAX_ZOOM_LEVEL = 17;
 const MIN_ZOOM_LEVEL = 7;
-
-const routeVertices = [
-  [36.48254323473325, 127.26065335665392],
-  [36.482226593066834, 127.26001453364722],
-  [36.48204327392011, 127.25962846213329],
-  [36.48198216804618, 127.25952847275872],
-  [36.48189328777668, 127.25943959425327],
-  [36.48179329821132, 127.25938126886537],
-  [36.48143778047806, 127.25921462679615],
-  [36.48130723886108, 127.25915630223778],
-  [36.48100171598417, 127.25902298915528],
-  [36.48064064343057, 127.2588619022937],
-];
 
 const { Tmapv3 } = window;
 
@@ -174,12 +162,9 @@ export const useMap = (mapRef?: React.RefObject<HTMLDivElement>) => {
       });
 
       // 경로에 맞게 지도 중심과 줌 조정
-      const startPoint = routeCoordinates[0];
-      const endPoint = routeCoordinates[routeCoordinates.length - 1];
-      map.setCenter(
-        new Tmapv3.LatLng((startPoint[0] + endPoint[0]) / 2, (startPoint[1] + endPoint[1]) / 2)
-      );
-      map.setZoom(20);
+      const middlePoint = routeCoordinates[Math.floor(routeCoordinates.length / 2)];
+      map.setCenter(new Tmapv3.LatLng(middlePoint[0], middlePoint[1]));
+      map.setZoom(7);
 
       console.log('폴리라인 그리기 완료 (파싱된 좌표):', routeCoordinates);
     } catch (error) {
