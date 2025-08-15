@@ -27,3 +27,7 @@ export const formatPhoneNumber = (value: string) => {
   if (numbers.length <= 7) return `${numbers.slice(0, 3)}-${numbers.slice(3)}`;
   return `${numbers.slice(0, 3)}-${numbers.slice(3, 7)}-${numbers.slice(7, 11)}`;
 };
+
+export const formatImageUrl = (value: string) => {
+  return import.meta.env.VITE_API_BASE_URL + value;
+};
