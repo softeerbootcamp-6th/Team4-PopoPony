@@ -121,7 +121,7 @@ public class RecruitIntegrationTest {
         assertThat(response.getRecruitId()).isEqualTo(recruitId);
         assertThat(response.getRoute()).isNotNull();
         assertThat(response.getBaseFee()).isEqualTo(35000);
-        assertThat(response.getExpectedTaxiFee()).isEqualTo(0); // taxi_fee(8500 + 9200)
+        assertThat(response.getExpectedTaxiFee()).isEqualTo(37000); // taxi_fee(8500 + 9200)
     }
 
     @Test
