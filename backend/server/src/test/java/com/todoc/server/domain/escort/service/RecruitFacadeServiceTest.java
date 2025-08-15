@@ -80,16 +80,12 @@ class RecruitFacadeServiceTest {
         when(request.getDestinationDetail()).thenReturn(destinationDetail);
         when(request.getReturnLocationDetail()).thenReturn(returnLocationDetail);
 
-        try {
-            when(tMapRouteService.getRoute(any()))
-                .thenReturn(new TMapRouteService.TMapRawResult(tmapJson, usedVertices));
-            when(tmapRouteParser.parseSummaryFromRaw(anyString()))
-                .thenReturn(new TMapRouteParser.RouteLegSummary(1561, 343, 0, 5200));
-            when(escortDetail.getEstimatedMeetingTime()).thenReturn(LocalTime.of(9, 0));
-            when(escortDetail.getEstimatedReturnTime()).thenReturn(LocalTime.of(11, 30));
-        } catch (IOException e) {
-
-        }
+        when(tMapRouteService.getRoute(any()))
+            .thenReturn(new TMapRouteService.TMapRawResult(tmapJson, usedVertices));
+        when(tmapRouteParser.parseSummaryFromRaw(anyString()))
+            .thenReturn(new TMapRouteParser.RouteLegSummary(1561, 343, 0, 5200));
+        when(escortDetail.getEstimatedMeetingTime()).thenReturn(LocalTime.of(9, 0));
+        when(escortDetail.getEstimatedReturnTime()).thenReturn(LocalTime.of(11, 30));
 
         Patient patient = mock(Patient.class);
         // 실제 좌표값을 가진 LocationInfo 생성
