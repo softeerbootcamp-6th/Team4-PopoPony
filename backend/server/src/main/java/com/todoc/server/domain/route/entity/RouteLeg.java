@@ -4,10 +4,12 @@ import com.todoc.server.common.entity.BaseEntity;
 import com.todoc.server.common.enumeration.RouteLegType;
 import jakarta.persistence.*;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
+@Getter
 @Setter
 @NoArgsConstructor
 public class RouteLeg extends BaseEntity {
