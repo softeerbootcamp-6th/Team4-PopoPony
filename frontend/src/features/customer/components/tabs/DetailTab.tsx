@@ -122,8 +122,8 @@ const DetailTab = ({ data }: { data: RecruitDetailResponse }) => {
               status={data.patient.hasCognitiveIssue ? '도움이 필요해요' : '괜찮아요'}>
               {data.patient.hasCognitiveIssue && (
                 <GrayBox>
-                  {data.patient.cognitiveIssueDetail?.map((detail) => (
-                    <div className='flex-start'>
+                  {data.patient.cognitiveIssueDetail?.map((detail, index) => (
+                    <div className='flex-start' key={detail + index}>
                       <IcCheck />
                       <span>{detail}</span>
                     </div>
