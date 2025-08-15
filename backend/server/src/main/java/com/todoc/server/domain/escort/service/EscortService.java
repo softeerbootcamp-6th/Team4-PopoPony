@@ -28,4 +28,12 @@ public class EscortService {
         return escortJpaRepository.findByRecruitId(recruitId)
                 .orElseThrow(EscortNotFoundException::new);
     }
+
+    public void proceedEscort(Long recruitId) {
+
+        Escort escort = getByRecruitId(recruitId);
+
+
+
+    }
 }
