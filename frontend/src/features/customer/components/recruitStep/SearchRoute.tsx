@@ -5,6 +5,9 @@ import { useLocation } from '@tanstack/react-router';
 import type { LocationDetail } from '@customer/types';
 import SearchInput from '../search/searchInput';
 import { searchResultData } from '@customer/mocks/searchRoute';
+import { Button } from '@components';
+import { getTMapSearch } from '@customer/apis';
+import type { TMapPOI } from '@customer/apis/getTMapSearch';
 
 interface SearchRouteProps {
   handleSelectRoute: () => void;
@@ -32,32 +35,10 @@ const SearchRoute = ({ handleSelectRoute }: SearchRouteProps) => {
 
   const place = getPlaceText(placeParam);
   const [searchValue, setSearchValue] = useState('');
-  // const [searchResult, setSearchResult] = useState<LocationDetail[]>([]);
+  const [searchResult, setSearchResult] = useState<TMapPOI[]>([]);
   // const [isLoading, setIsLoading] = useState(false);
+
   const { setValue } = useFormContext();
-
-  // const fetchSearchResult = async () => {
-  //   if (!searchValue.trim()) {
-  //     setSearchResult([]);
-  //     return;
-  //   }
-
-  //   setIsLoading(true);
-  //   try {
-  //     const result = await searchRoute(searchValue);
-  //     setSearchResult(result);
-  //   } catch (error) {
-  //     console.error('검색 중 오류 발생:', error);
-  //     setSearchResult([]);
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   fetchSearchResult();
-  // }, [searchValue]);
-
   // place에 따른 form field 이름 결정
   const getFormFieldName = () => {
     switch (place) {
@@ -75,6 +56,7 @@ const SearchRoute = ({ handleSelectRoute }: SearchRouteProps) => {
   // 검색 결과 선택 핸들러
   const handleSelectItem = (selectedItem: LocationDetail) => {
     const formFieldName = getFormFieldName();
+    console.log();
 
     // detailAddress를 제외한 데이터를 form에 저장
     const locationData = {
@@ -95,8 +77,14 @@ const SearchRoute = ({ handleSelectRoute }: SearchRouteProps) => {
 
     // 검색 결과 초기화 및 라우트 변경
     // setSearchResult([]);
-    setSearchValue('');
+    // setSearchValue('');
     handleSelectRoute();
+  };
+
+  const handleClickSearch = async () => {
+    const result = await getTMapSearch({ searchKeyword: searchValue });
+    console.log(result);
+    setSearchResult(result.searchPoiInfo.pois?.poi ?? []);
   };
 
   return (
@@ -111,25 +99,23 @@ const SearchRoute = ({ handleSelectRoute }: SearchRouteProps) => {
             onValueChange={setSearchValue}
             placeholder='검색어를 입력해주세요'
           />
+          <Button type='button' onClick={handleClickSearch}>
+            검색
+          </Button>
 
-          {/* 로딩 상태 */}
-          {/* {isLoading && (
-            <div className='mt-[1.6rem] p-[1.2rem] text-center text-gray-500'>검색 중...</div>
-          )} */}
-
-          {searchResultData.length > 0 && (
+          {searchResult.length > 0 && (
             <div className='flex flex-col'>
-              {searchResultData.map((result, index) => (
+              {searchResult.map((result, index) => (
                 <button
-                  key={`${result.placeName}-${index}`}
+                  key={`${result.name}-${index}`}
                   className='bg-neutral-0 border-stroke-neutral-light hover:bg-neutral-10 flex flex-col gap-[0.2rem] border-b-2 px-[2rem] py-[1.2rem] text-left transition-colors'
-                  onClick={() => handleSelectItem({ ...result, detailAddress: '' })}
+                  onClick={() => {}}
                   type='button'>
-                  <h4 className='body1-16-medium text-text-neutral-primary'>{result.placeName}</h4>
+                  <h4 className='body1-16-medium text-text-neutral-primary'>{result.name}</h4>
                   <h5 className='body2-14-medium text-text-neutral-secondary'>
                     {result.upperAddrName} {result.middleAddrName} {result.lowerAddrName}{' '}
-                    {result.roadName} {result.firstBuildingNo}
-                    {result.secondBuildingNo ? `-${result.secondBuildingNo}` : ''}
+                    {result.roadName} {result.firstBuildNo}
+                    {result.secondBuildNo ? `-${result.secondBuildNo}` : ''}
                   </h5>
                 </button>
               ))}
