@@ -45,9 +45,11 @@ const Footer = ({ children }: FormLayoutProps) => {
 const FooterPrevNext = ({
   handleClickNext,
   disabled,
+  nextButtonText = '다음',
 }: {
   handleClickNext: () => void;
   disabled: boolean;
+  nextButtonText?: string;
 }) => {
   const router = useRouter();
 
@@ -63,7 +65,7 @@ const FooterPrevNext = ({
         </Button>
       </div>
       <Button className='flex-1' onClick={handleClickNext} disabled={disabled}>
-        다음
+        {nextButtonText}
       </Button>
     </div>
   );
