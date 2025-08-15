@@ -15,16 +15,32 @@ interface SearchRouteProps {
 }
 
 // place 파라미터에 따른 텍스트 매핑
-const getPlaceText = (place?: string): '만남 장소를' | '병원을' | '복귀 장소를' => {
+const getPlaceText = (place?: string): React.ReactNode => {
   switch (place) {
     case 'meeting':
-      return '만남 장소를';
+      return (
+        <span>
+          <strong className='text-text-mint-primary'>만남 장소</strong>를 선택해주세요
+        </span>
+      );
     case 'hospital':
-      return '병원을';
+      return (
+        <span>
+          <strong className='text-text-mint-primary'>병원</strong>을 선택해주세요
+        </span>
+      );
     case 'return':
-      return '복귀 장소를';
+      return (
+        <span>
+          <strong className='text-text-mint-primary'>복귀 장소</strong>를 선택해주세요
+        </span>
+      );
     default:
-      return '만남 장소를';
+      return (
+        <span>
+          <strong className='text-text-mint-primary'>만남 장소</strong>를 선택해주세요
+        </span>
+      );
   }
 };
 
@@ -54,12 +70,12 @@ const SearchRoute = ({ handleSelectRoute }: SearchRouteProps) => {
   const loadMoreRef = useRef<HTMLDivElement>(null);
   // place에 따른 form field 이름 결정
   const getFormFieldName = () => {
-    switch (place) {
-      case '만남 장소를':
+    switch (placeParam) {
+      case 'meeting':
         return 'meetingLocationDetail';
-      case '병원을':
+      case 'hospital':
         return 'destinationDetail';
-      case '복귀 장소를':
+      case 'return':
         return 'returnLocationDetail';
       default:
         return 'meetingLocationDetail';
@@ -133,7 +149,7 @@ const SearchRoute = ({ handleSelectRoute }: SearchRouteProps) => {
     <FormLayout>
       <FormLayout.Content>
         <FormLayout.TitleWrapper>
-          <FormLayout.Title>{place} 선택해주세요</FormLayout.Title>
+          <FormLayout.Title>{place}</FormLayout.Title>
         </FormLayout.TitleWrapper>
         <div className='flex flex-col gap-[2rem]'>
           <SearchInput
@@ -142,7 +158,11 @@ const SearchRoute = ({ handleSelectRoute }: SearchRouteProps) => {
             placeholder='검색어를 입력해주세요'
           />
 
-          <Spinner isLoading={isLoading && debouncedSearchValue.length > 0} />
+          <Spinner
+            isLoading={isLoading && debouncedSearchValue.length > 0}
+            className='mt-[3.6rem]'
+            size='3.2rem'
+          />
 
           {isError && debouncedSearchValue && (
             <div className='body2-14-medium rounded-lg p-[1.2rem] text-center'>
