@@ -8,6 +8,8 @@ import postHelperReview from './postHelperReview';
 import getPastPatientInfo from './getPastPatientInfo';
 import getPastPatientInfoDetail from './getPastPatientInfoDetail';
 import getPresignedImage from './getPresignedImage';
+import getApplicationListById from './getApplicationListById';
+import deleteRecruit from './deleteRecruit';
 
 // TODO: 추후 삭제
 import { searchRoute } from './search';
@@ -24,4 +26,6 @@ export {
   getPastPatientInfo,
   getPastPatientInfoDetail,
   getPresignedImage,
+  getApplicationListById,
+  deleteRecruit,
 };
