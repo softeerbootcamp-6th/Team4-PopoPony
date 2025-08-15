@@ -80,7 +80,7 @@ public class ReportIntegrationTest {
     @DisplayName("리포트 기본값 조회 - recruitId=9 정상 반환")
     void getReportDefaultValue_success() {
         // given
-        Long recruitId = 9L;
+        Long recruitId = 1L;
 
         // when
         ReportDefaultValueResponse resp = reportFacadeService.getReportDefaultValue(recruitId);
@@ -89,7 +89,7 @@ public class ReportIntegrationTest {
         assertThat(resp).isNotNull();
         assertThat(resp.getActualMeetingTime()).isNull();
         assertThat(resp.getActualReturnTime()).isNull();
-        assertThat(resp.getMemo()).isEqualTo("병원 방문 준비 중입니다.");
+        assertThat(resp.getMemo()).isEqualTo("다음 진료 예약 잡았습니다.");
     }
 
     @Test

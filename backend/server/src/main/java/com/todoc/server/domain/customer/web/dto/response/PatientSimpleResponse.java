@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.todoc.server.common.util.ImageUrlUtils;
 import com.todoc.server.common.util.JsonUtils;
 import com.todoc.server.domain.customer.entity.Patient;
+import com.todoc.server.domain.image.exception.ImageFileNotFoundException;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
@@ -86,6 +87,10 @@ public class PatientSimpleResponse {
 
         // 성별 Enum에서 문자열로 변환
         String gender = patient.getGender().getLabel();
+
+        if (patient.getPatientProfileImage() == null) {
+            throw new ImageFileNotFoundException();
+        }
 
         return PatientSimpleResponse.builder()
                 .patientId(patient.getId())

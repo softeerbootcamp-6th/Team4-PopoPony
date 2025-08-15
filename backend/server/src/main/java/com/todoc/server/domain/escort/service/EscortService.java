@@ -64,7 +64,7 @@ public class EscortService {
         EscortStatus[] statuses = EscortStatus.values();
         int currentIndex = currentStatus.ordinal();
 
-        if (1 < currentIndex && currentIndex < statuses.length - 1) {
+        if (0 < currentIndex && currentIndex < statuses.length - 2) {
             EscortStatus nextStatus = statuses[currentIndex + 1];
             escort.setStatus(nextStatus);
 
@@ -113,7 +113,7 @@ public class EscortService {
 
         for (EscortDetailFlatDto escortDetailFlatDto : escortDetailFlatDtoList) {
             RouteLeg routeLeg = escortDetailFlatDto.getRouteLeg();
-            if (routeLeg.getLegType().equals(RouteLegType.HOSPITAL_TO_RETURN)) {
+            if (routeLeg.getLegType().equals(RouteLegType.MEETING_TO_HOSPITAL)) {
                 meetingToHospital = routeLeg;
             }
             else {
