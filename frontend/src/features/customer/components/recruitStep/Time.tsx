@@ -103,7 +103,7 @@ const Time = memo(({ handleNextStep }: RecruitStepProps) => {
       </FormLayout.Content>
       <FormLayout.Footer>
         <FormLayout.FooterPrevNext
-          handleClickNext={handleNextStep as () => void}
+          handleClickNext={handleNextStep}
           disabled={!timeIsFormValid || !dateIsFormValid}
         />
       </FormLayout.Footer>
