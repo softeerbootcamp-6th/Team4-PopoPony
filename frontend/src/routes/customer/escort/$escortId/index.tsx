@@ -17,6 +17,7 @@ function RouteComponent() {
             <EscortCard.StatusHeader
               text='동행번호 NO.12394O4L'
               title='7월 22일 (토), 서울아산병원'
+              hasOnClickEvent={false}
             />
             <EscortCard.Divider />
             <EscortCard.InfoSection>

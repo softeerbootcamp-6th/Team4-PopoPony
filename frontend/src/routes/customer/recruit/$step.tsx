@@ -91,7 +91,7 @@ function RouteComponent() {
                   <Request handleNextStep={nextStep} handleBackStep={handleBackStep} />
                 </Step>
                 <Step name='final'>
-                  <Final handleNextStep={nextStep} handleBackStep={handleBackStep} />
+                  <Final handleBackStep={handleBackStep} />
                 </Step>
               </Funnel>
             </FormProvider>
