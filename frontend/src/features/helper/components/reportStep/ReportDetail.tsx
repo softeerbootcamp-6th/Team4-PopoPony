@@ -3,9 +3,15 @@ import type { FunnelStepProps } from '@types';
 import { MultiImageSelect } from '@helper/components';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { cn } from '@/shared/libs/utils';
+import { Modal } from '@components';
+import { useModal } from '@hooks';
+import type { components } from '@schema';
+
+type ReportCreateRequest = components['schemas']['ReportCreateRequest'];
 
 const ReportDetail = ({ handleNextStep }: FunnelStepProps) => {
-  const { register, control } = useFormContext();
+  const { register, control, handleSubmit } = useFormContext();
+  const { isOpen, openModal, closeModal } = useModal();
 
   const description = useWatch({
     control,
@@ -19,6 +25,10 @@ const ReportDetail = ({ handleNextStep }: FunnelStepProps) => {
       return '동행 보고서는 5글자 이상 작성해주세요.';
     }
     return '';
+  };
+
+  const handleSubmitReport = (data: ReportCreateRequest) => {
+    const request = data;
   };
 
   return (
@@ -50,8 +60,20 @@ const ReportDetail = ({ handleNextStep }: FunnelStepProps) => {
         />
       </FormLayout.Content>
       <FormLayout.Footer>
-        <FormLayout.FooterPrevNext handleClickNext={handleNextStep} disabled={!isValid} />
+        <FormLayout.FooterPrevNext
+          handleClickNext={openModal}
+          disabled={!isValid}
+          nextButtonText='완료'
+        />
       </FormLayout.Footer>
+      <Modal isOpen={isOpen} onClose={closeModal}>
+        <Modal.Title>리포트를 전달하시겠어요?</Modal.Title>
+        <Modal.Content>동행리포트는 수정할 수 없으며 전달 즉시 동행은 마무리돼요.</Modal.Content>
+        <Modal.ButtonContainer>
+          <Modal.ConfirmButton onClick={handleSubmit(handleNextStep)}>전달하기</Modal.ConfirmButton>
+          <Modal.CloseButton onClick={closeModal}>취소</Modal.CloseButton>
+        </Modal.ButtonContainer>
+      </Modal>
     </FormLayout>
   );
 };
