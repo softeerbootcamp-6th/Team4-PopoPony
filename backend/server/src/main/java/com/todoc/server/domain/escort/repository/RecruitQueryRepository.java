@@ -39,6 +39,7 @@ public class RecruitQueryRepository {
                 recruit.id,
                 escort.id,
                 recruit.status,
+                escort.status,
                 application.count(),
                 recruit.escortDate,
                 recruit.estimatedMeetingTime,
@@ -59,7 +60,7 @@ public class RecruitQueryRepository {
             .join(route.hospitalLocationInfo, hospitalLocation)
             .join(recruit.patient, patient)
             .where(recruit.customer.id.eq(userId))
-            .groupBy(recruit.id)
+            .groupBy(recruit.id, escort.id, escort.status)
             .fetch();
 
         return result;
@@ -153,6 +154,7 @@ public class RecruitQueryRepository {
                 recruit.id,
                 escort.id,
                 recruit.status,
+                escort.status,
                 application.count(),
                 recruit.escortDate,
                 recruit.estimatedMeetingTime,
@@ -175,7 +177,7 @@ public class RecruitQueryRepository {
             .where(application.helper.id.eq(helperUserId)
                 .and(application.status.in(status))
                 .and(application.deletedAt.isNull()))
-            .groupBy(recruit.id)
+            .groupBy(recruit.id, escort.id, escort.status)
             .fetch();
     }
 

@@ -37,10 +37,7 @@ const Detail = ({ name, handleNextStep }: DetailProps) => {
         />
       </FormLayout.Content>
       <FormLayout.Footer>
-        <FormLayout.FooterPrevNext
-          handleClickNext={handleNextStep as () => void}
-          disabled={!isFormValid}
-        />
+        <FormLayout.FooterPrevNext handleClickNext={handleNextStep} disabled={!isFormValid} />
       </FormLayout.Footer>
     </FormLayout>
   );

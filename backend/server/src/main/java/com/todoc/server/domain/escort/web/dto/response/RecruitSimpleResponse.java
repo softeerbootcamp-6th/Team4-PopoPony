@@ -1,5 +1,6 @@
 package com.todoc.server.domain.escort.web.dto.response;
 
+import com.todoc.server.common.enumeration.EscortStatus;
 import com.todoc.server.common.enumeration.RecruitStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
@@ -24,7 +25,10 @@ public class RecruitSimpleResponse {
     // 매칭중, 매칭완료, 동행중
     @NotNull
     @Schema(description = "동행 신청의 진행 상태", allowableValues = {"매칭중", "매칭완료", "동행중", "동행완료"})
-    private String status;
+    private String recruitStatus;
+
+    @Schema(description = "실제 동행의 진행 상태", allowableValues = {"동행준비", "만남중", "병원행", "진료중", "복귀중", "리포트작성중", "동행완료"})
+    private String escortStatus;
 
     @NotNull
     @Schema(description = "지원한 도우미 수")
@@ -71,10 +75,11 @@ public class RecruitSimpleResponse {
     private Boolean hasCommunicationIssue;
 
     @Builder
-    public RecruitSimpleResponse(Long recruitId, Long escortId, String status, Long numberOfApplication, LocalDate escortDate, LocalTime estimatedMeetingTime, LocalTime estimatedReturnTime, String departureLocation, String destination, Integer estimatedPayment, Boolean needsHelping, Boolean usesWheelchair, Boolean hasCognitiveIssue, Boolean hasCommunicationIssue) {
+    public RecruitSimpleResponse(Long recruitId, Long escortId, String recruitStatus, String escortStatus, Long numberOfApplication, LocalDate escortDate, LocalTime estimatedMeetingTime, LocalTime estimatedReturnTime, String departureLocation, String destination, Integer estimatedPayment, Boolean needsHelping, Boolean usesWheelchair, Boolean hasCognitiveIssue, Boolean hasCommunicationIssue) {
         this.recruitId = recruitId;
         this.escortId = escortId;
-        this.status = status;
+        this.recruitStatus = recruitStatus;
+        this.escortStatus = escortStatus;
         this.numberOfApplication = numberOfApplication;
         this.escortDate = escortDate;
         this.estimatedMeetingTime = estimatedMeetingTime;
@@ -89,10 +94,13 @@ public class RecruitSimpleResponse {
     }
 
     @Builder
-    public RecruitSimpleResponse(Long recruitId, Long escortId, RecruitStatus status, Long numberOfApplication, LocalDate escortDate, LocalTime estimatedMeetingTime, LocalTime estimatedReturnTime, String departureLocation, String destination, Integer estimatedPayment, Boolean needsHelping, Boolean usesWheelchair, Boolean hasCognitiveIssue, Boolean hasCommunicationIssue) {
+    public RecruitSimpleResponse(Long recruitId, Long escortId, RecruitStatus recruitStatus, EscortStatus escortStatus, Long numberOfApplication, LocalDate escortDate, LocalTime estimatedMeetingTime, LocalTime estimatedReturnTime, String departureLocation, String destination, Integer estimatedPayment, Boolean needsHelping, Boolean usesWheelchair, Boolean hasCognitiveIssue, Boolean hasCommunicationIssue) {
+        String escortStatusLabel = escortStatus == null ? escortStatusLabel = null : escortStatus.getLabel();
+
         this.recruitId = recruitId;
         this.escortId = escortId;
-        this.status = status.getLabel();
+        this.recruitStatus = recruitStatus.getLabel();
+        this.escortStatus = escortStatusLabel;
         this.numberOfApplication = numberOfApplication;
         this.escortDate = escortDate;
         this.estimatedMeetingTime = estimatedMeetingTime;

@@ -4,6 +4,7 @@ import { useFormValidation } from '@hooks';
 import { Button, FormTextarea } from '@components';
 import { summarySchema, satisfactionLevel } from '@customer/types';
 import { useFormContext } from 'react-hook-form';
+import { Fragment } from 'react';
 
 interface SummaryProps extends RecruitStepProps {
   name: string;
@@ -37,8 +38,8 @@ const Summary = ({ name, handleNextStep }: SummaryProps) => {
         <div className='flex flex-col gap-[1.2rem]'>
           {satisfactionLevel.map((level, index) => {
             return (
-              <>
-                <div key={index} className='w-full'>
+              <Fragment key={level}>
+                <div className='w-full'>
                   <input
                     type='radio'
                     id={`${level}-${index}`}
@@ -67,11 +68,11 @@ const Summary = ({ name, handleNextStep }: SummaryProps) => {
                 {values.satisfactionLevel === level && values.satisfactionLevel !== '좋았어요' && (
                   <FormTextarea
                     name='satisfactionComment'
-                    placeholder='불편했던 점을 구체적으로 적어주세요.'
+                    placeholder='불편했던 점을 구체적으로 적어주세요.(10자 이상)'
                     rows={5}
                   />
                 )}
-              </>
+              </Fragment>
             );
           })}
         </div>

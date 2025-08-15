@@ -1,5 +1,6 @@
 package com.todoc.server.domain.escort.service;
 
+import com.todoc.server.IntegrationMockConfig;
 import com.todoc.server.common.dto.request.ImageCreateRequest;
 import com.todoc.server.common.enumeration.RecruitStatus;
 import com.todoc.server.domain.escort.entity.Recruit;
@@ -15,6 +16,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -29,6 +31,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+@Import(IntegrationMockConfig.class)
 @SpringBootTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE) // 실제 DB 사용 시
 @Transactional
@@ -232,19 +235,19 @@ public class RecruitIntegrationTest {
 
         // 진행중: DONE 제외 날짜 오름차순
         var inProgress = res.getInProgressList();
-        assertThat(inProgress.stream().map(RecruitSimpleResponse::getStatus))
+        assertThat(inProgress.stream().map(RecruitSimpleResponse::getRecruitStatus))
                 .doesNotContain(RecruitStatus.DONE.getLabel());
         if (!inProgress.isEmpty()) {
             System.out.println(inProgress.size());
             for (RecruitSimpleResponse recruitSimpleResponse : inProgress) {
-                assertThat(recruitSimpleResponse.getStatus()).isNotEqualTo(RecruitStatus.DONE.getLabel());
+                assertThat(recruitSimpleResponse.getRecruitStatus()).isNotEqualTo(RecruitStatus.DONE.getLabel());
             }
             assertThat(inProgress).isSortedAccordingTo(Comparator.comparing(RecruitSimpleResponse::getEscortDate));
         }
 
         // 완료: 전부 DONE, 날짜 내림차순
         var completed = res.getCompletedList();
-        assertThat(completed.stream().map(RecruitSimpleResponse::getStatus))
+        assertThat(completed.stream().map(RecruitSimpleResponse::getRecruitStatus))
                 .allMatch(s -> s.equals(RecruitStatus.DONE.getLabel()));
         if (completed.size() > 1) {
             assertThat(completed).isSortedAccordingTo(
@@ -284,7 +287,7 @@ public class RecruitIntegrationTest {
                 assertThat(item.getDestination()).isNotBlank();
                 assertThat(item.getEstimatedMeetingTime()).isNotNull();
                 assertThat(item.getEstimatedReturnTime()).isNotNull();
-                assertThat(item.getStatus()).isEqualTo(RecruitStatus.MATCHING.getLabel());
+                assertThat(item.getRecruitStatus()).isEqualTo(RecruitStatus.MATCHING.getLabel());
             });
         });
     }

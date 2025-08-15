@@ -6,7 +6,6 @@ type RecruitCreateJson = NonNullable<
   operations['createRecruit']['requestBody']
 >['content']['application/json'];
 
-// Build request body for POST /api/recruits from form values
 export const buildRecruitCreateRequest = (formData: RecruitFormValues): RecruitCreateJson => {
   const imageReq =
     formData.profileImageCreateRequest &&
