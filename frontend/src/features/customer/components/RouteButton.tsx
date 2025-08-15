@@ -1,4 +1,4 @@
-import { Button, Checkbox, ShowMapButton } from '@components';
+import { Button, ShowMapButton } from '@components';
 import { IcChevronDown } from '@icons';
 import { useState } from 'react';
 import type { LocationInfoSimpleResponse } from '@customer/types';
