@@ -26,11 +26,16 @@ public class RecruitPaymentResponse {
     @Schema(description = "예상 택시 요금")
     private Integer expectedTaxiFee;
 
+    @NotNull
+    @Schema(description = "이용 시간(분)")
+    private long totalMinutes;
+
     @Builder
-    public RecruitPaymentResponse(Long recruitId, RouteSimpleResponse route, Integer baseFee, Integer expectedTaxiFee) {
+    public RecruitPaymentResponse(Long recruitId, RouteSimpleResponse route, Integer baseFee, Integer expectedTaxiFee, long totalMinutes) {
         this.recruitId = recruitId;
         this.route = route;
         this.baseFee = baseFee;
         this.expectedTaxiFee = expectedTaxiFee;
+        this.totalMinutes = totalMinutes;
     }
 }
