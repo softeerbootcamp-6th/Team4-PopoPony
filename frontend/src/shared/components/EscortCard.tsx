@@ -12,7 +12,6 @@ const EscortCard = ({ children, onClick }: Props) => {
   return (
     <div
       className='bg-background-default-white border-stroke-neutral-dark shadow-card flex w-full cursor-pointer flex-col gap-[1.2rem] rounded-[0.8rem] border p-[1.6rem]'
-      // TODO: 삭제 필요
       onClick={() => {
         if (onClick) onClick();
       }}>
