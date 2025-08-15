@@ -113,7 +113,7 @@ public class EscortService {
 
         for (EscortDetailFlatDto escortDetailFlatDto : escortDetailFlatDtoList) {
             RouteLeg routeLeg = escortDetailFlatDto.getRouteLeg();
-            if (routeLeg.getLegType().equals(RouteLegType.HOSPITAL_TO_RETURN)) {
+            if (routeLeg.getLegType().equals(RouteLegType.MEETING_TO_HOSPITAL)) {
                 meetingToHospital = routeLeg;
             }
             else {
