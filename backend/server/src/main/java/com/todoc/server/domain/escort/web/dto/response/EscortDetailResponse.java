@@ -21,6 +21,10 @@ public class EscortDetailResponse {
     private Long escortId;
 
     @NotNull
+    @Schema(description = "경로 정보 ([위도, 경도] 배열)", example = "[[12,23],[13,45],[12,66]]")
+    private String coordinates;
+
+    @NotNull
     @Schema(description = "동행 날짜", example = "2025-08-01")
     private LocalDate escortDate;
 
@@ -55,10 +59,11 @@ public class EscortDetailResponse {
     private String extraRequest;
 
     @Builder
-    public EscortDetailResponse(Long escortId, LocalDate escortDate, String escortStatus, LocalTime estimatedMeetingTime, LocalTime estimatedReturnTime,
+    public EscortDetailResponse(Long escortId, String coordinates, LocalDate escortDate, String escortStatus, LocalTime estimatedMeetingTime, LocalTime estimatedReturnTime,
                                 RouteDetailResponse route, String customerContact, PatientSimpleResponse patient, String purpose,
                                 String extraRequest) {
         this.escortId = escortId;
+        this.coordinates = coordinates;
         this.escortDate = escortDate;
         this.escortStatus = escortStatus;
         this.estimatedMeetingTime = estimatedMeetingTime;
