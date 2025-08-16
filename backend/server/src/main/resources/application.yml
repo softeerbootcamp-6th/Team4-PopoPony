@@ -1,6 +1,11 @@
 spring:
   profiles:
     active: ${SPRING_PROFILE:local}
+  data:
+    redis:
+      repositories:
+        enabled: false
+      timeout: 3s
 
 server:
   servlet:
