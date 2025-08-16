@@ -1,7 +1,7 @@
 package com.todoc.server.domain.escort.service;
 
-import com.todoc.server.common.enumeration.RouteLegType;
 import com.todoc.server.common.util.FeeUtils;
+import com.todoc.server.common.util.JsonUtils;
 import com.todoc.server.domain.auth.entity.Auth;
 import com.todoc.server.domain.auth.service.AuthService;
 import com.todoc.server.domain.customer.entity.Patient;
@@ -20,7 +20,6 @@ import com.todoc.server.external.tmap.service.TMapRouteParser;
 import com.todoc.server.external.tmap.service.TMapRouteService;
 import com.todoc.server.external.tmap.service.TMapRouteService.TMapRawResult;
 import com.todoc.server.external.tmap.web.dto.RouteExternalRequest;
-import java.io.IOException;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -59,11 +58,6 @@ public class RecruitFacadeService {
         LocationInfo hospitalLocation = locationInfoService.register(request.getDestinationDetail());
         LocationInfo returnLocation = locationInfoService.register(request.getReturnLocationDetail());
 
-        Route route = routeService.register(request);
-        route.setMeetingLocationInfo(meetingLocation);
-        route.setHospitalLocationInfo(hospitalLocation);
-        route.setReturnLocationInfo(returnLocation);
-
         // 4) Tmap 두 구간 호출 (미팅→병원, 병원→복귀)
         RouteExternalRequest routeLegRequestForHospital = RouteExternalRequest.builder()
                 .startX(meetingLocation.getLongitude().toPlainString())
@@ -90,31 +84,38 @@ public class RecruitFacadeService {
         TMapRawResult rawResultForReturn = tMapRouteService.getRoute(routeLegRequestForReturn);
 
         // 6) Tmap 결과 파싱
-        var routeLegSummaryForHospital = tmapRouteParser.parseSummaryFromRaw(rawResultForHospital.tmapJson());
-        var routeLegSummaryForReturn = tmapRouteParser.parseSummaryFromRaw(rawResultForReturn.tmapJson());
+        TMapRouteParser.RouteParseResult routeParseResultForHospital = tmapRouteParser.parseSummaryFromRaw(rawResultForHospital.tmapJson());
+        TMapRouteParser.RouteLegSummary routeLegSummaryForHospital = routeParseResultForHospital.summary();
+        TMapRouteParser.RouteParseResult routeParseResultForReturn = tmapRouteParser.parseSummaryFromRaw(rawResultForReturn.tmapJson());
+        TMapRouteParser.RouteLegSummary routeLegSummaryForReturn = routeParseResultForReturn.summary();
 
         // 7) RouteLeg 생성, 연관관계 매핑
         RouteLeg leg1 = RouteLeg.builder()
-                .route(route) // ★ 연관관계는 Facade에서
-                .legType(RouteLegType.MEETING_TO_HOSPITAL)
                 .totalDistance(routeLegSummaryForHospital.totalDistance())
                 .totalTime(routeLegSummaryForHospital.totalTime())
                 .totalFare(routeLegSummaryForHospital.totalFare())
                 .taxiFare(routeLegSummaryForHospital.taxiFare())
                 .usedFavoriteRouteVertices(rawResultForHospital.usedVertices())
+                .coordinates(JsonUtils.toJson(routeParseResultForHospital.coordinates()))
                 .build();
         routeLegService.save(leg1);
 
         RouteLeg leg2 = RouteLeg.builder()
-                .route(route)
-                .legType(RouteLegType.HOSPITAL_TO_RETURN)
                 .totalDistance(routeLegSummaryForReturn.totalDistance())
                 .totalTime(routeLegSummaryForReturn.totalTime())
                 .totalFare(routeLegSummaryForReturn.totalFare())
                 .taxiFare(routeLegSummaryForReturn.taxiFare())
                 .usedFavoriteRouteVertices(rawResultForReturn.usedVertices())
+                .coordinates(JsonUtils.toJson(routeParseResultForReturn.coordinates()))
                 .build();
         routeLegService.save(leg2);
+
+        Route route = routeService.register(request);
+        route.setMeetingLocationInfo(meetingLocation);
+        route.setHospitalLocationInfo(hospitalLocation);
+        route.setReturnLocationInfo(returnLocation);
+        route.setMeetingToHospital(leg1);
+        route.setHospitalToReturn(leg2);
 
         // 동행 신청 생성 (생성 + 연관관계 설정)
         Recruit recruit = recruitService.register(request.getEscortDetail());

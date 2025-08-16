@@ -43,15 +43,7 @@ public class TMapRouteService {
             // TMap 응답에서 usedFavoriteRouteVertices 추출
             String used = null;
 
-            JsonNode root = objectMapper.readTree(rawString);
-            JsonNode n = root.path("usedFavoriteRouteVertices");
-
-            if (!n.isMissingNode() && !n.isNull()) used = n.asText();
-
             return new TMapRawResult(rawString, used);
-
-        } catch (IOException e) {
-            throw new TMapParsingException();
         } catch (Exception e) {
             throw new TMapAPICallException();
         }

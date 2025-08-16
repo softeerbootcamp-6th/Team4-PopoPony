@@ -103,6 +103,7 @@ public class ApplicationFacadeService {
             else {
                 // 나머지 지원들 -> 매칭 실패
                 application.setStatus(ApplicationStatus.FAILED);
+                application.softDelete();
             }
         }
     }
