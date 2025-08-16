@@ -65,6 +65,9 @@ dependencies {
 
 	// 로그인 비밀번호 처리
 	implementation("org.mindrot:jbcrypt:0.4")
+
+	// redis
+	implementation("org.springframework.boot:spring-boot-starter-data-redis")
 }
 
 val querydslDir = layout.buildDirectory.dir("generated/querydsl")
