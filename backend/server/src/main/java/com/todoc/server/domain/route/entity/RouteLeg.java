@@ -36,9 +36,13 @@ public class RouteLeg extends BaseEntity {
     @Column(columnDefinition = "TEXT")
     private String usedFavoriteRouteVertices; // 압축 좌표 원본(선택)
 
+    @Lob
+    @Column(columnDefinition = "LONGTEXT")
+    private String coordinates;
+
     @Builder
     public RouteLeg(Long id, Route route, RouteLegType legType, Integer totalDistance, Integer totalTime,
-        Integer totalFare, Integer taxiFare, String usedFavoriteRouteVertices) {
+        Integer totalFare, Integer taxiFare, String usedFavoriteRouteVertices, String coordinates) {
         this.id = id;
         this.route = route;
         this.legType = legType;
@@ -47,5 +51,6 @@ public class RouteLeg extends BaseEntity {
         this.totalFare = totalFare;
         this.taxiFare = taxiFare;
         this.usedFavoriteRouteVertices = usedFavoriteRouteVertices;
+        this.coordinates = coordinates;
     }
 }
