@@ -1,23 +1,63 @@
-import { Tabs } from '@components';
+import { Spinner, Tabs } from '@components';
 import { HelperCard, HelperEmptyCard, HelperSelectInfoCard } from '@customer/components';
+import { useParams, useNavigate } from '@tanstack/react-router';
+import { getApplicationListById } from '@customer/apis';
 
-const HelperTab = () => {
+const HelperTab = ({ status }: { status: string }) => {
+  const navigate = useNavigate();
+  const { escortId } = useParams({ from: '/customer/escort/$escortId/' });
+  const { data: applicationList, isLoading } = getApplicationListById(Number(escortId));
+
+  const handleHelperCardClick = (helperId: number, escortId: string, applicationId: number) => {
+    if (status === '매칭중') {
+      navigate({
+        to: '/customer/escort/$escortId/$helperId/helper/$applicationId',
+        params: {
+          escortId: escortId,
+          helperId: helperId.toString(),
+          applicationId: applicationId.toString(),
+        },
+        search: { canSelect: 'true' },
+      });
+    } else {
+      navigate({
+        to: '/customer/escort/$escortId/$helperId/helper/$applicationId',
+        params: {
+          escortId: escortId,
+          helperId: helperId.toString(),
+          applicationId: applicationId.toString(),
+        },
+        search: { canSelect: 'false' },
+      });
+    }
+  };
+
+  if (isLoading) return <Spinner />;
+
   return (
     <Tabs.TabsContentSection>
-      <HelperSelectInfoCard />
-      <HelperEmptyCard />
-      <HelperCard
-        helper={{
-          id: '1',
-          name: '최솔희',
-          age: 39,
-          gender: '여',
-          profileImage: '/images/default-profile.svg',
-          certificates: ['간호사', '간호조무사'],
-          tags: ['안전한 부축', '휠체어 이동', '인지장애 케어'],
-        }}
-        onClick={() => alert('준비중인 기능이에요')}
-      />
+      {applicationList &&
+      applicationList.data &&
+      applicationList.data.applicationList.length > 0 ? (
+        <>
+          {status === '매칭중' && <HelperSelectInfoCard />}
+          {applicationList.data.applicationList.map((application) => (
+            <HelperCard
+              key={application.helper.helperProfileId}
+              helper={application.helper}
+              onClick={() =>
+                handleHelperCardClick(
+                  application.helper.helperProfileId,
+                  escortId,
+                  application.applicationId
+                )
+              }
+            />
+          ))}
+        </>
+      ) : (
+        <HelperEmptyCard />
+      )}
     </Tabs.TabsContentSection>
   );
 };

@@ -196,6 +196,46 @@ export interface paths {
     patch: operations['cancelRecruit'];
     trace?: never;
   };
+  '/api/escorts/{recruitId}/status': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    /**
+     * 동행 다음 단계로 이동하기
+     * @description 로그인한 도우미가 동행(일감)의 다음 단계로 이동합니다. recruitId를 통해 진행할 동행(일감)을 선택합니다.
+     */
+    patch: operations['proceedEscort'];
+    trace?: never;
+  };
+  '/api/escorts/{recruitId}/memo': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    /**
+     * 동행 메모 작성하기
+     * @description 로그인한 도우미가 동행(일감) 중 메모를 작성합니다. recruitId를 통해 메모를 작성할 동행(일감)을 선택합니다.
+     */
+    patch: operations['updateMemo'];
+    trace?: never;
+  };
   '/api/applications/{applicationId}': {
     parameters: {
       query?: never;
@@ -388,6 +428,26 @@ export interface paths {
      * @description helperProfileId에 해당하는 도우미의 상세 정보를 조회합니다.
      */
     get: operations['getHelperDetail'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/escorts/{recruitId}': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * 동행 상세 정보 조회하기
+     * @description 동행 상세 정보를 조회합니다. recruitId를 통해 조회할 동행(일감)을 선택합니다.
+     */
+    get: operations['getEscortDetailByRecruitId'];
     put?: never;
     post?: never;
     delete?: never;
@@ -901,6 +961,11 @@ export interface components {
       /** @description 응답 body 필드 */
       data?: components['schemas']['ApplicationListResponse'];
     };
+    /** @description 동행 메모 작성 요청 DTO */
+    EscortMemoUpdateRequest: {
+      /** @description 도우미가 동행 중 작성한 메모 */
+      memo?: string;
+    };
     /** @description 공통 응답 포맷 */
     ResponseReviewDetailResponse: {
       /**
@@ -1073,7 +1138,19 @@ export interface components {
        * @description 동행 신청의 진행 상태
        * @enum {string}
        */
-      status: '매칭중' | '매칭완료' | '동행중' | '동행완료';
+      recruitStatus: '매칭중' | '매칭완료' | '동행중' | '동행완료';
+      /**
+       * @description 실제 동행의 진행 상태
+       * @enum {string}
+       */
+      escortStatus?:
+        | '동행준비'
+        | '만남중'
+        | '병원행'
+        | '진료중'
+        | '복귀중'
+        | '리포트작성중'
+        | '동행완료';
       /**
        * Format: int64
        * @description 지원한 도우미 수
@@ -1610,6 +1687,80 @@ export interface components {
        */
       badRate: number;
     };
+    /** @description 동행 상세 정보 조회 응답 DTO */
+    EscortDetailResponse: {
+      /**
+       * Format: int64
+       * @description 동행 ID
+       */
+      escortId: number;
+      /**
+       * Format: date
+       * @description 동행 날짜
+       * @example 2025-08-01
+       */
+      escortDate: string;
+      /**
+       * @description 동행 상태
+       * @example 병원행
+       */
+      escortStatus: string;
+      /**
+       * @description 만나는 시각
+       * @example 09:30:00
+       */
+      estimatedMeetingTime: string;
+      /**
+       * @description 복귀 시각
+       * @example 12:30:00
+       */
+      estimatedReturnTime: string;
+      /** @description 경로 세부 정보 */
+      route: components['schemas']['RouteDetailResponse'];
+      /** @description 고객 연락처 */
+      customerContact: string;
+      /** @description 환자 요약 정보 */
+      patient: components['schemas']['PatientSimpleResponse'];
+      /** @description 동행 목적 */
+      purpose?: string;
+      /** @description 요청 사항 */
+      extraRequest?: string;
+    };
+    /** @description 공통 응답 포맷 */
+    ResponseEscortDetailResponse: {
+      /**
+       * Format: int32
+       * @description 직접 정의한 응답에 대한 code
+       */
+      code: number;
+      /**
+       * Format: int32
+       * @description 응답 상태에 대한 HTTP 상태 코드
+       * @example 200
+       */
+      status: number;
+      /**
+       * @description 응답 상태에 대한 HTTP 메시지
+       * @example SUCCESS
+       */
+      message: string;
+      /** @description 응답 body 필드 */
+      data?: components['schemas']['EscortDetailResponse'];
+    };
+    /** @description 경로 상세 정보 DTO */
+    RouteDetailResponse: {
+      /**
+       * Format: int64
+       * @description 경로 ID
+       */
+      routeId: number;
+      /** @description 만남 장소 위치 정보 */
+      meetingLocationInfo: components['schemas']['LocationInfoSimpleResponse'];
+      /** @description 병원 위치 정보 */
+      hospitalLocationInfo: components['schemas']['LocationInfoSimpleResponse'];
+      /** @description 복귀 장소 위치 정보 */
+      returnLocationInfo: components['schemas']['LocationInfoSimpleResponse'];
+    };
   };
   responses: never;
   parameters: never;
@@ -1921,6 +2072,54 @@ export interface operations {
       };
     };
   };
+  proceedEscort: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        recruitId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description 동행 진행 성공 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          '*/*': components['schemas']['ResponseVoid'];
+        };
+      };
+    };
+  };
+  updateMemo: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        recruitId: number;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['EscortMemoUpdateRequest'];
+      };
+    };
+    responses: {
+      /** @description 동행 메모 작성 성공 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          '*/*': components['schemas']['ResponseVoid'];
+        };
+      };
+    };
+  };
   cancelApplicationToRecruit: {
     parameters: {
       query?: never;
@@ -2129,6 +2328,28 @@ export interface operations {
         };
         content: {
           '*/*': components['schemas']['ResponseHelperDetailResponse'];
+        };
+      };
+    };
+  };
+  getEscortDetailByRecruitId: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        recruitId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description 동행 상세 정보 조회 성공 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          '*/*': components['schemas']['ResponseEscortDetailResponse'];
         };
       };
     };

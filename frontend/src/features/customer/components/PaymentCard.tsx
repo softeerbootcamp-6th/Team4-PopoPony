@@ -3,9 +3,10 @@ import { Button, Divider } from '@components';
 interface Props {
   usageFee: number;
   estimatedTaxiFare: number;
+  onClick?: () => void;
 }
 
-const PaymentCard = ({ usageFee, estimatedTaxiFare }: Props) => {
+const PaymentCard = ({ usageFee, estimatedTaxiFare, onClick }: Props) => {
   const totalFee = usageFee + estimatedTaxiFare;
   return (
     <div className='bg-background-default-white flex-col-start shadow-card border-neutral-20 gap-[1.2rem] rounded-[1.2rem] border p-[1.6rem]'>
@@ -35,7 +36,7 @@ const PaymentCard = ({ usageFee, estimatedTaxiFare }: Props) => {
           </span>
         </div>
       </div>
-      <Button>기본 요금 {usageFee.toLocaleString()}원 결제하기</Button>
+      <Button onClick={onClick}>기본 요금 {usageFee.toLocaleString()}원 결제하기</Button>
     </div>
   );
 };

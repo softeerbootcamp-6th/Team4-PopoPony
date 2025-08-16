@@ -13,7 +13,7 @@ import { type RecruitStepProps, profileSchema } from '@customer/types';
 import { getPastPatientInfo, getPastPatientInfoDetail } from '@customer/apis';
 import { IcRadioOff, IcRadioOn } from '@assets/icons';
 import { useFormContext } from 'react-hook-form';
-import { booleanToString, numberToString, formatPhoneNumber } from '@utils';
+import { booleanToString, numberToString, formatPhoneNumber, formatImageUrl } from '@utils';
 
 const Profile = memo(({ handleNextStep }: RecruitStepProps) => {
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
@@ -37,11 +37,10 @@ const Profile = memo(({ handleNextStep }: RecruitStepProps) => {
   useEffect(() => {
     if (!isPatientIdConfirmed || !selectedPatientId) return;
     if (!detailData) return;
-    console.log('pastPatient detailData:', detailData);
     const { patientDetail, meetingLocationDetail, destinationDetail, returnLocationDetail } =
       detailData?.data || {};
     setValue('name', patientDetail?.name);
-    setValue('age', numberToString(patientDetail?.age as number));
+    setValue('age', numberToString(patientDetail?.age));
     setValue('gender', patientDetail?.gender);
     setValue('profileImageCreateRequest', {
       s3Key: patientDetail?.s3Key,
@@ -49,8 +48,8 @@ const Profile = memo(({ handleNextStep }: RecruitStepProps) => {
       size: patientDetail?.size,
       checksum: patientDetail?.checksum,
     });
-    setValue('imageUrl', import.meta.env.VITE_API_BASE_URL + patientDetail?.imageUrl);
-    setValue('phoneNumber', formatPhoneNumber(patientDetail?.phoneNumber as string));
+    setValue('imageUrl', formatImageUrl(patientDetail?.imageUrl));
+    setValue('phoneNumber', formatPhoneNumber(patientDetail?.phoneNumber));
     setValue('needsHelping', booleanToString(patientDetail?.needsHelping));
     setValue('usesWheelchair', booleanToString(patientDetail?.usesWheelchair));
     setValue('hasCognitiveIssue', booleanToString(patientDetail?.hasCognitiveIssue));

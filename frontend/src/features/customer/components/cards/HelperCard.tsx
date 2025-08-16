@@ -1,38 +1,45 @@
 import { StrengthTag, Tag } from '@components';
 import { IcChevronRightSecondary } from '@icons';
 import type { EscortStrength } from '@types';
-
-interface Helper {
-  id: string;
-  name: string;
-  age: number;
-  gender: '남' | '여';
-  profileImage?: string;
-  certificates: string[];
-  tags: EscortStrength[];
-}
+import type { HelperSimpleResponse } from '@customer/types';
+import { STRENGTH_OPTIONS } from '@helper/types';
+import { formatImageUrl } from '@utils';
 
 interface HelperCardProps {
-  helper: Helper;
+  helper: HelperSimpleResponse;
   onClick?: (helperId: string) => void;
 }
 
 const formatCertificates = (certificates: string[]) => {
-  if (certificates.length <= 2) {
+  if (certificates && certificates.length <= 2) {
     return certificates;
   }
 
-  const visibleCerts = certificates.slice(0, 2);
-  const hiddenCount = certificates.length - 2;
-  return [...visibleCerts, `+${hiddenCount}`];
+  const visibleCerts = certificates && certificates.slice(0, 2);
+  const hiddenCount = certificates && certificates.length - 2;
+  return [...(visibleCerts || []), `+${hiddenCount}`];
+};
+
+type StrengthOption = (typeof STRENGTH_OPTIONS)[number];
+
+const sortStrengthList = (strengthList: string[]) => {
+  //순서 보장 sort 알고리즘
+  const orderMap = new Map<StrengthOption, number>(
+    STRENGTH_OPTIONS.map((label, index) => [label, index] as const)
+  );
+  return [...strengthList].sort((a, b) => {
+    const aOrder = orderMap.get(a as StrengthOption) ?? Number.MAX_SAFE_INTEGER;
+    const bOrder = orderMap.get(b as StrengthOption) ?? Number.MAX_SAFE_INTEGER;
+    return aOrder - bOrder;
+  });
 };
 
 export default function HelperCard({ helper, onClick }: HelperCardProps) {
-  const { id, name, age, gender, profileImage, certificates, tags } = helper;
-  const displayCertificates = formatCertificates(certificates);
+  const { helperProfileId, name, age, gender, imageUrl, certificateList, strengthList } = helper;
+  const displayCertificates = formatCertificates(certificateList);
 
   const handleCardClick = () => {
-    onClick?.(id);
+    onClick?.(helperProfileId.toString());
   };
 
   return (
@@ -41,9 +48,9 @@ export default function HelperCard({ helper, onClick }: HelperCardProps) {
       onClick={handleCardClick}>
       <div className='flex-center gap-[1.2rem]'>
         <img
-          src={profileImage || '/images/default-profile.svg'}
+          src={formatImageUrl(imageUrl) || '/images/default-profile.svg'}
           alt={`${name} 프로필`}
-          className='w-[5.6rem h-[5.6rem] object-cover'
+          className='h-[5.6rem] w-[5.6rem] rounded-full object-cover'
         />
         <div className='flex flex-1 flex-col gap-[0.4rem]'>
           <div className='mb-1 flex items-center justify-between'>
@@ -53,7 +60,6 @@ export default function HelperCard({ helper, onClick }: HelperCardProps) {
                 ({age}세/{gender})
               </span>
             </div>
-
             <IcChevronRightSecondary />
           </div>
 
@@ -66,9 +72,10 @@ export default function HelperCard({ helper, onClick }: HelperCardProps) {
       </div>
 
       <div className='flex-start mt-[1.2rem] gap-[0.4rem]'>
-        {tags.map((tag) => (
-          <StrengthTag key={tag} type={tag} />
-        ))}
+        {strengthList &&
+          sortStrengthList(strengthList).map((strength) => (
+            <StrengthTag key={strength} type={strength as EscortStrength} />
+          ))}
       </div>
     </div>
   );

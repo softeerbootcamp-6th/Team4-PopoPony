@@ -1,6 +1,6 @@
 interface Props {
   status: 'good' | 'average' | 'bad';
-  date: string;
+  date?: string;
   content: string;
 }
 
@@ -14,7 +14,9 @@ const ReviewCard = ({ status, date, content }: Props) => {
           className='h-[3.6rem] w-[3.6rem]'
         />
       </div>
-      <div className='label2-14-medium text-text-neutral-secondary mt-[1.2rem]'>{date}</div>
+      {date && (
+        <div className='label2-14-medium text-text-neutral-secondary mt-[1.2rem]'>{date}</div>
+      )}
       <div className='body1-16-medium text-text-neutral-primary mt-[0.4rem]'>{content}</div>
     </article>
   );

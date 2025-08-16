@@ -1,7 +1,7 @@
 import { useFormContext } from 'react-hook-form';
 import { type InputHTMLAttributes, useState } from 'react';
 import { IcChevronDown } from '@icons';
-import { formatValue } from '@utils';
+import { formatFormInputValue } from '@utils';
 type InputType = 'date' | 'time' | 'cost' | 'number' | 'text' | 'contact';
 
 interface FormInputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'size' | 'type'> {
@@ -78,7 +78,7 @@ const FormInput = ({
 
   const { onChange, ...registerProps } = register(name);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const formattedValue = formatValue(e.target.value, type);
+    const formattedValue = formatFormInputValue(e.target.value, type);
     e.target.value = formattedValue;
     onChange(e);
     if (validation) {
