@@ -1338,9 +1338,84 @@ export interface components {
       /** @description 응답 body 필드 */
       data?: components['schemas']['RecruitPaymentResponse'];
     };
+    /** @description 환자 상태 정보 */
+    PatientDetailHistory: {
+      /**
+       * Format: int64
+       * @description 환자 ID
+       */
+      patientId: number;
+      /**
+       * @description 환자 이미지 URL
+       * @example https://example.com/patient.png
+       */
+      imageUrl: string;
+      /** @description S3 오브젝트 키(버킷 내부 경로). presigned 업로드 시 사용했던 key 그대로 전달 */
+      s3Key: string;
+      /** @description 원본 Content-Type (이미지 MIME 타입) */
+      contentType: string;
+      /**
+       * Format: int64
+       * @description 파일 크기(byte)
+       */
+      size: number;
+      /** @description 무결성 해시(일반적으로 S3 ETag) */
+      checksum: string;
+      /**
+       * @description 환자 이름
+       * @example 홍길동
+       */
+      name: string;
+      /**
+       * Format: int32
+       * @description 환자 나이
+       * @example 81
+       */
+      age: number;
+      /**
+       * @description 환자 성별
+       * @example 남자
+       */
+      gender: string;
+      /**
+       * @description 환자 연락처
+       * @example 010-1234-5678
+       */
+      phoneNumber: string;
+      /**
+       * @description 부축이 필요한지
+       * @example true
+       */
+      needsHelping: boolean;
+      /**
+       * @description 휠체어를 이용하고 있는지
+       * @example true
+       */
+      usesWheelchair: boolean;
+      /**
+       * @description 인지능력 이슈가 있는지
+       * @example true
+       */
+      hasCognitiveIssue: boolean;
+      /**
+       * @description 인지능력 이슈가 있다면, 디테일 설명
+       * @example ['판단에 도움이 필요해요', '기억하거나 이해하는 것이 어려워요]
+       */
+      cognitiveIssueDetail?: string[];
+      /**
+       * @description 의사소통 이슈가 있는지
+       * @example true
+       */
+      hasCommunicationIssue: boolean;
+      /**
+       * @description 의사소통 이슈가 있다면, 디테일 설명
+       * @example 이가 많이 없으셔서.. 천천히 이야기 들어주세요
+       */
+      communicationIssueDetail?: string;
+    };
     /** @description 이전 동행 신청 정보 상세 응답 DTO */
     RecruitHistoryDetailResponse: {
-      patientDetail?: components['schemas']['PatientDetail'];
+      patientDetail?: components['schemas']['PatientDetailHistory'];
       meetingLocationDetail?: components['schemas']['LocationDetail'];
       destinationDetail?: components['schemas']['LocationDetail'];
       returnLocationDetail?: components['schemas']['LocationDetail'];

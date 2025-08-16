@@ -15,8 +15,8 @@ const PhotoUpload = ({ name, prefix }: Props) => {
 
   const { uploadImage, isUploading } = useImageUpload();
 
-  const currentValue = watch(name);
-  const hasImage = Boolean(currentValue?.previewUrl);
+  const photoValue = watch('imageUrl');
+  const hasImage = Boolean(photoValue);
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -27,11 +27,11 @@ const PhotoUpload = ({ name, prefix }: Props) => {
       setValue(
         name,
         {
-          imageData,
-          previewUrl,
+          ...imageData,
         },
         { shouldValidate: true, shouldDirty: true }
       );
+      setValue('imageUrl', previewUrl);
     } catch (err) {
       console.error(err);
       alert('업로드에 실패했습니다. 다시 시도해주세요.');
@@ -70,7 +70,7 @@ const PhotoUpload = ({ name, prefix }: Props) => {
         {/* 이미지 미리보기 */}
         {hasImage ? (
           <img
-            src={currentValue.previewUrl}
+            src={photoValue}
             alt='미리보기'
             className='absolute inset-0 h-full w-full rounded-full object-cover'
           />

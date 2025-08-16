@@ -8,6 +8,7 @@ import com.todoc.server.domain.image.entity.ImageFile;
 import com.todoc.server.domain.report.entity.ImageAttachment;
 import com.todoc.server.domain.report.entity.Report;
 import com.todoc.server.domain.report.entity.TaxiFee;
+import com.todoc.server.domain.report.exception.ReportNotFoundException;
 import com.todoc.server.domain.report.web.dto.request.ReportCreateRequest;
 import com.todoc.server.domain.report.web.dto.response.ReportDefaultValueResponse;
 import com.todoc.server.domain.report.web.dto.response.ReportDetailResponse;
@@ -73,14 +74,14 @@ public class ReportIntegrationTest {
 
         // when & then
         assertThatThrownBy(() -> reportService.getReportDetailByRecruitId(recruitId))
-                .isInstanceOf(RecruitNotFoundException.class);
+                .isInstanceOf(ReportNotFoundException.class);
     }
 
     @Test
     @DisplayName("리포트 기본값 조회 - recruitId=9 정상 반환")
     void getReportDefaultValue_success() {
         // given
-        Long recruitId = 9L;
+        Long recruitId = 1L;
 
         // when
         ReportDefaultValueResponse resp = reportFacadeService.getReportDefaultValue(recruitId);
@@ -89,7 +90,7 @@ public class ReportIntegrationTest {
         assertThat(resp).isNotNull();
         assertThat(resp.getActualMeetingTime()).isNull();
         assertThat(resp.getActualReturnTime()).isNull();
-        assertThat(resp.getMemo()).isEqualTo("병원 방문 준비 중입니다.");
+        assertThat(resp.getMemo()).isEqualTo("다음 진료 예약 잡았습니다.");
     }
 
     @Test
