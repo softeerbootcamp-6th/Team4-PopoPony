@@ -2,29 +2,28 @@ package com.todoc.server.domain.escort.service;
 
 import com.todoc.server.common.enumeration.EscortStatus;
 import com.todoc.server.common.enumeration.RecruitStatus;
-import com.todoc.server.common.enumeration.RouteLegType;
 import com.todoc.server.domain.auth.entity.Auth;
+import com.todoc.server.domain.auth.exception.AuthNotFoundException;
 import com.todoc.server.domain.customer.entity.Patient;
+import com.todoc.server.domain.customer.exception.PatientNotFoundException;
 import com.todoc.server.domain.customer.web.dto.response.PatientSimpleResponse;
 import com.todoc.server.domain.escort.entity.Escort;
 import com.todoc.server.domain.escort.entity.Recruit;
 import com.todoc.server.domain.escort.exception.EscortInvalidProceedException;
 import com.todoc.server.domain.escort.exception.EscortNotFoundException;
+import com.todoc.server.domain.escort.exception.RecruitNotFoundException;
 import com.todoc.server.domain.escort.repository.EscortJpaRepository;
 import com.todoc.server.domain.escort.repository.EscortQueryRepository;
-import com.todoc.server.domain.escort.repository.dto.EscortDetailFlatDto;
 import com.todoc.server.domain.escort.web.dto.request.EscortMemoUpdateRequest;
 import com.todoc.server.domain.escort.web.dto.response.EscortDetailResponse;
 import com.todoc.server.domain.route.entity.Route;
-import com.todoc.server.domain.route.entity.RouteLeg;
-import com.todoc.server.domain.route.exception.RouteLegNotFoundException;
+import com.todoc.server.domain.route.exception.RouteNotFoundException;
 import com.todoc.server.domain.route.web.dto.response.RouteDetailResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalTime;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -97,32 +96,29 @@ public class EscortService {
     @Transactional(readOnly = true)
     public EscortDetailResponse getEscortDetailByRecruitId(Long recruitId) {
 
-        List<EscortDetailFlatDto> escortDetailFlatDtoList = escortQueryRepository.findEscortDetailByRecruitId(recruitId);
-        if (escortDetailFlatDtoList.isEmpty()) {
+        Escort escort = escortQueryRepository.findEscortDetailByRecruitId(recruitId);
+        if (escort == null) {
             throw new EscortNotFoundException();
         }
 
-        EscortDetailFlatDto first = escortDetailFlatDtoList.getFirst();
-        Escort escort = first.getEscort();
-        Recruit recruit = first.getRecruit();
-        Auth customer = first.getCustomer();
-        Patient patient = first.getPatient();
-        Route route = first.getRoute();
-        RouteLeg meetingToHospital = null;
-        RouteLeg hospitalToReturn = null;
-
-        for (EscortDetailFlatDto escortDetailFlatDto : escortDetailFlatDtoList) {
-            RouteLeg routeLeg = escortDetailFlatDto.getRouteLeg();
-            if (routeLeg.getLegType().equals(RouteLegType.MEETING_TO_HOSPITAL)) {
-                meetingToHospital = routeLeg;
-            }
-            else {
-                hospitalToReturn = routeLeg;
-            }
+        Recruit recruit = escort.getRecruit();
+        if (recruit == null) {
+            throw new RecruitNotFoundException();
         }
 
-        if (meetingToHospital == null ||  hospitalToReturn == null) {
-            throw new RouteLegNotFoundException();
+        Auth customer = recruit.getCustomer();
+        if (customer == null) {
+            throw new AuthNotFoundException();
+        }
+
+        Patient patient = recruit.getPatient();
+        if (patient == null) {
+            throw new PatientNotFoundException();
+        }
+
+        Route route = recruit.getRoute();
+        if (route == null) {
+            throw new RouteNotFoundException();
         }
 
         return EscortDetailResponse.builder()
@@ -135,7 +131,7 @@ public class EscortService {
                 .purpose(recruit.getPurpose())
                 .extraRequest(recruit.getExtraRequest())
                 .patient(PatientSimpleResponse.from(patient))
-                .route(RouteDetailResponse.from(route, meetingToHospital, hospitalToReturn))
+                .route(RouteDetailResponse.from(route))
                 .build();
     }
 }

@@ -1,7 +1,6 @@
 package com.todoc.server.domain.route.entity;
 
 import com.todoc.server.common.entity.BaseEntity;
-import com.todoc.server.common.enumeration.RouteLegType;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,14 +17,6 @@ public class RouteLeg extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY) // 하나의 Route에 2개의 RouteLeg이 존재
-    @JoinColumn(name = "route_id")
-    private Route route;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "leg_type")
-    private RouteLegType legType;
-
     // 요약 값(각 구간별)
     private Integer totalDistance; // m
     private Integer totalTime;     // sec
@@ -41,11 +32,9 @@ public class RouteLeg extends BaseEntity {
     private String coordinates;
 
     @Builder
-    public RouteLeg(Long id, Route route, RouteLegType legType, Integer totalDistance, Integer totalTime,
-        Integer totalFare, Integer taxiFare, String usedFavoriteRouteVertices, String coordinates) {
+    public RouteLeg(Long id, Integer totalDistance, Integer totalTime,
+                    Integer totalFare, Integer taxiFare, String usedFavoriteRouteVertices, String coordinates) {
         this.id = id;
-        this.route = route;
-        this.legType = legType;
         this.totalDistance = totalDistance;
         this.totalTime = totalTime;
         this.totalFare = totalFare;

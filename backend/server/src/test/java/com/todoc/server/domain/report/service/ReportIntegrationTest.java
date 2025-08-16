@@ -8,6 +8,7 @@ import com.todoc.server.domain.image.entity.ImageFile;
 import com.todoc.server.domain.report.entity.ImageAttachment;
 import com.todoc.server.domain.report.entity.Report;
 import com.todoc.server.domain.report.entity.TaxiFee;
+import com.todoc.server.domain.report.exception.ReportNotFoundException;
 import com.todoc.server.domain.report.web.dto.request.ReportCreateRequest;
 import com.todoc.server.domain.report.web.dto.response.ReportDefaultValueResponse;
 import com.todoc.server.domain.report.web.dto.response.ReportDetailResponse;
@@ -73,7 +74,7 @@ public class ReportIntegrationTest {
 
         // when & then
         assertThatThrownBy(() -> reportService.getReportDetailByRecruitId(recruitId))
-                .isInstanceOf(RecruitNotFoundException.class);
+                .isInstanceOf(ReportNotFoundException.class);
     }
 
     @Test

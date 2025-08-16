@@ -30,10 +30,21 @@ public class Route extends BaseEntity {
     @JoinColumn(name = "return_location_info_id")
     private LocationInfo returnLocationInfo;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "meeting_to_hospital_id")
+    private RouteLeg meetingToHospital;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "hospital_to_return_id")
+    private RouteLeg hospitalToReturn;
+
     @Builder
-    public Route(LocationInfo meetingLocationInfo, LocationInfo hospitalLocationInfo, LocationInfo returnLocationInfo) {
+    public Route(LocationInfo meetingLocationInfo, LocationInfo hospitalLocationInfo, LocationInfo returnLocationInfo,
+                 RouteLeg meetingToHospital, RouteLeg hospitalToReturn) {
         this.meetingLocationInfo = meetingLocationInfo;
         this.hospitalLocationInfo = hospitalLocationInfo;
         this.returnLocationInfo = returnLocationInfo;
+        this.meetingToHospital = meetingToHospital;
+        this.hospitalToReturn = hospitalToReturn;
     }
 }
