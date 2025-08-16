@@ -17,6 +17,8 @@ import com.todoc.server.domain.image.entity.ImageMeta;
 import com.todoc.server.domain.route.entity.LocationInfo;
 import java.util.ArrayList;
 import java.util.Map;
+
+import com.todoc.server.domain.route.entity.RouteLeg;
 import org.assertj.core.api.Assertions;
 import com.todoc.server.domain.route.entity.Route;
 import org.junit.jupiter.api.DisplayName;
@@ -268,10 +270,15 @@ class RecruitServiceTest {
                 .latitude(BigDecimal.valueOf(37.515702))
                 .build();
 
+        RouteLeg meetingToHospital = RouteLeg.builder().taxiFare(10000).build();
+        RouteLeg hospitalToReturn = RouteLeg.builder().taxiFare(15000).build();
+
         Route route = Route.builder()
                 .meetingLocationInfo(meetingLocation)
                 .hospitalLocationInfo(hospitalLocation)
                 .returnLocationInfo(returnLocation)
+                .meetingToHospital(meetingToHospital)
+                .hospitalToReturn(hospitalToReturn)
                 .build();
 
         Recruit recruit = Recruit.builder()
@@ -291,7 +298,7 @@ class RecruitServiceTest {
         assertThat(response.getRecruitId()).isEqualTo(10L);
         assertThat(response.getRoute()).isNotNull();
         assertThat(response.getBaseFee()).isEqualTo(53000);
-        assertThat(response.getExpectedTaxiFee()).isEqualTo(0);
+        assertThat(response.getExpectedTaxiFee()).isEqualTo(25000);
     }
 
     @Test

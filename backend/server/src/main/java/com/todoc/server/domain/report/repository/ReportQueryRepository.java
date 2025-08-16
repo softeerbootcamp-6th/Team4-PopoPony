@@ -1,8 +1,7 @@
 package com.todoc.server.domain.report.repository;
 
-import com.querydsl.core.Tuple;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.todoc.server.domain.escort.exception.RecruitNotFoundException;
+import com.todoc.server.domain.report.exception.ReportNotFoundException;
 import com.todoc.server.domain.report.repository.dto.ReportDetailFlatDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -27,13 +26,13 @@ public class ReportQueryRepository {
         var tuple = queryFactory
                 .select(report, taxiFee, recruit)
                 .from(report)
-                .join(report.recruit, recruit)
+                .leftJoin(report.recruit, recruit)
                 .leftJoin(taxiFee).on(taxiFee.report.eq(report))
                 .where(report.recruit.id.eq(recruitId))
                 .fetchOne();
 
-        if (tuple == null || tuple.get(recruit) == null) {
-            throw new RecruitNotFoundException();
+        if (tuple == null) {
+            throw new ReportNotFoundException();
         }
 
         Long reportId = tuple.get(report).getId();
