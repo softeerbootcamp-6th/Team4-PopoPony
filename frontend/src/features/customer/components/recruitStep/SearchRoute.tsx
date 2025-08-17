@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { FormLayout } from '@layouts';
 import { useFormContext } from 'react-hook-form';
 import { getRouteApi } from '@tanstack/react-router';
-import type { LocationDetail, PlaceType } from '@customer/types';
+import type { PlaceType, SearchLocationDetail } from '@customer/types';
 import SearchInput from '../search/searchInput';
 
 import useTMapSearch from '@customer/apis/getTMapSearch';
@@ -56,6 +56,22 @@ const getFormFieldName = (placeParam: PlaceType) => {
   }
 };
 
+const convertToLocationDetail = useCallback((poi: TMapPOI): SearchLocationDetail => {
+  return {
+    placeName: poi.name,
+    upperAddrName: poi.upperAddrName,
+    middleAddrName: poi.middleAddrName,
+    lowerAddrName: poi.lowerAddrName,
+    firstAddrNo: poi.firstNo,
+    secondAddrNo: poi.secondNo,
+    roadName: poi.roadName,
+    firstBuildingNo: poi.firstBuildNo,
+    secondBuildingNo: poi.secondBuildNo,
+    longitude: parseFloat(poi.frontLon),
+    latitude: parseFloat(poi.frontLat),
+  };
+}, []);
+
 const route = getRouteApi('/customer/recruit/$step');
 
 const SearchRoute = ({ handleSelectRoute }: SearchRouteProps) => {
@@ -81,41 +97,10 @@ const SearchRoute = ({ handleSelectRoute }: SearchRouteProps) => {
   const { setValue } = useFormContext();
   const loadMoreRef = useRef<HTMLDivElement>(null);
 
-  const convertToLocationDetail = useCallback((poi: TMapPOI): LocationDetail => {
-    return {
-      placeName: poi.name,
-      upperAddrName: poi.upperAddrName,
-      middleAddrName: poi.middleAddrName,
-      lowerAddrName: poi.lowerAddrName,
-      firstAddrNo: poi.firstNo,
-      secondAddrNo: poi.secondNo,
-      roadName: poi.roadName,
-      firstBuildingNo: poi.firstBuildNo,
-      secondBuildingNo: poi.secondBuildNo,
-      detailAddress: poi.detailAddrname || '',
-      longitude: parseFloat(poi.frontLon),
-      latitude: parseFloat(poi.frontLat),
-    };
-  }, []);
-
   const handleSelectItem = (poi: TMapPOI) => {
     const selectedItem = convertToLocationDetail(poi);
 
-    const locationData = {
-      placeName: selectedItem.placeName,
-      upperAddrName: selectedItem.upperAddrName,
-      middleAddrName: selectedItem.middleAddrName,
-      lowerAddrName: selectedItem.lowerAddrName,
-      firstAddrNo: selectedItem.firstAddrNo,
-      secondAddrNo: selectedItem.secondAddrNo,
-      roadName: selectedItem.roadName,
-      firstBuildingNo: selectedItem.firstBuildingNo,
-      secondBuildingNo: selectedItem.secondBuildingNo,
-      longitude: selectedItem.longitude,
-      latitude: selectedItem.latitude,
-    };
-
-    setValue(formFieldName, locationData);
+    setValue(formFieldName, selectedItem);
     handleSelectRoute();
   };
 
