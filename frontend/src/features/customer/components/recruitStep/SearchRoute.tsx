@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { FormLayout } from '@layouts';
 import { useFormContext } from 'react-hook-form';
 import { getRouteApi } from '@tanstack/react-router';
@@ -56,7 +56,7 @@ const getFormFieldName = (placeParam: PlaceType) => {
   }
 };
 
-const convertToLocationDetail = useCallback((poi: TMapPOI): SearchLocationDetail => {
+const convertToLocationDetail = (poi: TMapPOI): SearchLocationDetail => {
   return {
     placeName: poi.name,
     upperAddrName: poi.upperAddrName,
@@ -70,7 +70,7 @@ const convertToLocationDetail = useCallback((poi: TMapPOI): SearchLocationDetail
     longitude: parseFloat(poi.frontLon),
     latitude: parseFloat(poi.frontLat),
   };
-}, []);
+};
 
 const route = getRouteApi('/customer/recruit/$step');
 
