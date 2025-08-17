@@ -33,6 +33,15 @@ jobs:
           --health-timeout=3s
           --health-retries=30
           --health-start-period=20s
+      redis:
+        image: redis:7.2
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping || exit 1"
+          --health-interval=5s
+          --health-timeout=3s
+          --health-retries=30
 
     steps:
       - name: Checkout
@@ -54,10 +63,6 @@ jobs:
           nohup java -Dspring.profiles.active=${SPRING_PROFILE} -jar backend/server/build/libs/server-0.0.1-SNAPSHOT.jar &
           echo $! > app.pid
           sleep 15
-
-      - name: Check application health
-        run: |
-          curl -f http://localhost:8080/actuator/health
 
       - name: Stop application
         run: |

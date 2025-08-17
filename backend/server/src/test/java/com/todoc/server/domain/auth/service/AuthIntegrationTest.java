@@ -1,5 +1,6 @@
 package com.todoc.server.domain.auth.service;
 
+import com.todoc.server.IntegrationTestBase;
 import com.todoc.server.domain.auth.entity.Auth;
 import com.todoc.server.domain.auth.exception.AuthNotFoundException;
 import com.todoc.server.domain.auth.repository.AuthJpaRepository;
@@ -21,7 +22,7 @@ import static org.mindrot.jbcrypt.BCrypt.hashpw;
 @Transactional
 @ActiveProfiles("test")
 @Sql("/sql/data.sql")
-class AuthIntegrationTest {
+class AuthIntegrationTest extends IntegrationTestBase {
 
     @Autowired AuthService authService;
     @Autowired AuthJpaRepository authJpaRepository;

@@ -13,7 +13,7 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 @Configuration
 @EnableCaching
-@Profile({"local","prod"})
+@Profile({"local","prod", "ci"})
 public class RedisConfig {
 
     @Value("${spring.data.redis.host}")
