@@ -20,7 +20,7 @@ import com.todoc.server.domain.escort.web.dto.response.EscortStatusResponse;
 import com.todoc.server.domain.route.entity.Route;
 import com.todoc.server.domain.route.exception.RouteNotFoundException;
 import com.todoc.server.domain.route.web.dto.response.RouteDetailResponse;
-import com.todoc.server.domain.sse.service.SseEmitterManager;
+import com.todoc.server.domain.realtime.service.SseEmitterManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
