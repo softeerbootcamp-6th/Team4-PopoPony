@@ -73,7 +73,7 @@ function RouteComponent() {
                     key={escort.recruitId}
                     onClick={() => handleEscortCardClick(escort.recruitId)}>
                     <EscortCard.StatusHeader
-                      status={escort.status}
+                      status={escort.recruitStatus}
                       text={`${escort.numberOfApplication}명이 현재 지원 중이에요!`}
                       title={`${escortDate} ${escort.destination}`}
                     />
@@ -102,7 +102,7 @@ function RouteComponent() {
                     key={escort.recruitId}
                     onClick={() => handleEscortCardClick(escort.recruitId)}>
                     <EscortCard.StatusHeader
-                      status={escort.status}
+                      status={escort.recruitStatus}
                       text={`${escort.numberOfApplication}명이 현재 지원 중이에요!`}
                       title={`${escortDate} ${escort.destination}`}
                     />
