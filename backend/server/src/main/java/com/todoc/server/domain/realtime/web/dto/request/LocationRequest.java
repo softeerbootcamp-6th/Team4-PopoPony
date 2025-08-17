@@ -1,4 +1,4 @@
-package com.todoc.server.domain.latestlocation.web.dto.request;
+package com.todoc.server.domain.realtime.web.dto.request;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,6 +9,6 @@ import lombok.Setter;
 @NoArgsConstructor
 public class LocationRequest {
 
-    private Double lat;
-    private Double lon;
+    private Double latitude;
+    private Double longitude;
 }
