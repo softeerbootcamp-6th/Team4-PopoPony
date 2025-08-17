@@ -14,9 +14,9 @@ public class LocationController {
     private final LocationService locationService;
 
     @PostMapping("/{escortId}")
-    public Response updateLocation(@RequestParam("escortId") Long escortId, @RequestBody LocationRequest request) {
+    public Response updateLocation(@PathVariable(name = "escortId") Long escortId, @RequestBody LocationRequest request) {
 
-        locationService.register(request);
+        locationService.register(escortId, request);
         return Response.from();
     }
 }
