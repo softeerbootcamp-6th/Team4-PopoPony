@@ -1,5 +1,6 @@
 package com.todoc.server.domain.review.service;
 
+import com.todoc.server.IntegrationTestBase;
 import com.todoc.server.domain.escort.exception.RecruitNotFoundException;
 import com.todoc.server.domain.review.entity.PositiveFeedbackChoice;
 import com.todoc.server.domain.review.entity.Review;
@@ -29,7 +30,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 @Transactional
 @ActiveProfiles("test")
 @Sql("/sql/data.sql")
-public class ReviewIntegrationTest {
+public class ReviewIntegrationTest extends IntegrationTestBase {
 
     @Autowired
     private ReviewFacadeService reviewFacadeService;

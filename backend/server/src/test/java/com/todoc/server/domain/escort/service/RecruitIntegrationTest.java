@@ -1,6 +1,7 @@
 package com.todoc.server.domain.escort.service;
 
 import com.todoc.server.IntegrationMockConfig;
+import com.todoc.server.IntegrationTestBase;
 import com.todoc.server.common.dto.request.ImageCreateRequest;
 import com.todoc.server.common.enumeration.RecruitStatus;
 import com.todoc.server.domain.escort.entity.Recruit;
@@ -37,7 +38,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @Transactional
 @ActiveProfiles("test")
 @Sql("/sql/data.sql")
-public class RecruitIntegrationTest {
+public class RecruitIntegrationTest extends IntegrationTestBase {
 
     @Autowired
     private RecruitService recruitService;

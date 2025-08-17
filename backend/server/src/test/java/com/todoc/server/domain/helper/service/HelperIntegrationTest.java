@@ -1,5 +1,6 @@
 package com.todoc.server.domain.helper.service;
 
+import com.todoc.server.IntegrationTestBase;
 import com.todoc.server.common.enumeration.Area;
 import com.todoc.server.domain.helper.entity.HelperProfile;
 import com.todoc.server.domain.helper.exception.HelperProfileNotFoundException;
@@ -27,7 +28,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Transactional
 @ActiveProfiles("test")
 @Sql("/sql/data.sql")
-public class HelperIntegrationTest {
+public class HelperIntegrationTest extends IntegrationTestBase {
 
     @Autowired
     private HelperFacadeService helperFacadeService;
