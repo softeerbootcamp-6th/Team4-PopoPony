@@ -6,10 +6,22 @@ import type { RecruitSimpleResponse } from '@customer/types';
 import { getRecruitsCustomer } from '@customer/apis';
 import { dateFormat, timeFormat } from '@utils';
 import { useNavigate } from '@tanstack/react-router';
+import type { EscortStatus } from '@types';
 
 export const Route = createFileRoute('/customer/')({
   component: RouteComponent,
 });
+
+const escortStatusMessageMap: Record<NonNullable<EscortStatus>, string> = {
+  //동행준비, 리포트 작성중, 동행완료는 차피 쓰이지 않음. 타입 에러 해결 위해 넣음.
+  동행준비: '동행 준비 중입니다.',
+  만남중: '도우미와 곧 만나요!',
+  병원행: '병원으로 이동하고 있어요!',
+  진료중: '병원에서 안전하게 진료중이에요!',
+  복귀중: '도우미와 안전하게 복귀하고 있어요!',
+  리포트작성중: '리포트를 작성 중입니다.',
+  동행완료: '동행이 완료되었습니다.',
+};
 
 const refineRecruitData = (recruitData: RecruitSimpleResponse) => {
   let statusText = '';
@@ -18,7 +30,9 @@ const refineRecruitData = (recruitData: RecruitSimpleResponse) => {
   } else if (recruitData.recruitStatus === '매칭완료') {
     statusText = '매칭이 확정되었어요!';
   } else if (recruitData.recruitStatus === '동행중') {
-    statusText = '동행이 진행중입니다!';
+    //undefined 가능이지만 우리는 동행중일 때 escort status가 있음을 알기 때문에 타입 단언 가능.
+    statusText =
+      escortStatusMessageMap[recruitData.escortStatus as NonNullable<EscortStatus>] ?? '';
   } else if (recruitData.recruitStatus === '동행완료') {
     statusText = '동행번호 NO.' + recruitData.recruitId;
   }
