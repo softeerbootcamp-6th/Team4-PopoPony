@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import { useFormContext } from 'react-hook-form';
-import { IcCheckBox, IcEdit } from '@icons';
+import { IcCheckBox } from '@icons';
 import { useImageUpload } from '@hooks';
 import type { ImagePrefix } from '@types';
 
@@ -42,10 +42,6 @@ const ReceiptImageUpload = ({ name, prefix, placeholder }: Props) => {
   };
 
   const handleUploadClick = () => fileInputRef.current?.click();
-  const handleEditClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    handleUploadClick();
-  };
 
   return (
     <div className='relative'>
@@ -60,9 +56,9 @@ const ReceiptImageUpload = ({ name, prefix, placeholder }: Props) => {
 
       <button
         type='button'
-        onClick={!hasImage ? handleUploadClick : undefined}
+        onClick={handleUploadClick}
         disabled={isUploading}
-        className={`relative flex h-[16rem] w-[16rem] flex-col items-center justify-center gap-1 rounded-[0.8rem] transition-all duration-200 ease-in-out ${
+        className={`relative flex aspect-square w-full flex-col items-center justify-center gap-1 rounded-[0.8rem] transition-all duration-200 ease-in-out ${
           hasImage
             ? ''
             : 'bg-neutral-10 border-neutral-20 border-[1.5px] border-dashed hover:opacity-80 active:scale-95'
@@ -101,15 +97,6 @@ const ReceiptImageUpload = ({ name, prefix, placeholder }: Props) => {
             </div>
           </div>
         </>
-
-        {/* 수정 버튼 */}
-        {hasImage && !isUploading && (
-          <div
-            className='border-neutral-0 hover:bg-neutral-90 absolute right-[0.8rem] bottom-[0.8rem] z-10 flex h-[3.6rem] w-[3.6rem] items-center justify-center rounded-full border bg-neutral-100 transition-all duration-200 ease-in-out active:scale-95'
-            onClick={handleEditClick}>
-            <IcEdit className='text-neutral-0 h-[2.4rem] w-[2.4rem]' />
-          </div>
-        )}
       </button>
     </div>
   );
