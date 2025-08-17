@@ -1,4 +1,4 @@
-package com.todoc.server.domain.sse.service;
+package com.todoc.server.domain.realtime.service;
 
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
@@ -20,13 +20,13 @@ public class SseEmitterManager {
         SseEmitter newEmitter = new SseEmitter(0L); // 무제한 타임아웃
         AtomicReference<SseEmitter> box = emitterMap.computeIfAbsent(escortId, k -> new AtomicReference<>());
 
+        // escortId에 기존 SseEmitter가 있었다면 연결 종료
         SseEmitter prevEmitter = box.getAndSet(newEmitter);
         if (prevEmitter != null) {
-            // 동일 동행에 중복 접속 시 이전 연결 종료(의도적으로 하나만 유지)
             safeComplete(prevEmitter);
         }
 
-        // 연결 라이프사이클에 맞춰 자동 정리
+        // SseEmitter 수명주기에 따른 참조 해제
         Runnable cleanup = () -> box.compareAndSet(newEmitter, null);
         newEmitter.onCompletion(cleanup);
         newEmitter.onTimeout(cleanup);
