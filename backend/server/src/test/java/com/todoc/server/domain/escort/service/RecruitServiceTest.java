@@ -270,8 +270,8 @@ class RecruitServiceTest {
                 .latitude(BigDecimal.valueOf(37.515702))
                 .build();
 
-        RouteLeg meetingToHospital = RouteLeg.builder().taxiFare(10000).build();
-        RouteLeg hospitalToReturn = RouteLeg.builder().taxiFare(15000).build();
+        RouteLeg meetingToHospital = RouteLeg.builder().taxiFare(10000).totalTime(600).build();
+        RouteLeg hospitalToReturn = RouteLeg.builder().taxiFare(15000).totalTime(600).build();
 
         Route route = Route.builder()
                 .meetingLocationInfo(meetingLocation)
