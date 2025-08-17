@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { FormLayout } from '@layouts';
 import { useFormContext } from 'react-hook-form';
-import { useLocation } from '@tanstack/react-router';
-import type { LocationDetail } from '@customer/types';
+import { getRouteApi } from '@tanstack/react-router';
+import type { LocationDetail, PlaceType } from '@customer/types';
 import SearchInput from '../search/searchInput';
 
 import useTMapSearch from '@customer/apis/getTMapSearch';
@@ -14,8 +14,7 @@ interface SearchRouteProps {
   handleSelectRoute: () => void;
 }
 
-// place 파라미터에 따른 텍스트 매핑
-const getPlaceText = (place?: string): React.ReactNode => {
+const getPlaceText = (place: PlaceType): React.ReactNode => {
   switch (place) {
     case 'meeting':
       return (
@@ -44,14 +43,28 @@ const getPlaceText = (place?: string): React.ReactNode => {
   }
 };
 
-const SearchRoute = ({ handleSelectRoute }: SearchRouteProps) => {
-  const location = useLocation();
-  const searchParams = new URLSearchParams(location.search);
-  const placeParam = searchParams.get('place') ?? '';
+const getFormFieldName = (placeParam: PlaceType) => {
+  switch (placeParam) {
+    case 'meeting':
+      return 'meetingLocationDetail';
+    case 'hospital':
+      return 'destinationDetail';
+    case 'return':
+      return 'returnLocationDetail';
+    default:
+      return 'meetingLocationDetail';
+  }
+};
 
-  const place = getPlaceText(placeParam);
+const route = getRouteApi('/customer/recruit/$step');
+
+const SearchRoute = ({ handleSelectRoute }: SearchRouteProps) => {
+  const { place: placeParam } = route.useSearch();
+  const placeTitle = getPlaceText(placeParam);
+  const formFieldName = getFormFieldName(placeParam);
+
   const [searchValue, setSearchValue] = useState('');
-  const debouncedSearchValue = useDebounce(searchValue, 300); // 500ms 디바운싱
+  const debouncedSearchValue = useDebounce(searchValue, 300);
 
   const {
     data: searchData,
@@ -62,43 +75,11 @@ const SearchRoute = ({ handleSelectRoute }: SearchRouteProps) => {
     isError,
   } = useTMapSearch(debouncedSearchValue);
 
-  // 모든 페이지의 POI 데이터를 합쳐서 하나의 배열로 만듦
   const allSearchResults =
     searchData?.pages.flatMap((page) => page.searchPoiInfo.pois?.poi || []) || [];
 
   const { setValue } = useFormContext();
   const loadMoreRef = useRef<HTMLDivElement>(null);
-  // place에 따른 form field 이름 결정
-  const getFormFieldName = () => {
-    switch (placeParam) {
-      case 'meeting':
-        return 'meetingLocationDetail';
-      case 'hospital':
-        return 'destinationDetail';
-      case 'return':
-        return 'returnLocationDetail';
-      default:
-        return 'meetingLocationDetail';
-    }
-  };
-
-  // 무한 스크롤을 위한 Intersection Observer 설정
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
-          fetchNextPage();
-        }
-      },
-      { threshold: 0.1 }
-    );
-
-    if (loadMoreRef.current) {
-      observer.observe(loadMoreRef.current);
-    }
-
-    return () => observer.disconnect();
-  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   const convertToLocationDetail = useCallback((poi: TMapPOI): LocationDetail => {
     return {
@@ -117,12 +98,9 @@ const SearchRoute = ({ handleSelectRoute }: SearchRouteProps) => {
     };
   }, []);
 
-  // 검색 결과 선택 핸들러
   const handleSelectItem = (poi: TMapPOI) => {
     const selectedItem = convertToLocationDetail(poi);
-    const formFieldName = getFormFieldName();
 
-    // detailAddress를 제외한 데이터를 form에 저장
     const locationData = {
       placeName: selectedItem.placeName,
       upperAddrName: selectedItem.upperAddrName,
@@ -138,18 +116,31 @@ const SearchRoute = ({ handleSelectRoute }: SearchRouteProps) => {
     };
 
     setValue(formFieldName, locationData);
-
-    // 검색 결과 초기화 및 라우트 변경
-    // setSearchResult([]);
-    // setSearchValue('');
     handleSelectRoute();
   };
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
+          fetchNextPage();
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (loadMoreRef.current) {
+      observer.observe(loadMoreRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   return (
     <FormLayout>
       <FormLayout.Content>
         <FormLayout.TitleWrapper>
-          <FormLayout.Title>{place}</FormLayout.Title>
+          <FormLayout.Title>{placeTitle}</FormLayout.Title>
         </FormLayout.TitleWrapper>
         <div className='flex flex-col gap-[2rem]'>
           <SearchInput
@@ -186,7 +177,6 @@ const SearchRoute = ({ handleSelectRoute }: SearchRouteProps) => {
                   </h5>
                 </button>
               ))}
-
               <div
                 ref={loadMoreRef}
                 className='mt-[1.6rem] flex h-[2rem] items-center justify-center'>
