@@ -11,28 +11,27 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 
-@Tag(name = "recruits", description = "동행 신청 관련 API")
+@Tag(name = "sse", description = "SSE 관련 API")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/realtime")
+@RequestMapping("/api/sse")
 public class SseController {
 
     private final SseEmitterManager emitterManager;
 
     // 고객이 도우미 위치 구독
-    @GetMapping(value = "/escorts/{escortId}/helper-location", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    @GetMapping(value = "/escorts/{escortId}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public SseEmitter subscribe(@PathVariable Long escortId) {
-        SseEmitter emitter = emitterManager.addEmitter(escortId);
 
-        // 연결 직후 스냅샷(예: "NO_DATA") 전송
+        SseEmitter emitter = emitterManager.register(escortId);
+
+        // 연결 직후 스냅샷 전송
+        // TODO :: 도우미 마지막 위치 전달
         try {
-            emitter.send(SseEmitter.event()
-                    .name("snapshot")
-                    .data("NO_DATA"));
+            emitter.send(SseEmitter.event().name("snapshot").data("NO_DATA"));
         } catch (Exception e) {
             emitter.completeWithError(e);
         }
-
         return emitter;
     }
 }
