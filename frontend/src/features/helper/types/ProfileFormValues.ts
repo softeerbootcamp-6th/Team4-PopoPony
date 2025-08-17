@@ -9,7 +9,7 @@ export const REGION_OPTIONS = [
   { label: '광주광역시', value: '광주' },
   { label: '대전광역시', value: '대전' },
   { label: '울산광역시', value: '울산' },
-  { label: '세종특별자치시', value: '세종' },
+  { label: '세종특별자치시', value: '세종시' },
   { label: '경기도', value: '경기' },
   { label: '강원도', value: '강원' },
   { label: '충청북도', value: '충북' },
