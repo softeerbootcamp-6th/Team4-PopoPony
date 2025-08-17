@@ -2,7 +2,6 @@ package com.todoc.server.domain.escort.service;
 
 import com.todoc.server.common.enumeration.ApplicationStatus;
 import com.todoc.server.common.enumeration.RecruitStatus;
-import com.todoc.server.common.util.DateTimeUtils;
 import com.todoc.server.common.util.FeeUtils;
 import com.todoc.server.domain.customer.entity.Patient;
 import com.todoc.server.domain.customer.exception.PatientNotFoundException;
@@ -17,7 +16,11 @@ import com.todoc.server.domain.escort.web.dto.request.RecruitCreateRequest;
 import com.todoc.server.domain.escort.web.dto.response.*;
 
 import com.todoc.server.domain.route.exception.LocationNotFoundException;
+
+import com.todoc.server.domain.route.web.dto.response.RouteDetailResponse;
+import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
@@ -229,18 +232,26 @@ public class RecruitService {
         if (route == null) {
             throw new RouteNotFoundException();
         }
-        RouteSimpleResponse routeResponse = RouteSimpleResponse.from(route);
 
-        // 2. 기본 요금 계산
+        RouteDetailResponse routeResponse = RouteDetailResponse.from(route);
+
+        // 3. 이용 시간 계산
+        LocalTime startTime = recruit.getEstimatedMeetingTime();
+        LocalTime endTime = recruit.getEstimatedReturnTime();
+        long totalMinutes = Duration.between(startTime, endTime).toMinutes();
+
+        // 4. 기본 요금 계산
         int baseFee = FeeUtils.calculateTotalFee(recruit.getEstimatedMeetingTime(), recruit.getEstimatedReturnTime());
 
-        // 3. 예상 택시 요금 계산
-        // TODO :: 택시 요금에 대한 처리
-        int expectedTaxiFee = 0;
+        // 5. 예상 택시 요금 계산
+        int meetingToHospitalTaxiFee = route.getMeetingToHospital().getTaxiFare();
+        int hospitalToReturnTaxiFee = route.getHospitalToReturn().getTaxiFare();
+        int expectedTaxiFee = meetingToHospitalTaxiFee + hospitalToReturnTaxiFee;
 
         return RecruitPaymentResponse.builder()
                 .recruitId(recruit.getId())
                 .route(routeResponse)
+                .totalMinutes(totalMinutes)
                 .baseFee(baseFee)
                 .expectedTaxiFee(expectedTaxiFee)
                 .build();

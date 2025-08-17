@@ -28,10 +28,13 @@ public class EscortDetailFlatDto {
 
     private LocationInfo returnLocation;
 
-    private RouteLeg routeLeg;
+    private RouteLeg meetingToHospital;
+
+    private RouteLeg hospitalToReturn;
 
     public EscortDetailFlatDto(Escort escort, Recruit recruit, Auth customer, Patient patient, Route route,
-                               LocationInfo meetingLocation, LocationInfo hospitalLocation, LocationInfo returnLocation, RouteLeg routeLeg) {
+                               LocationInfo meetingLocation, LocationInfo hospitalLocation, LocationInfo returnLocation,
+                               RouteLeg meetingToHospital, RouteLeg hospitalToReturn) {
         this.escort = escort;
         this.recruit = recruit;
         this.customer = customer;
@@ -40,6 +43,7 @@ public class EscortDetailFlatDto {
         this.meetingLocation = meetingLocation;
         this.hospitalLocation = hospitalLocation;
         this.returnLocation = returnLocation;
-        this.routeLeg = routeLeg;
+        this.meetingToHospital = meetingToHospital;
+        this.hospitalToReturn = hospitalToReturn;
     }
 }
