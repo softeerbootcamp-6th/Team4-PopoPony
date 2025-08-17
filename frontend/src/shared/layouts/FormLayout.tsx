@@ -47,7 +47,7 @@ const FooterPrevNext = ({
   disabled,
   nextButtonText = '다음',
 }: {
-  handleClickNext: () => void;
+  handleClickNext?: () => void;
   disabled: boolean;
   nextButtonText?: string;
 }) => {
@@ -56,6 +56,10 @@ const FooterPrevNext = ({
   const handleClickPrev = () => {
     router.history.back();
   };
+
+  if (!handleClickNext) {
+    return null;
+  }
 
   return (
     <div className='flex w-full flex-shrink-0 gap-[0.8rem]'>

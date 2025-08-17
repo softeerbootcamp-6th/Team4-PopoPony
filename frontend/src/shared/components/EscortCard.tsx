@@ -5,15 +5,15 @@ import type { RecruitStatus, EscortStrength } from '@types';
 
 type Props = {
   children: React.ReactNode;
+  onClick?: () => void;
 };
 
-const EscortCard = ({ children }: Props) => {
+const EscortCard = ({ children, onClick }: Props) => {
   return (
     <div
       className='bg-background-default-white border-stroke-neutral-dark shadow-card flex w-full cursor-pointer flex-col gap-[1.2rem] rounded-[0.8rem] border p-[1.6rem]'
-      // TODO: 삭제 필요
       onClick={() => {
-        alert('준비중인 기능이예요');
+        if (onClick) onClick();
       }}>
       {children}
     </div>
@@ -24,9 +24,15 @@ interface CardStatusHeaderProps {
   status?: RecruitStatus;
   text: string;
   title: string;
+  hasOnClickEvent?: boolean;
 }
 
-const CardStatusHeader = ({ status, text, title }: CardStatusHeaderProps) => {
+const CardStatusHeader = ({
+  status,
+  text,
+  title,
+  hasOnClickEvent = true,
+}: CardStatusHeaderProps) => {
   return (
     <>
       <div className='flex-start gap-[0.4rem]'>
@@ -35,7 +41,7 @@ const CardStatusHeader = ({ status, text, title }: CardStatusHeaderProps) => {
       </div>
       <div className='flex-between mt-[0.6rem] cursor-pointer'>
         <h3 className='subtitle-18-bold text-text-neutral-primary'>{title}</h3>
-        <IcChevronRightSecondary />
+        {hasOnClickEvent && <IcChevronRightSecondary />}
       </div>
     </>
   );

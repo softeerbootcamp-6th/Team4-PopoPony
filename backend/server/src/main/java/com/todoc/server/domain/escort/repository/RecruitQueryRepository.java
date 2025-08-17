@@ -1,6 +1,5 @@
 package com.todoc.server.domain.escort.repository;
 
-import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -14,6 +13,7 @@ import java.util.List;
 import com.todoc.server.domain.escort.entity.Recruit;
 import com.todoc.server.domain.escort.web.dto.response.RecruitSimpleResponse;
 
+import com.todoc.server.domain.route.entity.QRouteLeg;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -39,6 +39,7 @@ public class RecruitQueryRepository {
                 recruit.id,
                 escort.id,
                 recruit.status,
+                escort.status,
                 application.count(),
                 recruit.escortDate,
                 recruit.estimatedMeetingTime,
@@ -59,7 +60,7 @@ public class RecruitQueryRepository {
             .join(route.hospitalLocationInfo, hospitalLocation)
             .join(recruit.patient, patient)
             .where(recruit.customer.id.eq(userId))
-            .groupBy(recruit.id)
+            .groupBy(recruit.id, escort.id, escort.status)
             .fetch();
 
         return result;
@@ -131,6 +132,8 @@ public class RecruitQueryRepository {
         QLocationInfo meetingLocation = new QLocationInfo("meetingLocation");
         QLocationInfo hospitalLocation = new QLocationInfo("hospitalLocation");
         QLocationInfo returnLocation = new QLocationInfo("returnLocation");
+        QRouteLeg meetingToHospital = new QRouteLeg("meetingToHospital");
+        QRouteLeg hospitalToReturn = new QRouteLeg("hospitalToReturn");
 
         return queryFactory
                 .select(recruit)
@@ -139,6 +142,8 @@ public class RecruitQueryRepository {
                 .join(route.meetingLocationInfo, meetingLocation).fetchJoin()
                 .join(route.hospitalLocationInfo, hospitalLocation).fetchJoin()
                 .join(route.returnLocationInfo, returnLocation).fetchJoin()
+                .join(route.meetingToHospital, meetingToHospital).fetchJoin()
+                .join(route.hospitalToReturn, hospitalToReturn).fetchJoin()
                 .where(recruit.id.eq(recruitId))
                 .fetchOne();
     }
@@ -153,6 +158,7 @@ public class RecruitQueryRepository {
                 recruit.id,
                 escort.id,
                 recruit.status,
+                escort.status,
                 application.count(),
                 recruit.escortDate,
                 recruit.estimatedMeetingTime,
@@ -175,7 +181,7 @@ public class RecruitQueryRepository {
             .where(application.helper.id.eq(helperUserId)
                 .and(application.status.in(status))
                 .and(application.deletedAt.isNull()))
-            .groupBy(recruit.id)
+            .groupBy(recruit.id, escort.id, escort.status)
             .fetch();
     }
 

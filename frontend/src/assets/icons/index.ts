@@ -9,6 +9,8 @@ import IcArrowUp from './arrow-up.svg?react';
 import IcCalendar from './calendar.svg?react';
 import IcCamera from './camera.svg?react';
 import IcCameraFill from './camera-fill.svg?react';
+import IcRadioOff from './radio-off.svg?react';
+import IcRadioOn from './radio-on.svg?react';
 import IcCheck from './check.svg?react';
 import IcCheckBox from './checkbox.svg?react';
 import IcCheckCircle from './check-circle.svg?react';
@@ -81,6 +83,8 @@ export {
   IcCalendar,
   IcCamera,
   IcCameraFill,
+  IcRadioOff,
+  IcRadioOn,
   IcCheck,
   IcCheckBox,
   IcCheckCircle,

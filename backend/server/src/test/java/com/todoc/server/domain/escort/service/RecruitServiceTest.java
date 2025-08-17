@@ -13,9 +13,12 @@ import com.todoc.server.domain.escort.repository.RecruitQueryRepository;
 import com.todoc.server.domain.escort.repository.dto.RecruitHistoryDetailFlatDto;
 import com.todoc.server.domain.escort.web.dto.response.*;
 import com.todoc.server.domain.image.entity.ImageFile;
+import com.todoc.server.domain.image.entity.ImageMeta;
 import com.todoc.server.domain.route.entity.LocationInfo;
 import java.util.ArrayList;
 import java.util.Map;
+
+import com.todoc.server.domain.route.entity.RouteLeg;
 import org.assertj.core.api.Assertions;
 import com.todoc.server.domain.route.entity.Route;
 import org.junit.jupiter.api.DisplayName;
@@ -58,11 +61,11 @@ class RecruitServiceTest {
     public void getRecruitListAsCustomerByUserId_ShouldReturnSortedRecruitList() {
         // given
         Long userId = 1L;
-        RecruitSimpleResponse inProgress1 = new RecruitSimpleResponse(1L,1L, "동행중", 2L, LocalDate.of(2024, 6, 3), LocalTime.NOON, LocalTime.MIDNIGHT, "서울역", "병원A", 10000, true, false, false, true);
-        RecruitSimpleResponse inProgress2 = new RecruitSimpleResponse(1L, 2L, "동행중", 2L, LocalDate.of(2024, 6, 1), LocalTime.NOON, LocalTime.MIDNIGHT, "서울역", "병원A", 10000, true, false, false, true);
-        RecruitSimpleResponse inProgress3 = new RecruitSimpleResponse(2L, null, "매칭중", 3L, LocalDate.of(2024, 6, 2), LocalTime.NOON, LocalTime.MIDNIGHT, "학동역", "병원B", 10000, true, false, false, true);
-        RecruitSimpleResponse done1 = new RecruitSimpleResponse(3L, null, "동행완료", 2L, LocalDate.of(2024, 5, 30), LocalTime.NOON, LocalTime.MIDNIGHT, "서울역", "병원C", 10000, true, false, false, true);
-        RecruitSimpleResponse done2 = new RecruitSimpleResponse(4L, null, "동행완료", 1L, LocalDate.of(2024, 6, 4), LocalTime.NOON, LocalTime.MIDNIGHT, "학동역", "병원D", 10000, true, false, false, true);
+        RecruitSimpleResponse inProgress1 = new RecruitSimpleResponse(1L,1L, "동행중", "동행준비", 2L, LocalDate.of(2024, 6, 3), LocalTime.NOON, LocalTime.MIDNIGHT, "서울역", "병원A", 10000, true, false, false, true);
+        RecruitSimpleResponse inProgress2 = new RecruitSimpleResponse(1L, 2L, "동행중", "만남중", 2L, LocalDate.of(2024, 6, 1), LocalTime.NOON, LocalTime.MIDNIGHT, "서울역", "병원A", 10000, true, false, false, true);
+        RecruitSimpleResponse inProgress3 = new RecruitSimpleResponse(2L, null, "매칭중", null, 3L, LocalDate.of(2024, 6, 2), LocalTime.NOON, LocalTime.MIDNIGHT, "학동역", "병원B", 10000, true, false, false, true);
+        RecruitSimpleResponse done1 = new RecruitSimpleResponse(3L, null, "동행완료", "리포트작성중", 2L, LocalDate.of(2024, 5, 30), LocalTime.NOON, LocalTime.MIDNIGHT, "서울역", "병원C", 10000, true, false, false, true);
+        RecruitSimpleResponse done2 = new RecruitSimpleResponse(4L, null, "동행완료", "동행완료", 1L, LocalDate.of(2024, 6, 4), LocalTime.NOON, LocalTime.MIDNIGHT, "학동역", "병원D", 10000, true, false, false, true);
 
         List<RecruitSimpleResponse> mockList = Arrays.asList(inProgress2, done1, inProgress1, done2, inProgress3);
 
@@ -76,11 +79,13 @@ class RecruitServiceTest {
         assertEquals(2, result.getCompletedList().size());
 
         // 진행중인 목록: IN_PROGRESS가 최상단, 날짜 오름차순
-        assertEquals("동행중", result.getInProgressList().get(0).getStatus());
+        assertEquals("동행중", result.getInProgressList().get(0).getRecruitStatus());
+        assertNotNull(result.getInProgressList().get(0).getEscortStatus());
         assertTrue(result.getInProgressList().get(0).getEscortDate().isBefore(result.getInProgressList().get(1).getEscortDate()));
 
         // 완료된 목록: 날짜 내림차순
-        assertEquals("동행완료", result.getCompletedList().get(0).getStatus());
+        assertEquals("동행완료", result.getCompletedList().get(0).getRecruitStatus());
+        assertNotNull(result.getCompletedList().get(0).getEscortStatus());
         assertTrue(result.getCompletedList().get(0).getEscortDate().isAfter(result.getCompletedList().get(1).getEscortDate()));
     }
 
@@ -197,8 +202,10 @@ class RecruitServiceTest {
 
         // 이미지 스텁 (핵심)
         ImageFile img = mock(ImageFile.class);
+        ImageMeta imageMeta = mock(ImageMeta.class);
         when(img.getId()).thenReturn(3001L);
         when(patient.getPatientProfileImage()).thenReturn(img);
+        when(img.getImageMeta()).thenReturn(imageMeta);
 
         try (MockedStatic<ImageUrlUtils> urlMock = mockStatic(ImageUrlUtils.class)) {
             urlMock.when(() -> ImageUrlUtils.getImageUrl(3001L))
@@ -263,10 +270,15 @@ class RecruitServiceTest {
                 .latitude(BigDecimal.valueOf(37.515702))
                 .build();
 
+        RouteLeg meetingToHospital = RouteLeg.builder().taxiFare(10000).totalTime(600).build();
+        RouteLeg hospitalToReturn = RouteLeg.builder().taxiFare(15000).totalTime(600).build();
+
         Route route = Route.builder()
                 .meetingLocationInfo(meetingLocation)
                 .hospitalLocationInfo(hospitalLocation)
                 .returnLocationInfo(returnLocation)
+                .meetingToHospital(meetingToHospital)
+                .hospitalToReturn(hospitalToReturn)
                 .build();
 
         Recruit recruit = Recruit.builder()
@@ -286,7 +298,7 @@ class RecruitServiceTest {
         assertThat(response.getRecruitId()).isEqualTo(10L);
         assertThat(response.getRoute()).isNotNull();
         assertThat(response.getBaseFee()).isEqualTo(53000);
-        assertThat(response.getExpectedTaxiFee()).isEqualTo(0);
+        assertThat(response.getExpectedTaxiFee()).isEqualTo(25000);
     }
 
     @Test
@@ -305,11 +317,11 @@ class RecruitServiceTest {
         // given
         Long helperUserId = 7L;
 
-        RecruitSimpleResponse r1 = new RecruitSimpleResponse(1L, 1L, "동행중", 2L, LocalDate.of(2024, 6, 3), LocalTime.NOON, LocalTime.MIDNIGHT, "서울역", "병원A", 10000, true, false, false, true);
-        RecruitSimpleResponse r2 = new RecruitSimpleResponse(2L, null, "매칭중", 3L, LocalDate.of(2024, 6, 4), LocalTime.NOON, LocalTime.MIDNIGHT, "학동역", "병원B", 10000, true, false, false, true);
-        RecruitSimpleResponse r3 = new RecruitSimpleResponse(3L, 3L, "매칭완료", 4L, LocalDate.of(2024, 6, 2), LocalTime.NOON, LocalTime.MIDNIGHT, "시청역", "병원C", 10000, true, false, false, true);
-        RecruitSimpleResponse r4 = new RecruitSimpleResponse(4L, 4L, "동행완료", 5L, LocalDate.of(2024, 6, 4), LocalTime.NOON, LocalTime.MIDNIGHT, "강남역", "병원D", 10000, true, false, false, true);
-        RecruitSimpleResponse r5 = new RecruitSimpleResponse(5L, 5L, "동행완료", 6L, LocalDate.of(2024, 5, 30), LocalTime.NOON, LocalTime.MIDNIGHT, "교대역", "병원E", 10000, true, false, false, true);
+        RecruitSimpleResponse r1 = new RecruitSimpleResponse(1L, 1L, "동행중", "동행준비", 2L, LocalDate.of(2024, 6, 3), LocalTime.NOON, LocalTime.MIDNIGHT, "서울역", "병원A", 10000, true, false, false, true);
+        RecruitSimpleResponse r2 = new RecruitSimpleResponse(2L, null, "매칭중", null, 3L, LocalDate.of(2024, 6, 4), LocalTime.NOON, LocalTime.MIDNIGHT, "학동역", "병원B", 10000, true, false, false, true);
+        RecruitSimpleResponse r3 = new RecruitSimpleResponse(3L, 3L, "매칭완료", null, 4L, LocalDate.of(2024, 6, 2), LocalTime.NOON, LocalTime.MIDNIGHT, "시청역", "병원C", 10000, true, false, false, true);
+        RecruitSimpleResponse r4 = new RecruitSimpleResponse(4L, 4L, "동행완료", "리포트작성중", 5L, LocalDate.of(2024, 6, 4), LocalTime.NOON, LocalTime.MIDNIGHT, "강남역", "병원D", 10000, true, false, false, true);
+        RecruitSimpleResponse r5 = new RecruitSimpleResponse(5L, 5L, "동행완료", "동행완료", 6L, LocalDate.of(2024, 5, 30), LocalTime.NOON, LocalTime.MIDNIGHT, "교대역", "병원E", 10000, true, false, false, true);
 
         when(recruitQueryRepository.findListByHelperUserIdAndApplicationStatus(
             eq(helperUserId), eq(List.of(ApplicationStatus.MATCHED, ApplicationStatus.PENDING))))
@@ -326,15 +338,15 @@ class RecruitServiceTest {
         List<RecruitSimpleResponse> inProgress = result.getInProgressList();
 
         assertEquals(1L, inProgress.get(0).getRecruitId());  // r1 (동행중이므로 첫번째로 와야함)
-        assertEquals("동행중", inProgress.get(0).getStatus());
+        assertEquals("동행중", inProgress.get(0).getRecruitStatus());
         assertEquals(LocalDate.of(2024, 6, 3), inProgress.get(0).getEscortDate());
 
         assertEquals(3L, inProgress.get(1).getRecruitId()); // r3 (매칭중/매칭완료 상태의 경우 동행일 기준 오름차순이므로 r3가 두번째로 와야함)
-        assertEquals("매칭완료", inProgress.get(1).getStatus());
+        assertEquals("매칭완료", inProgress.get(1).getRecruitStatus());
         assertEquals(LocalDate.of(2024, 6, 2), inProgress.get(1).getEscortDate());
 
         assertEquals(2L, inProgress.get(2).getRecruitId()); // r2 (동행중 상태가 아님, 동행일 기준 오름차순이므로 마지막에 와야함)
-        assertEquals("매칭중", inProgress.get(2).getStatus());
+        assertEquals("매칭중", inProgress.get(2).getRecruitStatus());
         assertEquals(LocalDate.of(2024, 6, 4), inProgress.get(2).getEscortDate());
 
         // 완료 목록

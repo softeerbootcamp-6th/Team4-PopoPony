@@ -62,7 +62,7 @@ const FormInput = ({
             {...props}
           />
           {!hasValue && placeholder && (
-            <div className='body1-16-medium bg-background-default-white text-text-neutral-assistive pointer-events-none absolute top-0 left-0 w-full'>
+            <div className='title-20-medium bg-background-default-white text-text-neutral-assistive pointer-events-none absolute top-0 left-0 w-full'>
               {placeholder}
             </div>
           )}

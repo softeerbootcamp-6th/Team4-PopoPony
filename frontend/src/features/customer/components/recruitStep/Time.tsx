@@ -52,10 +52,16 @@ const Time = memo(({ handleNextStep }: FunnelStepProps) => {
             validation={() => dateMarkFieldAsTouched('escortDate')}
           />
         </LabeledSection>
-        <div className='flex gap-[1.2rem]'>
-          <LabeledSection
-            label='시작 시간'
-            isChecked={!timeFieldErrors.estimatedMeetingTime && !!timeValues.estimatedMeetingTime}>
+
+        <LabeledSection
+          label='동행시간'
+          isChecked={
+            !timeFieldErrors.estimatedMeetingTime &&
+            !!timeValues.estimatedMeetingTime &&
+            !timeFieldErrors.estimatedReturnTime &&
+            !!timeValues.estimatedReturnTime
+          }>
+          <div className='flex gap-[1.2rem]'>
             <FormInput
               type='time'
               size='M'
@@ -63,10 +69,7 @@ const Time = memo(({ handleNextStep }: FunnelStepProps) => {
               placeholder='시작 시간 선택'
               validation={() => timeMarkFieldAsTouched('estimatedMeetingTime')}
             />
-          </LabeledSection>
-          <LabeledSection
-            label='종료 시간'
-            isChecked={!timeFieldErrors.estimatedReturnTime && !!timeValues.estimatedReturnTime}>
+
             <FormInput
               type='time'
               size='M'
@@ -74,8 +77,9 @@ const Time = memo(({ handleNextStep }: FunnelStepProps) => {
               placeholder='종료 시간 선택'
               validation={() => timeMarkFieldAsTouched('estimatedReturnTime')}
             />
-          </LabeledSection>
-        </div>
+          </div>
+        </LabeledSection>
+
         <div className='flex-between'>
           <div className='flex-center gap-[0.4rem]'>
             <IcAlertCircle

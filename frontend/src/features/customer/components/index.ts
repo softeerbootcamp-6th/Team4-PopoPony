@@ -8,7 +8,7 @@ import Time from './recruitStep/Time';
 import EscortRoute from './recruitStep/EscortRoute';
 import SearchRoute from './recruitStep/SearchRoute';
 import Request from './recruitStep/Request';
-import { Final } from './recruitStep/Final';
+import Final from './recruitStep/Final';
 import CardWrapper from './Card/CardWrapper';
 import PaymentCard from './PaymentCard';
 import WarningBox from './WarningBox';
@@ -16,6 +16,9 @@ import StatsSummaryCard from './StatsSummaryCard';
 import SatisfactionGraph from './SatisfactionGraph';
 import KeywordTag from './KeywordTag';
 import ReviewCard from './ReviewCard';
+import Summary from './reviewStep/Summary';
+import Detail from './reviewStep/Detail';
+import Comment from './reviewStep/Comment';
 
 // Cards
 import HelperCard from './cards/HelperCard';
@@ -60,4 +63,7 @@ export {
   SatisfactionGraph,
   KeywordTag,
   ReviewCard,
+  Summary,
+  Detail,
+  Comment,
 };

@@ -6,11 +6,24 @@ type RecruitCreateJson = NonNullable<
   operations['createRecruit']['requestBody']
 >['content']['application/json'];
 
-// Build request body for POST /api/recruits from form values
 export const buildRecruitCreateRequest = (formData: RecruitFormValues): RecruitCreateJson => {
+  const imageReq =
+    formData.profileImageCreateRequest &&
+    formData.profileImageCreateRequest.s3Key &&
+    formData.profileImageCreateRequest.contentType &&
+    typeof formData.profileImageCreateRequest.size === 'number' &&
+    formData.profileImageCreateRequest.checksum
+      ? {
+          s3Key: formData.profileImageCreateRequest.s3Key,
+          contentType: formData.profileImageCreateRequest.contentType,
+          size: formData.profileImageCreateRequest.size,
+          checksum: formData.profileImageCreateRequest.checksum,
+        }
+      : undefined;
+
   const requestBody: RecruitCreateJson = {
     patientDetail: {
-      profileImageCreateRequest: formData.profileImageCreateRequest,
+      ...(imageReq ? { profileImageCreateRequest: imageReq } : {}),
       name: formData.name,
       age: Number(formData.age),
       gender: formData.gender,

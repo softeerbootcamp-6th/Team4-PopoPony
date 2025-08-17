@@ -1,3 +1,4 @@
 import getReportDefault from './getReportDefault';
+import getRecruitList from './getRecruitList';
 
-export { getReportDefault };
+export { getReportDefault, getRecruitList };

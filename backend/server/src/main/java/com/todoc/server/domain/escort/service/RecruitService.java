@@ -2,7 +2,6 @@ package com.todoc.server.domain.escort.service;
 
 import com.todoc.server.common.enumeration.ApplicationStatus;
 import com.todoc.server.common.enumeration.RecruitStatus;
-import com.todoc.server.common.util.DateTimeUtils;
 import com.todoc.server.common.util.FeeUtils;
 import com.todoc.server.domain.customer.entity.Patient;
 import com.todoc.server.domain.customer.exception.PatientNotFoundException;
@@ -17,7 +16,11 @@ import com.todoc.server.domain.escort.web.dto.request.RecruitCreateRequest;
 import com.todoc.server.domain.escort.web.dto.response.*;
 
 import com.todoc.server.domain.route.exception.LocationNotFoundException;
+
+import com.todoc.server.domain.route.web.dto.response.RouteDetailResponse;
+import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
@@ -59,7 +62,7 @@ public class RecruitService {
 
         // 진행중인 목록과 완료된 목록 분리
         for (RecruitSimpleResponse recruit : rawList) {
-            if (RecruitStatus.from(recruit.getStatus()).get() == RecruitStatus.DONE) {
+            if (RecruitStatus.from(recruit.getRecruitStatus()).get() == RecruitStatus.DONE) {
                 completedList.add(recruit);
             } else {
                 inProgressList.add(recruit);
@@ -68,7 +71,7 @@ public class RecruitService {
 
         // 진행중인 목록의 경우, 진행중인 목록 먼저 필터링 하고, 이후에 동행일 기준 오름차순 정렬
         inProgressList.sort(Comparator
-            .comparing((RecruitSimpleResponse r) -> RecruitStatus.from(r.getStatus()).get() != RecruitStatus.IN_PROGRESS)
+            .comparing((RecruitSimpleResponse r) -> RecruitStatus.from(r.getRecruitStatus()).get() != RecruitStatus.IN_PROGRESS)
             .thenComparing(RecruitSimpleResponse::getEscortDate)
         );
 
@@ -147,8 +150,8 @@ public class RecruitService {
 
         // 환자 정보
         Patient patient = recruitHistoryDetailFlatDto.getPatient();
-        RecruitHistoryDetailResponse.PatientDetail patientDetail =
-                RecruitHistoryDetailResponse.PatientDetail.from(patient);
+        RecruitHistoryDetailResponse.PatientDetailHistory patientDetail =
+                RecruitHistoryDetailResponse.PatientDetailHistory.from(patient);
 
         // 위치 정보
         RecruitHistoryDetailResponse.LocationDetail meetingLocationDetail = RecruitHistoryDetailResponse.LocationDetail
@@ -229,18 +232,26 @@ public class RecruitService {
         if (route == null) {
             throw new RouteNotFoundException();
         }
-        RouteSimpleResponse routeResponse = RouteSimpleResponse.from(route);
 
-        // 2. 기본 요금 계산
+        RouteDetailResponse routeResponse = RouteDetailResponse.from(route);
+
+        // 3. 이용 시간 계산
+        LocalTime startTime = recruit.getEstimatedMeetingTime();
+        LocalTime endTime = recruit.getEstimatedReturnTime();
+        long totalMinutes = Duration.between(startTime, endTime).toMinutes();
+
+        // 4. 기본 요금 계산
         int baseFee = FeeUtils.calculateTotalFee(recruit.getEstimatedMeetingTime(), recruit.getEstimatedReturnTime());
 
-        // 3. 예상 택시 요금 계산
-        // TODO :: 택시 요금에 대한 처리
-        int expectedTaxiFee = 0;
+        // 5. 예상 택시 요금 계산
+        int meetingToHospitalTaxiFee = route.getMeetingToHospital().getTaxiFare();
+        int hospitalToReturnTaxiFee = route.getHospitalToReturn().getTaxiFare();
+        int expectedTaxiFee = meetingToHospitalTaxiFee + hospitalToReturnTaxiFee;
 
         return RecruitPaymentResponse.builder()
                 .recruitId(recruit.getId())
                 .route(routeResponse)
+                .totalMinutes(totalMinutes)
                 .baseFee(baseFee)
                 .expectedTaxiFee(expectedTaxiFee)
                 .build();
@@ -267,7 +278,7 @@ public class RecruitService {
 
         // 진행중인 목록과 완료된 목록 분리
         for (RecruitSimpleResponse recruit : rawList) {
-            if (RecruitStatus.from(recruit.getStatus()).get() == RecruitStatus.DONE) {
+            if (RecruitStatus.from(recruit.getRecruitStatus()).get() == RecruitStatus.DONE) {
                 completedList.add(recruit);
             } else {
                 inProgressList.add(recruit);
@@ -276,7 +287,7 @@ public class RecruitService {
 
         // 진행중인 목록의 경우, 진행중인 목록 먼저 필터링 하고, 이후에 동행일 기준 오름차순 정렬
         inProgressList.sort(Comparator
-            .comparing((RecruitSimpleResponse r) -> RecruitStatus.from(r.getStatus()).get() != RecruitStatus.IN_PROGRESS)
+            .comparing((RecruitSimpleResponse r) -> RecruitStatus.from(r.getRecruitStatus()).get() != RecruitStatus.IN_PROGRESS)
             .thenComparing(RecruitSimpleResponse::getEscortDate)
         );
 
@@ -334,7 +345,7 @@ public class RecruitService {
             RecruitSimpleResponse dto = RecruitSimpleResponse.builder()
                 .recruitId(recruit.getId())
                 .escortId(null)
-                .status(recruit.getStatus().getLabel())
+                .recruitStatus(recruit.getStatus().getLabel())
                 .numberOfApplication(0L)
                 .escortDate(recruit.getEscortDate())
                 .estimatedMeetingTime(recruit.getEstimatedMeetingTime())
