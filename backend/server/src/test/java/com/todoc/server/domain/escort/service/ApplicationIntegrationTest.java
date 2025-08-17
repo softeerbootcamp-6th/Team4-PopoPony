@@ -1,5 +1,6 @@
 package com.todoc.server.domain.escort.service;
 
+import com.todoc.server.IntegrationTestBase;
 import com.todoc.server.common.enumeration.ApplicationStatus;
 import com.todoc.server.common.enumeration.RecruitStatus;
 import com.todoc.server.domain.auth.service.AuthService;
@@ -30,7 +31,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 @Transactional
 @ActiveProfiles("test")
 @Sql("/sql/data.sql")
-public class ApplicationIntegrationTest {
+public class ApplicationIntegrationTest extends IntegrationTestBase {
 
     @Autowired
     private ApplicationService applicationService;
