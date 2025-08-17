@@ -31,15 +31,25 @@ public class RouteDetailResponse {
     @Schema(description = "병원-복귀장소 예상 택시 요금(원)")
     private int hospitalToReturnEstimatedTaxiFee;
 
+    @NotNull
+    @Schema(description = "병원까지의 경로 정보 ([위도, 경도] 배열)", example = "[[12,23],[13,45],[12,66]]")
+    private String meetingToHospital;
+
+    @NotNull
+    @Schema(description = "복귀장소까지의 경로 정보 ([위도, 경도] 배열)", example = "[[12,23],[13,45],[12,66]]")
+    private String hospitalToReturn;
+
     @Builder
     public RouteDetailResponse(RouteSimpleResponse routeSimple,
                                int meetingToHospitalEstimatedTime, int meetingToHospitalEstimatedTaxiFee,
-                               int hospitalToReturnEstimatedTime, int hospitalToReturnEstimatedTaxiFee) {
+                               int hospitalToReturnEstimatedTime, int hospitalToReturnEstimatedTaxiFee, String meetingToHospital, String hospitalToReturn) {
         this.routeSimple = routeSimple;
         this.meetingToHospitalEstimatedTime = meetingToHospitalEstimatedTime;
         this.meetingToHospitalEstimatedTaxiFee = meetingToHospitalEstimatedTaxiFee;
         this.hospitalToReturnEstimatedTime = hospitalToReturnEstimatedTime;
         this.hospitalToReturnEstimatedTaxiFee = hospitalToReturnEstimatedTaxiFee;
+        this.meetingToHospital = meetingToHospital;
+        this.hospitalToReturn = hospitalToReturn;
     }
 
     public static RouteDetailResponse from(Route route, RouteLeg meetingToHospital, RouteLeg hospitalToReturn) {
@@ -49,6 +59,8 @@ public class RouteDetailResponse {
                 .meetingToHospitalEstimatedTaxiFee(meetingToHospital.getTaxiFare())
                 .hospitalToReturnEstimatedTime(hospitalToReturn.getTotalTime())
                 .hospitalToReturnEstimatedTaxiFee(hospitalToReturn.getTaxiFare())
+                .meetingToHospital(route.getMeetingToHospital().getCoordinates())
+                .hospitalToReturn(route.getHospitalToReturn().getCoordinates())
                 .build();
     }
 
@@ -67,6 +79,8 @@ public class RouteDetailResponse {
                 .meetingToHospitalEstimatedTaxiFee(meetingToHospital.getTaxiFare())
                 .hospitalToReturnEstimatedTime(hospitalToReturn.getTotalTime())
                 .hospitalToReturnEstimatedTaxiFee(hospitalToReturn.getTaxiFare())
+                .meetingToHospital(route.getMeetingToHospital().getCoordinates())
+                .hospitalToReturn(route.getHospitalToReturn().getCoordinates())
                 .build();
     }
 }

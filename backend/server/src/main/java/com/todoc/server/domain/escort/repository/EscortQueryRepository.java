@@ -5,6 +5,8 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.todoc.server.common.enumeration.EscortStatus;
 import com.todoc.server.common.enumeration.RecruitStatus;
 import com.todoc.server.domain.escort.entity.Escort;
+import com.todoc.server.domain.escort.entity.QEscort;
+import com.todoc.server.domain.escort.entity.QRecruit;
 import com.todoc.server.domain.route.entity.QLocationInfo;
 import com.todoc.server.domain.route.entity.QRouteLeg;
 import lombok.RequiredArgsConstructor;
