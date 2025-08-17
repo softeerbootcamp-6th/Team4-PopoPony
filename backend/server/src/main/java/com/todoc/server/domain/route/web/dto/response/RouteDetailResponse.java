@@ -16,7 +16,7 @@ public class RouteDetailResponse {
     private RouteSimpleResponse routeSimple;
 
     @NotNull
-    @Schema(description = "만남장소-병원 예상 이동 시간(분)")
+    @Schema(description = "만남장소-병원 예상 이동 시간(초)")
     private int meetingToHospitalEstimatedTime;
 
     @NotNull
@@ -24,7 +24,7 @@ public class RouteDetailResponse {
     private int meetingToHospitalEstimatedTaxiFee;
 
     @NotNull
-    @Schema(description = "병원-복귀장소 예상 이동 시간(분)")
+    @Schema(description = "병원-복귀장소 예상 이동 시간(초)")
     private int hospitalToReturnEstimatedTime;
 
     @NotNull
