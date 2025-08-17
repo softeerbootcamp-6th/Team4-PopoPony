@@ -4,8 +4,10 @@ import com.todoc.server.common.response.Response;
 import com.todoc.server.domain.auth.service.SessionAuth;
 import com.todoc.server.domain.auth.web.LoginUser;
 import com.todoc.server.domain.helper.service.HelperFacadeService;
+import com.todoc.server.domain.helper.service.HelperService;
 import com.todoc.server.domain.helper.web.dto.request.HelperProfileCreateRequest;
 import com.todoc.server.domain.helper.web.dto.response.HelperDetailResponse;
+import com.todoc.server.domain.helper.web.dto.response.HelperProfileExistenceResponse;
 import com.todoc.server.domain.helper.web.dto.response.HelperSimpleResponse;
 import com.todoc.server.domain.review.web.dto.response.PositiveFeedbackStatResponse;
 import com.todoc.server.domain.review.web.dto.response.ReviewSimpleResponse;
@@ -27,6 +29,7 @@ import java.util.List;
 public class HelperController {
 
     private final HelperFacadeService helperFacadeService;
+    private final HelperService helperService;
 
     @Operation(
             summary = "도우미 상세 조회",
@@ -52,5 +55,17 @@ public class HelperController {
         helperFacadeService.createHelperProfile(auth.id(), requestDto);
 
         return Response.from();
+    }
+
+    @Operation(
+        summary = "도우미 프로필 존재 여부 확인",
+        description = "도우미가 기존에 등록한 프로필이 있는지 확인합니다.")
+    @ApiResponse(
+        responseCode = "200",
+        description = "도우미 프로필 존재 여부 조회 성공")
+    @GetMapping("/existence")
+    public Response<HelperProfileExistenceResponse> checkHelperProfileExistence(@LoginUser SessionAuth auth) {
+
+        return Response.from(helperService.checkHelperProfileExistence(auth.id()));
     }
 }
