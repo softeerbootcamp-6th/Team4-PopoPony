@@ -1,10 +1,10 @@
 import { useState, useCallback } from 'react';
-import type { ImageUploadResult, ImagePrefix } from '@types';
+import type { ImagePrefix, ImageWithPreviewUrl } from '@types';
 import { postPresignedUrl, putS3Upload } from '@apis';
 import { calculateMD5 } from '@utils';
 
 export interface UseImageUploadReturn {
-  uploadImage: (file: File, prefix: ImagePrefix) => Promise<ImageUploadResult>;
+  uploadImage: (file: File, prefix: ImagePrefix) => Promise<ImageWithPreviewUrl>;
   isUploading: boolean;
 }
 
@@ -14,7 +14,7 @@ export const useImageUpload = (): UseImageUploadReturn => {
   const { mutateAsync: getPresignedUrl } = postPresignedUrl();
 
   const uploadImage = useCallback(
-    async (file: File, prefix: ImagePrefix): Promise<ImageUploadResult> => {
+    async (file: File, prefix: ImagePrefix): Promise<ImageWithPreviewUrl> => {
       try {
         setIsUploading(true);
 
@@ -54,7 +54,7 @@ export const useImageUpload = (): UseImageUploadReturn => {
         await putS3Upload(file, uploadUrl, headers);
 
         // 5. 결과 반환
-        const result: ImageUploadResult = {
+        const result: ImageWithPreviewUrl = {
           ...imageData,
           s3Key,
           previewUrl,
