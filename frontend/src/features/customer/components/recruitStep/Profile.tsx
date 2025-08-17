@@ -9,13 +9,14 @@ import {
 import { memo, useState, useEffect } from 'react';
 import { FormLayout } from '@layouts';
 import { useFormValidation } from '@hooks';
-import { type RecruitStepProps, profileSchema } from '@customer/types';
+import { profileSchema } from '@customer/types';
 import { getPastPatientInfo, getPastPatientInfoDetail } from '@customer/apis';
 import { IcRadioOff, IcRadioOn } from '@assets/icons';
 import { useFormContext } from 'react-hook-form';
 import { booleanToString, numberToString, formatPhoneNumber } from '@utils';
+import type { FunnelStepProps } from '@types';
 
-const Profile = memo(({ handleNextStep }: RecruitStepProps) => {
+const Profile = memo(({ handleNextStep }: FunnelStepProps) => {
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
   const [selectedPatientId, setSelectedPatientId] = useState<number | null>(null);
   const [isPatientIdConfirmed, setIsPatientIdConfirmed] = useState(false);

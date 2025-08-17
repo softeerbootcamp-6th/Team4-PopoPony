@@ -15,7 +15,7 @@ import type { FunnelStepProps } from '@types';
 import { postRecruit } from '@customer/apis';
 import { buildRecruitCreateRequest } from '@customer/utils';
 
-const Final = ({ handleBackStep }: RecruitStepProps) => {
+const Final = ({ handleBackStep }: FunnelStepProps) => {
   const { getValues } = useFormContext<RecruitFormValues>();
   const formData = getValues();
   const navigate = useNavigate();
