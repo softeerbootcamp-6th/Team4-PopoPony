@@ -1,37 +1,53 @@
+import { useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { Button } from '@components';
+import type { CertificateItemValues } from '@helper/types';
+import { useImageUpload } from '@hooks';
+import type { ImagePrefix } from '@types';
 
 interface Props {
-  selectedCertificates: Array<{ type: string; certificateImageUrl: string }>;
-  certificateImages?: Record<string, string>;
+  selectedCertificates: Array<CertificateItemValues>;
+  prefix: ImagePrefix;
 }
 
-const CertificateImageUploader = ({ selectedCertificates }: Props) => {
+const CertificateImageUploader = ({ selectedCertificates, prefix }: Props) => {
   const { setValue, watch } = useFormContext();
-  const certificateList = watch('certificateList') || [];
+  const { uploadImage } = useImageUpload();
+  const certificateList: Array<CertificateItemValues> = watch('certificateList') || [];
+  const [uploadingType, setUploadingType] = useState<string | null>(null);
 
-  const handleImageUpload = (certificateType: string, fileName: string) => {
-    const updatedCertificateList = certificateList.map(
-      (cert: { type: string; certificateImageUrl: string }) => {
-        if (cert.type === certificateType) {
-          return { ...cert, certificateImageUrl: fileName };
-        }
-        return cert;
-      }
-    );
-    setValue('certificateList', updatedCertificateList);
-  };
-
-  const handleFileSelect = (
+  const handleFileSelect = async (
     certificateType: string,
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     const file = event.target.files?.[0];
-    if (file) {
-      handleImageUpload(certificateType, file.name);
+    if (!file) return;
+
+    try {
+      setUploadingType(certificateType);
+      const { imageData } = await uploadImage(file, prefix);
+
+      const updatedCertificateList = certificateList.map((cert) => {
+        if (cert.type === certificateType) {
+          return {
+            ...cert,
+            certificateImageCreateRequest: { ...imageData },
+          };
+        }
+        return cert;
+      });
+
+      setValue('certificateList', updatedCertificateList, {
+        shouldValidate: true,
+        shouldDirty: true,
+      });
+    } catch (err) {
+      console.error(err);
+      alert('업로드에 실패했습니다. 다시 시도해주세요.');
+    } finally {
+      event.target.value = '';
+      setUploadingType(null);
     }
-    // 파일 input 초기화 (같은 파일을 다시 선택할 수 있도록)
-    event.target.value = '';
   };
 
   if (selectedCertificates.length === 0) {
@@ -42,7 +58,7 @@ const CertificateImageUploader = ({ selectedCertificates }: Props) => {
     <div className='flex flex-col gap-[1.6rem]'>
       <div className='flex flex-col gap-[1.2rem]'>
         {selectedCertificates.map((certificate) => {
-          const hasImage = certificate.certificateImageUrl;
+          const hasImage = Boolean(certificate.certificateImageCreateRequest);
 
           return (
             <div key={certificate.type} className='flex flex-col gap-[0.8rem]'>
@@ -50,7 +66,7 @@ const CertificateImageUploader = ({ selectedCertificates }: Props) => {
                 <input
                   id={`label-${certificate.type}`}
                   type='text'
-                  value={hasImage ? hasImage : ''}
+                  value={hasImage ? '업로드 완료' : ''}
                   placeholder={`${certificate.type} 자격 인증 파일 첨부`}
                   disabled
                   className='body1-16-medium text-text-neutral-assistive border-stroke-neutral-dark h-full flex-1 rounded-[0.4rem] border px-[1.2rem]'
@@ -59,15 +75,21 @@ const CertificateImageUploader = ({ selectedCertificates }: Props) => {
                   type='file'
                   id={`file-${certificate.type}`}
                   accept='image/*'
-                  onChange={(e) => handleFileSelect(certificate.type, e)}
+                  onChange={(e) => void handleFileSelect(certificate.type, e)}
                   className='hidden'
+                  disabled={uploadingType === certificate.type}
                 />
                 <div className='w-[8.1rem]'>
                   <Button
                     variant='secondary'
                     size='md'
+                    disabled={uploadingType === certificate.type}
                     onClick={() => document.getElementById(`file-${certificate.type}`)?.click()}>
-                    {hasImage ? '변경' : '업로드'}
+                    {uploadingType === certificate.type
+                      ? '업로드 중...'
+                      : hasImage
+                        ? '변경'
+                        : '업로드'}
                   </Button>
                 </div>
               </div>
