@@ -169,8 +169,8 @@ class ReportFacadeServiceTest {
     void getReportDefaultValue_success() {
         // given
         Escort escort = new Escort();
-        ReflectionTestUtils.setField(escort, "actualMeetingTime", LocalTime.of(10, 5));
-        ReflectionTestUtils.setField(escort, "actualReturnTime", LocalTime.of(12, 40));
+        ReflectionTestUtils.setField(escort, "actualMeetingTime", LocalDateTime.of(2025, 8, 15, 10, 5));
+        ReflectionTestUtils.setField(escort, "actualReturnTime", LocalDateTime.of(2025, 8, 15, 12, 40));
         ReflectionTestUtils.setField(escort, "memo", "메모입니다.");
         when(escortService.getByRecruitId(9L)).thenReturn(escort);
 
@@ -179,8 +179,8 @@ class ReportFacadeServiceTest {
 
         // then
         assertThat(resp).isNotNull();
-        assertThat(resp.getActualMeetingTime()).isEqualTo(LocalTime.of(10, 5));
-        assertThat(resp.getActualReturnTime()).isEqualTo(LocalTime.of(12, 40));
+        assertThat(resp.getActualMeetingTime()).isEqualTo(LocalDateTime.of(2025, 8, 15, 10, 5));
+        assertThat(resp.getActualReturnTime()).isEqualTo(LocalDateTime.of(2025, 8, 15, 12, 40));
         assertThat(resp.getMemo()).isEqualTo("메모입니다.");
         verify(escortService).getByRecruitId(9L);
     }
