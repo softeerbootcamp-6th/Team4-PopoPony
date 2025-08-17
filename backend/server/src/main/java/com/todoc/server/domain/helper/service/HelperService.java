@@ -18,8 +18,10 @@ import com.todoc.server.domain.helper.exception.HelperProfileNotFoundException;
 import com.todoc.server.domain.helper.repository.HelperJpaRepository;
 import com.todoc.server.domain.helper.repository.HelperQueryRepository;
 import com.todoc.server.domain.helper.web.dto.request.HelperProfileCreateRequest;
+import com.todoc.server.domain.helper.web.dto.response.HelperProfileExistenceResponse;
 import com.todoc.server.domain.helper.web.dto.response.HelperSimpleResponse;
 import com.todoc.server.domain.image.entity.ImageFile;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -124,5 +126,26 @@ public class HelperService {
 
     public List<HelperProfile> getAllHelperProfiles() {
         return helperJpaRepository.findAll();
+    }
+
+
+    /**
+     * 도우미 프로필이 존재하는지 확인하는 함수
+     */
+    public HelperProfileExistenceResponse checkHelperProfileExistence(Long authId) {
+
+        Optional<HelperProfile> optional = helperJpaRepository.findByAuthId(authId);
+
+        boolean hasProfile = false;
+        Long helperProfileId = null;
+        if (optional.isPresent()) {
+            hasProfile = true;
+            helperProfileId = optional.get().getId();
+        }
+
+        return HelperProfileExistenceResponse.builder()
+                .hasProfile(hasProfile)
+                .helperProfileId(helperProfileId)
+                .build();
     }
 }
