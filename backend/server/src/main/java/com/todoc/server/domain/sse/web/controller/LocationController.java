@@ -15,8 +15,8 @@ public class LocationController {
     // 도우미가 현재 위치 전송
     @PostMapping
     public void updateLocation(@RequestBody LocationDto location) {
-        // 여기서 DB 저장이나 검증 로직 추가 가능
-        emitterManager.sendToEscort(location.getEscortId(), "update", location);
+        // TODO :: 추후에 진짜 Controller와 연결
+        emitterManager.sendEvent(location.getEscortId(), "location", location);
     }
 
     @Data
