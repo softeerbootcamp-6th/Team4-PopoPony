@@ -4,22 +4,20 @@ import { getReportDefault } from '@helper/apis';
 import { ReportDetail, Reservation, Taxi, Time } from '@helper/components';
 import { useFunnel, useModal } from '@hooks';
 import { PageLayout } from '@layouts';
-import type { components } from '@schema';
 import { createFileRoute, useRouter } from '@tanstack/react-router';
 import { FormProvider, useForm } from 'react-hook-form';
-import type { ImageUploadResult } from '@types';
+import type { ReportFormValues } from '@helper/types';
 
 export const Route = createFileRoute('/helper/escort/$escortId/report/$step')({
   component: RouteComponent,
 });
 
 const stepList = ['time', 'reservation', 'taxi', 'detail'];
-type ReportCreateRequest = components['schemas']['ReportCreateRequest'];
 
 function RouteComponent() {
   const router = useRouter();
   const { isOpen, openModal, closeModal } = useModal();
-  const methods = useForm<ReportCreateRequest>({ shouldUnregister: false });
+  const methods = useForm<ReportFormValues>();
   const { escortId } = Route.useParams();
 
   const { data: reportDefaultResponse } = getReportDefault(Number(escortId));
@@ -33,12 +31,12 @@ function RouteComponent() {
         hasNextAppointment: true,
         nextAppointmentTime: undefined,
         description: reportDefault.memo || '',
-        imageCreateRequestList: [] as ImageUploadResult[],
+        imageCreateRequestList: [],
         taxiFeeCreateRequest: {
           departureFee: 0,
-          departureReceipt: {} as ImageUploadResult,
+          departureReceipt: {} as ReportFormValues['taxiFeeCreateRequest']['departureReceipt'],
           returnFee: 0,
-          returnReceipt: {} as ImageUploadResult,
+          returnReceipt: {} as ReportFormValues['taxiFeeCreateRequest']['returnReceipt'],
         },
       });
     }
@@ -95,7 +93,7 @@ function RouteComponent() {
                   <Taxi handleNextStep={nextStep} handleBackStep={handleBackStep} />
                 </Step>
                 <Step name='detail'>
-                  <ReportDetail handleNextStep={nextStep} handleBackStep={handleBackStep} />
+                  <ReportDetail />
                 </Step>
               </Funnel>
             </FormProvider>

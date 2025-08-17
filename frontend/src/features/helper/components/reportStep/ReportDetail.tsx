@@ -1,17 +1,22 @@
 import { FormLayout } from '@layouts';
-import type { FunnelStepProps } from '@types';
 import { MultiImageSelect } from '@helper/components';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { cn } from '@/shared/libs/utils';
 import { Modal } from '@components';
 import { useModal } from '@hooks';
-import type { components } from '@schema';
+import type { ReportFormValues } from '@helper/types';
+import { convertFormToApiRequest } from '@helper/utils';
+import { postReport } from '@helper/apis';
+import { getRouteApi, useNavigate } from '@tanstack/react-router';
 
-type ReportCreateRequest = components['schemas']['ReportCreateRequest'];
+const Route = getRouteApi('/helper/escort/$escortId/report/$step');
 
-const ReportDetail = ({ handleNextStep }: FunnelStepProps) => {
-  const { register, control, handleSubmit } = useFormContext();
+const ReportDetail = () => {
+  const { register, control, handleSubmit } = useFormContext<ReportFormValues>();
   const { isOpen, openModal, closeModal } = useModal();
+  const navigate = useNavigate();
+  const { escortId } = Route.useParams();
+  const { mutate } = postReport();
 
   const description = useWatch({
     control,
@@ -27,8 +32,32 @@ const ReportDetail = ({ handleNextStep }: FunnelStepProps) => {
     return '';
   };
 
-  const handleSubmitReport = (data: ReportCreateRequest) => {
-    const request = data;
+  const handleSubmitReport = (data: ReportFormValues) => {
+    const apiRequest = convertFormToApiRequest(data);
+
+    mutate(
+      {
+        params: {
+          path: {
+            recruitId: Number(escortId),
+          },
+        },
+        body: apiRequest,
+      },
+      {
+        onSuccess: () => {
+          navigate({
+            to: '/helper/escort/$escortId/report/completed',
+            params: {
+              escortId: escortId,
+            },
+          });
+        },
+        onError: () => {
+          alert('리포트 전달에 실패했어요. 다시 시도해주세요.');
+        },
+      }
+    );
   };
 
   return (
@@ -70,7 +99,9 @@ const ReportDetail = ({ handleNextStep }: FunnelStepProps) => {
         <Modal.Title>리포트를 전달하시겠어요?</Modal.Title>
         <Modal.Content>동행리포트는 수정할 수 없으며 전달 즉시 동행은 마무리돼요.</Modal.Content>
         <Modal.ButtonContainer>
-          <Modal.ConfirmButton onClick={handleSubmit(handleNextStep)}>전달하기</Modal.ConfirmButton>
+          <Modal.ConfirmButton onClick={handleSubmit(handleSubmitReport)}>
+            전달하기
+          </Modal.ConfirmButton>
           <Modal.CloseButton onClick={closeModal}>취소</Modal.CloseButton>
         </Modal.ButtonContainer>
       </Modal>
