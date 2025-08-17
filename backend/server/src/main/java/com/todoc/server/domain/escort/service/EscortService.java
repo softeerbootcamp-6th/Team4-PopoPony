@@ -15,15 +15,17 @@ import com.todoc.server.domain.escort.repository.EscortQueryRepository;
 import com.todoc.server.domain.escort.repository.dto.EscortDetailFlatDto;
 import com.todoc.server.domain.escort.web.dto.request.EscortMemoUpdateRequest;
 import com.todoc.server.domain.escort.web.dto.response.EscortDetailResponse;
+import com.todoc.server.domain.escort.web.dto.response.EscortStatusResponse;
 import com.todoc.server.domain.route.entity.Route;
 import com.todoc.server.domain.route.entity.RouteLeg;
 import com.todoc.server.domain.route.exception.RouteLegNotFoundException;
 import com.todoc.server.domain.route.web.dto.response.RouteDetailResponse;
+import com.todoc.server.domain.sse.service.SseEmitterManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -33,6 +35,7 @@ public class EscortService {
 
     private final EscortJpaRepository escortJpaRepository;
     private final EscortQueryRepository escortQueryRepository;
+    private final SseEmitterManager emitterManager;
 
     @Transactional(readOnly = true)
     public Long getCountByHelperUserId(Long helperId) {
@@ -64,23 +67,25 @@ public class EscortService {
         EscortStatus[] statuses = EscortStatus.values();
         int currentIndex = currentStatus.ordinal();
 
-        if (1 < currentIndex && currentIndex < statuses.length - 1) {
+        if (0 < currentIndex && currentIndex < statuses.length - 1) {
             EscortStatus nextStatus = statuses[currentIndex + 1];
             escort.setStatus(nextStatus);
+            LocalDateTime now = LocalDateTime.now();
 
             // 동행 만남 완료
             if (nextStatus == EscortStatus.HEADING_TO_HOSPITAL) {
-                escort.setActualMeetingTime(LocalTime.now());
+                escort.setActualMeetingTime(now);
             }
 
             // 동행 복귀 완료
             if (nextStatus == EscortStatus.WRITING_REPORT) {
-                escort.setActualReturnTime(LocalTime.now());
+                escort.setActualReturnTime(now);
                 Recruit recruit = escort.getRecruit();
                 recruit.setStatus(RecruitStatus.DONE);
             }
 
             // TODO :: 진행 상태 변화 고객에게 알림
+            emitterManager.sendEvent(escortId, "status", new EscortStatusResponse(escortId, nextStatus.getLabel(), now));
 
         } else {
             throw new EscortInvalidProceedException();
