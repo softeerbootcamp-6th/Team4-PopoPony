@@ -1,4 +1,5 @@
 import { DetailFormSchema, CERTIFICATE_OPTIONS, STRENGTH_OPTIONS } from '@helper/types';
+import type { ResponseVoid } from '@types';
 import { useFormValidation } from '@hooks';
 import { FormLayout } from '@layouts';
 import { useNavigate } from '@tanstack/react-router';
@@ -19,11 +20,16 @@ import {
   IcShoes,
   IcShoesDisabled,
 } from '@icons';
+import { postHelperProfile } from '@helper/apis';
+import { useFormContext } from 'react-hook-form';
 
 const Detail = () => {
   const navigate = useNavigate();
+  const { getValues } = useFormContext();
   const { values, fieldErrors, isFormValid, markFieldAsTouched } =
     useFormValidation(DetailFormSchema);
+
+  const { mutate } = postHelperProfile();
   const mappingIcons = {
     '안전한 부축으로 편안한 이동': <IcShoes />,
     '휠체어 이용도 전문적인 동행': <IcWheelchair />,
@@ -42,8 +48,29 @@ const Detail = () => {
   }));
 
   const handleSubmit = () => {
-    //TODO: async함수로 만들고, api호출 기다림.
-    navigate({ to: '/helper/profile/new/completed' });
+    mutate(
+      {
+        body: {
+          profileImageCreateRequest: getValues('profileImageCreateRequest'),
+          certificateInfoList: getValues('certificateList'),
+          strengthList: getValues('strengthList'),
+          shortBio: getValues('shortBio'),
+          area: getValues('region'),
+        },
+      },
+      {
+        onSuccess: (response: ResponseVoid) => {
+          if (response.status !== 200) {
+            alert(response.message ?? '도우미 등록에 실패했습니다. 다시 시도해주세요.');
+            return;
+          }
+          navigate({ to: '/helper/profile/new/completed' });
+        },
+        onError: () => {
+          alert('도우미 등록에 실패했습니다. 다시 시도해주세요.');
+        },
+      }
+    );
   };
 
   return (
@@ -79,11 +106,18 @@ const Detail = () => {
         </LabeledSection>
         <Divider />
         {values.certificateList && values.certificateList.length > 0 && (
-          <CertificateImageUploader selectedCertificates={values.certificateList} />
+          <CertificateImageUploader
+            selectedCertificates={values.certificateList}
+            prefix='uploads/certificate'
+          />
         )}
         <LabeledSection
           label='나만의 강점'
-          isChecked={!fieldErrors.strengthList && !!values.strengthList}
+          isChecked={
+            !fieldErrors.strengthList &&
+            Array.isArray(values.strengthList) &&
+            values.strengthList.length > 0
+          }
           message={fieldErrors.strengthList}>
           <MultiOptionSelectorCol name='strengthList' options={strengthList} />
         </LabeledSection>
