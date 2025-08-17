@@ -1,6 +1,6 @@
 package com.todoc.server.domain.escort.web.dto.response;
 
-import com.todoc.server.domain.route.web.dto.response.RouteSimpleResponse;
+import com.todoc.server.domain.route.web.dto.response.RouteDetailResponse;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
@@ -15,8 +15,8 @@ public class RecruitPaymentResponse {
     private Long recruitId;
 
     @NotNull
-    @Schema(description = "경로 요약 정보")
-    private RouteSimpleResponse route;
+    @Schema(description = "경로 상세 정보")
+    private RouteDetailResponse route;
 
     @NotNull
     @Schema(description = "기본 결제 금액")
@@ -31,7 +31,7 @@ public class RecruitPaymentResponse {
     private long totalMinutes;
 
     @Builder
-    public RecruitPaymentResponse(Long recruitId, RouteSimpleResponse route, Integer baseFee, Integer expectedTaxiFee, long totalMinutes) {
+    public RecruitPaymentResponse(Long recruitId, RouteDetailResponse route, Integer baseFee, Integer expectedTaxiFee, long totalMinutes) {
         this.recruitId = recruitId;
         this.route = route;
         this.baseFee = baseFee;

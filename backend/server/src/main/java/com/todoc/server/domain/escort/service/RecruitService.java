@@ -17,6 +17,7 @@ import com.todoc.server.domain.escort.web.dto.response.*;
 
 import com.todoc.server.domain.route.exception.LocationNotFoundException;
 
+import com.todoc.server.domain.route.web.dto.response.RouteDetailResponse;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -231,7 +232,8 @@ public class RecruitService {
         if (route == null) {
             throw new RouteNotFoundException();
         }
-        RouteSimpleResponse routeResponse = RouteSimpleResponse.from(route);
+
+        RouteDetailResponse routeResponse = RouteDetailResponse.from(route);
 
         // 3. 이용 시간 계산
         LocalTime startTime = recruit.getEstimatedMeetingTime();
