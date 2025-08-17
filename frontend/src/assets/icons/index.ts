@@ -9,6 +9,8 @@ import IcArrowUp from './arrow-up.svg?react';
 import IcCalendar from './calendar.svg?react';
 import IcCamera from './camera.svg?react';
 import IcCameraFill from './camera-fill.svg?react';
+import IcRadioOff from './radio-off.svg?react';
+import IcRadioOn from './radio-on.svg?react';
 import IcCheck from './check.svg?react';
 import IcCheckBox from './checkbox.svg?react';
 import IcCheckCircle from './check-circle.svg?react';
@@ -57,7 +59,7 @@ import IcSearch from './search.svg?react';
 import IcSpinner from './Spiner.svg?react';
 import IcStarBadge from './star-badge.svg?react';
 import IcVariant34 from './Variant34.svg?react';
-import IcVariant55 from './Variant55.svg?react';
+import IcVerified from './verified.svg?react';
 import IcVerifiedUser from './verified_user.svg?react';
 
 import IcEdit from './edit.svg?react';
@@ -80,6 +82,8 @@ export {
   IcCalendar,
   IcCamera,
   IcCameraFill,
+  IcRadioOff,
+  IcRadioOn,
   IcCheck,
   IcCheckBox,
   IcCheckCircle,
@@ -128,7 +132,7 @@ export {
   IcSpinner,
   IcStarBadge,
   IcVariant34,
-  IcVariant55,
+  IcVerified,
   IcVerifiedUser,
 
   // Form Icons

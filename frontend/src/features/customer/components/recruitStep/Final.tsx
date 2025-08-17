@@ -8,100 +8,63 @@ import type {
   RouteFormValues,
 } from '@customer/types';
 import { CardWrapper } from '@customer/components';
-import { Button, BottomSheet, CheckboxCircle, TermsModal } from '@components';
+import { Button, TermsBottomSheet } from '@components';
 import { FormLayout } from '@layouts';
-import { IcChevronRight } from '@icons';
-import { useState } from 'react';
-import { getTermsById } from '@constants';
-import type { TermsData } from '@types';
 import { useNavigate } from '@tanstack/react-router';
 import type { RecruitStepProps } from '@customer/types';
+import { postRecruit } from '@customer/apis';
+import { buildRecruitCreateRequest } from '@customer/utils';
 
-export function Final({ handleBackStep }: RecruitStepProps) {
+const Final = ({ handleBackStep }: RecruitStepProps) => {
   const { getValues } = useFormContext<RecruitFormValues>();
   const formData = getValues();
   const navigate = useNavigate();
+  const { mutate } = postRecruit();
 
-  // 약관 모달 상태
-  const [selectedTerms, setSelectedTerms] = useState<TermsData | null>(null);
-  const [isTermsModalOpen, setIsTermsModalOpen] = useState(false);
-
-  // BottomSheet 상태
-  const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
-
-  // 약관 동의 상태
-  const [termsAgreement, setTermsAgreement] = useState({
-    serviceTerms: false,
-    privacyPolicy: false,
-    locationTerms: false,
-  });
-
-  // 모든 약관이 동의되었는지 확인
-  const isAllChecked =
-    termsAgreement.serviceTerms && termsAgreement.privacyPolicy && termsAgreement.locationTerms;
-
-  const handleTermsClick = (termsId: string) => {
-    const terms = getTermsById(termsId);
-    // BottomSheet 닫기
-    setIsBottomSheetOpen(false);
-    if (terms) {
-      setSelectedTerms(terms);
-      setIsTermsModalOpen(true);
-    }
-  };
-
-  const handleCloseTermsModal = () => {
-    setIsTermsModalOpen(false);
-    setSelectedTerms(null);
-    setIsBottomSheetOpen(true);
-  };
-
-  const handleTermsAgreementChange = (termsId: string, checked: boolean) => {
-    setTermsAgreement((prev) => ({
-      ...prev,
-      [termsId]: checked,
-    }));
-  };
-
-  const handleSubmit = async () => {
-    try {
-      // // API 호출하여 데이터 제출
-      // console.log('Submitting data:', formData);
-      // // await submitRecruitRequest(formData);
-
-      // 성공 시 완료 페이지로 이동
-      alert('동행 신청이 완료되었습니다!');
-      navigate({ to: '/customer/recruit/completed' });
-    } catch (error) {
-      console.error('제출 실패:', error);
-    }
+  const handleSubmit = () => {
+    const apiRequest = buildRecruitCreateRequest(formData);
+    mutate(
+      {
+        body: apiRequest,
+      },
+      {
+        onSuccess: () => {
+          alert('동행 신청이 완료되었습니다!');
+          navigate({ to: '/customer/recruit/completed' });
+        },
+        onError: (error) => {
+          console.error('제출 실패:', error);
+          alert('제출 중 오류가 발생했습니다. 다시 시도해주세요.');
+        },
+      }
+    );
   };
 
   // 각 타입별로 데이터 분리
   const profileData: ProfileFormValues = {
-    patientName: formData.patientName,
-    patientSex: formData.patientSex,
-    patientAge: formData.patientAge,
-    patientContact: formData.patientContact,
-    profileImageUrl: formData.profileImageUrl,
+    name: formData.name,
+    gender: formData.gender,
+    age: formData.age,
+    phoneNumber: formData.phoneNumber,
+    profileImageCreateRequest: formData.profileImageCreateRequest,
   };
 
   const conditionData: ConditionFormValues = {
-    needsPhysicalSupport: formData.needsPhysicalSupport,
+    needsHelping: formData.needsHelping,
     usesWheelchair: formData.usesWheelchair,
   };
 
   const communicationData: CommunicationFormValues = {
-    cognitiveAbility: formData.cognitiveAbility,
-    cognitiveIssues: formData.cognitiveIssues,
-    communicationAbility: formData.communicationAbility,
-    communicationHelp: formData.communicationHelp,
+    hasCognitiveIssue: formData.hasCognitiveIssue,
+    cognitiveIssueDetail: formData.cognitiveIssueDetail,
+    hasCommunicationIssue: formData.hasCommunicationIssue,
+    communicationIssueDetail: formData.communicationIssueDetail,
   };
 
   const timeData: TimeFormValues = {
     escortDate: formData.escortDate,
-    escortStartTime: formData.escortStartTime,
-    escortEndTime: formData.escortEndTime,
+    estimatedMeetingTime: formData.estimatedMeetingTime,
+    estimatedReturnTime: formData.estimatedReturnTime,
     escortDuration: formData.escortDuration,
   };
 
@@ -131,13 +94,13 @@ export function Final({ handleBackStep }: RecruitStepProps) {
                     <div className='flex w-[50%] gap-[0.8rem]'>
                       <h5 className='body2-14-bold text-text-neutral-primary'>이름</h5>
                       <h6 className='body2-14-medium text-text-neutral-primary'>
-                        {profileData.patientName}
+                        {profileData.name}
                       </h6>
                     </div>
                     <div className='flex w-[50%] gap-[0.8rem]'>
                       <h5 className='body2-14-bold text-text-neutral-primary'>나이</h5>
                       <h6 className='body2-14-medium text-text-neutral-primary'>
-                        {profileData.patientAge}세
+                        {profileData.age}세
                       </h6>
                     </div>
                   </div>
@@ -145,13 +108,13 @@ export function Final({ handleBackStep }: RecruitStepProps) {
                     <div className='flex w-[50%] gap-[0.8rem]'>
                       <h5 className='body2-14-bold text-text-neutral-primary'>성별</h5>
                       <h6 className='body2-14-medium text-text-neutral-primary'>
-                        {profileData.patientSex === 'male' ? '남자' : '여자'}
+                        {profileData.gender}
                       </h6>
                     </div>
                     <div className='flex w-[50%] gap-[0.8rem]'>
                       <h5 className='body2-14-bold text-text-neutral-primary'>연락처</h5>
                       <h6 className='body2-14-medium text-text-neutral-primary'>
-                        {profileData.patientContact}
+                        {profileData.phoneNumber}
                       </h6>
                     </div>
                   </div>
@@ -163,7 +126,7 @@ export function Final({ handleBackStep }: RecruitStepProps) {
                   <div className='flex items-center gap-[4.1rem]'>
                     <h5 className='body2-14-bold text-text-neutral-primary w-[5rem]'>부축</h5>
                     <h6 className='body2-14-medium text-text-neutral-primary'>
-                      {conditionData.needsPhysicalSupport === 'true' ? '필요해요' : '필요 없어요'}
+                      {conditionData.needsHelping === 'true' ? '필요해요' : '필요 없어요'}
                     </h6>
                   </div>
                   <div className='flex items-center gap-[4.1rem]'>
@@ -175,7 +138,7 @@ export function Final({ handleBackStep }: RecruitStepProps) {
                   <div className='flex items-center gap-[4.1rem]'>
                     <h5 className='body2-14-bold text-text-neutral-primary w-[5rem]'>인지능력</h5>
                     <h6 className='body2-14-medium text-text-neutral-primary'>
-                      {communicationData.cognitiveAbility === 'good'
+                      {communicationData.hasCognitiveIssue === 'false'
                         ? '괜찮아요'
                         : '도움이 필요해요'}
                     </h6>
@@ -183,7 +146,7 @@ export function Final({ handleBackStep }: RecruitStepProps) {
                   <div className='flex items-center gap-[4.1rem]'>
                     <h5 className='body2-14-bold text-text-neutral-primary w-[5rem]'>의사소통</h5>
                     <h6 className='body2-14-medium text-text-neutral-primary'>
-                      {communicationData.communicationAbility === 'good'
+                      {communicationData.hasCommunicationIssue === 'false'
                         ? '괜찮아요'
                         : '도움이 필요해요'}
                     </h6>
@@ -203,7 +166,7 @@ export function Final({ handleBackStep }: RecruitStepProps) {
                   <div className='flex items-center gap-[4.1rem]'>
                     <h5 className='body2-14-bold text-text-neutral-primary w-[5rem]'>동행시간</h5>
                     <h6 className='body2-14-medium text-text-neutral-primary'>
-                      {timeData.escortStartTime} ~ {timeData.escortEndTime}
+                      {timeData.estimatedMeetingTime} ~ {timeData.estimatedReturnTime}
                     </h6>
                   </div>
                 </div>
@@ -240,99 +203,23 @@ export function Final({ handleBackStep }: RecruitStepProps) {
         </FormLayout.Content>
         <FormLayout.Footer>
           <div className='flex gap-[1.2rem]'>
-            <BottomSheet open={isBottomSheetOpen} onOpenChange={setIsBottomSheetOpen}>
-              <FormLayout.FooterButtonWrapper>
-                <div className='w-[10rem]'>
-                  <Button variant='secondary' onClick={handleBackStep}>
-                    이전
-                  </Button>
-                </div>
-                <BottomSheet.Trigger asChild>
-                  <Button variant='primary' className='flex-1'>
-                    다음
-                  </Button>
-                </BottomSheet.Trigger>
-              </FormLayout.FooterButtonWrapper>
-              <BottomSheet.Content>
-                <BottomSheet.Header>
-                  <BottomSheet.Title>이용 약관 동의가 필요해요!</BottomSheet.Title>
-                  <BottomSheet.Description>
-                    <div className='flex flex-col gap-[1.5rem]'>
-                      <div className='flex items-center gap-[0.8rem]'>
-                        <CheckboxCircle
-                          checked={termsAgreement.serviceTerms}
-                          onChange={(e) =>
-                            handleTermsAgreementChange('serviceTerms', e.target.checked)
-                          }
-                        />
-                        <button
-                          className='flex items-center gap-[0.4rem]'
-                          onClick={() => handleTermsClick('service-terms')}>
-                          <p className='body1-16-medium text-text-neutral-primary'>
-                            토닥 서비스 이용약관(필수)
-                          </p>
-                          <IcChevronRight className='[&_path]:stroke-icon-neutral-secondary [&_path]:fill-icon-neutral-secondary h-[2.4rem] w-[2.4rem]' />
-                        </button>
-                      </div>
-                      <div className='flex items-center gap-[0.8rem]'>
-                        <CheckboxCircle
-                          checked={termsAgreement.privacyPolicy}
-                          onChange={(e) =>
-                            handleTermsAgreementChange('privacyPolicy', e.target.checked)
-                          }
-                        />
-                        <button
-                          className='flex items-center gap-[0.4rem]'
-                          onClick={() => handleTermsClick('privacy-policy')}>
-                          <p className='body1-16-medium text-text-neutral-primary'>
-                            개인정보처리방침(필수)
-                          </p>
-                          <IcChevronRight className='[&_path]:stroke-icon-neutral-secondary [&_path]:fill-icon-neutral-secondary h-[2.4rem] w-[2.4rem]' />
-                        </button>
-                      </div>
-                      <div className='flex items-center gap-[0.8rem]'>
-                        <CheckboxCircle
-                          checked={termsAgreement.locationTerms}
-                          onChange={(e) =>
-                            handleTermsAgreementChange('locationTerms', e.target.checked)
-                          }
-                        />
-                        <button
-                          className='flex items-center gap-[0.4rem]'
-                          onClick={() => handleTermsClick('location-terms')}>
-                          <p className='body1-16-medium text-text-neutral-primary'>
-                            위치정보 이용약관(필수)
-                          </p>
-                          <IcChevronRight className='[&_path]:stroke-icon-neutral-secondary [&_path]:fill-icon-neutral-secondary h-[2.4rem] w-[2.4rem]' />
-                        </button>
-                      </div>
-                    </div>
-                  </BottomSheet.Description>
-                </BottomSheet.Header>
-
-                <BottomSheet.Footer>
-                  <Button
-                    variant='primary'
-                    onClick={handleSubmit}
-                    className='w-full'
-                    disabled={!isAllChecked}>
-                    동의하고 신청하기
-                  </Button>
-                </BottomSheet.Footer>
-              </BottomSheet.Content>
-            </BottomSheet>
+            <FormLayout.FooterButtonWrapper>
+              <div className='w-[10rem]'>
+                <Button variant='secondary' onClick={handleBackStep}>
+                  이전
+                </Button>
+              </div>
+              <TermsBottomSheet onSubmit={handleSubmit}>
+                <Button variant='primary' className='flex-1'>
+                  다음
+                </Button>
+              </TermsBottomSheet>
+            </FormLayout.FooterButtonWrapper>
           </div>
         </FormLayout.Footer>
       </FormLayout>
-
-      {/* 약관 모달 */}
-      {selectedTerms && (
-        <TermsModal
-          isOpen={isTermsModalOpen}
-          onClose={handleCloseTermsModal}
-          terms={selectedTerms}
-        />
-      )}
     </>
   );
-}
+};
+
+export default Final;

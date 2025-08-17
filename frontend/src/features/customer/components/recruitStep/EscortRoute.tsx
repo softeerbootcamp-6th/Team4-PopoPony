@@ -1,34 +1,11 @@
 import { memo, useEffect } from 'react';
-import type { RecruitStepProps } from '@customer/types';
+import { type RecruitStepProps, routeFormSchema } from '@customer/types';
 import { useNavigate } from '@tanstack/react-router';
 import { FormLayout } from '@layouts';
 import { useFormContext } from 'react-hook-form';
 import { FormInput, LabeledSection, Dot, Checkbox } from '@components';
 import { SearchButton } from '@customer/components';
-import { z } from 'zod';
-import { useFormValidation } from '@customer/hooks';
-
-const locationDetailSchema = z.object({
-  placeName: z.string(),
-  upperAddrName: z.string(),
-  middleAddrName: z.string(),
-  lowerAddrName: z.string(),
-  firstAddrNo: z.string(),
-  secondAddrNo: z.string(),
-  roadName: z.string(),
-  firstBuildingNo: z.string(),
-  secondBuildingNo: z.string().optional(),
-  detailAddress: z.string().min(1, { message: '필수 입력 항목입니다.' }),
-  longitude: z.number(),
-  latitude: z.number(),
-});
-
-const routeFormSchema = z.object({
-  meetingLocationDetail: locationDetailSchema,
-  destinationDetail: locationDetailSchema,
-  returnLocationDetail: locationDetailSchema,
-  isMeetingLocationSameAsDestination: z.boolean(),
-});
+import { useFormValidation } from '@hooks';
 
 const EscortRoute = memo(({ handleNextStep }: RecruitStepProps) => {
   const { setValue } = useFormContext();

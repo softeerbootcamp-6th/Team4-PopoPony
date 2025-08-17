@@ -1,5 +1,5 @@
 import { useFormContext } from 'react-hook-form';
-import { type InputHTMLAttributes, useCallback, useState } from 'react';
+import { type InputHTMLAttributes, useState } from 'react';
 import { IcChevronDown } from '@icons';
 import { formatValue } from '@utils';
 type InputType = 'date' | 'time' | 'cost' | 'number' | 'text' | 'contact';
@@ -30,14 +30,6 @@ const FormInput = ({
   };
 
   const finalDescription = type === 'cost' ? '원' : description;
-
-  const handleChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      const formattedValue = formatValue(e.target.value, type);
-      e.target.value = formattedValue;
-    },
-    [formatValue, type]
-  );
 
   if (type === 'date' || type === 'time') {
     const { onChange, onBlur, ...registerProps } = register(name);
@@ -70,7 +62,7 @@ const FormInput = ({
             {...props}
           />
           {!hasValue && placeholder && (
-            <div className='body1-16-medium bg-background-default-white text-text-neutral-assistive pointer-events-none absolute top-0 left-0 w-full'>
+            <div className='title-20-medium bg-background-default-white text-text-neutral-assistive pointer-events-none absolute top-0 left-0 w-full'>
               {placeholder}
             </div>
           )}
@@ -85,6 +77,14 @@ const FormInput = ({
   }
 
   const { onChange, ...registerProps } = register(name);
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const formattedValue = formatValue(e.target.value, type);
+    e.target.value = formattedValue;
+    onChange(e);
+    if (validation) {
+      validation();
+    }
+  };
 
   return (
     <div
@@ -95,10 +95,6 @@ const FormInput = ({
         placeholder={placeholder}
         onChange={(e) => {
           handleChange(e);
-          onChange(e);
-          if (validation) {
-            validation();
-          }
         }}
         {...registerProps}
         {...props}

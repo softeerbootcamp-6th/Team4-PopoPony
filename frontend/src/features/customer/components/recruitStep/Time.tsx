@@ -1,56 +1,10 @@
 import { memo, useEffect } from 'react';
 import { FormInput, LabeledSection } from '@components';
 import { FormLayout } from '@layouts';
-import { z } from 'zod';
-import { useFormValidation } from '@customer/hooks';
-import type { RecruitStepProps } from '@customer/types';
+import { useFormValidation } from '@hooks';
+import { type RecruitStepProps, timeSchema, dateSchema } from '@customer/types';
 import { IcAlertCircle } from '@icons';
 import { useFormContext } from 'react-hook-form';
-
-const dateSchema = z.object({
-  escortDate: z
-    .string()
-    .min(1, { message: '날짜를 선택해주세요' })
-    .refine(
-      (date) => {
-        const today = new Date();
-        today.setHours(23, 59, 59, 999);
-        const selectedDate = new Date(date);
-        return selectedDate > today;
-      },
-      { message: '오늘 이후의 날짜를 선택해주세요' }
-    ),
-});
-
-const timeSchema = z
-  .object({
-    escortStartTime: z.string().min(1, { message: '시작 시간을 선택해주세요' }),
-    escortEndTime: z.string().min(1, { message: '종료 시간을 선택해주세요' }),
-    escortDuration: z.number(),
-  })
-  .refine(
-    (data) => {
-      const startTime = new Date(`2000-01-01T${data.escortStartTime}`);
-      const endTime = new Date(`2000-01-01T${data.escortEndTime}`);
-      return startTime < endTime;
-    },
-    {
-      message: '시작 시간이 종료 시간보다 늦습니다.',
-      path: ['escortEndTime'],
-    }
-  )
-  .refine(
-    (data) => {
-      const startTime = new Date(`2000-01-01T${data.escortStartTime}`);
-      const endTime = new Date(`2000-01-01T${data.escortEndTime}`);
-      const diffInMinutes = (endTime.getTime() - startTime.getTime()) / (1000 * 60);
-      return diffInMinutes >= 120;
-    },
-    {
-      message: '최소 2시간 이상 예약해주세요',
-      path: ['escortDuration'],
-    }
-  );
 
 const Time = memo(({ handleNextStep }: RecruitStepProps) => {
   const { setValue } = useFormContext();
@@ -69,15 +23,15 @@ const Time = memo(({ handleNextStep }: RecruitStepProps) => {
 
   // 시간 계산 및 escortDuration 자동 설정
   useEffect(() => {
-    if (timeValues.escortStartTime && timeValues.escortEndTime) {
-      const startTime = new Date(`2000-01-01T${timeValues.escortStartTime}`);
-      const endTime = new Date(`2000-01-01T${timeValues.escortEndTime}`);
+    if (timeValues.estimatedMeetingTime && timeValues.estimatedReturnTime) {
+      const startTime = new Date(`2000-01-01T${timeValues.estimatedMeetingTime}`);
+      const endTime = new Date(`2000-01-01T${timeValues.estimatedReturnTime}`);
 
       const diffInMinutes = (endTime.getTime() - startTime.getTime()) / (1000 * 60);
       setValue('escortDuration', diffInMinutes);
       timeMarkFieldAsTouched('escortDuration');
     }
-  }, [timeValues.escortStartTime, timeValues.escortEndTime, setValue]);
+  }, [timeValues.estimatedMeetingTime, timeValues.estimatedReturnTime, setValue]);
 
   return (
     <FormLayout>
@@ -97,47 +51,51 @@ const Time = memo(({ handleNextStep }: RecruitStepProps) => {
             validation={() => dateMarkFieldAsTouched('escortDate')}
           />
         </LabeledSection>
-        <div className='flex gap-[1.2rem]'>
-          <LabeledSection
-            label='시작 시간'
-            isChecked={!timeFieldErrors.escortStartTime && !!timeValues.escortStartTime}>
+
+        <LabeledSection
+          label='동행시간'
+          isChecked={
+            !timeFieldErrors.estimatedMeetingTime &&
+            !!timeValues.estimatedMeetingTime &&
+            !timeFieldErrors.estimatedReturnTime &&
+            !!timeValues.estimatedReturnTime
+          }>
+          <div className='flex gap-[1.2rem]'>
             <FormInput
               type='time'
               size='M'
-              name='escortStartTime'
+              name='estimatedMeetingTime'
               placeholder='시작 시간 선택'
-              validation={() => timeMarkFieldAsTouched('escortStartTime')}
+              validation={() => timeMarkFieldAsTouched('estimatedMeetingTime')}
             />
-          </LabeledSection>
-          <LabeledSection
-            label='종료 시간'
-            isChecked={!timeFieldErrors.escortEndTime && !!timeValues.escortEndTime}>
+
             <FormInput
               type='time'
               size='M'
-              name='escortEndTime'
+              name='estimatedReturnTime'
               placeholder='종료 시간 선택'
-              validation={() => timeMarkFieldAsTouched('escortEndTime')}
+              validation={() => timeMarkFieldAsTouched('estimatedReturnTime')}
             />
-          </LabeledSection>
-        </div>
+          </div>
+        </LabeledSection>
+
         <div className='flex-between'>
           <div className='flex-center gap-[0.4rem]'>
             <IcAlertCircle
               className={`${
-                timeFieldErrors.escortDuration || timeFieldErrors.escortEndTime
+                timeFieldErrors.escortDuration || timeFieldErrors.estimatedReturnTime
                   ? '[&_path]:fill-text-red-primary'
                   : '[&_path]:fill-icon-neutral-secondary'
               }`}
             />
             <span
               className={`body1-16-medium ${
-                timeFieldErrors.escortDuration || timeFieldErrors.escortEndTime
+                timeFieldErrors.escortDuration || timeFieldErrors.estimatedReturnTime
                   ? 'text-text-red-primary'
                   : 'text-text-neutral-assistive'
               }`}>
-              {timeFieldErrors.escortEndTime
-                ? timeFieldErrors.escortEndTime
+              {timeFieldErrors.estimatedReturnTime
+                ? timeFieldErrors.estimatedReturnTime
                 : '최소 2시간 이상 예약해주세요'}
             </span>
           </div>

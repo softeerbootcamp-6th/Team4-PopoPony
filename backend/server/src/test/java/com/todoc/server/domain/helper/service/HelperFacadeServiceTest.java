@@ -1,8 +1,14 @@
 package com.todoc.server.domain.helper.service;
 
+import com.todoc.server.domain.auth.entity.Auth;
+import com.todoc.server.domain.auth.service.AuthService;
 import com.todoc.server.domain.escort.service.EscortService;
+import com.todoc.server.domain.helper.entity.Certificate;
+import com.todoc.server.domain.helper.entity.HelperProfile;
+import com.todoc.server.domain.helper.web.dto.request.HelperProfileCreateRequest;
 import com.todoc.server.domain.helper.web.dto.response.HelperDetailResponse;
 import com.todoc.server.domain.helper.web.dto.response.HelperSimpleResponse;
+import com.todoc.server.domain.image.service.ImageFileService;
 import com.todoc.server.domain.review.service.PositiveFeedbackChoiceService;
 import com.todoc.server.domain.review.service.ReviewService;
 import com.todoc.server.domain.review.web.dto.response.PositiveFeedbackStatResponse;
@@ -12,14 +18,17 @@ import com.todoc.server.domain.review.web.dto.response.ReviewStatResponse;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 import static org.assertj.core.api.Assertions.*;
 
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @ExtendWith(MockitoExtension.class)
@@ -29,6 +38,9 @@ class HelperFacadeServiceTest {
     private HelperService helperService;
 
     @Mock
+    private CertificateService certificateService;
+
+    @Mock
     private EscortService escortService;
 
     @Mock
@@ -36,6 +48,12 @@ class HelperFacadeServiceTest {
 
     @Mock
     private PositiveFeedbackChoiceService positiveFeedbackChoiceService;
+
+    @Mock
+    private AuthService authService;
+
+    @Mock
+    private ImageFileService imageFileService;
 
     @InjectMocks
     private HelperFacadeService helperFacadeService;
@@ -95,5 +113,46 @@ class HelperFacadeServiceTest {
         assertThat(response.getReviewStat().getAverageRate()).isEqualTo(29);
         assertThat(response.getPositiveFeedbackStatList()).hasSize(1);
         assertThat(response.getLatestReviewList()).hasSize(1);
+    }
+
+    @Test
+    void createHelperProfile_정상() {
+        // given
+        HelperProfileCreateRequest request = new HelperProfileCreateRequest();
+        List<HelperProfileCreateRequest.CertificateInfo> certs = new ArrayList<>();
+        for (int i = 1; i <= 2; i++) {
+            HelperProfileCreateRequest.CertificateInfo certificateInfo = new HelperProfileCreateRequest.CertificateInfo();
+            ReflectionTestUtils.setField(certificateInfo, "type", "자격증" + i);
+
+            var imageCreateRequest = new com.todoc.server.common.dto.request.ImageCreateRequest();
+            ReflectionTestUtils.setField(imageCreateRequest, "s3Key",       "helpers/1/cert-" + i + ".jpg");
+            ReflectionTestUtils.setField(imageCreateRequest, "contentType", "image/jpeg");
+            ReflectionTestUtils.setField(imageCreateRequest, "size",        12345L * i);
+            ReflectionTestUtils.setField(imageCreateRequest, "checksum",    "\"etag-cert-" + i + "\"");
+
+            ReflectionTestUtils.setField(certificateInfo, "certificateImageCreateRequest", imageCreateRequest);
+
+            certs.add(certificateInfo);
+        }
+        ReflectionTestUtils.setField(request, "certificateInfoList", certs);
+
+        Long authId = 1L;
+        Auth auth = Auth.builder()
+                .id(authId)
+                .build();
+
+        HelperProfile helperProfile = HelperProfile.builder().build();
+        given(helperService.register(request)).willReturn(helperProfile);
+        given(authService.getAuthById(authId)).willReturn(auth);
+
+        when(certificateService.register(any(HelperProfileCreateRequest.CertificateInfo.class)))
+                .thenReturn(new Certificate(), new Certificate()); // 호출 2번 대비
+
+        // when
+        helperFacadeService.createHelperProfile(authId, request);
+
+        // then
+        verify(helperService).register(request);
+        verify(certificateService, times(2)).register(any(HelperProfileCreateRequest.CertificateInfo.class));
     }
 }

@@ -2,22 +2,14 @@ import { TwoOptionSelector, LabeledSection } from '@components';
 import { useFormContext } from 'react-hook-form';
 import { memo } from 'react';
 import { FormLayout } from '@layouts';
-import { useFormValidation } from '@customer/hooks';
-import { z } from 'zod';
-import type { RecruitStepProps } from '@customer/types';
-
-//TODO: 현재 true, false 값이 문자열로 저장되어 있음. 이를 boolean으로 변환해야 함.
-
-const conditionSchema = z.object({
-  needsPhysicalSupport: z.string(),
-  usesWheelchair: z.string(),
-});
+import { useFormValidation } from '@hooks';
+import { type RecruitStepProps, conditionSchema } from '@customer/types';
 
 const Condition = memo(({ handleNextStep }: RecruitStepProps) => {
-  const { values, fieldErrors, isFormValid, markFieldAsTouched } =
+  const { values, isFormValid, fieldErrors, markFieldAsTouched } =
     useFormValidation(conditionSchema);
   const { getValues } = useFormContext();
-  const patientName = getValues('patientName');
+  const patientName = getValues('name');
   return (
     <FormLayout>
       <FormLayout.Content>
@@ -27,12 +19,10 @@ const Condition = memo(({ handleNextStep }: RecruitStepProps) => {
             보행 상태를 알려주세요
           </FormLayout.Title>
         </FormLayout.TitleWrapper>
-        <LabeledSection
-          label='부축'
-          isChecked={!fieldErrors.needsPhysicalSupport && !!values.needsPhysicalSupport}>
-          <div onClick={() => markFieldAsTouched('needsPhysicalSupport')}>
+        <LabeledSection label='부축' isChecked={!fieldErrors.needsHelping && !!values.needsHelping}>
+          <div onClick={() => markFieldAsTouched('needsHelping')}>
             <TwoOptionSelector
-              name='needsPhysicalSupport'
+              name='needsHelping'
               leftOption={{ label: '필요해요', value: 'true' }}
               rightOption={{ label: '필요없어요', value: 'false' }}
             />

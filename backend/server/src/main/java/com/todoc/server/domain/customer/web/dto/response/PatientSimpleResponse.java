@@ -1,8 +1,10 @@
 package com.todoc.server.domain.customer.web.dto.response;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.todoc.server.common.util.ImageUrlUtils;
 import com.todoc.server.common.util.JsonUtils;
 import com.todoc.server.domain.customer.entity.Patient;
+import com.todoc.server.domain.image.exception.ImageFileNotFoundException;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
@@ -36,7 +38,7 @@ public class PatientSimpleResponse {
 
     @NotNull
     @Schema(description = "환자 연락처", example = "010-1234-5678")
-    private String phoneNumber;
+    private String contact;
 
     @NotNull
     @Schema(description = "부축이 필요한지", example = "true")
@@ -61,13 +63,14 @@ public class PatientSimpleResponse {
     private String communicationIssueDetail;
 
     @Builder
-    public PatientSimpleResponse(Long patientId, String imageUrl, String name, String gender, Integer age,
+    public PatientSimpleResponse(Long patientId, String imageUrl, String name, String gender, String contact, Integer age,
                                  Boolean needsHelping, Boolean usesWheelchair, Boolean hasCognitiveIssue, List<String> cognitiveIssueDetail,
                                  Boolean hasCommunicationIssue, String communicationIssueDetail) {
         this.patientId = patientId;
         this.imageUrl = imageUrl;
         this.name = name;
         this.gender = gender;
+        this.contact = contact;
         this.age = age;
         this.needsHelping = needsHelping;
         this.usesWheelchair = usesWheelchair;
@@ -86,11 +89,16 @@ public class PatientSimpleResponse {
         // 성별 Enum에서 문자열로 변환
         String gender = patient.getGender().getLabel();
 
+        if (patient.getPatientProfileImage() == null) {
+            throw new ImageFileNotFoundException();
+        }
+
         return PatientSimpleResponse.builder()
                 .patientId(patient.getId())
-                .imageUrl(patient.getImageUrl())
+                .imageUrl(ImageUrlUtils.getImageUrl(patient.getPatientProfileImage().getId()))
                 .name(patient.getName())
                 .gender(gender)
+                .contact(patient.getContact())
                 .age(patient.getAge())
                 .needsHelping(patient.getNeedsHelping())
                 .usesWheelchair(patient.getUsesWheelchair())

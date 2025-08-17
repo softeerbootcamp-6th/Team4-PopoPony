@@ -21,8 +21,10 @@ import Checkbox from './checkbox/Checkbox';
 import ShowMapButton from './ShowMapButton';
 import Divider from './Divider';
 import MultiOptionSelector from './form/MultiOptionSelector';
+import MultiOptionSelectorCol from './form/MultiOptionSelectorCol';
 import CheckboxCircle from './checkbox/CheckboxCircle';
 import TermsModal from './modal/TermsModal';
+import TermsBottomSheet from './modal/TermsBottomSheet';
 import Dot from './Dot';
 
 export {
@@ -49,7 +51,9 @@ export {
   ShowMapButton,
   Divider,
   MultiOptionSelector,
+  MultiOptionSelectorCol,
   CheckboxCircle,
   TermsModal,
+  TermsBottomSheet,
   Dot,
 };

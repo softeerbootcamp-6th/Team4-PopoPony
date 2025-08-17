@@ -1,18 +1,31 @@
 package com.todoc.server.domain.escort.service;
 
+import com.todoc.server.IntegrationMockConfig;
+import com.todoc.server.common.util.FeeUtils;
 import com.todoc.server.domain.auth.entity.Auth;
+import com.todoc.server.domain.auth.service.AuthService;
 import com.todoc.server.domain.customer.entity.Patient;
 import com.todoc.server.domain.customer.service.PatientService;
 import com.todoc.server.domain.escort.entity.Recruit;
 import com.todoc.server.domain.escort.web.dto.request.RecruitCreateRequest;
+import com.todoc.server.domain.image.service.ImageFileService;
 import com.todoc.server.domain.route.entity.LocationInfo;
 import com.todoc.server.domain.route.entity.Route;
 import com.todoc.server.domain.route.service.LocationInfoService;
+import com.todoc.server.domain.route.service.RouteLegService;
 import com.todoc.server.domain.route.service.RouteService;
+import com.todoc.server.external.tmap.service.TMapRouteParser;
+import com.todoc.server.external.tmap.service.TMapRouteService;
+import java.io.IOException;
+import java.time.LocalTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
+
+import java.math.BigDecimal;
+import java.util.List;
+
 import static org.mockito.Mockito.*;
 
 class RecruitFacadeServiceTest {
@@ -25,6 +38,16 @@ class RecruitFacadeServiceTest {
     private LocationInfoService locationInfoService;
     @Mock
     private RouteService routeService;
+    @Mock
+    private AuthService authService;
+    @Mock
+    private ImageFileService imageFileService;
+    @Mock
+    private TMapRouteService tMapRouteService;
+    @Mock
+    private TMapRouteParser tmapRouteParser;
+    @Mock
+    private RouteLegService routeLegService;
 
     @InjectMocks
     private RecruitFacadeService recruitFacadeService;
@@ -38,6 +61,12 @@ class RecruitFacadeServiceTest {
     @DisplayName("동행 신청 생성 시 의존성 호출 및 연관관계 설정 확인")
     void createRecruit() {
         // given
+        Long authId = 1L;
+        Auth auth = mock(Auth.class);
+
+        String usedVertices = "...";
+        String tmapJson = "...";
+
         RecruitCreateRequest request = mock(RecruitCreateRequest.class);
         RecruitCreateRequest.PatientDetail patientDetail = mock(RecruitCreateRequest.PatientDetail.class);
         RecruitCreateRequest.EscortDetail escortDetail = mock(RecruitCreateRequest.EscortDetail.class);
@@ -51,10 +80,27 @@ class RecruitFacadeServiceTest {
         when(request.getDestinationDetail()).thenReturn(destinationDetail);
         when(request.getReturnLocationDetail()).thenReturn(returnLocationDetail);
 
+        when(tMapRouteService.getRoute(any()))
+            .thenReturn(new TMapRouteService.TMapRawResult(tmapJson, usedVertices));
+        when(tmapRouteParser.parseSummaryFromRaw(anyString()))
+            .thenReturn(new TMapRouteParser.RouteParseResult(List.of(), new TMapRouteParser.RouteLegSummary(1561, 343, 0, 5200)));
+        when(escortDetail.getEstimatedMeetingTime()).thenReturn(LocalTime.of(9, 0));
+        when(escortDetail.getEstimatedReturnTime()).thenReturn(LocalTime.of(11, 30));
+
         Patient patient = mock(Patient.class);
-        LocationInfo meetingLocation = mock(LocationInfo.class);
-        LocationInfo hospitalLocation = mock(LocationInfo.class);
-        LocationInfo returnLocation = mock(LocationInfo.class);
+        // 실제 좌표값을 가진 LocationInfo 생성
+        LocationInfo meetingLocation = new LocationInfo();
+        meetingLocation.setLongitude(new BigDecimal("127.2581225"));
+        meetingLocation.setLatitude(new BigDecimal("36.4809912"));
+
+        LocationInfo hospitalLocation = new LocationInfo();
+        hospitalLocation.setLongitude(new BigDecimal("126.9784043"));
+        hospitalLocation.setLatitude(new BigDecimal("37.5670240"));
+
+        LocationInfo returnLocation = new LocationInfo();
+        returnLocation.setLongitude(new BigDecimal("127.1234567"));
+        returnLocation.setLatitude(new BigDecimal("36.9876543"));
+
         Route route = mock(Route.class);
         Recruit recruit = mock(Recruit.class);
 
@@ -64,9 +110,10 @@ class RecruitFacadeServiceTest {
         when(locationInfoService.register(returnLocationDetail)).thenReturn(returnLocation);
         when(routeService.register(request)).thenReturn(route);
         when(recruitService.register(escortDetail)).thenReturn(recruit);
+        when(authService.getAuthById(authId)).thenReturn(auth);
 
         // when
-        recruitFacadeService.createRecruit(request);
+        recruitFacadeService.createRecruit(authId, request);
 
         // then
         verify(patientService).register(patientDetail);
@@ -85,7 +132,8 @@ class RecruitFacadeServiceTest {
         verify(recruit).setCustomer(any(Auth.class));
         verify(recruit).setPatient(patient);
         verify(recruit).setRoute(route);
-        verify(recruit).setEstimatedFee(null);
+        verify(recruit).setEstimatedFee(any());
 
+        verify(imageFileService).register(any());
     }
 }

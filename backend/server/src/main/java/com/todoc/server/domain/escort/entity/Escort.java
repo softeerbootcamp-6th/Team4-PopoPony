@@ -10,6 +10,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.SQLRestriction;
 
+import java.time.LocalTime;
+
 @Entity
 @Getter
 @Setter
@@ -31,6 +33,12 @@ public class Escort extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "helper_id")
     private Auth helper;
+
+    @Column(name = "actual_meeting_time")
+    private LocalTime actualMeetingTime;
+
+    @Column(name = "actual_return_time")
+    private LocalTime actualReturnTime;
 
     private String memo;
 

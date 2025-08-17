@@ -1,47 +1,11 @@
-import { TwoOptionSelector, LabeledSection, MultiOptionSelector, FormInput } from '@components';
+import { TwoOptionSelector, LabeledSection, MultiOptionSelectorCol, FormInput } from '@components';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { memo, useEffect, useRef } from 'react';
 import { FormLayout } from '@layouts';
-import { useFormValidation } from '@customer/hooks';
-import { z } from 'zod';
+import { useFormValidation } from '@hooks';
 import type { RecruitStepProps } from '@customer/types';
-import { COGNITIVE_ISSUES_OPTIONS } from '@customer/types';
+import { COGNITIVE_ISSUES_OPTIONS, CognitiveSchema, CommunicationSchema } from '@customer/types';
 
-const CognitiveSchema = z
-  .object({
-    cognitiveAbility: z.enum(['good', 'bad']),
-    cognitiveIssues: z.array(z.string()).optional(),
-  })
-  .refine(
-    (data) => {
-      if (data.cognitiveAbility === 'bad') {
-        return data.cognitiveIssues && data.cognitiveIssues.length > 0;
-      }
-      return true;
-    },
-    {
-      message: '구체적인 문제점을 선택해주세요',
-      path: ['cognitiveIssues'],
-    }
-  );
-
-const CommunicationSchema = z
-  .object({
-    communicationAbility: z.enum(['good', 'bad']),
-    communicationHelp: z.string().optional(),
-  })
-  .refine(
-    (data) => {
-      if (data.communicationAbility === 'bad') {
-        return data.communicationHelp && data.communicationHelp.length >= 10;
-      }
-      return true;
-    },
-    {
-      message: '10자 이상 입력해주세요',
-      path: ['communicationHelp'],
-    }
-  );
 const Communication = memo(({ handleNextStep }: RecruitStepProps) => {
   const { setValue, control } = useFormContext();
   const {
@@ -58,8 +22,8 @@ const Communication = memo(({ handleNextStep }: RecruitStepProps) => {
   } = useFormValidation(CognitiveSchema);
 
   // 개별 필드 감시 및 자동 초기화
-  const cognitiveAbility = useWatch({ control, name: 'cognitiveAbility' });
-  const communicationAbility = useWatch({ control, name: 'communicationAbility' });
+  const cognitiveAbility = useWatch({ control, name: 'hasCognitiveIssue' });
+  const communicationAbility = useWatch({ control, name: 'hasCommunicationIssue' });
 
   // 이전 값 추적을 위한 ref
   const prevCognitiveAbility = useRef(cognitiveAbility);
@@ -67,15 +31,21 @@ const Communication = memo(({ handleNextStep }: RecruitStepProps) => {
 
   // 값이 'good'으로 변경될 때만 초기화
   useEffect(() => {
-    if (cognitiveAbility === 'good' && prevCognitiveAbility.current !== 'good') {
-      setValue('cognitiveIssues', []);
+    if (
+      cognitiveValues.hasCognitiveIssue === 'false' &&
+      prevCognitiveAbility.current !== cognitiveAbility
+    ) {
+      setValue('cognitiveIssueDetail', []);
     }
     prevCognitiveAbility.current = cognitiveAbility;
   }, [cognitiveAbility, setValue]);
 
   useEffect(() => {
-    if (communicationAbility === 'good' && prevCommunicationAbility.current !== 'good') {
-      setValue('communicationHelp', '');
+    if (
+      communicationValues.hasCommunicationIssue === 'false' &&
+      prevCommunicationAbility.current !== communicationAbility
+    ) {
+      setValue('communicationIssueDetail', '');
     }
     prevCommunicationAbility.current = communicationAbility;
   }, [communicationAbility, setValue]);
@@ -91,24 +61,27 @@ const Communication = memo(({ handleNextStep }: RecruitStepProps) => {
         </FormLayout.TitleWrapper>
         <LabeledSection
           label='인지 능력'
-          isChecked={!cognitiveFieldErrors.cognitiveAbility && !!cognitiveValues.cognitiveAbility}>
-          <div onClick={() => cognitiveMarkFieldAsTouched('cognitiveAbility')}>
+          isChecked={
+            !cognitiveFieldErrors.hasCognitiveIssue && !!cognitiveValues.hasCognitiveIssue
+          }>
+          <div onClick={() => cognitiveMarkFieldAsTouched('hasCognitiveIssue')}>
             <TwoOptionSelector
-              name='cognitiveAbility'
-              leftOption={{ label: '괜찮아요', value: 'good' }}
-              rightOption={{ label: '도움이 필요해요', value: 'bad' }}
+              name='hasCognitiveIssue'
+              leftOption={{ label: '괜찮아요', value: 'false' }}
+              rightOption={{ label: '도움이 필요해요', value: 'true' }}
             />
           </div>
         </LabeledSection>
-        {cognitiveValues.cognitiveAbility === 'bad' && (
+        {cognitiveValues.hasCognitiveIssue === 'true' && (
           <LabeledSection
             label='구체적인 문제점'
             isChecked={
-              !cognitiveFieldErrors.cognitiveIssues && !!cognitiveValues.cognitiveIssues?.length
+              !cognitiveFieldErrors.cognitiveIssueDetail &&
+              !!cognitiveValues.cognitiveIssueDetail?.length
             }>
-            <div onClick={() => cognitiveMarkFieldAsTouched('cognitiveIssues')}>
-              <MultiOptionSelector
-                name='cognitiveIssues'
+            <div onClick={() => cognitiveMarkFieldAsTouched('cognitiveIssueDetail')}>
+              <MultiOptionSelectorCol
+                name='cognitiveIssueDetail'
                 options={COGNITIVE_ISSUES_OPTIONS.map((option) => ({
                   label: option,
                   value: option,
@@ -120,30 +93,31 @@ const Communication = memo(({ handleNextStep }: RecruitStepProps) => {
         <LabeledSection
           label='의사소통 능력'
           isChecked={
-            !communicationFieldErrors.communicationAbility &&
-            !!communicationValues.communicationAbility
+            !communicationFieldErrors.hasCommunicationIssue &&
+            !!communicationValues.hasCommunicationIssue
           }>
-          <div onClick={() => communicationMarkFieldAsTouched('communicationAbility')}>
+          <div onClick={() => communicationMarkFieldAsTouched('hasCommunicationIssue')}>
             <TwoOptionSelector
-              name='communicationAbility'
-              leftOption={{ label: '괜찮아요', value: 'good' }}
-              rightOption={{ label: '도움이 필요해요', value: 'bad' }}
+              name='hasCommunicationIssue'
+              leftOption={{ label: '괜찮아요', value: 'false' }}
+              rightOption={{ label: '도움이 필요해요', value: 'true' }}
             />
           </div>
         </LabeledSection>
-        {communicationValues.communicationAbility === 'bad' && (
+        {communicationValues.hasCommunicationIssue === 'true' && (
           <LabeledSection
             label='의사소통 도움'
             isChecked={
-              !communicationFieldErrors.communicationHelp && !!communicationValues.communicationHelp
+              !communicationFieldErrors.communicationIssueDetail &&
+              !!communicationValues.communicationIssueDetail
             }
-            message={communicationFieldErrors.communicationHelp}>
+            message={communicationFieldErrors.communicationIssueDetail}>
             <FormInput
               type='text'
               size='M'
               placeholder='필요하신 도움을 작성해주세요'
-              name='communicationHelp'
-              validation={() => communicationMarkFieldAsTouched('communicationHelp')}
+              name='communicationIssueDetail'
+              validation={() => communicationMarkFieldAsTouched('communicationIssueDetail')}
             />
           </LabeledSection>
         )}

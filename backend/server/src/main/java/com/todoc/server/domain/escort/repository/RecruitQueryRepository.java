@@ -1,14 +1,19 @@
 package com.todoc.server.domain.escort.repository;
 
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.todoc.server.common.enumeration.ApplicationStatus;
+import com.todoc.server.common.enumeration.RecruitStatus;
 import com.todoc.server.domain.escort.repository.dto.RecruitHistoryDetailFlatDto;
 import com.todoc.server.domain.escort.web.dto.response.RecruitHistorySimpleResponse;
 import com.todoc.server.domain.route.entity.QLocationInfo;
+import java.time.LocalDate;
 import java.util.List;
 import com.todoc.server.domain.escort.entity.Recruit;
 import com.todoc.server.domain.escort.web.dto.response.RecruitSimpleResponse;
 
+import com.todoc.server.domain.route.entity.QRouteLeg;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -34,12 +39,18 @@ public class RecruitQueryRepository {
                 recruit.id,
                 escort.id,
                 recruit.status,
+                escort.status,
                 application.count(),
                 recruit.escortDate,
                 recruit.estimatedMeetingTime,
                 recruit.estimatedReturnTime,
                 meetingLocation.placeName,
-                hospitalLocation.placeName
+                hospitalLocation.placeName,
+                recruit.estimatedFee,
+                patient.needsHelping,
+                patient.usesWheelchair,
+                patient.hasCognitiveIssue,
+                patient.hasCommunicationIssue
             ))
             .from(recruit)
             .leftJoin(application).on(application.recruit.eq(recruit))
@@ -47,8 +58,9 @@ public class RecruitQueryRepository {
             .join(recruit.route, route)
             .join(route.meetingLocationInfo, meetingLocation)
             .join(route.hospitalLocationInfo, hospitalLocation)
+            .join(recruit.patient, patient)
             .where(recruit.customer.id.eq(userId))
-            .groupBy(recruit.id)
+            .groupBy(recruit.id, escort.id, escort.status)
             .fetch();
 
         return result;
@@ -120,6 +132,8 @@ public class RecruitQueryRepository {
         QLocationInfo meetingLocation = new QLocationInfo("meetingLocation");
         QLocationInfo hospitalLocation = new QLocationInfo("hospitalLocation");
         QLocationInfo returnLocation = new QLocationInfo("returnLocation");
+        QRouteLeg meetingToHospital = new QRouteLeg("meetingToHospital");
+        QRouteLeg hospitalToReturn = new QRouteLeg("hospitalToReturn");
 
         return queryFactory
                 .select(recruit)
@@ -128,7 +142,76 @@ public class RecruitQueryRepository {
                 .join(route.meetingLocationInfo, meetingLocation).fetchJoin()
                 .join(route.hospitalLocationInfo, hospitalLocation).fetchJoin()
                 .join(route.returnLocationInfo, returnLocation).fetchJoin()
+                .join(route.meetingToHospital, meetingToHospital).fetchJoin()
+                .join(route.hospitalToReturn, hospitalToReturn).fetchJoin()
                 .where(recruit.id.eq(recruitId))
                 .fetchOne();
+    }
+
+    /**
+     * HelperUserId로 신청한 동행 목록 조회 (도우미 userId와 신청 상태를 기준으로 필터링)
+     */
+    public List<RecruitSimpleResponse> findListByHelperUserIdAndApplicationStatus(Long helperUserId, List<ApplicationStatus> status) {
+
+        return queryFactory
+            .select(Projections.constructor(RecruitSimpleResponse.class,
+                recruit.id,
+                escort.id,
+                recruit.status,
+                escort.status,
+                application.count(),
+                recruit.escortDate,
+                recruit.estimatedMeetingTime,
+                recruit.estimatedReturnTime,
+                meetingLocation.placeName,
+                hospitalLocation.placeName,
+                recruit.estimatedFee,
+                patient.needsHelping,
+                patient.usesWheelchair,
+                patient.hasCognitiveIssue,
+                patient.hasCommunicationIssue
+            ))
+            .from(recruit)
+            .join(application).on(application.recruit.eq(recruit))
+            .leftJoin(escort).on(escort.recruit.eq(recruit))
+            .join(recruit.route, route)
+            .join(route.meetingLocationInfo, meetingLocation)
+            .join(route.hospitalLocationInfo, hospitalLocation)
+            .join(recruit.patient, patient)
+            .where(application.helper.id.eq(helperUserId)
+                .and(application.status.in(status))
+                .and(application.deletedAt.isNull()))
+            .groupBy(recruit.id, escort.id, escort.status)
+            .fetch();
+    }
+
+    /**
+     * 시작일과 종료일 사이에 해당하는 동행 신청 목록 조회 (페치조인)
+     */
+    public List<Recruit> findListByDateRangeAndStatus(String area, LocalDate startDate, LocalDate endDate, List<RecruitStatus> status) {
+
+        return queryFactory
+            .selectFrom(recruit)
+            .join(recruit.route, route).fetchJoin()
+            .join(recruit.patient, patient).fetchJoin()
+            .join(route.meetingLocationInfo, meetingLocation).fetchJoin()
+            .join(route.hospitalLocationInfo, hospitalLocation).fetchJoin()
+            .where(areaEq(area)
+                .and(escortDateBetween(startDate, endDate))
+                .and(recruit.status.in(status)))
+            .fetch();
+    }
+
+    private BooleanExpression areaEq(String area) {
+        return (area != null && !area.isBlank())
+            ? meetingLocation.upperAddrName.eq(area)
+            : null; // null이면 where에서 무시
+    }
+
+    private BooleanExpression escortDateBetween(LocalDate start, LocalDate end) {
+        if (start != null && end != null) return recruit.escortDate.between(start, end);
+        if (start != null) return recruit.escortDate.goe(start);
+        if (end != null) return recruit.escortDate.loe(end);
+        return null;
     }
 }

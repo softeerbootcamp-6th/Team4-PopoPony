@@ -1,8 +1,4 @@
-export interface TermsData {
-  id: string;
-  title: string;
-  content: string;
-  required: boolean;
-}
-
-export * from './escortType';
+export * from './statusType';
+export * from './termsData';
+export * from './funnelRoute';
+export * from './imageType';

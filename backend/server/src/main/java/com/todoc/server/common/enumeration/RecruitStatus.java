@@ -10,7 +10,7 @@ public enum RecruitStatus {
     MATCHING("매칭중"),
     COMPLETED("매칭완료"),
     IN_PROGRESS("동행중"),
-    DONE("완료된 동행");
+    DONE("동행완료");
 
     private final String label;
 

@@ -74,7 +74,7 @@ const BottomSheetContent = ({
         )}
         {...props}>
         {children}
-        <SheetPrimitive.Close className='absolute top-[1.6rem] right-[1.6rem] rounded-[0.8rem] p-[0.8rem] opacity-70 transition-opacity hover:opacity-100 focus:ring-2 focus:ring-[var(--color-background-default-mint)] focus:ring-offset-2 focus:outline-none disabled:pointer-events-none'>
+        <SheetPrimitive.Close className='absolute top-[1.6rem] right-[1.6rem] rounded-[0.8rem] p-[0.8rem] opacity-70 transition-opacity hover:opacity-100 disabled:pointer-events-none'>
           <XIcon className='text-text-neutral-primary h-[2rem] w-[2rem]' />
           <span className='sr-only'>닫기</span>
         </SheetPrimitive.Close>

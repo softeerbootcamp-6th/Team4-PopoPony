@@ -1,8 +1,8 @@
 package com.todoc.server.domain.report.repository;
 
-import com.querydsl.core.Tuple;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.todoc.server.domain.escort.exception.RecruitNotFoundException;
+import com.todoc.server.domain.report.exception.ReportNotFoundException;
+import com.todoc.server.domain.report.repository.dto.ReportDetailFlatDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,6 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 import static com.todoc.server.domain.report.entity.QReport.report;
 import static com.todoc.server.domain.report.entity.QTaxiFee.taxiFee;
 import static com.todoc.server.domain.escort.entity.QRecruit.recruit;
+import static com.todoc.server.domain.report.entity.QImageAttachment.imageAttachment;
+import static com.todoc.server.domain.image.entity.QImageFile.imageFile;
 
 @RequiredArgsConstructor
 @Repository
@@ -18,19 +20,31 @@ public class ReportQueryRepository {
 
     private final JPAQueryFactory queryFactory;
 
-    public Tuple getReportDetailByRecruitId(Long recruitId) {
+    @Transactional(readOnly = true)
+    public ReportDetailFlatDto getReportDetailByRecruitId(Long recruitId) {
 
-        Tuple tuple = queryFactory
+        var tuple = queryFactory
                 .select(report, taxiFee, recruit)
                 .from(report)
-                .join(report.recruit, recruit)
+                .leftJoin(report.recruit, recruit)
                 .leftJoin(taxiFee).on(taxiFee.report.eq(report))
                 .where(report.recruit.id.eq(recruitId))
                 .fetchOne();
 
-        if (tuple == null || tuple.get(recruit) == null) {
-            throw new RecruitNotFoundException();
+        if (tuple == null) {
+            throw new ReportNotFoundException();
         }
-        return tuple;
+
+        Long reportId = tuple.get(report).getId();
+
+        java.util.List<Long> imageIds = queryFactory
+                .select(imageFile.id)
+                .from(imageAttachment)
+                .join(imageAttachment.imageFile, imageFile)
+                .where(imageAttachment.report.id.eq(reportId))
+                .orderBy(imageAttachment.id.asc())
+                .fetch();
+
+        return new ReportDetailFlatDto(tuple.get(report), tuple.get(taxiFee), tuple.get(recruit), imageIds);
     }
 }
