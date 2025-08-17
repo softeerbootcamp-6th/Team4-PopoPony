@@ -1,11 +1,10 @@
 import { FormLayout } from '@layouts';
 import type { FunnelStepProps } from '@types';
-import { ReceiptImageUpload } from '@helper/components';
 import { useFormContext, useWatch } from 'react-hook-form';
-import { formatValue } from '@utils';
+import { TaxiFeeSection } from '@helper/components';
 
 const Taxi = ({ handleNextStep }: FunnelStepProps) => {
-  const { register, control, watch } = useFormContext();
+  const { control, watch } = useFormContext();
 
   const departureFee = useWatch({
     control,
@@ -36,56 +35,18 @@ const Taxi = ({ handleNextStep }: FunnelStepProps) => {
           </FormLayout.SubTitle>
         </FormLayout.TitleWrapper>
         <div className='flex gap-[1.2rem]'>
-          <div className='flex flex-col gap-[0.8rem]'>
-            <span className='body2-14-medium text-text-neutral-secondary'>만남-병원 요금</span>
-            <div
-              className={`border-stroke-neutral-dark bg-background-default-white focus-within:border-stroke-mint focus-within:ring-stroke-mint/20 relative flex h-[5.1rem] w-full items-center rounded-[0.8rem] border px-[1.6rem] transition-[color,box-shadow] focus-within:ring-[0.3rem]`}>
-              <input
-                type='text'
-                className='body1-16-medium text-text-neutral-primary placeholder:text-text-neutral-assistive w-full min-w-0 flex-1 bg-transparent outline-none disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50'
-                placeholder='택시 요금'
-                {...register('taxiFeeCreateRequest.departureFee', {
-                  onChange: (e) => {
-                    const formattedValue = formatValue(e.target.value, 'cost');
-                    e.target.value = formattedValue;
-                  },
-                })}
-              />
-              <div className='body1-16-medium text-text-neutral-assistive ml-[0.8rem] select-none'>
-                원
-              </div>
-            </div>
-            <ReceiptImageUpload
-              name='taxiFeeCreateRequest.departureReceipt'
-              prefix='uploads/taxi'
-              placeholder='만남-병원'
-            />
-          </div>
-          <div className='flex flex-col gap-[0.8rem]'>
-            <span className='body2-14-medium text-text-neutral-secondary'>병원-복귀 요금</span>
-            <div
-              className={`border-stroke-neutral-dark bg-background-default-white focus-within:border-stroke-mint focus-within:ring-stroke-mint/20 relative flex h-[5.1rem] w-full items-center rounded-[0.8rem] border px-[1.6rem] transition-[color,box-shadow] focus-within:ring-[0.3rem]`}>
-              <input
-                type='text'
-                className='body1-16-medium text-text-neutral-primary placeholder:text-text-neutral-assistive w-full min-w-0 flex-1 bg-transparent outline-none disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50'
-                placeholder='택시 요금'
-                {...register('taxiFeeCreateRequest.returnFee', {
-                  onChange: (e) => {
-                    const formattedValue = formatValue(e.target.value, 'cost');
-                    e.target.value = formattedValue;
-                  },
-                })}
-              />
-              <div className='body1-16-medium text-text-neutral-assistive ml-[0.8rem] select-none'>
-                원
-              </div>
-            </div>
-            <ReceiptImageUpload
-              name='taxiFeeCreateRequest.returnReceipt'
-              prefix='uploads/taxi'
-              placeholder='병원-복귀'
-            />
-          </div>
+          <TaxiFeeSection
+            title='만남-병원 요금'
+            feeFieldName='taxiFeeCreateRequest.departureFee'
+            receiptFieldName='taxiFeeCreateRequest.departureReceipt'
+            placeholder='만남-병원'
+          />
+          <TaxiFeeSection
+            title='병원-복귀 요금'
+            feeFieldName='taxiFeeCreateRequest.returnFee'
+            receiptFieldName='taxiFeeCreateRequest.returnReceipt'
+            placeholder='병원-복귀'
+          />
         </div>
       </FormLayout.Content>
       <FormLayout.Footer>
