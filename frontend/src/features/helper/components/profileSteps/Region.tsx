@@ -17,7 +17,7 @@ const Region = ({ handleNextStep }: ProfileStepProps) => {
           <FormLayout.Title>프로필을 작성해주세요</FormLayout.Title>
         </FormLayout.TitleWrapper>
         <div className='flex-center w-full'>
-          <PhotoUpload name='imageUrl' prefix='uploads/helper' />
+          <PhotoUpload name='profileImageCreateRequest' prefix='uploads/helper' />
         </div>
         <LabeledSection
           label='선호 활동 지역'
@@ -31,7 +31,7 @@ const Region = ({ handleNextStep }: ProfileStepProps) => {
                 className={`title-20-medium ${
                   values.region ? 'text-text-neutral-primary' : 'text-text-neutral-assistive'
                 }`}>
-                {REGION_OPTIONS.find((option) => option.value === values.region)?.value ||
+                {REGION_OPTIONS.find((option) => option.value === values.region)?.label ||
                   '지역 선택'}
               </p>
               <IcChevronDown
