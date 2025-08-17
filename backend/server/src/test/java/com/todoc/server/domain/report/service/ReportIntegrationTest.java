@@ -1,5 +1,6 @@
 package com.todoc.server.domain.report.service;
 
+import com.todoc.server.IntegrationTestBase;
 import com.todoc.server.common.dto.request.ImageCreateRequest;
 import com.todoc.server.domain.auth.entity.Auth;
 import com.todoc.server.domain.escort.exception.EscortNotFoundException;
@@ -34,7 +35,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 @Transactional
 @ActiveProfiles("test")
 @Sql("/sql/data.sql")
-public class ReportIntegrationTest {
+public class ReportIntegrationTest extends IntegrationTestBase {
 
     @Autowired
     private ReportService reportService;
