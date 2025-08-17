@@ -9,3 +9,4 @@ export type ImageCreateRequest = components['schemas']['ImageCreateRequest'];
 export type CertificateInfo = components['schemas']['CertificateInfo'];
 export type RecruitStatus = components['schemas']['RecruitSimpleResponse']['recruitStatus'];
 export type EscortStatus = components['schemas']['RecruitSimpleResponse']['escortStatus'];
+export type ReviewDetailResponse = components['schemas']['ReviewDetailResponse'];

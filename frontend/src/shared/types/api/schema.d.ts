@@ -196,7 +196,7 @@ export interface paths {
     patch: operations['cancelRecruit'];
     trace?: never;
   };
-  '/api/escorts/{recruitId}/status': {
+  '/api/escorts/{escortId}/status': {
     parameters: {
       query?: never;
       header?: never;
@@ -211,12 +211,12 @@ export interface paths {
     head?: never;
     /**
      * 동행 다음 단계로 이동하기
-     * @description 로그인한 도우미가 동행(일감)의 다음 단계로 이동합니다. recruitId를 통해 진행할 동행(일감)을 선택합니다.
+     * @description 로그인한 도우미가 동행(일감)의 다음 단계로 이동합니다. escortId를 통해 진행할 동행(일감)을 선택합니다.
      */
     patch: operations['proceedEscort'];
     trace?: never;
   };
-  '/api/escorts/{recruitId}/memo': {
+  '/api/escorts/{escortId}/memo': {
     parameters: {
       query?: never;
       header?: never;
@@ -231,7 +231,7 @@ export interface paths {
     head?: never;
     /**
      * 동행 메모 작성하기
-     * @description 로그인한 도우미가 동행(일감) 중 메모를 작성합니다. recruitId를 통해 메모를 작성할 동행(일감)을 선택합니다.
+     * @description 로그인한 도우미가 동행(일감) 중 메모를 작성합니다. escortId를 통해 메모를 작성할 동행(일감)을 선택합니다.
      */
     patch: operations['updateMemo'];
     trace?: never;
@@ -436,7 +436,7 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
-  '/api/escorts/{recruitId}': {
+  '/api/escorts/recruits/{recruitId}': {
     parameters: {
       query?: never;
       header?: never;
@@ -1270,7 +1270,7 @@ export interface components {
        * @description 환자 연락처
        * @example 010-1234-5678
        */
-      phoneNumber: string;
+      contact: string;
       /**
        * @description 부축이 필요한지
        * @example true
@@ -1373,6 +1373,42 @@ export interface components {
       hospitalLocationInfo: components['schemas']['LocationInfoSimpleResponse'];
       /** @description 복귀 장소 위치 정보 */
       returnLocationInfo: components['schemas']['LocationInfoSimpleResponse'];
+      /**
+       * @description 병원까지의 경로 정보 ([위도, 경도] 배열)
+       * @example [
+       *       [
+       *         12,
+       *         23
+       *       ],
+       *       [
+       *         13,
+       *         45
+       *       ],
+       *       [
+       *         12,
+       *         66
+       *       ]
+       *     ]
+       */
+      meetingToHospital: string;
+      /**
+       * @description 복귀장소까지의 경로 정보 ([위도, 경도] 배열)
+       * @example [
+       *       [
+       *         12,
+       *         23
+       *       ],
+       *       [
+       *         13,
+       *         45
+       *       ],
+       *       [
+       *         12,
+       *         66
+       *       ]
+       *     ]
+       */
+      hospitalToReturn: string;
     };
     /** @description 동행 신청 결제 정보 조회 응답 DTO */
     RecruitPaymentResponse: {
@@ -1381,8 +1417,8 @@ export interface components {
        * @description 동행 신청 ID
        */
       recruitId: number;
-      /** @description 경로 요약 정보 */
-      route: components['schemas']['RouteSimpleResponse'];
+      /** @description 경로 상세 정보 */
+      route: components['schemas']['RouteDetailResponse'];
       /**
        * Format: int32
        * @description 기본 결제 금액
@@ -1393,6 +1429,11 @@ export interface components {
        * @description 예상 택시 요금
        */
       expectedTaxiFee: number;
+      /**
+       * Format: int64
+       * @description 이용 시간(분)
+       */
+      totalMinutes: number;
     };
     /** @description 공통 응답 포맷 */
     ResponseRecruitPaymentResponse: {
@@ -1414,6 +1455,67 @@ export interface components {
       message: string;
       /** @description 응답 body 필드 */
       data?: components['schemas']['RecruitPaymentResponse'];
+    };
+    /** @description 경로 상세 정보 DTO */
+    RouteDetailResponse: {
+      /** @description 경로 요약 정보 */
+      routeSimple: components['schemas']['RouteSimpleResponse'];
+      /**
+       * Format: int32
+       * @description 만남장소-병원 예상 이동 시간(초)
+       */
+      meetingToHospitalEstimatedTime: number;
+      /**
+       * Format: int32
+       * @description 만남장소-병원 예상 택시 요금(원)
+       */
+      meetingToHospitalEstimatedTaxiFee: number;
+      /**
+       * Format: int32
+       * @description 병원-복귀장소 예상 이동 시간(초)
+       */
+      hospitalToReturnEstimatedTime: number;
+      /**
+       * Format: int32
+       * @description 병원-복귀장소 예상 택시 요금(원)
+       */
+      hospitalToReturnEstimatedTaxiFee: number;
+      /**
+       * @description 병원까지의 경로 정보 ([위도, 경도] 배열)
+       * @example [
+       *       [
+       *         12,
+       *         23
+       *       ],
+       *       [
+       *         13,
+       *         45
+       *       ],
+       *       [
+       *         12,
+       *         66
+       *       ]
+       *     ]
+       */
+      meetingToHospital: string;
+      /**
+       * @description 복귀장소까지의 경로 정보 ([위도, 경도] 배열)
+       * @example [
+       *       [
+       *         12,
+       *         23
+       *       ],
+       *       [
+       *         13,
+       *         45
+       *       ],
+       *       [
+       *         12,
+       *         66
+       *       ]
+       *     ]
+       */
+      hospitalToReturn: string;
     };
     /** @description 환자 상태 정보 */
     PatientDetailHistory: {
@@ -1747,20 +1849,6 @@ export interface components {
       /** @description 응답 body 필드 */
       data?: components['schemas']['EscortDetailResponse'];
     };
-    /** @description 경로 상세 정보 DTO */
-    RouteDetailResponse: {
-      /**
-       * Format: int64
-       * @description 경로 ID
-       */
-      routeId: number;
-      /** @description 만남 장소 위치 정보 */
-      meetingLocationInfo: components['schemas']['LocationInfoSimpleResponse'];
-      /** @description 병원 위치 정보 */
-      hospitalLocationInfo: components['schemas']['LocationInfoSimpleResponse'];
-      /** @description 복귀 장소 위치 정보 */
-      returnLocationInfo: components['schemas']['LocationInfoSimpleResponse'];
-    };
   };
   responses: never;
   parameters: never;
@@ -2077,7 +2165,7 @@ export interface operations {
       query?: never;
       header?: never;
       path: {
-        recruitId: number;
+        escortId: number;
       };
       cookie?: never;
     };
@@ -2099,7 +2187,7 @@ export interface operations {
       query?: never;
       header?: never;
       path: {
-        recruitId: number;
+        escortId: number;
       };
       cookie?: never;
     };
