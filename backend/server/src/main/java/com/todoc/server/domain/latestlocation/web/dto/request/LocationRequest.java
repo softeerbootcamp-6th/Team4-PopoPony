@@ -9,7 +9,6 @@ import lombok.Setter;
 @NoArgsConstructor
 public class LocationRequest {
 
-    private Long escortId;
     private Double lat;
     private Double lon;
 }

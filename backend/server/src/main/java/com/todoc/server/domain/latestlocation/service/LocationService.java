@@ -13,8 +13,8 @@ public class LocationService {
 
     private final LocationCacheRepository locationCacheRepository;
 
-    public void register(LocationRequest request) {
+    public void register(Long escortId, LocationRequest request) {
 
-        locationCacheRepository.save(request.getEscortId(),request.getLat(),request.getLon());
+        locationCacheRepository.save(escortId, request.getLat(), request.getLon());
     }
 }
