@@ -3,7 +3,7 @@ import { PageLayout } from '@layouts';
 import { Button, EscortCard, Tabs } from '@components';
 import type { RecruitStatus } from '@types';
 import { dateFormat, timeFormat } from '@utils';
-import { getRecruitList } from '@helper/apis';
+import { getRecruitList, getHasProfile } from '@helper/apis';
 import type { RecruitSimpleResponse } from '@helper/types';
 
 export const Route = createFileRoute('/helper/')({
@@ -45,19 +45,27 @@ const refineEscortData = (escortData: RecruitSimpleResponse): RefinedEscortData 
 };
 
 function RouteComponent() {
-  const hasProfile = false;
-  //TODO: 추후 api call로 전환
+  const { data: hasProfileData } = getHasProfile();
   const { data: recruitListData } = getRecruitList();
   const { inProgressList: inProgressListData, completedList: completedListData } =
     recruitListData?.data ?? {};
   const navigate = useNavigate();
-  const handleEscortCardClick = (recruitId: number) => {
-    navigate({
-      to: '/helper/escort/$escortId',
-      params: {
-        escortId: recruitId.toString(),
-      },
-    });
+  const handleEscortCardClick = (recruitId: number, isCompleted: boolean) => {
+    if (isCompleted) {
+      navigate({
+        to: '/helper/escort/$escortId',
+        params: {
+          escortId: recruitId.toString(),
+        },
+      });
+    } else {
+      navigate({
+        to: '/helper/application/$escortId',
+        params: {
+          escortId: recruitId.toString(),
+        },
+      });
+    }
   };
 
   return (
@@ -75,11 +83,15 @@ function RouteComponent() {
             <div className='flex-between flex w-full gap-[1.2rem]'>
               <div className='flex-1'>
                 <Link
-                  to={hasProfile ? '/helper/profile' : '/helper/profile/new/$step'}
-                  params={{ step: 'region' }}>
+                  to={
+                    hasProfileData?.hasProfile
+                      ? `/helper/profile/$helperId`
+                      : '/helper/profile/new/$step'
+                  }
+                  params={{ step: 'region', helperId: hasProfileData?.helperId.toString() }}>
                   <Button variant='assistive' size='md'>
                     <span className='text-text-neutral-primary'>
-                      {hasProfile ? '프로필 바로가기' : '프로필 작성하기'}
+                      {hasProfileData?.hasProfile ? '프로필 바로가기' : '프로필 작성하기'}
                     </span>
                   </Button>
                 </Link>
@@ -123,7 +135,7 @@ function RouteComponent() {
                 return (
                   <EscortCard
                     key={escort.recruitId}
-                    onClick={() => handleEscortCardClick(escort.recruitId)}>
+                    onClick={() => handleEscortCardClick(escort.recruitId, false)}>
                     <EscortCard.StatusHeader
                       status={refinedData.status}
                       text={refinedData.statusText}
@@ -147,7 +159,7 @@ function RouteComponent() {
                 return (
                   <EscortCard
                     key={escort.recruitId}
-                    onClick={() => handleEscortCardClick(escort.recruitId)}>
+                    onClick={() => handleEscortCardClick(escort.recruitId, true)}>
                     <EscortCard.StatusHeader
                       status={refinedData.status}
                       text={refinedData.statusText}
