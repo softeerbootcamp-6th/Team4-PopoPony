@@ -33,6 +33,7 @@ import IcDownArrow from './down-arrow.svg?react';
 // Transportation Icons
 import IcBusFill from './bus-fill.svg?react';
 import IcSubwayFill from './subway-fill.svg?react';
+import IcTaxiBadge from './taxi-badge.svg?react';
 import IcTaxiFill from './taxi-fill.svg?react';
 
 // User & Profile Icons
@@ -70,6 +71,10 @@ import IcNumber2 from './number-2.svg?react';
 import IcNumber3 from './number-3.svg?react';
 import IcTextGo from './text-go.svg?react';
 
+import IcMarker1 from './marker1.svg?react';
+import IcMarker2 from './marker2.svg?react';
+import IcMarker3 from './marker3.svg?react';
+
 export {
   // Basic Icons
   IcAddCircle,
@@ -106,6 +111,7 @@ export {
   // Transportation Icons
   IcBusFill,
   IcSubwayFill,
+  IcTaxiBadge,
   IcTaxiFill,
 
   // User & Profile Icons
@@ -143,4 +149,9 @@ export {
   IcNumber2,
   IcNumber3,
   IcTextGo,
+
+  // Marker Icons
+  IcMarker1,
+  IcMarker2,
+  IcMarker3,
 };
