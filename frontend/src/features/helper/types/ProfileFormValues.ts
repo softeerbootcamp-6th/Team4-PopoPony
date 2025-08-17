@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { type ImageCreateRequest } from './schemaTypes';
+import { imageSchema } from '@types';
 
 export const REGION_OPTIONS = [
   { label: '서울특별시', value: '서울' },
@@ -36,7 +36,7 @@ export const CERTIFICATE_OPTIONS = [
 ] as const;
 
 export const RegionFormSchema = z.object({
-  profileImageCreateRequest: z.custom<ImageCreateRequest>(),
+  profileImageCreateRequest: imageSchema,
   region: z.enum(REGION_OPTIONS.map((option) => option.value)),
 });
 
@@ -44,12 +44,18 @@ export type RegionFormValues = z.infer<typeof RegionFormSchema>;
 
 const CertificateItemSchema = z.object({
   type: z.enum(CERTIFICATE_OPTIONS),
-  certificateImageCreateRequest: z.custom<ImageCreateRequest>(),
+  certificateImageCreateRequest: imageSchema,
 });
+
+export type CertificateItemValues = z.infer<typeof CertificateItemSchema>;
 
 export const DetailFormSchema = z.object({
   shortBio: z.string().min(1, '간단한 자기소개를 입력해주세요'),
-  strengthList: z.array(z.enum(STRENGTH_OPTIONS)).max(3, '강점은 최대 3개까지 선택 가능합니다'),
+  strengthList: z
+    .array(z.enum(STRENGTH_OPTIONS))
+    .max(3, '강점은 최대 3개까지 선택 가능합니다')
+    .optional()
+    .default([]),
   certificateList: z
     .array(CertificateItemSchema)
     .min(1, '최소 1개의 자격증을 선택해주세요')
