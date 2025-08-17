@@ -147,7 +147,7 @@ const SearchRoute = ({ handleSelectRoute }: SearchRouteProps) => {
           )}
 
           {allSearchResults.length > 0 && (
-            <div className='flex max-h-[40rem] flex-col overflow-y-auto'>
+            <div className='flex h-full flex-col overflow-y-auto'>
               {allSearchResults.map((result, index) => (
                 <button
                   key={`${result.id}-${index}`}
