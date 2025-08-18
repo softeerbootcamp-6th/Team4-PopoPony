@@ -29,3 +29,14 @@ export const timeFormat = (time: string): string => {
 export const getEscortTitle = (date: string): string => {
   return dateFormat(date, 'M월 d일 (eee)');
 };
+
+/**
+ * 초를 시간과 분으로 변환
+ * @param seconds - 초 (예: 3600)
+ * @returns "1시간 0분" 형태의 포맷된 시간 문자열
+ */
+export const secondsToTime = (seconds: number) => {
+  const hours = Math.floor(seconds / 3600);
+  const remainingMinutes = Math.floor((seconds % 3600) / 60);
+  return `${hours}시간 ${remainingMinutes}분`;
+};
