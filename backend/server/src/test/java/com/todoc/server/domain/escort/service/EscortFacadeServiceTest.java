@@ -90,17 +90,14 @@ class EscortFacadeServiceTest {
         when(helper.getHelperProfileImage()).thenReturn(new ImageFile());
         when(helper.getAuth()).thenReturn(new Auth());
 
-        // helper
+        // patient
         when(patient.getPatientProfileImage()).thenReturn(new ImageFile());
 
-        // 의존 서비스 동작
         when(escortService.getEscortWithDetailByRecruitId(recruitId)).thenReturn(escort);
         when(helperService.getHelperProfileListByRecruitId(recruitId)).thenReturn(List.of(helper));
 
-        // --- 실행 ---
         EscortDetailResponse res = escortFacadeService.getEscortDetailByRecruitId(recruitId);
 
-        // --- 검증 ---
         assertThat(res).isNotNull();
         assertThat(res.getEscortId()).isEqualTo(777L);
         assertThat(res.getEscortStatus()).isEqualTo("ONGOING");
@@ -179,11 +176,5 @@ class EscortFacadeServiceTest {
 
         assertThatThrownBy(() -> escortFacadeService.getEscortDetailByRecruitId(recruitId))
                 .isInstanceOf(RouteNotFoundException.class);
-    }
-
-    /* ==== 테스트 편의를 위한 내부 인터페이스 ====
-       EscortStatus.getLabel()을 호출하는 부분만 필요하므로 간단 mock 타입 정의 */
-    private interface StatusLike {
-        String getLabel();
     }
 }
