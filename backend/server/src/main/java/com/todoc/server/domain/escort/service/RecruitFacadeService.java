@@ -1,7 +1,6 @@
 package com.todoc.server.domain.escort.service;
 
 import com.todoc.server.common.util.FeeUtils;
-import com.todoc.server.common.util.JsonUtils;
 import com.todoc.server.domain.auth.entity.Auth;
 import com.todoc.server.domain.auth.service.AuthService;
 import com.todoc.server.domain.customer.entity.Patient;
@@ -96,7 +95,7 @@ public class RecruitFacadeService {
                 .totalFare(routeLegSummaryForHospital.totalFare())
                 .taxiFare(routeLegSummaryForHospital.taxiFare())
                 .usedFavoriteRouteVertices(rawResultForHospital.usedVertices())
-                .coordinates(JsonUtils.toJson(routeParseResultForHospital.coordinates()))
+                .coordinates(routeParseResultForHospital.coordinates())
                 .build();
         routeLegService.save(leg1);
 
@@ -106,7 +105,7 @@ public class RecruitFacadeService {
                 .totalFare(routeLegSummaryForReturn.totalFare())
                 .taxiFare(routeLegSummaryForReturn.taxiFare())
                 .usedFavoriteRouteVertices(rawResultForReturn.usedVertices())
-                .coordinates(JsonUtils.toJson(routeParseResultForReturn.coordinates()))
+                .coordinates(routeParseResultForReturn.coordinates())
                 .build();
         routeLegService.save(leg2);
 

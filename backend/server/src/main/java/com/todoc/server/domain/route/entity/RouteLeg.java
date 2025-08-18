@@ -1,11 +1,16 @@
 package com.todoc.server.domain.route.entity;
 
 import com.todoc.server.common.entity.BaseEntity;
+import com.todoc.server.domain.route.Coordinate;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
+
+import java.util.List;
 
 @Entity
 @Getter
@@ -27,13 +32,13 @@ public class RouteLeg extends BaseEntity {
     @Column(columnDefinition = "TEXT")
     private String usedFavoriteRouteVertices; // 압축 좌표 원본(선택)
 
-    @Lob
-    @Column(columnDefinition = "LONGTEXT")
-    private String coordinates;
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Column(columnDefinition = "JSON")
+    private List<Coordinate> coordinates;
 
     @Builder
     public RouteLeg(Long id, Integer totalDistance, Integer totalTime,
-                    Integer totalFare, Integer taxiFare, String usedFavoriteRouteVertices, String coordinates) {
+                    Integer totalFare, Integer taxiFare, String usedFavoriteRouteVertices, List<Coordinate> coordinates) {
         this.id = id;
         this.totalDistance = totalDistance;
         this.totalTime = totalTime;

@@ -158,6 +158,8 @@ export const routeFormSchema = z.object({
   isMeetingLocationSameAsDestination: z.boolean(),
 });
 
+export type SearchLocationDetail = Omit<LocationDetail, 'detailAddress'>;
+
 export type LocationDetail = z.infer<typeof locationDetailSchema>;
 
 export type RouteFormValues = z.infer<typeof routeFormSchema>;
