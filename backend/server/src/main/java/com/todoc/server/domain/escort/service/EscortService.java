@@ -49,9 +49,19 @@ public class EscortService {
         escortJpaRepository.save(escort);
     }
 
+    @Transactional
     public Escort getByRecruitId(Long recruitId) {
         return escortJpaRepository.findByRecruitId(recruitId)
                 .orElseThrow(EscortNotFoundException::new);
+    }
+
+    @Transactional
+    public Escort getEscortWithDetailByRecruitId(Long recruitId) {
+        Escort escort = escortQueryRepository.findEscortDetailByRecruitId(recruitId);
+        if (escort == null) {
+            throw new EscortNotFoundException();
+        }
+        return escort;
     }
 
     @Transactional
@@ -100,51 +110,6 @@ public class EscortService {
 
         Escort escort = getById(escortId);
         escort.setMemo(request.getMemo());
-    }
-
-    @Transactional(readOnly = true)
-    public EscortDetailResponse getEscortDetailByRecruitId(Long recruitId) {
-
-        Escort escort = escortQueryRepository.findEscortDetailByRecruitId(recruitId);
-        if (escort == null) {
-            throw new EscortNotFoundException();
-        }
-
-        Recruit recruit = escort.getRecruit();
-        if (recruit == null) {
-            throw new RecruitNotFoundException();
-        }
-
-        Auth customer = recruit.getCustomer();
-        if (customer == null) {
-            throw new AuthNotFoundException();
-        }
-
-        Patient patient = recruit.getPatient();
-        if (patient == null) {
-            throw new PatientNotFoundException();
-        }
-
-        Route route = recruit.getRoute();
-        if (route == null) {
-            throw new RouteNotFoundException();
-        }
-
-        HelperProfile helper = helperService.getHelperProfileListByRecruitId(recruitId).getFirst();
-
-        return EscortDetailResponse.builder()
-                .escortId(escort.getId())
-                .escortStatus(escort.getStatus().getLabel())
-                .customerContact(customer.getContact())
-                .escortDate(recruit.getEscortDate())
-                .estimatedMeetingTime(recruit.getEstimatedMeetingTime())
-                .estimatedReturnTime(recruit.getEstimatedReturnTime())
-                .purpose(recruit.getPurpose())
-                .extraRequest(recruit.getExtraRequest())
-                .helper(EscortDetailResponse.EscortHelperSimpleResponse.from(helper))
-                .patient(EscortDetailResponse.EscortPatientSimpleResponse.from(patient))
-                .route(RouteDetailResponse.from(route))
-                .build();
     }
 
     /**
