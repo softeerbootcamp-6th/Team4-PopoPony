@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.todoc.server.domain.route.Coordinate;
 import com.todoc.server.external.tmap.exception.TMapParsingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -17,7 +18,7 @@ public class TMapRouteParser {
     private final ObjectMapper objectMapper;
 
     public record RouteParseResult(
-            List<List<Double>> coordinates,
+            List<Coordinate> coordinates,
             RouteLegSummary summary
     ) {}
 
@@ -27,7 +28,7 @@ public class TMapRouteParser {
     public RouteParseResult parseSummaryFromRaw(String rawJson) {
         try {
             JsonNode root = objectMapper.readTree(rawJson);
-            List<List<Double>> coordinates = new ArrayList<>();
+            List<Coordinate> coordinates = new ArrayList<>();
             RouteLegSummary summary = null;
             for (JsonNode f : root.path("features")) {
 
@@ -35,13 +36,11 @@ public class TMapRouteParser {
                 if (f.path("geometry").path("type").asText("").equals("LineString")) {
                     // coordinates에 다음을 추가함.
                     JsonNode array = f.path("geometry").path("coordinates");
-                    for (JsonNode inner : array) {
-                        List<Double> innerList = new ArrayList<>();
-
-                        for (JsonNode value : inner) {
-                            innerList.addFirst(value.asDouble());
-                        }
-                        coordinates.add(innerList);
+                    for (JsonNode point : array) {
+                        // [lat, lon] 순서임
+                        double latitude = point.get(0).asDouble();
+                        double longitude = point.get(1).asDouble();
+                        coordinates.add(new Coordinate(latitude, longitude));
                     }
                 }
 
