@@ -74,6 +74,7 @@ public class EscortService {
             // 동행 만남 완료
             if (nextStatus == EscortStatus.HEADING_TO_HOSPITAL) {
                 escort.setActualMeetingTime(now);
+
                 emitterManager.close(escortId, Role.PATIENT);
             }
 
