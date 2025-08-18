@@ -1,5 +1,5 @@
 import { DetailFormSchema, CERTIFICATE_OPTIONS, STRENGTH_OPTIONS } from '@helper/types';
-import type { ResponseVoid } from '@types';
+import type { PostResponse } from '@types';
 import { useFormValidation } from '@hooks';
 import { FormLayout } from '@layouts';
 import { useNavigate } from '@tanstack/react-router';
@@ -59,7 +59,7 @@ const Detail = () => {
         },
       },
       {
-        onSuccess: (response: ResponseVoid) => {
+        onSuccess: (response: PostResponse) => {
           if (response.status !== 200) {
             alert(response.message ?? '도우미 등록에 실패했습니다. 다시 시도해주세요.');
             return;
