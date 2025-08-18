@@ -2,29 +2,30 @@ package com.todoc.server.domain.helper.service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.querydsl.core.Tuple;
+import com.todoc.server.common.dto.request.ImageCreateRequest;
 import com.todoc.server.common.enumeration.Area;
 import com.todoc.server.common.enumeration.Gender;
-import com.todoc.server.common.enumeration.RecruitStatus;
 import com.todoc.server.common.util.DateTimeUtils;
 import com.todoc.server.common.util.ImageUrlUtils;
 import com.todoc.server.common.util.JsonUtils;
-import com.todoc.server.domain.helper.entity.HelperProfile;
-import com.todoc.server.domain.helper.exception.HelperProfileAreaInvalidException;
-import com.todoc.server.domain.escort.entity.Recruit;
-import com.todoc.server.domain.escort.web.dto.request.RecruitCreateRequest;
+import com.todoc.server.domain.helper.entity.Certificate;
 import com.todoc.server.domain.helper.entity.HelperProfile;
 import com.todoc.server.domain.helper.exception.HelperProfileAreaInvalidException;
 import com.todoc.server.domain.helper.exception.HelperProfileNotFoundException;
 import com.todoc.server.domain.helper.repository.HelperJpaRepository;
 import com.todoc.server.domain.helper.repository.HelperQueryRepository;
+import com.todoc.server.domain.helper.repository.dto.HelperUpdateDefaultFlatDto;
+import com.todoc.server.domain.helper.web.dto.request.CertificateCreateRequest;
 import com.todoc.server.domain.helper.web.dto.request.HelperProfileCreateRequest;
 import com.todoc.server.domain.helper.web.dto.response.HelperSimpleResponse;
+import com.todoc.server.domain.helper.web.dto.response.HelperUpdateDefaultResponse;
 import com.todoc.server.domain.image.entity.ImageFile;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -120,6 +121,40 @@ public class HelperService {
                 .build();
 
         return helperJpaRepository.save(helperProfile);
+    }
+
+    @Transactional(readOnly = true)
+    public HelperUpdateDefaultResponse getHelperUpdateDefaultByHelperProfileId(Long helperProfileId) {
+
+        List<HelperUpdateDefaultFlatDto> list = helperQueryRepository.getHelperUpdateDefaultByHelperProfileId(helperProfileId);
+        if (list.isEmpty()) {
+            throw new HelperProfileNotFoundException();
+        }
+
+        HelperUpdateDefaultFlatDto first = list.getFirst();
+        HelperProfile helperProfile = first.getHelperProfile();
+        ImageFile profileImage = helperProfile.getHelperProfileImage();
+        String strength = helperProfile.getStrength();
+
+        List<CertificateCreateRequest> certificateCreateRequestList = new ArrayList<>();
+        for (HelperUpdateDefaultFlatDto flatDto : list) {
+            Certificate certificate = flatDto.getCertificate();
+
+            CertificateCreateRequest certificateCreateRequest = CertificateCreateRequest.builder()
+                    .type(certificate.getType())
+                    .certificateImageCreateRequest(ImageCreateRequest.from(certificate.getCertificateImage()))
+                    .build();
+            certificateCreateRequestList.add(certificateCreateRequest);
+        }
+
+        return HelperUpdateDefaultResponse.builder()
+                .imageUrl(ImageUrlUtils.getImageUrl(profileImage.getId()))
+                .profileImageCreateRequest(ImageCreateRequest.from(profileImage))
+                .strengthList(JsonUtils.fromJson(strength, new TypeReference<>() {}))
+                .shortBio(helperProfile.getShortBio())
+                .area(helperProfile.getArea().getLabel())
+                .certificateInfoList(certificateCreateRequestList)
+                .build();
     }
 
     public List<HelperProfile> getAllHelperProfiles() {
