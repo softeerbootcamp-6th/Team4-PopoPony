@@ -4,6 +4,7 @@ import com.todoc.server.common.enumeration.EscortStatus;
 import com.todoc.server.common.enumeration.Role;
 import com.todoc.server.domain.escort.service.EscortService;
 import com.todoc.server.domain.realtime.exception.RealtimeAlreadyMetPatientException;
+import com.todoc.server.domain.realtime.exception.RealtimeCustomerLocationException;
 import com.todoc.server.domain.realtime.exception.RealtimeInvalidRoleException;
 import com.todoc.server.domain.realtime.web.dto.request.LocationRequest;
 import com.todoc.server.domain.realtime.web.dto.response.LocationResponse;
@@ -30,13 +31,7 @@ public class RealtimeFacadeService {
     public SseEmitter registerEmitter(Long escortId, String roleString) {
 
         Role role = getRole(roleString);
-
-        if (role == Role.PATIENT) {
-            EscortStatus escortStatus = escortService.getById(escortId).getStatus();
-            if (escortStatus != EscortStatus.MEETING) {
-                throw new RealtimeAlreadyMetPatientException();
-            }
-        }
+        validateAlreadyMetPatient(escortId, role);
 
         SseEmitter emitter = emitterManager.register(escortId, role);
 
@@ -61,13 +56,16 @@ public class RealtimeFacadeService {
     }
 
     /**
-     * Escort의 도우미의 최근 위치 정보를 갱신
+     * Escort의 도우미/환자의 최근 위치 정보를 갱신
      */
     public void updateLocation(Long escortId, String roleString, LocationRequest request) {
 
         Role role = getRole(roleString);
+        validateAlreadyMetPatient(escortId, role);
 
-        if (role == Role.CUSTOMER) return;
+        if (role == Role.CUSTOMER) {
+            throw new RealtimeCustomerLocationException();
+        }
 
         Instant timestamp = Instant.now();
         LocationResponse location = LocationResponse.builder()
@@ -93,5 +91,14 @@ public class RealtimeFacadeService {
         emitter.send(SseEmitter.event()
                 .name(role.getLabel() + "-location")
                 .data(Objects.requireNonNullElse(latestLocation, "NO_LOCATION")));
+    }
+
+    private void validateAlreadyMetPatient(Long escortId, Role role) {
+        if (role == Role.PATIENT) {
+            EscortStatus escortStatus = escortService.getById(escortId).getStatus();
+            if (escortStatus != EscortStatus.MEETING) {
+                throw new RealtimeAlreadyMetPatientException();
+            }
+        }
     }
 }
