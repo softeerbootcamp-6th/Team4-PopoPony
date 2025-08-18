@@ -33,4 +33,13 @@ public class CertificateService {
                 .build();
         return certificateJpaRepository.save(certificate);
     }
+
+    public void deleteAllByHelperProfileId(Long helperProfileId) {
+
+        List<Certificate> certificateList = certificateJpaRepository.findAllByHelperProfileId(helperProfileId);
+
+        for (Certificate certificate : certificateList) {
+            certificate.softDelete();
+        }
+    }
 }
