@@ -157,6 +157,11 @@ public class HelperService {
                 .build();
     }
 
+    public HelperProfile getHelperProfileById(Long helperProfileId) {
+        return helperJpaRepository.findById(helperProfileId)
+                .orElseThrow(HelperProfileNotFoundException::new);
+    }
+
     public List<HelperProfile> getAllHelperProfiles() {
         return helperJpaRepository.findAll();
     }

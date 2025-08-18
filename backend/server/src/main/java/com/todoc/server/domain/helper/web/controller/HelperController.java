@@ -60,4 +60,18 @@ public class HelperController {
 
         return Response.from(helperService.getHelperUpdateDefaultByHelperProfileId(helperProfileId));
     }
+
+    @Operation(
+            summary = "도우미 프로필 수정 ",
+            description = "helperProfileId에 해당하는 도우미 프로필을 수정합니다.")
+    @ApiResponse(
+            responseCode = "200",
+            description = "도우미 프로필 수정 성공")
+    @PutMapping("/{helperProfileId}/updates")
+    public Response<Void> updateHelperProfile(@PathVariable Long helperProfileId, @RequestBody HelperProfileCreateRequest requestDto) {
+
+         helperFacadeService.updateHelperProfile(helperProfileId, requestDto);
+
+         return Response.from();
+    }
 }
