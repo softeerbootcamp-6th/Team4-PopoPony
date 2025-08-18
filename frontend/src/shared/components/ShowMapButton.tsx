@@ -1,16 +1,34 @@
+import { useNavigate } from '@tanstack/react-router';
+
 interface ShowMapButtonProps {
   roadAddress?: string;
   businessAddress: string;
+  pos: { lat: number; lng: number };
 }
 
-const ShowMapButton = ({ roadAddress, businessAddress }: ShowMapButtonProps) => {
+const ShowMapButton = ({ roadAddress, businessAddress, pos }: ShowMapButtonProps) => {
+  const navigate = useNavigate();
+  const handleClick = () => {
+    navigate({
+      to: '/map',
+      search: {
+        lat: pos.lat,
+        lng: pos.lng,
+      },
+    });
+  };
+
   return (
-    <div className='flex-wrap gap-[0.4rem]'>
-      <span className='body2-14-medium text-text-neutral-secondary mr-[0.4rem]'>{`${roadAddress ? `${roadAddress} ,` : ''} ${businessAddress}`}</span>
-      <button className='caption2-10-medium text-text-neutral-secondary border-stroke-neutral-dark w-fit translate-y-[-0.1rem] rounded-[0.4rem] border px-[0.5rem] py-[0.2rem]'>
-        지도 보기
-      </button>
-    </div>
+    <>
+      <div className='flex-wrap gap-[0.4rem]'>
+        <span className='body2-14-medium text-text-neutral-secondary mr-[0.4rem]'>{`${roadAddress ? `${roadAddress} ,` : ''} ${businessAddress}`}</span>
+        <button
+          className='caption2-10-medium text-text-neutral-secondary border-stroke-neutral-dark w-fit translate-y-[-0.1rem] rounded-[0.4rem] border px-[0.5rem] py-[0.2rem]'
+          onClick={handleClick}>
+          지도 보기
+        </button>
+      </div>
+    </>
   );
 };
 

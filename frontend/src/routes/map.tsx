@@ -1,38 +1,46 @@
+import { INITIAL_LATITUDE, INITIAL_LONGITUDE } from '@dashboard/constants';
 import { useMap } from '@hooks';
-import { IcCurrentLocation } from '@icons';
-import { createFileRoute } from '@tanstack/react-router';
-import { useRef } from 'react';
+import { IcArrowLeft } from '@icons';
+import { createFileRoute, useRouter } from '@tanstack/react-router';
+import { useEffect, useRef } from 'react';
+import z from 'zod';
+
+const mapSearchSchema = z.object({
+  lat: z.number().default(INITIAL_LATITUDE),
+  lng: z.number().default(INITIAL_LONGITUDE),
+});
 
 export const Route = createFileRoute('/map')({
+  validateSearch: mapSearchSchema,
   component: RouteComponent,
 });
 
 function RouteComponent() {
+  const router = useRouter();
+  const { lat, lng } = Route.useSearch();
   const mapRef = useRef<HTMLDivElement>(null);
-  const { mapInstance, isTmapLoaded, setCurrentLocation } = useMap(
-    mapRef as React.RefObject<HTMLDivElement>
-  );
+  const { mapInstance, addMarker, setCenter } = useMap(mapRef as React.RefObject<HTMLDivElement>);
 
-  // Tmap이 로드되지 않았으면 로딩 표시
-  if (!isTmapLoaded) {
-    return (
-      <div className='bg-background-default-white absolute inset-0 flex h-[100dvh] w-[100dvw] items-center justify-center'>
-        <div className='text-center'>
-          <div className='border-primary-500 mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-b-2'></div>
-          <p className='text-gray-600'>지도를 불러오는 중...</p>
-        </div>
-      </div>
-    );
-  }
+  useEffect(() => {
+    if (mapInstance) {
+      addMarker(lat, lng);
+      setCenter(lat, lng);
+    }
+  }, [mapInstance, lat, lng]);
 
   return (
     <div className='bg-neutral-40 absolute inset-0 h-[100dvh] w-[100dvw]'>
-      <div ref={mapRef} className='h-full w-full'></div>
-      <div
-        className='bg-neutral-0 shadow-button absolute bottom-[1.6rem] left-[1.6rem] cursor-pointer rounded-full p-[0.8rem]'
-        onClick={setCurrentLocation}>
-        <IcCurrentLocation />
+      <div className='flex h-full flex-col'>
+        <div ref={mapRef} className='h-full w-full'></div>
       </div>
+      <button
+        type='button'
+        className='shadow-button flex-center bg-background-default-mint absolute top-[1.6rem] left-[1.6rem] h-[4.8rem] w-[4.8rem] cursor-pointer rounded-full p-[0.8rem]'
+        onClick={() => {
+          router.history.back();
+        }}>
+        <IcArrowLeft className='[&_path]:fill-white [&_path]:stroke-white' />
+      </button>
     </div>
   );
 }
