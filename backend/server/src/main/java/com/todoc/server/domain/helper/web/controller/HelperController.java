@@ -1,5 +1,6 @@
 package com.todoc.server.domain.helper.web.controller;
 
+import com.todoc.server.common.response.EmptyBody;
 import com.todoc.server.common.response.Response;
 import com.todoc.server.domain.auth.service.SessionAuth;
 import com.todoc.server.domain.auth.web.LoginUser;
@@ -50,7 +51,7 @@ public class HelperController {
             responseCode = "200",
             description = "도우미 프로필 등록 성공")
     @PostMapping("")
-    public Response<Void> createHelperProfile(@LoginUser SessionAuth auth, @RequestBody HelperProfileCreateRequest requestDto) {
+    public Response<EmptyBody> createHelperProfile(@LoginUser SessionAuth auth, @RequestBody HelperProfileCreateRequest requestDto) {
 
         helperFacadeService.createHelperProfile(auth.id(), requestDto);
 

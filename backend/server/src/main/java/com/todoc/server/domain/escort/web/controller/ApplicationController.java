@@ -1,20 +1,16 @@
 package com.todoc.server.domain.escort.web.controller;
 
+import com.todoc.server.common.response.EmptyBody;
 import com.todoc.server.common.response.Response;
 import com.todoc.server.domain.auth.service.SessionAuth;
 import com.todoc.server.domain.auth.web.LoginUser;
 import com.todoc.server.domain.escort.service.ApplicationFacadeService;
 import com.todoc.server.domain.escort.web.dto.response.ApplicationListResponse;
-import com.todoc.server.domain.escort.web.dto.response.ApplicationSimpleResponse;
-import com.todoc.server.domain.helper.web.dto.response.HelperSimpleResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Tag(name = "applications", description = "지원 관련 API")
 @RestController
@@ -43,7 +39,7 @@ public class ApplicationController {
             responseCode = "200",
             description = "지원 선택 성공")
     @PostMapping("/{applicationId}/select")
-    public Response<ApplicationListResponse> selectApplication(@PathVariable Long applicationId) {
+    public Response<EmptyBody> selectApplication(@PathVariable Long applicationId) {
 
         applicationFacadeService.selectApplication(applicationId);
 
@@ -57,7 +53,7 @@ public class ApplicationController {
         responseCode = "200",
         description = "동행 지원 성공")
     @PostMapping("/recruits/{recruitId}")
-    public Response<Void> applyApplicationToRecruit(@LoginUser SessionAuth auth, @PathVariable Long recruitId) {
+    public Response<EmptyBody> applyApplicationToRecruit(@LoginUser SessionAuth auth, @PathVariable Long recruitId) {
 
         applicationFacadeService.applyApplicationToRecruit(recruitId, auth.id());
 
@@ -71,7 +67,7 @@ public class ApplicationController {
         responseCode = "200",
         description = "동행 지원 취소 성공")
     @PatchMapping("/{applicationId}")
-    public Response<Void> cancelApplicationToRecruit(@PathVariable Long applicationId) {
+    public Response<EmptyBody> cancelApplicationToRecruit(@PathVariable Long applicationId) {
 
          applicationFacadeService.cancelApplicationToRecruit(applicationId);
 

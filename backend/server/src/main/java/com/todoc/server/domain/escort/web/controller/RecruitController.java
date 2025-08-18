@@ -1,5 +1,6 @@
 package com.todoc.server.domain.escort.web.controller;
 
+import com.todoc.server.common.response.EmptyBody;
 import com.todoc.server.common.response.Response;
 import com.todoc.server.domain.auth.service.SessionAuth;
 import com.todoc.server.domain.auth.web.LoginUser;
@@ -98,7 +99,7 @@ public class RecruitController {
             responseCode = "200",
             description = "동행 신청 성공")
     @PostMapping("")
-    public Response<Void> createRecruit(@LoginUser SessionAuth auth, @RequestBody RecruitCreateRequest requestDto) {
+    public Response<EmptyBody> createRecruit(@LoginUser SessionAuth auth, @RequestBody RecruitCreateRequest requestDto) {
 
         recruitFacadeService.createRecruit(auth.id(), requestDto);
 
@@ -112,7 +113,7 @@ public class RecruitController {
             responseCode = "200",
             description = "동행 신청 취소 성공")
     @PatchMapping("/{recruitId}/cancel")
-    public Response<Void> cancelRecruit(@PathVariable Long recruitId) {
+    public Response<EmptyBody> cancelRecruit(@PathVariable Long recruitId) {
 
         recruitService.cancelRecruit(recruitId);
 
