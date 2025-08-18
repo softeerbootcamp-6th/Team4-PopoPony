@@ -26,6 +26,11 @@ import CheckboxCircle from './checkbox/CheckboxCircle';
 import TermsModal from './modal/TermsModal';
 import TermsBottomSheet from './modal/TermsBottomSheet';
 import Dot from './Dot';
+import {
+  Button as ShadCnButton,
+  buttonVariants as shadCnButtonVariants,
+} from './shadcn/ShadcnButton';
+import { Calendar, CalendarDayButton } from './calendar';
 
 export {
   Button,
@@ -56,4 +61,8 @@ export {
   TermsModal,
   TermsBottomSheet,
   Dot,
+  ShadCnButton,
+  shadCnButtonVariants,
+  Calendar,
+  CalendarDayButton,
 };
