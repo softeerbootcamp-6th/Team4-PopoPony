@@ -6,7 +6,6 @@ import com.todoc.server.domain.auth.entity.Auth;
 import com.todoc.server.domain.auth.exception.AuthNotFoundException;
 import com.todoc.server.domain.customer.entity.Patient;
 import com.todoc.server.domain.customer.exception.PatientNotFoundException;
-import com.todoc.server.domain.customer.web.dto.response.PatientSimpleResponse;
 import com.todoc.server.domain.escort.entity.Escort;
 import com.todoc.server.domain.escort.entity.Recruit;
 import com.todoc.server.domain.escort.exception.EscortInvalidProceedException;
@@ -130,7 +129,7 @@ public class EscortService {
                 .estimatedReturnTime(recruit.getEstimatedReturnTime())
                 .purpose(recruit.getPurpose())
                 .extraRequest(recruit.getExtraRequest())
-                .patient(PatientSimpleResponse.from(patient))
+                .patient(EscortDetailResponse.EscortPatientSimpleResponse.from(patient))
                 .route(RouteDetailResponse.from(route))
                 .build();
     }
