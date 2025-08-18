@@ -22,26 +22,29 @@ public class RealtimeController {
     // 고객이 동행에 대한 SSE 구독
     @Operation(
             summary = "동행에 대한 SSE 구독",
-            description = "고객이 특정 동행에 대한 SSE를 조회합니다.")
+            description = "Role에 따라 특정 동행의 SSE를 요청합니다.")
     @ApiResponse(
             responseCode = "200",
-            description = "동행에 대한 SSE 구독")
-    @GetMapping(value = "/escorts/{escortId}/customers/sse", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public SseEmitter subscribe(@PathVariable Long escortId) {
+            description = "동행에 대한 SSE 요청 성공")
+    @GetMapping(value = "/escorts/{escortId}/sse", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public SseEmitter subscribe(@PathVariable Long escortId,
+                                @RequestParam String role) {
 
-        return realtimeFacadeService.registerEmitter(escortId);
+        return realtimeFacadeService.registerEmitter(escortId, role);
     }
 
     @Operation(
             summary = "마지막 위치 업데이트",
-            description = "도우미가 자신의 마지막 위치를 갱신합니다.")
+            description = "Role에 따라 자신의 마지막 위치를 갱신합니다.")
     @ApiResponse(
             responseCode = "200",
             description = "마지막 위치 업데이트 성공")
-    @PostMapping("escorts/{escortId}/helpers/locations")
-    public Response<Void> updateLocation(@PathVariable(name = "escortId") Long escortId, @RequestBody LocationRequest request) {
+    @PostMapping("escorts/{escortId}/locations")
+    public Response<Void> updateLocation(@PathVariable(name = "escortId") Long escortId,
+                                         @RequestParam String role,
+                                         @RequestBody LocationRequest request) {
 
-        realtimeFacadeService.updateLocation(escortId, request);
+        realtimeFacadeService.updateLocation(escortId, role, request);
         return Response.from();
     }
 }
