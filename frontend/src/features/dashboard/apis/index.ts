@@ -1,3 +1,3 @@
-import { getEscortDetail } from './getEscortDetail';
+import getEscortDetail from './getEscortDetail';
 
 export { getEscortDetail };

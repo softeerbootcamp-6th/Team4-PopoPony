@@ -1,11 +1,21 @@
 import { $api } from '@apis';
 
-export const getEscortDetail = (escortId: number) => {
-  return $api.useQuery('get', '/api/escorts/recruits/{recruitId}', {
-    params: {
-      path: {
-        recruitId: escortId,
+const getEscortDetail = (escortId: number) => {
+  return $api.useSuspenseQuery(
+    'get',
+    '/api/escorts/recruits/{recruitId}',
+    {
+      params: {
+        path: {
+          recruitId: escortId,
+        },
       },
     },
-  });
+    {
+      staleTime: Infinity,
+      gcTime: Infinity,
+    }
+  );
 };
+
+export default getEscortDetail;
