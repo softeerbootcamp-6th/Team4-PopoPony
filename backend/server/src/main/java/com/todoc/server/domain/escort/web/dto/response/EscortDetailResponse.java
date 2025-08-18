@@ -1,6 +1,9 @@
 package com.todoc.server.domain.escort.web.dto.response;
 
-import com.todoc.server.domain.customer.web.dto.response.PatientSimpleResponse;
+import com.todoc.server.common.util.ImageUrlUtils;
+import com.todoc.server.domain.customer.entity.Patient;
+import com.todoc.server.domain.helper.entity.HelperProfile;
+import com.todoc.server.domain.image.entity.ImageFile;
 import com.todoc.server.domain.route.web.dto.response.RouteDetailResponse;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
@@ -45,8 +48,10 @@ public class EscortDetailResponse {
     private String customerContact;
 
     @NotNull
-    @Schema(description = "환자 요약 정보")
-    private PatientSimpleResponse patient;
+    private EscortHelperSimpleResponse helper;
+
+    @NotNull
+    private EscortPatientSimpleResponse patient;
 
     @Schema(description = "동행 목적")
     private String purpose;
@@ -56,7 +61,7 @@ public class EscortDetailResponse {
 
     @Builder
     public EscortDetailResponse(Long escortId, LocalDate escortDate, String escortStatus, LocalTime estimatedMeetingTime, LocalTime estimatedReturnTime,
-                                RouteDetailResponse route, String customerContact, PatientSimpleResponse patient, String purpose,
+                                RouteDetailResponse route, String customerContact, EscortPatientSimpleResponse patient, String purpose,
                                 String extraRequest) {
         this.escortId = escortId;
         this.escortDate = escortDate;
@@ -68,5 +73,75 @@ public class EscortDetailResponse {
         this.patient = patient;
         this.purpose = purpose;
         this.extraRequest = extraRequest;
+    }
+
+    @NotNull
+    @Getter
+    @Schema(description = "환자 정보")
+    public static class EscortPatientSimpleResponse {
+
+        @NotNull
+        @Schema(description = "환자 ID")
+        private Long patientId;
+
+        @NotNull
+        @Schema(description = "환자 이미지 URL", example = "https://example.com/patient.png")
+        private String imageUrl;
+
+        @NotNull
+        @Schema(description = "환자 이름", example = "홍길동")
+        private String name;
+
+        public static EscortPatientSimpleResponse from(Patient patient) {
+            ImageFile patientImage = patient.getPatientProfileImage();
+
+            return EscortPatientSimpleResponse.builder()
+                    .patientId(patient.getId())
+                    .imageUrl(ImageUrlUtils.getImageUrl(patientImage.getId()))
+                    .name(patient.getName())
+                    .build();
+        }
+
+        @Builder
+        public EscortPatientSimpleResponse(Long patientId, String imageUrl, String name) {
+            this.patientId = patientId;
+            this.imageUrl = imageUrl;
+            this.name = name;
+        }
+    }
+
+    @NotNull
+    @Getter
+    @Schema(description = "도우미 정보")
+    public static class EscortHelperSimpleResponse {
+
+        @NotNull
+        @Schema(description = "도우미 ID")
+        private Long helperProfileId;
+
+        @NotNull
+        @Schema(description = "도우미 이미지 URL", example = "https://example.com/helper.png")
+        private String imageUrl;
+
+        @NotNull
+        @Schema(description = "도우미 이름", example = "김도움")
+        private String name;
+
+        public static EscortHelperSimpleResponse from(HelperProfile helperProfile) {
+            ImageFile helperImage = helperProfile.getHelperProfileImage();
+
+            return EscortHelperSimpleResponse.builder()
+                    .helperProfileId(helperProfile.getId())
+                    .imageUrl(ImageUrlUtils.getImageUrl(helperImage.getId()))
+                    .name(helperProfile.getAuth().getName())
+                    .build();
+        }
+
+        @Builder
+        public EscortHelperSimpleResponse(Long helperProfileId, String imageUrl, String name) {
+            this.helperProfileId = helperProfileId;
+            this.imageUrl = imageUrl;
+            this.name = name;
+        }
     }
 }
