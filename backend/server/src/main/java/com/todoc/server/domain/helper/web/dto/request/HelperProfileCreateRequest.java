@@ -19,7 +19,7 @@ public class HelperProfileCreateRequest {
     @Schema(description = "한 줄 소개", example = "부모님처럼 모시겠습니다!")
     private String shortBio;
 
-    @Schema(description = "만족도", allowableValues = {"서울", "부산", "대구", "인천", "광주", "대전", "울산", "세종시",
+    @Schema(description = "지역", allowableValues = {"서울", "부산", "대구", "인천", "광주", "대전", "울산", "세종시",
             "경기", "강원", "충북", "충남", "전북", "전남", "경북", "경남", "제주"})
     private String area;
 

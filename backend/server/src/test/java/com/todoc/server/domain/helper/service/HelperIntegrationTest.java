@@ -6,6 +6,7 @@ import com.todoc.server.domain.helper.entity.HelperProfile;
 import com.todoc.server.domain.helper.exception.HelperProfileNotFoundException;
 import com.todoc.server.domain.helper.web.dto.request.HelperProfileCreateRequest;
 import com.todoc.server.domain.helper.web.dto.response.HelperDetailResponse;
+import com.todoc.server.domain.helper.web.dto.response.HelperProfileExistenceResponse;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.DisplayName;
@@ -137,5 +138,33 @@ public class HelperIntegrationTest extends IntegrationTestBase {
         ReflectionTestUtils.setField(dto, "size", size);
         ReflectionTestUtils.setField(dto, "checksum", checksum);
         return dto;
+    }
+
+    @Test
+    @DisplayName("도우미 프로필이 존재하면 hasProfile=true 와 ID를 반환한다")
+    void checkHelperProfileExistence_whenProfileExists() {
+        // given
+        Long authId = 1L;
+
+        // when
+        HelperProfileExistenceResponse response = helperService.checkHelperProfileExistence(authId);
+
+        // then
+        assertThat(response.isHasProfile()).isTrue();
+        assertThat(response.getHelperProfileId()).isEqualTo(1L);
+    }
+
+    @Test
+    @DisplayName("도우미 프로필이 없으면 hasProfile=false 와 null을 반환한다")
+    void checkHelperProfileExistence_whenProfileDoesNotExist() {
+        // given
+        Long authId = 6L;
+
+        // when
+        HelperProfileExistenceResponse response = helperService.checkHelperProfileExistence(authId);
+
+        // then
+        assertThat(response.isHasProfile()).isFalse();
+        assertThat(response.getHelperProfileId()).isNull();
     }
 }
