@@ -2,6 +2,7 @@ package com.todoc.server.domain.escort.service;
 
 import com.todoc.server.common.enumeration.EscortStatus;
 import com.todoc.server.common.enumeration.RecruitStatus;
+import com.todoc.server.common.enumeration.Role;
 import com.todoc.server.domain.auth.entity.Auth;
 import com.todoc.server.domain.auth.exception.AuthNotFoundException;
 import com.todoc.server.domain.customer.entity.Patient;
@@ -84,7 +85,7 @@ public class EscortService {
             }
 
             // TODO :: 진행 상태 변화 고객에게 알림 (Web Push, SMS, E-mail 등)
-            emitterManager.sendEvent(escortId, "status", new EscortStatusResponse(escortId, nextStatus.getLabel(), now));
+            emitterManager.send(escortId, Role.CUSTOMER, "status", new EscortStatusResponse(escortId, nextStatus.getLabel(), now));
 
         } else {
             throw new EscortInvalidProceedException();
