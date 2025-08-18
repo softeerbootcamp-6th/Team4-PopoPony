@@ -1,14 +1,16 @@
 import { BottomSheet } from '@components';
 import { REGION_OPTIONS } from '@helper/types';
 import { useState } from 'react';
+import { useFormContext } from 'react-hook-form';
 
-interface RegionBottomSheetProps {
+interface RegionBottomSheetFormProps {
   children: React.ReactNode;
-  onSelect: (value: string) => void;
+  name: string;
 }
 
-const RegionBottomSheet = ({ children, onSelect }: RegionBottomSheetProps) => {
+const RegionBottomSheetForm = ({ children, name }: RegionBottomSheetFormProps) => {
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
+  const { register } = useFormContext();
 
   return (
     <BottomSheet open={isBottomSheetOpen} onOpenChange={setIsBottomSheetOpen}>
@@ -27,9 +29,9 @@ const RegionBottomSheet = ({ children, onSelect }: RegionBottomSheetProps) => {
                   value={option.value}
                   className='peer hidden'
                   onClick={() => {
-                    onSelect(option.value);
                     setIsBottomSheetOpen(false);
                   }}
+                  {...register(name)}
                 />
                 <label
                   htmlFor={index.toString()}
@@ -45,4 +47,4 @@ const RegionBottomSheet = ({ children, onSelect }: RegionBottomSheetProps) => {
   );
 };
 
-export default RegionBottomSheet;
+export default RegionBottomSheetForm;
