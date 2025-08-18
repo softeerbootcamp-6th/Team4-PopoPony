@@ -1,6 +1,9 @@
 package com.todoc.server.domain.realtime.service;
 
+import com.todoc.server.common.enumeration.EscortStatus;
 import com.todoc.server.common.enumeration.Role;
+import com.todoc.server.domain.escort.service.EscortService;
+import com.todoc.server.domain.realtime.exception.RealtimeAlreadyMetPatientException;
 import com.todoc.server.domain.realtime.exception.RealtimeInvalidRoleException;
 import com.todoc.server.domain.realtime.web.dto.request.LocationRequest;
 import com.todoc.server.domain.realtime.web.dto.response.LocationResponse;
@@ -19,6 +22,7 @@ public class RealtimeFacadeService {
 
     private final LocationService locationService;
     private final SseEmitterManager emitterManager;
+    private final EscortService escortService;
 
     /**
      * Escort에 대해 새로운 SseEmitter를 등록
@@ -27,20 +31,27 @@ public class RealtimeFacadeService {
 
         Role role = getRole(roleString);
 
+        if (role == Role.PATIENT) {
+            EscortStatus escortStatus = escortService.getById(escortId).getStatus();
+            if (escortStatus != EscortStatus.MEETING) {
+                throw new RealtimeAlreadyMetPatientException();
+            }
+        }
+
         SseEmitter emitter = emitterManager.register(escortId, role);
 
         // 연결 직후 스냅샷 전송
         try {
             switch (role) {
                 case CUSTOMER -> {
-                    sendLocationSnapshot(escortId, Role.HELPER, emitter);
-                    sendLocationSnapshot(escortId, Role.PATIENT, emitter);
+                    getLocationSnapshot(escortId, Role.HELPER, emitter);
+                    getLocationSnapshot(escortId, Role.PATIENT, emitter);
                 }
                 case PATIENT -> {
-                    sendLocationSnapshot(escortId, Role.HELPER, emitter);
+                    getLocationSnapshot(escortId, Role.HELPER, emitter);
                 }
                 case HELPER -> {
-                    sendLocationSnapshot(escortId, Role.PATIENT, emitter);
+                    getLocationSnapshot(escortId, Role.PATIENT, emitter);
                 }
             }
         } catch (Exception e) {
@@ -77,7 +88,7 @@ public class RealtimeFacadeService {
                 .orElseThrow(RealtimeInvalidRoleException::new);
     }
 
-    private void sendLocationSnapshot(Long escortId, Role role, SseEmitter emitter) throws IOException {
+    private void getLocationSnapshot(Long escortId, Role role, SseEmitter emitter) throws IOException {
         LocationResponse latestLocation = locationService.getLatestLocation(escortId, role);
         emitter.send(SseEmitter.event()
                 .name(role.getLabel() + "-location")
