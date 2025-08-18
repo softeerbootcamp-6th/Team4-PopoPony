@@ -9,15 +9,23 @@ const getSearchRecruits = ({
   startDate?: string;
   endDate?: string;
 }) => {
-  return $api.useSuspenseQuery('get', '/api/recruits', {
-    params: {
-      query: {
-        area: region,
-        startDate,
-        endDate,
+  return $api.useQuery(
+    'get',
+    '/api/recruits',
+    {
+      params: {
+        query: {
+          area: region,
+          startDate,
+          endDate,
+        },
       },
     },
-  });
+    {
+      staleTime: 1000 * 60 * 5,
+      gcTime: 1000 * 60 * 5,
+    }
+  );
 };
 
 export default getSearchRecruits;
