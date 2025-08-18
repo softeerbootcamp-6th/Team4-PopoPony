@@ -1,65 +1,5 @@
+import type { TMapSearchParams, TMapSearchResponse } from '@customer/types';
 import { useInfiniteQuery } from '@tanstack/react-query';
-
-interface TMapSearchParams {
-  searchKeyword: string;
-  version?: number;
-  page?: number;
-  count?: number;
-  areaLLCode?: string;
-  areaLMCode?: string;
-  resCoordType?: 'WGS84GEO' | 'EPSG3857' | 'KATECH';
-  searchType?: 'all' | 'name' | 'telno';
-  searchtypCd?: 'A' | 'R';
-  radius?: string;
-  reqCoordType?: 'WGS84GEO' | 'EPSG3857' | 'KATECH';
-  centerLon?: number;
-  centerLat?: number;
-  multiPoint?: 'Y' | 'N';
-  poiGroupYn?: 'Y' | 'N';
-  evPublicType?: string;
-  evOemType?: string;
-  removeFireplugYn?: string;
-  buildingNameYn?: 'Y' | 'N';
-}
-
-interface TMapPOI {
-  id: string;
-  name: string;
-  telNo: string;
-  frontLat: string;
-  frontLon: string;
-  noorLat: string;
-  noorLon: string;
-  upperAddrName: string;
-  middleAddrName: string;
-  lowerAddrName: string;
-  detailAddrname: string;
-  mlClass: string;
-  firstNo: string;
-  secondNo: string;
-  roadName: string;
-  firstBuildNo: string;
-  secondBuildNo: string;
-  radius: string;
-  bizName: string;
-  upperBizName: string;
-  middleBizName: string;
-  lowerBizName: string;
-  detailBizName: string;
-  rpFlag: string;
-  groupSubLists?: unknown[];
-}
-
-interface TMapSearchResponse {
-  searchPoiInfo: {
-    totalCount: string;
-    count: string;
-    page: string;
-    pois?: {
-      poi: TMapPOI[];
-    };
-  };
-}
 
 const fetchTMapSearch = async (params: TMapSearchParams): Promise<TMapSearchResponse> => {
   const searchParams = new URLSearchParams({
@@ -113,7 +53,7 @@ const fetchTMapSearch = async (params: TMapSearchParams): Promise<TMapSearchResp
   return response.json();
 };
 
-const useTMapSearch = (searchKeyword: string, enabled: boolean = true) => {
+const getTMapSearch = (searchKeyword: string, enabled: boolean = true) => {
   return useInfiniteQuery({
     queryKey: ['tmap-search', searchKeyword],
     queryFn: ({ pageParam = 1 }) =>
@@ -145,6 +85,4 @@ const useTMapSearch = (searchKeyword: string, enabled: boolean = true) => {
   });
 };
 
-export default useTMapSearch;
-export { fetchTMapSearch };
-export type { TMapSearchParams, TMapSearchResponse, TMapPOI };
+export default getTMapSearch;

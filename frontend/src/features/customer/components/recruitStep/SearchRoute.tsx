@@ -2,11 +2,10 @@ import { useState, useEffect, useRef } from 'react';
 import { FormLayout } from '@layouts';
 import { useFormContext } from 'react-hook-form';
 import { getRouteApi } from '@tanstack/react-router';
-import type { PlaceType, SearchLocationDetail } from '@customer/types';
+import type { PlaceType, SearchLocationDetail, TMapPOI } from '@customer/types';
 import SearchInput from '../search/searchInput';
 
 import useTMapSearch from '@customer/apis/getTMapSearch';
-import type { TMapPOI } from '@customer/apis/getTMapSearch';
 import { useDebounce } from '@hooks';
 import { Spinner } from '@components';
 
