@@ -4,3 +4,4 @@ import { useFormValidation } from './useFormValidation';
 import { useImageUpload } from './useImageUpload';
 
 export { useFunnel, useModal, useFormValidation, useImageUpload };
+export { default as useDebounce } from './useDebounce';
