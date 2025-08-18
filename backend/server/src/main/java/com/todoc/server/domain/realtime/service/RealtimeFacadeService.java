@@ -1,16 +1,19 @@
 package com.todoc.server.domain.realtime.service;
 
+import com.todoc.server.common.enumeration.Role;
+import com.todoc.server.domain.realtime.exception.RealtimeInvalidRoleException;
 import com.todoc.server.domain.realtime.web.dto.request.LocationRequest;
 import com.todoc.server.domain.realtime.web.dto.response.LocationResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
+import java.io.IOException;
 import java.time.Instant;
+import java.util.Objects;
+import java.util.Set;
 
 @Service
-@Transactional
 @RequiredArgsConstructor
 public class RealtimeFacadeService {
 
@@ -20,14 +23,26 @@ public class RealtimeFacadeService {
     /**
      * Escort에 대해 새로운 SseEmitter를 등록
      */
-    public SseEmitter registerEmitter(Long escortId) {
+    public SseEmitter registerEmitter(Long escortId, String roleString) {
 
-        SseEmitter emitter = emitterManager.register(escortId);
+        Role role = getRole(roleString);
+
+        SseEmitter emitter = emitterManager.register(escortId, role);
 
         // 연결 직후 스냅샷 전송
         try {
-            LocationResponse latestLocation = locationService.getLatestLocation(escortId);
-            emitter.send(SseEmitter.event().name("location").data(latestLocation));
+            switch (role) {
+                case CUSTOMER -> {
+                    sendLocationSnapshot(escortId, Role.HELPER, emitter);
+                    sendLocationSnapshot(escortId, Role.PATIENT, emitter);
+                }
+                case PATIENT -> {
+                    sendLocationSnapshot(escortId, Role.HELPER, emitter);
+                }
+                case HELPER -> {
+                    sendLocationSnapshot(escortId, Role.PATIENT, emitter);
+                }
+            }
         } catch (Exception e) {
             emitter.completeWithError(e);
         }
@@ -37,7 +52,11 @@ public class RealtimeFacadeService {
     /**
      * Escort의 도우미의 최근 위치 정보를 갱신
      */
-    public void updateLocation(Long escortId, LocationRequest request) {
+    public void updateLocation(Long escortId, String roleString, LocationRequest request) {
+
+        Role role = getRole(roleString);
+
+        if (role == Role.CUSTOMER) return;
 
         Instant timestamp = Instant.now();
         LocationResponse location = LocationResponse.builder()
@@ -46,8 +65,22 @@ public class RealtimeFacadeService {
                 .longitude(request.getLongitude())
                 .timestamp(timestamp)
                 .build();
-        emitterManager.sendEvent(escortId, "location", location);
 
-        locationService.register(escortId, request, timestamp);
+        Set<Role> roleSet = role == Role.HELPER ? Role.TO_CUSTOMER_AND_PATIENT : Role.TO_CUSTOMER_AND_HELPER;
+        emitterManager.send(escortId, roleSet, role.getLabel() + "-location", location);
+
+        locationService.register(escortId, role, request, timestamp);
+    }
+
+    private Role getRole(String roleString) {
+        return Role.from(roleString.toLowerCase())
+                .orElseThrow(RealtimeInvalidRoleException::new);
+    }
+
+    private void sendLocationSnapshot(Long escortId, Role role, SseEmitter emitter) throws IOException {
+        LocationResponse latestLocation = locationService.getLatestLocation(escortId, role);
+        emitter.send(SseEmitter.event()
+                .name(role.getLabel() + "-location")
+                .data(Objects.requireNonNullElse(latestLocation, "NO_LOCATION")));
     }
 }
