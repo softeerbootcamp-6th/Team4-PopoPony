@@ -61,8 +61,8 @@ public class EscortDetailResponse {
 
     @Builder
     public EscortDetailResponse(Long escortId, LocalDate escortDate, String escortStatus, LocalTime estimatedMeetingTime, LocalTime estimatedReturnTime,
-                                RouteDetailResponse route, String customerContact, EscortPatientSimpleResponse patient, String purpose,
-                                String extraRequest) {
+                                RouteDetailResponse route, String customerContact, EscortPatientSimpleResponse patient,
+                                EscortHelperSimpleResponse helper, String purpose, String extraRequest) {
         this.escortId = escortId;
         this.escortDate = escortDate;
         this.escortStatus = escortStatus;
@@ -71,6 +71,7 @@ public class EscortDetailResponse {
         this.route = route;
         this.customerContact = customerContact;
         this.patient = patient;
+        this.helper = helper;
         this.purpose = purpose;
         this.extraRequest = extraRequest;
     }
@@ -92,6 +93,10 @@ public class EscortDetailResponse {
         @Schema(description = "환자 이름", example = "홍길동")
         private String name;
 
+        @NotNull
+        @Schema(description = "환자 연락처", example = "010-1234-5678")
+        private String contact;
+
         public static EscortPatientSimpleResponse from(Patient patient) {
             ImageFile patientImage = patient.getPatientProfileImage();
 
@@ -99,14 +104,16 @@ public class EscortDetailResponse {
                     .patientId(patient.getId())
                     .imageUrl(ImageUrlUtils.getImageUrl(patientImage.getId()))
                     .name(patient.getName())
+                    .contact(patient.getContact())
                     .build();
         }
 
         @Builder
-        public EscortPatientSimpleResponse(Long patientId, String imageUrl, String name) {
+        public EscortPatientSimpleResponse(Long patientId, String imageUrl, String name, String contact) {
             this.patientId = patientId;
             this.imageUrl = imageUrl;
             this.name = name;
+            this.contact = contact;
         }
     }
 
@@ -127,6 +134,10 @@ public class EscortDetailResponse {
         @Schema(description = "도우미 이름", example = "김도움")
         private String name;
 
+        @NotNull
+        @Schema(description = "도우미 연락처", example = "010-1234-5678")
+        private String contact;
+
         public static EscortHelperSimpleResponse from(HelperProfile helperProfile) {
             ImageFile helperImage = helperProfile.getHelperProfileImage();
 
@@ -134,14 +145,16 @@ public class EscortDetailResponse {
                     .helperProfileId(helperProfile.getId())
                     .imageUrl(ImageUrlUtils.getImageUrl(helperImage.getId()))
                     .name(helperProfile.getAuth().getName())
+                    .contact(helperProfile.getAuth().getContact())
                     .build();
         }
 
         @Builder
-        public EscortHelperSimpleResponse(Long helperProfileId, String imageUrl, String name) {
+        public EscortHelperSimpleResponse(Long helperProfileId, String imageUrl, String name, String contact) {
             this.helperProfileId = helperProfileId;
             this.imageUrl = imageUrl;
             this.name = name;
+            this.contact = contact;
         }
     }
 }

@@ -1,24 +1,14 @@
 package com.todoc.server.domain.escort.service;
 
 import com.todoc.server.common.enumeration.EscortStatus;
-import com.todoc.server.common.enumeration.Gender;
 import com.todoc.server.common.enumeration.RecruitStatus;
 import com.todoc.server.common.enumeration.RouteLegType;
-import com.todoc.server.domain.auth.entity.Auth;
-import com.todoc.server.domain.customer.entity.Patient;
 import com.todoc.server.domain.escort.entity.Escort;
 import com.todoc.server.domain.escort.entity.Recruit;
 import com.todoc.server.domain.escort.exception.EscortInvalidProceedException;
 import com.todoc.server.domain.escort.exception.EscortNotFoundException;
 import com.todoc.server.domain.escort.repository.EscortJpaRepository;
-import com.todoc.server.domain.escort.repository.EscortQueryRepository;
 import com.todoc.server.domain.escort.web.dto.request.EscortMemoUpdateRequest;
-import com.todoc.server.domain.escort.web.dto.response.EscortDetailResponse;
-import com.todoc.server.domain.image.entity.ImageFile;
-import com.todoc.server.domain.route.entity.LocationInfo;
-import com.todoc.server.domain.route.entity.Route;
-import com.todoc.server.domain.route.entity.RouteLeg;
-import com.todoc.server.domain.route.exception.RouteLegNotFoundException;
 import com.todoc.server.domain.realtime.service.SseEmitterManager;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -39,8 +29,7 @@ import static org.mockito.Mockito.*;
 class EscortServiceTest {
 
     @Mock private EscortJpaRepository escortJpaRepository;
-    @Mock private EscortQueryRepository escortQueryRepository;
-    @Mock private SseEmitterManager emitterManager;
+    @Mock private SseEmitterManager sseEmitterManager;
 
     @InjectMocks private EscortService escortService;
 
@@ -62,36 +51,6 @@ class EscortServiceTest {
         r.setPurpose("검진");
         r.setExtraRequest("천천히 보행");
         return r;
-    }
-
-    private Route makeRoute(Long id, LocationInfo meetingLocation, LocationInfo hospitalLocation, LocationInfo returnLocation,
-                            RouteLeg meetingToHospital, RouteLeg hospitalToReturn) {
-        Route route = new Route();
-        route.setId(id);
-        route.setMeetingLocationInfo(meetingLocation);
-        route.setHospitalLocationInfo(hospitalLocation);
-        route.setReturnLocationInfo(returnLocation);
-        route.setMeetingToHospital(meetingToHospital);
-        route.setHospitalToReturn(hospitalToReturn);
-        return route;
-    }
-
-    private LocationInfo makeLocationInfo(long id, String name) {
-        LocationInfo li = new LocationInfo();
-        li.setId(id);
-        li.setPlaceName(name);
-        return li;
-    }
-
-    private RouteLeg makeRouteLeg(Route route, RouteLegType type) {
-        return RouteLeg.builder()
-                .id((long) (Math.random() * 10000))
-                .totalDistance(5000)
-                .totalTime(15)
-                .totalFare(3000)
-                .taxiFare(12000)
-                .usedFavoriteRouteVertices(null)
-                .build();
     }
 
     @Nested
@@ -159,117 +118,6 @@ class EscortServiceTest {
             req.setMemo("메모");
             assertThatThrownBy(() -> escortService.updateMemo(404L, req))
                     .isInstanceOf(EscortNotFoundException.class);
-        }
-    }
-
-    @Nested
-    @DisplayName("getEscortDetailByRecruitId")
-    class GetEscortDetail {
-
-        @Test
-        @DisplayName("정상: 두 종류의 RouteLeg가 모두 있을 때 상세 응답 생성")
-        void getEscortDetailByRecruitId_ok() {
-            // given
-            Recruit recruit = makeRecruit(100L);
-
-            Auth customer = new Auth(); customer.setContact("010-1234-5678");
-            recruit.setCustomer(customer);
-
-            Patient patient = Patient.builder()
-                    .name("김철수")
-                    .age(75)
-                    .patientProfileImage(new ImageFile())
-                    .gender(Gender.MALE)
-                    .contact("010-1111-2222")
-                    .needsHelping(true)
-                    .usesWheelchair(true)
-                    .hasCognitiveIssue(false)
-                    .cognitiveIssueDetail(null)
-                    .hasCommunicationIssue(true)
-                    .communicationIssueDetail("청각장애")
-                    .build();
-            recruit.setPatient(patient);
-
-            LocationInfo m = makeLocationInfo(1L, "만남장소");
-            LocationInfo h = makeLocationInfo(2L, "병원");
-            LocationInfo r = makeLocationInfo(3L, "복귀장소");
-            RouteLeg meetingToHospital = RouteLeg.builder()
-                    .totalTime(130)
-                    .taxiFare(14000)
-                    .build();
-            RouteLeg hospitalToReturn = RouteLeg.builder()
-                    .totalTime(150)
-                    .taxiFare(19000)
-                    .build();
-            Route route = makeRoute(300L, m, h, r, meetingToHospital, hospitalToReturn);
-            recruit.setRoute(route);
-
-            Escort escort = makeEscort(200L, EscortStatus.IN_TREATMENT, recruit);
-            escort.setRecruit(recruit);
-
-            when(escortQueryRepository.findEscortDetailByRecruitId(100L))
-                    .thenReturn(escort);
-
-            EscortDetailResponse resp = escortService.getEscortDetailByRecruitId(100L);
-
-            // then
-            assertThat(resp.getEscortId()).isEqualTo(escort.getId());
-            assertThat(resp.getCustomerContact()).isEqualTo("010-1234-5678");
-            assertThat(resp.getEscortDate()).isEqualTo(recruit.getEscortDate());
-            assertThat(resp.getPurpose()).isEqualTo("검진");
-        }
-
-        @Test
-        @DisplayName("데이터가 없으면 EscortNotFoundException")
-        void getEscortDetail_empty_throws() {
-            when(escortQueryRepository.findEscortDetailByRecruitId(1001L))
-                    .thenReturn(null);
-
-            assertThatThrownBy(() -> escortService.getEscortDetailByRecruitId(1001L))
-                    .isInstanceOf(EscortNotFoundException.class);
-        }
-
-        @Test
-        @DisplayName("레그가 하나라도 없으면 RouteLegNotFoundException")
-        void getEscortDetail_missing_leg_throws() {
-            // given
-            Recruit recruit = makeRecruit(100L);
-
-            Auth customer = new Auth(); customer.setContact("010-1234-5678");
-            recruit.setCustomer(customer);
-
-            Patient patient = Patient.builder()
-                    .name("김철수")
-                    .age(75)
-                    .patientProfileImage(new ImageFile())
-                    .gender(Gender.MALE)
-                    .contact("010-1111-2222")
-                    .needsHelping(true)
-                    .usesWheelchair(true)
-                    .hasCognitiveIssue(false)
-                    .cognitiveIssueDetail(null)
-                    .hasCommunicationIssue(true)
-                    .communicationIssueDetail("청각장애")
-                    .build();
-            recruit.setPatient(patient);
-
-            LocationInfo m = makeLocationInfo(1L, "만남장소");
-            LocationInfo h = makeLocationInfo(2L, "병원");
-            LocationInfo r = makeLocationInfo(3L, "복귀장소");
-            RouteLeg meetingToHospital = new RouteLeg();
-            meetingToHospital.setTotalTime(170);
-            RouteLeg hospitalToReturn = null;
-            Route route = makeRoute(300L, m, h, r, meetingToHospital, hospitalToReturn);
-            recruit.setRoute(route);
-
-            Escort escort = makeEscort(200L, EscortStatus.IN_TREATMENT, recruit);
-            escort.setRecruit(recruit);
-
-            when(escortQueryRepository.findEscortDetailByRecruitId(100L))
-                    .thenReturn(escort);
-
-            assertThatThrownBy(() -> escortService.getEscortDetailByRecruitId(100L))
-                    .isInstanceOf(RouteLegNotFoundException.class);
         }
     }
 }

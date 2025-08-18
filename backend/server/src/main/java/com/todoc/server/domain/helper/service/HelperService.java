@@ -188,4 +188,16 @@ public class HelperService {
                 .helperProfileId(helperProfileId)
                 .build();
     }
+
+    /**
+     * 동행 신청에 지원한 도우미 목록을 조회하는 함수
+     */
+    public List<HelperProfile> getHelperProfileListByRecruitId(Long recruitId) {
+
+        List<HelperProfile> list = helperQueryRepository.getHelperProfileListByRecruitId(recruitId);
+        if (list.isEmpty()) {
+            throw new HelperProfileNotFoundException();
+        }
+        return list;
+    }
 }

@@ -30,6 +30,7 @@ import static org.assertj.core.api.Assertions.*;
 @Sql("/sql/data.sql")
 class EscortIntegrationTest extends IntegrationTestBase {
 
+    @Autowired private EscortFacadeService escortFacadeService;
     @Autowired private EscortService escortService;
     @Autowired private RecruitService recruitService;
 
@@ -113,7 +114,7 @@ class EscortIntegrationTest extends IntegrationTestBase {
         @DisplayName("정상 (두 레그 모두 존재)")
         void getEscortDetailByRecruitId_정상() {
             // when
-            EscortDetailResponse response = escortService.getEscortDetailByRecruitId(RECRUIT_ID_WITH_DETAIL);
+            EscortDetailResponse response = escortFacadeService.getEscortDetailByRecruitId(RECRUIT_ID_WITH_DETAIL);
 
             // then
             assertThat(response).isNotNull();
@@ -129,7 +130,7 @@ class EscortIntegrationTest extends IntegrationTestBase {
         @DisplayName("존재하지 않는 신청")
         void getEscortDetailByRecruitId_존재하지않음() {
             assertThatThrownBy(() ->
-                    escortService.getEscortDetailByRecruitId(NON_EXIST_RECRUIT_ID))
+                    escortFacadeService.getEscortDetailByRecruitId(NON_EXIST_RECRUIT_ID))
                     .isInstanceOf(com.todoc.server.domain.escort.exception.EscortNotFoundException.class);
         }
     }
