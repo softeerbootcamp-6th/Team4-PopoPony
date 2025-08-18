@@ -5,3 +5,4 @@ import { useImageUpload } from './useImageUpload';
 
 export { useFunnel, useModal, useFormValidation, useImageUpload };
 export { default as useDebounce } from './useDebounce';
+export { default as useClickOutside } from './useClickOutside';
