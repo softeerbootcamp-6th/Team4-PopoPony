@@ -22,7 +22,7 @@ public class SseEmitterManager {
     public SseEmitter register(Long escortId, Role role) {
 
         SseEmitter newEmitter = new SseEmitter(0L);
-        AtomicReference<SseEmitter> box = roleMap(escortId).get(role);
+        AtomicReference<SseEmitter> box = getRoleMap(escortId).get(role);
 
         // 참조를 새로운 Emitter로 교체
         SseEmitter prevEmitter = box.getAndSet(newEmitter);
@@ -42,7 +42,7 @@ public class SseEmitterManager {
     }
 
     /** escortId의 Role-Reference 맵을 가져오거나 생성 */
-    private EnumMap<Role, AtomicReference<SseEmitter>> roleMap(Long escortId) {
+    private EnumMap<Role, AtomicReference<SseEmitter>> getRoleMap(Long escortId) {
         return escortIdMap.computeIfAbsent(escortId, k -> {
             EnumMap<Role, AtomicReference<SseEmitter>> roleMap = new EnumMap<>(Role.class);
             for (Role role : Role.values()) {
@@ -65,7 +65,7 @@ public class SseEmitterManager {
                     .data(data));
         } catch (IOException ex) {
             // 전송 실패 시 현재 등록된 연결이면 드랍
-            AtomicReference<SseEmitter> ref = roleMap(escortId).get(role);
+            AtomicReference<SseEmitter> ref = getRoleMap(escortId).get(role);
             if (ref.compareAndSet(emitter, null)) {
                 safeComplete(emitter);
             }
