@@ -4,8 +4,10 @@ import com.todoc.server.common.dto.request.ImageCreateRequest;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 @Schema(description = "자격증 정보 생성 요청 DTO")
 public class CertificateCreateRequest {
 
