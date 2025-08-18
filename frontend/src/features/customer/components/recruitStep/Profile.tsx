@@ -27,7 +27,7 @@ const Profile = memo(({ handleNextStep }: RecruitStepProps) => {
   );
   const pastPatientInfo = data?.data?.beforeList || [];
 
-  const { setValue } = useFormContext();
+  const { reset } = useFormContext();
 
   const onSelectPatient = () => {
     setIsPatientIdConfirmed(true);
@@ -39,28 +39,30 @@ const Profile = memo(({ handleNextStep }: RecruitStepProps) => {
     if (!detailData) return;
     const { patientDetail, meetingLocationDetail, destinationDetail, returnLocationDetail } =
       detailData?.data || {};
-    setValue('name', patientDetail?.name);
-    setValue('age', numberToString(patientDetail?.age));
-    setValue('gender', patientDetail?.gender);
-    setValue('profileImageCreateRequest', {
-      s3Key: patientDetail?.s3Key,
-      contentType: patientDetail?.contentType,
-      size: patientDetail?.size,
-      checksum: patientDetail?.checksum,
+    reset({
+      name: patientDetail?.name,
+      age: numberToString(patientDetail?.age),
+      gender: patientDetail?.gender,
+      profileImageCreateRequest: {
+        s3Key: patientDetail?.s3Key,
+        contentType: patientDetail?.contentType,
+        size: patientDetail?.size,
+        checksum: patientDetail?.checksum,
+      },
+      imageUrl: formatImageUrl(patientDetail?.imageUrl),
+      phoneNumber: formatPhoneNumber(patientDetail?.phoneNumber),
+      needsHelping: booleanToString(patientDetail?.needsHelping),
+      usesWheelchair: booleanToString(patientDetail?.usesWheelchair),
+      hasCognitiveIssue: booleanToString(patientDetail?.hasCognitiveIssue),
+      cognitiveIssueDetail: patientDetail?.cognitiveIssueDetail,
+      hasCommunicationIssue: booleanToString(patientDetail?.hasCommunicationIssue),
+      communicationIssueDetail: patientDetail?.communicationIssueDetail,
+      meetingLocationDetail,
+      destinationDetail,
+      returnLocationDetail,
     });
-    setValue('imageUrl', formatImageUrl(patientDetail?.imageUrl));
-    setValue('phoneNumber', formatPhoneNumber(patientDetail?.phoneNumber));
-    setValue('needsHelping', booleanToString(patientDetail?.needsHelping));
-    setValue('usesWheelchair', booleanToString(patientDetail?.usesWheelchair));
-    setValue('hasCognitiveIssue', booleanToString(patientDetail?.hasCognitiveIssue));
-    setValue('cognitiveIssueDetail', patientDetail?.cognitiveIssueDetail);
-    setValue('hasCommunicationIssue', booleanToString(patientDetail?.hasCommunicationIssue));
-    setValue('communicationIssueDetail', patientDetail?.communicationIssueDetail);
-    setValue('meetingLocationDetail', meetingLocationDetail);
-    setValue('destinationDetail', destinationDetail);
-    setValue('returnLocationDetail', returnLocationDetail);
     setIsBottomSheetOpen(false);
-  }, [detailData, isPatientIdConfirmed, selectedPatientId, setValue]);
+  }, [detailData, isPatientIdConfirmed, selectedPatientId, reset]);
 
   return (
     <FormLayout>
