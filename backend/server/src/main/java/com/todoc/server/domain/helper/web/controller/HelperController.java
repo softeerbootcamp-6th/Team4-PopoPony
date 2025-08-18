@@ -74,7 +74,7 @@ public class HelperController {
             responseCode = "200",
             description = "도우미 프로필 수정 성공")
     @PutMapping("/{helperProfileId}/updates")
-    public Response<Void> updateHelperProfile(@PathVariable Long helperProfileId, @RequestBody HelperProfileCreateRequest requestDto) {
+    public Response<EmptyBody> updateHelperProfile(@PathVariable Long helperProfileId, @RequestBody HelperProfileCreateRequest requestDto) {
 
          helperFacadeService.updateHelperProfile(helperProfileId, requestDto);
 
