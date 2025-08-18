@@ -1,12 +1,15 @@
 import { RegionBottomSheet } from '@helper/components';
-import { IcChevronDown } from '@icons';
+import { IcChevronDown, IcCloseS } from '@icons';
 import { PageLayout } from '@layouts';
 import { z } from 'zod';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
-import { EscortCard } from '@components';
+import { Calendar, EscortCard } from '@components';
 import { getSearchRecruits } from '@helper/apis';
-import { timeFormat } from '@utils';
-import { useEffect, useState } from 'react';
+import { dateFormat, timeFormat } from '@utils';
+import { useRef, useState } from 'react';
+import type { DateRange } from 'react-day-picker';
+import { useClickOutside } from '@hooks';
+import { HelperEmptyCard } from '@customer/components';
 
 const filterSearchSchema = z.object({
   region: z.string().optional(),
@@ -20,17 +23,33 @@ export const Route = createFileRoute('/helper/application/')({
 
 interface FilterButtonProps {
   label: string;
+  selected?: string | undefined;
   onClick: () => void;
+  onClickReset?: () => void;
 }
 
-const FilterButton = ({ label, onClick }: FilterButtonProps) => {
+const FilterButton = ({ label, selected, onClick, onClickReset }: FilterButtonProps) => {
   return (
     <button
       type='button'
       onClick={onClick}
-      className='flex-center bg-neutral-10 w-fit gap-[0.4rem] rounded-full px-[1.2rem] py-[0.4rem]'>
-      <span className='body1-16-bold text-text-neutral-primary'>{label}</span>
-      <IcChevronDown />
+      className='flex-center body1-16-bold bg-neutral-10 w-fit gap-[0.4rem] rounded-full px-[1.2rem] py-[0.4rem]'>
+      {selected ? (
+        <>
+          <span className='text-text-mint-primary'>{selected}</span>
+          <IcCloseS
+            onClick={(e) => {
+              e.stopPropagation();
+              onClickReset?.();
+            }}
+          />
+        </>
+      ) : (
+        <>
+          <span className='text-text-neutral-primary'>{label}</span>
+          <IcChevronDown />
+        </>
+      )}
     </button>
   );
 };
@@ -38,20 +57,55 @@ const FilterButton = ({ label, onClick }: FilterButtonProps) => {
 function RouteComponent() {
   const navigate = useNavigate({ from: Route.fullPath });
   const [selectedRegion, setSelectedRegion] = useState<string>();
-  const [selectedStartDate, setSelectedStartDate] = useState<string>();
-  const [selectedEndDate, setSelectedEndDate] = useState<string>();
+
+  const [isOpenCalendar, setIsOpenCalendar] = useState(false);
+  const [selectedDateRange, setSelectedDateRange] = useState<DateRange>();
+  const calendarRef = useRef<HTMLDivElement>(null);
+
+  const startDate = selectedDateRange?.from
+    ? dateFormat(selectedDateRange.from.toISOString(), 'yyyy-MM-dd')
+    : undefined;
+  const endDate = selectedDateRange?.to
+    ? dateFormat(selectedDateRange.to.toISOString(), 'yyyy-MM-dd')
+    : undefined;
+
+  const formattedDateRange =
+    startDate &&
+    `${startDate?.slice(2)}${startDate !== endDate ? ` ~ ${endDate?.slice(2)}` : ''}`.replaceAll(
+      '-',
+      '.'
+    );
 
   const { data } = getSearchRecruits({
     region: selectedRegion,
-    startDate: selectedStartDate,
-    endDate: selectedEndDate,
+    startDate,
+    endDate,
   });
-  const { inProgressMap: searchData } = data.data;
-  const dateList = Object.keys(searchData);
+  const { inProgressMap: searchData } = data?.data ?? {};
+  const dateList = Object.keys(searchData ?? {});
 
   const handleSelectRegion = (value: string) => {
     setSelectedRegion(value);
   };
+
+  const handleClickReset = (name: 'region' | 'date') => {
+    if (name === 'region') {
+      setSelectedRegion(undefined);
+    } else {
+      setSelectedDateRange(undefined);
+    }
+  };
+
+  const handleToggleCalendar = () => {
+    setIsOpenCalendar((prev) => !prev);
+  };
+
+  // 캘린더 밖 영역 클릭 시 닫기
+  useClickOutside({
+    ref: calendarRef,
+    handler: () => setIsOpenCalendar(false),
+    enabled: isOpenCalendar,
+  });
 
   return (
     <PageLayout>
@@ -59,17 +113,42 @@ function RouteComponent() {
       <PageLayout.Content>
         <section className='flex-start gap-[1.2rem] px-[2rem] py-[1.2rem]'>
           <RegionBottomSheet onSelect={handleSelectRegion}>
-            <FilterButton label='지역' onClick={() => {}} />
+            <FilterButton
+              label='지역'
+              selected={selectedRegion}
+              onClick={() => {}}
+              onClickReset={() => handleClickReset('region')}
+            />
           </RegionBottomSheet>
-          <FilterButton label='날짜' onClick={() => {}} />
+          <div className='relative' ref={calendarRef}>
+            <FilterButton
+              label='날짜'
+              selected={formattedDateRange}
+              onClick={handleToggleCalendar}
+              onClickReset={() => handleClickReset('date')}
+            />
+            {isOpenCalendar && (
+              <div className='absolute top-[4rem] left-0 z-10 translate-x-[-30%]'>
+                <Calendar
+                  mode='range'
+                  selected={selectedDateRange}
+                  captionLayout='dropdown'
+                  onSelect={(dateRange) => {
+                    setSelectedDateRange(dateRange);
+                  }}
+                />
+              </div>
+            )}
+          </div>
         </section>
         <section className='flex flex-col gap-[1.6rem] p-[2rem]'>
+          {dateList.length === 0 && <HelperEmptyCard />}
           {dateList.map((date) => (
             <div className='flex flex-col gap-[0.8rem]' key={date}>
               <span key={date} className='body2-14-medium text-text-neutral-secondary'>
                 {date}
               </span>
-              {searchData[date].map((escort) => {
+              {searchData?.[date]?.map((escort) => {
                 return (
                   <EscortCard key={escort.recruitId} onClick={() => {}}>
                     <EscortCard.StatusHeader
@@ -94,7 +173,6 @@ function RouteComponent() {
             </div>
           ))}
         </section>
-        <div></div>
       </PageLayout.Content>
     </PageLayout>
   );
