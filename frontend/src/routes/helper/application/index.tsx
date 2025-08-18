@@ -6,7 +6,7 @@ import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { Calendar, EscortCard } from '@components';
 import { getSearchRecruits } from '@helper/apis';
 import { dateFormat, timeFormat } from '@utils';
-import { useRef, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import type { DateRange } from 'react-day-picker';
 import { useClickOutside } from '@hooks';
 import { HelperEmptyCard } from '@customer/components';
@@ -54,6 +54,9 @@ const FilterButton = ({ label, selected, onClick, onClickReset }: FilterButtonPr
   );
 };
 
+const fmtDash = (d: Date) => dateFormat(d.toISOString(), 'yyyy-MM-dd');
+const fmtDot = (d: Date) => dateFormat(d.toISOString(), 'yy.MM.dd');
+
 function RouteComponent() {
   const navigate = useNavigate({ from: Route.fullPath });
   const [selectedRegion, setSelectedRegion] = useState<string>();
@@ -62,19 +65,20 @@ function RouteComponent() {
   const [selectedDateRange, setSelectedDateRange] = useState<DateRange>();
   const calendarRef = useRef<HTMLDivElement>(null);
 
-  const startDate = selectedDateRange?.from
-    ? dateFormat(selectedDateRange.from.toISOString(), 'yyyy-MM-dd')
-    : undefined;
-  const endDate = selectedDateRange?.to
-    ? dateFormat(selectedDateRange.to.toISOString(), 'yyyy-MM-dd')
-    : undefined;
+  const { startDate, endDate, formattedDateRange } = useMemo(() => {
+    const from = selectedDateRange?.from;
+    if (!from) return { startDate: undefined, endDate: undefined, formattedDateRange: undefined };
 
-  const formattedDateRange =
-    startDate &&
-    `${startDate?.slice(2)}${startDate !== endDate ? ` ~ ${endDate?.slice(2)}` : ''}`.replaceAll(
-      '-',
-      '.'
-    );
+    const to = selectedDateRange?.to ?? from;
+
+    const startDate = fmtDash(from);
+    const endDate = fmtDash(to);
+
+    const formattedDateRange =
+      startDate === endDate ? fmtDot(from) : `${fmtDot(from)} ~ ${fmtDot(to)}`;
+
+    return { startDate, endDate, formattedDateRange };
+  }, [selectedDateRange]);
 
   const { data } = getSearchRecruits({
     region: selectedRegion,
@@ -150,7 +154,14 @@ function RouteComponent() {
               </span>
               {searchData?.[date]?.map((escort) => {
                 return (
-                  <EscortCard key={escort.recruitId} onClick={() => {}}>
+                  <EscortCard
+                    key={escort.recruitId}
+                    onClick={() => {
+                      navigate({
+                        to: '/helper/application/$escortId',
+                        params: { escortId: escort.recruitId.toString() },
+                      });
+                    }}>
                     <EscortCard.StatusHeader
                       status={escort.recruitStatus}
                       text={`${escort.numberOfApplication}명이 현재 지원 중이에요!`}
