@@ -1,10 +1,13 @@
 package com.todoc.server.domain.route.web.dto.response;
 
+import com.todoc.server.domain.route.Coordinate;
 import com.todoc.server.domain.route.entity.Route;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
+
+import java.util.List;
 
 @Getter
 @Schema(description = "경로 요약 정보 DTO")
@@ -28,15 +31,15 @@ public class RouteSimpleResponse {
 
     @NotNull
     @Schema(description = "병원까지의 경로 정보 ([위도, 경도] 배열)", example = "[[12,23],[13,45],[12,66]]")
-    private String meetingToHospital;
+    private List<Coordinate> meetingToHospital;
 
     @NotNull
     @Schema(description = "복귀장소까지의 경로 정보 ([위도, 경도] 배열)", example = "[[12,23],[13,45],[12,66]]")
-    private String hospitalToReturn;
+    private List<Coordinate> hospitalToReturn;
 
     @Builder
     public RouteSimpleResponse(Long routeId, LocationInfoSimpleResponse meetingLocationInfo,
-                               LocationInfoSimpleResponse hospitalLocationInfo, LocationInfoSimpleResponse returnLocationInfo, String meetingToHospital, String hospitalToReturn) {
+                               LocationInfoSimpleResponse hospitalLocationInfo, LocationInfoSimpleResponse returnLocationInfo, List<Coordinate> meetingToHospital, List<Coordinate> hospitalToReturn) {
         this.routeId = routeId;
         this.meetingLocationInfo = meetingLocationInfo;
         this.hospitalLocationInfo = hospitalLocationInfo;
