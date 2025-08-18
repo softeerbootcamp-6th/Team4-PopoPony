@@ -1,91 +1,57 @@
-import { ShowMapButton } from '@components';
 import { getEscortDetail } from '@dashboard/apis';
-import { IcMarker1, IcMarker2, IcMarker3, IcPinFillEffect, IcTaxiBadge } from '@icons';
+import { useMap } from '@hooks';
+import { IcPinFillEffect } from '@icons';
 import { PageLayout } from '@layouts';
 import { createFileRoute } from '@tanstack/react-router';
 import { dateFormat } from '@utils';
-import { useMemo } from 'react';
+import { useEffect, useRef } from 'react';
+import type { components } from '@schema';
+import { PlaceInfo, TaxiInfo } from '@dashboard/components';
 
 export const Route = createFileRoute('/dashboard/$escortId/helper/prepare')({
   component: RouteComponent,
 });
 
-interface PlaceInfoProps {
-  sequence: number;
-  placeName: string;
-  address: string;
-  detailAddress: string;
-}
-
-const PlaceInfo = ({ sequence, placeName, address, detailAddress }: PlaceInfoProps) => {
-  const marker = useMemo(() => {
-    switch (sequence) {
-      case 1:
-        return <IcMarker1 />;
-      case 2:
-        return <IcMarker2 />;
-      case 3:
-        return <IcMarker3 />;
-    }
-  }, [sequence]);
-
-  return (
-    <div className='flex gap-[1.2rem]'>
-      {marker}
-      <div className='flex flex-col gap-[0.4rem]'>
-        <p className='subtitle-18-medium text-text-neutral-primary'>{placeName}</p>
-        <ShowMapButton roadAddress={address} businessAddress={detailAddress} />
-      </div>
-    </div>
-  );
-};
-
-interface TaxiInfoProps {
-  time: number;
-  price: number;
-}
-
-const TaxiInfo = ({ time, price }: TaxiInfoProps) => {
-  return (
-    <div className='flex gap-[1.2rem]'>
-      <div className='flex-col-start gap-[0.8rem]'>
-        <IcTaxiBadge width={24} height={24} className='min-h-[2.4rem] min-w-[2.4rem]' />
-        <div className='border-stroke-neutral-dark h-full w-[0.1rem] border border-dashed' />
-      </div>
-      <div className='flex flex-col gap-[0.8rem]'>
-        <p className='subtitle-18-bold text-text-neutral-primary'>택시 탑승</p>
-        <div className='body1-16-medium text-text-neutral-primary flex flex-col gap-[0.4rem]'>
-          <div className='flex-start gap-[2rem]'>
-            <p className='text-text-neutral-assistive w-[9rem]'>예상 소요시간</p>
-            <p>{minutesToTime(time)}</p>
-          </div>
-          <div className='flex-start gap-[2rem]'>
-            <p className='text-text-neutral-assistive w-[9rem]'>예상 금액</p>
-            <p>{price.toLocaleString()}원</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-const minutesToTime = (minutes: number) => {
-  const hours = Math.floor(minutes / 60);
-  const remainingMinutes = minutes % 60;
-  return `${hours}시간 ${remainingMinutes}분`;
-};
+type EscortDetailResponse = components['schemas']['EscortDetailResponse'];
 
 function RouteComponent() {
   const { escortId } = Route.useParams();
+  const mapRef = useRef<HTMLDivElement>(null);
+  const { mapInstance, isTmapLoaded, addPolyline } = useMap(
+    mapRef as React.RefObject<HTMLDivElement>
+  );
+
   const { data } = getEscortDetail(Number(escortId));
-  const escortDetail = data?.data;
+  const escortDetail = data?.data as EscortDetailResponse;
 
   const { imageUrl, name } = escortDetail?.patient ?? {};
-  const { meetingLocationInfo, hospitalLocationInfo, returnLocationInfo } =
-    escortDetail?.route.routeSimple ?? {};
+  const {
+    meetingLocationInfo,
+    hospitalLocationInfo,
+    returnLocationInfo,
+    meetingToHospital,
+    hospitalToReturn,
+  } = escortDetail?.route.routeSimple ?? {};
+
+  useEffect(() => {
+    if (!mapInstance) return;
+
+    addPolyline([
+      {
+        startMarkerType: 'marker1',
+        endMarkerType: 'marker2',
+        pathCoordinates: JSON.parse(meetingToHospital),
+      },
+      {
+        startMarkerType: 'marker2',
+        endMarkerType: 'marker3',
+        pathCoordinates: JSON.parse(hospitalToReturn),
+      },
+    ]);
+  }, [mapInstance]);
 
   // TODO 이거 어떻게 하기로 했더라
-  if (!escortDetail) return <div>Loading...</div>;
+  if (!isTmapLoaded) return <div>Loading...</div>;
 
   const timeLeft = () => {
     const now = new Date();
@@ -104,7 +70,7 @@ function RouteComponent() {
           alt='home'
           className='absolute top-[-5.6rem] left-0 z-0 w-full'
         />
-        <div className='relative z-10 mx-[2rem] flex flex-col gap-[2.8rem]'>
+        <div className='relative z-10 mx-[2rem] flex flex-col gap-[2.8rem] pb-[4rem]'>
           <div className='flex-between'>
             <div className='flex flex-col gap-[0.4rem]'>
               <p className='body1-16-medium text-text-neutral-primary'>{name} 환자와의 동행까지</p>
@@ -129,10 +95,8 @@ function RouteComponent() {
             </div>
           </div>
 
-          <div>
-            <div className='bg-neutral-10 flex-center h-[17.3rem] w-full rounded-[0.8rem]'>
-              지도
-            </div>
+          <div className='h-[17.3rem] w-full rounded-[0.8rem] border-2 border-gray-300 bg-gray-100'>
+            <div ref={mapRef}></div>
           </div>
 
           <div className='flex flex-col gap-[3.6rem]'>
