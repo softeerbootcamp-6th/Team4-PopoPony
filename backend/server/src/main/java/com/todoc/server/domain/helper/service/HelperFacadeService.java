@@ -5,6 +5,7 @@ import com.todoc.server.domain.auth.service.AuthService;
 import com.todoc.server.domain.escort.service.EscortService;
 import com.todoc.server.domain.helper.entity.Certificate;
 import com.todoc.server.domain.helper.entity.HelperProfile;
+import com.todoc.server.domain.helper.web.dto.request.CertificateCreateRequest;
 import com.todoc.server.domain.helper.web.dto.request.HelperProfileCreateRequest;
 import com.todoc.server.domain.helper.web.dto.response.HelperDetailResponse;
 import com.todoc.server.domain.helper.web.dto.response.HelperSimpleResponse;
@@ -87,10 +88,10 @@ public class HelperFacadeService {
         helperProfile.setHelperProfileImage(profileImage);
 
         // 자격증 정보 저장
-        List<HelperProfileCreateRequest.CertificateInfo> certificateInfoList = Optional.ofNullable(requestDto.getCertificateInfoList())
+        List<CertificateCreateRequest> certificateInfoList = Optional.ofNullable(requestDto.getCertificateInfoList())
                         .orElse(Collections.emptyList());
 
-        for (HelperProfileCreateRequest.CertificateInfo certificateInfo : certificateInfoList) {
+        for (CertificateCreateRequest certificateInfo : certificateInfoList) {
             ImageFile certificateImage = imageFileService.register(certificateInfo.getCertificateImageCreateRequest());
             Certificate certificate = certificateService.register(certificateInfo);
             certificate.setHelperProfile(helperProfile);
