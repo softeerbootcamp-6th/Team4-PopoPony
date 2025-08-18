@@ -1,5 +1,6 @@
 package com.todoc.server.domain.review.web.controller;
 
+import com.todoc.server.common.response.EmptyBody;
 import com.todoc.server.common.response.Response;
 import com.todoc.server.domain.auth.service.SessionAuth;
 import com.todoc.server.domain.auth.web.LoginUser;
@@ -45,7 +46,7 @@ public class ReviewController {
             responseCode = "200",
             description = "도우미 리뷰 등록 성공")
     @PostMapping("/recruits/{recruitId}")
-    public Response<Void> createReview(@LoginUser SessionAuth auth, @PathVariable Long recruitId, @RequestBody ReviewCreateRequest request) {
+    public Response<EmptyBody> createReview(@LoginUser SessionAuth auth, @PathVariable Long recruitId, @RequestBody ReviewCreateRequest request) {
 
         reviewFacadeService.createReview(auth.id(), request);
 

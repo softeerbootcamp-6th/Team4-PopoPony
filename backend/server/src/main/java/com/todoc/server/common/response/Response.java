@@ -26,6 +26,7 @@ public class Response<T> {
     @Schema(description = "응답 상태에 대한 HTTP 메시지", example = "SUCCESS")
     private final String message;
 
+    @NotNull
     @Schema(description = "응답 body 필드")
     private final T data;
 
@@ -36,12 +37,12 @@ public class Response<T> {
         this.data = data;
     }
 
-    public static <T> Response<T> from() {
-        return new Response<>(SUCCESS.getCode(), SUCCESS.getStatus(), SUCCESS.getMessage(), null);
+    public static Response<EmptyBody> from() {
+        return new Response<>(SUCCESS.getCode(), SUCCESS.getStatus(), SUCCESS.getMessage(), new EmptyBody());
     }
 
-    public static <T> Response<T> from(String message) {
-        return new Response<>(SUCCESS.getCode(), SUCCESS.getStatus(), message, null);
+    public static Response<EmptyBody> from(String message) {
+        return new Response<>(SUCCESS.getCode(), SUCCESS.getStatus(), message, new EmptyBody());
     }
 
     public static <T> Response<T> from(T data) {

@@ -4,7 +4,7 @@ import com.todoc.server.common.enumeration.Gender;
 import com.todoc.server.common.entity.BaseEntity;
 import com.todoc.server.domain.auth.entity.Auth;
 import com.todoc.server.domain.image.entity.ImageFile;
-import com.todoc.server.domain.latestlocation.entity.LatestLocation;
+import com.todoc.server.domain.realtime.entity.LatestLocation;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;

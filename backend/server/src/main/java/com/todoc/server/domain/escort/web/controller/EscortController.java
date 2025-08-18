@@ -1,5 +1,6 @@
 package com.todoc.server.domain.escort.web.controller;
 
+import com.todoc.server.common.response.EmptyBody;
 import com.todoc.server.common.response.Response;
 import com.todoc.server.domain.escort.service.EscortService;
 import com.todoc.server.domain.escort.web.dto.request.EscortMemoUpdateRequest;
@@ -25,7 +26,7 @@ public class EscortController {
             responseCode = "200",
             description = "동행 진행 성공")
     @PatchMapping("/{escortId}/status")
-    public Response<Void> proceedEscort(@PathVariable Long escortId) {
+    public Response<EmptyBody> proceedEscort(@PathVariable Long escortId) {
 
         escortService.proceedEscort(escortId);
 
@@ -39,7 +40,7 @@ public class EscortController {
             responseCode = "200",
             description = "동행 메모 작성 성공")
     @PatchMapping("/{escortId}/memo")
-    public Response<Void> updateMemo(@PathVariable Long escortId, @RequestBody EscortMemoUpdateRequest request) {
+    public Response<EmptyBody> updateMemo(@PathVariable Long escortId, @RequestBody EscortMemoUpdateRequest request) {
 
         escortService.updateMemo(escortId, request);
 

@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.SQLRestriction;
 
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -35,10 +35,10 @@ public class Escort extends BaseEntity {
     private Auth helper;
 
     @Column(name = "actual_meeting_time")
-    private LocalTime actualMeetingTime;
+    private LocalDateTime actualMeetingTime;
 
     @Column(name = "actual_return_time")
-    private LocalTime actualReturnTime;
+    private LocalDateTime actualReturnTime;
 
     private String memo;
 
