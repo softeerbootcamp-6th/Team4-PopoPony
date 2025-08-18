@@ -1,5 +1,6 @@
 package com.todoc.server.domain.escort.web.controller;
 
+import com.todoc.server.common.response.EmptyBody;
 import com.todoc.server.common.response.Response;
 import com.todoc.server.domain.auth.service.SessionAuth;
 import com.todoc.server.domain.auth.web.LoginUser;
@@ -80,6 +81,18 @@ public class RecruitController {
     }
 
     @Operation(
+            summary = "특정 동행 신청의 상태 정보 조회",
+            description = "recruitId에 해당하는 동행 신청의 상태 정보를 조회합니다.")
+    @ApiResponse(
+            responseCode = "200",
+            description = "동행 신청 상태 정보 조회 성공")
+    @GetMapping("/{recruitId}/status")
+    public Response<RecruitStatusResponse> getRecruitStatus(@PathVariable Long recruitId) {
+
+        return Response.from(recruitService.getRecruitStatusByRecruitId(recruitId));
+    }
+
+    @Operation(
             summary = "특정 동행 신청의 결제 정보 조회",
             description = "recruitId에 해당하는 동행 신청의 결제 정보를 조회합니다.")
     @ApiResponse(
@@ -98,7 +111,7 @@ public class RecruitController {
             responseCode = "200",
             description = "동행 신청 성공")
     @PostMapping("")
-    public Response<Void> createRecruit(@LoginUser SessionAuth auth, @RequestBody RecruitCreateRequest requestDto) {
+    public Response<EmptyBody> createRecruit(@LoginUser SessionAuth auth, @RequestBody RecruitCreateRequest requestDto) {
 
         recruitFacadeService.createRecruit(auth.id(), requestDto);
 
@@ -112,7 +125,7 @@ public class RecruitController {
             responseCode = "200",
             description = "동행 신청 취소 성공")
     @PatchMapping("/{recruitId}/cancel")
-    public Response<Void> cancelRecruit(@PathVariable Long recruitId) {
+    public Response<EmptyBody> cancelRecruit(@PathVariable Long recruitId) {
 
         recruitService.cancelRecruit(recruitId);
 

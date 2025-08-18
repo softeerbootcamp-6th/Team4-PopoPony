@@ -1,5 +1,6 @@
 package com.todoc.server.domain.realtime.web.controller;
 
+import com.todoc.server.common.response.EmptyBody;
 import com.todoc.server.common.response.Response;
 import com.todoc.server.domain.realtime.service.RealtimeFacadeService;
 import com.todoc.server.domain.realtime.web.dto.request.LocationRequest;
@@ -40,7 +41,7 @@ public class RealtimeController {
             responseCode = "200",
             description = "마지막 위치 업데이트 성공")
     @PostMapping("escorts/{escortId}/locations")
-    public Response<Void> updateLocation(@PathVariable(name = "escortId") Long escortId,
+    public Response<EmptyBody> updateLocation(@PathVariable(name = "escortId") Long escortId,
                                          @RequestParam String role,
                                          @RequestBody LocationRequest request) {
 

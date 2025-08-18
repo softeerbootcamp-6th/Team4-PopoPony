@@ -11,4 +11,5 @@ services:
       DB_URL: ${DB_URL}
       DB_USERNAME: ${DB_USERNAME}
       DB_PASSWORD: ${DB_PASSWORD}
+      TMAP_API_KEY: ${TMAP_API_KEY}
     restart: always
