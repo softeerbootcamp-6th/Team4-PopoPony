@@ -61,8 +61,8 @@ public class EscortDetailResponse {
 
     @Builder
     public EscortDetailResponse(Long escortId, LocalDate escortDate, String escortStatus, LocalTime estimatedMeetingTime, LocalTime estimatedReturnTime,
-                                RouteDetailResponse route, String customerContact, EscortPatientSimpleResponse patient, String purpose,
-                                String extraRequest) {
+                                RouteDetailResponse route, String customerContact, EscortPatientSimpleResponse patient,
+                                EscortHelperSimpleResponse helper, String purpose, String extraRequest) {
         this.escortId = escortId;
         this.escortDate = escortDate;
         this.escortStatus = escortStatus;
@@ -71,6 +71,7 @@ public class EscortDetailResponse {
         this.route = route;
         this.customerContact = customerContact;
         this.patient = patient;
+        this.helper = helper;
         this.purpose = purpose;
         this.extraRequest = extraRequest;
     }

@@ -17,6 +17,8 @@ import com.todoc.server.domain.escort.repository.EscortQueryRepository;
 import com.todoc.server.domain.escort.web.dto.request.EscortMemoUpdateRequest;
 import com.todoc.server.domain.escort.web.dto.response.EscortDetailResponse;
 import com.todoc.server.domain.escort.web.dto.response.EscortStatusResponse;
+import com.todoc.server.domain.helper.entity.HelperProfile;
+import com.todoc.server.domain.helper.service.HelperService;
 import com.todoc.server.domain.route.entity.Route;
 import com.todoc.server.domain.route.exception.RouteNotFoundException;
 import com.todoc.server.domain.route.web.dto.response.RouteDetailResponse;
@@ -35,6 +37,7 @@ public class EscortService {
     private final EscortJpaRepository escortJpaRepository;
     private final EscortQueryRepository escortQueryRepository;
     private final SseEmitterManager emitterManager;
+    private final HelperService helperService;
 
     @Transactional(readOnly = true)
     public Long getCountByHelperUserId(Long helperId) {
@@ -127,6 +130,8 @@ public class EscortService {
             throw new RouteNotFoundException();
         }
 
+        HelperProfile helper = helperService.getHelperProfileListByRecruitId(recruitId).getFirst();
+
         return EscortDetailResponse.builder()
                 .escortId(escort.getId())
                 .escortStatus(escort.getStatus().getLabel())
@@ -136,6 +141,7 @@ public class EscortService {
                 .estimatedReturnTime(recruit.getEstimatedReturnTime())
                 .purpose(recruit.getPurpose())
                 .extraRequest(recruit.getExtraRequest())
+                .helper(EscortDetailResponse.EscortHelperSimpleResponse.from(helper))
                 .patient(EscortDetailResponse.EscortPatientSimpleResponse.from(patient))
                 .route(RouteDetailResponse.from(route))
                 .build();
