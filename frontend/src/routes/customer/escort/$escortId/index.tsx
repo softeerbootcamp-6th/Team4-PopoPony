@@ -26,7 +26,7 @@ function RouteComponent() {
   const navigate = useNavigate();
   const [hasReview, setHasReview] = useState(false);
   const [helperId, setHelperId] = useState<number | null>(null);
-  const { escortId } = useParams({ from: '/customer/escort/$escortId/' });
+  const { escortId } = Route.useParams();
 
   const { data: recruitData, isLoading } = getRecruitById(Number(escortId));
 

@@ -1,8 +1,10 @@
 import { Button, ShowMapButton } from '@components';
 import { PageLayout } from '@layouts';
-import { createFileRoute, useNavigate, useParams } from '@tanstack/react-router';
+import { createFileRoute, useNavigate, getRouteApi } from '@tanstack/react-router';
 import { getRecruitById } from '@customer/apis';
 import { dateFormat, timeFormatWithOptionalMinutes, timeDuration } from '@utils';
+
+const routeApi = getRouteApi('/customer/escort/$escortId/completed');
 
 export const Route = createFileRoute('/customer/escort/$escortId/completed')({
   component: RouteComponent,
@@ -10,7 +12,7 @@ export const Route = createFileRoute('/customer/escort/$escortId/completed')({
 
 function RouteComponent() {
   const navigate = useNavigate();
-  const { escortId } = useParams({ from: '/customer/escort/$escortId/completed' });
+  const { escortId } = routeApi.useParams();
   const { data } = getRecruitById(Number(escortId));
   const { escortDate, estimatedMeetingTime, estimatedReturnTime, route } = data?.data || {};
   return (
