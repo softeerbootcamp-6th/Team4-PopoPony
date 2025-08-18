@@ -37,16 +37,12 @@ public class RealtimeFacadeService {
 
         // 연결 직후 스냅샷 전송
         try {
-            switch (role) {
-                case CUSTOMER -> {
+            if (role != Role.PATIENT) {
+                getLocationSnapshot(escortId, Role.PATIENT, emitter);
+            }
+            if (role != Role.HELPER) {
+                if (escortService.getById(escortId).getStatus() == EscortStatus.MEETING) {
                     getLocationSnapshot(escortId, Role.HELPER, emitter);
-                    getLocationSnapshot(escortId, Role.PATIENT, emitter);
-                }
-                case PATIENT -> {
-                    getLocationSnapshot(escortId, Role.HELPER, emitter);
-                }
-                case HELPER -> {
-                    getLocationSnapshot(escortId, Role.PATIENT, emitter);
                 }
             }
         } catch (Exception e) {
