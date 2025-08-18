@@ -1,10 +1,15 @@
 package com.todoc.server.common.dto.request;
 
+import com.todoc.server.domain.image.entity.ImageFile;
+import com.todoc.server.domain.image.entity.ImageMeta;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 @Schema(description = "이미지 등록 요청 DTO")
 public class ImageCreateRequest {
 
@@ -23,4 +28,23 @@ public class ImageCreateRequest {
     @NotNull
     @Schema(description = "무결성 해시(일반적으로 S3 ETag)")
     private String checksum;
+
+    @Builder
+    public ImageCreateRequest(String s3Key, String contentType, Long size, String checksum) {
+        this.s3Key = s3Key;
+        this.contentType = contentType;
+        this.size = size;
+        this.checksum = checksum;
+    }
+
+    public static ImageCreateRequest from(ImageFile imageFile) {
+        ImageMeta imageMeta = imageFile.getImageMeta();
+
+        return ImageCreateRequest.builder()
+                .s3Key(imageMeta.getS3Key())
+                .contentType(imageMeta.getContentType())
+                .size(imageMeta.getSize())
+                .checksum(imageMeta.getChecksum())
+                .build();
+    }
 }

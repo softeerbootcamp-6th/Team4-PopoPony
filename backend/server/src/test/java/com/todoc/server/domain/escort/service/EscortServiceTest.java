@@ -19,6 +19,7 @@ import com.todoc.server.domain.route.entity.LocationInfo;
 import com.todoc.server.domain.route.entity.Route;
 import com.todoc.server.domain.route.entity.RouteLeg;
 import com.todoc.server.domain.route.exception.RouteLegNotFoundException;
+import com.todoc.server.domain.realtime.service.SseEmitterManager;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -29,7 +30,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
@@ -40,6 +40,7 @@ class EscortServiceTest {
 
     @Mock private EscortJpaRepository escortJpaRepository;
     @Mock private EscortQueryRepository escortQueryRepository;
+    @Mock private SseEmitterManager emitterManager;
 
     @InjectMocks private EscortService escortService;
 

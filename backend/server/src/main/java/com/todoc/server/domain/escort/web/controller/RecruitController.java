@@ -81,6 +81,18 @@ public class RecruitController {
     }
 
     @Operation(
+            summary = "특정 동행 신청의 상태 정보 조회",
+            description = "recruitId에 해당하는 동행 신청의 상태 정보를 조회합니다.")
+    @ApiResponse(
+            responseCode = "200",
+            description = "동행 신청 상태 정보 조회 성공")
+    @GetMapping("/{recruitId}/status")
+    public Response<RecruitStatusResponse> getRecruitStatus(@PathVariable Long recruitId) {
+
+        return Response.from(recruitService.getRecruitStatusByRecruitId(recruitId));
+    }
+
+    @Operation(
             summary = "특정 동행 신청의 결제 정보 조회",
             description = "recruitId에 해당하는 동행 신청의 결제 정보를 조회합니다.")
     @ApiResponse(

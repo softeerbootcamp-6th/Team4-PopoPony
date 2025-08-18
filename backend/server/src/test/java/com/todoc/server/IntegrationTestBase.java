@@ -1,6 +1,6 @@
 package com.todoc.server;
 
-import com.todoc.server.domain.latestlocation.repository.LocationCacheRepository;
+import com.todoc.server.domain.realtime.repository.LocationCacheRepository;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
