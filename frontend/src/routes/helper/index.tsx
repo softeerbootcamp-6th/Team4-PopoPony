@@ -26,7 +26,7 @@ const statusMessageMap: Record<RecruitStatus, string> = {
 };
 
 const refineEscortData = (escortData: RecruitSimpleResponse): RefinedEscortData => {
-  const statusText = statusMessageMap[escortData.status];
+  const statusText = statusMessageMap[escortData.recruitStatus];
   const title = dateFormat(escortData.escortDate, 'M월 d일 (eee)') + ', ' + escortData.destination;
   const startTime = timeFormat(escortData.estimatedMeetingTime);
   const endTime = timeFormat(escortData.estimatedReturnTime);
@@ -36,7 +36,7 @@ const refineEscortData = (escortData: RecruitSimpleResponse): RefinedEscortData 
 
   return {
     id: escortData.recruitId,
-    status: escortData.status,
+    status: escortData.recruitStatus,
     statusText,
     title,
     timeText,
@@ -85,8 +85,7 @@ function RouteComponent() {
                 </Link>
               </div>
               <div className='flex-1'>
-                {/* TODO: 추후 동행 상세 페이지 연동 시 수정 */}
-                <Link to='/helper/escort/$escortId' params={{ escortId: '1' }}>
+                <Link to='/helper/application'>
                   <Button size='md'>
                     <span className='text-text-neutral-0'>일감찾기</span>
                   </Button>
