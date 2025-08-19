@@ -34,6 +34,7 @@ import {
 import { Calendar, CalendarDayButton } from './calendar';
 import StrengthTagList from './StrengthTagList';
 import FloatingButton from './FloatingButton';
+import SlideButton from './SlideButton';
 
 export {
   Button,
@@ -71,4 +72,5 @@ export {
   CalendarDayButton,
   StrengthTagList,
   FloatingButton,
+  SlideButton,
 };
