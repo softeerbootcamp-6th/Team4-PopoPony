@@ -3,9 +3,10 @@ import { useFormContext } from 'react-hook-form';
 import { memo } from 'react';
 import { FormLayout } from '@layouts';
 import { useFormValidation } from '@hooks';
-import { type RecruitStepProps, conditionSchema } from '@customer/types';
+import { conditionSchema } from '@customer/types';
+import type { FunnelStepProps } from '@types';
 
-const Condition = memo(({ handleNextStep }: RecruitStepProps) => {
+const Condition = memo(({ handleNextStep }: FunnelStepProps) => {
   const { values, isFormValid, fieldErrors, markFieldAsTouched } =
     useFormValidation(conditionSchema);
   const { getValues } = useFormContext();

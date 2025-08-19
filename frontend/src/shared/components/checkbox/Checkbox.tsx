@@ -26,7 +26,7 @@ const Checkbox = ({ label, checked, disabled, onChange = () => {} }: Props) => {
     return {
       background: 'bg-neutral-15',
       iconColor: '[&_path]:fill-neutral-0',
-      textColor: 'text-text-neutral-disabled',
+      textColor: 'text-text-neutral-secondary',
     };
   };
   const { background, iconColor, textColor } = checkboxStyle();

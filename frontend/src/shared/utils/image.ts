@@ -1,3 +1,4 @@
+import type { ImageType, ImageWithPreviewUrl } from '@types';
 import CryptoJS from 'crypto-js';
 
 // MD5 checksum 계산 유틸리티 (crypto-js 사용)
@@ -12,4 +13,10 @@ export const calculateMD5 = async (file: File): Promise<string> => {
 
   // Base64로 인코딩하여 반환
   return hash.toString(CryptoJS.enc.Base64);
+};
+
+export const removePreviewUrl = (image: ImageWithPreviewUrl): ImageType => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { previewUrl, ...imageData } = image;
+  return imageData;
 };
