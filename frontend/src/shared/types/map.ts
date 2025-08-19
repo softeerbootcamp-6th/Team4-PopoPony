@@ -4,5 +4,5 @@ export type MarkerType = 'marker1' | 'marker2' | 'marker3' | 'home' | 'hospital'
 export interface RouteSegment {
   startMarkerType: MarkerType;
   endMarkerType: MarkerType;
-  pathCoordinates: [number, number][];
+  pathCoordinates: { lat: number; lon: number }[];
 }

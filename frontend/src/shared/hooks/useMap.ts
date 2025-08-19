@@ -157,30 +157,31 @@ export const useMap = (mapRef: React.RefObject<HTMLDivElement>) => {
 
     try {
       // 1. 모든 고유 지점 추출 (중복 방지)
-      const uniquePoints = new Map<string, { lat: number; lng: number; markerType: string }>();
+      const uniquePoints = new Map<string, { lat: number; lng: number; markerType: MarkerType }>();
 
       segments.forEach((segment) => {
         const startPoint = segment.pathCoordinates[0];
         const endPoint = segment.pathCoordinates[segment.pathCoordinates.length - 1];
 
-        const startKey = `${startPoint[0]},${startPoint[1]}`;
-        const endKey = `${endPoint[0]},${endPoint[1]}`;
+        const startKey = `${startPoint.lat},${startPoint.lon}`;
+        const endKey = `${endPoint.lat},${endPoint.lon}`;
 
         uniquePoints.set(startKey, {
-          lat: startPoint[0],
-          lng: startPoint[1],
+          lat: startPoint.lat,
+          lng: startPoint.lon,
           markerType: segment.startMarkerType,
         });
         uniquePoints.set(endKey, {
-          lat: endPoint[0],
-          lng: endPoint[1],
+          lat: endPoint.lat,
+          lng: endPoint.lon,
           markerType: segment.endMarkerType,
         });
       });
 
       // 2. 고유 지점에만 마커 생성
       uniquePoints.forEach((point) => {
-        addMarker(point.lat, point.lng, point.markerType as MarkerType);
+        // TODO 위도 경도 바꿔야함
+        addMarker(point.lng, point.lat, point.markerType as MarkerType);
       });
 
       // 3. 모든 경로 그리기
@@ -192,7 +193,8 @@ export const useMap = (mapRef: React.RefObject<HTMLDivElement>) => {
           }
 
           // LatLng 객체 배열 생성
-          const path = segment.pathCoordinates.map(([lat, lng]) => new Tmapv3.LatLng(lat, lng));
+          // TODO 위도 경도 바꿔야함
+          const path = segment.pathCoordinates.map(({ lat, lon }) => new Tmapv3.LatLng(lon, lat));
 
           // Tmap 공식 문서 방식으로 폴리라인 생성
           new Tmapv3.Polyline({
@@ -207,10 +209,17 @@ export const useMap = (mapRef: React.RefObject<HTMLDivElement>) => {
 
       // 4. 경로에 맞게 지도 중심과 줌 조정 (첫 번째 세그먼트 기준)
       if (segments.length > 0 && segments[0].pathCoordinates.length > 0) {
-        const middleIndex = Math.floor(segments[0].pathCoordinates.length / 2);
-        const middlePoint = segments[0].pathCoordinates[middleIndex];
-        mapInstance.setCenter(new Tmapv3.LatLng(middlePoint[0], middlePoint[1]));
-        mapInstance.setZoom(7);
+        const startPoint = segments[0].pathCoordinates[0];
+        const endPoint = segments[0].pathCoordinates[segments[0].pathCoordinates.length - 1];
+
+        const middlePoint = new Tmapv3.LatLng(
+          (startPoint.lon + endPoint.lon) / 2,
+          (startPoint.lat + endPoint.lat) / 2
+        );
+
+        // TODO 위도 경도 바꿔야함
+        mapInstance.setCenter(middlePoint);
+        mapInstance.setZoom(6);
       }
     } catch (error) {
       console.error('폴리라인 그리기 오류:', error);

@@ -7,9 +7,10 @@ interface PlaceInfoProps {
   placeName: string;
   address: string;
   detailAddress: string;
+  pos: { lat: number; lon: number };
 }
 
-const PlaceInfo = ({ sequence, placeName, address, detailAddress }: PlaceInfoProps) => {
+const PlaceInfo = ({ sequence, placeName, address, detailAddress, pos }: PlaceInfoProps) => {
   const marker = useMemo(() => {
     switch (sequence) {
       case 1:
@@ -29,7 +30,7 @@ const PlaceInfo = ({ sequence, placeName, address, detailAddress }: PlaceInfoPro
         <ShowMapButton
           roadAddress={address}
           businessAddress={detailAddress}
-          pos={{ lat: 37.5665, lng: 126.978 }}
+          pos={{ lat: pos.lat, lng: pos.lon }}
         />
       </div>
     </div>

@@ -33,6 +33,10 @@ function RouteComponent() {
     hospitalToReturn,
   } = escortDetail?.route.routeSimple ?? {};
 
+  const isSameStartEnd =
+    meetingLocationInfo.lat === returnLocationInfo.lat &&
+    meetingLocationInfo.lon === returnLocationInfo.lon;
+
   useEffect(() => {
     if (!mapInstance) return;
 
@@ -40,17 +44,16 @@ function RouteComponent() {
       {
         startMarkerType: 'marker1',
         endMarkerType: 'marker2',
-        pathCoordinates: JSON.parse(meetingToHospital),
+        pathCoordinates: meetingToHospital,
       },
       {
         startMarkerType: 'marker2',
-        endMarkerType: 'marker3',
-        pathCoordinates: JSON.parse(hospitalToReturn),
+        endMarkerType: isSameStartEnd ? 'marker1' : 'marker3',
+        pathCoordinates: hospitalToReturn,
       },
     ]);
   }, [mapInstance]);
 
-  // TODO 이거 어떻게 하기로 했더라
   if (!isTmapLoaded) return <div>Loading...</div>;
 
   const timeLeft = () => {
@@ -105,6 +108,7 @@ function RouteComponent() {
               placeName={meetingLocationInfo?.placeName ?? ''}
               address={meetingLocationInfo?.address ?? ''}
               detailAddress={meetingLocationInfo?.detailAddress ?? ''}
+              pos={{ lat: meetingLocationInfo?.lat, lon: meetingLocationInfo?.lon }}
             />
             <TaxiInfo
               time={escortDetail.route.meetingToHospitalEstimatedTime}
@@ -115,16 +119,18 @@ function RouteComponent() {
               placeName={hospitalLocationInfo?.placeName ?? ''}
               address={hospitalLocationInfo?.address ?? ''}
               detailAddress={hospitalLocationInfo?.detailAddress ?? ''}
+              pos={{ lat: hospitalLocationInfo?.lat, lon: hospitalLocationInfo?.lon }}
             />
             <TaxiInfo
               time={escortDetail.route.hospitalToReturnEstimatedTime}
               price={escortDetail.route.hospitalToReturnEstimatedTaxiFee}
             />
             <PlaceInfo
-              sequence={3}
+              sequence={isSameStartEnd ? 1 : 3}
               placeName={returnLocationInfo?.placeName ?? ''}
               address={returnLocationInfo?.address ?? ''}
               detailAddress={returnLocationInfo?.detailAddress ?? ''}
+              pos={{ lat: returnLocationInfo?.lat, lon: returnLocationInfo?.lon }}
             />
           </div>
         </div>
