@@ -22,9 +22,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
-import org.springframework.context.annotation.Import;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import static org.mockito.Mockito.*;
 
@@ -83,7 +83,7 @@ class RecruitFacadeServiceTest {
         when(tMapRouteService.getRoute(any()))
             .thenReturn(new TMapRouteService.TMapRawResult(tmapJson, usedVertices));
         when(tmapRouteParser.parseSummaryFromRaw(anyString()))
-            .thenReturn(new TMapRouteParser.RouteLegSummary(1561, 343, 0, 5200));
+            .thenReturn(new TMapRouteParser.RouteParseResult(List.of(), new TMapRouteParser.RouteLegSummary(1561, 343, 0, 5200)));
         when(escortDetail.getEstimatedMeetingTime()).thenReturn(LocalTime.of(9, 0));
         when(escortDetail.getEstimatedReturnTime()).thenReturn(LocalTime.of(11, 30));
 

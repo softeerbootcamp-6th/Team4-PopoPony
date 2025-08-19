@@ -5,7 +5,7 @@
 
     import java.util.Optional;
 
-    public interface EscortJpaRepository extends JpaRepository<Escort, String> {
+    public interface EscortJpaRepository extends JpaRepository<Escort, Long> {
         // helperId(도우미의 userId)로 개수 카운트
         Long countByHelperId(Long helperId);
         Optional<Escort> findByRecruitId(Long recruitId);

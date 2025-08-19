@@ -1,8 +1,8 @@
 import { ProgressBar, Modal } from '@components';
 import { PageLayout } from '@layouts';
-import { type RecruitFormValues } from '@customer/types';
+import { recruitStepSearchSchema, type RecruitFormValues } from '@customer/types';
 import { useFunnel, useModal } from '@hooks';
-import { createFileRoute, useRouter } from '@tanstack/react-router';
+import { createFileRoute, redirect, useRouter } from '@tanstack/react-router';
 import { FormProvider, useForm } from 'react-hook-form';
 import {
   Profile,
@@ -16,6 +16,15 @@ import {
 } from '@customer/components';
 
 export const Route = createFileRoute('/customer/recruit/$step')({
+  validateSearch: recruitStepSearchSchema,
+  beforeLoad: async ({ search }) => {
+    const { place } = search;
+    if (place && !(place === 'meeting' || place === 'hospital' || place === 'return')) {
+      throw redirect({
+        to: '/customer',
+      });
+    }
+  },
   component: RouteComponent,
 });
 
