@@ -1,6 +1,7 @@
 package com.todoc.server.domain.report.service;
 
 import com.todoc.server.common.dto.request.ImageCreateRequest;
+import com.todoc.server.common.enumeration.EscortStatus;
 import com.todoc.server.domain.auth.entity.Auth;
 import com.todoc.server.domain.auth.exception.AuthNotFoundException;
 import com.todoc.server.domain.escort.entity.Application;
@@ -14,6 +15,8 @@ import com.todoc.server.domain.image.service.ImageFileService;
 import com.todoc.server.domain.report.entity.ImageAttachment;
 import com.todoc.server.domain.report.entity.Report;
 import com.todoc.server.domain.report.entity.TaxiFee;
+import com.todoc.server.domain.report.exception.ReportAlreadyWrittenException;
+import com.todoc.server.domain.report.exception.ReportNotReadyToWriteException;
 import com.todoc.server.domain.report.web.dto.request.ReportCreateRequest;
 import com.todoc.server.domain.report.web.dto.response.ReportDefaultValueResponse;
 import lombok.RequiredArgsConstructor;
@@ -55,6 +58,16 @@ public class ReportFacadeService {
     @Transactional
     public void createReport(ReportCreateRequest requestDto, Long recruitId) {
 
+        // 0. 리포트 작성이 가능한 상태인지 확인
+        if (reportService.isReportExist(recruitId)) {
+            throw new ReportAlreadyWrittenException();
+        }
+
+        Escort escort = escortService.getByRecruitId(recruitId);
+        if (escort.getStatus() != EscortStatus.WRITING_REPORT) {
+            throw new ReportNotReadyToWriteException();
+        }
+
         // 1. 리포트 등록
         Report report = reportService.register(requestDto);
         Application application = applicationService.getMatchedApplicationByRecruitId(recruitId);
@@ -88,5 +101,8 @@ public class ReportFacadeService {
         taxiFee.setReport(report);
         taxiFee.setDepartureReceiptImage(departureReceipt);
         taxiFee.setReturnReceiptImage(returnReceipt);
+
+        // 4. 동행 진행상태 업데이트 (리포트작성중 -> 동행완료)
+        escort.setStatus(EscortStatus.DONE);
     }
 }

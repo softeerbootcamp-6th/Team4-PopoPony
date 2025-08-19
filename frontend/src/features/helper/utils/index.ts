@@ -1,3 +1,4 @@
 import toProfileFormValues from './normalizeProfileFromApi';
+import { convertFormToApiRequest } from './refineApiData';
 
-export { toProfileFormValues };
+export { toProfileFormValues, convertFormToApiRequest };

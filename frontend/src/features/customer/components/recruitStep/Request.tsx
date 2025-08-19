@@ -1,9 +1,10 @@
-import { type RecruitStepProps, requestFormSchema } from '@customer/types';
+import { requestFormSchema } from '@customer/types';
 import { FormTextarea, LabeledSection } from '@components';
 import { FormLayout } from '@layouts';
 import { useFormValidation } from '@hooks';
+import type { FunnelStepProps } from '@types';
 
-const Request = ({ handleNextStep }: RecruitStepProps) => {
+const Request = ({ handleNextStep }: FunnelStepProps) => {
   const { values, fieldErrors, isFormValid, markFieldAsTouched } =
     useFormValidation(requestFormSchema);
 

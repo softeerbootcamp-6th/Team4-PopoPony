@@ -57,9 +57,11 @@ dependencies {
 
 	// for health-check + 애플리케이션의 운영 및 모니터링 기능
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
+	implementation("io.micrometer:micrometer-core")
+	implementation("io.micrometer:micrometer-registry-cloudwatch2")
 
 	// S3
-	implementation(platform("software.amazon.awssdk:bom:2.25.66"))
+	implementation(platform("software.amazon.awssdk:bom:2.31.78"))
 	implementation("software.amazon.awssdk:s3")
 	implementation("software.amazon.awssdk:sts")
 
@@ -68,6 +70,13 @@ dependencies {
 
 	// redis
 	implementation("org.springframework.boot:spring-boot-starter-data-redis")
+
+	// logging
+	implementation ("org.springframework.boot:spring-boot-starter-aop")
+
+	// CloudWatch
+	implementation(platform("software.amazon.awssdk:bom:2.31.78"))
+	implementation("software.amazon.awssdk:cloudwatch")
 }
 
 val querydslDir = layout.buildDirectory.dir("generated/querydsl")

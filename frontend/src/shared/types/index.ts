@@ -1,5 +1,5 @@
 export * from './statusType';
 export * from './termsData';
-export * from './funnelRoute';
+export * from './funnel';
 export * from './imageType';
 export * from './schemaTypes';

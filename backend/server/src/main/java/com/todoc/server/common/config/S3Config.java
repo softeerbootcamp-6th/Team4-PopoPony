@@ -28,7 +28,7 @@ public class S3Config {
                 .region(Region.of(region))
                 .credentialsProvider(DefaultCredentialsProvider.create());
 
-        if (!endpoint.isBlank()) {
+        if (endpoint != null && !endpoint.isBlank()) {
             b.endpointOverride(URI.create(endpoint))
                     .serviceConfiguration(S3Configuration.builder()
                             .pathStyleAccessEnabled(pathStyle)
@@ -43,8 +43,11 @@ public class S3Config {
                 .region(Region.of(region))
                 .credentialsProvider(DefaultCredentialsProvider.create());
 
-        if (!endpoint.isBlank()) {
-            b.endpointOverride(URI.create(endpoint));
+        if (endpoint != null && !endpoint.isBlank()) {
+            b.endpointOverride(URI.create(endpoint))
+                    .serviceConfiguration(S3Configuration.builder()
+                            .pathStyleAccessEnabled(pathStyle)
+                            .build());
         }
         return b.build();
     }
