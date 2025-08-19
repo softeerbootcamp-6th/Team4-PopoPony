@@ -70,6 +70,9 @@ dependencies {
 
 	// redis
 	implementation("org.springframework.boot:spring-boot-starter-data-redis")
+
+	// logging
+	implementation ("org.springframework.boot:spring-boot-starter-aop")
 }
 
 val querydslDir = layout.buildDirectory.dir("generated/querydsl")
