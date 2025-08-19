@@ -119,6 +119,18 @@ function RouteComponent() {
                         <EscortCard.Info type='time' text={timeText} />
                         <EscortCard.Info type='location' text={locationText} />
                       </EscortCard.InfoSection>
+                      {escort.recruitStatus === '동행중' && (
+                        <EscortCard.DashboardButton
+                          onClick={() => {
+                            navigate({
+                              to: '/dashboard/$escortId/customer',
+                              params: {
+                                escortId: escort.recruitId.toString(),
+                              },
+                            });
+                          }}
+                        />
+                      )}
                     </EscortCard>
                   );
                 })
