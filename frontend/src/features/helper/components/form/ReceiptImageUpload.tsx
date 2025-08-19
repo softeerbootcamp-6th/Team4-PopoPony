@@ -1,22 +1,23 @@
 import React, { useRef } from 'react';
 import { useFormContext } from 'react-hook-form';
-import { IcCamera, IcEdit } from '@icons';
+import { IcCheckBox } from '@icons';
 import { useImageUpload } from '@hooks';
 import type { ImagePrefix } from '@types';
 
 interface Props {
   name: string;
   prefix: ImagePrefix;
+  placeholder: string;
 }
 
-const PhotoUpload = ({ name, prefix }: Props) => {
+const ReceiptImageUpload = ({ name, prefix, placeholder }: Props) => {
   const { setValue, watch } = useFormContext();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const { uploadImage, isUploading } = useImageUpload();
 
-  const photoValue = watch('imageUrl');
-  const hasImage = Boolean(photoValue);
+  const currentValue = watch(name);
+  const hasImage = Boolean(currentValue?.previewUrl);
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -31,7 +32,6 @@ const PhotoUpload = ({ name, prefix }: Props) => {
         },
         { shouldValidate: true, shouldDirty: true }
       );
-      setValue('imageUrl', imageData.previewUrl);
     } catch (err) {
       console.error(err);
       alert('업로드에 실패했습니다. 다시 시도해주세요.');
@@ -42,10 +42,6 @@ const PhotoUpload = ({ name, prefix }: Props) => {
   };
 
   const handleUploadClick = () => fileInputRef.current?.click();
-  const handleEditClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    handleUploadClick();
-  };
 
   return (
     <div className='relative'>
@@ -60,42 +56,50 @@ const PhotoUpload = ({ name, prefix }: Props) => {
 
       <button
         type='button'
-        onClick={!hasImage ? handleUploadClick : undefined}
+        onClick={handleUploadClick}
         disabled={isUploading}
-        className={`relative flex h-[16rem] w-[16rem] flex-col items-center justify-center gap-1 rounded-full transition-all duration-200 ease-in-out ${
+        className={`relative flex aspect-square w-full flex-col items-center justify-center gap-1 rounded-[0.8rem] transition-all duration-200 ease-in-out ${
           hasImage
             ? ''
             : 'bg-neutral-10 border-neutral-20 border-[1.5px] border-dashed hover:opacity-80 active:scale-95'
         } ${isUploading ? 'cursor-not-allowed opacity-50' : ''}`}>
         {/* 이미지 미리보기 */}
-        {hasImage ? (
+        {hasImage && (
           <img
-            src={photoValue}
+            src={currentValue.previewUrl}
             alt='미리보기'
-            className='absolute inset-0 h-full w-full rounded-full object-cover'
+            className='absolute inset-0 h-full w-full rounded-[0.8rem] object-cover'
           />
-        ) : (
-          <>
-            <div className='relative h-6 w-6'>
-              <IcCamera className='h-full w-full text-neutral-50' />
-            </div>
-            <div className='body1-16-medium text-neutral-70 text-center'>
-              {isUploading ? '업로드 중...' : '환자 사진'}
-            </div>
-          </>
         )}
 
-        {/* 수정 버튼 */}
-        {hasImage && !isUploading && (
-          <div
-            className='border-neutral-0 hover:bg-neutral-90 absolute right-0 bottom-[0.8rem] z-10 flex h-[4rem] w-[4rem] items-center justify-center rounded-full border bg-neutral-100 transition-all duration-200 ease-in-out active:scale-95'
-            onClick={handleEditClick}>
-            <IcEdit className='text-neutral-0 h-[2.4rem] w-[2.4rem]' />
+        <>
+          {hasImage && (
+            <div className='bg-black-opacity-60 absolute inset-0 h-full w-full rounded-[0.8rem]' />
+          )}
+          <div className='flex-col-center absolute gap-[0.4rem]'>
+            <div className='flex-start gap-[0.8rem]'>
+              <div
+                className={`${
+                  hasImage ? 'bg-mint-50' : 'bg-icon-neutral-disabled'
+                } flex-center h-[2.4rem] w-[2.4rem] rounded-full`}>
+                <IcCheckBox />
+              </div>
+              {hasImage && <span className='text-mint-50 body1-16-bold'>업로드 완료</span>}
+            </div>
+
+            <div
+              className={`body1-16-medium ${
+                hasImage ? 'text-background-default-white' : 'text-text-neutral-secondary'
+              } text-center`}>
+              {placeholder} 요금
+              <br />
+              영수증
+            </div>
           </div>
-        )}
+        </>
       </button>
     </div>
   );
 };
 
-export default PhotoUpload;
+export default ReceiptImageUpload;
