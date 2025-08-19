@@ -3,7 +3,7 @@ import { PageLayout } from '@layouts';
 import { Button, EscortCard, Tabs } from '@components';
 import type { RecruitStatus } from '@types';
 import { dateFormat, timeFormat } from '@utils';
-import { getRecruitList, getHasProfile } from '@helper/apis';
+import { getRecruitList, getProfileExistance } from '@helper/apis';
 import type { RecruitSimpleResponse, EscortStatus } from '@helper/types';
 
 export const Route = createFileRoute('/helper/')({
@@ -64,7 +64,7 @@ const refineEscortData = (escortData: RecruitSimpleResponse): RefinedEscortData 
 };
 
 function RouteComponent() {
-  const { data: hasProfileData } = getHasProfile();
+  const { data: hasProfileData } = getProfileExistance();
   const { data: recruitListData } = getRecruitList();
   const { inProgressList: inProgressListData, completedList: completedListData } =
     recruitListData?.data ?? {};
