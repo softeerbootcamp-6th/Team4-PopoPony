@@ -174,12 +174,14 @@ function RouteComponent() {
                       <EscortCard.Info type='location' text={refinedData.locationText} />
                     </EscortCard.InfoSection>
                     {refinedData.status === '동행중' && (
-                      <EscortCard.Button
+                      <EscortCard.DashboardButton
                         onClick={() => {
-                          {
-                            /* TODO: 대시보드 버튼 클릭 시 대시보드 페이지로 이동 */
-                          }
-                          alert('대시보드 버튼 클릭함');
+                          navigate({
+                            to: '/dashboard/$escortId/helper',
+                            params: {
+                              escortId: escort.recruitId.toString(),
+                            },
+                          });
                         }}
                       />
                     )}
