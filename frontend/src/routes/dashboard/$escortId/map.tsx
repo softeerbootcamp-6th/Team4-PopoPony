@@ -2,7 +2,7 @@ import { createFileRoute } from '@tanstack/react-router';
 import { PageLayout } from '@layouts';
 import { Header, Footer, DashBoardCard } from '@dashboard/components';
 import { getEscortDetail } from '@dashboard/apis';
-
+import { TermsBottomSheet } from '@components';
 export const Route = createFileRoute('/dashboard/$escortId/map')({
   component: RouteComponent,
 });
@@ -53,6 +53,12 @@ function RouteComponent() {
           handleClickGoToCustomerCenter={handleClickGoToCustomerCenter}
         />
       </PageLayout.Footer>
+      <TermsBottomSheet
+        defaultOpen={!localStorage.getItem('termsAgreement')}
+        onSubmit={() => {
+          localStorage.setItem('termsAgreement', 'true');
+        }}
+      />
     </PageLayout>
   );
 }
