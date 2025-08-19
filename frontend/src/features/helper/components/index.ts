@@ -6,6 +6,7 @@ import CertificateImageUploader from './form/CertificateImageUploader';
 import ReceiptImageUpload from './form/ReceiptImageUpload';
 import MultiImageSelect from './form/MultiImageSelect';
 import TaxiFeeSection from './form/TaxiFeeSection';
+import FilterButton from './FilterButton';
 
 import Time from './reportStep/Time';
 import Reservation from './reportStep/Reservation';
@@ -25,4 +26,5 @@ export {
   Reservation,
   Taxi,
   ReportDetail,
+  FilterButton,
 };

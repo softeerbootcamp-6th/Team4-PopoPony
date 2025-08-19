@@ -1,5 +1,4 @@
-import { RegionBottomSheet } from '@helper/components';
-import { IcChevronDown, IcCloseS } from '@icons';
+import { FilterButton, RegionBottomSheet } from '@helper/components';
 import { PageLayout } from '@layouts';
 import { z } from 'zod';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
@@ -19,39 +18,6 @@ export const Route = createFileRoute('/helper/application/')({
   validateSearch: filterSearchSchema,
   component: RouteComponent,
 });
-
-interface FilterButtonProps {
-  label: string;
-  selected?: string | undefined;
-  onClick: () => void;
-  onClickReset?: () => void;
-}
-
-const FilterButton = ({ label, selected, onClick, onClickReset }: FilterButtonProps) => {
-  return (
-    <button
-      type='button'
-      onClick={onClick}
-      className='flex-center body1-16-bold bg-neutral-10 w-fit gap-[0.4rem] rounded-full px-[1.2rem] py-[0.4rem]'>
-      {selected ? (
-        <>
-          <span className='text-text-mint-primary'>{selected}</span>
-          <IcCloseS
-            onClick={(e) => {
-              e.stopPropagation();
-              onClickReset?.();
-            }}
-          />
-        </>
-      ) : (
-        <>
-          <span className='text-text-neutral-primary'>{label}</span>
-          <IcChevronDown />
-        </>
-      )}
-    </button>
-  );
-};
 
 const fmtDash = (d: Date) => dateFormat(d.toISOString(), 'yyyy-MM-dd');
 const fmtDot = (d: Date) => dateFormat(d.toISOString(), 'yy.MM.dd');
@@ -119,7 +85,6 @@ function RouteComponent() {
             <FilterButton
               label='지역'
               selected={selectedRegion}
-              onClick={() => {}}
               onClickReset={() => handleClickReset('region')}
             />
           </RegionBottomSheet>
