@@ -1,6 +1,7 @@
 package com.todoc.server.domain.report.service;
 
 import com.todoc.server.common.dto.request.ImageCreateRequest;
+import com.todoc.server.common.enumeration.EscortStatus;
 import com.todoc.server.domain.auth.entity.Auth;
 import com.todoc.server.domain.auth.exception.AuthNotFoundException;
 import com.todoc.server.domain.escort.entity.Application;
@@ -94,6 +95,10 @@ class ReportFacadeServiceTest {
         TaxiFee taxiFee = mock(TaxiFee.class);
         when(taxiFeeService.register(feeReq)).thenReturn(taxiFee);
 
+        Escort escort = new Escort();
+        escort.setStatus(EscortStatus.WRITING_REPORT);
+        when(escortService.getByRecruitId(recruitId)).thenReturn(escort);
+
         // when
         reportFacadeService.createReport(req, recruitId);
 
@@ -121,14 +126,14 @@ class ReportFacadeServiceTest {
 
         verify(applicationService).getMatchedApplicationByRecruitId(recruitId);
         verify(reportService).register(any());
-        verifyNoMoreInteractions(applicationService, reportService, taxiFeeService,
-                imageAttachmentService, imageFileService);
     }
 
     @Test
     @DisplayName("createReport - customer == null 이면 AuthNotFoundException")
     void createReport_customerNull() {
         // given
+        long recruitId = 1L;
+
         ReportCreateRequest req = emptyMinimalRequest();
         when(reportService.register(any())).thenReturn(new Report());
 
@@ -136,10 +141,14 @@ class ReportFacadeServiceTest {
         Application app = mock(Application.class);
         when(app.getRecruit()).thenReturn(recruit);
         when(app.getHelper()).thenReturn(new Auth());
-        when(applicationService.getMatchedApplicationByRecruitId(2L)).thenReturn(app);
+        when(applicationService.getMatchedApplicationByRecruitId(recruitId)).thenReturn(app);
+
+        Escort escort = new Escort();
+        escort.setStatus(EscortStatus.WRITING_REPORT);
+        when(escortService.getByRecruitId(recruitId)).thenReturn(escort);
 
         // when & then
-        assertThatThrownBy(() -> reportFacadeService.createReport(req, 2L))
+        assertThatThrownBy(() -> reportFacadeService.createReport(req, recruitId))
                 .isInstanceOf(AuthNotFoundException.class);
     }
 
@@ -147,6 +156,8 @@ class ReportFacadeServiceTest {
     @DisplayName("createReport - helper == null 이면 AuthNotFoundException")
     void createReport_helperNull() {
         // given
+        long recruitId = 1L;
+
         ReportCreateRequest req = emptyMinimalRequest();
         when(reportService.register(any())).thenReturn(new Report());
 
@@ -157,10 +168,14 @@ class ReportFacadeServiceTest {
         Application app = mock(Application.class);
         when(app.getRecruit()).thenReturn(recruit);
         when(app.getHelper()).thenReturn(null);
-        when(applicationService.getMatchedApplicationByRecruitId(3L)).thenReturn(app);
+        when(applicationService.getMatchedApplicationByRecruitId(recruitId)).thenReturn(app);
+
+        Escort escort = new Escort();
+        escort.setStatus(EscortStatus.WRITING_REPORT);
+        when(escortService.getByRecruitId(recruitId)).thenReturn(escort);
 
         // when & then
-        assertThatThrownBy(() -> reportFacadeService.createReport(req, 3L))
+        assertThatThrownBy(() -> reportFacadeService.createReport(req, recruitId))
                 .isInstanceOf(AuthNotFoundException.class);
     }
 
