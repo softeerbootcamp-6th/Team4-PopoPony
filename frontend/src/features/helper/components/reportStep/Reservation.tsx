@@ -9,24 +9,21 @@ const Reservation = ({ handleNextStep }: FunnelStepProps) => {
   const { register, watch, setValue } = useFormContext();
 
   const hasNextAppointment = watch('hasNextAppointment');
-  const nextAppointmentDate = watch('nextAppointmentTime');
+  const reservationDate = watch('reservationDate');
+  const reservationTime = watch('reservationTime');
 
-  const nextAppointmentDay = nextAppointmentDate?.split('T')[0] || '';
-  const nextAppointmentTime = nextAppointmentDate?.split('T')[1] || '';
+  const nextReservationTime = new Date(`${reservationDate}T${reservationTime}`);
 
   const today = new Date();
-  const isValidTime =
-    nextAppointmentDay && nextAppointmentTime && isBefore(today, nextAppointmentDate);
+  const isValidTime = reservationDate && reservationTime && isBefore(today, nextReservationTime);
 
-  const isValidButton = !hasNextAppointment || (hasNextAppointment && isValidTime);
+  const isValidButton = !hasNextAppointment || (reservationDate && isValidTime);
 
   const getTimeErrorMessage = () => {
-    if (!nextAppointmentDay || !nextAppointmentTime) {
+    if (!reservationDate || !reservationTime) {
       return undefined;
     }
-    const nextAppointment = new Date(nextAppointmentDate);
-
-    if (isBefore(nextAppointment, today)) {
+    if (isBefore(nextReservationTime, today)) {
       return '예약 일정은 오늘 이후여야 합니다.';
     }
     return undefined;
@@ -47,7 +44,8 @@ const Reservation = ({ handleNextStep }: FunnelStepProps) => {
               checked={!hasNextAppointment}
               onChange={() => {
                 if (hasNextAppointment) {
-                  setValue('nextAppointmentTime', undefined);
+                  setValue('reservationDate', undefined);
+                  setValue('reservationTime', undefined);
                 }
                 setValue('hasNextAppointment', !hasNextAppointment);
               }}
@@ -62,13 +60,9 @@ const Reservation = ({ handleNextStep }: FunnelStepProps) => {
                   type='date'
                   disabled={!hasNextAppointment}
                   className='body1-16-medium text-text-neutral-primary w-full bg-transparent outline-none disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:top-0 [&::-webkit-calendar-picker-indicator]:left-0 [&::-webkit-calendar-picker-indicator]:h-full [&::-webkit-calendar-picker-indicator]:w-full [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:opacity-0'
-                  {...register('actualMeetingTime', {
-                    onChange: (e) => {
-                      setValue('nextAppointmentTime', `${e.target.value}T${nextAppointmentTime}`);
-                    },
-                  })}
+                  {...register('reservationDate')}
                 />
-                {!nextAppointmentDay && (
+                {!reservationDate && (
                   <div className='body1-16-medium bg-background-default-white text-text-neutral-assistive pointer-events-none absolute top-0 left-0 w-full'>
                     {hasNextAppointment ? '날짜 선택' : '-'}
                   </div>
@@ -82,13 +76,13 @@ const Reservation = ({ handleNextStep }: FunnelStepProps) => {
                   type='time'
                   disabled={!hasNextAppointment}
                   className='body1-16-medium text-text-neutral-primary w-full bg-transparent outline-none disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:top-0 [&::-webkit-calendar-picker-indicator]:left-0 [&::-webkit-calendar-picker-indicator]:h-full [&::-webkit-calendar-picker-indicator]:w-full [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:opacity-0'
-                  {...register('actualReturnTime', {
+                  {...register('reservationTime', {
                     onChange: (e) => {
-                      setValue('nextAppointmentTime', `${nextAppointmentDay}T${e.target.value}:00`);
+                      setValue('reservationTime', `${e.target.value}:00`);
                     },
                   })}
                 />
-                {!nextAppointmentTime && (
+                {!reservationTime && (
                   <div className='body1-16-medium bg-background-default-white text-text-neutral-assistive pointer-events-none absolute top-0 left-0 w-full'>
                     {hasNextAppointment ? '시간 선택' : '-'}
                   </div>

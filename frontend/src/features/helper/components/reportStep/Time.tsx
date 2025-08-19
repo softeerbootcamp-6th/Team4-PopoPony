@@ -6,7 +6,7 @@ import { useFormContext } from 'react-hook-form';
 import { differenceInMinutes } from 'date-fns';
 
 const Time = ({ handleNextStep }: FunnelStepProps) => {
-  const { register, watch } = useFormContext();
+  const { register, watch, setValue } = useFormContext();
 
   const actualMeetingTime = watch('actualMeetingTime');
   const actualReturnTime = watch('actualReturnTime');
@@ -55,7 +55,11 @@ const Time = ({ handleNextStep }: FunnelStepProps) => {
                   <input
                     type='time'
                     className='body1-16-medium text-text-neutral-primary w-full bg-transparent outline-none disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:top-0 [&::-webkit-calendar-picker-indicator]:left-0 [&::-webkit-calendar-picker-indicator]:h-full [&::-webkit-calendar-picker-indicator]:w-full [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:opacity-0'
-                    {...register('actualMeetingTime')}
+                    {...register('actualMeetingTime', {
+                      onChange: (e) => {
+                        setValue('actualMeetingTime', `${e.target.value}:00`);
+                      },
+                    })}
                   />
                   {!actualMeetingTime && (
                     <div className='body1-16-medium bg-background-default-white text-text-neutral-assistive pointer-events-none absolute top-0 left-0 w-full'>
@@ -70,7 +74,11 @@ const Time = ({ handleNextStep }: FunnelStepProps) => {
                   <input
                     type='time'
                     className='body1-16-medium text-text-neutral-primary w-full bg-transparent outline-none disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:top-0 [&::-webkit-calendar-picker-indicator]:left-0 [&::-webkit-calendar-picker-indicator]:h-full [&::-webkit-calendar-picker-indicator]:w-full [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:opacity-0'
-                    {...register('actualReturnTime')}
+                    {...register('actualReturnTime', {
+                      onChange: (e) => {
+                        setValue('actualReturnTime', `${e.target.value}:00`);
+                      },
+                    })}
                   />
                   {!actualReturnTime && (
                     <div className='body1-16-medium bg-background-default-white text-text-neutral-assistive pointer-events-none absolute top-0 left-0 w-full'>

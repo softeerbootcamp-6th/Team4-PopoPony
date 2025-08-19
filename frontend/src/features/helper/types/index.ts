@@ -9,11 +9,13 @@ export type ReportFormValues = Omit<
   components['schemas']['ReportCreateRequest'],
   'imageCreateRequestList' | 'taxiFeeCreateRequest'
 > & {
+  reservationDate?: string;
+  reservationTime?: string;
   imageCreateRequestList: ImageWithPreviewUrl[];
   taxiFeeCreateRequest: {
-    departureFee: number;
+    departureFee: string;
     departureReceipt: ImageWithPreviewUrl;
-    returnFee: number;
+    returnFee: string;
     returnReceipt: ImageWithPreviewUrl;
   };
 };

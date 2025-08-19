@@ -33,9 +33,9 @@ function RouteComponent() {
         description: reportDefault.memo || '',
         imageCreateRequestList: [],
         taxiFeeCreateRequest: {
-          departureFee: 0,
+          departureFee: '',
           departureReceipt: {} as ReportFormValues['taxiFeeCreateRequest']['departureReceipt'],
-          returnFee: 0,
+          returnFee: '',
           returnReceipt: {} as ReportFormValues['taxiFeeCreateRequest']['returnReceipt'],
         },
       });

@@ -8,21 +8,31 @@ import { removePreviewUrl } from '@utils';
 export const convertFormToApiRequest = (
   formData: ReportFormValues
 ): components['schemas']['ReportCreateRequest'] => {
-  const { imageCreateRequestList, taxiFeeCreateRequest, ...rest } = formData;
+  const {
+    imageCreateRequestList,
+    taxiFeeCreateRequest,
+    reservationDate,
+    reservationTime,
+    ...rest
+  } = formData;
+
+  const nextAppointmentTime =
+    reservationDate && reservationTime ? `${reservationDate}T${reservationTime}` : undefined;
 
   // ImageWithPreviewUrl에서 previewUrl 제거
   const apiImageList = imageCreateRequestList.map(removePreviewUrl);
 
   // 택시 요금 정보에서도 previewUrl 제거
   const apiTaxiFee = {
-    departureFee: taxiFeeCreateRequest.departureFee,
+    departureFee: Number(taxiFeeCreateRequest.departureFee.replaceAll(',', '')),
     departureReceipt: removePreviewUrl(taxiFeeCreateRequest.departureReceipt),
-    returnFee: taxiFeeCreateRequest.returnFee,
+    returnFee: Number(taxiFeeCreateRequest.returnFee.replaceAll(',', '')),
     returnReceipt: removePreviewUrl(taxiFeeCreateRequest.returnReceipt),
   };
 
   return {
     ...rest,
+    nextAppointmentTime,
     imageCreateRequestList: apiImageList,
     taxiFeeCreateRequest: apiTaxiFee,
   };
