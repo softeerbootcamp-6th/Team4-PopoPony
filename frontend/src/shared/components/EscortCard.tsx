@@ -90,6 +90,6 @@ EscortCard.StatusHeader = CardStatusHeader;
 EscortCard.InfoSection = InfoSection;
 EscortCard.Info = CardInfo;
 EscortCard.Tag = CardTags;
-EscortCard.Button = CardButton;
+EscortCard.DashboardButton = CardButton;
 
 export default EscortCard;

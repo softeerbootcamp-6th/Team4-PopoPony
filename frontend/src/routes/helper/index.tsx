@@ -3,8 +3,8 @@ import { PageLayout } from '@layouts';
 import { Button, EscortCard, Tabs } from '@components';
 import type { RecruitStatus } from '@types';
 import { dateFormat, timeFormat } from '@utils';
-import { getRecruitList } from '@helper/apis';
-import type { RecruitSimpleResponse } from '@helper/types';
+import { getRecruitList, getProfileExistance } from '@helper/apis';
+import type { RecruitSimpleResponse, EscortStatus } from '@helper/types';
 
 export const Route = createFileRoute('/helper/')({
   component: RouteComponent,
@@ -22,11 +22,30 @@ const statusMessageMap: Record<RecruitStatus, string> = {
   매칭중: '아직 매칭 확정되지 않았어요!',
   매칭완료: '매칭이 확정되었어요!',
   동행중: '동행이 진행중입니다!',
-  동행완료: '동행번호 NO.12394O4L',
+  동행완료: '동행번호 NO.',
+};
+const escortStatusMessageMap: Record<NonNullable<EscortStatus>, string> = {
+  //동행준비, 리포트 작성중, 동행완료는 차피 쓰이지 않음. 타입 에러 해결 위해 넣음.
+  동행준비: '동행 준비 중입니다.',
+  만남중: '동행자에게 이동해주세요.',
+  병원행: '병원으로 이동해주세요.',
+  진료중: '병원에서 진료 중입니다.',
+  복귀중: '안전하게 복귀해주세요.',
+  리포트작성중: '리포트를 작성 중입니다.',
+  동행완료: '동행이 완료되었습니다.',
 };
 
 const refineEscortData = (escortData: RecruitSimpleResponse): RefinedEscortData => {
-  const statusText = statusMessageMap[escortData.recruitStatus];
+  let statusText = '';
+  if (escortData.recruitStatus === '동행중' && escortData.escortStatus) {
+    statusText = escortStatusMessageMap[escortData.escortStatus as NonNullable<EscortStatus>] ?? '';
+  } else {
+    if (escortData.recruitStatus === '동행완료') {
+      statusText = statusMessageMap[escortData.recruitStatus] + (escortData.escortId || '');
+    } else {
+      statusText = statusMessageMap[escortData.recruitStatus];
+    }
+  }
   const title = dateFormat(escortData.escortDate, 'M월 d일 (eee)') + ', ' + escortData.destination;
   const startTime = timeFormat(escortData.estimatedMeetingTime);
   const endTime = timeFormat(escortData.estimatedReturnTime);
@@ -45,19 +64,31 @@ const refineEscortData = (escortData: RecruitSimpleResponse): RefinedEscortData 
 };
 
 function RouteComponent() {
-  const hasProfile = false;
-  //TODO: 추후 api call로 전환
+  const { data: hasProfileData } = getProfileExistance();
+  const { hasProfile, helperProfileId } = hasProfileData?.data ?? {
+    hasProfile: false,
+    helperProfileId: undefined,
+  };
   const { data: recruitListData } = getRecruitList();
   const { inProgressList: inProgressListData, completedList: completedListData } =
     recruitListData?.data ?? {};
   const navigate = useNavigate();
-  const handleEscortCardClick = (recruitId: number) => {
-    navigate({
-      to: '/helper/escort/$escortId',
-      params: {
-        escortId: recruitId.toString(),
-      },
-    });
+  const handleEscortCardClick = (recruitId: number, isCompleted: boolean) => {
+    if (isCompleted) {
+      navigate({
+        to: '/helper/escort/$escortId',
+        params: {
+          escortId: recruitId.toString(),
+        },
+      });
+    } else {
+      navigate({
+        to: '/helper/application/$escortId',
+        params: {
+          escortId: recruitId.toString(),
+        },
+      });
+    }
   };
 
   return (
@@ -74,15 +105,24 @@ function RouteComponent() {
             </h2>
             <div className='flex-between flex w-full gap-[1.2rem]'>
               <div className='flex-1'>
-                <Link
-                  to={hasProfile ? '/helper/profile' : '/helper/profile/new/$step'}
-                  params={{ step: 'region' }}>
-                  <Button variant='assistive' size='md'>
-                    <span className='text-text-neutral-primary'>
-                      {hasProfile ? '프로필 바로가기' : '프로필 작성하기'}
-                    </span>
-                  </Button>
-                </Link>
+                {hasProfile && helperProfileId ? (
+                  <Link
+                    to={`/helper/profile/$helperId`}
+                    params={{ helperId: helperProfileId.toString() }}>
+                    <Button variant='assistive' size='md'>
+                      <span className='text-text-neutral-primary'>프로필 바로가기</span>
+                    </Button>
+                  </Link>
+                ) : (
+                  <Link
+                    to='/helper/profile/new/$step'
+                    params={{ step: 'region' }}
+                    search={{ mode: 'new' }}>
+                    <Button variant='assistive' size='md'>
+                      <span className='text-text-neutral-primary'>프로필 작성하기</span>
+                    </Button>
+                  </Link>
+                )}
               </div>
               <div className='flex-1'>
                 <Link to='/helper/application'>
@@ -122,7 +162,7 @@ function RouteComponent() {
                 return (
                   <EscortCard
                     key={escort.recruitId}
-                    onClick={() => handleEscortCardClick(escort.recruitId)}>
+                    onClick={() => handleEscortCardClick(escort.recruitId, false)}>
                     <EscortCard.StatusHeader
                       status={refinedData.status}
                       text={refinedData.statusText}
@@ -133,7 +173,18 @@ function RouteComponent() {
                       <EscortCard.Info type='time' text={refinedData.timeText} />
                       <EscortCard.Info type='location' text={refinedData.locationText} />
                     </EscortCard.InfoSection>
-                    {refinedData.status === '동행중' && <EscortCard.Button onClick={() => {}} />}
+                    {refinedData.status === '동행중' && (
+                      <EscortCard.DashboardButton
+                        onClick={() => {
+                          navigate({
+                            to: '/dashboard/$escortId/helper',
+                            params: {
+                              escortId: escort.recruitId.toString(),
+                            },
+                          });
+                        }}
+                      />
+                    )}
                   </EscortCard>
                 );
               })}
@@ -146,7 +197,7 @@ function RouteComponent() {
                 return (
                   <EscortCard
                     key={escort.recruitId}
-                    onClick={() => handleEscortCardClick(escort.recruitId)}>
+                    onClick={() => handleEscortCardClick(escort.recruitId, true)}>
                     <EscortCard.StatusHeader
                       status={refinedData.status}
                       text={refinedData.statusText}
