@@ -3,7 +3,7 @@ import { IcHomeFill, IcHospitalFill, IcClockFill, IcMarkFill } from '@icons';
 
 const DashBoardCard = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className='bg-background-default-white shadow-card shadow-bottom-sheet flex-1 rounded-t-[1.6rem]'>
+    <div className='shadow-card shadow-bottom-sheet relative z-10 -mt-[1.6rem] flex-1'>
       {children}
     </div>
   );
@@ -12,9 +12,9 @@ const DashBoardCard = ({ children }: { children: React.ReactNode }) => {
 const Home = (active: boolean) => {
   return (
     <div
-      className={`flex-center h-[2.4rem] w-[2.4rem] rounded-full ${active ? 'bg-neutral-15' : 'bg-background-default-mint'}`}>
+      className={`flex-center h-[2.4rem] w-[2.4rem] rounded-full ${active ? 'bg-background-default-mint' : 'bg-neutral-15'}`}>
       <IcHomeFill
-        className={`h-[1.6rem] w-[1.6rem] ${active ? '[&_path]:fill-icon-neutral-disabled' : '[&_path]:fill-background-default-white'}`}
+        className={`h-full w-full ${active ? '[&_path]:fill-background-default-white' : '[&_path]:fill-icon-neutral-disabled'}`}
       />
     </div>
   );
@@ -22,23 +22,27 @@ const Home = (active: boolean) => {
 const Line = (active: boolean) => {
   return (
     <div
-      className={`h-[0.4rem] w-[2rem] rounded-full ${active ? 'bg-neutral-15' : 'bg-background-default-mint'}`}
+      className={`h-[0.4rem] w-[2rem] rounded-full ${active ? 'bg-background-default-mint' : 'bg-neutral-15'}`}
     />
   );
 };
 const Hospital = (active: boolean) => {
   return (
     <div
-      className={`flex-center h-[2.4rem] w-[2.4rem] rounded-full ${active ? 'bg-neutral-15' : 'bg-background-default-mint'}`}>
+      className={`flex-center h-[2.4rem] w-[2.4rem] rounded-full ${active ? 'bg-background-default-mint' : 'bg-neutral-15'}`}>
       <IcHospitalFill
-        className={`h-[1.6rem] w-[1.6rem] ${active ? '[&_path]:fill-icon-neutral-disabled' : '[&_path]:fill-background-default-white'}`}
+        className={`h-full w-full ${active ? '[&_path]:fill-background-default-white' : '[&_path]:fill-icon-neutral-disabled'}`}
       />
     </div>
   );
 };
 
 const TitleWrapper = ({ children }: { children: React.ReactNode }) => {
-  return <div className='flex flex-col gap-[0.8rem] p-[2rem]'>{children}</div>;
+  return (
+    <div className='bg-background-default-white flex flex-col gap-[0.8rem] rounded-t-[1.6rem] p-[2rem]'>
+      {children}
+    </div>
+  );
 };
 
 type StatusTitleComponentProps = { escortStatus: StatusTitleProps };
@@ -72,13 +76,13 @@ const ContentWrapper = ({ children }: { children: React.ReactNode }) => {
 };
 
 const ContentTitle = ({ children }: { children: React.ReactNode }) => {
-  return <div className='flex flex-col gap-[0.8rem] p-[2rem]'>{children}</div>;
+  return <div className='flex flex-col gap-[0.8rem]'>{children}</div>;
 };
 
 const TimeContent = (time: string) => {
   return (
     <div className='flex flex-col gap-[0.8rem]'>
-      <IcClockFill className='h-[1.6rem] w-[1.6rem]' />
+      <IcClockFill className='h-[2.4rem] w-[2.4rem]' />
       <div className='subtitle-18-medium text-text-neutral-primary'>{time}</div>
     </div>
   );
@@ -95,7 +99,7 @@ const AddressContent = ({
 }) => {
   return (
     <div className='flex items-start justify-start gap-[0.8rem]'>
-      <IcMarkFill className='h-[1.6rem] w-[1.6rem]' />
+      <IcMarkFill className='[&_path]:fill-icon-neutral-assistive h-[2.4rem] w-[2.4rem]' />
       <div className='flex flex-col gap-[0.4rem]'>
         <div className='subtitle-18-medium text-text-neutral-primary'>{detailAddress}</div>
         <div className='body2-14-medium text-text-neutral-secondary'>

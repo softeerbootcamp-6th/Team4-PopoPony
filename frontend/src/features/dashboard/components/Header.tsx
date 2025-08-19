@@ -10,7 +10,7 @@ const Header = ({ updateBefore }: HeaderProps) => {
   return (
     <>
       <button
-        className='bg-background-default-white shadow-button top-[1.2rem] left-[1.2rem] flex h-[4.8rem] w-[4.8rem] items-center justify-center rounded-full'
+        className='bg-background-default-white shadow-button absolute top-[1.2rem] left-[1.2rem] flex h-[4.8rem] w-[4.8rem] items-center justify-center rounded-full'
         onClick={() => router.history.back()}>
         <IcArrowLeft className='h-[2.4rem] w-[2.4rem]' />
       </button>
