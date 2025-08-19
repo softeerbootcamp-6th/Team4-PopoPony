@@ -15,7 +15,7 @@ const LabeledSection = ({ label, isChecked = false, children, message }: Props) 
         {isChecked && <IcCheck className='[&_path]:stroke-mint-50' />}
       </div>
       <div>{children}</div>
-      {!isChecked && message && <p className='body2-14-regular text-red-500'>{message}</p>}
+      {!isChecked && message && <p className='body2-14-medium text-red-500'>{message}</p>}
     </section>
   );
 };

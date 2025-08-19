@@ -61,7 +61,7 @@ dependencies {
 	implementation("io.micrometer:micrometer-registry-cloudwatch2")
 
 	// S3
-	implementation(platform("software.amazon.awssdk:bom:2.25.66"))
+	implementation(platform("software.amazon.awssdk:bom:2.31.78"))
 	implementation("software.amazon.awssdk:s3")
 	implementation("software.amazon.awssdk:sts")
 
@@ -75,7 +75,7 @@ dependencies {
 	implementation ("org.springframework.boot:spring-boot-starter-aop")
 
 	// CloudWatch
-	implementation(platform("software.amazon.awssdk:bom:2.25.58"))
+	implementation(platform("software.amazon.awssdk:bom:2.31.78"))
 	implementation("software.amazon.awssdk:cloudwatch")
 }
 
