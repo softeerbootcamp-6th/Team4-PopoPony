@@ -5,18 +5,18 @@ import { reviewSchema } from '@customer/types';
 import { FormLayout } from '@layouts';
 import { FormTextarea } from '@components';
 import { postHelperReview } from '@customer/apis';
-import { useParams } from '@tanstack/react-router';
+import { getRouteApi } from '@tanstack/react-router';
 
 interface CommentProps extends RecruitStepProps {
   escortId: string;
   handleNextStep: () => void;
 }
 
+const routeApi = getRouteApi('/customer/escort/$escortId/$helperId/review/$step');
+
 const Comment = ({ escortId, handleNextStep }: CommentProps) => {
   const { getValues } = useFormContext();
-  const { helperId } = useParams({
-    from: '/customer/escort/$escortId/$helperId/review/$step',
-  });
+  const { helperId } = routeApi.useParams();
   const { isFormValid } = useFormValidation(reviewSchema);
   const { mutate } = postHelperReview();
 

@@ -8,6 +8,12 @@ import postHelperReview from './postHelperReview';
 import getPastPatientInfo from './getPastPatientInfo';
 import getPastPatientInfoDetail from './getPastPatientInfoDetail';
 import getPresignedImage from './getPresignedImage';
+import getApplicationListById from './getApplicationListById';
+import deleteRecruit from './deleteRecruit';
+import postSelectApplication from './postSelectApplication';
+import getRecruitPayment from './getRecruitPayment';
+import getRecruitReportByRecruitId from './getRecruitReportByRecruitId';
+import getRecruitReviewByRecruitId from './getRecruitReviewByRecruitId';
 import getTMapSearch from './getTMapSearch';
 // TODO: 추후 삭제
 import { searchRoute } from './search';
@@ -24,5 +30,11 @@ export {
   getPastPatientInfo,
   getPastPatientInfoDetail,
   getPresignedImage,
+  getApplicationListById,
+  deleteRecruit,
+  postSelectApplication,
+  getRecruitPayment,
+  getRecruitReviewByRecruitId,
+  getRecruitReportByRecruitId,
   getTMapSearch,
 };
