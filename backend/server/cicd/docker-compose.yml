@@ -13,3 +13,9 @@ services:
       DB_PASSWORD: ${DB_PASSWORD}
       TMAP_API_KEY: ${TMAP_API_KEY}
     restart: always
+    logging:
+      driver: awslogs
+      options:
+        awslogs-region: ap-northeast-2       # 리전 맞게 수정
+        awslogs-group: SpringApp/Logs        # CloudWatch Log Group
+        awslogs-stream: app                  # 컨테이너 Log Stream 이름
