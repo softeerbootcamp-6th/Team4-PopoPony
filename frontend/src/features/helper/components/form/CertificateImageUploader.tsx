@@ -25,7 +25,7 @@ const CertificateImageUploader = ({ selectedCertificates, prefix }: Props) => {
 
     try {
       setUploadingType(certificateType);
-      const { imageData } = await uploadImage(file, prefix);
+      const imageData = await uploadImage(file, prefix);
 
       const updatedCertificateList = certificateList.map((cert) => {
         if (cert.type === certificateType) {

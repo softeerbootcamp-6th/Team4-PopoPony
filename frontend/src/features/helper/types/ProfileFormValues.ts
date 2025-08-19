@@ -35,7 +35,7 @@ export const CERTIFICATE_OPTIONS = [
   '간병사',
 ] as const;
 
-const EditSchema = z.object({
+export const EditSchema = z.object({
   imageUrl: z.string().optional(),
   isEdit: z.boolean().optional(),
   helperProfileId: z.number().optional(),
