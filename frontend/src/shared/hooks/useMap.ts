@@ -58,7 +58,7 @@ export const useMap = (mapRef: React.RefObject<HTMLDivElement>) => {
     }
   };
 
-  const addMarker = (lat: number, lng: number, type?: MarkerType) => {
+  const addMarker = (lat: number, lng: number, type?: MarkerType, label?: string) => {
     if (!mapInstance) {
       return null;
     }
@@ -86,6 +86,7 @@ export const useMap = (mapRef: React.RefObject<HTMLDivElement>) => {
       position: new Tmapv3.LatLng(lat, lng),
       map: mapInstance,
       icon: iconPath(),
+      label: label,
     });
 
     return marker;
