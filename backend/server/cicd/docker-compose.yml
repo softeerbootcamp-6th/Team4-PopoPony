@@ -12,6 +12,7 @@ services:
       DB_USERNAME: ${DB_USERNAME}
       DB_PASSWORD: ${DB_PASSWORD}
       TMAP_API_KEY: ${TMAP_API_KEY}
+      TZ: Asia/Seoul
     restart: always
     logging:
       driver: awslogs
