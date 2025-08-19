@@ -1,5 +1,6 @@
 import { type StatusTitleProps } from '@dashboard/types';
 import { IcHomeFill, IcHospitalFill, IcClockFill, IcMarkFill } from '@icons';
+import { timeFormat } from '@utils';
 
 const DashBoardCard = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -79,11 +80,13 @@ const ContentTitle = ({ children }: { children: React.ReactNode }) => {
   return <div className='flex flex-col gap-[0.8rem]'>{children}</div>;
 };
 
-const TimeContent = (time: string) => {
+const TimeContent = ({ time }: { time: string }) => {
   return (
-    <div className='flex flex-col gap-[0.8rem]'>
-      <IcClockFill className='h-[2.4rem] w-[2.4rem]' />
-      <div className='subtitle-18-medium text-text-neutral-primary'>{time}</div>
+    <div className='flex gap-[0.8rem]'>
+      <IcClockFill className='[&_path]:fill-icon-neutral-assistive h-[2.4rem] w-[2.4rem]' />
+      <div className='subtitle-18-medium text-text-neutral-primary'>
+        {timeFormat(time, 'aaa HH:mm')}
+      </div>
     </div>
   );
 };
