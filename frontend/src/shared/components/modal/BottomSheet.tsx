@@ -134,7 +134,7 @@ const BottomSheetTitle = ({ className, children, ...props }: BottomSheetTitlePro
 // Description Component
 interface BottomSheetDescriptionProps
   extends React.ComponentProps<typeof SheetPrimitive.Description> {
-  children: React.ReactNode;
+  children?: React.ReactNode;
 }
 
 const BottomSheetDescription = ({ className, children, ...props }: BottomSheetDescriptionProps) => {

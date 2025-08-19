@@ -16,6 +16,7 @@ export {
   Region,
   Detail,
   RegionBottomSheet,
+  RegionBottomSheetForm,
   CertificateImageUploader,
   ReceiptImageUpload,
   MultiImageSelect,

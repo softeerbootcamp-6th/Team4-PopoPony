@@ -15,7 +15,10 @@ const RegionBottomSheet = ({ children, onSelect }: RegionBottomSheetProps) => {
       <BottomSheet.Trigger asChild>{children}</BottomSheet.Trigger>
       <BottomSheet.Content>
         <BottomSheet.Header>
-          <BottomSheet.Title>지역을 선택해주세요</BottomSheet.Title>
+          <BottomSheet.Title>
+            지역을 선택해주세요
+            <BottomSheet.Description></BottomSheet.Description>
+          </BottomSheet.Title>
         </BottomSheet.Header>
         <div className='grid grid-cols-3 gap-x-[0.8rem] gap-y-[1.2rem] p-[2rem]'>
           {REGION_OPTIONS.map((option, index) => {

@@ -3,13 +3,12 @@ import { IcChevronDown, IcCloseS } from '@icons';
 import { PageLayout } from '@layouts';
 import { z } from 'zod';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
-import { Calendar, EscortCard } from '@components';
+import { Calendar, EmptyCard, EscortCard } from '@components';
 import { getSearchRecruits } from '@helper/apis';
 import { dateFormat, timeFormat } from '@utils';
 import { useMemo, useRef, useState } from 'react';
 import type { DateRange } from 'react-day-picker';
 import { useClickOutside } from '@hooks';
-import { HelperEmptyCard } from '@customer/components';
 
 const filterSearchSchema = z.object({
   region: z.string().optional(),
@@ -146,7 +145,7 @@ function RouteComponent() {
           </div>
         </section>
         <section className='flex flex-col gap-[1.6rem] p-[2rem]'>
-          {dateList.length === 0 && <HelperEmptyCard />}
+          {dateList.length === 0 && <EmptyCard text='조건에 맞는 일감이 없어요' />}
           {dateList.map((date) => (
             <div className='flex flex-col gap-[0.8rem]' key={date}>
               <span key={date} className='body2-14-medium text-text-neutral-secondary'>
