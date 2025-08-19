@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import type { MarkerType, Position, TMap, TMapPolyline } from '@types';
 import {
+  DEFAULT_POLYLINE_COLOR,
+  DEFAULT_POLYLINE_STROKE_WEIGHT,
   DEFAULT_ZOOM_LEVEL,
   INITIAL_LATITUDE,
   INITIAL_LONGITUDE,
@@ -202,9 +204,8 @@ export const useMap = (mapRef: React.RefObject<HTMLDivElement>) => {
     try {
       const polyline = new Tmapv3.Polyline({
         path,
-        strokeColor: '#39bdea',
-        strokeWeight: 8,
-        direction: true,
+        strokeColor: DEFAULT_POLYLINE_COLOR,
+        strokeWeight: DEFAULT_POLYLINE_STROKE_WEIGHT,
         map: mapInstance,
       });
 
@@ -269,16 +270,14 @@ export const useMap = (mapRef: React.RefObject<HTMLDivElement>) => {
       mapInstance.on('ConfigLoad', () => {
         new Tmapv3.Polyline({
           path: meetingToHospitalPath,
-          strokeColor: '#39bdea',
-          strokeWeight: 8,
-          direction: true,
+          strokeColor: DEFAULT_POLYLINE_COLOR,
+          strokeWeight: DEFAULT_POLYLINE_STROKE_WEIGHT,
           map: mapInstance,
         });
         new Tmapv3.Polyline({
           path: hospitalToReturnPath,
-          strokeColor: '#39bdea',
-          strokeWeight: 8,
-          direction: true,
+          strokeColor: DEFAULT_POLYLINE_COLOR,
+          strokeWeight: DEFAULT_POLYLINE_STROKE_WEIGHT,
           map: mapInstance,
         });
       });
