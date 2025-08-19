@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { EscortCard, ProgressIndicator, Tabs } from '@components';
 import { DetailTab, ReportTab } from '@helper/components';
 import { PageLayout } from '@layouts';
