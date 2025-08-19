@@ -2,9 +2,9 @@ import { FilterButton, RegionBottomSheet } from '@helper/components';
 import { PageLayout } from '@layouts';
 import { z } from 'zod';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
-import { Calendar, EmptyCard, EscortCard } from '@components';
+import { Calendar, EmptyCard, EscortCard, StrengthTagList } from '@components';
 import { getSearchRecruits } from '@helper/apis';
-import { dateFormat, timeFormat } from '@utils';
+import { dateFormat, timeDuration, timeFormat } from '@utils';
 import { useMemo, useRef, useState } from 'react';
 import type { DateRange } from 'react-day-picker';
 import { useClickOutside } from '@hooks';
@@ -133,15 +133,29 @@ function RouteComponent() {
                     />
                     <EscortCard.Divider />
                     <EscortCard.InfoSection>
-                      <EscortCard.Info
-                        type='time'
-                        text={`${date} ${timeFormat(escort.estimatedMeetingTime)} ~ ${timeFormat(escort.estimatedReturnTime)}`}
-                      />
+                      <div className='flex-start flex-wrap gap-[0.4rem]'>
+                        <EscortCard.Info
+                          type='time'
+                          text={`${date} ${timeFormat(escort.estimatedMeetingTime)} ~ ${timeFormat(escort.estimatedReturnTime)} ${timeDuration(escort.estimatedMeetingTime, escort.estimatedReturnTime)}`}
+                        />
+                        <span className='label2-14-bold text-text-neutral-secondary'>
+                          {timeDuration(escort.estimatedMeetingTime, escort.estimatedReturnTime)}
+                        </span>
+                      </div>
                       <EscortCard.Info
                         type='location'
                         text={`${escort.departureLocation} → ${escort.destination}`}
                       />
+                      <EscortCard.Info
+                        type='price'
+                        text={`${escort.estimatedPayment.toLocaleString()}원`}
+                      />
                     </EscortCard.InfoSection>
+                    <StrengthTagList
+                      needsHelping={escort.needsHelping}
+                      usesWheelchair={escort.usesWheelchair}
+                      hasCognitiveIssue={escort.hasCognitiveIssue}
+                    />
                   </EscortCard>
                 );
               })}

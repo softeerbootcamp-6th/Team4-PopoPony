@@ -32,6 +32,7 @@ import {
   buttonVariants as shadCnButtonVariants,
 } from './shadcn/ShadcnButton';
 import { Calendar, CalendarDayButton } from './calendar';
+import StrengthTagList from './StrengthTagList';
 
 export {
   Button,
@@ -67,4 +68,5 @@ export {
   shadCnButtonVariants,
   Calendar,
   CalendarDayButton,
+  StrengthTagList,
 };
