@@ -1,15 +1,15 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { Modal } from '@components';
 import { PageLayout } from '@layouts';
 import { type ProfileFormValues } from '@helper/types';
+import { toProfileFormValues } from '@helper/utils/normalizeProfileFromApi';
 import { useFunnel, useModal } from '@hooks';
-import { createFileRoute, useRouter, useSearch } from '@tanstack/react-router';
+import { createFileRoute, useRouter } from '@tanstack/react-router';
+import { getProfileExistance, getReviseHelperProfileInfo } from '@helper/apis';
 import { Region, Detail } from '@helper/components';
 import { FormProvider, useForm } from 'react-hook-form';
-import { getHasProfile, getHelperById } from '@helper/apis';
 
 export const Route = createFileRoute('/helper/profile/new/$step')({
-  validateSearch: (search: { revise?: string } | undefined) => ({ revise: search?.revise }),
   component: RouteComponent,
 });
 
@@ -17,19 +17,17 @@ const stepList = ['region', 'detail'];
 
 function RouteComponent() {
   const router = useRouter();
+  const { data: hasProfileData } = getProfileExistance();
+  const isRevise = hasProfileData?.data?.hasProfile || false;
+  const { data: helperData } = getReviseHelperProfileInfo(
+    hasProfileData?.data?.helperProfileId ?? 0,
+    isRevise
+  );
+
   const { isOpen, openModal, closeModal } = useModal();
-  const [enable, setEnable] = useState(false);
   const methods = useForm<ProfileFormValues>({ shouldUnregister: false });
-  //이전에 프로필이 있는지, 그걸 수정하기 위해서 이 페이지에 라우팅 했는지 확인
-  const { data: hasProfileData } = getHasProfile();
-  //TODO: 만약 이걸 받아오는 api주소가 바뀌면 이걸 받아오는 부분도 바꿔야함
-  const { data: helperData } = getHelperById(hasProfileData?.helperId, enable);
-  const { revise } = useSearch({ from: '/helper/profile/new/$step' });
-  useEffect(() => {
-    if (revise === 'true') {
-      setEnable(true);
-    }
-  }, [revise]);
+  const { reset } = methods;
+
   const { Funnel, Step, nextStep } = useFunnel({
     defaultStep: 'region',
     basePath: 'helper/profile/new',
@@ -52,25 +50,10 @@ function RouteComponent() {
 
   useEffect(() => {
     if (helperData) {
-      //현재 타입 에러 발생. 추후 백엔드와 협의 후 수정
-      methods.setValue('region', helperData.data?.helperSimple?.area || '', {
-        shouldDirty: true,
-        shouldValidate: true,
-      });
-      methods.setValue('shortBio', helperData.data?.helperSimple?.shortBio || '', {
-        shouldDirty: true,
-        shouldValidate: true,
-      });
-      methods.setValue('strengthList', helperData.data?.helperSimple?.strengthList || [], {
-        shouldDirty: true,
-        shouldValidate: true,
-      });
-      methods.setValue('certificateList', helperData.data?.helperSimple?.certificateList || [], {
-        shouldDirty: true,
-        shouldValidate: true,
-      });
+      const normalized = toProfileFormValues(helperData.data, hasProfileData?.data.helperProfileId);
+      reset(normalized);
     }
-  }, [helperData, enable]);
+  }, [helperData, reset]);
 
   return (
     <PageLayout>
