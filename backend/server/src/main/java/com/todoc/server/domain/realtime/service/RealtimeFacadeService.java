@@ -14,6 +14,7 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.io.IOException;
 import java.time.Instant;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
@@ -37,13 +38,16 @@ public class RealtimeFacadeService {
 
         // 연결 직후 스냅샷 전송
         try {
+            emitter.send(SseEmitter.event().name("connected")
+                    .data(Map.of("timestamp", Instant.now().toString(), "role", role.getLabel())));
+
             if (role != Role.PATIENT) {
-                getLocationSnapshot(escortId, Role.PATIENT, emitter);
+                if (escortService.getById(escortId).getStatus() == EscortStatus.MEETING) {
+                    getLocationSnapshot(escortId, Role.PATIENT, emitter);
+                }
             }
             if (role != Role.HELPER) {
-                if (escortService.getById(escortId).getStatus() == EscortStatus.MEETING) {
-                    getLocationSnapshot(escortId, Role.HELPER, emitter);
-                }
+                getLocationSnapshot(escortId, Role.HELPER, emitter);
             }
         } catch (Exception e) {
             emitter.completeWithError(e);

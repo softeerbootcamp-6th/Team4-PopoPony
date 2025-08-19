@@ -22,16 +22,20 @@ spring:
 
 management:
   endpoints:
-    web.exposure.include: health,metrics,info
+    web:
+      exposure:
+        include: health,metrics,info
+
   metrics:
     tags:
-      application: app              # 대시보드에서 식별용 공통 태그
+      application: app
     export:
       cloudwatch:
         enabled: true
-        namespace: "SpringApp-JVM"            # CloudWatch 네임스페이스
-        step: 60s                   # 전송 주기
-    enable:                         # 과다 지표 방지(필요한 것만)
+        namespace: "SpringApp-JVM"
+        step: 60s
+        region: ap-northeast-2
+    enable:
       all: false
       jvm: true
       process: true
