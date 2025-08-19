@@ -40,7 +40,7 @@ public class RealtimeController {
     @ApiResponse(
             responseCode = "200",
             description = "마지막 위치 업데이트 성공")
-    @PostMapping("escorts/{escortId}/locations")
+    @PostMapping("/escorts/{escortId}/locations")
     public Response<EmptyBody> updateLocation(@PathVariable(name = "escortId") Long escortId,
                                          @RequestParam String role,
                                          @RequestBody LocationRequest request) {
