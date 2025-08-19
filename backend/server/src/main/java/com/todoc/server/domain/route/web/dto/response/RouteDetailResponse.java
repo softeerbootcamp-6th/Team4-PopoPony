@@ -1,5 +1,6 @@
 package com.todoc.server.domain.route.web.dto.response;
 
+import com.todoc.server.domain.route.Coordinate;
 import com.todoc.server.domain.route.entity.Route;
 import com.todoc.server.domain.route.entity.RouteLeg;
 import com.todoc.server.domain.route.exception.RouteLegNotFoundException;
@@ -7,6 +8,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
+
+import java.util.List;
 
 @Getter
 @Schema(description = "경로 상세 정보 DTO")
@@ -33,16 +36,16 @@ public class RouteDetailResponse {
 
     @NotNull
     @Schema(description = "병원까지의 경로 정보 ([위도, 경도] 배열)", example = "[[12,23],[13,45],[12,66]]")
-    private String meetingToHospital;
+    private List<Coordinate> meetingToHospital;
 
     @NotNull
     @Schema(description = "복귀장소까지의 경로 정보 ([위도, 경도] 배열)", example = "[[12,23],[13,45],[12,66]]")
-    private String hospitalToReturn;
+    private List<Coordinate> hospitalToReturn;
 
     @Builder
     public RouteDetailResponse(RouteSimpleResponse routeSimple,
                                int meetingToHospitalEstimatedTime, int meetingToHospitalEstimatedTaxiFee,
-                               int hospitalToReturnEstimatedTime, int hospitalToReturnEstimatedTaxiFee, String meetingToHospital, String hospitalToReturn) {
+                               int hospitalToReturnEstimatedTime, int hospitalToReturnEstimatedTaxiFee, List<Coordinate> meetingToHospital, List<Coordinate> hospitalToReturn) {
         this.routeSimple = routeSimple;
         this.meetingToHospitalEstimatedTime = meetingToHospitalEstimatedTime;
         this.meetingToHospitalEstimatedTaxiFee = meetingToHospitalEstimatedTaxiFee;

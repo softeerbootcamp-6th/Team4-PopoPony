@@ -1270,9 +1270,9 @@ export interface components {
     };
     Coordinate: {
       /** Format: double */
-      lat?: number;
+      lat: number;
       /** Format: double */
-      lon?: number;
+      lon: number;
     };
     /** @description 장소 요약 정보 DTO */
     LocationInfoSimpleResponse: {

@@ -2,29 +2,32 @@ package com.todoc.server.domain.helper.service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.querydsl.core.Tuple;
+import com.todoc.server.common.dto.request.ImageCreateRequest;
 import com.todoc.server.common.enumeration.Area;
 import com.todoc.server.common.enumeration.Gender;
-import com.todoc.server.common.enumeration.RecruitStatus;
 import com.todoc.server.common.util.DateTimeUtils;
 import com.todoc.server.common.util.ImageUrlUtils;
 import com.todoc.server.common.util.JsonUtils;
-import com.todoc.server.domain.helper.entity.HelperProfile;
-import com.todoc.server.domain.helper.exception.HelperProfileAreaInvalidException;
-import com.todoc.server.domain.escort.entity.Recruit;
-import com.todoc.server.domain.escort.web.dto.request.RecruitCreateRequest;
+import com.todoc.server.domain.helper.entity.Certificate;
 import com.todoc.server.domain.helper.entity.HelperProfile;
 import com.todoc.server.domain.helper.exception.HelperProfileAreaInvalidException;
 import com.todoc.server.domain.helper.exception.HelperProfileNotFoundException;
 import com.todoc.server.domain.helper.repository.HelperJpaRepository;
 import com.todoc.server.domain.helper.repository.HelperQueryRepository;
+import com.todoc.server.domain.helper.repository.dto.HelperUpdateDefaultFlatDto;
+import com.todoc.server.domain.helper.web.dto.request.CertificateCreateRequest;
 import com.todoc.server.domain.helper.web.dto.request.HelperProfileCreateRequest;
+import com.todoc.server.domain.helper.web.dto.response.HelperProfileExistenceResponse;
 import com.todoc.server.domain.helper.web.dto.response.HelperSimpleResponse;
+import com.todoc.server.domain.helper.web.dto.response.HelperUpdateDefaultResponse;
 import com.todoc.server.domain.image.entity.ImageFile;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -122,7 +125,88 @@ public class HelperService {
         return helperJpaRepository.save(helperProfile);
     }
 
+    @Transactional(readOnly = true)
+    public HelperUpdateDefaultResponse getHelperUpdateDefaultByHelperProfileId(Long helperProfileId) {
+
+        List<HelperUpdateDefaultFlatDto> list = helperQueryRepository.getHelperUpdateDefaultByHelperProfileId(helperProfileId);
+        if (list.isEmpty()) {
+            throw new HelperProfileNotFoundException();
+        }
+
+        HelperUpdateDefaultFlatDto first = list.getFirst();
+        HelperProfile helperProfile = first.getHelperProfile();
+        ImageFile profileImage = helperProfile.getHelperProfileImage();
+        String strength = helperProfile.getStrength();
+
+        List<CertificateCreateRequest> certificateCreateRequestList = new ArrayList<>();
+        for (HelperUpdateDefaultFlatDto flatDto : list) {
+            Certificate certificate = flatDto.getCertificate();
+
+            CertificateCreateRequest certificateCreateRequest = CertificateCreateRequest.builder()
+                    .type(certificate.getType())
+                    .certificateImageCreateRequest(ImageCreateRequest.from(certificate.getCertificateImage()))
+                    .build();
+            certificateCreateRequestList.add(certificateCreateRequest);
+        }
+
+        return HelperUpdateDefaultResponse.builder()
+                .imageUrl(ImageUrlUtils.getImageUrl(profileImage.getId()))
+                .profileImageCreateRequest(ImageCreateRequest.from(profileImage))
+                .strengthList(JsonUtils.fromJson(strength, new TypeReference<>() {}))
+                .shortBio(helperProfile.getShortBio())
+                .area(helperProfile.getArea().getLabel())
+                .certificateInfoList(certificateCreateRequestList)
+                .build();
+    }
+
+    public HelperProfile getHelperProfileById(Long helperProfileId) {
+        return helperJpaRepository.findById(helperProfileId)
+                .orElseThrow(HelperProfileNotFoundException::new);
+    }
+
     public List<HelperProfile> getAllHelperProfiles() {
         return helperJpaRepository.findAll();
+    }
+
+
+    /**
+     * 도우미 프로필이 존재하는지의 정보를 담은 응답을 생성하는 함수
+     */
+    public HelperProfileExistenceResponse checkHelperProfileExistence(Long authId) {
+
+        Optional<HelperProfile> optional = helperJpaRepository.findByAuthId(authId);
+
+        boolean hasProfile = false;
+        Long helperProfileId = null;
+        if (optional.isPresent()) {
+            hasProfile = true;
+            helperProfileId = optional.get().getId();
+        }
+
+        return HelperProfileExistenceResponse.builder()
+                .hasProfile(hasProfile)
+                .helperProfileId(helperProfileId)
+                .build();
+    }
+
+    /**
+     * 도우미 프로필이 존재하는지 확인하는 함수
+     */
+    public boolean hasHelperProfile(Long authId) {
+
+        Optional<HelperProfile> optional = helperJpaRepository.findByAuthId(authId);
+        return optional.isPresent();
+    }
+
+    /**
+     * 동행 신청에 지원한 도우미 목록을 조회하는 함수
+     */
+    public List<HelperProfile> getHelperProfileListByRecruitId(Long recruitId) {
+
+        List<HelperProfile> list = helperQueryRepository.getHelperProfileListByRecruitId(recruitId);
+        if (list.isEmpty()) {
+            throw new HelperProfileNotFoundException();
+        }
+        return list;
     }
 }

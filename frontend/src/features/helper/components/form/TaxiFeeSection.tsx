@@ -1,4 +1,4 @@
-import { formatValue } from '@utils';
+import { formatFormInputValue } from '@utils';
 import { useFormContext } from 'react-hook-form';
 import ReceiptImageUpload from './ReceiptImageUpload';
 
@@ -27,7 +27,7 @@ const TaxiFeeSection = ({
           placeholder='택시 요금'
           {...register(feeFieldName, {
             onChange: (e) => {
-              const formattedValue = formatValue(e.target.value, 'cost');
+              const formattedValue = formatFormInputValue(e.target.value, 'cost');
               e.target.value = formattedValue;
             },
           })}

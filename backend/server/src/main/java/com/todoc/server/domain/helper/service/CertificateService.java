@@ -2,7 +2,7 @@ package com.todoc.server.domain.helper.service;
 
 import com.todoc.server.domain.helper.entity.Certificate;
 import com.todoc.server.domain.helper.repository.CertificateJpaRepository;
-import com.todoc.server.domain.helper.web.dto.request.HelperProfileCreateRequest;
+import com.todoc.server.domain.helper.web.dto.request.CertificateCreateRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,10 +27,19 @@ public class CertificateService {
         return certificateJpaRepository.findTypesByHelperProfileId(helperProfileId);
     }
 
-    public Certificate register(HelperProfileCreateRequest.CertificateInfo certificateInfo) {
+    public Certificate register(CertificateCreateRequest certificateInfo) {
         Certificate certificate = Certificate.builder()
                 .type(certificateInfo.getType())
                 .build();
         return certificateJpaRepository.save(certificate);
+    }
+
+    public void deleteAllByHelperProfileId(Long helperProfileId) {
+
+        List<Certificate> certificateList = certificateJpaRepository.findAllByHelperProfileId(helperProfileId);
+
+        for (Certificate certificate : certificateList) {
+            certificate.softDelete();
+        }
     }
 }

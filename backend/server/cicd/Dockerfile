@@ -10,7 +10,7 @@ COPY gradle ./gradle
 COPY . .
 
 # 빌드 실행
-RUN gradle bootJar -x test --no-daemon
+RUN gradle bootJar --no-daemon
 
 # 2단계: 실행
 FROM --platform=linux/arm64 openjdk:21-jdk

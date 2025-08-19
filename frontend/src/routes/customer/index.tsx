@@ -1,7 +1,8 @@
 import { createFileRoute, Link } from '@tanstack/react-router';
 import { PageLayout } from '@layouts';
-import { Button, EscortCard, Tabs } from '@components';
+import { Button, EscortCard, Tabs, EmptyCard } from '@components';
 import { IcPlusSideLeft } from '@icons';
+import type { RecruitSimpleResponse } from '@customer/types';
 import { getRecruitsCustomer } from '@customer/apis';
 import { dateFormat, timeFormat } from '@utils';
 import { useNavigate } from '@tanstack/react-router';
@@ -9,6 +10,27 @@ import { useNavigate } from '@tanstack/react-router';
 export const Route = createFileRoute('/customer/')({
   component: RouteComponent,
 });
+
+const refineRecruitData = (recruitData: RecruitSimpleResponse) => {
+  let statusText = '';
+  if (recruitData.recruitStatus === '매칭중') {
+    statusText = `${recruitData.numberOfApplication}명이 현재 지원중이예요!`;
+  } else if (recruitData.recruitStatus === '매칭완료') {
+    statusText = '매칭이 확정되었어요!';
+  } else if (recruitData.recruitStatus === '동행중') {
+    statusText = '동행이 진행중입니다!';
+  } else if (recruitData.recruitStatus === '동행완료') {
+    statusText = '동행번호 NO.' + recruitData.recruitId;
+  }
+  const title =
+    dateFormat(recruitData.escortDate, 'M월 d일 (eee)') + ', ' + recruitData.destination;
+  const startTime = timeFormat(recruitData.estimatedMeetingTime);
+  const endTime = timeFormat(recruitData.estimatedReturnTime);
+  const dateText = dateFormat(recruitData.escortDate, 'M월 d일(eee)');
+  const timeText = `${dateText} ${startTime} ~ ${endTime}`;
+  const locationText = `${recruitData.departureLocation} → ${recruitData.destination}`;
+  return { statusText, title, timeText, locationText };
+};
 
 function RouteComponent() {
   const { data: escortData } = getRecruitsCustomer();
@@ -66,60 +88,56 @@ function RouteComponent() {
           </Tabs.TabsList>
           <Tabs.TabsContent value='신청'>
             <div className='flex-col-start gap-[1.2rem] p-[2rem]'>
-              {inProgressList?.map((escort) => {
-                const escortDate = dateFormat(escort.escortDate, 'MM월 dd일(eee)');
-                return (
-                  <EscortCard
-                    key={escort.recruitId}
-                    onClick={() => handleEscortCardClick(escort.recruitId)}>
-                    <EscortCard.StatusHeader
-                      status={escort.recruitStatus}
-                      text={`${escort.numberOfApplication}명이 현재 지원 중이에요!`}
-                      title={`${escortDate} ${escort.destination}`}
-                    />
-                    <EscortCard.Divider />
-                    <EscortCard.InfoSection>
-                      <EscortCard.Info
-                        type='time'
-                        text={`${escortDate} ${timeFormat(escort.estimatedMeetingTime)} ~ ${timeFormat(escort.estimatedReturnTime)}`}
+              {inProgressList && inProgressList.length > 0 ? (
+                inProgressList.map((escort) => {
+                  const { statusText, title, timeText, locationText } = refineRecruitData(escort);
+                  return (
+                    <EscortCard
+                      key={escort.recruitId}
+                      onClick={() => handleEscortCardClick(escort.recruitId)}>
+                      <EscortCard.StatusHeader
+                        status={escort.recruitStatus}
+                        text={statusText}
+                        title={title}
                       />
-                      <EscortCard.Info
-                        type='location'
-                        text={`${escort.departureLocation} → ${escort.destination}`}
-                      />
-                    </EscortCard.InfoSection>
-                  </EscortCard>
-                );
-              })}
+                      <EscortCard.Divider />
+                      <EscortCard.InfoSection>
+                        <EscortCard.Info type='time' text={timeText} />
+                        <EscortCard.Info type='location' text={locationText} />
+                      </EscortCard.InfoSection>
+                    </EscortCard>
+                  );
+                })
+              ) : (
+                <EmptyCard text='현재 신청중인 동행 내역이 없어요' />
+              )}
             </div>
           </Tabs.TabsContent>
           <Tabs.TabsContent value='완료'>
             <div className='flex-col-start gap-[1.2rem] p-[2rem]'>
-              {completedList?.map((escort) => {
-                const escortDate = dateFormat(escort.escortDate, 'MM월 dd일(eee)');
-                return (
-                  <EscortCard
-                    key={escort.recruitId}
-                    onClick={() => handleEscortCardClick(escort.recruitId)}>
-                    <EscortCard.StatusHeader
-                      status={escort.recruitStatus}
-                      text={`${escort.numberOfApplication}명이 현재 지원 중이에요!`}
-                      title={`${escortDate} ${escort.destination}`}
-                    />
-                    <EscortCard.Divider />
-                    <EscortCard.InfoSection>
-                      <EscortCard.Info
-                        type='time'
-                        text={`${escortDate} ${timeFormat(escort.estimatedMeetingTime)} ~ ${timeFormat(escort.estimatedReturnTime)}`}
+              {completedList && completedList.length > 0 ? (
+                completedList.map((escort) => {
+                  const { statusText, title, timeText, locationText } = refineRecruitData(escort);
+                  return (
+                    <EscortCard
+                      key={escort.recruitId}
+                      onClick={() => handleEscortCardClick(escort.recruitId)}>
+                      <EscortCard.StatusHeader
+                        status={escort.recruitStatus}
+                        text={statusText}
+                        title={title}
                       />
-                      <EscortCard.Info
-                        type='location'
-                        text={`${escort.departureLocation} → ${escort.destination}`}
-                      />
-                    </EscortCard.InfoSection>
-                  </EscortCard>
-                );
-              })}
+                      <EscortCard.Divider />
+                      <EscortCard.InfoSection>
+                        <EscortCard.Info type='time' text={timeText} />
+                        <EscortCard.Info type='location' text={locationText} />
+                      </EscortCard.InfoSection>
+                    </EscortCard>
+                  );
+                })
+              ) : (
+                <EmptyCard text='완료된 동행 내역이 없어요' />
+              )}
             </div>
           </Tabs.TabsContent>
         </Tabs>
