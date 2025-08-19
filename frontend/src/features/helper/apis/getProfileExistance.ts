@@ -1,7 +1,9 @@
 import { $api } from '@apis';
 
-const getProfileExistance = () => {
-  return $api.useQuery('get', '/api/helpers/existence');
+const getProfileExistance = (enable = true) => {
+  return $api.useQuery('get', '/api/helpers/existence', {
+    enabled: enable,
+  });
 };
 
 export default getProfileExistance;

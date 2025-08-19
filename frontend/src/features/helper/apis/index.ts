@@ -6,6 +6,7 @@ import getRecruitReportByRecruitId from './getRecruitReportByRecruitId';
 import getRecruitReviewByRecruitId from './getRecruitReviewByRecruitId';
 import getHelperById from './getHelperById';
 import getProfileExistance from './getProfileExistance';
+import getReviseHelperProfileInfo from './getReviseHelperProfileInfo';
 export {
   getRecruitList,
   postHelperProfile,
@@ -15,4 +16,5 @@ export {
   getRecruitReviewByRecruitId,
   getHelperById,
   getProfileExistance,
+  getReviseHelperProfileInfo,
 };
