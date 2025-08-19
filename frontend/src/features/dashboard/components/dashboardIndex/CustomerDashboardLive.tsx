@@ -8,7 +8,7 @@ type Props = {
   route: RouteSimpleResponse;
 };
 
-const DashboardLive = ({ escortStatus, title, route }: Props) => {
+const CustomerDashboardLive = ({ escortStatus, title, route }: Props) => {
   const address = (() => {
     if (escortStatus === '만남중') return route.meetingLocationInfo;
     if (escortStatus === '병원행' || escortStatus === '진료중') return route.hospitalLocationInfo;
@@ -36,4 +36,4 @@ const DashboardLive = ({ escortStatus, title, route }: Props) => {
   );
 };
 
-export default DashboardLive;
+export default CustomerDashboardLive;
