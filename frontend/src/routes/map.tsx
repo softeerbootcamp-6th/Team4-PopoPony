@@ -1,6 +1,6 @@
+import { FloatingButton } from '@components';
 import { INITIAL_LATITUDE, INITIAL_LONGITUDE } from '@dashboard/constants';
 import { useMap } from '@hooks';
-import { IcArrowLeft } from '@icons';
 import { createFileRoute, useRouter } from '@tanstack/react-router';
 import { useEffect, useRef } from 'react';
 import z from 'zod';
@@ -33,14 +33,7 @@ function RouteComponent() {
       <div className='flex h-full flex-col'>
         <div ref={mapRef} className='h-full w-full'></div>
       </div>
-      <button
-        type='button'
-        className='shadow-button flex-center bg-background-default-mint absolute top-[1.6rem] left-[1.6rem] h-[4.8rem] w-[4.8rem] cursor-pointer rounded-full p-[0.8rem]'
-        onClick={() => {
-          router.history.back();
-        }}>
-        <IcArrowLeft className='[&_path]:fill-white [&_path]:stroke-white' />
-      </button>
+      <FloatingButton color='mint' onClick={() => router.history.back()} />
     </div>
   );
 }
