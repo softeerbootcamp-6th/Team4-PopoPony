@@ -7,7 +7,8 @@ import { dateFormat, getDaysLeft, timeFormatTo24Hour } from '@utils';
 import { useEffect, useRef } from 'react';
 import type { components } from '@schema';
 import { PlaceInfo, TaxiInfo } from '@dashboard/components';
-export const Route = createFileRoute('/dashboard/$escortId/customer/prepare')({
+
+export const Route = createFileRoute('/dashboard/$escortId/helper/prepare')({
   component: RouteComponent,
 });
 
@@ -23,7 +24,7 @@ function RouteComponent() {
   const { data } = getEscortDetail(Number(escortId));
   const escortDetail = data?.data as EscortDetailResponse;
 
-  const { imageUrl, name } = escortDetail?.helper ?? {};
+  const { imageUrl, name } = escortDetail?.patient ?? {};
   const {
     meetingLocationInfo,
     hospitalLocationInfo,
@@ -67,9 +68,7 @@ function RouteComponent() {
         <div className='relative z-10 mx-[2rem] flex flex-col gap-[2.8rem] pb-[4rem]'>
           <div className='flex-between'>
             <div className='flex flex-col gap-[0.4rem]'>
-              <p className='body1-16-medium text-text-neutral-primary'>
-                {name} 도우미와의 동행까지
-              </p>
+              <p className='body1-16-medium text-text-neutral-primary'>{name} 환자와의 동행까지</p>
               <p className='text-text-neutral-primary display-32-bold'>
                 <strong className='text-text-mint-on-primary'>
                   {getDaysLeft(escortDetail.escortDate)}일

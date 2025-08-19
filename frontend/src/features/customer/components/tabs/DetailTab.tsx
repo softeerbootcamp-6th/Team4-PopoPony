@@ -1,4 +1,4 @@
-import { Tabs, Divider, Button, Modal, StrengthTagList } from '@components';
+import { Tabs, Divider, Button, Modal, StrengthTagList, ShowMapButton } from '@components';
 import { InfoSection, RouteButton, GrayBox } from '@customer/components';
 import { useModal } from '@hooks';
 import { IcCheck } from '@icons';
@@ -79,13 +79,14 @@ const DetailTab = ({ data }: { data: RecruitDetailResponse }) => {
           <div className='flex-start body1-16-medium gap-[2rem]'>
             <span className='text-text-neutral-primary'>동행 병원</span>
             <div className='flex-start gap-[0.8rem]'>
-              <span className='text-text-neutral-secondary'>
-                {data.route.hospitalLocationInfo.placeName}
-              </span>
-              {/* 이 지도보기 버튼의 onclick은 무엇을 해줘야 할까요 */}
-              <button className='caption2-10-medium text-text-neutral-secondary border-stroke-neutral-dark w-fit rounded-[0.4rem] border px-[0.5rem] py-[0.2rem]'>
-                지도 보기
-              </button>
+              <ShowMapButton
+                businessAddress={data.route.hospitalLocationInfo.placeName}
+                pos={{
+                  lat: data.route.hospitalLocationInfo.lat,
+                  lng: data.route.hospitalLocationInfo.lon,
+                }}
+                fontSize='medium'
+              />
             </div>
           </div>
         </div>

@@ -4,5 +4,16 @@ import EscortCompleted from './dashboardIndex/EscortCompleted';
 import WritingReport from './dashboardIndex/WritingReport';
 import CustomerDashboardLive from './dashboardIndex/CustomerDashboardLive';
 import Footer from './Footer';
+import PlaceInfo from './PlaceInfo';
+import TaxiInfo from './TaxiInfo';
 
-export { Header, DashBoardCard, EscortCompleted, WritingReport, CustomerDashboardLive, Footer };
+export {
+  Header,
+  DashBoardCard,
+  EscortCompleted,
+  WritingReport,
+  CustomerDashboardLive,
+  Footer,
+  PlaceInfo,
+  TaxiInfo,
+};
