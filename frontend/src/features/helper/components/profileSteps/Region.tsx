@@ -3,7 +3,7 @@ import { RegionFormSchema, type ProfileStepProps, REGION_OPTIONS } from '@helper
 import { useFormValidation } from '@hooks';
 import { FormLayout } from '@layouts';
 import { LabeledSection, PhotoUpload, Button } from '@components';
-import { RegionBottomSheet } from '@helper/components';
+import { RegionBottomSheetForm } from '@helper/components';
 import { IcChevronDown } from '@assets/icons';
 
 const Region = ({ handleNextStep }: ProfileStepProps) => {
@@ -17,21 +17,21 @@ const Region = ({ handleNextStep }: ProfileStepProps) => {
           <FormLayout.Title>프로필을 작성해주세요</FormLayout.Title>
         </FormLayout.TitleWrapper>
         <div className='flex-center w-full'>
-          <PhotoUpload name='imageUrl' prefix='uploads/helper' />
+          <PhotoUpload name='profileImageCreateRequest' prefix='uploads/helper' />
         </div>
         <LabeledSection
           label='선호 활동 지역'
-          isChecked={!fieldErrors.region && !!values.region}
-          message={fieldErrors.region}>
-          <RegionBottomSheet name='region'>
+          isChecked={!fieldErrors.area && !!values.area}
+          message={fieldErrors.area}>
+          <RegionBottomSheetForm name='area'>
             <button
               className='flex-between border-b-neutral-20 w-full border-b-2 pb-[0.8rem]'
               onClick={() => setIsBottomSheetOpen((prev) => !prev)}>
               <p
                 className={`title-20-medium ${
-                  values.region ? 'text-text-neutral-primary' : 'text-text-neutral-assistive'
+                  values.area ? 'text-text-neutral-primary' : 'text-text-neutral-assistive'
                 }`}>
-                {REGION_OPTIONS.find((option) => option.value === values.region)?.value ||
+                {REGION_OPTIONS.find((option) => option.value === values.area)?.label ||
                   '지역 선택'}
               </p>
               <IcChevronDown
@@ -40,7 +40,7 @@ const Region = ({ handleNextStep }: ProfileStepProps) => {
                 }`}
               />
             </button>
-          </RegionBottomSheet>
+          </RegionBottomSheetForm>
         </LabeledSection>
       </FormLayout.Content>
       <FormLayout.Footer>

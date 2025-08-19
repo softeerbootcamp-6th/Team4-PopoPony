@@ -46,7 +46,11 @@ management:
         include: health
   endpoint:
     health:
-      show-details: never
+      show-details: always
+    endpoints:
+      web:
+        exposure:
+          include: health
 
 aws:
   s3:

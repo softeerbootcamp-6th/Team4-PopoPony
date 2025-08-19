@@ -86,8 +86,8 @@ const Option = ({
         return;
       }
       if (dataFormat === 'object') {
-        // CertificateItemSchema 형태로 추가
-        const newItem = { type: value, certificateImageUrl: '' };
+        // TODO: 언젠간 고치자 꼭...
+        const newItem = { type: value, certificateImageCreateRequest: null };
         setValue(name, [...currentValues, newItem], { shouldValidate: true, shouldDirty: true });
       } else {
         setValue(name, [...currentValues, value], { shouldValidate: true, shouldDirty: true });
