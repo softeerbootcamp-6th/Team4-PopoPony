@@ -20,16 +20,14 @@ const formatCertificates = (certificates: string[]) => {
   return [...(visibleCerts || []), `+${hiddenCount}`];
 };
 
-type StrengthOption = (typeof STRENGTH_OPTIONS)[number];
-
 const sortStrengthList = (strengthList: string[]) => {
   //순서 보장 sort 알고리즘
-  const orderMap = new Map<StrengthOption, number>(
-    STRENGTH_OPTIONS.map((label, index) => [label, index] as const)
+  const orderMap = new Map<string, number>(
+    STRENGTH_OPTIONS.map((option, index) => [option.value, index] as const)
   );
   return [...strengthList].sort((a, b) => {
-    const aOrder = orderMap.get(a as StrengthOption) ?? Number.MAX_SAFE_INTEGER;
-    const bOrder = orderMap.get(b as StrengthOption) ?? Number.MAX_SAFE_INTEGER;
+    const aOrder = orderMap.get(a) ?? Number.MAX_SAFE_INTEGER;
+    const bOrder = orderMap.get(b) ?? Number.MAX_SAFE_INTEGER;
     return aOrder - bOrder;
   });
 };

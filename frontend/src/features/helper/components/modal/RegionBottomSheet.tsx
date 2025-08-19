@@ -36,7 +36,7 @@ const RegionBottomSheet = ({ children, name }: RegionBottomSheetProps) => {
                 <label
                   htmlFor={index.toString()}
                   className='border-neutral-20 peer-checked:border-mint-60 peer-checked:bg-mint-5 peer-checked:text-mint-70 flex-center body1-16-medium text-neutral-90 h-[4.8rem] w-full cursor-pointer rounded-[0.6rem] border'>
-                  {option.label}
+                  {option.value.slice(0, 2)}
                 </label>
               </div>
             );
