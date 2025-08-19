@@ -4,6 +4,30 @@
  */
 
 export interface paths {
+  '/api/helpers/{helperProfileId}/updates': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * 도우미 프로필 수정 기본값 조회
+     * @description helperProfileId에 해당하는 도우미 프로필에 대한 수정 기본값을 조회합니다.
+     */
+    get: operations['getHelperProfileUpdateDefault'];
+    /**
+     * 도우미 프로필 수정
+     * @description helperProfileId에 해당하는 도우미 프로필을 수정합니다.
+     */
+    put: operations['updateHelperProfile'];
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/api/reviews/recruits/{recruitId}': {
     parameters: {
       query?: never;
@@ -76,7 +100,7 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
-  '/api/locations/{escortId}': {
+  '/api/realtime/escorts/{escortId}/locations': {
     parameters: {
       query?: never;
       header?: never;
@@ -85,6 +109,10 @@ export interface paths {
     };
     get?: never;
     put?: never;
+    /**
+     * 마지막 위치 업데이트
+     * @description Role에 따라 자신의 마지막 위치를 갱신합니다.
+     */
     post: operations['updateLocation'];
     delete?: never;
     options?: never;
@@ -312,6 +340,26 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/api/recruits/{recruitId}/status': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * 특정 동행 신청의 상태 정보 조회
+     * @description recruitId에 해당하는 동행 신청의 상태 정보를 조회합니다.
+     */
+    get: operations['getRecruitStatus'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/api/recruits/{recruitId}/payments': {
     parameters: {
       query?: never;
@@ -412,6 +460,26 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/api/realtime/escorts/{escortId}/sse': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * 동행에 대한 SSE 구독
+     * @description Role에 따라 특정 동행의 SSE를 요청합니다.
+     */
+    get: operations['subscribe'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/api/images/{imageFileId}/presigned': {
     parameters: {
       query?: never;
@@ -444,6 +512,26 @@ export interface paths {
      * @description helperProfileId에 해당하는 도우미의 상세 정보를 조회합니다.
      */
     get: operations['getHelperDetail'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/helpers/existence': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * 도우미 프로필 존재 여부 확인
+     * @description 도우미가 기존에 등록한 프로필이 있는지 확인합니다.
+     */
+    get: operations['checkHelperProfileExistence'];
     put?: never;
     post?: never;
     delete?: never;
@@ -492,6 +580,91 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
   schemas: {
+    /** @description 자격증 정보 생성 요청 DTO */
+    CertificateCreateRequest: {
+      /** @description 자격증 이미지 정보 */
+      certificateImageCreateRequest?: components['schemas']['ImageCreateRequest'];
+      /**
+       * @description 자격증 종류
+       * @example 간호조무사
+       */
+      type?: string;
+    };
+    /** @description 도우미 프로필 등록 요청 DTO */
+    HelperProfileCreateRequest: {
+      /** @description 도우미 프로필 이미지 정보 */
+      profileImageCreateRequest?: components['schemas']['ImageCreateRequest'];
+      /**
+       * @description 강점 목록
+       * @example ['안전한 부축으로 편안한 이동', '인지 장애 어르신 맞춤 케어']
+       */
+      strengthList?: string[];
+      /**
+       * @description 한 줄 소개
+       * @example 부모님처럼 모시겠습니다!
+       */
+      shortBio?: string;
+      /**
+       * @description 활동 지역
+       * @enum {string}
+       */
+      area?:
+        | '서울'
+        | '부산'
+        | '대구'
+        | '인천'
+        | '광주'
+        | '대전'
+        | '울산'
+        | '세종시'
+        | '경기'
+        | '강원'
+        | '충북'
+        | '충남'
+        | '전북'
+        | '전남'
+        | '경북'
+        | '경남'
+        | '제주';
+      /** @description 자격증 정보 목록 */
+      certificateInfoList?: components['schemas']['CertificateCreateRequest'][];
+    };
+    /** @description 이미지 등록 요청 DTO */
+    ImageCreateRequest: {
+      /** @description S3 오브젝트 키(버킷 내부 경로). presigned 업로드 시 사용했던 key 그대로 전달 */
+      s3Key: string;
+      /** @description 원본 Content-Type (이미지 MIME 타입) */
+      contentType: string;
+      /**
+       * Format: int64
+       * @description 파일 크기(byte)
+       */
+      size: number;
+      /** @description 무결성 해시(일반적으로 S3 ETag) */
+      checksum: string;
+    };
+    EmptyBody: unknown;
+    /** @description 공통 응답 포맷 */
+    ResponseEmptyBody: {
+      /**
+       * Format: int32
+       * @description 직접 정의한 응답에 대한 code
+       */
+      code: number;
+      /**
+       * Format: int32
+       * @description 응답 상태에 대한 HTTP 상태 코드
+       * @example 200
+       */
+      status: number;
+      /**
+       * @description 응답 상태에 대한 HTTP 메시지
+       * @example SUCCESS
+       */
+      message: string;
+      /** @description 응답 body 필드 */
+      data: components['schemas']['EmptyBody'];
+    };
     /** @description 리뷰 작성 DTO */
     ReviewCreateRequest: {
       /**
@@ -518,41 +691,6 @@ export interface components {
       positiveFeedbackList?: string[];
       /** @description 한줄 코멘트 */
       shortComment?: string;
-    };
-    /** @description 공통 응답 포맷 */
-    ResponseVoid: {
-      /**
-       * Format: int32
-       * @description 직접 정의한 응답에 대한 code
-       */
-      code: number;
-      /**
-       * Format: int32
-       * @description 응답 상태에 대한 HTTP 상태 코드
-       * @example 200
-       */
-      status: number;
-      /**
-       * @description 응답 상태에 대한 HTTP 메시지
-       * @example SUCCESS
-       */
-      message: string;
-      /** @description 응답 body 필드 */
-      data?: unknown;
-    };
-    /** @description 이미지 등록 요청 DTO */
-    ImageCreateRequest: {
-      /** @description S3 오브젝트 키(버킷 내부 경로). presigned 업로드 시 사용했던 key 그대로 전달 */
-      s3Key: string;
-      /** @description 원본 Content-Type (이미지 MIME 타입) */
-      contentType: string;
-      /**
-       * Format: int64
-       * @description 파일 크기(byte)
-       */
-      size: number;
-      /** @description 무결성 해시(일반적으로 S3 ETag) */
-      checksum: string;
     };
     /** @description 동행 리포트 생성 요청 DTO */
     ReportCreateRequest: {
@@ -763,33 +901,10 @@ export interface components {
       returnLocationDetail?: components['schemas']['LocationDetail'];
     };
     LocationRequest: {
-      /** Format: int64 */
-      escortId?: number;
       /** Format: double */
-      lat?: number;
+      latitude?: number;
       /** Format: double */
-      lon?: number;
-    };
-    /** @description 공통 응답 포맷 */
-    Response: {
-      /**
-       * Format: int32
-       * @description 직접 정의한 응답에 대한 code
-       */
-      code: number;
-      /**
-       * Format: int32
-       * @description 응답 상태에 대한 HTTP 상태 코드
-       * @example 200
-       */
-      status: number;
-      /**
-       * @description 응답 상태에 대한 HTTP 메시지
-       * @example SUCCESS
-       */
-      message: string;
-      /** @description 응답 body 필드 */
-      data?: unknown;
+      longitude?: number;
     };
     /** @description 단일 파일에 대한 Presigned URL 발급에 필요한 메타데이터 */
     FileSpec: {
@@ -856,59 +971,7 @@ export interface components {
        */
       message: string;
       /** @description 응답 body 필드 */
-      data?: components['schemas']['PresignBatchResponse'];
-    };
-    /** @description 환자 상태 정보 */
-    CertificateInfo: {
-      /**
-       * @description 자격증 이미지 URL
-       * @example https://example.com/certificate.png
-       */
-      certificateImageCreateRequest?: components['schemas']['ImageCreateRequest'];
-      /**
-       * @description 자격증 종류
-       * @example 간호조무사
-       */
-      type?: string;
-    };
-    /** @description 도우미 프로필 등록 요청 DTO */
-    HelperProfileCreateRequest: {
-      /** @description 도우미 프로필 이미지 정보 */
-      profileImageCreateRequest?: components['schemas']['ImageCreateRequest'];
-      /**
-       * @description 강점 목록
-       * @example ['안전한 부축으로 편안한 이동', '인지 장애 어르신 맞춤 케어']
-       */
-      strengthList?: string[];
-      /**
-       * @description 한 줄 소개
-       * @example 부모님처럼 모시겠습니다!
-       */
-      shortBio?: string;
-      /**
-       * @description 만족도
-       * @enum {string}
-       */
-      area?:
-        | '서울'
-        | '부산'
-        | '대구'
-        | '인천'
-        | '광주'
-        | '대전'
-        | '울산'
-        | '세종시'
-        | '경기'
-        | '강원'
-        | '충북'
-        | '충남'
-        | '전북'
-        | '전남'
-        | '경북'
-        | '경남'
-        | '제주';
-      /** @description 자격증 정보 목록 */
-      certificateInfoList?: components['schemas']['CertificateInfo'][];
+      data: components['schemas']['PresignBatchResponse'];
     };
     LoginRequest: {
       loginId?: string;
@@ -938,73 +1001,7 @@ export interface components {
        */
       message: string;
       /** @description 응답 body 필드 */
-      data?: components['schemas']['LoginResponse'];
-    };
-    /** @description 지원 목록 조회 응답 DTO */
-    ApplicationListResponse: {
-      /** @description 지원 목록 */
-      applicationList: components['schemas']['ApplicationSimpleResponse'][];
-    };
-    /** @description 지원 정보 요약본 응답 DTO */
-    ApplicationSimpleResponse: {
-      /**
-       * Format: int64
-       * @description 지원 ID
-       */
-      applicationId: number;
-      /** @description 도우미 요약 정보 */
-      helper: components['schemas']['HelperSimpleResponse'];
-    };
-    /** @description 도우미 정보 요약본 응답 DTO */
-    HelperSimpleResponse: {
-      /**
-       * Format: int64
-       * @description 도우미 프로필 ID
-       */
-      helperProfileId: number;
-      /** @description 프로필 이미지 URL */
-      imageUrl: string;
-      /** @description 성명 */
-      name: string;
-      /**
-       * @description 성별
-       * @enum {string}
-       */
-      gender: '남자' | '여자';
-      /**
-       * Format: int32
-       * @description 나이
-       */
-      age: number;
-      /** @description 한 줄 소개 */
-      shortBio?: string;
-      /** @description 연락처 */
-      contact: string;
-      /** @description 자격증 목록 */
-      certificateList: string[];
-      /** @description 강점 목록 */
-      strengthList: string[];
-    };
-    /** @description 공통 응답 포맷 */
-    ResponseApplicationListResponse: {
-      /**
-       * Format: int32
-       * @description 직접 정의한 응답에 대한 code
-       */
-      code: number;
-      /**
-       * Format: int32
-       * @description 응답 상태에 대한 HTTP 상태 코드
-       * @example 200
-       */
-      status: number;
-      /**
-       * @description 응답 상태에 대한 HTTP 메시지
-       * @example SUCCESS
-       */
-      message: string;
-      /** @description 응답 body 필드 */
-      data?: components['schemas']['ApplicationListResponse'];
+      data: components['schemas']['LoginResponse'];
     };
     /** @description 동행 메모 작성 요청 DTO */
     EscortMemoUpdateRequest: {
@@ -1030,7 +1027,7 @@ export interface components {
        */
       message: string;
       /** @description 응답 body 필드 */
-      data?: components['schemas']['ReviewDetailResponse'];
+      data: components['schemas']['ReviewDetailResponse'];
     };
     /** @description 도우미 후기 상세 정보 DTO */
     ReviewDetailResponse: {
@@ -1119,16 +1116,18 @@ export interface components {
        */
       message: string;
       /** @description 응답 body 필드 */
-      data?: components['schemas']['ReportDetailResponse'];
+      data: components['schemas']['ReportDetailResponse'];
     };
     /** @description 리포트 작성 기본값 응답 DTO */
     ReportDefaultValueResponse: {
       /**
+       * Format: date-time
        * @description 실제 만난 시각
        * @example 09:30:00
        */
       actualMeetingTime: string;
       /**
+       * Format: date-time
        * @description 실제 복귀 시각
        * @example 12:30:00
        */
@@ -1158,7 +1157,7 @@ export interface components {
        */
       message: string;
       /** @description 응답 body 필드 */
-      data?: components['schemas']['ReportDefaultValueResponse'];
+      data: components['schemas']['ReportDefaultValueResponse'];
     };
     /** @description 동행 목록 검색용 응답 DTO */
     RecruitSearchListResponse: {
@@ -1267,7 +1266,13 @@ export interface components {
        */
       message: string;
       /** @description 응답 body 필드 */
-      data?: components['schemas']['RecruitSearchListResponse'];
+      data: components['schemas']['RecruitSearchListResponse'];
+    };
+    Coordinate: {
+      /** Format: double */
+      lat?: number;
+      /** Format: double */
+      lon?: number;
     };
     /** @description 장소 요약 정보 DTO */
     LocationInfoSimpleResponse: {
@@ -1282,6 +1287,10 @@ export interface components {
       address: string;
       /** @description 상세 주소 */
       detailAddress: string;
+      /** @description 위도 */
+      lat: number;
+      /** @description 경도 */
+      lon: number;
     };
     /** @description 환자 요약 정보 조회 응답 DTO */
     PatientSimpleResponse: {
@@ -1403,7 +1412,7 @@ export interface components {
        */
       message: string;
       /** @description 응답 body 필드 */
-      data?: components['schemas']['RecruitDetailResponse'];
+      data: components['schemas']['RecruitDetailResponse'];
     };
     /** @description 경로 요약 정보 DTO */
     RouteSimpleResponse: {
@@ -1435,7 +1444,7 @@ export interface components {
        *       ]
        *     ]
        */
-      meetingToHospital: string;
+      meetingToHospital: components['schemas']['Coordinate'][];
       /**
        * @description 복귀장소까지의 경로 정보 ([위도, 경도] 배열)
        * @example [
@@ -1453,7 +1462,41 @@ export interface components {
        *       ]
        *     ]
        */
-      hospitalToReturn: string;
+      hospitalToReturn: components['schemas']['Coordinate'][];
+    };
+    /** @description 동행 신청 상태 응답 DTO */
+    RecruitStatusResponse: {
+      /**
+       * Format: int64
+       * @description 동행 신청 ID
+       */
+      recruitId: number;
+      /**
+       * @description 동행 신청의 진행 상태
+       * @enum {string}
+       */
+      recruitStatus: '매칭중' | '매칭완료' | '동행중' | '동행완료';
+    };
+    /** @description 공통 응답 포맷 */
+    ResponseRecruitStatusResponse: {
+      /**
+       * Format: int32
+       * @description 직접 정의한 응답에 대한 code
+       */
+      code: number;
+      /**
+       * Format: int32
+       * @description 응답 상태에 대한 HTTP 상태 코드
+       * @example 200
+       */
+      status: number;
+      /**
+       * @description 응답 상태에 대한 HTTP 메시지
+       * @example SUCCESS
+       */
+      message: string;
+      /** @description 응답 body 필드 */
+      data: components['schemas']['RecruitStatusResponse'];
     };
     /** @description 동행 신청 결제 정보 조회 응답 DTO */
     RecruitPaymentResponse: {
@@ -1499,7 +1542,7 @@ export interface components {
        */
       message: string;
       /** @description 응답 body 필드 */
-      data?: components['schemas']['RecruitPaymentResponse'];
+      data: components['schemas']['RecruitPaymentResponse'];
     };
     /** @description 경로 상세 정보 DTO */
     RouteDetailResponse: {
@@ -1542,7 +1585,7 @@ export interface components {
        *       ]
        *     ]
        */
-      meetingToHospital: string;
+      meetingToHospital: components['schemas']['Coordinate'][];
       /**
        * @description 복귀장소까지의 경로 정보 ([위도, 경도] 배열)
        * @example [
@@ -1560,7 +1603,7 @@ export interface components {
        *       ]
        *     ]
        */
-      hospitalToReturn: string;
+      hospitalToReturn: components['schemas']['Coordinate'][];
     };
     /** @description 환자 상태 정보 */
     PatientDetailHistory: {
@@ -1663,7 +1706,7 @@ export interface components {
        */
       message: string;
       /** @description 응답 body 필드 */
-      data?: components['schemas']['RecruitHistoryDetailResponse'];
+      data: components['schemas']['RecruitHistoryDetailResponse'];
     };
     /** @description 이전 동행 목록 조회 응답 DTO */
     RecruitHistoryListResponse: {
@@ -1710,7 +1753,7 @@ export interface components {
        */
       message: string;
       /** @description 응답 body 필드 */
-      data?: components['schemas']['RecruitHistoryListResponse'];
+      data: components['schemas']['RecruitHistoryListResponse'];
     };
     /** @description 동행 목록 조회 응답 DTO */
     RecruitListResponse: {
@@ -1738,7 +1781,11 @@ export interface components {
        */
       message: string;
       /** @description 응답 body 필드 */
-      data?: components['schemas']['RecruitListResponse'];
+      data: components['schemas']['RecruitListResponse'];
+    };
+    SseEmitter: {
+      /** Format: int64 */
+      timeout?: number;
     };
     /** @description 도우미 상세 정보 응답 DTO */
     HelperDetailResponse: {
@@ -1755,6 +1802,36 @@ export interface components {
       positiveFeedbackStatList: components['schemas']['PositiveFeedbackStatResponse'][];
       /** @description 최신 후기 리스트 */
       latestReviewList: components['schemas']['ReviewSimpleResponse'][];
+    };
+    /** @description 도우미 정보 요약본 응답 DTO */
+    HelperSimpleResponse: {
+      /**
+       * Format: int64
+       * @description 도우미 프로필 ID
+       */
+      helperProfileId: number;
+      /** @description 프로필 이미지 URL */
+      imageUrl: string;
+      /** @description 성명 */
+      name: string;
+      /**
+       * @description 성별
+       * @enum {string}
+       */
+      gender: '남자' | '여자';
+      /**
+       * Format: int32
+       * @description 나이
+       */
+      age: number;
+      /** @description 한 줄 소개 */
+      shortBio?: string;
+      /** @description 연락처 */
+      contact: string;
+      /** @description 자격증 목록 */
+      certificateList: string[];
+      /** @description 강점 목록 */
+      strengthList: string[];
     };
     /** @description 도우미 후기 좋았던점 통계 DTO */
     PositiveFeedbackStatResponse: {
@@ -1789,7 +1866,7 @@ export interface components {
        */
       message: string;
       /** @description 응답 body 필드 */
-      data?: components['schemas']['HelperDetailResponse'];
+      data: components['schemas']['HelperDetailResponse'];
     };
     /** @description 도우미 후기 요약 정보 DTO */
     ReviewSimpleResponse: {
@@ -1834,6 +1911,102 @@ export interface components {
        */
       badRate: number;
     };
+    /** @description 도우미 프로필 수정 기본값 응답 DTO */
+    HelperUpdateDefaultResponse: {
+      /** @description 프로필 이미지 URL */
+      imageUrl: string;
+      /** @description 도우미 프로필 이미지 정보 */
+      profileImageCreateRequest: components['schemas']['ImageCreateRequest'];
+      /**
+       * @description 강점 목록
+       * @example ['안전한 부축으로 편안한 이동', '인지 장애 어르신 맞춤 케어']
+       */
+      strengthList: string[];
+      /**
+       * @description 한 줄 소개
+       * @example 부모님처럼 모시겠습니다!
+       */
+      shortBio: string;
+      /**
+       * @description 활동 지역
+       * @enum {string}
+       */
+      area:
+        | '서울'
+        | '부산'
+        | '대구'
+        | '인천'
+        | '광주'
+        | '대전'
+        | '울산'
+        | '세종시'
+        | '경기'
+        | '강원'
+        | '충북'
+        | '충남'
+        | '전북'
+        | '전남'
+        | '경북'
+        | '경남'
+        | '제주';
+      /** @description 자격증 정보 목록 */
+      certificateInfoList: components['schemas']['CertificateCreateRequest'][];
+    };
+    /** @description 공통 응답 포맷 */
+    ResponseHelperUpdateDefaultResponse: {
+      /**
+       * Format: int32
+       * @description 직접 정의한 응답에 대한 code
+       */
+      code: number;
+      /**
+       * Format: int32
+       * @description 응답 상태에 대한 HTTP 상태 코드
+       * @example 200
+       */
+      status: number;
+      /**
+       * @description 응답 상태에 대한 HTTP 메시지
+       * @example SUCCESS
+       */
+      message: string;
+      /** @description 응답 body 필드 */
+      data: components['schemas']['HelperUpdateDefaultResponse'];
+    };
+    /** @description 도우미 프로필 존재 여부 응답 DTO */
+    HelperProfileExistenceResponse: {
+      /**
+       * @description 도우미 프로필 존재 여부
+       * @example true
+       */
+      hasProfile: boolean;
+      /**
+       * Format: int64
+       * @description 도우미 프로필 ID
+       */
+      helperProfileId?: number;
+    };
+    /** @description 공통 응답 포맷 */
+    ResponseHelperProfileExistenceResponse: {
+      /**
+       * Format: int32
+       * @description 직접 정의한 응답에 대한 code
+       */
+      code: number;
+      /**
+       * Format: int32
+       * @description 응답 상태에 대한 HTTP 상태 코드
+       * @example 200
+       */
+      status: number;
+      /**
+       * @description 응답 상태에 대한 HTTP 메시지
+       * @example SUCCESS
+       */
+      message: string;
+      /** @description 응답 body 필드 */
+      data: components['schemas']['HelperProfileExistenceResponse'];
+    };
     /** @description 동행 상세 정보 조회 응답 DTO */
     EscortDetailResponse: {
       /**
@@ -1866,12 +2039,58 @@ export interface components {
       route: components['schemas']['RouteDetailResponse'];
       /** @description 고객 연락처 */
       customerContact: string;
-      /** @description 환자 요약 정보 */
-      patient: components['schemas']['PatientSimpleResponse'];
+      helper: components['schemas']['EscortHelperSimpleResponse'];
+      patient: components['schemas']['EscortPatientSimpleResponse'];
       /** @description 동행 목적 */
       purpose?: string;
       /** @description 요청 사항 */
       extraRequest?: string;
+    };
+    /** @description 도우미 정보 */
+    EscortHelperSimpleResponse: {
+      /**
+       * Format: int64
+       * @description 도우미 ID
+       */
+      helperProfileId: number;
+      /**
+       * @description 도우미 이미지 URL
+       * @example https://example.com/helper.png
+       */
+      imageUrl: string;
+      /**
+       * @description 도우미 이름
+       * @example 김도움
+       */
+      name: string;
+      /**
+       * @description 도우미 연락처
+       * @example 010-1234-5678
+       */
+      contact: string;
+    };
+    /** @description 환자 정보 */
+    EscortPatientSimpleResponse: {
+      /**
+       * Format: int64
+       * @description 환자 ID
+       */
+      patientId: number;
+      /**
+       * @description 환자 이미지 URL
+       * @example https://example.com/patient.png
+       */
+      imageUrl: string;
+      /**
+       * @description 환자 이름
+       * @example 홍길동
+       */
+      name: string;
+      /**
+       * @description 환자 연락처
+       * @example 010-1234-5678
+       */
+      contact: string;
     };
     /** @description 공통 응답 포맷 */
     ResponseEscortDetailResponse: {
@@ -1892,7 +2111,43 @@ export interface components {
        */
       message: string;
       /** @description 응답 body 필드 */
-      data?: components['schemas']['EscortDetailResponse'];
+      data: components['schemas']['EscortDetailResponse'];
+    };
+    /** @description 지원 목록 조회 응답 DTO */
+    ApplicationListResponse: {
+      /** @description 지원 목록 */
+      applicationList: components['schemas']['ApplicationSimpleResponse'][];
+    };
+    /** @description 지원 정보 요약본 응답 DTO */
+    ApplicationSimpleResponse: {
+      /**
+       * Format: int64
+       * @description 지원 ID
+       */
+      applicationId: number;
+      /** @description 도우미 요약 정보 */
+      helper: components['schemas']['HelperSimpleResponse'];
+    };
+    /** @description 공통 응답 포맷 */
+    ResponseApplicationListResponse: {
+      /**
+       * Format: int32
+       * @description 직접 정의한 응답에 대한 code
+       */
+      code: number;
+      /**
+       * Format: int32
+       * @description 응답 상태에 대한 HTTP 상태 코드
+       * @example 200
+       */
+      status: number;
+      /**
+       * @description 응답 상태에 대한 HTTP 메시지
+       * @example SUCCESS
+       */
+      message: string;
+      /** @description 응답 body 필드 */
+      data: components['schemas']['ApplicationListResponse'];
     };
   };
   responses: never;
@@ -1903,6 +2158,54 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
+  getHelperProfileUpdateDefault: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        helperProfileId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description 도우미 프로필 수정 기본값 조회 성공 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          '*/*': components['schemas']['ResponseHelperUpdateDefaultResponse'];
+        };
+      };
+    };
+  };
+  updateHelperProfile: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        helperProfileId: number;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['HelperProfileCreateRequest'];
+      };
+    };
+    responses: {
+      /** @description 도우미 프로필 수정 성공 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          '*/*': components['schemas']['ResponseEmptyBody'];
+        };
+      };
+    };
+  };
   getReviewAsRecruit: {
     parameters: {
       query?: never;
@@ -1946,7 +2249,7 @@ export interface operations {
           [name: string]: unknown;
         };
         content: {
-          '*/*': components['schemas']['ResponseVoid'];
+          '*/*': components['schemas']['ResponseEmptyBody'];
         };
       };
     };
@@ -1977,7 +2280,9 @@ export interface operations {
     parameters: {
       query?: never;
       header?: never;
-      path?: never;
+      path: {
+        recruitId: number;
+      };
       cookie?: never;
     };
     requestBody: {
@@ -1992,7 +2297,7 @@ export interface operations {
           [name: string]: unknown;
         };
         content: {
-          '*/*': components['schemas']['ResponseVoid'];
+          '*/*': components['schemas']['ResponseEmptyBody'];
         };
       };
     };
@@ -2040,7 +2345,7 @@ export interface operations {
           [name: string]: unknown;
         };
         content: {
-          '*/*': components['schemas']['ResponseVoid'];
+          '*/*': components['schemas']['ResponseEmptyBody'];
         };
       };
     };
@@ -2048,10 +2353,12 @@ export interface operations {
   updateLocation: {
     parameters: {
       query: {
-        escortId: number;
+        role: string;
       };
       header?: never;
-      path?: never;
+      path: {
+        escortId: number;
+      };
       cookie?: never;
     };
     requestBody: {
@@ -2060,13 +2367,13 @@ export interface operations {
       };
     };
     responses: {
-      /** @description OK */
+      /** @description 마지막 위치 업데이트 성공 */
       200: {
         headers: {
           [name: string]: unknown;
         };
         content: {
-          '*/*': components['schemas']['Response'];
+          '*/*': components['schemas']['ResponseEmptyBody'];
         };
       };
     };
@@ -2114,7 +2421,7 @@ export interface operations {
           [name: string]: unknown;
         };
         content: {
-          '*/*': components['schemas']['ResponseVoid'];
+          '*/*': components['schemas']['ResponseEmptyBody'];
         };
       };
     };
@@ -2160,7 +2467,7 @@ export interface operations {
           [name: string]: unknown;
         };
         content: {
-          '*/*': components['schemas']['ResponseApplicationListResponse'];
+          '*/*': components['schemas']['ResponseEmptyBody'];
         };
       };
     };
@@ -2204,7 +2511,7 @@ export interface operations {
           [name: string]: unknown;
         };
         content: {
-          '*/*': components['schemas']['ResponseVoid'];
+          '*/*': components['schemas']['ResponseEmptyBody'];
         };
       };
     };
@@ -2226,7 +2533,7 @@ export interface operations {
           [name: string]: unknown;
         };
         content: {
-          '*/*': components['schemas']['ResponseVoid'];
+          '*/*': components['schemas']['ResponseEmptyBody'];
         };
       };
     };
@@ -2248,7 +2555,7 @@ export interface operations {
           [name: string]: unknown;
         };
         content: {
-          '*/*': components['schemas']['ResponseVoid'];
+          '*/*': components['schemas']['ResponseEmptyBody'];
         };
       };
     };
@@ -2274,7 +2581,7 @@ export interface operations {
           [name: string]: unknown;
         };
         content: {
-          '*/*': components['schemas']['ResponseVoid'];
+          '*/*': components['schemas']['ResponseEmptyBody'];
         };
       };
     };
@@ -2296,7 +2603,7 @@ export interface operations {
           [name: string]: unknown;
         };
         content: {
-          '*/*': components['schemas']['ResponseVoid'];
+          '*/*': components['schemas']['ResponseEmptyBody'];
         };
       };
     };
@@ -2341,6 +2648,28 @@ export interface operations {
         };
         content: {
           '*/*': components['schemas']['ResponseRecruitDetailResponse'];
+        };
+      };
+    };
+  };
+  getRecruitStatus: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        recruitId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description 동행 신청 상태 정보 조회 성공 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          '*/*': components['schemas']['ResponseRecruitStatusResponse'];
         };
       };
     };
@@ -2449,6 +2778,30 @@ export interface operations {
       };
     };
   };
+  subscribe: {
+    parameters: {
+      query: {
+        role: string;
+      };
+      header?: never;
+      path: {
+        escortId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description 동행에 대한 SSE 요청 성공 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'text/event-stream': components['schemas']['SseEmitter'];
+        };
+      };
+    };
+  };
   getPresignedUrl: {
     parameters: {
       query?: never;
@@ -2487,6 +2840,26 @@ export interface operations {
         };
         content: {
           '*/*': components['schemas']['ResponseHelperDetailResponse'];
+        };
+      };
+    };
+  };
+  checkHelperProfileExistence: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description 도우미 프로필 존재 여부 조회 성공 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          '*/*': components['schemas']['ResponseHelperProfileExistenceResponse'];
         };
       };
     };
