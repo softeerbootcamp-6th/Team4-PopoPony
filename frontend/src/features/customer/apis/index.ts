@@ -14,7 +14,7 @@ import postSelectApplication from './postSelectApplication';
 import getRecruitPayment from './getRecruitPayment';
 import getRecruitReportByRecruitId from './getRecruitReportByRecruitId';
 import getRecruitReviewByRecruitId from './getRecruitReviewByRecruitId';
-
+import getTMapSearch from './getTMapSearch';
 // TODO: 추후 삭제
 import { searchRoute } from './search';
 
@@ -36,4 +36,5 @@ export {
   getRecruitPayment,
   getRecruitReviewByRecruitId,
   getRecruitReportByRecruitId,
+  getTMapSearch,
 };

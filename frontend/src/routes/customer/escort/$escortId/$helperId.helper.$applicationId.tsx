@@ -4,7 +4,7 @@ import { KeywordTag, ReviewCard, SatisfactionGraph, StatsSummaryCard } from '@cu
 import { useModal } from '@hooks';
 import { IcPhoneFill, IcVerified } from '@icons';
 import { PageLayout } from '@layouts';
-import { createFileRoute, useNavigate, useParams, useSearch } from '@tanstack/react-router';
+import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import type { EscortStrength } from '@types';
 import { dateFormat, formatImageUrl } from '@utils';
 
@@ -18,12 +18,8 @@ export const Route = createFileRoute('/customer/escort/$escortId/$helperId/helpe
 function RouteComponent() {
   const navigate = useNavigate();
   const { isOpen, openModal, closeModal } = useModal();
-  const { helperId, escortId, applicationId } = useParams({
-    from: '/customer/escort/$escortId/$helperId/helper/$applicationId',
-  });
-  const { canSelect } = useSearch({
-    from: '/customer/escort/$escortId/$helperId/helper/$applicationId',
-  });
+  const { helperId, escortId, applicationId } = Route.useParams();
+  const { canSelect } = Route.useSearch();
   const { data } = getHelperById(Number(helperId));
   const {
     helperSimple,
@@ -152,12 +148,11 @@ function RouteComponent() {
           </Tabs.TabsContent>
         </Tabs>
       </PageLayout.Content>
-      {!canSelect ||
-        (canSelect !== 'false' && (
-          <PageLayout.Footer>
-            <Button onClick={openModal}>도우미 선택하기</Button>
-          </PageLayout.Footer>
-        ))}
+      {canSelect && canSelect !== 'false' && (
+        <PageLayout.Footer>
+          <Button onClick={openModal}>도우미 선택하기</Button>
+        </PageLayout.Footer>
+      )}
       <Modal isOpen={isOpen} onClose={closeModal}>
         <Modal.Title>{name}님을 선택하시겠어요?</Modal.Title>
         <Modal.Content>선택 후에는 도우미를 변경할 수 없어요.</Modal.Content>

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { EscortCard, ProgressIndicator, Tabs, Button } from '@components';
 import { DetailTab, HelperTab, ReportTab } from '@customer/components';
 import { PageLayout } from '@layouts';
-import { createFileRoute, useParams, useNavigate } from '@tanstack/react-router';
+import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import type { RecruitDetailResponse } from '@customer/types';
 import { getRecruitById } from '@customer/apis';
 import { dateFormat, timeFormat } from '@utils';
@@ -26,7 +26,7 @@ function RouteComponent() {
   const navigate = useNavigate();
   const [hasReview, setHasReview] = useState(false);
   const [helperId, setHelperId] = useState<number | null>(null);
-  const { escortId } = useParams({ from: '/customer/escort/$escortId/' });
+  const { escortId } = Route.useParams();
 
   const { data: recruitData, isLoading } = getRecruitById(Number(escortId));
 

@@ -6,13 +6,15 @@ import {
   getRecruitReportByRecruitId,
   getRecruitReviewByRecruitId,
 } from '@customer/apis';
-import { useParams, useNavigate } from '@tanstack/react-router';
+import { getRouteApi, useNavigate } from '@tanstack/react-router';
 import { dateFormat, timeFormat } from '@utils';
 
 type ReportTabProps = {
   setHasReview: (hasReview: boolean) => void;
   setHelperId: (helperId: number) => void;
 };
+
+const routeApi = getRouteApi('/customer/escort/$escortId/');
 
 const statusMap = {
   좋았어요: 'good',
@@ -22,12 +24,13 @@ const statusMap = {
 
 const ReportTab = ({ setHasReview, setHelperId }: ReportTabProps) => {
   const navigate = useNavigate();
-  const { escortId } = useParams({ from: '/customer/escort/$escortId/' });
+  const { escortId } = routeApi.useParams();
   const { data: applicationList, isLoading: isApplicationListLoading } = getApplicationListById(
     Number(escortId)
   );
-  const { data: reportData } = getRecruitReportByRecruitId(Number(escortId));
-  const isReviewEnabled = reportData?.code === 10000 && reportData.status === 200;
+  const { data: reportDataOriginal } = getRecruitReportByRecruitId(Number(escortId));
+  const { data: reportData } = reportDataOriginal || {};
+  const isReviewEnabled = reportDataOriginal?.code === 10000 && reportDataOriginal.status === 200;
   const { data: reviewData, isLoading: isReviewDataLoading } = getRecruitReviewByRecruitId(
     Number(escortId),
     Boolean(isReviewEnabled)
@@ -36,8 +39,8 @@ const ReportTab = ({ setHasReview, setHelperId }: ReportTabProps) => {
     setHasReview(true);
   }
 
-  const actualStartTime = reportData?.data?.actualMeetingTime;
-  const actualEndTime = reportData?.data?.actualReturnTime;
+  const actualStartTime = reportData?.actualMeetingTime;
+  const actualEndTime = reportData?.actualReturnTime;
 
   const handleHelperCardClick = (helperId: number, escortId: string, applicationId: number) => {
     navigate({
@@ -47,7 +50,9 @@ const ReportTab = ({ setHasReview, setHelperId }: ReportTabProps) => {
         helperId: helperId.toString(),
         applicationId: applicationId.toString(),
       },
-      search: { canSelect: 'false' },
+      search: {
+        canSelect: 'false',
+      },
     });
   };
   if (isApplicationListLoading || isReviewDataLoading) return <Spinner />;
@@ -57,7 +62,7 @@ const ReportTab = ({ setHasReview, setHelperId }: ReportTabProps) => {
   }
 
   //reviewData.code가 150101이면 동행완료인데 리포트가 없는거. 130101이면 동행도 없음.
-  if (reportData && reportData.code === 130101) {
+  if (reportDataOriginal && reportDataOriginal.status !== 200) {
     alert('잘못된 접근입니다!');
     return null;
   }
@@ -134,20 +139,20 @@ const ReportTab = ({ setHasReview, setHelperId }: ReportTabProps) => {
                       width={16}
                       height={16}
                     />
-                    {reportData?.data?.extraMinutes && reportData?.data?.extraMinutes > 0 && (
+                    {reportData?.extraMinutes && reportData?.extraMinutes > 0 && (
                       <span className='label3-12-medium text-text-red-primary'>
-                        예상 동행 시간보다 {reportData?.data?.extraMinutes}분 초과되었어요!
+                        예상 동행 시간보다 {reportData?.extraMinutes}분 초과되었어요!
                       </span>
                     )}
                   </div>
                 </InfoSection>
                 <Divider />
-                {reportData?.data?.hasNextAppointment && (
+                {reportData?.hasNextAppointment && (
                   <InfoSection title='다음 예약'>
                     <span className='body1-16-medium text-text-neutral-primary'>
-                      {reportData?.data?.nextAppointmentTime &&
+                      {reportData?.nextAppointmentTime &&
                         dateFormat(
-                          reportData?.data?.nextAppointmentTime,
+                          reportData?.nextAppointmentTime,
                           'yyyy년 MM월 dd일 aaa HH시 mm분'
                         )}
                     </span>
@@ -157,7 +162,7 @@ const ReportTab = ({ setHasReview, setHelperId }: ReportTabProps) => {
                 <Divider />
                 <InfoSection title='전달 내용'>
                   <div className='bg-neutral-10 label2-14-medium text-text-neutral-primary flex flex-col rounded-[0.6rem] p-[1rem]'>
-                    <span>{reportData?.data?.description}</span>
+                    <span>{reportData?.description}</span>
                   </div>
                 </InfoSection>
               </div>
@@ -170,7 +175,7 @@ const ReportTab = ({ setHasReview, setHelperId }: ReportTabProps) => {
                 <div className='flex-between'>
                   <span className='body2-14-medium text-text-neutral-secondary'>기존 결제금액</span>
                   <span className='body1-16-bold text-text-neutral-primary'>
-                    {reportData?.data?.baseFee.toLocaleString()}원
+                    {reportData?.baseFee.toLocaleString()}원
                   </span>
                 </div>
                 <Divider />
@@ -181,7 +186,7 @@ const ReportTab = ({ setHasReview, setHelperId }: ReportTabProps) => {
                     </span>
                     <span className='body1-16-bold text-text-neutral-primary'>
                       {(
-                        (reportData?.data?.taxiFee || 0) + (reportData?.data?.extraTimeFee || 0)
+                        (reportData?.taxiFee || 0) + (reportData?.extraTimeFee || 0)
                       ).toLocaleString()}
                       원
                     </span>
@@ -189,7 +194,7 @@ const ReportTab = ({ setHasReview, setHelperId }: ReportTabProps) => {
                   <div className='flex-between'>
                     <span className='body2-14-medium text-text-neutral-assistive'>택시 요금</span>
                     <span className='label3-12-medium text-text-neutral-secondary'>
-                      {reportData?.data?.taxiFee.toLocaleString()}원
+                      {reportData?.taxiFee.toLocaleString()}원
                     </span>
                   </div>
                   <div className='flex-between'>
@@ -197,7 +202,7 @@ const ReportTab = ({ setHasReview, setHelperId }: ReportTabProps) => {
                       이용 시간 초과 요금
                     </span>
                     <span className='label3-12-medium text-text-neutral-secondary'>
-                      {reportData?.data?.extraTimeFee.toLocaleString()}원
+                      {reportData?.extraTimeFee.toLocaleString()}원
                     </span>
                   </div>
                   <WarningBox text='이용시간 초과요금은 15분에 5천원이에요.' />

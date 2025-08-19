@@ -15,7 +15,8 @@ public enum EscortErrorCode implements ResponseCode {
     APPLICATION_NOT_FOUND(130201, HttpStatus.NOT_FOUND.value(), "해당 동행 지원을 찾을 수 없습니다."),
     APPLICATION_INVALID_SELECT(130203, HttpStatus.BAD_REQUEST.value(), "대기 중인 지원만 선택할 수 있습니다."),
 
-    ESCORT_NOT_FOUND(130301, HttpStatus.NOT_FOUND.value(), "해당 동행을 찾을 수 없습니다.");
+    ESCORT_NOT_FOUND(130301, HttpStatus.NOT_FOUND.value(), "해당 동행을 찾을 수 없습니다."),
+    ESCORT_INVALID_PROCEED(130301, HttpStatus.BAD_REQUEST.value(), "아직 준비 중이거나 이미 완료된 동행입니다.");
 
     private final int code;
     private final int status;

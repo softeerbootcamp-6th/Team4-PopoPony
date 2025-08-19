@@ -1,10 +1,13 @@
 package com.todoc.server.domain.helper.service;
 
+import com.todoc.server.IntegrationTestBase;
 import com.todoc.server.common.enumeration.Area;
 import com.todoc.server.domain.helper.entity.HelperProfile;
 import com.todoc.server.domain.helper.exception.HelperProfileNotFoundException;
+import com.todoc.server.domain.helper.web.dto.request.CertificateCreateRequest;
 import com.todoc.server.domain.helper.web.dto.request.HelperProfileCreateRequest;
 import com.todoc.server.domain.helper.web.dto.response.HelperDetailResponse;
+import com.todoc.server.domain.helper.web.dto.response.HelperProfileExistenceResponse;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.DisplayName;
@@ -27,7 +30,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Transactional
 @ActiveProfiles("test")
 @Sql("/sql/data.sql")
-public class HelperIntegrationTest {
+public class HelperIntegrationTest extends IntegrationTestBase {
 
     @Autowired
     private HelperFacadeService helperFacadeService;
@@ -101,14 +104,14 @@ public class HelperIntegrationTest {
 
     private HelperProfileCreateRequest createHelperProfileRequest() {
         // 자격증 1
-        HelperProfileCreateRequest.CertificateInfo cert1 = new HelperProfileCreateRequest.CertificateInfo();
+        CertificateCreateRequest cert1 = new CertificateCreateRequest();
         ReflectionTestUtils.setField(cert1, "certificateImageCreateRequest", image(
                 "uploads/certs/cert1.jpg", "image/jpeg", 123_456L, "\"etag-cert1\""
         ));
         ReflectionTestUtils.setField(cert1, "type", "간호사 자격증");
 
         // 자격증 2
-        HelperProfileCreateRequest.CertificateInfo cert2 = new HelperProfileCreateRequest.CertificateInfo();
+        CertificateCreateRequest cert2 = new CertificateCreateRequest();
         ReflectionTestUtils.setField(cert2, "certificateImageCreateRequest", image(
                 "uploads/certs/cert2.jpg", "image/jpeg", 234_567L, "\"etag-cert2\""
         ));
@@ -136,5 +139,33 @@ public class HelperIntegrationTest {
         ReflectionTestUtils.setField(dto, "size", size);
         ReflectionTestUtils.setField(dto, "checksum", checksum);
         return dto;
+    }
+
+    @Test
+    @DisplayName("도우미 프로필이 존재하면 hasProfile=true 와 ID를 반환한다")
+    void checkHelperProfileExistence_whenProfileExists() {
+        // given
+        Long authId = 1L;
+
+        // when
+        HelperProfileExistenceResponse response = helperService.checkHelperProfileExistence(authId);
+
+        // then
+        assertThat(response.isHasProfile()).isTrue();
+        assertThat(response.getHelperProfileId()).isEqualTo(1L);
+    }
+
+    @Test
+    @DisplayName("도우미 프로필이 없으면 hasProfile=false 와 null을 반환한다")
+    void checkHelperProfileExistence_whenProfileDoesNotExist() {
+        // given
+        Long authId = 6L;
+
+        // when
+        HelperProfileExistenceResponse response = helperService.checkHelperProfileExistence(authId);
+
+        // then
+        assertThat(response.isHasProfile()).isFalse();
+        assertThat(response.getHelperProfileId()).isNull();
     }
 }

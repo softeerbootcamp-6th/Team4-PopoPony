@@ -6,6 +6,7 @@ import com.todoc.server.common.util.ImageUrlUtils;
 import com.todoc.server.domain.escort.entity.Recruit;
 import com.todoc.server.domain.report.entity.Report;
 import com.todoc.server.domain.report.entity.TaxiFee;
+import com.todoc.server.domain.report.exception.ReportNotFoundException;
 import com.todoc.server.domain.report.repository.ReportJpaRepository;
 import com.todoc.server.domain.report.repository.ReportQueryRepository;
 import com.todoc.server.domain.report.repository.dto.ReportDetailFlatDto;
@@ -37,6 +38,8 @@ public class ReportService {
 
         // 1. 데이터 조회 (Report + TaxiFee + Recruit)
         ReportDetailFlatDto reportDetailFlatDto = reportQueryRepository.getReportDetailByRecruitId(recruitId);
+
+
         Report r = reportDetailFlatDto.getReport();
         TaxiFee tf = reportDetailFlatDto.getTaxiFee();
         Recruit rc = reportDetailFlatDto.getRecruit();

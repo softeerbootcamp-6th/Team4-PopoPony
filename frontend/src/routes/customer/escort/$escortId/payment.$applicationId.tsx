@@ -1,7 +1,9 @@
 import { PaymentCard, WarningBox } from '@customer/components';
 import { PageLayout } from '@layouts';
-import { createFileRoute, useParams, useNavigate } from '@tanstack/react-router';
+import { createFileRoute, useNavigate, getRouteApi } from '@tanstack/react-router';
 import { getRecruitPayment, postSelectApplication } from '@customer/apis';
+
+const routeApi = getRouteApi('/customer/escort/$escortId/payment/$applicationId');
 
 export const Route = createFileRoute('/customer/escort/$escortId/payment/$applicationId')({
   component: RouteComponent,
@@ -9,9 +11,7 @@ export const Route = createFileRoute('/customer/escort/$escortId/payment/$applic
 
 function RouteComponent() {
   const navigate = useNavigate();
-  const { escortId, applicationId } = useParams({
-    from: '/customer/escort/$escortId/payment/$applicationId',
-  });
+  const { escortId, applicationId } = routeApi.useParams();
   const { data } = getRecruitPayment(Number(escortId));
   //TODO: route추가로 지도 정보 가져올 수 있음
   const { baseFee, expectedTaxiFee } = data?.data || {};

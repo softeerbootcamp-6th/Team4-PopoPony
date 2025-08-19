@@ -100,7 +100,7 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
-  '/api/realtime/escorts/{escortId}/locations': {
+  '/api/locations/{escortId}': {
     parameters: {
       query?: never;
       header?: never;
@@ -109,10 +109,6 @@ export interface paths {
     };
     get?: never;
     put?: never;
-    /**
-     * 마지막 위치 업데이트
-     * @description Role에 따라 자신의 마지막 위치를 갱신합니다.
-     */
     post: operations['updateLocation'];
     delete?: never;
     options?: never;
@@ -520,26 +516,6 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
-  '/api/helpers/existence': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    /**
-     * 도우미 프로필 존재 여부 확인
-     * @description 도우미가 기존에 등록한 프로필이 있는지 확인합니다.
-     */
-    get: operations['checkHelperProfileExistence'];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
   '/api/escorts/recruits/{recruitId}': {
     parameters: {
       query?: never;
@@ -901,10 +877,33 @@ export interface components {
       returnLocationDetail?: components['schemas']['LocationDetail'];
     };
     LocationRequest: {
+      /** Format: int64 */
+      escortId?: number;
       /** Format: double */
-      latitude?: number;
+      lat?: number;
       /** Format: double */
-      longitude?: number;
+      lon?: number;
+    };
+    /** @description 공통 응답 포맷 */
+    Response: {
+      /**
+       * Format: int32
+       * @description 직접 정의한 응답에 대한 code
+       */
+      code: number;
+      /**
+       * Format: int32
+       * @description 응답 상태에 대한 HTTP 상태 코드
+       * @example 200
+       */
+      status: number;
+      /**
+       * @description 응답 상태에 대한 HTTP 메시지
+       * @example SUCCESS
+       */
+      message: string;
+      /** @description 응답 body 필드 */
+      data?: unknown;
     };
     /** @description 단일 파일에 대한 Presigned URL 발급에 필요한 메타데이터 */
     FileSpec: {
@@ -1444,7 +1443,7 @@ export interface components {
        *       ]
        *     ]
        */
-      meetingToHospital: components['schemas']['Coordinate'][];
+      meetingToHospital: string;
       /**
        * @description 복귀장소까지의 경로 정보 ([위도, 경도] 배열)
        * @example [
@@ -1462,41 +1461,7 @@ export interface components {
        *       ]
        *     ]
        */
-      hospitalToReturn: components['schemas']['Coordinate'][];
-    };
-    /** @description 동행 신청 상태 응답 DTO */
-    RecruitStatusResponse: {
-      /**
-       * Format: int64
-       * @description 동행 신청 ID
-       */
-      recruitId: number;
-      /**
-       * @description 동행 신청의 진행 상태
-       * @enum {string}
-       */
-      recruitStatus: '매칭중' | '매칭완료' | '동행중' | '동행완료';
-    };
-    /** @description 공통 응답 포맷 */
-    ResponseRecruitStatusResponse: {
-      /**
-       * Format: int32
-       * @description 직접 정의한 응답에 대한 code
-       */
-      code: number;
-      /**
-       * Format: int32
-       * @description 응답 상태에 대한 HTTP 상태 코드
-       * @example 200
-       */
-      status: number;
-      /**
-       * @description 응답 상태에 대한 HTTP 메시지
-       * @example SUCCESS
-       */
-      message: string;
-      /** @description 응답 body 필드 */
-      data: components['schemas']['RecruitStatusResponse'];
+      hospitalToReturn: string;
     };
     /** @description 동행 신청 결제 정보 조회 응답 DTO */
     RecruitPaymentResponse: {
@@ -1604,6 +1569,67 @@ export interface components {
        *     ]
        */
       hospitalToReturn: components['schemas']['Coordinate'][];
+    };
+    /** @description 경로 상세 정보 DTO */
+    RouteDetailResponse: {
+      /** @description 경로 요약 정보 */
+      routeSimple: components['schemas']['RouteSimpleResponse'];
+      /**
+       * Format: int32
+       * @description 만남장소-병원 예상 이동 시간(초)
+       */
+      meetingToHospitalEstimatedTime: number;
+      /**
+       * Format: int32
+       * @description 만남장소-병원 예상 택시 요금(원)
+       */
+      meetingToHospitalEstimatedTaxiFee: number;
+      /**
+       * Format: int32
+       * @description 병원-복귀장소 예상 이동 시간(초)
+       */
+      hospitalToReturnEstimatedTime: number;
+      /**
+       * Format: int32
+       * @description 병원-복귀장소 예상 택시 요금(원)
+       */
+      hospitalToReturnEstimatedTaxiFee: number;
+      /**
+       * @description 병원까지의 경로 정보 ([위도, 경도] 배열)
+       * @example [
+       *       [
+       *         12,
+       *         23
+       *       ],
+       *       [
+       *         13,
+       *         45
+       *       ],
+       *       [
+       *         12,
+       *         66
+       *       ]
+       *     ]
+       */
+      meetingToHospital: string;
+      /**
+       * @description 복귀장소까지의 경로 정보 ([위도, 경도] 배열)
+       * @example [
+       *       [
+       *         12,
+       *         23
+       *       ],
+       *       [
+       *         13,
+       *         45
+       *       ],
+       *       [
+       *         12,
+       *         66
+       *       ]
+       *     ]
+       */
+      hospitalToReturn: string;
     };
     /** @description 환자 상태 정보 */
     PatientDetailHistory: {
@@ -2113,42 +2139,6 @@ export interface components {
       /** @description 응답 body 필드 */
       data: components['schemas']['EscortDetailResponse'];
     };
-    /** @description 지원 목록 조회 응답 DTO */
-    ApplicationListResponse: {
-      /** @description 지원 목록 */
-      applicationList: components['schemas']['ApplicationSimpleResponse'][];
-    };
-    /** @description 지원 정보 요약본 응답 DTO */
-    ApplicationSimpleResponse: {
-      /**
-       * Format: int64
-       * @description 지원 ID
-       */
-      applicationId: number;
-      /** @description 도우미 요약 정보 */
-      helper: components['schemas']['HelperSimpleResponse'];
-    };
-    /** @description 공통 응답 포맷 */
-    ResponseApplicationListResponse: {
-      /**
-       * Format: int32
-       * @description 직접 정의한 응답에 대한 code
-       */
-      code: number;
-      /**
-       * Format: int32
-       * @description 응답 상태에 대한 HTTP 상태 코드
-       * @example 200
-       */
-      status: number;
-      /**
-       * @description 응답 상태에 대한 HTTP 메시지
-       * @example SUCCESS
-       */
-      message: string;
-      /** @description 응답 body 필드 */
-      data: components['schemas']['ApplicationListResponse'];
-    };
   };
   responses: never;
   parameters: never;
@@ -2374,6 +2364,32 @@ export interface operations {
         };
         content: {
           '*/*': components['schemas']['ResponseEmptyBody'];
+        };
+      };
+    };
+  };
+  updateLocation: {
+    parameters: {
+      query: {
+        escortId: number;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['LocationRequest'];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          '*/*': components['schemas']['Response'];
         };
       };
     };

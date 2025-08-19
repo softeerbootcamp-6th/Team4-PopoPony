@@ -1,10 +1,14 @@
 package com.todoc.server.domain.helper.service;
 
+import com.todoc.server.common.enumeration.Area;
+import com.todoc.server.common.util.JsonUtils;
 import com.todoc.server.domain.auth.entity.Auth;
 import com.todoc.server.domain.auth.service.AuthService;
 import com.todoc.server.domain.escort.service.EscortService;
 import com.todoc.server.domain.helper.entity.Certificate;
 import com.todoc.server.domain.helper.entity.HelperProfile;
+import com.todoc.server.domain.helper.exception.HelperProfileAreaInvalidException;
+import com.todoc.server.domain.helper.web.dto.request.CertificateCreateRequest;
 import com.todoc.server.domain.helper.web.dto.request.HelperProfileCreateRequest;
 import com.todoc.server.domain.helper.web.dto.response.HelperDetailResponse;
 import com.todoc.server.domain.helper.web.dto.response.HelperSimpleResponse;
@@ -87,10 +91,48 @@ public class HelperFacadeService {
         helperProfile.setHelperProfileImage(profileImage);
 
         // 자격증 정보 저장
-        List<HelperProfileCreateRequest.CertificateInfo> certificateInfoList = Optional.ofNullable(requestDto.getCertificateInfoList())
+        List<CertificateCreateRequest> certificateInfoList = Optional.ofNullable(requestDto.getCertificateInfoList())
                         .orElse(Collections.emptyList());
 
-        for (HelperProfileCreateRequest.CertificateInfo certificateInfo : certificateInfoList) {
+        for (CertificateCreateRequest certificateInfo : certificateInfoList) {
+            ImageFile certificateImage = imageFileService.register(certificateInfo.getCertificateImageCreateRequest());
+            Certificate certificate = certificateService.register(certificateInfo);
+            certificate.setHelperProfile(helperProfile);
+            certificate.setCertificateImage(certificateImage);
+        }
+    }
+
+    @Transactional
+    public void updateHelperProfile(Long helperProfileId, HelperProfileCreateRequest requestDto) {
+
+        HelperProfile helperProfile = helperService.getHelperProfileById(helperProfileId);
+
+        if (requestDto.getProfileImageCreateRequest() != null) {
+            ImageFile newProfileImage = imageFileService.register(requestDto.getProfileImageCreateRequest());
+            helperProfile.setHelperProfileImage(newProfileImage);
+        }
+
+        if (requestDto.getStrengthList() != null) {
+            String jsonStrength = JsonUtils.toJson(requestDto.getStrengthList());
+            helperProfile.setStrength(jsonStrength);
+        }
+
+        helperProfile.setShortBio(requestDto.getShortBio());
+
+        // area 업데이트
+        Area area = Area.from(requestDto.getArea())
+                .orElseThrow(HelperProfileAreaInvalidException::new);
+        helperProfile.setArea(area);
+
+        // 자격증 정보는 기존 것 삭제하고 새로 저장
+        if (requestDto.getCertificateInfoList() != null) {
+            certificateService.deleteAllByHelperProfileId(helperProfileId);
+        }
+
+        List<CertificateCreateRequest> certificateInfoList = Optional.ofNullable(requestDto.getCertificateInfoList())
+                        .orElse(Collections.emptyList());
+
+        for (CertificateCreateRequest certificateInfo : certificateInfoList) {
             ImageFile certificateImage = imageFileService.register(certificateInfo.getCertificateImageCreateRequest());
             Certificate certificate = certificateService.register(certificateInfo);
             certificate.setHelperProfile(helperProfile);

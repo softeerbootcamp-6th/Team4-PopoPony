@@ -1,12 +1,15 @@
-import { Spinner, Tabs } from '@components';
-import { HelperCard, HelperEmptyCard, HelperSelectInfoCard } from '@customer/components';
-import { useParams, useNavigate } from '@tanstack/react-router';
+import { Spinner, Tabs, EmptyCard } from '@components';
+import { HelperCard, HelperSelectInfoCard } from '@customer/components';
+import { useNavigate, getRouteApi } from '@tanstack/react-router';
 import { getApplicationListById } from '@customer/apis';
+
+const routeApi = getRouteApi('/customer/escort/$escortId/');
 
 const HelperTab = ({ status }: { status: string }) => {
   const navigate = useNavigate();
-  const { escortId } = useParams({ from: '/customer/escort/$escortId/' });
-  const { data: applicationList, isLoading } = getApplicationListById(Number(escortId));
+  const { escortId } = routeApi.useParams();
+  const { data: applicationData, isLoading } = getApplicationListById(Number(escortId));
+  const { applicationList } = applicationData?.data || {};
 
   const handleHelperCardClick = (helperId: number, escortId: string, applicationId: number) => {
     if (status === '매칭중') {
@@ -36,12 +39,10 @@ const HelperTab = ({ status }: { status: string }) => {
 
   return (
     <Tabs.TabsContentSection>
-      {applicationList &&
-      applicationList.data &&
-      applicationList.data.applicationList.length > 0 ? (
+      {applicationList && applicationList.length > 0 ? (
         <>
           {status === '매칭중' && <HelperSelectInfoCard />}
-          {applicationList.data.applicationList.map((application) => (
+          {applicationList.map((application) => (
             <HelperCard
               key={application.helper.helperProfileId}
               helper={application.helper}
@@ -56,7 +57,7 @@ const HelperTab = ({ status }: { status: string }) => {
           ))}
         </>
       ) : (
-        <HelperEmptyCard />
+        <EmptyCard text='아직 지원한 도우미가 없어요' />
       )}
     </Tabs.TabsContentSection>
   );

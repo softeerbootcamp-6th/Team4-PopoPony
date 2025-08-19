@@ -11,4 +11,6 @@ public interface CertificateJpaRepository extends JpaRepository<Certificate, Lon
 
     @Query(value = "SELECT type FROM certificate WHERE helper_profile_id = :helperProfileId", nativeQuery = true)
     List<String> findTypesByHelperProfileId(@Param("helperProfileId") Long helperId);
+
+    List<Certificate> findAllByHelperProfileId(Long helperProfileId);
 }

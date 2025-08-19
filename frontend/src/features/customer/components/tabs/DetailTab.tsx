@@ -5,13 +5,15 @@ import { IcCheck } from '@icons';
 import type { EscortStrength } from '@types';
 import type { RecruitDetailResponse } from '@customer/types';
 import { dateFormat, timeFormatWithOptionalMinutes, timeDuration, formatImageUrl } from '@utils';
-import { useNavigate, useParams } from '@tanstack/react-router';
+import { useNavigate, getRouteApi } from '@tanstack/react-router';
 import { deleteRecruit } from '@customer/apis';
+
+const routeApi = getRouteApi('/customer/escort/$escortId/');
 
 const DetailTab = ({ data }: { data: RecruitDetailResponse }) => {
   const navigate = useNavigate();
   const { mutate } = deleteRecruit();
-  const { escortId } = useParams({ from: '/customer/escort/$escortId/' });
+  const { escortId } = routeApi.useParams();
   const {
     isOpen: isDeleteRecruitOpen,
     openModal: openDeleteRecruitModal,
