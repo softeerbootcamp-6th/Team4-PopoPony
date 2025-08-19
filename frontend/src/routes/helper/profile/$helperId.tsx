@@ -18,9 +18,9 @@ function RouteComponent() {
   const {
     helperSimple,
     escortCount = 0,
-    reviewStat,
-    positiveFeedbackStatList,
-    latestReviewList,
+    reviewStat = { goodRate: 0, averageRate: 0, badRate: 0, reviewCount: 0 },
+    positiveFeedbackStatList = [],
+    latestReviewList = [],
   } = data?.data || {};
 
   const statusMap = {

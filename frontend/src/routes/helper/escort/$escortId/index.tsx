@@ -1,4 +1,4 @@
-import { EscortCard, ProgressIndicator, Tabs } from '@components';
+import { EscortCard, ProgressIndicator, Tabs, Spinner } from '@components';
 import { DetailTab, ReportTab } from '@helper/components';
 import { PageLayout } from '@layouts';
 import { createFileRoute, useParams } from '@tanstack/react-router';
@@ -26,7 +26,11 @@ function RouteComponent() {
   const { data: recruitData, isLoading } = getRecruitById(Number(escortId));
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div className='flex-center h-full w-full'>
+        <Spinner size='48' color='primary' isLoading={true} />
+      </div>
+    );
   }
   if (!recruitData || !recruitData.data) {
     return null;

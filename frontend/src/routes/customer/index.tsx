@@ -30,9 +30,11 @@ const refineRecruitData = (recruitData: RecruitSimpleResponse) => {
   } else if (recruitData.recruitStatus === '매칭완료') {
     statusText = '매칭이 확정되었어요!';
   } else if (recruitData.recruitStatus === '동행중') {
-    //undefined 가능이지만 우리는 동행중일 때 escort status가 있음을 알기 때문에 타입 단언 가능.
-    statusText =
-      escortStatusMessageMap[recruitData.escortStatus as NonNullable<EscortStatus>] ?? '';
+    if (recruitData.escortStatus) {
+      statusText = escortStatusMessageMap[recruitData.escortStatus] ?? '';
+    } else {
+      statusText = '도우미와 곧 만나요!';
+    }
   } else if (recruitData.recruitStatus === '동행완료') {
     statusText = '동행번호 NO.' + recruitData.recruitId;
   }

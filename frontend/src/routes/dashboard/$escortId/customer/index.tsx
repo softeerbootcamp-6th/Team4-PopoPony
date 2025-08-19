@@ -127,7 +127,7 @@ function RouteComponent() {
     } else {
       return {
         //쓰지 않음. 타입 안정성 위한 코드
-        escortStatus: '복귀완료' as StatusTitleProps,
+        escortStatus: '복귀중' as StatusTitleProps,
         title: '',
       };
     }

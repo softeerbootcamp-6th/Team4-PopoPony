@@ -14,10 +14,10 @@ const allowedStrengths = new Set<string>([...STRENGTH_OPTIONS.map((o) => o.value
 const allowedCertificates = new Set<string>([...CERTIFICATE_OPTIONS]);
 const allowedAreas = new Set<string>(REGION_OPTIONS.map((o) => o.value));
 
-export function toProfileFormValues(
+const toProfileFormValues = (
   api: HelperProfileApi,
   helperProfileId: number | undefined
-): ProfileFormValues {
+): ProfileFormValues => {
   const strengthList = (api.strengthList ?? []).filter(
     (v): v is (typeof STRENGTH_OPTIONS)[number]['value'] =>
       typeof v === 'string' && allowedStrengths.has(v)
@@ -43,7 +43,7 @@ export function toProfileFormValues(
 
   return {
     imageUrl: formatImageUrl(api.imageUrl) ?? '',
-    profileImageCreateRequest: api.profileImageCreateRequest!,
+    profileImageCreateRequest: api.profileImageCreateRequest ?? null,
     strengthList,
     certificateList,
     shortBio: api.shortBio ?? '',
@@ -51,4 +51,6 @@ export function toProfileFormValues(
     isEdit: true,
     helperProfileId: helperProfileId,
   };
-}
+};
+
+export default toProfileFormValues;

@@ -1,6 +1,4 @@
-type Props = Record<string, never>;
-
-const EscortCompleted = (_props: Props) => {
+const EscortCompleted = () => {
   return (
     <div className='flex h-full flex-col items-center justify-center p-[2rem]'>
       <div className='aspect-square w-full'>

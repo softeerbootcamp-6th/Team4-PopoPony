@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { Modal } from '@components';
 import { PageLayout } from '@layouts';
 import { type ProfileFormValues } from '@helper/types';
-import { toProfileFormValues } from '@helper/utils/normalizeProfileFromApi';
+import { toProfileFormValues } from '@helper/utils';
 import { useFunnel, useModal } from '@hooks';
 import { createFileRoute, useRouter } from '@tanstack/react-router';
 import { getProfileExistance, getReviseHelperProfileInfo } from '@helper/apis';
