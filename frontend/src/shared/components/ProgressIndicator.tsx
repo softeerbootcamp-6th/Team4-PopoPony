@@ -1,11 +1,11 @@
+import type { RecruitStatus } from '@types';
+
 interface ProgressIndicatorProps {
-  currentStatus: EscortStatus;
+  currentStatus: RecruitStatus;
   className?: string;
 }
 
-type EscortStatus = '매칭중' | '매칭확정' | '동행중' | '동행완료';
-
-const ESCORT_STEPS: EscortStatus[] = ['매칭중', '매칭확정', '동행중', '동행완료'];
+const ESCORT_STEPS: RecruitStatus[] = ['매칭중', '매칭완료', '동행중', '동행완료'];
 
 export default function ProgressIndicator({
   currentStatus,

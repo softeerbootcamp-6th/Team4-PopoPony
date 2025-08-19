@@ -375,6 +375,16 @@ public class RecruitService {
             .build();
     }
 
+    public RecruitStatusResponse getRecruitStatusByRecruitId(Long recruitId) {
+
+        Recruit recruit = getRecruitById(recruitId);
+
+        return RecruitStatusResponse.builder()
+                .recruitId(recruit.getId())
+                .recruitStatus(recruit.getStatus().getLabel())
+                .build();
+    }
+
     public List<Recruit> getAllRecruits() {
         return recruitJpaRepository.findAll();
     }

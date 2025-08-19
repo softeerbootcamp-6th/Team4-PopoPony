@@ -1,5 +1,6 @@
 package com.todoc.server.domain.report.web.controller;
 
+import com.todoc.server.common.response.EmptyBody;
 import com.todoc.server.common.response.Response;
 import com.todoc.server.domain.auth.service.SessionAuth;
 import com.todoc.server.domain.auth.web.LoginUser;
@@ -59,9 +60,9 @@ public class ReportController {
             responseCode = "200",
             description = "리포트 등록 성공")
     @PostMapping("recruits/{recruitId}")
-    public Response<Void> createReportOnRecruit(@LoginUser SessionAuth auth, @RequestBody ReportCreateRequest request) {
+    public Response<EmptyBody> createReportOnRecruit(@LoginUser SessionAuth auth, @PathVariable(name="recruitId") Long recruitId, @RequestBody ReportCreateRequest request) {
 
-        reportFacadeService.createReport(request, auth.id());
+        reportFacadeService.createReport(request, recruitId);
 
         return Response.from();
     }

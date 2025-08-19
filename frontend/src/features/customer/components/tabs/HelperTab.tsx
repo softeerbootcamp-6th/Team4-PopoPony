@@ -1,23 +1,64 @@
-import { Tabs } from '@components';
-import { HelperCard, HelperEmptyCard, HelperSelectInfoCard } from '@customer/components';
+import { Spinner, Tabs, EmptyCard } from '@components';
+import { HelperCard, HelperSelectInfoCard } from '@customer/components';
+import { useNavigate, getRouteApi } from '@tanstack/react-router';
+import { getApplicationListById } from '@customer/apis';
 
-const HelperTab = () => {
+const routeApi = getRouteApi('/customer/escort/$escortId/');
+
+const HelperTab = ({ status }: { status: string }) => {
+  const navigate = useNavigate();
+  const { escortId } = routeApi.useParams();
+  const { data: applicationData, isLoading } = getApplicationListById(Number(escortId));
+  const { applicationList } = applicationData?.data || {};
+
+  const handleHelperCardClick = (helperId: number, escortId: string, applicationId: number) => {
+    if (status === '매칭중') {
+      navigate({
+        to: '/customer/escort/$escortId/$helperId/helper/$applicationId',
+        params: {
+          escortId: escortId,
+          helperId: helperId.toString(),
+          applicationId: applicationId.toString(),
+        },
+        search: { canSelect: 'true' },
+      });
+    } else {
+      navigate({
+        to: '/customer/escort/$escortId/$helperId/helper/$applicationId',
+        params: {
+          escortId: escortId,
+          helperId: helperId.toString(),
+          applicationId: applicationId.toString(),
+        },
+        search: { canSelect: 'false' },
+      });
+    }
+  };
+
+  if (isLoading) return <Spinner />;
+
   return (
     <Tabs.TabsContentSection>
-      <HelperSelectInfoCard />
-      <HelperEmptyCard />
-      <HelperCard
-        helper={{
-          id: '1',
-          name: '최솔희',
-          age: 39,
-          gender: '여',
-          profileImage: '/images/default-profile.svg',
-          certificates: ['간호사', '간호조무사'],
-          tags: ['안전한 부축', '휠체어 이동', '인지장애 케어'],
-        }}
-        onClick={() => alert('준비중인 기능이에요')}
-      />
+      {applicationList && applicationList.length > 0 ? (
+        <>
+          {status === '매칭중' && <HelperSelectInfoCard />}
+          {applicationList.map((application) => (
+            <HelperCard
+              key={application.helper.helperProfileId}
+              helper={application.helper}
+              onClick={() =>
+                handleHelperCardClick(
+                  application.helper.helperProfileId,
+                  escortId,
+                  application.applicationId
+                )
+              }
+            />
+          ))}
+        </>
+      ) : (
+        <EmptyCard text='아직 지원한 도우미가 없어요' />
+      )}
     </Tabs.TabsContentSection>
   );
 };

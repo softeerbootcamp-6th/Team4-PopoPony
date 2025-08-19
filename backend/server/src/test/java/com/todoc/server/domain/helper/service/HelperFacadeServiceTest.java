@@ -5,6 +5,7 @@ import com.todoc.server.domain.auth.service.AuthService;
 import com.todoc.server.domain.escort.service.EscortService;
 import com.todoc.server.domain.helper.entity.Certificate;
 import com.todoc.server.domain.helper.entity.HelperProfile;
+import com.todoc.server.domain.helper.web.dto.request.CertificateCreateRequest;
 import com.todoc.server.domain.helper.web.dto.request.HelperProfileCreateRequest;
 import com.todoc.server.domain.helper.web.dto.response.HelperDetailResponse;
 import com.todoc.server.domain.helper.web.dto.response.HelperSimpleResponse;
@@ -119,9 +120,9 @@ class HelperFacadeServiceTest {
     void createHelperProfile_정상() {
         // given
         HelperProfileCreateRequest request = new HelperProfileCreateRequest();
-        List<HelperProfileCreateRequest.CertificateInfo> certs = new ArrayList<>();
+        List<CertificateCreateRequest> certs = new ArrayList<>();
         for (int i = 1; i <= 2; i++) {
-            HelperProfileCreateRequest.CertificateInfo certificateInfo = new HelperProfileCreateRequest.CertificateInfo();
+            CertificateCreateRequest certificateInfo = new CertificateCreateRequest();
             ReflectionTestUtils.setField(certificateInfo, "type", "자격증" + i);
 
             var imageCreateRequest = new com.todoc.server.common.dto.request.ImageCreateRequest();
@@ -145,7 +146,7 @@ class HelperFacadeServiceTest {
         given(helperService.register(request)).willReturn(helperProfile);
         given(authService.getAuthById(authId)).willReturn(auth);
 
-        when(certificateService.register(any(HelperProfileCreateRequest.CertificateInfo.class)))
+        when(certificateService.register(any(CertificateCreateRequest.class)))
                 .thenReturn(new Certificate(), new Certificate()); // 호출 2번 대비
 
         // when
@@ -153,6 +154,6 @@ class HelperFacadeServiceTest {
 
         // then
         verify(helperService).register(request);
-        verify(certificateService, times(2)).register(any(HelperProfileCreateRequest.CertificateInfo.class));
+        verify(certificateService, times(2)).register(any(CertificateCreateRequest.class));
     }
 }

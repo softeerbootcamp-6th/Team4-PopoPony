@@ -196,9 +196,10 @@ public class RecruitQueryRepository {
             .join(recruit.patient, patient).fetchJoin()
             .join(route.meetingLocationInfo, meetingLocation).fetchJoin()
             .join(route.hospitalLocationInfo, hospitalLocation).fetchJoin()
-            .where(areaEq(area)
-                .and(escortDateBetween(startDate, endDate))
-                .and(recruit.status.in(status)))
+            .where(
+                areaEq(area),
+                escortDateBetween(startDate, endDate),
+                recruit.status.in(status))
             .fetch();
     }
 

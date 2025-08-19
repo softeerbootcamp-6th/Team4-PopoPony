@@ -23,7 +23,6 @@ import Comment from './reviewStep/Comment';
 // Cards
 import HelperCard from './cards/HelperCard';
 import HelperSelectInfoCard from './cards/HelperSelectInfoCard';
-import HelperEmptyCard from './cards/HelperEmptyCard';
 import ReportInfoCard from './cards/ReportInfoCard';
 import PaymentFailedCard from './cards/PaymentFailedCard';
 
@@ -42,7 +41,6 @@ export {
   StatsSummaryCard,
   HelperCard,
   HelperSelectInfoCard,
-  HelperEmptyCard,
   ReportInfoCard,
   PaymentFailedCard,
   HelperTab,

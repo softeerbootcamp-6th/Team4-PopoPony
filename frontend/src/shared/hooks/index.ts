@@ -5,3 +5,4 @@ import { useImageUpload } from './useImageUpload';
 import { useMap } from './useMap';
 
 export { useFunnel, useModal, useFormValidation, useImageUpload, useMap };
+export { default as useDebounce } from './useDebounce';

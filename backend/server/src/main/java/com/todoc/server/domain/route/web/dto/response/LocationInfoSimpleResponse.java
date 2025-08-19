@@ -6,9 +6,11 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.math.BigDecimal;
+
 @Getter
 @Schema(description = "장소 요약 정보 DTO")
-public class LocationInfoSimpleResponse {
+public class    LocationInfoSimpleResponse {
 
     @NotNull
     @Schema(description = "장소 ID")
@@ -26,12 +28,22 @@ public class LocationInfoSimpleResponse {
     @Schema(description = "상세 주소")
     private String detailAddress;
 
+    @NotNull
+    @Schema(description = "위도")
+    private BigDecimal lat;
+
+    @NotNull
+    @Schema(description = "경도")
+    private BigDecimal lon;
+
     @Builder
-    public LocationInfoSimpleResponse(Long locationInfoId, String placeName, String address, String detailAddress) {
+    public LocationInfoSimpleResponse(Long locationInfoId, String placeName, String address, String detailAddress, BigDecimal lat, BigDecimal lon) {
         this.locationInfoId = locationInfoId;
         this.placeName = placeName;
         this.address = address;
         this.detailAddress = detailAddress;
+        this.lat = lat;
+        this.lon = lon;
     }
 
     public static LocationInfoSimpleResponse from(LocationInfo locationInfo) {
@@ -40,6 +52,8 @@ public class LocationInfoSimpleResponse {
                 .placeName(locationInfo.getPlaceName())
                 .address(locationInfo.getFullRoadAddress())
                 .detailAddress(locationInfo.getDetailAddress())
+                .lat(locationInfo.getLatitude())
+                .lon(locationInfo.getLongitude())
                 .build();
     }
 }
