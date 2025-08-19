@@ -10,6 +10,9 @@ import {
   CustomerDashboardLive,
   Footer,
 } from '@dashboard/components';
+import { useEffect, useRef } from 'react';
+import { useMap } from '@hooks';
+import { FloatingButton } from '@components';
 
 export const Route = createFileRoute('/dashboard/$escortId/customer/')({
   beforeLoad: async ({ context, params }) => {
@@ -32,23 +35,24 @@ export const Route = createFileRoute('/dashboard/$escortId/customer/')({
   component: RouteComponent,
 });
 
-type DashboardCardProps = {
-  escortStatus: StatusTitleProps;
-  title: string;
-  address?: {
-    locationInfoId: number;
-    placeName: string;
-    address: string;
-    detailAddress: string;
-  };
-};
-
 function RouteComponent() {
   const router = useRouter();
   const { escortId: recruitId } = Route.useParams();
-  const { data: escortDetailOrigin } = getEscortDetail(Number(recruitId));
-  const { escortStatus, route, helper } = escortDetailOrigin.data;
+  const { data } = getEscortDetail(Number(recruitId));
+  const mapRef = useRef<HTMLDivElement>(null);
+  const {
+    mapInstance,
+    isTmapLoaded,
+    addPolyline,
+    addUserLocationMarker,
+    setCurrentLocation,
+    addMarker,
+  } = useMap(mapRef as React.RefObject<HTMLDivElement>);
+  let { escortStatus, route, helper, estimatedMeetingTime } = data.data;
+  const { meetingLocationInfo } = route.routeSimple;
   const helperContact = helper.contact;
+
+  escortStatus = '병원행';
 
   const handleClickCallHelper = () => {
     window.open(`tel:${helperContact}`, '_blank');
@@ -64,6 +68,17 @@ function RouteComponent() {
       },
     });
   };
+
+  useEffect(() => {
+    if (mapInstance) {
+      addMarker(
+        meetingLocationInfo.lat,
+        meetingLocationInfo.lon,
+        'home',
+        meetingLocationInfo.placeName
+      );
+    }
+  }, [mapInstance]);
 
   if (escortStatus === '리포트작성중') {
     return (
@@ -103,45 +118,24 @@ function RouteComponent() {
     );
   }
 
-  const dashboardCardProps = (): DashboardCardProps => {
-    if (escortStatus === '만남중') {
-      return {
-        escortStatus: escortStatus,
-        title: '만남장소로 이동 중',
-        address: route.routeSimple.meetingLocationInfo,
-      };
-    }
-    if (escortStatus === '병원행' || escortStatus === '진료중') {
-      return {
-        escortStatus: escortStatus,
-        title: '병원으로 이동 중',
-        address: route.routeSimple.hospitalLocationInfo,
-      };
-    }
-    if (escortStatus === '복귀중') {
-      return {
-        escortStatus: escortStatus,
-        title: '복귀 장소로 이동 중',
-        address: route.routeSimple.returnLocationInfo,
-      };
-    } else {
-      return {
-        //쓰지 않음. 타입 안정성 위한 코드
-        escortStatus: '복귀중' as StatusTitleProps,
-        title: '',
-      };
-    }
-  };
-
   return (
     <PageLayout>
       <Header updateBefore={10} />
       <PageLayout.Content>
         <div className='flex h-full flex-col'>
-          <div className='bg-background-default-mint flex-center h-[27rem] w-full'>지도지도</div>
+          {/* 지도 */}
+          <div className='bg-background-default-white2 flex-center relative h-[27rem] w-full'>
+            <div ref={mapRef}></div>
+            <FloatingButton onClick={() => router.history.back()} />
+            <FloatingButton
+              icon='current'
+              position='bottom-left'
+              onClick={() => setCurrentLocation()}
+            />
+          </div>
           <CustomerDashboardLive
-            escortStatus={dashboardCardProps().escortStatus}
-            title={dashboardCardProps().title}
+            escortStatus={escortStatus as StatusTitleProps}
+            time={estimatedMeetingTime}
             route={route.routeSimple}
           />
         </div>
