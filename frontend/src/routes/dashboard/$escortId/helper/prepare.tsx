@@ -3,7 +3,7 @@ import { useMap } from '@hooks';
 import { IcPinFillEffect } from '@icons';
 import { PageLayout } from '@layouts';
 import { createFileRoute } from '@tanstack/react-router';
-import { dateFormat, getDaysLeft, timeFormatTo24Hour, timeFormatWithOptionalMinutes } from '@utils';
+import { dateFormat, getDaysLeft, timeFormatTo24Hour } from '@utils';
 import { useEffect, useRef } from 'react';
 import type { components } from '@schema';
 import { PlaceInfo, TaxiInfo } from '@dashboard/components';
