@@ -75,6 +75,7 @@ import IcTextGo from './text-go.svg?react';
 import IcMarker1 from './marker1.svg?react';
 import IcMarker2 from './marker2.svg?react';
 import IcMarker3 from './marker3.svg?react';
+import IcMarkerDepart from './marker-depart.svg?react';
 
 export {
   // Basic Icons
@@ -156,4 +157,5 @@ export {
   IcMarker1,
   IcMarker2,
   IcMarker3,
+  IcMarkerDepart,
 };
