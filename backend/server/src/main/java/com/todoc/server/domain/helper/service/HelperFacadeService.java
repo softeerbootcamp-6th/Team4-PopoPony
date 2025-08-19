@@ -7,6 +7,7 @@ import com.todoc.server.domain.auth.service.AuthService;
 import com.todoc.server.domain.escort.service.EscortService;
 import com.todoc.server.domain.helper.entity.Certificate;
 import com.todoc.server.domain.helper.entity.HelperProfile;
+import com.todoc.server.domain.helper.exception.HelperProfileAlreadyCreatedException;
 import com.todoc.server.domain.helper.exception.HelperProfileAreaInvalidException;
 import com.todoc.server.domain.helper.web.dto.request.CertificateCreateRequest;
 import com.todoc.server.domain.helper.web.dto.request.HelperProfileCreateRequest;
@@ -78,6 +79,10 @@ public class HelperFacadeService {
      */
     @Transactional
     public void createHelperProfile(Long authId, HelperProfileCreateRequest requestDto) {
+
+        if (helperService.hasHelperProfile(authId)) {
+            throw new HelperProfileAlreadyCreatedException();
+        }
 
         HelperProfile helperProfile = helperService.register(requestDto);
 

@@ -4,7 +4,7 @@
  * @param inputType input태그의 타입.
  * @returns
  */
-export const formatValue = (value: string, inputType: string) => {
+export const formatFormInputValue = (value: string, inputType: string) => {
   switch (inputType) {
     case 'contact':
       const numbers = value.replace(/[^0-9]/g, '');
@@ -21,9 +21,15 @@ export const formatValue = (value: string, inputType: string) => {
   }
 };
 
-export const formatPhoneNumber = (value: string) => {
+export const formatPhoneNumber = (value: string | undefined) => {
+  if (value === undefined) return '';
   const numbers = value.replace(/[^0-9]/g, '');
   if (numbers.length <= 3) return numbers;
   if (numbers.length <= 7) return `${numbers.slice(0, 3)}-${numbers.slice(3)}`;
   return `${numbers.slice(0, 3)}-${numbers.slice(3, 7)}-${numbers.slice(7, 11)}`;
+};
+
+export const formatImageUrl = (value: string | undefined) => {
+  if (value === undefined) return '';
+  return import.meta.env.VITE_API_BASE_URL + value;
 };

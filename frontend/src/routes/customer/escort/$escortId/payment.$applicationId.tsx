@@ -1,12 +1,41 @@
 import { PaymentCard, WarningBox } from '@customer/components';
 import { PageLayout } from '@layouts';
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute, useNavigate, getRouteApi } from '@tanstack/react-router';
+import { getRecruitPayment, postSelectApplication } from '@customer/apis';
 
-export const Route = createFileRoute('/customer/escort/$escortId/payment')({
+const routeApi = getRouteApi('/customer/escort/$escortId/payment/$applicationId');
+
+export const Route = createFileRoute('/customer/escort/$escortId/payment/$applicationId')({
   component: RouteComponent,
 });
 
 function RouteComponent() {
+  const navigate = useNavigate();
+  const { escortId, applicationId } = routeApi.useParams();
+  const { data } = getRecruitPayment(Number(escortId));
+  //TODO: route추가로 지도 정보 가져올 수 있음
+  const { baseFee, expectedTaxiFee } = data?.data || {};
+
+  const { mutate } = postSelectApplication();
+
+  const handleSelectApplication = () => {
+    mutate(
+      {
+        params: { path: { applicationId: Number(applicationId) } },
+      },
+      {
+        onSuccess: () => {
+          navigate({
+            to: '/customer/escort/$escortId/completed',
+            params: {
+              escortId: escortId,
+            },
+          });
+        },
+      }
+    );
+  };
+
   return (
     <PageLayout>
       <PageLayout.Header title='결제하기' showBack />
@@ -14,7 +43,11 @@ function RouteComponent() {
         <div className='flex h-full flex-col justify-between'>
           <div className='bg-background-default-white flex flex-col gap-[1.6rem] px-[2rem] py-[1.6rem]'>
             <h2 className='title-20-bold text-text-neutral-primary'>결제 예정금액</h2>
-            <PaymentCard usageFee={30000} estimatedTaxiFare={100000} />
+            <PaymentCard
+              usageFee={baseFee || 0}
+              estimatedTaxiFare={expectedTaxiFee || 0}
+              onClick={handleSelectApplication}
+            />
             <WarningBox text='택시 요금은 동행 완료 후 자동 결제됩니다.' />
           </div>
           <div className='bg-background-light-neutral w-full p-[2rem]'>

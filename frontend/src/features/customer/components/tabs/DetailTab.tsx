@@ -3,9 +3,52 @@ import { InfoSection, RouteButton, GrayBox } from '@customer/components';
 import { useModal } from '@hooks';
 import { IcCheck } from '@icons';
 import type { EscortStrength } from '@types';
+import type { RecruitDetailResponse } from '@customer/types';
+import { dateFormat, timeFormatWithOptionalMinutes, timeDuration, formatImageUrl } from '@utils';
+import { useNavigate, getRouteApi } from '@tanstack/react-router';
+import { deleteRecruit } from '@customer/apis';
 
-const DetailTab = () => {
-  const { isOpen, openModal, closeModal } = useModal();
+const routeApi = getRouteApi('/customer/escort/$escortId/');
+
+const DetailTab = ({ data }: { data: RecruitDetailResponse }) => {
+  const navigate = useNavigate();
+  const { mutate } = deleteRecruit();
+  const { escortId } = routeApi.useParams();
+  const {
+    isOpen: isDeleteRecruitOpen,
+    openModal: openDeleteRecruitModal,
+    closeModal: closeDeleteRecruitModal,
+  } = useModal();
+  const {
+    isOpen: isDeleteRecruitSuccessOpen,
+    openModal: openDeleteRecruitSuccessModal,
+    closeModal: closeDeleteRecruitSuccessModal,
+  } = useModal();
+  const taglist = [];
+  if (data.patient.needsHelping) {
+    taglist.push('안전한 부축');
+  }
+  if (data.patient.usesWheelchair) {
+    taglist.push('휠체어 이동');
+  }
+
+  const handleDeleteRecruit = () => {
+    mutate(
+      {
+        params: {
+          path: { recruitId: Number(escortId) },
+        },
+      },
+      {
+        onSuccess: () => {
+          openDeleteRecruitSuccessModal();
+        },
+        onError: () => {
+          alert('동행 신청 취소에 실패했습니다.');
+        },
+      }
+    );
+  };
 
   return (
     <>
@@ -13,37 +56,54 @@ const DetailTab = () => {
       <Tabs.TabsContentSection>
         <div className='flex-start gap-[1.2rem]'>
           <img
-            src='/images/default-profile.svg'
+            src={formatImageUrl(data.patient.imageUrl)}
             alt='환자 프로필'
-            className='h-[5.6rem] w-[5.6rem] object-cover'
+            className='h-[5.6rem] w-[5.6rem] rounded-full object-cover'
           />
           <div className='flex flex-col gap-[0.4rem]'>
-            <span className='subtitle-18-bold text-text-neutral-primary'>김토닥 환자</span>
+            <span className='subtitle-18-bold text-text-neutral-primary'>
+              {data.patient.name} 환자
+            </span>
             <span className='label2-14-medium text-text-neutral-assistive'>
-              ({`70`}세)/{`남`}
+              ({data.patient.age}세)/{data.patient.gender}
             </span>
           </div>
         </div>
         <div className='flex flex-col gap-[0.8rem]'>
           <div className='flex-start body1-16-medium gap-[2rem]'>
             <span className='text-text-neutral-primary'>동행 날짜</span>
-            <span className='text-text-neutral-secondary'>2025년 7월 22일 (토)</span>
+            <span className='text-text-neutral-secondary'>
+              {dateFormat(data.escortDate, 'M월 d일 (eee)')}
+            </span>
           </div>
           <div className='flex-start body1-16-medium gap-[2rem]'>
             <span className='text-text-neutral-primary'>동행 시간</span>
-            <span className='text-text-neutral-secondary'>오후 12시 ~ 3시 (3시간)</span>
+            <span className='text-text-neutral-secondary'>
+              {timeFormatWithOptionalMinutes(data.estimatedMeetingTime)} ~{' '}
+              {timeFormatWithOptionalMinutes(data.estimatedReturnTime)} (
+              {timeDuration(data.estimatedMeetingTime, data.estimatedReturnTime)})
+            </span>
           </div>
           <div className='flex-start body1-16-medium gap-[2rem]'>
             <span className='text-text-neutral-primary'>동행 병원</span>
             <div className='flex-start gap-[0.8rem]'>
-              <span className='text-text-neutral-secondary'>서울아산병원</span>
+              <span className='text-text-neutral-secondary'>
+                {data.route.hospitalLocationInfo.placeName}
+              </span>
+              {/* 이 지도보기 버튼의 onclick은 무엇을 해줘야 할까요 */}
               <button className='caption2-10-medium text-text-neutral-secondary border-stroke-neutral-dark w-fit rounded-[0.4rem] border px-[0.5rem] py-[0.2rem]'>
                 지도 보기
               </button>
             </div>
           </div>
         </div>
-        <RouteButton />
+        <RouteButton
+          LocationData={[
+            data.route.meetingLocationInfo,
+            data.route.hospitalLocationInfo,
+            data.route.returnLocationInfo,
+          ]}
+        />
       </Tabs.TabsContentSection>
       <Tabs.TabsDivider />
 
@@ -54,27 +114,33 @@ const DetailTab = () => {
           <div className='mt-[1.2rem] flex flex-col gap-[2rem]'>
             <InfoSection title='보행 상태'>
               <div className='flex-start gap-[0.4rem]'>
-                {['안전한 부축', '휠체어 이동', '인지장애 케어'].map((tag) => (
+                {taglist.map((tag) => (
                   <StrengthTag key={tag} type={tag as EscortStrength} />
                 ))}
               </div>
             </InfoSection>
-            <InfoSection title='인지 능력' status='괜찮아요'>
-              <GrayBox>
-                <div className='flex-start'>
-                  <IcCheck />
-                  <span>판단에 도움이 필요해요</span>
-                </div>
-                <div className='flex-start'>
-                  <IcCheck />
-                  <span>기억하거나 이해하는 것이 어려워요</span>
-                </div>
-              </GrayBox>
+            <InfoSection
+              title='인지 능력'
+              status={data.patient.hasCognitiveIssue ? '도움이 필요해요' : '괜찮아요'}>
+              {data.patient.hasCognitiveIssue && (
+                <GrayBox>
+                  {data.patient.cognitiveIssueDetail?.map((detail, index) => (
+                    <div className='flex-start' key={detail + index}>
+                      <IcCheck />
+                      <span>{detail}</span>
+                    </div>
+                  ))}
+                </GrayBox>
+              )}
             </InfoSection>
-            <InfoSection title='의사소통' status='도움이 필요해요'>
-              <div className='bg-neutral-10 label2-14-medium text-text-neutral-primary rounded-[0.6rem] p-[1rem]'>
-                <span>이가 많이 없으셔서 발음하시는 게 불편하세요.</span>
-              </div>
+            <InfoSection
+              title='의사소통'
+              status={data.patient.hasCommunicationIssue ? '도움이 필요해요' : '괜찮아요'}>
+              {data.patient.hasCommunicationIssue && (
+                <GrayBox>
+                  <div className='flex-start'>{data.patient.communicationIssueDetail}</div>
+                </GrayBox>
+              )}
             </InfoSection>
           </div>
         </div>
@@ -86,31 +152,48 @@ const DetailTab = () => {
           <div className='mt-[1.2rem] flex flex-col gap-[2rem]'>
             <InfoSection title='동행 목적'>
               <GrayBox>
-                <span>이가 많이 없으셔서 발음하시는 게 불편하세요.</span>
+                <span>{data.purpose}</span>
               </GrayBox>
             </InfoSection>
-            <InfoSection title='요청사항'>
-              <GrayBox>
-                <span>다음 정기 검진 예약 꼭 잡아주세요!</span>
-              </GrayBox>
-            </InfoSection>
+            {data.extraRequest && (
+              <InfoSection title='요청사항'>
+                <GrayBox>
+                  <span>{data.extraRequest}</span>
+                </GrayBox>
+              </InfoSection>
+            )}
           </div>
         </div>
-        <Button variant='assistive' onClick={openModal}>
-          신청 취소하기
-        </Button>
-        <Modal isOpen={isOpen} onClose={closeModal}>
+        {/* TODO:도우미 후기가 있으면 버튼 안 뜨기 */}
+        {data.status !== '동행완료' && (
+          <Button variant='assistive' onClick={openDeleteRecruitModal}>
+            신청 취소하기
+          </Button>
+        )}
+        <Modal isOpen={isDeleteRecruitOpen} onClose={closeDeleteRecruitModal}>
           <Modal.Title>동행 신청을 취소하시겠어요?</Modal.Title>
           <Modal.Content>취소된 동행은 복구할 수 없어요.</Modal.Content>
           <Modal.ButtonContainer>
             <Modal.ConfirmButton
               onClick={() => {
-                alert('준비중인 기능이에요');
-                closeModal();
+                handleDeleteRecruit();
+                closeDeleteRecruitModal();
               }}>
               취소하기
             </Modal.ConfirmButton>
-            <Modal.CloseButton onClick={closeModal}>돌아가기</Modal.CloseButton>
+            <Modal.CloseButton onClick={closeDeleteRecruitModal}>돌아가기</Modal.CloseButton>
+          </Modal.ButtonContainer>
+        </Modal>
+        <Modal isOpen={isDeleteRecruitSuccessOpen} onClose={closeDeleteRecruitSuccessModal}>
+          <Modal.Title>동행 신청 취소가 완료되었습니다.</Modal.Title>
+          <Modal.ButtonContainer>
+            <Modal.ConfirmButton
+              onClick={() => {
+                navigate({ to: '/customer' });
+                closeDeleteRecruitSuccessModal();
+              }}>
+              홈으로 가기
+            </Modal.ConfirmButton>
           </Modal.ButtonContainer>
         </Modal>
       </Tabs.TabsContentSection>
