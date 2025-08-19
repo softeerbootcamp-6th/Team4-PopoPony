@@ -60,11 +60,11 @@ export type TMapMarker = {
   getPosition: () => TMapLatLng;
   setPosition: (latLng: TMapLatLng) => void;
   setLabel: (HTML: string) => void;
+  setVisible: (visible: boolean) => void;
 };
 
 export type TMapPolyline = {
   setMap: (map: TMap | null) => void;
-  getPath: () => TMapLatLng[];
   setPath: (path: TMapLatLng[]) => void;
   setOptions: (options: {
     strokeColor?: string;
