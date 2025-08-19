@@ -100,7 +100,7 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
-  '/api/realtime/escorts/{escortId}/helpers/locations': {
+  '/api/realtime/escorts/{escortId}/locations': {
     parameters: {
       query?: never;
       header?: never;
@@ -111,7 +111,7 @@ export interface paths {
     put?: never;
     /**
      * 마지막 위치 업데이트
-     * @description 도우미가 자신의 마지막 위치를 갱신합니다.
+     * @description Role에 따라 자신의 마지막 위치를 갱신합니다.
      */
     post: operations['updateLocation'];
     delete?: never;
@@ -460,7 +460,7 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
-  '/api/realtime/escorts/{escortId}/customers/sse': {
+  '/api/realtime/escorts/{escortId}/sse': {
     parameters: {
       query?: never;
       header?: never;
@@ -469,7 +469,7 @@ export interface paths {
     };
     /**
      * 동행에 대한 SSE 구독
-     * @description 고객이 특정 동행에 대한 SSE를 조회합니다.
+     * @description Role에 따라 특정 동행의 SSE를 요청합니다.
      */
     get: operations['subscribe'];
     put?: never;
@@ -1268,6 +1268,12 @@ export interface components {
       /** @description 응답 body 필드 */
       data: components['schemas']['RecruitSearchListResponse'];
     };
+    Coordinate: {
+      /** Format: double */
+      lat?: number;
+      /** Format: double */
+      lon?: number;
+    };
     /** @description 장소 요약 정보 DTO */
     LocationInfoSimpleResponse: {
       /**
@@ -1281,6 +1287,10 @@ export interface components {
       address: string;
       /** @description 상세 주소 */
       detailAddress: string;
+      /** @description 위도 */
+      lat: number;
+      /** @description 경도 */
+      lon: number;
     };
     /** @description 환자 요약 정보 조회 응답 DTO */
     PatientSimpleResponse: {
@@ -1434,7 +1444,7 @@ export interface components {
        *       ]
        *     ]
        */
-      meetingToHospital: string;
+      meetingToHospital: components['schemas']['Coordinate'][];
       /**
        * @description 복귀장소까지의 경로 정보 ([위도, 경도] 배열)
        * @example [
@@ -1452,7 +1462,7 @@ export interface components {
        *       ]
        *     ]
        */
-      hospitalToReturn: string;
+      hospitalToReturn: components['schemas']['Coordinate'][];
     };
     /** @description 동행 신청 상태 응답 DTO */
     RecruitStatusResponse: {
@@ -1575,7 +1585,7 @@ export interface components {
        *       ]
        *     ]
        */
-      meetingToHospital: string;
+      meetingToHospital: components['schemas']['Coordinate'][];
       /**
        * @description 복귀장소까지의 경로 정보 ([위도, 경도] 배열)
        * @example [
@@ -1593,7 +1603,7 @@ export interface components {
        *       ]
        *     ]
        */
-      hospitalToReturn: string;
+      hospitalToReturn: components['schemas']['Coordinate'][];
     };
     /** @description 환자 상태 정보 */
     PatientDetailHistory: {
@@ -2053,6 +2063,11 @@ export interface components {
        * @example 김도움
        */
       name: string;
+      /**
+       * @description 도우미 연락처
+       * @example 010-1234-5678
+       */
+      contact: string;
     };
     /** @description 환자 정보 */
     EscortPatientSimpleResponse: {
@@ -2071,6 +2086,11 @@ export interface components {
        * @example 홍길동
        */
       name: string;
+      /**
+       * @description 환자 연락처
+       * @example 010-1234-5678
+       */
+      contact: string;
     };
     /** @description 공통 응답 포맷 */
     ResponseEscortDetailResponse: {
@@ -2260,7 +2280,9 @@ export interface operations {
     parameters: {
       query?: never;
       header?: never;
-      path?: never;
+      path: {
+        recruitId: number;
+      };
       cookie?: never;
     };
     requestBody: {
@@ -2330,7 +2352,9 @@ export interface operations {
   };
   updateLocation: {
     parameters: {
-      query?: never;
+      query: {
+        role: string;
+      };
       header?: never;
       path: {
         escortId: number;
@@ -2756,7 +2780,9 @@ export interface operations {
   };
   subscribe: {
     parameters: {
-      query?: never;
+      query: {
+        role: string;
+      };
       header?: never;
       path: {
         escortId: number;
@@ -2765,7 +2791,7 @@ export interface operations {
     };
     requestBody?: never;
     responses: {
-      /** @description 동행에 대한 SSE 구독 */
+      /** @description 동행에 대한 SSE 요청 성공 */
       200: {
         headers: {
           [name: string]: unknown;
