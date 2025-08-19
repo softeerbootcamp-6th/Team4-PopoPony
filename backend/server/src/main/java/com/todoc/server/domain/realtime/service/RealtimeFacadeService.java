@@ -38,12 +38,12 @@ public class RealtimeFacadeService {
         // 연결 직후 스냅샷 전송
         try {
             if (role != Role.PATIENT) {
-                getLocationSnapshot(escortId, Role.PATIENT, emitter);
+                if (escortService.getById(escortId).getStatus() == EscortStatus.MEETING) {
+                    getLocationSnapshot(escortId, Role.PATIENT, emitter);
+                }
             }
             if (role != Role.HELPER) {
-                if (escortService.getById(escortId).getStatus() == EscortStatus.MEETING) {
-                    getLocationSnapshot(escortId, Role.HELPER, emitter);
-                }
+                getLocationSnapshot(escortId, Role.HELPER, emitter);
             }
         } catch (Exception e) {
             emitter.completeWithError(e);
