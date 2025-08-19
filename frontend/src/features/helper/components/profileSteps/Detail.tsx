@@ -20,57 +20,90 @@ import {
   IcShoes,
   IcShoesDisabled,
 } from '@icons';
-import { postHelperProfile } from '@helper/apis';
+import { postHelperProfile, putHelperProfile } from '@helper/apis';
 import { useFormContext } from 'react-hook-form';
 
 const Detail = () => {
   const navigate = useNavigate();
   const { getValues } = useFormContext();
+  const isEdit = getValues('isEdit');
   const { values, fieldErrors, isFormValid, markFieldAsTouched } =
     useFormValidation(DetailFormSchema);
 
-  const { mutate } = postHelperProfile();
+  const { mutate: postMutate } = postHelperProfile();
+  const { mutate: putMutate } = putHelperProfile();
   const mappingIcons = {
     '안전한 부축으로 편안한 이동': <IcShoes />,
     '휠체어 이용도 전문적인 동행': <IcWheelchair />,
     '인지 장애 어르신 맞춤 케어': <IcRecognize />,
-  };
+  } as const;
   const mappingIconsDisabled = {
     '안전한 부축으로 편안한 이동': <IcShoesDisabled />,
     '휠체어 이용도 전문적인 동행': <IcWheelchairDisabled />,
     '인지 장애 어르신 맞춤 케어': <IcRecognizeDisabled />,
-  };
+  } as const;
   const strengthList = STRENGTH_OPTIONS.map((option) => ({
-    label: option,
-    value: option,
-    icon: mappingIcons[option],
-    iconDisabled: mappingIconsDisabled[option],
+    label: option.label,
+    value: option.value,
+    icon: mappingIcons[option.label],
+    iconDisabled: mappingIconsDisabled[option.label],
   }));
 
   const handleSubmit = () => {
-    mutate(
-      {
-        body: {
-          profileImageCreateRequest: getValues('profileImageCreateRequest'),
-          certificateInfoList: getValues('certificateList'),
-          strengthList: getValues('strengthList'),
-          shortBio: getValues('shortBio'),
-          area: getValues('region'),
+    if (isEdit) {
+      putMutate(
+        {
+          params: {
+            path: {
+              helperProfileId: getValues('helperProfileId'),
+            },
+          },
+          body: {
+            profileImageCreateRequest: getValues('profileImageCreateRequest'),
+            certificateInfoList: getValues('certificateList'),
+            strengthList: getValues('strengthList'),
+            shortBio: getValues('shortBio'),
+            area: getValues('area'),
+          },
         },
-      },
-      {
-        onSuccess: (response: PostResponse) => {
-          if (response.status !== 200) {
-            alert(response.message ?? '도우미 등록에 실패했습니다. 다시 시도해주세요.');
-            return;
-          }
-          navigate({ to: '/helper/profile/new/completed' });
+        {
+          onSuccess: (response: PostResponse) => {
+            if (response.status !== 200) {
+              alert(response.message ?? '도우미 등록에 실패했습니다. 다시 시도해주세요.');
+              return;
+            }
+            navigate({ to: '/helper/profile/new/completed' });
+          },
+          onError: () => {
+            alert('도우미 등록에 실패했습니다. 다시 시도해주세요.');
+          },
+        }
+      );
+    } else {
+      postMutate(
+        {
+          body: {
+            profileImageCreateRequest: getValues('profileImageCreateRequest'),
+            certificateInfoList: getValues('certificateList'),
+            strengthList: getValues('strengthList'),
+            shortBio: getValues('shortBio'),
+            area: getValues('area'),
+          },
         },
-        onError: () => {
-          alert('도우미 등록에 실패했습니다. 다시 시도해주세요.');
-        },
-      }
-    );
+        {
+          onSuccess: (response: PostResponse) => {
+            if (response.status !== 200) {
+              alert(response.message ?? '도우미 등록에 실패했습니다. 다시 시도해주세요.');
+              return;
+            }
+            navigate({ to: '/helper/profile/new/completed' });
+          },
+          onError: () => {
+            alert('도우미 등록에 실패했습니다. 다시 시도해주세요.');
+          },
+        }
+      );
+    }
   };
 
   return (

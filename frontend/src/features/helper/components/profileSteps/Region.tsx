@@ -21,17 +21,17 @@ const Region = ({ handleNextStep }: ProfileStepProps) => {
         </div>
         <LabeledSection
           label='선호 활동 지역'
-          isChecked={!fieldErrors.region && !!values.region}
-          message={fieldErrors.region}>
-          <RegionBottomSheet name='region'>
+          isChecked={!fieldErrors.area && !!values.area}
+          message={fieldErrors.area}>
+          <RegionBottomSheet name='area'>
             <button
               className='flex-between border-b-neutral-20 w-full border-b-2 pb-[0.8rem]'
               onClick={() => setIsBottomSheetOpen((prev) => !prev)}>
               <p
                 className={`title-20-medium ${
-                  values.region ? 'text-text-neutral-primary' : 'text-text-neutral-assistive'
+                  values.area ? 'text-text-neutral-primary' : 'text-text-neutral-assistive'
                 }`}>
-                {REGION_OPTIONS.find((option) => option.value === values.region)?.label ||
+                {REGION_OPTIONS.find((option) => option.value === values.area)?.label ||
                   '지역 선택'}
               </p>
               <IcChevronDown
