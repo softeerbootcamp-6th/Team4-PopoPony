@@ -16,7 +16,7 @@ type EscortDetailResponse = components['schemas']['EscortDetailResponse'];
 function RouteComponent() {
   const { escortId } = Route.useParams();
   const mapRef = useRef<HTMLDivElement>(null);
-  const { mapInstance, isTmapLoaded, addPolyline } = useMap(
+  const { mapInstance, isTmapLoaded, addRoutePolyline } = useMap(
     mapRef as React.RefObject<HTMLDivElement>
   );
 
@@ -24,13 +24,8 @@ function RouteComponent() {
   const escortDetail = data?.data as EscortDetailResponse;
 
   const { imageUrl, name } = escortDetail?.helper ?? {};
-  const {
-    meetingLocationInfo,
-    hospitalLocationInfo,
-    returnLocationInfo,
-    meetingToHospital,
-    hospitalToReturn,
-  } = escortDetail?.route.routeSimple ?? {};
+  const { routeSimple: route } = escortDetail.route;
+  const { meetingLocationInfo, hospitalLocationInfo, returnLocationInfo } = route;
 
   const isSameStartEnd =
     meetingLocationInfo.lat === returnLocationInfo.lat &&
@@ -39,18 +34,7 @@ function RouteComponent() {
   useEffect(() => {
     if (!mapInstance) return;
 
-    addPolyline([
-      {
-        startMarkerType: 'marker1',
-        endMarkerType: 'marker2',
-        pathCoordinates: meetingToHospital,
-      },
-      {
-        startMarkerType: 'marker2',
-        endMarkerType: isSameStartEnd ? 'marker1' : 'marker3',
-        pathCoordinates: hospitalToReturn,
-      },
-    ]);
+    addRoutePolyline(route);
   }, [mapInstance]);
 
   if (!isTmapLoaded) return <div>Loading...</div>;
