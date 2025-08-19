@@ -62,9 +62,6 @@ function RouteComponent() {
                 params: {
                   step: 'region',
                 },
-                search: {
-                  revise: 'true',
-                },
               });
             }}>
             <span className='ml-[0.8rem]'>수정하기</span>
