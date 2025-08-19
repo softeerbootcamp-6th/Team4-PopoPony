@@ -73,6 +73,10 @@ dependencies {
 
 	// logging
 	implementation ("org.springframework.boot:spring-boot-starter-aop")
+
+	// CloudWatch
+	implementation(platform("software.amazon.awssdk:bom:2.25.58"))
+	implementation("software.amazon.awssdk:cloudwatch")
 }
 
 val querydslDir = layout.buildDirectory.dir("generated/querydsl")
