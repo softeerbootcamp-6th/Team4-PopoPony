@@ -3,7 +3,7 @@ import { RegionFormSchema, type ProfileStepProps, REGION_OPTIONS } from '@helper
 import { useFormValidation } from '@hooks';
 import { FormLayout } from '@layouts';
 import { LabeledSection, PhotoUpload, Button } from '@components';
-import { RegionBottomSheet } from '@helper/components';
+import { RegionBottomSheetForm } from '@helper/components';
 import { IcChevronDown } from '@assets/icons';
 
 const Region = ({ handleNextStep }: ProfileStepProps) => {
@@ -23,7 +23,7 @@ const Region = ({ handleNextStep }: ProfileStepProps) => {
           label='선호 활동 지역'
           isChecked={!fieldErrors.area && !!values.area}
           message={fieldErrors.area}>
-          <RegionBottomSheet name='area'>
+          <RegionBottomSheetForm name='area'>
             <button
               className='flex-between border-b-neutral-20 w-full border-b-2 pb-[0.8rem]'
               onClick={() => setIsBottomSheetOpen((prev) => !prev)}>
@@ -40,7 +40,7 @@ const Region = ({ handleNextStep }: ProfileStepProps) => {
                 }`}
               />
             </button>
-          </RegionBottomSheet>
+          </RegionBottomSheetForm>
         </LabeledSection>
       </FormLayout.Content>
       <FormLayout.Footer>

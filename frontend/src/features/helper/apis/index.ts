@@ -8,6 +8,7 @@ import getProfileExistance from './getProfileExistance';
 import getReviseHelperProfileInfo from './getReviseHelperProfileInfo';
 import putHelperProfile from './putHelperProfile';
 import postReport from './postReport';
+import getSearchRecruits from './getSearchRecruits';
 
 export {
   getReportDefault,
@@ -20,4 +21,5 @@ export {
   getReviseHelperProfileInfo,
   putHelperProfile,
   postReport,
+  getSearchRecruits,
 };
