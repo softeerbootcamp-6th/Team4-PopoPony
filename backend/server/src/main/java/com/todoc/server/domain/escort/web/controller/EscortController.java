@@ -2,6 +2,7 @@ package com.todoc.server.domain.escort.web.controller;
 
 import com.todoc.server.common.response.EmptyBody;
 import com.todoc.server.common.response.Response;
+import com.todoc.server.domain.escort.service.EscortFacadeService;
 import com.todoc.server.domain.escort.service.EscortService;
 import com.todoc.server.domain.escort.web.dto.request.EscortMemoUpdateRequest;
 import com.todoc.server.domain.escort.web.dto.response.EscortDetailResponse;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/escorts")
 public class EscortController {
 
+    private final EscortFacadeService escortFacadeService;
     private final EscortService escortService;
 
     @Operation(
@@ -56,6 +58,6 @@ public class EscortController {
     @GetMapping("/recruits/{recruitId}")
     public Response<EscortDetailResponse> getEscortDetailByRecruitId(@PathVariable Long recruitId) {
 
-        return Response.from(escortService.getEscortDetailByRecruitId(recruitId));
+        return Response.from(escortFacadeService.getEscortDetailByRecruitId(recruitId));
     }
 }

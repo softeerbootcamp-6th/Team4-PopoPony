@@ -17,6 +17,8 @@ import com.todoc.server.domain.escort.repository.EscortQueryRepository;
 import com.todoc.server.domain.escort.web.dto.request.EscortMemoUpdateRequest;
 import com.todoc.server.domain.escort.web.dto.response.EscortDetailResponse;
 import com.todoc.server.domain.escort.web.dto.response.EscortStatusResponse;
+import com.todoc.server.domain.helper.entity.HelperProfile;
+import com.todoc.server.domain.helper.service.HelperService;
 import com.todoc.server.domain.route.entity.Route;
 import com.todoc.server.domain.route.exception.RouteNotFoundException;
 import com.todoc.server.domain.route.web.dto.response.RouteDetailResponse;
@@ -35,6 +37,7 @@ public class EscortService {
     private final EscortJpaRepository escortJpaRepository;
     private final EscortQueryRepository escortQueryRepository;
     private final SseEmitterManager emitterManager;
+    private final HelperService helperService;
 
     @Transactional(readOnly = true)
     public Long getCountByHelperUserId(Long helperId) {
@@ -46,9 +49,19 @@ public class EscortService {
         escortJpaRepository.save(escort);
     }
 
+    @Transactional
     public Escort getByRecruitId(Long recruitId) {
         return escortJpaRepository.findByRecruitId(recruitId)
                 .orElseThrow(EscortNotFoundException::new);
+    }
+
+    @Transactional
+    public Escort getEscortWithDetailByRecruitId(Long recruitId) {
+        Escort escort = escortQueryRepository.findEscortDetailByRecruitId(recruitId);
+        if (escort == null) {
+            throw new EscortNotFoundException();
+        }
+        return escort;
     }
 
     @Transactional
@@ -74,6 +87,7 @@ public class EscortService {
             // 동행 만남 완료
             if (nextStatus == EscortStatus.HEADING_TO_HOSPITAL) {
                 escort.setActualMeetingTime(now);
+
                 emitterManager.close(escortId, Role.PATIENT);
             }
 
@@ -97,48 +111,6 @@ public class EscortService {
 
         Escort escort = getById(escortId);
         escort.setMemo(request.getMemo());
-    }
-
-    @Transactional(readOnly = true)
-    public EscortDetailResponse getEscortDetailByRecruitId(Long recruitId) {
-
-        Escort escort = escortQueryRepository.findEscortDetailByRecruitId(recruitId);
-        if (escort == null) {
-            throw new EscortNotFoundException();
-        }
-
-        Recruit recruit = escort.getRecruit();
-        if (recruit == null) {
-            throw new RecruitNotFoundException();
-        }
-
-        Auth customer = recruit.getCustomer();
-        if (customer == null) {
-            throw new AuthNotFoundException();
-        }
-
-        Patient patient = recruit.getPatient();
-        if (patient == null) {
-            throw new PatientNotFoundException();
-        }
-
-        Route route = recruit.getRoute();
-        if (route == null) {
-            throw new RouteNotFoundException();
-        }
-
-        return EscortDetailResponse.builder()
-                .escortId(escort.getId())
-                .escortStatus(escort.getStatus().getLabel())
-                .customerContact(customer.getContact())
-                .escortDate(recruit.getEscortDate())
-                .estimatedMeetingTime(recruit.getEstimatedMeetingTime())
-                .estimatedReturnTime(recruit.getEstimatedReturnTime())
-                .purpose(recruit.getPurpose())
-                .extraRequest(recruit.getExtraRequest())
-                .patient(EscortDetailResponse.EscortPatientSimpleResponse.from(patient))
-                .route(RouteDetailResponse.from(route))
-                .build();
     }
 
     /**

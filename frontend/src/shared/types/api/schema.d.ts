@@ -1270,9 +1270,9 @@ export interface components {
     };
     Coordinate: {
       /** Format: double */
-      lat?: number;
+      lat: number;
       /** Format: double */
-      lon?: number;
+      lon: number;
     };
     /** @description 장소 요약 정보 DTO */
     LocationInfoSimpleResponse: {
@@ -2063,6 +2063,11 @@ export interface components {
        * @example 김도움
        */
       name: string;
+      /**
+       * @description 도우미 연락처
+       * @example 010-1234-5678
+       */
+      contact: string;
     };
     /** @description 환자 정보 */
     EscortPatientSimpleResponse: {
@@ -2081,6 +2086,11 @@ export interface components {
        * @example 홍길동
        */
       name: string;
+      /**
+       * @description 환자 연락처
+       * @example 010-1234-5678
+       */
+      contact: string;
     };
     /** @description 공통 응답 포맷 */
     ResponseEscortDetailResponse: {

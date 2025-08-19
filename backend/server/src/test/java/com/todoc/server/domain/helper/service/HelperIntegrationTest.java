@@ -44,7 +44,6 @@ public class HelperIntegrationTest extends IntegrationTestBase {
     @PersistenceContext
     private EntityManager em;
 
-    // TODO :: 주석 해제하기
     @Test
     @DisplayName("도우미 상세 정보 조회 - 정상")
     void getHelperDetailByHelperProfileId_정상() {
@@ -81,7 +80,7 @@ public class HelperIntegrationTest extends IntegrationTestBase {
         // given
         HelperProfileCreateRequest request = createHelperProfileRequest();
         int beforeCount = helperService.getAllHelperProfiles().size();
-        Long authId = 1L;
+        Long authId = 6L;
 
         // when
         helperFacadeService.createHelperProfile(authId, request);

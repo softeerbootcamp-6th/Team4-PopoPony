@@ -19,3 +19,20 @@ spring:
     console:
       enabled: true
       path: /h2-console
+management:
+  endpoints:
+    web.exposure.include: "health,metrics,info"
+  metrics:
+    tags:
+      application: app              # 대시보드에서 식별용 공통 태그
+    export:
+      cloudwatch:
+        enabled: true
+        namespace: "JVM"            # CloudWatch 네임스페이스
+        step: 60s                   # 전송 주기
+        batch-size: 20
+    enable:                         # 과다 지표 방지(필요한 것만)
+      all: false
+      jvm: true
+      process: true
+      system: true

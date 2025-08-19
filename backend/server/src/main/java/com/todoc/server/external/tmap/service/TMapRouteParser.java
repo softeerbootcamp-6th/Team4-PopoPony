@@ -38,8 +38,8 @@ public class TMapRouteParser {
                     JsonNode array = f.path("geometry").path("coordinates");
                     for (JsonNode point : array) {
                         // [lat, lon] 순서임
-                        double latitude = point.get(0).asDouble();
-                        double longitude = point.get(1).asDouble();
+                        double longitude = point.get(0).asDouble();
+                        double latitude = point.get(1).asDouble();
                         coordinates.add(new Coordinate(latitude, longitude));
                     }
                 }

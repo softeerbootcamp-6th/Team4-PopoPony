@@ -21,8 +21,13 @@ const ProgressBar = ({ maxStep, currentStep }: ProgressBarProps) => {
 
 const ProgressBarItem = ({ filled }: ProgressBarItemProps) => {
   return (
-    <div
-      className={`h-[0.6rem] w-full rounded-full ${filled ? 'bg-background-default-mint' : 'bg-neutral-10'}`}></div>
+    <div className='bg-neutral-10 h-[0.6rem] w-full overflow-hidden rounded-full'>
+      <div
+        className={`bg-background-default-mint h-full rounded-full transition-all duration-500 ease-out ${
+          filled ? 'w-full' : 'w-0'
+        }`}
+      />
+    </div>
   );
 };
 
