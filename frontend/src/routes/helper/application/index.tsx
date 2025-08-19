@@ -113,8 +113,8 @@ function RouteComponent() {
           {dateList.length === 0 && <EmptyCard text='조건에 맞는 일감이 없어요' />}
           {dateList.map((date) => (
             <div className='flex flex-col gap-[0.8rem]' key={date}>
-              <span key={date} className='body2-14-medium text-text-neutral-secondary'>
-                {dateFormat(date, 'MM월 dd일')}
+              <span key={date} className='body2-14-bold text-text-neutral-secondary'>
+                {dateFormat(date, 'M월 d일')}
               </span>
               {searchData?.[date]?.map((escort) => {
                 return (
