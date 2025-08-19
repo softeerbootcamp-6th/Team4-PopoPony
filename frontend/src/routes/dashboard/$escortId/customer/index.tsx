@@ -10,9 +10,10 @@ import {
   CustomerDashboardLive,
   Footer,
 } from '@dashboard/components';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useMap } from '@hooks';
 import { FloatingButton } from '@components';
+import type { TMapMarker } from '@types';
 
 export const Route = createFileRoute('/dashboard/$escortId/customer/')({
   beforeLoad: async ({ context, params }) => {
@@ -25,12 +26,12 @@ export const Route = createFileRoute('/dashboard/$escortId/customer/')({
 
     const escortDetail = await queryClient.ensureQueryData(escortDetailOpts);
 
-    if (escortDetail.data.escortStatus === '동행준비') {
-      throw redirect({
-        to: '/dashboard/$escortId/customer/prepare',
-        params: { escortId: String(recruitId) },
-      });
-    }
+    // if (escortDetail.data.escortStatus === '동행준비') {
+    //   throw redirect({
+    //     to: '/dashboard/$escortId/customer/prepare',
+    //     params: { escortId: String(recruitId) },
+    //   });
+    // }
   },
   component: RouteComponent,
 });
@@ -40,19 +41,25 @@ function RouteComponent() {
   const { escortId: recruitId } = Route.useParams();
   const { data } = getEscortDetail(Number(recruitId));
   const mapRef = useRef<HTMLDivElement>(null);
-  const {
-    mapInstance,
-    isTmapLoaded,
-    addPolyline,
-    addUserLocationMarker,
-    setCurrentLocation,
-    addMarker,
-  } = useMap(mapRef as React.RefObject<HTMLDivElement>);
-  let { escortStatus, route, helper, estimatedMeetingTime } = data.data;
-  const { meetingLocationInfo } = route.routeSimple;
-  const helperContact = helper.contact;
+  const { mapInstance, addPolyline, setCurrentLocation, addMarker, resetPolyline } = useMap(
+    mapRef as React.RefObject<HTMLDivElement>
+  );
 
-  escortStatus = '병원행';
+  const meetingMarker = useRef<TMapMarker>(null);
+  const hospitalMarker = useRef<TMapMarker>(null);
+  const returnMarker = useRef<TMapMarker>(null);
+
+  const [escortStatus, setEscortStatus] = useState<EscortStatusProps>('만남중');
+
+  let { route, helper, estimatedMeetingTime } = data.data;
+  const {
+    meetingLocationInfo,
+    hospitalLocationInfo,
+    returnLocationInfo,
+    meetingToHospital,
+    hospitalToReturn,
+  } = route.routeSimple;
+  const helperContact = helper.contact;
 
   const handleClickCallHelper = () => {
     window.open(`tel:${helperContact}`, '_blank');
@@ -69,15 +76,68 @@ function RouteComponent() {
     });
   };
 
+  const handleSetMarkerVisible = ({
+    isMeeting,
+    isHospital,
+    isReturn,
+  }: {
+    isMeeting: boolean;
+    isHospital: boolean;
+    isReturn: boolean;
+  }) => {
+    meetingMarker.current?.setVisible(isMeeting);
+    hospitalMarker.current?.setVisible(isHospital);
+    returnMarker.current?.setVisible(isReturn);
+  };
+
   useEffect(() => {
-    if (mapInstance) {
-      addMarker(
-        meetingLocationInfo.lat,
-        meetingLocationInfo.lon,
-        'home',
-        meetingLocationInfo.placeName
-      );
+    if (!mapInstance) return;
+
+    resetPolyline();
+    switch (escortStatus) {
+      case '만남중':
+        handleSetMarkerVisible({ isMeeting: true, isHospital: false, isReturn: false });
+        break;
+      case '병원행':
+        handleSetMarkerVisible({ isMeeting: true, isHospital: true, isReturn: false });
+        addPolyline(meetingToHospital, 'meetingToHospital');
+        break;
+      case '진료중':
+        handleSetMarkerVisible({ isMeeting: false, isHospital: true, isReturn: false });
+        break;
+      case '복귀중':
+        handleSetMarkerVisible({ isMeeting: false, isHospital: true, isReturn: true });
+        addPolyline(hospitalToReturn, 'hospitalToReturn');
+        break;
+      default:
+        break;
     }
+  }, [escortStatus]);
+
+  useEffect(() => {
+    if (!mapInstance) return;
+
+    meetingMarker.current = addMarker(
+      meetingLocationInfo.lat,
+      meetingLocationInfo.lon,
+      'home',
+      meetingLocationInfo.placeName
+    );
+    hospitalMarker.current = addMarker(
+      hospitalLocationInfo.lat,
+      hospitalLocationInfo.lon,
+      'hospital',
+      hospitalLocationInfo.placeName
+    );
+    returnMarker.current = addMarker(
+      returnLocationInfo.lat,
+      returnLocationInfo.lon,
+      'home',
+      returnLocationInfo.placeName
+    );
+
+    hospitalMarker.current?.setVisible(false);
+    returnMarker.current?.setVisible(false);
   }, [mapInstance]);
 
   if (escortStatus === '리포트작성중') {
@@ -132,6 +192,28 @@ function RouteComponent() {
               position='bottom-left'
               onClick={() => setCurrentLocation()}
             />
+          </div>
+          <div className='flex-center gap-[1.2rem]'>
+            <button
+              className='border-b-stroke-neutral-dark rounded-md border px-[0.8rem] py-[0.4rem]'
+              onClick={() => setEscortStatus('만남중')}>
+              만남중
+            </button>
+            <button
+              className='border-b-stroke-neutral-dark rounded-md border px-[0.8rem] py-[0.4rem]'
+              onClick={() => setEscortStatus('병원행')}>
+              병원행
+            </button>
+            <button
+              className='border-b-stroke-neutral-dark rounded-md border px-[0.8rem] py-[0.4rem]'
+              onClick={() => setEscortStatus('진료중')}>
+              진료중
+            </button>
+            <button
+              className='border-b-stroke-neutral-dark rounded-md border px-[0.8rem] py-[0.4rem]'
+              onClick={() => setEscortStatus('복귀중')}>
+              복귀중
+            </button>
           </div>
           <CustomerDashboardLive
             escortStatus={escortStatus as StatusTitleProps}
