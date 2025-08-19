@@ -66,7 +66,7 @@ const Footer = ({
     );
   }
   return (
-    <Button variant='secondary' className='flex-1' onClick={handleClickGoToReport}>
+    <Button variant='primary' className='flex-1' onClick={handleClickGoToReport}>
       리포트 확인하러 가기
     </Button>
   );
@@ -76,8 +76,8 @@ function RouteComponent() {
   const router = useRouter();
   const { escortId: recruitId } = Route.useParams();
   const { data: escortDetailOrigin } = getEscortDetail(Number(recruitId));
-  const { escortStatus, route } = escortDetailOrigin.data;
-  const helperContact = '010-1234-5678'; // TODO: 조만간 api에서 받아올거임.
+  const { escortStatus, route, helper } = escortDetailOrigin.data;
+  const helperContact = helper.contact;
 
   const handleClickCallHelper = () => {
     window.open(`tel:${helperContact}`, '_blank');
@@ -166,12 +166,14 @@ function RouteComponent() {
     <PageLayout>
       <Header updateBefore={10} />
       <PageLayout.Content>
-        <div className='bg-background-light-neutral flex-center h-[27rem] w-full'>지도지도</div>
-        <DashboardLive
-          escortStatus={dashboardCardProps().escortStatus}
-          title={dashboardCardProps().title}
-          route={route.routeSimple}
-        />
+        <div className='flex h-full flex-col'>
+          <div className='bg-background-light-neutral flex-center h-[27rem] w-full'>지도지도</div>
+          <DashboardLive
+            escortStatus={dashboardCardProps().escortStatus}
+            title={dashboardCardProps().title}
+            route={route.routeSimple}
+          />
+        </div>
       </PageLayout.Content>
       <PageLayout.Footer>
         <Footer
