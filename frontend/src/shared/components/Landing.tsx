@@ -1,6 +1,6 @@
 const Landing = () => {
   return (
-    <div className='relative mt-[15dvh] flex w-[50rem] flex-col gap-[4rem] max-[1200px]:hidden'>
+    <div className='relative mt-[10dvh] flex w-[50rem] flex-col gap-[4rem] max-[1200px]:hidden'>
       <img src='/images/logo-text.svg' alt='logo-text' className='ml-[6.6rem] w-[11rem]' />
       <img
         src='/images/landing-bg.png'

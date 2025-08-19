@@ -26,7 +26,7 @@ const statusMessageMap: Record<RecruitStatus, string> = {
 };
 
 const refineEscortData = (escortData: RecruitSimpleResponse): RefinedEscortData => {
-  const statusText = statusMessageMap[escortData.status];
+  const statusText = statusMessageMap[escortData.recruitStatus];
   const title = dateFormat(escortData.escortDate, 'M월 d일 (eee)') + ', ' + escortData.destination;
   const startTime = timeFormat(escortData.estimatedMeetingTime);
   const endTime = timeFormat(escortData.estimatedReturnTime);
@@ -36,7 +36,7 @@ const refineEscortData = (escortData: RecruitSimpleResponse): RefinedEscortData 
 
   return {
     id: escortData.recruitId,
-    status: escortData.status,
+    status: escortData.recruitStatus,
     statusText,
     title,
     timeText,
