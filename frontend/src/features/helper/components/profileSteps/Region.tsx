@@ -23,7 +23,7 @@ const Region = ({ handleNextStep }: ProfileStepProps) => {
           label='선호 활동 지역'
           isChecked={!fieldErrors.area && !!values.area}
           message={fieldErrors.area}>
-          <RegionBottomSheet name='area'>
+          <RegionBottomSheetForm name='area'>
             <button
               className='flex-between border-b-neutral-20 w-full border-b-2 pb-[0.8rem]'
               onClick={() => setIsBottomSheetOpen((prev) => !prev)}>
