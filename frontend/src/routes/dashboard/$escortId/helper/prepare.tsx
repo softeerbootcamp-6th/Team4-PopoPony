@@ -3,7 +3,7 @@ import { useMap } from '@hooks';
 import { IcPinFillEffect } from '@icons';
 import { PageLayout } from '@layouts';
 import { createFileRoute } from '@tanstack/react-router';
-import { dateFormat } from '@utils';
+import { dateFormat, getDaysLeft, timeFormatTo24Hour, timeFormatWithOptionalMinutes } from '@utils';
 import { useEffect, useRef } from 'react';
 import type { components } from '@schema';
 import { PlaceInfo, TaxiInfo } from '@dashboard/components';
@@ -56,14 +56,6 @@ function RouteComponent() {
 
   if (!isTmapLoaded) return <div>Loading...</div>;
 
-  const timeLeft = () => {
-    const now = new Date();
-    const escortDate = new Date(escortDetail.escortDate);
-    const timeDiff = escortDate.getTime() - now.getTime();
-    const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
-    return days;
-  };
-
   return (
     <PageLayout>
       <PageLayout.Header showBack={true} background={false} />
@@ -78,7 +70,10 @@ function RouteComponent() {
             <div className='flex flex-col gap-[0.4rem]'>
               <p className='body1-16-medium text-text-neutral-primary'>{name} 환자와의 동행까지</p>
               <p className='text-text-neutral-primary display-32-bold'>
-                <strong className='text-text-mint-on-primary'>{timeLeft()}일</strong> 남았어요!
+                <strong className='text-text-mint-on-primary'>
+                  {getDaysLeft(escortDetail.escortDate)}일
+                </strong>{' '}
+                남았어요!
               </p>
             </div>
             <img
@@ -90,15 +85,19 @@ function RouteComponent() {
 
           <div className='bg-background-light-mint flex flex-col gap-[0.4rem] rounded-[0.6rem] px-[1.2rem] py-[1rem]'>
             <p className='body2-14-medium text-text-neutral-secondary'>동행 예정 시간</p>
-            <div className='flex-start gap-[0.4rem]'>
+            <div className='flex-start gap-[0.8rem]'>
               <IcPinFillEffect />
-              <p className='subtitle-18-bold text-text-neutral-primary'>
-                {`${dateFormat(escortDetail!.escortDate, 'yyyy년 MM월 dd일')} ${escortDetail.estimatedMeetingTime} ~ ${escortDetail.estimatedReturnTime}`}
+              <p className='subtitle-18-bold text-text-neutral-primary flex flex-wrap gap-x-[0.4rem]'>
+                <span>{dateFormat(escortDetail!.escortDate, 'yyyy년 MM월 dd일')}</span>
+                <span>
+                  {timeFormatTo24Hour(escortDetail.estimatedMeetingTime)} ~{' '}
+                  {timeFormatTo24Hour(escortDetail.estimatedReturnTime)}
+                </span>
               </p>
             </div>
           </div>
 
-          <div className='h-[17.3rem] w-full rounded-[0.8rem] border-2 border-gray-300 bg-gray-100'>
+          <div className='aspect-video w-full rounded-[0.8rem] border-2 border-gray-300 bg-gray-100'>
             <div ref={mapRef}></div>
           </div>
 
