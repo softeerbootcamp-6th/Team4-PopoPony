@@ -6,3 +6,4 @@ import { useMap } from './useMap';
 
 export { useFunnel, useModal, useFormValidation, useImageUpload, useMap };
 export { default as useDebounce } from './useDebounce';
+export { default as useClickOutside } from './useClickOutside';

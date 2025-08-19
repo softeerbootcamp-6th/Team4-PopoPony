@@ -29,6 +29,7 @@ import IcCloseM from './close-M.svg?react';
 import IcCloseS from './close-S.svg?react';
 import IcCoinFill from './coin-fill.svg?react';
 import IcDownArrow from './down-arrow.svg?react';
+import IcButtonClose from './button-close.svg?react';
 
 // Transportation Icons
 import IcBusFill from './bus-fill.svg?react';
@@ -107,6 +108,7 @@ export {
   IcCloseS,
   IcCoinFill,
   IcDownArrow,
+  IcButtonClose,
 
   // Transportation Icons
   IcBusFill,

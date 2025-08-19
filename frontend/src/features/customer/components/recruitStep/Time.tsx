@@ -2,11 +2,12 @@ import { memo, useEffect } from 'react';
 import { FormInput, LabeledSection } from '@components';
 import { FormLayout } from '@layouts';
 import { useFormValidation } from '@hooks';
-import { type RecruitStepProps, timeSchema, dateSchema } from '@customer/types';
+import { timeSchema, dateSchema } from '@customer/types';
 import { IcAlertCircle } from '@icons';
 import { useFormContext } from 'react-hook-form';
+import type { FunnelStepProps } from '@types';
 
-const Time = memo(({ handleNextStep }: RecruitStepProps) => {
+const Time = memo(({ handleNextStep }: FunnelStepProps) => {
   const { setValue } = useFormContext();
   const {
     values: timeValues,

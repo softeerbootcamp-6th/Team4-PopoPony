@@ -170,7 +170,7 @@ public class HelperService {
 
 
     /**
-     * 도우미 프로필이 존재하는지 확인하는 함수
+     * 도우미 프로필이 존재하는지의 정보를 담은 응답을 생성하는 함수
      */
     public HelperProfileExistenceResponse checkHelperProfileExistence(Long authId) {
 
@@ -187,6 +187,15 @@ public class HelperService {
                 .hasProfile(hasProfile)
                 .helperProfileId(helperProfileId)
                 .build();
+    }
+
+    /**
+     * 도우미 프로필이 존재하는지 확인하는 함수
+     */
+    public boolean hasHelperProfile(Long authId) {
+
+        Optional<HelperProfile> optional = helperJpaRepository.findByAuthId(authId);
+        return optional.isPresent();
     }
 
     /**

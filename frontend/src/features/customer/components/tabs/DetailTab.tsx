@@ -1,8 +1,7 @@
-import { StrengthTag, Tabs, Divider, Button, Modal, ShowMapButton } from '@components';
+import { Tabs, Divider, Button, Modal, StrengthTagList } from '@components';
 import { InfoSection, RouteButton, GrayBox } from '@customer/components';
 import { useModal } from '@hooks';
 import { IcCheck } from '@icons';
-import type { EscortStrength } from '@types';
 import type { RecruitDetailResponse } from '@customer/types';
 import { dateFormat, timeFormatWithOptionalMinutes, timeDuration, formatImageUrl } from '@utils';
 import { useNavigate, getRouteApi } from '@tanstack/react-router';
@@ -24,13 +23,6 @@ const DetailTab = ({ data }: { data: RecruitDetailResponse }) => {
     openModal: openDeleteRecruitSuccessModal,
     closeModal: closeDeleteRecruitSuccessModal,
   } = useModal();
-  const taglist = [];
-  if (data.patient.needsHelping) {
-    taglist.push('안전한 부축');
-  }
-  if (data.patient.usesWheelchair) {
-    taglist.push('휠체어 이동');
-  }
 
   const handleDeleteRecruit = () => {
     mutate(
@@ -114,11 +106,11 @@ const DetailTab = ({ data }: { data: RecruitDetailResponse }) => {
           <h3 className='subtitle-18-bold text-text-neutral-primary'>환자 상태</h3>
           <div className='mt-[1.2rem] flex flex-col gap-[2rem]'>
             <InfoSection title='보행 상태'>
-              <div className='flex-start gap-[0.4rem]'>
-                {taglist.map((tag) => (
-                  <StrengthTag key={tag} type={tag as EscortStrength} />
-                ))}
-              </div>
+              <StrengthTagList
+                needsHelping={data.patient.needsHelping}
+                usesWheelchair={data.patient.usesWheelchair}
+                hasCognitiveIssue={data.patient.hasCognitiveIssue}
+              />
             </InfoSection>
             <InfoSection
               title='인지 능력'

@@ -1,8 +1,11 @@
+import { useEffect } from 'react';
 import { Modal } from '@components';
 import { PageLayout } from '@layouts';
 import { type ProfileFormValues } from '@helper/types';
+import { toProfileFormValues } from '@helper/utils';
 import { useFunnel, useModal } from '@hooks';
 import { createFileRoute, useRouter } from '@tanstack/react-router';
+import { getProfileExistance, getReviseHelperProfileInfo } from '@helper/apis';
 import { Region, Detail } from '@helper/components';
 import { FormProvider, useForm } from 'react-hook-form';
 
@@ -14,8 +17,16 @@ const stepList = ['region', 'detail'];
 
 function RouteComponent() {
   const router = useRouter();
+  const { data: hasProfileData } = getProfileExistance();
+  const isRevise = hasProfileData?.data?.hasProfile || false;
+  const { data: helperData } = getReviseHelperProfileInfo(
+    hasProfileData?.data?.helperProfileId ?? 0,
+    isRevise
+  );
+
   const { isOpen, openModal, closeModal } = useModal();
   const methods = useForm<ProfileFormValues>({ shouldUnregister: false });
+  const { reset } = methods;
 
   const { Funnel, Step, nextStep } = useFunnel({
     defaultStep: 'region',
@@ -36,6 +47,13 @@ function RouteComponent() {
   const handleDenyClose = () => {
     closeModal();
   };
+
+  useEffect(() => {
+    if (helperData) {
+      const normalized = toProfileFormValues(helperData.data, hasProfileData?.data.helperProfileId);
+      reset(normalized);
+    }
+  }, [helperData, reset]);
 
   return (
     <PageLayout>
