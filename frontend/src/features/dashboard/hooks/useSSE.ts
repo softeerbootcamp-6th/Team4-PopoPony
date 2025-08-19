@@ -1,15 +1,38 @@
 import { useEffect, useRef, useState } from 'react';
+import { type EscortStatusProps } from '@dashboard/types';
 
-interface SSEEvent {
-  type: string;
-  data: {
-    [key: string]: unknown;
-  };
-  timestamp?: string;
+// SSE 이벤트 타입 정의
+interface LocationResponse {
+  escortId: number;
+  latitude: number;
+  longitude: number;
+  timestamp: string;
 }
 
+interface EscortStatusResponse {
+  escortId: number;
+  escortStatus: EscortStatusProps;
+  timestamp: string;
+}
+
+// 한국 시간으로 변환하는 유틸리티 함수
+const convertToKoreaTime = (timestamp: string): string => {
+  const date = new Date(timestamp);
+  return date.toLocaleString('ko-KR', {
+    timeZone: 'Asia/Seoul',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+  });
+};
+
 const useSSE = (escortId: string, role: string) => {
-  const [events, setEvents] = useState<SSEEvent[]>([]);
+  const [helperLocations, setHelperLocations] = useState<LocationResponse[]>([]);
+  const [patientLocations, setPatientLocations] = useState<LocationResponse[]>([]);
+  const [escortStatuses, setEscortStatuses] = useState<EscortStatusResponse[]>([]);
   const [connectionStatus, setConnectionStatus] = useState<
     'connecting' | 'connected' | 'error' | 'disconnected'
   >('connecting');
@@ -29,18 +52,27 @@ const useSSE = (escortId: string, role: string) => {
     };
 
     es.addEventListener('helper-location', (e) => {
-      console.log('helper-location', JSON.parse(e.data));
-      setEvents((prev) => [...prev, { type: 'helper-location', data: JSON.parse(e.data) }]);
+      const data: LocationResponse = JSON.parse(e.data);
+      const koreaTime = convertToKoreaTime(data.timestamp);
+      const locationWithKoreaTime = { ...data, timestamp: koreaTime };
+      console.log('helper-location', locationWithKoreaTime);
+      setHelperLocations((prev) => [...prev, locationWithKoreaTime]);
     });
 
     es.addEventListener('patient-location', (e) => {
-      console.log('patient-location', JSON.parse(e.data));
-      setEvents((prev) => [...prev, { type: 'patient-location', data: JSON.parse(e.data) }]);
+      const data: LocationResponse = JSON.parse(e.data);
+      const koreaTime = convertToKoreaTime(data.timestamp);
+      const locationWithKoreaTime = { ...data, timestamp: koreaTime };
+      console.log('patient-location', locationWithKoreaTime);
+      setPatientLocations((prev) => [...prev, locationWithKoreaTime]);
     });
 
     es.addEventListener('status', (e) => {
-      console.log('status', JSON.parse(e.data));
-      setEvents((prev) => [...prev, { type: 'status', data: JSON.parse(e.data) }]);
+      const data: EscortStatusResponse = JSON.parse(e.data);
+      const koreaTime = convertToKoreaTime(data.timestamp);
+      const statusWithKoreaTime = { ...data, timestamp: koreaTime };
+      console.log('status', statusWithKoreaTime);
+      setEscortStatuses((prev) => [...prev, statusWithKoreaTime]);
     });
 
     es.onerror = (err) => {
@@ -55,7 +87,12 @@ const useSSE = (escortId: string, role: string) => {
     };
   }, [escortId, role]);
 
-  return { events, connectionStatus };
+  return {
+    helperLocations,
+    patientLocations,
+    escortStatuses,
+    connectionStatus,
+  };
 };
 
 export default useSSE;

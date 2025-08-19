@@ -14,6 +14,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useMap } from '@hooks';
 import { FloatingButton } from '@components';
 import type { TMapMarker } from '@types';
+import { useSSE } from '@dashboard/hooks';
 
 export const Route = createFileRoute('/dashboard/$escortId/customer/')({
   beforeLoad: async ({ context, params }) => {
@@ -44,6 +45,15 @@ function RouteComponent() {
   const { mapInstance, addPolyline, setCurrentLocation, addMarker, resetPolyline } = useMap(
     mapRef as React.RefObject<HTMLDivElement>
   );
+
+  const { helperLocations, patientLocations, escortStatuses, connectionStatus } = useSSE(
+    String(recruitId),
+    'patient'
+  );
+  console.log('helperLocations', helperLocations);
+  console.log('patientLocations', patientLocations);
+  console.log('escortStatuses', escortStatuses);
+  console.log('connectionStatus', connectionStatus);
 
   const meetingMarker = useRef<TMapMarker>(null);
   const hospitalMarker = useRef<TMapMarker>(null);
