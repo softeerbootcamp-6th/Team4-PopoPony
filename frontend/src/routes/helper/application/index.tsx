@@ -114,7 +114,7 @@ function RouteComponent() {
           {dateList.map((date) => (
             <div className='flex flex-col gap-[0.8rem]' key={date}>
               <span key={date} className='body2-14-medium text-text-neutral-secondary'>
-                {date}
+                {dateFormat(date, 'MM월 dd일')}
               </span>
               {searchData?.[date]?.map((escort) => {
                 return (
