@@ -1,4 +1,4 @@
-import { Tabs, Divider, Button, Modal, StrengthTagList } from '@components';
+import { Tabs, Divider, Button, Modal, StrengthTagList, ShowMapButton } from '@components';
 import { InfoSection, RouteButton, GrayBox } from '@customer/components';
 import { useModal } from '@hooks';
 import { IcCheck } from '@icons';
