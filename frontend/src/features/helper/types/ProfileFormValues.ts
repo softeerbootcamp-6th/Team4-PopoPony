@@ -22,9 +22,9 @@ export const REGION_OPTIONS = [
 ] as const;
 
 export const STRENGTH_OPTIONS = [
-  '안전한 부축으로 편안한 이동',
-  '휠체어 이용도 전문적인 동행',
-  '인지 장애 어르신 맞춤 케어',
+  { label: '안전한 부축으로 편안한 이동', value: '안전한 부축' },
+  { label: '휠체어 이용도 전문적인 동행', value: '휠체어 이동' },
+  { label: '인지 장애 어르신 맞춤 케어', value: '인지장애 케어' },
 ] as const;
 
 export const CERTIFICATE_OPTIONS = [
@@ -35,9 +35,17 @@ export const CERTIFICATE_OPTIONS = [
   '간병사',
 ] as const;
 
+const EditSchema = z.object({
+  imageUrl: z.string().optional(),
+  isEdit: z.boolean().optional(),
+  helperProfileId: z.number().optional(),
+});
+
+export type EditValues = z.infer<typeof EditSchema>;
+
 export const RegionFormSchema = z.object({
   profileImageCreateRequest: imageSchema,
-  region: z.enum(REGION_OPTIONS.map((option) => option.value)),
+  area: z.enum(REGION_OPTIONS.map((option) => option.value)),
 });
 
 export type RegionFormValues = z.infer<typeof RegionFormSchema>;
@@ -52,7 +60,7 @@ export type CertificateItemValues = z.infer<typeof CertificateItemSchema>;
 export const DetailFormSchema = z.object({
   shortBio: z.string().min(1, '간단한 자기소개를 입력해주세요'),
   strengthList: z
-    .array(z.enum(STRENGTH_OPTIONS))
+    .array(z.enum(STRENGTH_OPTIONS.map((o) => o.value)))
     .max(3, '강점은 최대 3개까지 선택 가능합니다')
     .optional()
     .default([]),
@@ -64,4 +72,4 @@ export const DetailFormSchema = z.object({
 
 export type DetailFormValues = z.infer<typeof DetailFormSchema>;
 
-export type ProfileFormValues = RegionFormValues & DetailFormValues;
+export type ProfileFormValues = EditValues & RegionFormValues & DetailFormValues;
