@@ -65,6 +65,10 @@ const refineEscortData = (escortData: RecruitSimpleResponse): RefinedEscortData 
 
 function RouteComponent() {
   const { data: hasProfileData } = getProfileExistance();
+  const { hasProfile, helperProfileId } = hasProfileData?.data ?? {
+    hasProfile: false,
+    helperProfileId: undefined,
+  };
   const { data: recruitListData } = getRecruitList();
   const { inProgressList: inProgressListData, completedList: completedListData } =
     recruitListData?.data ?? {};
@@ -101,19 +105,24 @@ function RouteComponent() {
             </h2>
             <div className='flex-between flex w-full gap-[1.2rem]'>
               <div className='flex-1'>
-                <Link
-                  to={
-                    hasProfileData?.hasProfile
-                      ? `/helper/profile/$helperId`
-                      : '/helper/profile/new/$step'
-                  }
-                  params={{ step: 'region', helperId: hasProfileData?.helperId.toString() }}>
-                  <Button variant='assistive' size='md'>
-                    <span className='text-text-neutral-primary'>
-                      {hasProfileData?.hasProfile ? '프로필 바로가기' : '프로필 작성하기'}
-                    </span>
-                  </Button>
-                </Link>
+                {hasProfile && helperProfileId ? (
+                  <Link
+                    to={`/helper/profile/$helperId`}
+                    params={{ helperId: helperProfileId.toString() }}>
+                    <Button variant='assistive' size='md'>
+                      <span className='text-text-neutral-primary'>프로필 바로가기</span>
+                    </Button>
+                  </Link>
+                ) : (
+                  <Link
+                    to='/helper/profile/new/$step'
+                    params={{ step: 'region' }}
+                    search={{ mode: 'new' }}>
+                    <Button variant='assistive' size='md'>
+                      <span className='text-text-neutral-primary'>프로필 작성하기</span>
+                    </Button>
+                  </Link>
+                )}
               </div>
               <div className='flex-1'>
                 <Link to='/helper/application'>
