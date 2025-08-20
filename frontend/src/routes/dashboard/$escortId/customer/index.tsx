@@ -51,8 +51,7 @@ function RouteComponent() {
     isMapReady,
     addPolyline,
     setCurrentLocation,
-    setCenter,
-    setZoom,
+    handleSetCenterAndZoom,
     addMarker,
     addCustomMarker,
     resetPolyline,
@@ -114,17 +113,6 @@ function RouteComponent() {
     meetingMarker.current?.setVisible(isMeeting);
     hospitalMarker.current?.setVisible(isHospital);
     returnMarker.current?.setVisible(isReturn);
-  };
-
-  const handleSetCenterAndZoom = (position1: Position, position2?: Position) => {
-    if (!position2) {
-      setCenter(position1.lat, position1.lon);
-      setZoom(DEFAULT_ZOOM_LEVEL);
-      return;
-    }
-    const { center, zoom } = calculateCenterAndZoom(position1, position2);
-    setCenter(center.lat, center.lng);
-    setZoom(zoom);
   };
 
   // 상태 변경 시 폴리라인 다시 그리기 (지도 로드 완료 후)
