@@ -1,4 +1,4 @@
-import { createFileRoute, redirect, useRouter } from '@tanstack/react-router';
+import { createFileRoute, useRouter, redirect } from '@tanstack/react-router';
 import { getEscortDetail } from '@dashboard/apis';
 import { PageLayout } from '@layouts';
 import { type StatusTitleProps, type EscortStatusProps } from '@dashboard/types';
@@ -10,7 +10,7 @@ import {
   CustomerDashboardLive,
   Footer,
 } from '@dashboard/components';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { useMap } from '@hooks';
 import { FloatingButton } from '@components';
 import type { TMapMarker } from '@types';
@@ -27,12 +27,12 @@ export const Route = createFileRoute('/dashboard/$escortId/customer/')({
 
     const escortDetail = await queryClient.ensureQueryData(escortDetailOpts);
 
-    // if (escortDetail.data.escortStatus === '동행준비') {
-    //   throw redirect({
-    //     to: '/dashboard/$escortId/customer/prepare',
-    //     params: { escortId: String(recruitId) },
-    //   });
-    // }
+    if (escortDetail.data.escortStatus === '동행준비') {
+      throw redirect({
+        to: '/dashboard/$escortId/customer/prepare',
+        params: { escortId: String(recruitId) },
+      });
+    }
   },
   component: RouteComponent,
 });
@@ -53,7 +53,7 @@ function RouteComponent() {
     resetPolyline,
   } = useMap(mapRef as React.RefObject<HTMLDivElement>);
 
-  const { helperLocations, patientLocations, escortStatuses, connectionStatus } = useSSE(
+  const { helperLocations, patientLocations, escortStatuses } = useSSE(
     String(recruitId),
     'customer'
   );
@@ -73,7 +73,7 @@ function RouteComponent() {
     meetingToHospital,
     hospitalToReturn,
   } = route.routeSimple;
-  const { name: patientName, imageUrl: patientImageUrl, contact: patientContact } = patient;
+  const { name: patientName, imageUrl: patientImageUrl } = patient;
   const { name: helperName, imageUrl: helperImageUrl, contact: helperContact } = helper;
 
   const handleClickCallHelper = () => {
@@ -113,7 +113,7 @@ function RouteComponent() {
 
   useEffect(() => {
     if (!mapInstance) return;
-    console.log('바뀌었음');
+
     if (patientLocations?.latitude && patientLocations?.longitude) {
       console.log('patientLocations', patientLocations);
       patientMarker.current?.setPosition(
