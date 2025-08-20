@@ -42,7 +42,7 @@ function RouteComponent() {
     const delayMs = Math.max(0, (diff - 3) * 1000 - ThreeHoursInMs);
     const id = setTimeout(() => {
       router.navigate({
-        to: '/dashboard/$escortId/customer',
+        to: '/dashboard/$escortId/helper',
         params: { escortId: escortId },
       });
     }, delayMs);
