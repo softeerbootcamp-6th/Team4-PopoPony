@@ -80,6 +80,12 @@ export const useMap = (mapRef: React.RefObject<HTMLDivElement>) => {
     }
   };
 
+  const setZoom = (zoom: number) => {
+    if (mapInstance) {
+      mapInstance.setZoom(zoom);
+    }
+  };
+
   // 지도를 현재 위치로 이동
   const setCurrentLocation = () => {
     if (mapInstance) {
@@ -331,6 +337,7 @@ export const useMap = (mapRef: React.RefObject<HTMLDivElement>) => {
     isMapReady,
     polylineInstances,
     setCenter,
+    setZoom,
     setCurrentLocation,
     addMarker,
     addCustomMarker,
