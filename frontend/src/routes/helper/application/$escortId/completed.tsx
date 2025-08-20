@@ -1,4 +1,4 @@
-import { Button, ShowMapButton } from '@components';
+import { Button } from '@components';
 import { PageLayout } from '@layouts';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { getRecruitsByRecruitId } from '@helper/apis';
@@ -63,10 +63,15 @@ function RouteComponent() {
             </div>
             <div className='flex-start gap-[2rem]'>
               <span className='text-text-neutral-primary'>병원</span>
-              <div className='flex-start gap-[0.4rem]'>
-                {meetingName} <IcArrowRight /> {hospitalName}
+              <div className='flex-start text-text-neutral-secondary gap-[0.4rem]'>
+                {meetingName} <IcArrowRight className='h-[1.6rem] w-[1.6rem]' /> {hospitalName}
               </div>
             </div>
+          </div>
+          <div className='w-full px-[2rem] pb-[2rem]'>
+            <Button variant='secondary' onClick={() => navigate({ to: '/helper/application' })}>
+              다른 일감 지원하기
+            </Button>
           </div>
         </div>
       </PageLayout.Content>
