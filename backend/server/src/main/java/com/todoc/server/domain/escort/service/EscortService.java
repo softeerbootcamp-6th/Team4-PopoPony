@@ -3,25 +3,15 @@ package com.todoc.server.domain.escort.service;
 import com.todoc.server.common.enumeration.EscortStatus;
 import com.todoc.server.common.enumeration.RecruitStatus;
 import com.todoc.server.common.enumeration.Role;
-import com.todoc.server.domain.auth.entity.Auth;
-import com.todoc.server.domain.auth.exception.AuthNotFoundException;
-import com.todoc.server.domain.customer.entity.Patient;
-import com.todoc.server.domain.customer.exception.PatientNotFoundException;
 import com.todoc.server.domain.escort.entity.Escort;
 import com.todoc.server.domain.escort.entity.Recruit;
 import com.todoc.server.domain.escort.exception.EscortInvalidProceedException;
 import com.todoc.server.domain.escort.exception.EscortNotFoundException;
-import com.todoc.server.domain.escort.exception.RecruitNotFoundException;
 import com.todoc.server.domain.escort.repository.EscortJpaRepository;
 import com.todoc.server.domain.escort.repository.EscortQueryRepository;
 import com.todoc.server.domain.escort.web.dto.request.EscortMemoUpdateRequest;
-import com.todoc.server.domain.escort.web.dto.response.EscortDetailResponse;
 import com.todoc.server.domain.escort.web.dto.response.EscortStatusResponse;
-import com.todoc.server.domain.helper.entity.HelperProfile;
 import com.todoc.server.domain.helper.service.HelperService;
-import com.todoc.server.domain.route.entity.Route;
-import com.todoc.server.domain.route.exception.RouteNotFoundException;
-import com.todoc.server.domain.route.web.dto.response.RouteDetailResponse;
 import com.todoc.server.domain.realtime.service.SseEmitterManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -70,6 +60,45 @@ public class EscortService {
                 .orElseThrow(EscortNotFoundException::new);
     }
 
+    // TODO : 테스트 끝나고 제거
+    @Transactional
+    public void proceedEscortForTest(Long escortId) {
+
+        Escort escort = getById(escortId);
+        EscortStatus currentStatus = escort.getStatus();
+
+        EscortStatus[] statuses = EscortStatus.values();
+        int currentIndex = currentStatus.ordinal();
+
+        if (true) {
+            int nextIndex = (currentIndex + 1) % statuses.length;
+
+            EscortStatus nextStatus = statuses[nextIndex];
+            escort.setStatus(nextStatus);
+            LocalDateTime now = LocalDateTime.now();
+
+            // 동행 만남 완료
+            if (nextStatus == EscortStatus.HEADING_TO_HOSPITAL) {
+                escort.setActualMeetingTime(now);
+
+                emitterManager.close(escortId, Role.PATIENT);
+            }
+
+            // 동행 복귀 완료
+            if (nextStatus == EscortStatus.WRITING_REPORT) {
+                escort.setActualReturnTime(now);
+                Recruit recruit = escort.getRecruit();
+                recruit.setStatus(RecruitStatus.DONE);
+            }
+
+            // TODO :: 진행 상태 변화 고객에게 알림 (Web Push, SMS, E-mail 등)
+            emitterManager.send(escortId, Role.CUSTOMER, "status", new EscortStatusResponse(escortId, nextStatus.getLabel(), now));
+
+        } else {
+            throw new EscortInvalidProceedException();
+        }
+    }
+
     @Transactional
     public void proceedEscort(Long escortId) {
 
@@ -80,7 +109,9 @@ public class EscortService {
         int currentIndex = currentStatus.ordinal();
 
         if (0 < currentIndex && currentIndex < statuses.length - 1) {
-            EscortStatus nextStatus = statuses[currentIndex + 1];
+            int nextIndex = (currentIndex + 1) % statuses.length;
+
+            EscortStatus nextStatus = statuses[nextIndex];
             escort.setStatus(nextStatus);
             LocalDateTime now = LocalDateTime.now();
 

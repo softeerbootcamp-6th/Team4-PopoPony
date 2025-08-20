@@ -10,10 +10,6 @@ import com.todoc.server.domain.helper.web.dto.request.HelperProfileCreateRequest
 import com.todoc.server.domain.helper.web.dto.response.HelperDetailResponse;
 import com.todoc.server.domain.helper.web.dto.response.HelperUpdateDefaultResponse;
 import com.todoc.server.domain.helper.web.dto.response.HelperProfileExistenceResponse;
-import com.todoc.server.domain.helper.web.dto.response.HelperSimpleResponse;
-import com.todoc.server.domain.review.web.dto.response.PositiveFeedbackStatResponse;
-import com.todoc.server.domain.review.web.dto.response.ReviewSimpleResponse;
-import com.todoc.server.domain.review.web.dto.response.ReviewStatResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;

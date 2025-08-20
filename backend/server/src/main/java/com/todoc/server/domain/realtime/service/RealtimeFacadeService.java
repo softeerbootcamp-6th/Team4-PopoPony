@@ -3,6 +3,7 @@ package com.todoc.server.domain.realtime.service;
 import com.todoc.server.common.enumeration.EscortStatus;
 import com.todoc.server.common.enumeration.Role;
 import com.todoc.server.domain.escort.service.EscortService;
+import com.todoc.server.domain.escort.web.dto.response.EscortStatusResponse;
 import com.todoc.server.domain.realtime.exception.RealtimeAlreadyMetPatientException;
 import com.todoc.server.domain.realtime.exception.RealtimeCustomerLocationException;
 import com.todoc.server.domain.realtime.exception.RealtimeInvalidRoleException;
@@ -14,7 +15,7 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.io.IOException;
 import java.time.Instant;
-import java.util.Map;
+import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Set;
 
@@ -32,17 +33,19 @@ public class RealtimeFacadeService {
     public SseEmitter registerEmitter(Long escortId, String roleString) {
 
         Role role = getRole(roleString);
-        validateAlreadyMetPatient(escortId, role);
+        EscortStatus escortStatus = escortService.getById(escortId).getStatus();
+        validateAlreadyMetPatient(role, escortStatus);
 
         SseEmitter emitter = emitterManager.register(escortId, role);
 
         // 연결 직후 스냅샷 전송
         try {
-            emitter.send(SseEmitter.event().name("connected")
-                    .data(Map.of("timestamp", Instant.now().toString(), "role", role.getLabel())));
+            emitter.send(SseEmitter.event()
+                    .name("status")
+                    .data(new EscortStatusResponse(escortId, escortStatus.getLabel(), LocalDateTime.now())));
 
             if (role != Role.PATIENT) {
-                if (escortService.getById(escortId).getStatus() == EscortStatus.MEETING) {
+                if (escortStatus == EscortStatus.MEETING) {
                     getLocationSnapshot(escortId, Role.PATIENT, emitter);
                 }
             }
@@ -61,7 +64,7 @@ public class RealtimeFacadeService {
     public void updateLocation(Long escortId, String roleString, LocationRequest request) {
 
         Role role = getRole(roleString);
-        validateAlreadyMetPatient(escortId, role);
+        validateAlreadyMetPatient(role, escortService.getById(escortId).getStatus());
 
         if (role == Role.CUSTOMER) {
             throw new RealtimeCustomerLocationException();
@@ -93,9 +96,8 @@ public class RealtimeFacadeService {
                 .data(Objects.requireNonNullElse(latestLocation, "NO_LOCATION")));
     }
 
-    private void validateAlreadyMetPatient(Long escortId, Role role) {
+    private void validateAlreadyMetPatient(Role role, EscortStatus escortStatus) {
         if (role == Role.PATIENT) {
-            EscortStatus escortStatus = escortService.getById(escortId).getStatus();
             if (escortStatus != EscortStatus.MEETING) {
                 throw new RealtimeAlreadyMetPatientException();
             }

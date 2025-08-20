@@ -155,11 +155,12 @@ public class RecruitController {
         description = "동행 지원 목록 조회 성공")
     @GetMapping("")
     public Response<RecruitSearchListResponse> getRecruitListBySearch(
+        @LoginUser SessionAuth auth,
         @RequestParam(required = false, name = "area") String area,
         @RequestParam(required = false, name = "startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
         @RequestParam(required = false, name = "endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate){
 
-        RecruitSearchListResponse dto = recruitService.getRecruitListBySearch(area, startDate, endDate);
+        RecruitSearchListResponse dto = recruitService.getRecruitListBySearch(auth.id(), area, startDate, endDate);
 
         return Response.from(dto);
     }
