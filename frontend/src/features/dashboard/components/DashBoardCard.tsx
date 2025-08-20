@@ -38,9 +38,21 @@ const Hospital = (active: boolean) => {
   );
 };
 
+const ButtonWrapper = ({ children }: { children: React.ReactNode }) => {
+  return <div className='flex-start flex gap-[0.6rem] py-[0.8rem]'>{children}</div>;
+};
+
 const TitleWrapper = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className='bg-background-default-white flex flex-col gap-[0.8rem] rounded-t-[1.6rem] p-[2rem]'>
+      {children}
+    </div>
+  );
+};
+const Card = ({ children, className }: { children: React.ReactNode; className?: string }) => {
+  return (
+    <div
+      className={`bg-background-default-white shadow-card mt-[3.6rem] flex flex-col gap-[0.8rem] rounded-[1.2rem] p-[1.6rem] ${className}`}>
       {children}
     </div>
   );
@@ -126,5 +138,7 @@ DashBoardCard.ContentWrapper = ContentWrapper;
 DashBoardCard.ContentTitle = ContentTitle;
 DashBoardCard.TimeContent = TimeContent;
 DashBoardCard.AddressContent = AddressContent;
+DashBoardCard.ButtonWrapper = ButtonWrapper;
+DashBoardCard.Card = Card;
 
 export default DashBoardCard;
