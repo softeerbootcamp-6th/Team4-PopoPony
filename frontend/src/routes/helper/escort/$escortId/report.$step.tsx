@@ -55,7 +55,7 @@ function RouteComponent() {
 
   const handleApproveClose = () => {
     closeModal();
-    router.navigate({ to: '/customer' });
+    router.navigate({ to: '/helper' });
   };
 
   const handleDenyClose = () => {
