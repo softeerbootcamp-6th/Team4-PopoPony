@@ -15,17 +15,15 @@ type SlideButtonProps = {
   threshold?: number; // 0~1 비율, 이 이상 밀면 해제
   initialLabel: string; // 화면 표시 텍스트
   confirmedLabel: string; // 화면 표시 텍스트
-  resetAfter?: number | null; // ms. null이면 유지
   disabled?: boolean;
   className?: string;
 };
 
 export default function SlideButton({
   onConfirm,
-  threshold = 0.65,
+  threshold = 1,
   initialLabel,
   confirmedLabel,
-  resetAfter = null,
   disabled = false,
 }: SlideButtonProps) {
   const trackRef = useRef<HTMLDivElement>(null);
@@ -63,22 +61,21 @@ export default function SlideButton({
 
   // 해제 후 자동 리셋 옵션
   useEffect(() => {
-    if (!unlocked || resetAfter == null) return;
-    const to = setTimeout(() => {
-      setUnlocked(false);
-      controls.start({ x: 0 });
-    }, resetAfter);
-    return () => clearTimeout(to);
-  }, [unlocked, resetAfter, controls]);
+    if (!unlocked) return;
+    controls.start({ x: 0 });
+    setUnlocked(false);
+  }, [unlocked, controls]);
 
   const handleDragEnd = async () => {
     if (disabled || unlocked) return;
     const current = x.get();
     const hit = current >= maxX * threshold;
     if (hit) {
-      await controls.start({ x: maxX });
-      setUnlocked(true);
-      onConfirm?.();
+      setTimeout(async () => {
+        await controls.start({ x: maxX });
+        setUnlocked(true);
+        onConfirm?.();
+      }, 500);
     } else {
       controls.start({ x: 0 }); // 스냅백
     }
