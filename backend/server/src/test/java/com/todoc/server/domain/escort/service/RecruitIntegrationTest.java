@@ -260,12 +260,14 @@ public class RecruitIntegrationTest extends IntegrationTestBase {
     @Test
     @DisplayName("검색 - 실제 DB 데이터로 지역/기간 필터 후 날짜별 그룹핑 검증")
     void getRecruitListBySearch_realDB() {
+        long authId = 1L;
+
         String area = "서울";
         LocalDate start = LocalDate.of(2024, 1, 1);
         LocalDate end   = LocalDate.of(2026, 12, 31);
 
         // 1) 서비스 호출
-        RecruitSearchListResponse res = recruitService.getRecruitListBySearch(area, start, end);
+        RecruitSearchListResponse res = recruitService.getRecruitListBySearch(authId, area, start, end);
 
         assertThat(res).isNotNull();
         assertThat(res.getInProgressMap()).isNotNull();
