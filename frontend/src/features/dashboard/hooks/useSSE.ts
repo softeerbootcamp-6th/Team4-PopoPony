@@ -30,9 +30,9 @@ const convertToKoreaTime = (timestamp: string): string => {
 };
 
 const useSSE = (escortId: string, role: string) => {
-  const [helperLocations, setHelperLocations] = useState<LocationResponse[]>([]);
-  const [patientLocations, setPatientLocations] = useState<LocationResponse[]>([]);
-  const [escortStatuses, setEscortStatuses] = useState<EscortStatusResponse[]>([]);
+  const [helperLocations, setHelperLocations] = useState<LocationResponse | null>(null);
+  const [patientLocations, setPatientLocations] = useState<LocationResponse | null>(null);
+  const [escortStatuses, setEscortStatuses] = useState<EscortStatusResponse | null>(null);
   const [connectionStatus, setConnectionStatus] = useState<
     'connecting' | 'connected' | 'error' | 'disconnected'
   >('connecting');
@@ -56,7 +56,7 @@ const useSSE = (escortId: string, role: string) => {
       const koreaTime = convertToKoreaTime(data.timestamp);
       const locationWithKoreaTime = { ...data, timestamp: koreaTime };
       console.log('helper-location', locationWithKoreaTime);
-      setHelperLocations((prev) => [...prev, locationWithKoreaTime]);
+      setHelperLocations(locationWithKoreaTime);
     });
 
     es.addEventListener('patient-location', (e) => {
@@ -64,7 +64,7 @@ const useSSE = (escortId: string, role: string) => {
       const koreaTime = convertToKoreaTime(data.timestamp);
       const locationWithKoreaTime = { ...data, timestamp: koreaTime };
       console.log('patient-location', locationWithKoreaTime);
-      setPatientLocations((prev) => [...prev, locationWithKoreaTime]);
+      setPatientLocations(locationWithKoreaTime);
     });
 
     es.addEventListener('status', (e) => {
@@ -72,7 +72,7 @@ const useSSE = (escortId: string, role: string) => {
       const koreaTime = convertToKoreaTime(data.timestamp);
       const statusWithKoreaTime = { ...data, timestamp: koreaTime };
       console.log('status', statusWithKoreaTime);
-      setEscortStatuses((prev) => [...prev, statusWithKoreaTime]);
+      setEscortStatuses(statusWithKoreaTime);
     });
 
     es.onerror = (err) => {
