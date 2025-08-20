@@ -13,8 +13,10 @@ import {
 import { useEffect, useRef } from 'react';
 import { useMap } from '@hooks';
 import { FloatingButton } from '@components';
-import type { TMapMarker } from '@types';
+import type { Position, TMapMarker } from '@types';
 import { useSSE } from '@dashboard/hooks';
+import { calculateCenterAndZoom, updatedBefore } from '@helper/utils';
+import { DEFAULT_ZOOM_LEVEL } from '@dashboard/constants';
 
 export const Route = createFileRoute('/dashboard/$escortId/customer/')({
   beforeLoad: async ({ context, params }) => {
@@ -46,8 +48,11 @@ function RouteComponent() {
   const mapRef = useRef<HTMLDivElement>(null);
   const {
     mapInstance,
+    isMapReady,
     addPolyline,
     setCurrentLocation,
+    setCenter,
+    setZoom,
     addMarker,
     addCustomMarker,
     resetPolyline,
@@ -111,30 +116,21 @@ function RouteComponent() {
     returnMarker.current?.setVisible(isReturn);
   };
 
-  useEffect(() => {
-    if (!mapInstance) return;
-
-    if (patientLocations?.latitude && patientLocations?.longitude) {
-      console.log('patientLocations', patientLocations);
-      patientMarker.current?.setPosition(
-        new Tmapv3.LatLng(patientLocations.latitude, patientLocations.longitude)
-      );
+  const handleSetCenterAndZoom = (position1: Position, position2?: Position) => {
+    if (!position2) {
+      setCenter(position1.lat, position1.lon);
+      setZoom(DEFAULT_ZOOM_LEVEL);
+      return;
     }
-    if (helperLocations?.latitude && helperLocations?.longitude) {
-      console.log('helperLocations', helperLocations);
-      helperMarker.current?.setPosition(
-        new Tmapv3.LatLng(helperLocations.latitude, helperLocations.longitude)
-      );
-    }
-  }, [
-    patientLocations?.latitude,
-    patientLocations?.longitude,
-    helperLocations?.latitude,
-    helperLocations?.longitude,
-  ]);
+    const { center, zoom } = calculateCenterAndZoom(position1, position2);
+    setCenter(center.lat, center.lng);
+    setZoom(zoom);
+  };
 
+  // 상태 변경 시 폴리라인 다시 그리기 (지도 로드 완료 후)
   useEffect(() => {
-    if (!mapInstance) return;
+    if (!isMapReady) return; // 지도가 준비되지 않았으면 리턴
+
     resetPolyline();
     switch (currentStatus) {
       case '만남중':
@@ -145,6 +141,10 @@ function RouteComponent() {
           isHospital: false,
           isReturn: false,
         });
+        handleSetCenterAndZoom(
+          { lat: helperLocations?.latitude ?? 0, lon: helperLocations?.longitude ?? 0 },
+          { lat: patientLocations?.latitude ?? 0, lon: patientLocations?.longitude ?? 0 }
+        );
         break;
       case '병원행':
         handleSetMarkerVisible({
@@ -155,6 +155,16 @@ function RouteComponent() {
           isReturn: false,
         });
         addPolyline(meetingToHospital, 'meetingToHospital');
+        handleSetCenterAndZoom(
+          {
+            lat: meetingLocationInfo?.lat ?? 0,
+            lon: meetingLocationInfo?.lon ?? 0,
+          },
+          {
+            lat: hospitalLocationInfo?.lat ?? 0,
+            lon: hospitalLocationInfo?.lon ?? 0,
+          }
+        );
         break;
       case '진료중':
         handleSetMarkerVisible({
@@ -163,6 +173,10 @@ function RouteComponent() {
           isMeeting: false,
           isHospital: true,
           isReturn: false,
+        });
+        handleSetCenterAndZoom({
+          lat: hospitalLocationInfo?.lat ?? 0,
+          lon: hospitalLocationInfo?.lon ?? 0,
         });
         break;
       case '복귀중':
@@ -174,11 +188,21 @@ function RouteComponent() {
           isReturn: true,
         });
         addPolyline(hospitalToReturn, 'hospitalToReturn');
+        handleSetCenterAndZoom(
+          {
+            lat: hospitalLocationInfo?.lat ?? 0,
+            lon: hospitalLocationInfo?.lon ?? 0,
+          },
+          {
+            lat: returnLocationInfo?.lat ?? 0,
+            lon: returnLocationInfo?.lon ?? 0,
+          }
+        );
         break;
       default:
         break;
     }
-  }, [currentStatus]);
+  }, [currentStatus, isMapReady]); // isMapReady 의존성 추가
 
   useEffect(() => {
     if (!mapInstance) return;
@@ -215,12 +239,15 @@ function RouteComponent() {
     // 환자 마커 생성 또는 업데이트
     if (patientLocations?.latitude && patientLocations?.longitude) {
       if (!patientMarker.current) {
-        // 마커가 없으면 새로 생성
         patientMarker.current = addCustomMarker(
           patientLocations.latitude,
           patientLocations.longitude,
           `${patientName} 고객`,
           patientImageUrl
+        );
+      } else {
+        patientMarker.current?.setPosition(
+          new Tmapv3.LatLng(patientLocations.latitude, patientLocations.longitude)
         );
       }
     }
@@ -244,6 +271,10 @@ function RouteComponent() {
           helperLocations.longitude,
           `${helperName} 도우미`,
           helperImageUrl
+        );
+      } else {
+        helperMarker.current?.setPosition(
+          new Tmapv3.LatLng(helperLocations.latitude, helperLocations.longitude)
         );
       }
     }
@@ -294,13 +325,12 @@ function RouteComponent() {
   }
   return (
     <PageLayout>
-      <Header updateBefore={10} />
+      <Header updateBefore={updatedBefore(helperLocations?.timestamp)} showBack={true} />
       <PageLayout.Content>
         <div className='flex h-full flex-col'>
           {/* 지도 */}
           <div className='bg-background-default-white2 flex-center relative h-[27rem] w-full'>
             <div ref={mapRef}></div>
-            <FloatingButton onClick={() => router.history.back()} />
             <FloatingButton
               icon='current'
               position='bottom-left'

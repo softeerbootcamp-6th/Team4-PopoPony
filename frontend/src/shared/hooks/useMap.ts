@@ -16,6 +16,7 @@ const { Tmapv3 } = window;
 export const useMap = (mapRef: React.RefObject<HTMLDivElement>) => {
   const [mapInstance, setMapInstance] = useState<TMap | null>(null);
   const [isTmapLoaded, setIsTmapLoaded] = useState(false);
+  const [isMapReady, setIsMapReady] = useState(false);
   const [polylineInstances, setPolylineInstances] = useState<Map<string, TMapPolyline>>(new Map());
 
   // 지도 초기화 함수 (초기 로딩시 사용되는 함수)
@@ -34,6 +35,12 @@ export const useMap = (mapRef: React.RefObject<HTMLDivElement>) => {
       });
 
       map.setZoomLimit(MIN_ZOOM_LEVEL, MAX_ZOOM_LEVEL);
+
+      // ConfigLoad 이벤트 리스너 추가
+      map.on('ConfigLoad', () => {
+        setIsMapReady(true);
+      });
+
       setMapInstance(map);
 
       return map;
@@ -70,6 +77,12 @@ export const useMap = (mapRef: React.RefObject<HTMLDivElement>) => {
     if (mapInstance) {
       mapInstance.setCenter(new Tmapv3.LatLng(lat, lng));
       mapInstance.setZoom(DEFAULT_ZOOM_LEVEL);
+    }
+  };
+
+  const setZoom = (zoom: number) => {
+    if (mapInstance) {
+      mapInstance.setZoom(zoom);
     }
   };
 
@@ -321,8 +334,10 @@ export const useMap = (mapRef: React.RefObject<HTMLDivElement>) => {
   return {
     mapInstance,
     isTmapLoaded,
+    isMapReady,
     polylineInstances,
     setCenter,
+    setZoom,
     setCurrentLocation,
     addMarker,
     addCustomMarker,

@@ -6,29 +6,16 @@ interface LocationResponse {
   escortId: number;
   latitude: number;
   longitude: number;
-  timestamp: string;
+  timestamp: Date;
 }
 
 interface EscortStatusResponse {
   escortId: number;
   escortStatus: EscortStatusProps;
-  timestamp: string;
+  timestamp: Date;
 }
 
-// 한국 시간으로 변환하는 유틸리티 함수
-const convertToKoreaTime = (timestamp: string): string => {
-  const date = new Date(timestamp);
-  return date.toLocaleString('ko-KR', {
-    timeZone: 'Asia/Seoul',
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit',
-  });
-};
-
+// TODO: console.log 제거
 const useSSE = (escortId: string, role: string) => {
   const [helperLocations, setHelperLocations] = useState<LocationResponse | null>(null);
   const [patientLocations, setPatientLocations] = useState<LocationResponse | null>(null);
@@ -53,7 +40,7 @@ const useSSE = (escortId: string, role: string) => {
 
     es.addEventListener('helper-location', (e) => {
       const data: LocationResponse = JSON.parse(e.data);
-      const koreaTime = convertToKoreaTime(data.timestamp);
+      const koreaTime = new Date(data.timestamp);
       const locationWithKoreaTime = { ...data, timestamp: koreaTime };
       console.log('helper-location', locationWithKoreaTime);
       setHelperLocations(locationWithKoreaTime);
@@ -61,7 +48,7 @@ const useSSE = (escortId: string, role: string) => {
 
     es.addEventListener('patient-location', (e) => {
       const data: LocationResponse = JSON.parse(e.data);
-      const koreaTime = convertToKoreaTime(data.timestamp);
+      const koreaTime = new Date(data.timestamp);
       const locationWithKoreaTime = { ...data, timestamp: koreaTime };
       console.log('patient-location', locationWithKoreaTime);
       setPatientLocations(locationWithKoreaTime);
@@ -69,7 +56,7 @@ const useSSE = (escortId: string, role: string) => {
 
     es.addEventListener('status', (e) => {
       const data: EscortStatusResponse = JSON.parse(e.data);
-      const koreaTime = convertToKoreaTime(data.timestamp);
+      const koreaTime = new Date(data.timestamp);
       const statusWithKoreaTime = { ...data, timestamp: koreaTime };
       console.log('status', statusWithKoreaTime);
       setEscortStatuses(statusWithKoreaTime);
