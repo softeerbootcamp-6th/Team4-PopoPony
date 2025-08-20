@@ -1,6 +1,7 @@
-import { Button, Divider, EscortCard } from '@components';
+import { Button, Divider, EscortCard, StrengthTag } from '@components';
 import { getRecruitById } from '@customer/apis';
 import { GrayBox, InfoSection, RouteButton } from '@customer/components';
+import { type EscortStrength } from '@types';
 import type { RecruitDetailResponse } from '@customer/types';
 import { IcCheck } from '@icons';
 import { PageLayout } from '@layouts';
@@ -51,6 +52,16 @@ function RouteComponent() {
     extraRequest,
   } = recruitData;
   const { meetingLocationInfo, hospitalLocationInfo, returnLocationInfo } = route;
+  const taglist = [];
+  if (patient.needsHelping) {
+    taglist.push('안전한 부축');
+  }
+  if (patient.usesWheelchair) {
+    taglist.push('휠체어 이동');
+  }
+  if (patient.hasCognitiveIssue) {
+    taglist.push('인지장애 케어');
+  }
 
   return (
     <PageLayout>
@@ -68,55 +79,57 @@ function RouteComponent() {
         </div>
         <>
           {/* 환자 및 동행 정보 */}
-          <div className='flex-start gap-[1.2rem]'>
-            <img
-              src={formatImageUrl(patient.imageUrl)}
-              alt='환자 프로필'
-              className='h-[5.6rem] w-[5.6rem] rounded-full object-cover'
-            />
-            <div className='flex flex-col gap-[0.4rem]'>
-              <span className='subtitle-18-bold text-text-neutral-primary'>
-                {patient.name} 환자
-              </span>
-              <span className='label2-14-medium text-text-neutral-assistive'>
-                ({patient.age}세)/{patient.gender}
-              </span>
-            </div>
-          </div>
-          <div className='flex flex-col gap-[0.8rem]'>
-            <div className='flex-start body1-16-medium gap-[2rem]'>
-              <span className='text-text-neutral-primary'>동행 날짜</span>
-              <span className='text-text-neutral-secondary'>
-                {dateFormat(escortDate, 'M월 d일 (eee)')}
-              </span>
-            </div>
-            <div className='flex-start body1-16-medium gap-[2rem]'>
-              <span className='text-text-neutral-primary'>동행 시간</span>
-              <span className='text-text-neutral-secondary'>
-                {timeFormatWithOptionalMinutes(estimatedMeetingTime)} ~{' '}
-                {timeFormatWithOptionalMinutes(estimatedReturnTime)} (
-                {timeDuration(estimatedMeetingTime, estimatedReturnTime)})
-              </span>
-            </div>
-            <div className='flex-start body1-16-medium gap-[2rem]'>
-              <span className='text-text-neutral-primary'>동행 병원</span>
-              <div className='flex-start gap-[0.8rem]'>
-                <span className='text-text-neutral-secondary'>
-                  {hospitalLocationInfo.placeName}
+          <div className='flex flex-col gap-[1.6rem] p-[2rem]'>
+            <div className='flex-start gap-[1.2rem]'>
+              <img
+                src={formatImageUrl(patient.imageUrl)}
+                alt='환자 프로필'
+                className='h-[5.6rem] w-[5.6rem] rounded-full object-cover'
+              />
+              <div className='flex flex-col gap-[0.4rem]'>
+                <span className='subtitle-18-bold text-text-neutral-primary'>
+                  {patient.name} 환자
                 </span>
-                {/* 이 지도보기 버튼의 onclick은 무엇을 해줘야 할까요 */}
-                <button className='caption2-10-medium text-text-neutral-secondary border-stroke-neutral-dark w-fit rounded-[0.4rem] border px-[0.5rem] py-[0.2rem]'>
-                  지도 보기
-                </button>
+                <span className='label2-14-medium text-text-neutral-assistive'>
+                  ({patient.age}세)/{patient.gender}
+                </span>
               </div>
             </div>
+            <div className='flex flex-col gap-[0.8rem]'>
+              <div className='flex-start body1-16-medium gap-[2rem]'>
+                <span className='text-text-neutral-primary'>동행 날짜</span>
+                <span className='text-text-neutral-secondary'>
+                  {dateFormat(escortDate, 'M월 d일 (eee)')}
+                </span>
+              </div>
+              <div className='flex-start body1-16-medium gap-[2rem]'>
+                <span className='text-text-neutral-primary'>동행 시간</span>
+                <span className='text-text-neutral-secondary'>
+                  {timeFormatWithOptionalMinutes(estimatedMeetingTime)} ~{' '}
+                  {timeFormatWithOptionalMinutes(estimatedReturnTime)} (
+                  {timeDuration(estimatedMeetingTime, estimatedReturnTime)})
+                </span>
+              </div>
+              <div className='flex-start body1-16-medium gap-[2rem]'>
+                <span className='text-text-neutral-primary'>동행 병원</span>
+                <div className='flex-start gap-[0.8rem]'>
+                  <span className='text-text-neutral-secondary'>
+                    {hospitalLocationInfo.placeName}
+                  </span>
+                  {/* 이 지도보기 버튼의 onclick은 무엇을 해줘야 할까요 */}
+                  <button className='caption2-10-medium text-text-neutral-secondary border-stroke-neutral-dark w-fit rounded-[0.4rem] border px-[0.5rem] py-[0.2rem]'>
+                    지도 보기
+                  </button>
+                </div>
+              </div>
+            </div>
+            <RouteButton
+              LocationData={[meetingLocationInfo, hospitalLocationInfo, returnLocationInfo]}
+            />
           </div>
-          <RouteButton
-            LocationData={[meetingLocationInfo, hospitalLocationInfo, returnLocationInfo]}
-          />
 
           {/* 환자 상태 */}
-          {/* <div>
+          <div className='flex flex-col gap-[2.4rem] p-[2rem]'>
             <h3 className='subtitle-18-bold text-text-neutral-primary'>환자 상태</h3>
             <div className='mt-[1.2rem] flex flex-col gap-[2rem]'>
               <InfoSection title='보행 상태'>
@@ -150,25 +163,25 @@ function RouteComponent() {
                 )}
               </InfoSection>
             </div>
-          </div> */}
-          <Divider />
+            <Divider />
 
-          {/* 진료시 참고 사항 */}
-          <div>
-            <h3 className='subtitle-18-bold text-text-neutral-primary'>진료시 참고 사항</h3>
-            <div className='mt-[1.2rem] flex flex-col gap-[2rem]'>
-              <InfoSection title='동행 목적'>
-                <GrayBox>
-                  <span>{purpose}</span>
-                </GrayBox>
-              </InfoSection>
-              {extraRequest && (
-                <InfoSection title='요청사항'>
+            {/* 진료시 참고 사항 */}
+            <div>
+              <h3 className='subtitle-18-bold text-text-neutral-primary'>진료시 참고 사항</h3>
+              <div className='mt-[1.2rem] flex flex-col gap-[2rem]'>
+                <InfoSection title='동행 목적'>
                   <GrayBox>
-                    <span>{extraRequest}</span>
+                    <span>{purpose}</span>
                   </GrayBox>
                 </InfoSection>
-              )}
+                {extraRequest && (
+                  <InfoSection title='요청사항'>
+                    <GrayBox>
+                      <span>{extraRequest}</span>
+                    </GrayBox>
+                  </InfoSection>
+                )}
+              </div>
             </div>
           </div>
         </>
