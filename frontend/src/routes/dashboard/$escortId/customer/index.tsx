@@ -29,12 +29,12 @@ export const Route = createFileRoute('/dashboard/$escortId/customer/')({
 
     const escortDetail = await queryClient.ensureQueryData(escortDetailOpts);
 
-    // if (escortDetail.data.escortStatus === '동행준비') {
-    //   throw redirect({
-    //     to: '/dashboard/$escortId/customer/prepare',
-    //     params: { escortId: String(recruitId) },
-    //   });
-    // }
+    if (escortDetail.data.escortStatus === '동행준비') {
+      throw redirect({
+        to: '/dashboard/$escortId/customer/prepare',
+        params: { escortId: String(recruitId) },
+      });
+    }
   },
   component: RouteComponent,
 });
