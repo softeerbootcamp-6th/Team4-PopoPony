@@ -10,6 +10,11 @@ import {
   CustomerDashboardLive,
   Footer,
 } from '@dashboard/components';
+import { useEffect, useRef, useState } from 'react';
+import { useMap } from '@hooks';
+import { FloatingButton } from '@components';
+import type { TMapMarker } from '@types';
+import { useSSE } from '@dashboard/hooks';
 
 export const Route = createFileRoute('/dashboard/$escortId/customer/')({
   beforeLoad: async ({ context, params }) => {
@@ -22,33 +27,54 @@ export const Route = createFileRoute('/dashboard/$escortId/customer/')({
 
     const escortDetail = await queryClient.ensureQueryData(escortDetailOpts);
 
-    if (escortDetail.data.escortStatus === '동행준비') {
-      throw redirect({
-        to: '/dashboard/$escortId/customer/prepare',
-        params: { escortId: String(recruitId) },
-      });
-    }
+    // if (escortDetail.data.escortStatus === '동행준비') {
+    //   throw redirect({
+    //     to: '/dashboard/$escortId/customer/prepare',
+    //     params: { escortId: String(recruitId) },
+    //   });
+    // }
   },
   component: RouteComponent,
 });
 
-type DashboardCardProps = {
-  escortStatus: StatusTitleProps;
-  title: string;
-  address?: {
-    locationInfoId: number;
-    placeName: string;
-    address: string;
-    detailAddress: string;
-  };
-};
+const { Tmapv3 } = window;
 
 function RouteComponent() {
   const router = useRouter();
   const { escortId: recruitId } = Route.useParams();
-  const { data: escortDetailOrigin } = getEscortDetail(Number(recruitId));
-  const { escortStatus, route, helper } = escortDetailOrigin.data;
-  const helperContact = helper.contact;
+  const { data } = getEscortDetail(Number(recruitId));
+  const mapRef = useRef<HTMLDivElement>(null);
+  const {
+    mapInstance,
+    addPolyline,
+    setCurrentLocation,
+    addMarker,
+    addCustomMarker,
+    resetPolyline,
+  } = useMap(mapRef as React.RefObject<HTMLDivElement>);
+
+  const { helperLocations, patientLocations, escortStatuses, connectionStatus } = useSSE(
+    String(recruitId),
+    'customer'
+  );
+  const currentStatus = escortStatuses?.escortStatus ?? '만남중';
+
+  const patientMarker = useRef<TMapMarker>(null);
+  const helperMarker = useRef<TMapMarker>(null);
+  const meetingMarker = useRef<TMapMarker>(null);
+  const hospitalMarker = useRef<TMapMarker>(null);
+  const returnMarker = useRef<TMapMarker>(null);
+
+  let { route, patient, helper, estimatedMeetingTime } = data.data;
+  const {
+    meetingLocationInfo,
+    hospitalLocationInfo,
+    returnLocationInfo,
+    meetingToHospital,
+    hospitalToReturn,
+  } = route.routeSimple;
+  const { name: patientName, imageUrl: patientImageUrl, contact: patientContact } = patient;
+  const { name: helperName, imageUrl: helperImageUrl, contact: helperContact } = helper;
 
   const handleClickCallHelper = () => {
     window.open(`tel:${helperContact}`, '_blank');
@@ -65,7 +91,171 @@ function RouteComponent() {
     });
   };
 
-  if (escortStatus === '리포트작성중') {
+  const handleSetMarkerVisible = ({
+    patient,
+    helper,
+    isMeeting,
+    isHospital,
+    isReturn,
+  }: {
+    patient: boolean;
+    helper: boolean;
+    isMeeting: boolean;
+    isHospital: boolean;
+    isReturn: boolean;
+  }) => {
+    patientMarker.current?.setVisible(patient);
+    helperMarker.current?.setVisible(helper);
+    meetingMarker.current?.setVisible(isMeeting);
+    hospitalMarker.current?.setVisible(isHospital);
+    returnMarker.current?.setVisible(isReturn);
+  };
+
+  useEffect(() => {
+    if (!mapInstance) return;
+    console.log('바뀌었음');
+    if (patientLocations?.latitude && patientLocations?.longitude) {
+      console.log('patientLocations', patientLocations);
+      patientMarker.current?.setPosition(
+        new Tmapv3.LatLng(patientLocations.latitude, patientLocations.longitude)
+      );
+    }
+    if (helperLocations?.latitude && helperLocations?.longitude) {
+      console.log('helperLocations', helperLocations);
+      helperMarker.current?.setPosition(
+        new Tmapv3.LatLng(helperLocations.latitude, helperLocations.longitude)
+      );
+    }
+  }, [
+    patientLocations?.latitude,
+    patientLocations?.longitude,
+    helperLocations?.latitude,
+    helperLocations?.longitude,
+  ]);
+
+  useEffect(() => {
+    if (!mapInstance) return;
+    resetPolyline();
+    switch (currentStatus) {
+      case '만남중':
+        handleSetMarkerVisible({
+          patient: true,
+          helper: true,
+          isMeeting: true,
+          isHospital: false,
+          isReturn: false,
+        });
+        break;
+      case '병원행':
+        handleSetMarkerVisible({
+          patient: false,
+          helper: true,
+          isMeeting: true,
+          isHospital: true,
+          isReturn: false,
+        });
+        addPolyline(meetingToHospital, 'meetingToHospital');
+        break;
+      case '진료중':
+        handleSetMarkerVisible({
+          patient: false,
+          helper: true,
+          isMeeting: false,
+          isHospital: true,
+          isReturn: false,
+        });
+        break;
+      case '복귀중':
+        handleSetMarkerVisible({
+          patient: false,
+          helper: true,
+          isMeeting: false,
+          isHospital: true,
+          isReturn: true,
+        });
+        addPolyline(hospitalToReturn, 'hospitalToReturn');
+        break;
+      default:
+        break;
+    }
+  }, [currentStatus]);
+
+  useEffect(() => {
+    if (!mapInstance) return;
+
+    // 고정 마커들 생성 (위치 정보가 있는 경우)
+    meetingMarker.current = addMarker(
+      meetingLocationInfo.lat,
+      meetingLocationInfo.lon,
+      'home',
+      meetingLocationInfo.placeName
+    );
+    hospitalMarker.current = addMarker(
+      hospitalLocationInfo.lat,
+      hospitalLocationInfo.lon,
+      'hospital',
+      hospitalLocationInfo.placeName
+    );
+    returnMarker.current = addMarker(
+      returnLocationInfo.lat,
+      returnLocationInfo.lon,
+      'home',
+      returnLocationInfo.placeName
+    );
+
+    // 초기에는 숨김 처리
+    hospitalMarker.current?.setVisible(false);
+    returnMarker.current?.setVisible(false);
+  }, [mapInstance]);
+
+  // 환자와 도우미 마커 생성/업데이트
+  useEffect(() => {
+    if (!mapInstance || !patientName || !patientImageUrl) return;
+
+    // 환자 마커 생성 또는 업데이트
+    if (patientLocations?.latitude && patientLocations?.longitude) {
+      if (!patientMarker.current) {
+        // 마커가 없으면 새로 생성
+        patientMarker.current = addCustomMarker(
+          patientLocations.latitude,
+          patientLocations.longitude,
+          `${patientName} 고객`,
+          patientImageUrl
+        );
+      }
+    }
+  }, [
+    mapInstance,
+    patientLocations?.latitude,
+    patientLocations?.longitude,
+    patientName,
+    patientImageUrl,
+  ]);
+
+  useEffect(() => {
+    if (!mapInstance || !helperName || !helperImageUrl) return;
+
+    // 도우미 마커 생성 또는 업데이트
+    if (helperLocations?.latitude && helperLocations?.longitude) {
+      if (!helperMarker.current) {
+        // 마커가 없으면 새로 생성
+        helperMarker.current = addCustomMarker(
+          helperLocations.latitude,
+          helperLocations.longitude,
+          `${helperName} 도우미`,
+          helperImageUrl
+        );
+      }
+    }
+  }, [
+    mapInstance,
+    helperLocations?.latitude,
+    helperLocations?.longitude,
+    helperName,
+    helperImageUrl,
+  ]);
+
+  if (currentStatus === '리포트작성중') {
     return (
       <PageLayout>
         <PageLayout.Header showClose={true} onClose={() => router.history.back()} />
@@ -74,7 +264,7 @@ function RouteComponent() {
         </PageLayout.Content>
         <PageLayout.Footer>
           <Footer
-            escortStatus={escortStatus as EscortStatusProps}
+            escortStatus={currentStatus as EscortStatusProps}
             handleClickGoToReport={handleClickGoToReport}
             handleClickCallHelper={handleClickCallHelper}
             handleClickGoToCustomerCenter={handleClickGoToCustomerCenter}
@@ -84,7 +274,7 @@ function RouteComponent() {
     );
   }
 
-  if (escortStatus === '동행완료') {
+  if (currentStatus === '동행완료') {
     return (
       <PageLayout>
         <PageLayout.Header showClose={true} onClose={() => router.history.back()} />
@@ -93,7 +283,7 @@ function RouteComponent() {
         </PageLayout.Content>
         <PageLayout.Footer>
           <Footer
-            escortStatus={escortStatus as EscortStatusProps}
+            escortStatus={currentStatus as EscortStatusProps}
             handleClickGoToReport={handleClickGoToReport}
             handleClickCallHelper={handleClickCallHelper}
             handleClickGoToCustomerCenter={handleClickGoToCustomerCenter}
@@ -102,60 +292,31 @@ function RouteComponent() {
       </PageLayout>
     );
   }
-
-  const dashboardCardProps = (): DashboardCardProps => {
-    if (escortStatus === '만남중') {
-      return {
-        escortStatus: escortStatus,
-        title: '만남장소로 이동 중',
-        address: route.routeSimple.meetingLocationInfo,
-      };
-    }
-    if (escortStatus === '병원행') {
-      return {
-        escortStatus: escortStatus,
-        title: '병원으로 이동 중',
-        address: route.routeSimple.hospitalLocationInfo,
-      };
-    }
-    if (escortStatus === '진료중') {
-      return {
-        escortStatus: escortStatus,
-        title: '병원에서 진료 중',
-        address: route.routeSimple.hospitalLocationInfo,
-      };
-    }
-    if (escortStatus === '복귀중') {
-      return {
-        escortStatus: escortStatus,
-        title: '복귀 장소로 이동 중',
-        address: route.routeSimple.returnLocationInfo,
-      };
-    } else {
-      return {
-        //쓰지 않음. 타입 안정성 위한 코드
-        escortStatus: '복귀중' as StatusTitleProps,
-        title: '',
-      };
-    }
-  };
-
   return (
     <PageLayout>
       <Header updateBefore={10} />
       <PageLayout.Content>
         <div className='flex h-full flex-col'>
-          <div className='bg-background-default-mint flex-center h-[27rem] w-full'>지도지도</div>
+          {/* 지도 */}
+          <div className='bg-background-default-white2 flex-center relative h-[27rem] w-full'>
+            <div ref={mapRef}></div>
+            <FloatingButton onClick={() => router.history.back()} />
+            <FloatingButton
+              icon='current'
+              position='bottom-left'
+              onClick={() => setCurrentLocation()}
+            />
+          </div>
           <CustomerDashboardLive
-            escortStatus={dashboardCardProps().escortStatus}
-            title={dashboardCardProps().title}
+            escortStatus={currentStatus as StatusTitleProps}
+            time={estimatedMeetingTime}
             route={route.routeSimple}
           />
         </div>
       </PageLayout.Content>
       <PageLayout.Footer>
         <Footer
-          escortStatus={escortStatus as EscortStatusProps}
+          escortStatus={currentStatus as EscortStatusProps}
           handleClickGoToReport={handleClickGoToReport}
           handleClickCallHelper={handleClickCallHelper}
           handleClickGoToCustomerCenter={handleClickGoToCustomerCenter}

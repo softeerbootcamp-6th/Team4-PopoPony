@@ -24,7 +24,7 @@ function RouteComponent() {
   const router = useRouter();
   const { escortId } = Route.useParams();
   const mapRef = useRef<HTMLDivElement>(null);
-  const { mapInstance, isTmapLoaded, addPolyline } = useMap(
+  const { mapInstance, isTmapLoaded, addRoutePolyline } = useMap(
     mapRef as React.RefObject<HTMLDivElement>
   );
 
@@ -32,14 +32,16 @@ function RouteComponent() {
   const escortDetail = data?.data as EscortDetailResponse;
 
   const { imageUrl, name } = escortDetail?.helper ?? {};
+  const { routeSimple: route } = escortDetail.route;
+
+  const diff = getDifferenceInSecondsFromNow(escortDetail.escortDate);
   const {
     meetingLocationInfo,
     hospitalLocationInfo,
     returnLocationInfo,
     meetingToHospital,
     hospitalToReturn,
-  } = escortDetail?.route.routeSimple ?? {};
-  const diff = getDifferenceInSecondsFromNow(escortDetail.escortDate);
+  } = route;
 
   useEffect(() => {
     //동행 시작 3시간 전에 자동 리다이렉트
@@ -60,18 +62,7 @@ function RouteComponent() {
   useEffect(() => {
     if (!mapInstance) return;
 
-    addPolyline([
-      {
-        startMarkerType: 'marker1',
-        endMarkerType: 'marker2',
-        pathCoordinates: meetingToHospital,
-      },
-      {
-        startMarkerType: 'marker2',
-        endMarkerType: isSameStartEnd ? 'marker1' : 'marker3',
-        pathCoordinates: hospitalToReturn,
-      },
-    ]);
+    addRoutePolyline(route);
   }, [mapInstance]);
 
   if (!isTmapLoaded) return <div>Loading...</div>;

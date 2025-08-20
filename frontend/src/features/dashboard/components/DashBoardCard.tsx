@@ -1,13 +1,10 @@
+import { ShowMapButton } from '@components';
 import { type StatusTitleProps } from '@dashboard/types';
 import { IcHomeFill, IcHospitalFill, IcClockFill, IcMarkFill } from '@icons';
 import { timeFormat } from '@utils';
 
 const DashBoardCard = ({ children }: { children: React.ReactNode }) => {
-  return (
-    <div className='shadow-card shadow-bottom-sheet relative z-10 -mt-[1.6rem] flex-1'>
-      {children}
-    </div>
-  );
+  return <div className='shadow-bottom-sheet relative z-10 flex-1'>{children}</div>;
 };
 
 const Home = (active: boolean) => {
@@ -107,24 +104,19 @@ const AddressContent = ({
   detailAddress,
   address,
   placeName,
+  position,
 }: {
   detailAddress: string;
   address: string;
   placeName: string;
+  position: { lat: number; lng: number };
 }) => {
   return (
     <div className='flex items-start justify-start gap-[0.8rem]'>
       <IcMarkFill className='[&_path]:fill-icon-neutral-assistive h-[2.4rem] w-[2.4rem]' />
       <div className='flex flex-col gap-[0.4rem]'>
         <div className='subtitle-18-medium text-text-neutral-primary'>{detailAddress}</div>
-        <div className='body2-14-medium text-text-neutral-secondary'>
-          {address} {placeName}{' '}
-          <span>
-            <button className='caption2-10-medium text-text-neutral-secondary border-stroke-neutral-dark w-fit translate-y-[-0.1rem] rounded-[0.4rem] border px-[0.5rem] py-[0.2rem]'>
-              지도 보기
-            </button>
-          </span>
-        </div>
+        <ShowMapButton roadAddress={address} businessAddress={placeName} pos={position} />
       </div>
     </div>
   );

@@ -1,5 +1,5 @@
 import { useForm } from 'react-hook-form';
-import { Button } from '@components';
+import { Button, SlideButton } from '@components';
 import type { LoginFormValues } from '@auth/types';
 import { authStorage } from '@auth/utils';
 import { useNavigate } from '@tanstack/react-router';
@@ -61,9 +61,17 @@ const LoginForm = () => {
         {error && <p className='body1-16-medium text-text-red-primary'>{error}</p>}
       </div>
 
-      <Button type='submit' variant='primary' size='lg' disabled={!isFormValid} className='w-full'>
+      {/* <Button type='submit' variant='primary' size='lg' disabled={!isFormValid} className='w-full'>
         로그인
-      </Button>
+      </Button> */}
+      <SlideButton
+        onConfirm={handleSubmit(handleLogin)}
+        threshold={1.0}
+        initialLabel='밀어서 로그인'
+        confirmedLabel='로그인중...'
+        resetAfter={1500}
+        disabled={false}
+      />
     </form>
   );
 };
