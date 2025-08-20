@@ -60,6 +60,45 @@ public class EscortService {
                 .orElseThrow(EscortNotFoundException::new);
     }
 
+    // TODO : 테스트 끝나고 제거
+    @Transactional
+    public void proceedEscortForTest(Long escortId) {
+
+        Escort escort = getById(escortId);
+        EscortStatus currentStatus = escort.getStatus();
+
+        EscortStatus[] statuses = EscortStatus.values();
+        int currentIndex = currentStatus.ordinal();
+
+        if (true) {
+            int nextIndex = (currentIndex + 1) % statuses.length;
+
+            EscortStatus nextStatus = statuses[nextIndex];
+            escort.setStatus(nextStatus);
+            LocalDateTime now = LocalDateTime.now();
+
+            // 동행 만남 완료
+            if (nextStatus == EscortStatus.HEADING_TO_HOSPITAL) {
+                escort.setActualMeetingTime(now);
+
+                emitterManager.close(escortId, Role.PATIENT);
+            }
+
+            // 동행 복귀 완료
+            if (nextStatus == EscortStatus.WRITING_REPORT) {
+                escort.setActualReturnTime(now);
+                Recruit recruit = escort.getRecruit();
+                recruit.setStatus(RecruitStatus.DONE);
+            }
+
+            // TODO :: 진행 상태 변화 고객에게 알림 (Web Push, SMS, E-mail 등)
+            emitterManager.send(escortId, Role.CUSTOMER, "status", new EscortStatusResponse(escortId, nextStatus.getLabel(), now));
+
+        } else {
+            throw new EscortInvalidProceedException();
+        }
+    }
+
     @Transactional
     public void proceedEscort(Long escortId) {
 
@@ -69,9 +108,7 @@ public class EscortService {
         EscortStatus[] statuses = EscortStatus.values();
         int currentIndex = currentStatus.ordinal();
 
-        // TODO : 루프 처리 해제하기
-//        if (0 < currentIndex && currentIndex < statuses.length - 1) {
-        if (true) {
+        if (0 < currentIndex && currentIndex < statuses.length - 1) {
             int nextIndex = (currentIndex + 1) % statuses.length;
 
             EscortStatus nextStatus = statuses[nextIndex];

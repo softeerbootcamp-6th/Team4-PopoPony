@@ -35,6 +35,21 @@ public class EscortController {
         return Response.from();
     }
 
+    // TODO : 테스트 끝내고 제거
+    @Operation(
+            summary = "동행 다음 단계로 이동하기(테스트용)",
+            description = "로그인한 도우미가 동행(일감)의 다음 단계로 이동합니다. escortId를 통해 진행할 동행(일감)을 선택합니다.")
+    @ApiResponse(
+            responseCode = "200",
+            description = "동행 진행 성공")
+    @PatchMapping("/{escortId}/status/test")
+    public Response<EmptyBody> proceedEscortForTest(@PathVariable Long escortId) {
+
+        escortService.proceedEscortForTest(escortId);
+
+        return Response.from();
+    }
+
     @Operation(
             summary = "동행 메모 작성하기",
             description = "로그인한 도우미가 동행(일감) 중 메모를 작성합니다. escortId를 통해 메모를 작성할 동행(일감)을 선택합니다.")
