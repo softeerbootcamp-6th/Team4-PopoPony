@@ -111,10 +111,17 @@ function RouteComponent() {
         address: route.routeSimple.meetingLocationInfo,
       };
     }
-    if (escortStatus === '병원행' || escortStatus === '진료중') {
+    if (escortStatus === '병원행') {
       return {
         escortStatus: escortStatus,
         title: '병원으로 이동 중',
+        address: route.routeSimple.hospitalLocationInfo,
+      };
+    }
+    if (escortStatus === '진료중') {
+      return {
+        escortStatus: escortStatus,
+        title: '병원에서 진료 중',
         address: route.routeSimple.hospitalLocationInfo,
       };
     }
