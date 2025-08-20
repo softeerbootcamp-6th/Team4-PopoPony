@@ -36,6 +36,10 @@ import IcBusFill from './bus-fill.svg?react';
 import IcSubwayFill from './subway-fill.svg?react';
 import IcTaxiBadge from './taxi-badge.svg?react';
 import IcTaxiFill from './taxi-fill.svg?react';
+import IcTaxiCalled from './taxi-called.svg?react';
+import IcTaxiCompleted from './taxi-completed.svg?react';
+import IcTaxiWaiting from './taxi-waiting.svg?react';
+import IcTaxiFailed from './taxi-failed.svg?react';
 
 // User & Profile Icons
 import IcProfile from './profile.svg?react';
@@ -115,6 +119,10 @@ export {
   IcSubwayFill,
   IcTaxiBadge,
   IcTaxiFill,
+  IcTaxiCalled,
+  IcTaxiCompleted,
+  IcTaxiWaiting,
+  IcTaxiFailed,
 
   // User & Profile Icons
   IcProfile,
