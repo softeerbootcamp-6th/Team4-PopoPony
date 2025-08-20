@@ -360,6 +360,8 @@ class RecruitServiceTest {
     @DisplayName("검색 - 지역/날짜로 조회 후 escortDate 오름차순 정렬 및 DTO 매핑")
     void getRecruitListBySearch_정상조회_정렬_매핑() {
         // given
+        long authId = 1L;
+
         String area = "서울";
         LocalDate d1 = LocalDate.of(2024, 6, 1);
         LocalDate d2 = LocalDate.of(2024, 6, 2);
@@ -378,12 +380,12 @@ class RecruitServiceTest {
         Recruit r3 = Recruit.builder().id(3L).status(RecruitStatus.MATCHING).escortDate(d2).estimatedMeetingTime(LocalTime.of(14, 0)).estimatedReturnTime(LocalTime.of(16, 0)).estimatedFee(98000).route(route).patient(p).build();
 
         when(recruitQueryRepository.findListByDateRangeAndStatus(
-            eq(area), eq(d1), eq(d2), eq(List.of(RecruitStatus.MATCHING))
+            eq(authId), eq(area), eq(d1), eq(d2), eq(List.of(RecruitStatus.MATCHING))
         )).thenReturn(List.of(r1, r3, r2));  // 섞어서 반환
 
 
         // when
-        RecruitSearchListResponse res = recruitService.getRecruitListBySearch(area, d1, d2);
+        RecruitSearchListResponse res = recruitService.getRecruitListBySearch(authId, area, d1, d2);
 
 
         // then

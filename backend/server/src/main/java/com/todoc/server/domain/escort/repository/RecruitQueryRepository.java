@@ -188,7 +188,7 @@ public class RecruitQueryRepository {
     /**
      * 시작일과 종료일 사이에 해당하는 동행 신청 목록 조회 (페치조인)
      */
-    public List<Recruit> findListByDateRangeAndStatus(String area, LocalDate startDate, LocalDate endDate, List<RecruitStatus> status) {
+    public List<Recruit> findListByDateRangeAndStatus(long authId, String area, LocalDate startDate, LocalDate endDate, List<RecruitStatus> status) {
 
         return queryFactory
             .selectFrom(recruit)
@@ -199,7 +199,8 @@ public class RecruitQueryRepository {
             .where(
                 areaEq(area),
                 escortDateBetween(startDate, endDate),
-                recruit.status.in(status))
+                recruit.status.in(status),
+                recruit.customer.id.ne(authId))
             .fetch();
     }
 
