@@ -3,6 +3,7 @@ import { PageLayout } from '@layouts';
 import { Header, Footer, DashBoardCard } from '@dashboard/components';
 import { getEscortDetail } from '@dashboard/apis';
 import { TermsBottomSheet } from '@components';
+import { call } from '@utils';
 export const Route = createFileRoute('/dashboard/$escortId/map')({
   component: RouteComponent,
 });
@@ -12,13 +13,6 @@ function RouteComponent() {
   const { data: escortData } = getEscortDetail(Number(recruitId));
   //필요한 데이터 추가로 escortData.data에서 가져오기
   const { estimatedMeetingTime, helper, route } = escortData?.data ?? {};
-
-  const handleClickCallHelper = () => {
-    window.open(`tel:${helper.contact}`, '_blank');
-  };
-  const handleClickGoToCustomerCenter = () => {
-    window.open(`tel:010-2514-9058`, '_blank');
-  };
 
   return (
     <PageLayout>
@@ -49,8 +43,8 @@ function RouteComponent() {
       <PageLayout.Footer>
         <Footer
           escortStatus={escortData?.data.escortStatus}
-          handleClickCallHelper={handleClickCallHelper}
-          handleClickGoToCustomerCenter={handleClickGoToCustomerCenter}
+          handleClickCallHelper={() => call(helper.contact)}
+          handleClickGoToCustomerCenter={() => call(import.meta.env.VITE_CUSTOMER_PHONE_NUMBER)}
         />
       </PageLayout.Footer>
       <TermsBottomSheet

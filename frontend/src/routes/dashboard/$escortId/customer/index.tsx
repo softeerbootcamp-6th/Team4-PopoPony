@@ -10,6 +10,7 @@ import {
   CustomerDashboardLive,
   Footer,
 } from '@dashboard/components';
+import { call } from '@utils';
 
 export const Route = createFileRoute('/dashboard/$escortId/customer/')({
   beforeLoad: async ({ context, params }) => {
@@ -50,12 +51,6 @@ function RouteComponent() {
   const { escortStatus, route, helper } = escortDetailOrigin.data;
   const helperContact = helper.contact;
 
-  const handleClickCallHelper = () => {
-    window.open(`tel:${helperContact}`, '_blank');
-  };
-  const handleClickGoToCustomerCenter = () => {
-    window.open(`tel:010-2514-9058`, '_blank');
-  };
   const handleClickGoToReport = () => {
     router.navigate({
       to: '/customer/escort/$escortId',
@@ -76,8 +71,8 @@ function RouteComponent() {
           <Footer
             escortStatus={escortStatus as EscortStatusProps}
             handleClickGoToReport={handleClickGoToReport}
-            handleClickCallHelper={handleClickCallHelper}
-            handleClickGoToCustomerCenter={handleClickGoToCustomerCenter}
+            handleClickCallHelper={() => call(helperContact)}
+            handleClickGoToCustomerCenter={() => call(import.meta.env.VITE_CUSTOMER_PHONE_NUMBER)}
           />
         </PageLayout.Footer>
       </PageLayout>
@@ -95,8 +90,8 @@ function RouteComponent() {
           <Footer
             escortStatus={escortStatus as EscortStatusProps}
             handleClickGoToReport={handleClickGoToReport}
-            handleClickCallHelper={handleClickCallHelper}
-            handleClickGoToCustomerCenter={handleClickGoToCustomerCenter}
+            handleClickCallHelper={() => call(helperContact)}
+            handleClickGoToCustomerCenter={() => call(import.meta.env.VITE_CUSTOMER_PHONE_NUMBER)}
           />
         </PageLayout.Footer>
       </PageLayout>
@@ -150,8 +145,8 @@ function RouteComponent() {
         <Footer
           escortStatus={escortStatus as EscortStatusProps}
           handleClickGoToReport={handleClickGoToReport}
-          handleClickCallHelper={handleClickCallHelper}
-          handleClickGoToCustomerCenter={handleClickGoToCustomerCenter}
+          handleClickCallHelper={() => call(helperContact)}
+          handleClickGoToCustomerCenter={() => call(import.meta.env.VITE_CUSTOMER_PHONE_NUMBER)}
         />
       </PageLayout.Footer>
     </PageLayout>
