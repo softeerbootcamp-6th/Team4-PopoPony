@@ -1,6 +1,6 @@
 import { $api } from '@apis';
 
-const patchEscortStatusByEscortId = async () => {
+const patchEscortStatusByEscortId = () => {
   return $api.useMutation('patch', '/api/escorts/{escortId}/status');
 };
 
