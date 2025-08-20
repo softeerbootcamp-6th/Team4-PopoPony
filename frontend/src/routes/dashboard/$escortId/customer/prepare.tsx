@@ -35,13 +35,7 @@ function RouteComponent() {
   const { routeSimple: route } = escortDetail.route;
 
   const diff = getDifferenceInSecondsFromNow(escortDetail.escortDate);
-  const {
-    meetingLocationInfo,
-    hospitalLocationInfo,
-    returnLocationInfo,
-    meetingToHospital,
-    hospitalToReturn,
-  } = route;
+  const { meetingLocationInfo, hospitalLocationInfo, returnLocationInfo } = route;
 
   useEffect(() => {
     //동행 시작 3시간 전에 자동 리다이렉트
