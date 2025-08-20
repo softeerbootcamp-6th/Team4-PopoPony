@@ -67,7 +67,7 @@ public class SseEmitterManager {
             // 전송 실패 시 현재 등록된 연결이면 드랍
             AtomicReference<SseEmitter> ref = getRoleMap(escortId).get(role);
             if (ref.compareAndSet(emitter, null)) {
-                safeComplete(emitter);
+                safeCompleteWithError(emitter, ex);
             }
         }
     }
@@ -133,5 +133,9 @@ public class SseEmitterManager {
 
     private void safeComplete(SseEmitter emitter) {
         try { emitter.complete(); } catch (Exception ignore) {}
+    }
+
+    private void safeCompleteWithError(SseEmitter emitter, Exception ex) {
+        try { emitter.completeWithError(ex); } catch (Exception ignore) {}
     }
 }
