@@ -22,7 +22,7 @@ function RouteComponent() {
 
   return (
     <PageLayout>
-      <Header showBack={false} updateBefore={10} />
+      <Header showBack={false} updateBefore={'10'} />
       <PageLayout.Content>
         <div className='flex h-full flex-col'>
           <div className='bg-background-default-mint flex-center h-[27rem] w-full'>지도지도</div>
@@ -40,6 +40,10 @@ function RouteComponent() {
                   detailAddress={route.routeSimple.meetingLocationInfo.detailAddress}
                   address={route.routeSimple.meetingLocationInfo.address}
                   placeName={route.routeSimple.meetingLocationInfo.placeName}
+                  position={{
+                    lat: route.routeSimple.meetingLocationInfo.lat,
+                    lng: route.routeSimple.meetingLocationInfo.lon,
+                  }}
                 />
               </DashBoardCard.ContentTitle>
             </DashBoardCard.ContentWrapper>
