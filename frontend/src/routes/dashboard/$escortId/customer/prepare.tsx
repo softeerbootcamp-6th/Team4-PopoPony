@@ -2,8 +2,13 @@ import { getEscortDetail } from '@dashboard/apis';
 import { useMap } from '@hooks';
 import { IcPinFillEffect } from '@icons';
 import { PageLayout } from '@layouts';
-import { createFileRoute } from '@tanstack/react-router';
-import { dateFormat, getDaysLeft, timeFormatTo24Hour } from '@utils';
+import { createFileRoute, useRouter } from '@tanstack/react-router';
+import {
+  dateFormat,
+  timeFormatTo24Hour,
+  getRemainingDayOrHour,
+  getDifferenceInSecondsFromNow,
+} from '@utils';
 import { useEffect, useRef } from 'react';
 import type { components } from '@schema';
 import { PlaceInfo, TaxiInfo } from '@dashboard/components';
@@ -11,9 +16,12 @@ export const Route = createFileRoute('/dashboard/$escortId/customer/prepare')({
   component: RouteComponent,
 });
 
+const ThreeHoursInMs = 1000 * 60 * 60 * 3;
+
 type EscortDetailResponse = components['schemas']['EscortDetailResponse'];
 
 function RouteComponent() {
+  const router = useRouter();
   const { escortId } = Route.useParams();
   const mapRef = useRef<HTMLDivElement>(null);
   const { mapInstance, isTmapLoaded, addPolyline } = useMap(
@@ -31,6 +39,19 @@ function RouteComponent() {
     meetingToHospital,
     hospitalToReturn,
   } = escortDetail?.route.routeSimple ?? {};
+  const diff = getDifferenceInSecondsFromNow(escortDetail.escortDate);
+
+  useEffect(() => {
+    //동행 시작 3시간 전에 자동 리다이렉트
+    const delayMs = Math.max(0, (diff - 3) * 1000 - ThreeHoursInMs);
+    const id = setTimeout(() => {
+      router.navigate({
+        to: '/dashboard/$escortId/customer',
+        params: { escortId: escortId },
+      });
+    }, delayMs);
+    return () => clearTimeout(id);
+  }, [diff, escortId, router]);
 
   const isSameStartEnd =
     meetingLocationInfo.lat === returnLocationInfo.lat &&
@@ -72,7 +93,7 @@ function RouteComponent() {
               </p>
               <p className='text-text-neutral-primary display-32-bold'>
                 <strong className='text-text-mint-on-primary'>
-                  {getDaysLeft(escortDetail.escortDate)}일
+                  {getRemainingDayOrHour(escortDetail.escortDate)}
                 </strong>{' '}
                 남았어요!
               </p>
