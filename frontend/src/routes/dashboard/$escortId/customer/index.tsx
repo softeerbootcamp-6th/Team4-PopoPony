@@ -78,7 +78,7 @@ function RouteComponent() {
     meetingToHospital,
     hospitalToReturn,
   } = route.routeSimple;
-  const { name: patientName, imageUrl: patientImageUrl, contact: patientContact } = patient;
+  const { name: patientName, imageUrl: patientImageUrl } = patient;
   const { name: helperName, imageUrl: helperImageUrl, contact: helperContact } = helper;
 
   const handleClickCallHelper = () => {
