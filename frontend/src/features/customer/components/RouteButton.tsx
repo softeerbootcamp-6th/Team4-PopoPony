@@ -50,7 +50,14 @@ const RouteButton = ({ LocationData }: { LocationData: LocationInfoSimpleRespons
                     <h5 className='subtitle-18-medium text-text-neutral-primary mt-[0.8rem] mb-[0.4rem]'>
                       {value.detailAddress}
                     </h5>
-                    <ShowMapButton roadAddress={value.address} businessAddress={value.placeName} />
+                    <ShowMapButton
+                      roadAddress={value.address}
+                      businessAddress={value.placeName}
+                      pos={{
+                        lat: value.lat,
+                        lng: value.lon,
+                      }}
+                    />
                   </div>
                 </div>
               ))}

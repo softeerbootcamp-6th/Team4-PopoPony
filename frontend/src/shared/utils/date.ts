@@ -1,4 +1,4 @@
-import { differenceInMinutes, format, parse } from 'date-fns';
+import { differenceInDays, differenceInMinutes, format, parse } from 'date-fns';
 import { ko } from 'date-fns/locale';
 
 /**
@@ -36,6 +36,16 @@ export const timeFormatWithOptionalMinutes = (time: string): string => {
 };
 
 /**
+ * 시간을 24시간 형식으로 변환
+ * @param time - "HH:mm:ss" 형태의 시간 문자열
+ * @returns 예: "오후 12시", "오전 9시 05분"
+ */
+export const timeFormatTo24Hour = (time: string): string => {
+  const parsedTime = parse(time, 'HH:mm:ss', new Date());
+  return format(parsedTime, 'HH시 mm분', { locale: ko });
+};
+
+/**
  * 시작-종료 시간 차이를 한국어로 표기
  * @param startTime - "HH:mm:ss" 형식의 시작 시간
  * @param endTime - "HH:mm:ss" 형식의 종료 시간
@@ -62,4 +72,20 @@ export const timeDuration = (startTime: string, endTime: string): string => {
  */
 export const getEscortTitle = (date: string): string => {
   return dateFormat(date, 'M월 d일 (eee)');
+};
+
+/**
+ * 초를 시간과 분으로 변환
+ * @param seconds - 초 (예: 3600)
+ * @returns "1시간 0분" 형태의 포맷된 시간 문자열
+ */
+export const secondsToTime = (seconds: number) => {
+  const hours = Math.floor(seconds / 3600);
+  const remainingMinutes = Math.floor((seconds % 3600) / 60);
+  return `${hours}시간 ${remainingMinutes}분`;
+};
+
+export const getDaysLeft = (date: string) => {
+  const diff = differenceInDays(new Date(date), new Date());
+  return diff >= 0 ? diff + 1 : 0;
 };

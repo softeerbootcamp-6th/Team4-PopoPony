@@ -64,7 +64,13 @@ function RouteComponent() {
             <div className='flex-start gap-[2rem]'>
               <span className='text-text-neutral-primary'>방문 병원</span>
               <div>
-                <ShowMapButton businessAddress={route?.hospitalLocationInfo?.placeName || ''} />
+                <ShowMapButton
+                  businessAddress={route?.hospitalLocationInfo?.placeName || ''}
+                  pos={{
+                    lat: route?.hospitalLocationInfo?.lat || 0,
+                    lng: route?.hospitalLocationInfo?.lon || 0,
+                  }}
+                />
               </div>
             </div>
           </div>

@@ -31,12 +31,16 @@ interface BottomSheetContentProps extends React.ComponentProps<typeof SheetPrimi
   className?: string;
   children: React.ReactNode;
   containerId?: string;
+  disableOutsideClose?: boolean;
+  hideCloseButton?: boolean;
 }
 
 const BottomSheetContent = ({
   className,
   children,
   containerId = 'page-layout-container',
+  disableOutsideClose = false,
+  hideCloseButton = false,
   ...props
 }: BottomSheetContentProps) => {
   const [container, setContainer] = React.useState<HTMLElement | null>(null);
@@ -72,12 +76,16 @@ const BottomSheetContent = ({
           'shadow-bottom-sheet bg-background-default-white absolute inset-x-0 bottom-0 z-50 h-auto rounded-t-[1.2rem]',
           className
         )}
+        onInteractOutside={disableOutsideClose ? (e) => e.preventDefault() : undefined}
+        onEscapeKeyDown={disableOutsideClose ? (e) => e.preventDefault() : undefined}
         {...props}>
         {children}
-        <SheetPrimitive.Close className='absolute top-[1.6rem] right-[1.6rem] rounded-[0.8rem] p-[0.8rem] opacity-70 transition-opacity hover:opacity-100 disabled:pointer-events-none'>
-          <XIcon className='text-text-neutral-primary h-[2rem] w-[2rem]' />
-          <span className='sr-only'>닫기</span>
-        </SheetPrimitive.Close>
+        {!hideCloseButton && (
+          <SheetPrimitive.Close className='absolute top-[1.6rem] right-[1.6rem] rounded-[0.8rem] p-[0.8rem] opacity-70 transition-opacity hover:opacity-100 disabled:pointer-events-none'>
+            <XIcon className='text-text-neutral-primary h-[2rem] w-[2rem]' />
+            <span className='sr-only'>닫기</span>
+          </SheetPrimitive.Close>
+        )}
       </SheetPrimitive.Content>
     </SheetPrimitive.Portal>
   );
@@ -134,7 +142,7 @@ const BottomSheetTitle = ({ className, children, ...props }: BottomSheetTitlePro
 // Description Component
 interface BottomSheetDescriptionProps
   extends React.ComponentProps<typeof SheetPrimitive.Description> {
-  children: React.ReactNode;
+  children?: React.ReactNode;
 }
 
 const BottomSheetDescription = ({ className, children, ...props }: BottomSheetDescriptionProps) => {

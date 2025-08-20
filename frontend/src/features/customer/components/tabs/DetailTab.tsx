@@ -1,8 +1,7 @@
-import { StrengthTag, Tabs, Divider, Button, Modal } from '@components';
+import { Tabs, Divider, Button, Modal, StrengthTagList, ShowMapButton } from '@components';
 import { InfoSection, RouteButton, GrayBox } from '@customer/components';
 import { useModal } from '@hooks';
 import { IcCheck } from '@icons';
-import type { EscortStrength } from '@types';
 import type { RecruitDetailResponse } from '@customer/types';
 import { dateFormat, timeFormatWithOptionalMinutes, timeDuration, formatImageUrl } from '@utils';
 import { useNavigate, getRouteApi } from '@tanstack/react-router';
@@ -24,13 +23,6 @@ const DetailTab = ({ data }: { data: RecruitDetailResponse }) => {
     openModal: openDeleteRecruitSuccessModal,
     closeModal: closeDeleteRecruitSuccessModal,
   } = useModal();
-  const taglist = [];
-  if (data.patient.needsHelping) {
-    taglist.push('안전한 부축');
-  }
-  if (data.patient.usesWheelchair) {
-    taglist.push('휠체어 이동');
-  }
 
   const handleDeleteRecruit = () => {
     mutate(
@@ -87,13 +79,14 @@ const DetailTab = ({ data }: { data: RecruitDetailResponse }) => {
           <div className='flex-start body1-16-medium gap-[2rem]'>
             <span className='text-text-neutral-primary'>동행 병원</span>
             <div className='flex-start gap-[0.8rem]'>
-              <span className='text-text-neutral-secondary'>
-                {data.route.hospitalLocationInfo.placeName}
-              </span>
-              {/* 이 지도보기 버튼의 onclick은 무엇을 해줘야 할까요 */}
-              <button className='caption2-10-medium text-text-neutral-secondary border-stroke-neutral-dark w-fit rounded-[0.4rem] border px-[0.5rem] py-[0.2rem]'>
-                지도 보기
-              </button>
+              <ShowMapButton
+                businessAddress={data.route.hospitalLocationInfo.placeName}
+                pos={{
+                  lat: data.route.hospitalLocationInfo.lat,
+                  lng: data.route.hospitalLocationInfo.lon,
+                }}
+                fontSize='medium'
+              />
             </div>
           </div>
         </div>
@@ -113,11 +106,11 @@ const DetailTab = ({ data }: { data: RecruitDetailResponse }) => {
           <h3 className='subtitle-18-bold text-text-neutral-primary'>환자 상태</h3>
           <div className='mt-[1.2rem] flex flex-col gap-[2rem]'>
             <InfoSection title='보행 상태'>
-              <div className='flex-start gap-[0.4rem]'>
-                {taglist.map((tag) => (
-                  <StrengthTag key={tag} type={tag as EscortStrength} />
-                ))}
-              </div>
+              <StrengthTagList
+                needsHelping={data.patient.needsHelping}
+                usesWheelchair={data.patient.usesWheelchair}
+                hasCognitiveIssue={data.patient.hasCognitiveIssue}
+              />
             </InfoSection>
             <InfoSection
               title='인지 능력'

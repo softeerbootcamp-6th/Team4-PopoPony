@@ -6,12 +6,13 @@ import type { TermsData } from '@types';
 import TermsModal from './TermsModal';
 
 interface TermsBottomSheetProps {
-  children: React.ReactNode;
+  children?: React.ReactNode;
   onSubmit: () => void;
+  defaultOpen?: boolean;
 }
 
-const TermsBottomSheet = ({ children, onSubmit }: TermsBottomSheetProps) => {
-  const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
+const TermsBottomSheet = ({ children, onSubmit, defaultOpen = false }: TermsBottomSheetProps) => {
+  const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(defaultOpen);
   const [selectedTerms, setSelectedTerms] = useState<TermsData | null>(null);
   const [isTermsModalOpen, setIsTermsModalOpen] = useState(false);
   // 약관 동의 상태
@@ -45,9 +46,9 @@ const TermsBottomSheet = ({ children, onSubmit }: TermsBottomSheetProps) => {
   return (
     <>
       <BottomSheet open={isBottomSheetOpen} onOpenChange={setIsBottomSheetOpen}>
-        <BottomSheet.Trigger asChild>{children}</BottomSheet.Trigger>
+        {children ? <BottomSheet.Trigger asChild>{children}</BottomSheet.Trigger> : null}
 
-        <BottomSheet.Content>
+        <BottomSheet.Content disableOutsideClose hideCloseButton>
           <BottomSheet.Header>
             <BottomSheet.Title>이용 약관 동의가 필요해요!</BottomSheet.Title>
             <div className='flex flex-col gap-[1.5rem]'>
@@ -99,7 +100,12 @@ const TermsBottomSheet = ({ children, onSubmit }: TermsBottomSheetProps) => {
           <BottomSheet.Footer>
             <Button
               variant='primary'
-              onClick={onSubmit}
+              onClick={() => {
+                if (isAllChecked) {
+                  setIsBottomSheetOpen(false);
+                  onSubmit();
+                }
+              }}
               className='w-full'
               disabled={!isAllChecked}>
               동의하고 신청하기
