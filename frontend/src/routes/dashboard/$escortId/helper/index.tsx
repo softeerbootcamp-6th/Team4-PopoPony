@@ -332,7 +332,6 @@ function RouteComponent() {
     returnMarker.current?.setVisible(false);
   }, [mapInstance]);
 
-  // 환자와 도우미 마커 생성/업데이트
   useEffect(() => {
     if (!mapInstance || !curLocation) return;
 
