@@ -33,6 +33,7 @@ import {
 } from './shadcn/ShadcnButton';
 import { Calendar, CalendarDayButton } from './calendar';
 import StrengthTagList from './StrengthTagList';
+import { Toaster } from './Toaster';
 
 export {
   Button,
@@ -69,4 +70,5 @@ export {
   Calendar,
   CalendarDayButton,
   StrengthTagList,
+  Toaster,
 };

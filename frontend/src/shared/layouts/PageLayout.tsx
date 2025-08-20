@@ -1,6 +1,8 @@
-import { TopAppBar, BottomCTA } from '@components';
+import { TopAppBar, BottomCTA, Toaster } from '@components';
 import type { TopAppBarProps } from '../components/TopAppBar';
 import type { BottomCTAProps } from '../components/BottomCTA';
+import { success } from 'zod';
+import { IcAlertCircle, IcCheckCircle } from '@icons';
 
 interface PageLayoutProps {
   children: React.ReactNode;
@@ -17,6 +19,12 @@ const PageLayout = ({ children, background = 'bg-background-default-white' }: Pa
       id='page-layout-container'
       className={`shadow-page relative flex h-[100dvh] min-h-[100dvh] w-full max-w-[500px] min-w-[375px] flex-col ${background}`}>
       {children}
+      <Toaster
+        position='top-center'
+        style={{ position: 'absolute' }}
+        duration={1000}
+        richColors={true}
+      />
     </div>
   );
 };
