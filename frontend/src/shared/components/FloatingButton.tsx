@@ -17,7 +17,7 @@ const FloatingButton = ({
   const colorStyle = {
     white: {
       bgColor: 'bg-background-default-white',
-      iconColor: '[&_path]:fill-black [&_path]:stroke-black',
+      iconColor: '[&_path]:fill-black',
     },
     mint: {
       bgColor: 'bg-background-default-mint',
