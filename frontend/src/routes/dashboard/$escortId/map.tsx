@@ -1,8 +1,9 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { PageLayout } from '@layouts';
 import { Header, Footer, DashBoardCard } from '@dashboard/components';
-import { getEscortDetail } from '@dashboard/apis';
+import { getEscortDetail, postCurrentPosition } from '@dashboard/apis';
 import { TermsBottomSheet } from '@components';
+import { useEffect, useRef } from 'react';
 export const Route = createFileRoute('/dashboard/$escortId/map')({
   component: RouteComponent,
 });
@@ -11,7 +12,39 @@ function RouteComponent() {
   const { escortId: recruitId } = Route.useParams();
   const { data: escortData } = getEscortDetail(Number(recruitId));
   //필요한 데이터 추가로 escortData.data에서 가져오기
-  const { estimatedMeetingTime, helper, route } = escortData?.data ?? {};
+  const { estimatedMeetingTime, helper, route, escortId } = escortData?.data ?? {};
+  const { mutate: postCurrentPositionCall } = postCurrentPosition();
+  const timerRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    if (!('geolocation' in navigator)) return;
+
+    navigator.geolocation.getCurrentPosition((position) => {
+      const { latitude, longitude } = position.coords;
+
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+        timerRef.current = null;
+      }
+
+      timerRef.current = window.setInterval(() => {
+        postCurrentPositionCall({
+          params: { path: { escortId: Number(escortId) }, query: { role: 'patient' } },
+          body: {
+            latitude: latitude,
+            longitude: longitude,
+          },
+        });
+      }, 1000);
+    });
+
+    return () => {
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+        timerRef.current = null;
+      }
+    };
+  }, [escortId]);
 
   const handleClickCallHelper = () => {
     window.open(`tel:${helper.contact}`, '_blank');
@@ -40,6 +73,10 @@ function RouteComponent() {
                   detailAddress={route.routeSimple.meetingLocationInfo.detailAddress}
                   address={route.routeSimple.meetingLocationInfo.address}
                   placeName={route.routeSimple.meetingLocationInfo.placeName}
+                  position={{
+                    lat: route.routeSimple.meetingLocationInfo.lat,
+                    lng: route.routeSimple.meetingLocationInfo.lon,
+                  }}
                 />
               </DashBoardCard.ContentTitle>
             </DashBoardCard.ContentWrapper>

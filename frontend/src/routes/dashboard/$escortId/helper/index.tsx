@@ -1,5 +1,10 @@
 import { createFileRoute, redirect, useRouter } from '@tanstack/react-router';
-import { getEscortDetail, patchEscortStatusByEscortId, patchEscortMemo } from '@dashboard/apis';
+import {
+  getEscortDetail,
+  patchEscortStatusByEscortId,
+  patchEscortMemo,
+  postCurrentPosition,
+} from '@dashboard/apis';
 import { PageLayout } from '@layouts';
 import {
   Header,
@@ -12,7 +17,7 @@ import { $api } from '@apis';
 import type { StatusTitleProps, EscortStatus } from '@dashboard/types';
 import { Button, SlideButton } from '@components';
 import { IcHeadphoneQuestionmark } from '@icons';
-import { useState, useEffect, type ReactNode } from 'react';
+import { useState, useEffect, useRef, type ReactNode } from 'react';
 
 export const Route = createFileRoute('/dashboard/$escortId/helper/')({
   beforeLoad: async ({ context, params }) => {
@@ -83,12 +88,42 @@ function RouteComponent() {
   const { data: escortDetailOrigin } = getEscortDetail(Number(recruitId));
   const { mutate: patchEscortMemoCall } = patchEscortMemo();
   const { mutate: patchEscortStatusByEscortIdCall } = patchEscortStatusByEscortId();
-
+  const { mutate: postCurrentPositionCall } = postCurrentPosition();
+  const timerRef = useRef<number | null>(null);
   const [memo, setMemo] = useState('');
   const { escortId, route, patient, customerContact, estimatedMeetingTime, purpose, extraRequest } =
     escortDetailOrigin.data;
   const [escortStatus, setEscortStatus] = useState(escortDetailOrigin.data.escortStatus);
-  // 리다이렉트는 beforeLoad에서 처리됨
+
+  useEffect(() => {
+    if (!('geolocation' in navigator)) return;
+
+    navigator.geolocation.getCurrentPosition((position) => {
+      const { latitude, longitude } = position.coords;
+
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+        timerRef.current = null;
+      }
+
+      timerRef.current = window.setInterval(() => {
+        postCurrentPositionCall({
+          params: { path: { escortId: Number(escortId) }, query: { role: 'helper' } },
+          body: {
+            latitude: latitude,
+            longitude: longitude,
+          },
+        });
+      }, 1000);
+    });
+
+    return () => {
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+        timerRef.current = null;
+      }
+    };
+  }, [escortId]);
 
   const patientContact = patient.contact;
 
