@@ -1,11 +1,12 @@
-import { Button, Divider, EscortCard, StrengthTag } from '@components';
+import { Button, Divider, EscortCard, StrengthTag, TermsBottomSheet, Spinner } from '@components';
 import { getRecruitById } from '@customer/apis';
 import { GrayBox, InfoSection, RouteButton } from '@customer/components';
 import { type EscortStrength } from '@types';
 import type { RecruitDetailResponse } from '@customer/types';
 import { IcCheck } from '@icons';
 import { PageLayout } from '@layouts';
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute, useNavigate } from '@tanstack/react-router';
+import { postApplicationByRecruitId } from '@helper/apis';
 import {
   dateFormat,
   formatImageUrl,
@@ -14,7 +15,7 @@ import {
   timeFormatWithOptionalMinutes,
 } from '@utils';
 
-export const Route = createFileRoute('/helper/application/$escortId')({
+export const Route = createFileRoute('/helper/application/$escortId/')({
   component: RouteComponent,
 });
 
@@ -30,11 +31,34 @@ const refineCardData = (recruitData: RecruitDetailResponse) => {
 };
 
 function RouteComponent() {
+  const navigate = useNavigate();
   const { escortId } = Route.useParams();
   const { data, isLoading } = getRecruitById(Number(escortId));
+  const { mutate: postApplication } = postApplicationByRecruitId();
+  const handleSubmit = () => {
+    postApplication(
+      {
+        params: { path: { recruitId: Number(escortId) } },
+      },
+      {
+        onSuccess: () => {
+          navigate({
+            to: '/helper/application/$escortId/completed',
+            params: {
+              escortId: escortId,
+            },
+          });
+        },
+      }
+    );
+  };
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div className='flex h-full w-full items-center justify-center'>
+        <Spinner size='lg' />
+      </div>
+    );
   }
   if (!data || !data.data) {
     return null;
@@ -187,7 +211,10 @@ function RouteComponent() {
         </>
       </PageLayout.Content>
       <PageLayout.Footer>
-        <Button onClick={() => {}}>지원하기</Button>
+        {/* TODO: 중복 지원 시 처리로직 추가 */}
+        <TermsBottomSheet onSubmit={handleSubmit}>
+          <Button>지원하기</Button>
+        </TermsBottomSheet>
       </PageLayout.Footer>
     </PageLayout>
   );
