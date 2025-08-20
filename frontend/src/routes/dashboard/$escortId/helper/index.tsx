@@ -10,7 +10,7 @@ import {
 } from '@dashboard/components';
 import { $api } from '@apis';
 import type { StatusTitleProps, EscortStatus } from '@dashboard/types';
-import { Button } from '@components';
+import { Button, SlideButton } from '@components';
 import { IcHeadphoneQuestionmark } from '@icons';
 import { useState, useEffect, type ReactNode } from 'react';
 
@@ -70,6 +70,8 @@ type DashboardCardProps = {
     placeName: string;
     address: string;
     detailAddress: string;
+    lat: number;
+    lon: number;
   };
   card: ReactNode;
   button: ReactNode;
@@ -147,9 +149,11 @@ function RouteComponent() {
         address: route.routeSimple.meetingLocationInfo,
         card: <HelperDashboardSearchCard />,
         button: (
-          <Button variant='primary' onClick={handleClickNextStep}>
-            밀어서 만남 완료
-          </Button>
+          <SlideButton
+            onConfirm={handleClickNextStep}
+            initialLabel='밀어서 만남 완료'
+            confirmedLabel='병원 가기 시작...'
+          />
         ),
       };
     }
@@ -165,9 +169,11 @@ function RouteComponent() {
           />
         ),
         button: (
-          <Button variant='primary' onClick={handleClickNextStep}>
-            밀어서 병원 도착
-          </Button>
+          <SlideButton
+            onConfirm={handleClickNextStep}
+            initialLabel='밀어서 병원 도착'
+            confirmedLabel='진료 보기 시작...'
+          />
         ),
       };
     }
@@ -185,9 +191,11 @@ function RouteComponent() {
           />
         ),
         button: (
-          <Button variant='primary' onClick={handleClickNextStep}>
-            밀어서 진료 완료
-          </Button>
+          <SlideButton
+            onConfirm={handleClickNextStep}
+            initialLabel='밀어서 진료 완료'
+            confirmedLabel='복귀 시작...'
+          />
         ),
       };
     }
@@ -203,9 +211,11 @@ function RouteComponent() {
           />
         ),
         button: (
-          <Button variant='primary' onClick={handleClickNextStep}>
-            밀어서 복귀 완료
-          </Button>
+          <SlideButton
+            onConfirm={handleClickNextStep}
+            initialLabel='밀어서 복귀 완료'
+            confirmedLabel='리포트 작성 시작...'
+          />
         ),
       };
     } else {
@@ -254,6 +264,10 @@ function RouteComponent() {
               detailAddress={dashboardCardProps().address?.detailAddress ?? ''}
               address={dashboardCardProps().address?.address ?? ''}
               placeName={dashboardCardProps().address?.placeName ?? ''}
+              position={{
+                lat: dashboardCardProps().address?.lat ?? 0,
+                lng: dashboardCardProps().address?.lon ?? 0,
+              }}
             />
             {dashboardCardProps().card}
           </DashBoardCard.ContentWrapper>
