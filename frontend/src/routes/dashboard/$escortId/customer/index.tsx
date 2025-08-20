@@ -13,10 +13,9 @@ import {
 import { useEffect, useRef } from 'react';
 import { useMap } from '@hooks';
 import { FloatingButton } from '@components';
-import type { Position, TMapMarker } from '@types';
+import type { TMapMarker } from '@types';
 import { useSSE } from '@dashboard/hooks';
-import { calculateCenterAndZoom, updatedBefore } from '@helper/utils';
-import { DEFAULT_ZOOM_LEVEL } from '@dashboard/constants';
+import { updatedBefore } from '@helper/utils';
 
 export const Route = createFileRoute('/dashboard/$escortId/customer/')({
   beforeLoad: async ({ context, params }) => {

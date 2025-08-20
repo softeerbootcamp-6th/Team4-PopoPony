@@ -119,7 +119,6 @@ function RouteComponent() {
     setCurrentLocation,
     handleSetCenterAndZoom,
     addMarker,
-    addCustomMarker,
     resetPolyline,
   } = useMap(mapRef as React.RefObject<HTMLDivElement>);
 
