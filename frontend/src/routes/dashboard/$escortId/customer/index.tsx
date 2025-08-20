@@ -46,6 +46,7 @@ function RouteComponent() {
   const mapRef = useRef<HTMLDivElement>(null);
   const {
     mapInstance,
+    isMapReady,
     addPolyline,
     setCurrentLocation,
     addMarker,
@@ -111,30 +112,32 @@ function RouteComponent() {
     returnMarker.current?.setVisible(isReturn);
   };
 
-  useEffect(() => {
-    if (!mapInstance) return;
-    console.log('바뀌었음');
-    if (patientLocations?.latitude && patientLocations?.longitude) {
-      console.log('patientLocations', patientLocations);
-      patientMarker.current?.setPosition(
-        new Tmapv3.LatLng(patientLocations.latitude, patientLocations.longitude)
-      );
-    }
-    if (helperLocations?.latitude && helperLocations?.longitude) {
-      console.log('helperLocations', helperLocations);
-      helperMarker.current?.setPosition(
-        new Tmapv3.LatLng(helperLocations.latitude, helperLocations.longitude)
-      );
-    }
-  }, [
-    patientLocations?.latitude,
-    patientLocations?.longitude,
-    helperLocations?.latitude,
-    helperLocations?.longitude,
-  ]);
+  // useEffect(() => {
+  //   if (!mapInstance) return;
+  //   console.log('바뀌었음');
+  //   if (patientLocations?.latitude && patientLocations?.longitude) {
+  //     console.log('patientLocations', patientLocations);
+  //     patientMarker.current?.setPosition(
+  //       new Tmapv3.LatLng(patientLocations.latitude, patientLocations.longitude)
+  //     );
+  //   }
+  //   if (helperLocations?.latitude && helperLocations?.longitude) {
+  //     console.log('helperLocations', helperLocations);
+  //     helperMarker.current?.setPosition(
+  //       new Tmapv3.LatLng(helperLocations.latitude, helperLocations.longitude)
+  //     );
+  //   }
+  // }, [
+  //   patientLocations?.latitude,
+  //   patientLocations?.longitude,
+  //   helperLocations?.latitude,
+  //   helperLocations?.longitude,
+  // ]);
 
+  // 상태 변경 시 폴리라인 다시 그리기 (지도 로드 완료 후)
   useEffect(() => {
-    if (!mapInstance) return;
+    if (!isMapReady) return; // 지도가 준비되지 않았으면 리턴
+
     resetPolyline();
     switch (currentStatus) {
       case '만남중':
@@ -178,7 +181,7 @@ function RouteComponent() {
       default:
         break;
     }
-  }, [currentStatus]);
+  }, [currentStatus, isMapReady]); // isMapReady 의존성 추가
 
   useEffect(() => {
     if (!mapInstance) return;
@@ -215,12 +218,15 @@ function RouteComponent() {
     // 환자 마커 생성 또는 업데이트
     if (patientLocations?.latitude && patientLocations?.longitude) {
       if (!patientMarker.current) {
-        // 마커가 없으면 새로 생성
         patientMarker.current = addCustomMarker(
           patientLocations.latitude,
           patientLocations.longitude,
           `${patientName} 고객`,
           patientImageUrl
+        );
+      } else {
+        patientMarker.current?.setPosition(
+          new Tmapv3.LatLng(patientLocations.latitude, patientLocations.longitude)
         );
       }
     }
@@ -244,6 +250,10 @@ function RouteComponent() {
           helperLocations.longitude,
           `${helperName} 도우미`,
           helperImageUrl
+        );
+      } else {
+        helperMarker.current?.setPosition(
+          new Tmapv3.LatLng(helperLocations.latitude, helperLocations.longitude)
         );
       }
     }
@@ -292,7 +302,6 @@ function RouteComponent() {
       </PageLayout>
     );
   }
-
   return (
     <PageLayout>
       <Header updateBefore={10} />
