@@ -122,10 +122,12 @@ export const useMap = (mapRef: React.RefObject<HTMLDivElement>) => {
   };
 
   // 커스텀 마커 추가 함수 (프로필 이미지 표시)
-  const addCustomMarker = (lat: number, lng: number, name: string, imageUrl: string) => {
-    if (!mapInstance) {
+  const addCustomMarker = (lat?: number, lng?: number, name?: string, imageUrl?: string) => {
+    if (!mapInstance || !lat || !lng || !name || !imageUrl) {
       return null;
     }
+
+    const previewUrl = `${import.meta.env.VITE_API_BASE_URL}${imageUrl}`;
 
     const marker = new Tmapv3.Marker({
       position: new Tmapv3.LatLng(lat, lng),
@@ -154,7 +156,7 @@ export const useMap = (mapRef: React.RefObject<HTMLDivElement>) => {
                 border-radius: 50%;
               ">
                 <img
-                  src="${imageUrl}"
+                  src="${previewUrl}"
                   style="width: 100%; height: 100%; object-fit: cover;"
                   alt="프로필"
                 />
@@ -198,8 +200,7 @@ export const useMap = (mapRef: React.RefObject<HTMLDivElement>) => {
       existingPolyline.setMap(null);
     }
 
-    // TODO 위도 경도 바꿔야함
-    const path = positions.map(({ lat, lon }) => new Tmapv3.LatLng(lon, lat));
+    const path = positions.map(({ lat, lon }) => new Tmapv3.LatLng(lat, lon));
 
     try {
       const polyline = new Tmapv3.Polyline({
@@ -288,7 +289,6 @@ export const useMap = (mapRef: React.RefObject<HTMLDivElement>) => {
         (startPoint.lon + endPoint.lon) / 2,
         (startPoint.lat + endPoint.lat) / 2
       );
-      // TODO 위도 경도 바꿔야함
       mapInstance.setCenter(middlePoint);
       mapInstance.setZoom(6);
     } catch (error) {
