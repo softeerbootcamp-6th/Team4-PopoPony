@@ -1,4 +1,4 @@
-import { memo, useEffect } from 'react';
+import { memo, useEffect, useState } from 'react';
 import { FormInput, LabeledSection } from '@components';
 import { FormLayout } from '@layouts';
 import { useFormValidation } from '@hooks';
@@ -21,6 +21,8 @@ const Time = memo(({ handleNextStep }: FunnelStepProps) => {
     isFormValid: dateIsFormValid,
     markFieldAsTouched: dateMarkFieldAsTouched,
   } = useFormValidation(dateSchema);
+  const [isTimeAndDateValid, setIsTimeAndDateValid] = useState(false);
+  const [timeAndDateError, setTimeAndDateError] = useState<string>('');
 
   // 시간 계산 및 escortDuration 자동 설정
   useEffect(() => {
@@ -33,6 +35,34 @@ const Time = memo(({ handleNextStep }: FunnelStepProps) => {
       timeMarkFieldAsTouched('escortDuration');
     }
   }, [timeValues.estimatedMeetingTime, timeValues.estimatedReturnTime, setValue]);
+
+  // 날짜와 시간 검증 (오늘 날짜 + 현재 시간 이후인지 확인)
+  useEffect(() => {
+    if (dateValues.escortDate && timeValues.estimatedMeetingTime) {
+      const today = new Date();
+      const selectedDate = new Date(dateValues.escortDate);
+      const isToday = selectedDate.toDateString() === today.toDateString();
+
+      if (isToday) {
+        const meetingDateTime = new Date(
+          `${dateValues.escortDate}T${timeValues.estimatedMeetingTime}`
+        );
+        const currentTime = new Date();
+
+        if (meetingDateTime <= currentTime) {
+          setIsTimeAndDateValid(false);
+          setTimeAndDateError('현재보다 이후의 시간을 선택해주세요');
+          return;
+        }
+      }
+
+      setIsTimeAndDateValid(true);
+      setTimeAndDateError('');
+    } else {
+      setIsTimeAndDateValid(false);
+      setTimeAndDateError('');
+    }
+  }, [dateValues.escortDate, timeValues.estimatedMeetingTime]);
 
   return (
     <FormLayout>
@@ -84,20 +114,26 @@ const Time = memo(({ handleNextStep }: FunnelStepProps) => {
           <div className='flex-center gap-[0.4rem]'>
             <IcAlertCircle
               className={`${
-                timeFieldErrors.escortDuration || timeFieldErrors.estimatedReturnTime
+                timeFieldErrors.escortDuration ||
+                timeFieldErrors.estimatedReturnTime ||
+                timeAndDateError
                   ? '[&_path]:fill-text-red-primary'
                   : '[&_path]:fill-icon-neutral-secondary'
               }`}
             />
             <span
               className={`body1-16-medium ${
-                timeFieldErrors.escortDuration || timeFieldErrors.estimatedReturnTime
+                timeFieldErrors.escortDuration ||
+                timeFieldErrors.estimatedReturnTime ||
+                timeAndDateError
                   ? 'text-text-red-primary'
                   : 'text-text-neutral-assistive'
               }`}>
-              {timeFieldErrors.estimatedReturnTime
-                ? timeFieldErrors.estimatedReturnTime
-                : '최소 2시간 이상 예약해주세요'}
+              {timeAndDateError
+                ? timeAndDateError
+                : timeFieldErrors.estimatedReturnTime
+                  ? timeFieldErrors.estimatedReturnTime
+                  : '최소 2시간 이상 예약해주세요'}
             </span>
           </div>
         </div>
@@ -105,7 +141,7 @@ const Time = memo(({ handleNextStep }: FunnelStepProps) => {
       <FormLayout.Footer>
         <FormLayout.FooterPrevNext
           handleClickNext={handleNextStep}
-          disabled={!timeIsFormValid || !dateIsFormValid}
+          disabled={!timeIsFormValid || !dateIsFormValid || !isTimeAndDateValid}
         />
       </FormLayout.Footer>
     </FormLayout>

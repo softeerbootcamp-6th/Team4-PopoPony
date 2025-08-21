@@ -94,10 +94,11 @@ export const dateSchema = z.object({
     .refine(
       (date) => {
         const today = new Date();
+        today.setHours(0, 0, 0, 0);
         const selectedDate = new Date(date);
-        return selectedDate > today;
+        return selectedDate >= today;
       },
-      { message: '오늘 이후의 날짜를 선택해주세요' }
+      { message: '날짜 선택은 금일부터 가능합니다.' }
     ),
 });
 
