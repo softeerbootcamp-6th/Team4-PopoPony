@@ -1,4 +1,11 @@
-import { differenceInDays, differenceInMinutes, format, parse } from 'date-fns';
+import {
+  differenceInDays,
+  differenceInMinutes,
+  differenceInHours,
+  differenceInSeconds,
+  format,
+  parse,
+} from 'date-fns';
 import { ko } from 'date-fns/locale';
 
 /**
@@ -88,4 +95,28 @@ export const secondsToTime = (seconds: number) => {
 export const getDaysLeft = (date: string) => {
   const diff = differenceInDays(new Date(date), new Date());
   return diff >= 0 ? diff + 1 : 0;
+};
+
+/**
+ * 남은 시간이 하루(24시간) 이상이면 "d일" 반환, 하루 이하이면 "m시간" 반환
+ * @param date - 목표 시각(미래)
+ * @returns 예: "2일" 또는 "5시간" 또는 "0시간"
+ */
+export const getRemainingDayOrHour = (date: string): string => {
+  const target = new Date(date);
+  const now = new Date();
+  const remainingHours = differenceInHours(target, now);
+
+  if (remainingHours <= 0) return '0시간';
+  if (remainingHours >= 24) {
+    const days = Math.floor(remainingHours / 24);
+    return `${days}일`;
+  }
+  return `${remainingHours}시간`;
+};
+
+export const getDifferenceInSecondsFromNow = (date: string) => {
+  const target = new Date(date);
+  const now = new Date();
+  return differenceInSeconds(target, now);
 };

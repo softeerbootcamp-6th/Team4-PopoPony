@@ -6,6 +6,9 @@ import CustomerDashboardLive from './dashboardIndex/CustomerDashboardLive';
 import Footer from './Footer';
 import PlaceInfo from './PlaceInfo';
 import TaxiInfo from './TaxiInfo';
+import HelperDashboardSearchCard from './dashboardIndex/HelperDashboardSearchCard';
+import HelperDashboardTaxiCard from './dashboardIndex/HelperDashboardTaxiCard';
+import HelperDashboardSummary from './dashboardIndex/HelperDashboardSummary';
 
 export {
   Header,
@@ -16,4 +19,7 @@ export {
   Footer,
   PlaceInfo,
   TaxiInfo,
+  HelperDashboardSearchCard,
+  HelperDashboardTaxiCard,
+  HelperDashboardSummary,
 };

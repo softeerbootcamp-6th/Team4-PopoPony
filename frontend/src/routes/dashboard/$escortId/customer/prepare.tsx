@@ -2,8 +2,13 @@ import { getEscortDetail } from '@dashboard/apis';
 import { useMap } from '@hooks';
 import { IcPinFillEffect } from '@icons';
 import { PageLayout } from '@layouts';
-import { createFileRoute } from '@tanstack/react-router';
-import { dateFormat, getDaysLeft, timeFormatTo24Hour } from '@utils';
+import { createFileRoute, useRouter } from '@tanstack/react-router';
+import {
+  dateFormat,
+  timeFormatTo24Hour,
+  getRemainingDayOrHour,
+  getDifferenceInSecondsFromNow,
+} from '@utils';
 import { useEffect, useRef } from 'react';
 import type { components } from '@schema';
 import { PlaceInfo, TaxiInfo } from '@dashboard/components';
@@ -11,12 +16,15 @@ export const Route = createFileRoute('/dashboard/$escortId/customer/prepare')({
   component: RouteComponent,
 });
 
+const ThreeHoursInMs = 1000 * 60 * 60 * 3;
+
 type EscortDetailResponse = components['schemas']['EscortDetailResponse'];
 
 function RouteComponent() {
+  const router = useRouter();
   const { escortId } = Route.useParams();
   const mapRef = useRef<HTMLDivElement>(null);
-  const { mapInstance, isTmapLoaded, addPolyline } = useMap(
+  const { mapInstance, isTmapLoaded, addRoutePolyline } = useMap(
     mapRef as React.RefObject<HTMLDivElement>
   );
 
@@ -24,13 +32,22 @@ function RouteComponent() {
   const escortDetail = data?.data as EscortDetailResponse;
 
   const { imageUrl, name } = escortDetail?.helper ?? {};
-  const {
-    meetingLocationInfo,
-    hospitalLocationInfo,
-    returnLocationInfo,
-    meetingToHospital,
-    hospitalToReturn,
-  } = escortDetail?.route.routeSimple ?? {};
+  const { routeSimple: route } = escortDetail.route;
+
+  const diff = getDifferenceInSecondsFromNow(escortDetail.escortDate);
+  const { meetingLocationInfo, hospitalLocationInfo, returnLocationInfo } = route;
+
+  useEffect(() => {
+    //동행 시작 3시간 전에 자동 리다이렉트
+    const delayMs = Math.max(0, (diff - 3) * 1000 - ThreeHoursInMs);
+    const id = setTimeout(() => {
+      router.navigate({
+        to: '/dashboard/$escortId/customer',
+        params: { escortId: escortId },
+      });
+    }, delayMs);
+    return () => clearTimeout(id);
+  }, [diff, escortId, router]);
 
   const isSameStartEnd =
     meetingLocationInfo.lat === returnLocationInfo.lat &&
@@ -39,18 +56,7 @@ function RouteComponent() {
   useEffect(() => {
     if (!mapInstance) return;
 
-    addPolyline([
-      {
-        startMarkerType: 'marker1',
-        endMarkerType: 'marker2',
-        pathCoordinates: meetingToHospital,
-      },
-      {
-        startMarkerType: 'marker2',
-        endMarkerType: isSameStartEnd ? 'marker1' : 'marker3',
-        pathCoordinates: hospitalToReturn,
-      },
-    ]);
+    addRoutePolyline(route);
   }, [mapInstance]);
 
   if (!isTmapLoaded) return <div>Loading...</div>;
@@ -72,7 +78,7 @@ function RouteComponent() {
               </p>
               <p className='text-text-neutral-primary display-32-bold'>
                 <strong className='text-text-mint-on-primary'>
-                  {getDaysLeft(escortDetail.escortDate)}일
+                  {getRemainingDayOrHour(escortDetail.escortDate)}
                 </strong>{' '}
                 남았어요!
               </p>

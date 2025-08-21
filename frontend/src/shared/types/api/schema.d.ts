@@ -260,6 +260,26 @@ export interface paths {
     patch: operations['proceedEscort'];
     trace?: never;
   };
+  '/api/escorts/{escortId}/status/test': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    /**
+     * 동행 다음 단계로 이동하기(테스트용)
+     * @description 로그인한 도우미가 동행(일감)의 다음 단계로 이동합니다. escortId를 통해 진행할 동행(일감)을 선택합니다.
+     */
+    patch: operations['proceedEscortForTest'];
+    trace?: never;
+  };
   '/api/escorts/{escortId}/memo': {
     parameters: {
       query?: never;
@@ -2373,7 +2393,7 @@ export interface operations {
           [name: string]: unknown;
         };
         content: {
-          '*/*': components['schemas']['ResponseEmptyBody'];
+          'application/json': components['schemas']['ResponseEmptyBody'];
         };
       };
     };
@@ -2539,6 +2559,28 @@ export interface operations {
     };
   };
   proceedEscort: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        escortId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description 동행 진행 성공 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          '*/*': components['schemas']['ResponseEmptyBody'];
+        };
+      };
+    };
+  };
+  proceedEscortForTest: {
     parameters: {
       query?: never;
       header?: never;
