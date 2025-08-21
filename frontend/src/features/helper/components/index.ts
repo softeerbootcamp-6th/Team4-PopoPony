@@ -11,6 +11,11 @@ import MultiImageSelect from './form/MultiImageSelect';
 import TaxiFeeSection from './form/TaxiFeeSection';
 import FilterButton from './FilterButton';
 
+import Time from './reportStep/Time';
+import Reservation from './reportStep/Reservation';
+import Taxi from './reportStep/Taxi';
+import ReportDetail from './reportStep/ReportDetail';
+
 export {
   Region,
   Detail,
