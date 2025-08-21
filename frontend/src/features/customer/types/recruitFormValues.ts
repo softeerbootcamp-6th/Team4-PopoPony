@@ -65,12 +65,12 @@ export const CommunicationSchema = z
   .refine(
     (data) => {
       if (data.hasCommunicationIssue === 'true') {
-        return data.communicationIssueDetail && data.communicationIssueDetail.length >= 10;
+        return data.communicationIssueDetail && data.communicationIssueDetail.length >= 1;
       }
       return true;
     },
     {
-      message: '10자 이상 입력해주세요',
+      message: '구체적인 문제점을 도우미에게 알려주세요',
       path: ['communicationIssueDetail'],
     }
   );
