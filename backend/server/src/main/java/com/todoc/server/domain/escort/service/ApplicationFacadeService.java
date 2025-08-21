@@ -53,9 +53,25 @@ public class ApplicationFacadeService {
                     Long applicationId = entry.getKey();
                     List<ApplicationFlatDto> groupedTuples = entry.getValue();
 
+                    // 변환: ApplicationFlatDto → HelperSimpleFlatDto
+                    List<HelperSimpleFlatDto> helperTuples = groupedTuples.stream()
+                        .map(a -> new HelperSimpleFlatDto(
+                            a.getHelperProfileId(),
+                            a.getHelperProfileImage(),
+                            a.getStrength(),
+                            a.getShortBio(),
+                            a.getAuthId(),
+                            a.getName(),
+                            a.getBirthDate(),
+                            a.getGender(),
+                            a.getContact(),
+                            a.getCertificateType()
+                        ))
+                        .toList();
+
                     return ApplicationSimpleResponse.builder()
                             .applicationId(applicationId)
-                            .helper(helperService.buildHelperSimpleByHelperProfileId(groupedTuples))
+                            .helper(helperService.buildHelperSimpleByHelperProfileId(helperTuples))
                             .build();
                 })
                 .toList();

@@ -15,6 +15,7 @@ import com.todoc.server.domain.escort.exception.RecruitNotFoundException;
 import com.todoc.server.domain.escort.repository.dto.ApplicationFlatDto;
 import com.todoc.server.domain.escort.web.dto.response.ApplicationListResponse;
 import com.todoc.server.domain.escort.web.dto.response.ApplicationSimpleResponse;
+import com.todoc.server.domain.helper.repository.dto.HelperSimpleFlatDto;
 import com.todoc.server.domain.helper.service.HelperService;
 import com.todoc.server.domain.helper.web.dto.response.HelperSimpleResponse;
 import org.junit.jupiter.api.BeforeEach;
@@ -106,10 +107,23 @@ class ApplicationFacadeServiceTest {
         void getApplicationListByRecruitId() {
             // given
             when(applicationService.getApplicationListByRecruitId(recruitId))
-                    .thenReturn(Map.of(applicationId, mockApplicationDtoList));
+                .thenReturn(Map.of(applicationId, mockApplicationDtoList));
 
-            when(helperService.buildHelperSimpleByHelperProfileId(mockApplicationDtoList))
-                    .thenReturn(mockHelperResponse);
+            // stub 객체 준비
+            HelperSimpleResponse helperSimpleResponse = HelperSimpleResponse.builder()
+                .helperProfileId(1L)
+                .imageUrl("http://test.com/image.png")
+                .name("홍길동")
+                .gender("남성")
+                .age(30)
+                .shortBio("간단 소개")
+                .contact("010-1234-5678")
+                .strengthList(List.of("친절함", "책임감"))
+                .certificateList(List.of("간병인 자격증"))
+                .build();
+
+            given(helperService.buildHelperSimpleByHelperProfileId(anyList()))
+                .willReturn(helperSimpleResponse);
 
             // when
             ApplicationListResponse response = applicationFacadeService.getApplicationListByRecruitId(recruitId);
@@ -120,7 +134,7 @@ class ApplicationFacadeServiceTest {
 
             ApplicationSimpleResponse item = response.getApplicationList().get(0);
             assertThat(item.getApplicationId()).isEqualTo(applicationId);
-            assertThat(item.getHelper()).isEqualTo(mockHelperResponse);
+            assertThat(item.getHelper()).isEqualTo(helperSimpleResponse);
         }
 
         @Test

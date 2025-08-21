@@ -6,6 +6,7 @@ import com.todoc.server.domain.escort.repository.dto.ApplicationFlatDto;
 import com.todoc.server.domain.helper.entity.HelperProfile;
 import com.todoc.server.domain.helper.repository.HelperJpaRepository;
 import com.todoc.server.domain.helper.repository.HelperQueryRepository;
+import com.todoc.server.domain.helper.repository.dto.HelperSimpleFlatDto;
 import com.todoc.server.domain.helper.web.dto.response.HelperProfileExistenceResponse;
 import com.todoc.server.domain.helper.web.dto.response.HelperSimpleResponse;
 import com.todoc.server.domain.image.entity.ImageFile;
@@ -45,16 +46,16 @@ class HelperServiceTest {
         ImageFile imageFile = mock(ImageFile.class);
         when(imageFile.getId()).thenReturn(999L);
 
-        ApplicationFlatDto dto1 = new ApplicationFlatDto(
-                1L, helperProfileId, imageFile, 10L,
-                "홍길동", LocalDate.of(1990, 1, 1), Gender.MALE,
-                "010-1111-2222", "[안전한 부축]", "도우미 소개입니다", "간호조무사"
+        HelperSimpleFlatDto dto1 = new HelperSimpleFlatDto(
+                helperProfileId, imageFile,
+            "[\"안전한 부축\"]", "도우미 소개입니다", 10L, "홍길동", LocalDate.of(1990, 1, 1), Gender.MALE,
+                "010-1111-2222", "간호조무사"
         );
 
-        ApplicationFlatDto dto2 = new ApplicationFlatDto(
-                1L, helperProfileId, imageFile, 10L,
-                "홍길동", LocalDate.of(1990, 1, 1), Gender.MALE,
-                "010-1111-2222", "[\"안전한 부축\", \"휠체어 이동\", \"인지장애 케어\"]", "도우미 소개입니다", "응급처치"
+        HelperSimpleFlatDto dto2 = new HelperSimpleFlatDto(
+                helperProfileId, imageFile,
+            "[\"안전한 부축\"]", "도우미 소개입니다", 10L, "김옥순", LocalDate.of(1990, 1, 1), Gender.FEMALE,
+                "010-1111-2222", "간호조무사"
         );
 
         when(helperQueryRepository.getHelperSimpleByHelperProfileId(helperProfileId))
@@ -67,8 +68,8 @@ class HelperServiceTest {
         assertThat(response).isNotNull();
         assertThat(response.getName()).isEqualTo("홍길동");
         assertThat(response.getAge()).isGreaterThan(30);
-        assertThat(response.getStrengthList()).contains("친절함", "정확함");
-        assertThat(response.getCertificateList()).containsExactlyInAnyOrder("간호조무사", "응급처치");
+        assertThat(response.getStrengthList()).contains("안전한 부축");
+        assertThat(response.getCertificateList()).containsExactlyInAnyOrder("간호조무사");
         assertThat(response.getShortBio()).isEqualTo("도우미 소개입니다");
         assertThat(response.getImageUrl()).isEqualTo("/api/images/999/presigned");
     }

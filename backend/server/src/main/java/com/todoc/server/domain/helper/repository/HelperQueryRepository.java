@@ -28,21 +28,19 @@ public class HelperQueryRepository {
     private final JPAQueryFactory queryFactory;
 
     @Transactional(readOnly = true)
-    public List<ApplicationFlatDto> getHelperSimpleByHelperProfileId(Long helperProfileId) {
+    public List<HelperSimpleFlatDto> getHelperSimpleByHelperProfileId(Long helperProfileId) {
 
         return queryFactory
-                .select(Projections.constructor(ApplicationFlatDto.class,
-                        Expressions.nullExpression(),
-                        application.id,
+                .select(Projections.constructor(HelperSimpleFlatDto.class,
                         helperProfile.id,
                         helperProfile.helperProfileImage,
+                        helperProfile.strength,
+                        helperProfile.shortBio,
                         auth.id,
                         auth.name,
                         auth.birthDate,
                         auth.gender,
                         auth.contact,
-                        helperProfile.strength,
-                        helperProfile.shortBio,
                         certificate.type)
                 )
                 .from(helperProfile)

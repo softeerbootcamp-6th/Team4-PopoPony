@@ -54,7 +54,7 @@ public class HelperService {
     @Transactional(readOnly = true)
     public HelperSimpleResponse getHelperSimpleByHelperProfileId(Long helperProfileId) {
 
-        List<ApplicationFlatDto> tuples = helperQueryRepository.getHelperSimpleByHelperProfileId(helperProfileId);
+        List<HelperSimpleFlatDto> tuples = helperQueryRepository.getHelperSimpleByHelperProfileId(helperProfileId);
         if (tuples.isEmpty()) {
             throw new HelperProfileNotFoundException();
         }
@@ -62,10 +62,10 @@ public class HelperService {
     }
 
     @Transactional(readOnly = true)
-    public HelperSimpleResponse buildHelperSimpleByHelperProfileId(List<ApplicationFlatDto> applicationFlatDtoList) {
+    public HelperSimpleResponse buildHelperSimpleByHelperProfileId(List<HelperSimpleFlatDto> applicationFlatDtoList) {
 
         // 1. 필드 추출
-        ApplicationFlatDto first = applicationFlatDtoList.getFirst();
+        HelperSimpleFlatDto first = applicationFlatDtoList.getFirst();
         Long helperProfileId = first.getHelperProfileId();
         String name = first.getName();
         LocalDate birthDate = first.getBirthDate();

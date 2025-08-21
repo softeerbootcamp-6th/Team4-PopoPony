@@ -21,6 +21,7 @@ import com.todoc.server.domain.route.web.dto.response.RouteDetailResponse;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
@@ -50,6 +51,7 @@ public class RecruitService {
      *   <li>2. 진행중인 목록: '동행중' 상태를 최상단에 표시, 동행일 오름차순 정렬</li>
      *   <li>3. 완료된 목록: 동행일 내림차순 정렬</li>
      * </ul>
+     *
      * @param userId (authId)
      * @return 분리된 '동행 신청 목록'응답 DTO
      */
@@ -71,7 +73,8 @@ public class RecruitService {
 
         // 진행중인 목록의 경우, 진행중인 목록 먼저 필터링 하고, 이후에 동행일 기준 오름차순 정렬
         inProgressList.sort(Comparator
-            .comparing((RecruitSimpleResponse r) -> RecruitStatus.from(r.getRecruitStatus()).get() != RecruitStatus.IN_PROGRESS)
+            .comparing((RecruitSimpleResponse r) -> RecruitStatus.from(r.getRecruitStatus()).get()
+                != RecruitStatus.IN_PROGRESS)
             .thenComparing(RecruitSimpleResponse::getEscortDate)
         );
 
@@ -92,25 +95,25 @@ public class RecruitService {
     public Recruit register(RecruitCreateRequest.EscortDetail escortDetail) {
 
         Recruit recruit = Recruit.builder()
-                .escortDate(escortDetail.getEscortDate())
-                .estimatedMeetingTime(escortDetail.getEstimatedMeetingTime())
-                .estimatedReturnTime(escortDetail.getEstimatedReturnTime())
-                .purpose(escortDetail.getPurpose())
-                .extraRequest(escortDetail.getExtraRequest())
-                .status(RecruitStatus.MATCHING)
-                .build();
+            .escortDate(escortDetail.getEscortDate())
+            .estimatedMeetingTime(escortDetail.getEstimatedMeetingTime())
+            .estimatedReturnTime(escortDetail.getEstimatedReturnTime())
+            .purpose(escortDetail.getPurpose())
+            .extraRequest(escortDetail.getExtraRequest())
+            .status(RecruitStatus.MATCHING)
+            .build();
 
         return recruitJpaRepository.save(recruit);
     }
 
     public Recruit getRecruitById(Long recruitId) {
         return recruitJpaRepository.findById(recruitId)
-                .orElseThrow(RecruitNotFoundException::new);
+            .orElseThrow(RecruitNotFoundException::new);
     }
 
     public void cancelRecruit(Long recruitId) {
         Recruit recruit = recruitJpaRepository.findById(recruitId)
-                .orElseThrow(RecruitNotFoundException::new);
+            .orElseThrow(RecruitNotFoundException::new);
 
         // 매칭 완료된 동행 신청에 대한 예외 처리
         if (recruit.getStatus() != RecruitStatus.MATCHING) {
@@ -123,26 +126,30 @@ public class RecruitService {
 
     /**
      * userId에 해당하는 고객의 이전 동행 신청 목록을 조회하는 함수
+     *
      * @param userId
      * @return 이전 동행 신청 목록 응답 DTO(RecruitHistoryListResponse) size = 5
      */
     @Transactional(readOnly = true)
     public RecruitHistoryListResponse getRecruitHistoryListByUserId(Long userId) {
-        List<RecruitHistorySimpleResponse> recruitList = recruitQueryRepository.findRecruitListSortedByUserId(userId, 5);
+        List<RecruitHistorySimpleResponse> recruitList = recruitQueryRepository.findRecruitListSortedByUserId(
+            userId, 5);
 
         return RecruitHistoryListResponse.builder()
-                .beforeList(recruitList)
-                .build();
+            .beforeList(recruitList)
+            .build();
     }
 
     /**
      * recruitId에 해당하는 동행 신청에 대한 상세 정보를 조회하는 함수 (Request 형식과 동일한 형식의 Response DTO)
+     *
      * @param recruitId
      * @return 동행 신청 상세 정보 DTO(RecruitHistoryDetailResponse)
      */
     @Transactional(readOnly = true)
     public RecruitHistoryDetailResponse getRecruitHistoryDetailByRecruitId(Long recruitId) {
-        RecruitHistoryDetailFlatDto recruitHistoryDetailFlatDto = recruitQueryRepository.getRecruitHistoryDetailByRecruitId(recruitId);
+        RecruitHistoryDetailFlatDto recruitHistoryDetailFlatDto = recruitQueryRepository.getRecruitHistoryDetailByRecruitId(
+            recruitId);
 
         if (recruitHistoryDetailFlatDto == null) {
             throw new RecruitNotFoundException();
@@ -151,22 +158,22 @@ public class RecruitService {
         // 환자 정보
         Patient patient = recruitHistoryDetailFlatDto.getPatient();
         RecruitHistoryDetailResponse.PatientDetailHistory patientDetail =
-                RecruitHistoryDetailResponse.PatientDetailHistory.from(patient);
+            RecruitHistoryDetailResponse.PatientDetailHistory.from(patient);
 
         // 위치 정보
         RecruitHistoryDetailResponse.LocationDetail meetingLocationDetail = RecruitHistoryDetailResponse.LocationDetail
-                .from(recruitHistoryDetailFlatDto.getMeetingLocation());
+            .from(recruitHistoryDetailFlatDto.getMeetingLocation());
         RecruitHistoryDetailResponse.LocationDetail destinationDetail = RecruitHistoryDetailResponse.LocationDetail
-                .from(recruitHistoryDetailFlatDto.getDestination());
+            .from(recruitHistoryDetailFlatDto.getDestination());
         RecruitHistoryDetailResponse.LocationDetail returnLocationDetail = RecruitHistoryDetailResponse.LocationDetail
-                .from(recruitHistoryDetailFlatDto.getReturnLocation());
+            .from(recruitHistoryDetailFlatDto.getReturnLocation());
 
         return RecruitHistoryDetailResponse.builder()
-                .patientDetail(patientDetail)
-                .meetingLocationDetail(meetingLocationDetail)
-                .destinationDetail(destinationDetail)
-                .returnLocationDetail(returnLocationDetail)
-                .build();
+            .patientDetail(patientDetail)
+            .meetingLocationDetail(meetingLocationDetail)
+            .destinationDetail(destinationDetail)
+            .returnLocationDetail(returnLocationDetail)
+            .build();
     }
 
     /**
@@ -179,7 +186,8 @@ public class RecruitService {
     public RecruitDetailResponse getRecruitDetailByRecruitId(Long recruitId) {
 
         // 1. 데이터 조회 (Recruit + Patient + Route)
-        Recruit recruit = recruitQueryRepository.getRecruitWithPatientAndRouteByRecruitId(recruitId);
+        Recruit recruit = recruitQueryRepository.getRecruitWithPatientAndRouteByRecruitId(
+            recruitId);
         if (recruit == null) {
             throw new RecruitNotFoundException();
         }
@@ -200,16 +208,16 @@ public class RecruitService {
 
         // 4. Recruit → RecruitDetailResponse
         return RecruitDetailResponse.builder()
-                .recruitId(recruit.getId())
-                .status(recruit.getStatus().getLabel())
-                .escortDate(recruit.getEscortDate())
-                .estimatedMeetingTime(recruit.getEstimatedMeetingTime())
-                .estimatedReturnTime(recruit.getEstimatedReturnTime())
-                .route(routeResponse)
-                .patient(patientResponse)
-                .purpose(recruit.getPurpose())
-                .extraRequest(recruit.getExtraRequest())
-                .build();
+            .recruitId(recruit.getId())
+            .status(recruit.getStatus().getLabel())
+            .escortDate(recruit.getEscortDate())
+            .estimatedMeetingTime(recruit.getEstimatedMeetingTime())
+            .estimatedReturnTime(recruit.getEstimatedReturnTime())
+            .route(routeResponse)
+            .patient(patientResponse)
+            .purpose(recruit.getPurpose())
+            .extraRequest(recruit.getExtraRequest())
+            .build();
     }
 
     /**
@@ -241,7 +249,8 @@ public class RecruitService {
         long totalMinutes = Duration.between(startTime, endTime).toMinutes();
 
         // 4. 기본 요금 계산
-        int baseFee = FeeUtils.calculateTotalFee(recruit.getEstimatedMeetingTime(), recruit.getEstimatedReturnTime());
+        int baseFee = FeeUtils.calculateTotalFee(recruit.getEstimatedMeetingTime(),
+            recruit.getEstimatedReturnTime());
 
         // 5. 예상 택시 요금 계산
         int meetingToHospitalTaxiFee = route.getMeetingToHospital().getTaxiFare();
@@ -249,12 +258,12 @@ public class RecruitService {
         int expectedTaxiFee = meetingToHospitalTaxiFee + hospitalToReturnTaxiFee;
 
         return RecruitPaymentResponse.builder()
-                .recruitId(recruit.getId())
-                .route(routeResponse)
-                .totalMinutes(totalMinutes)
-                .baseFee(baseFee)
-                .expectedTaxiFee(expectedTaxiFee)
-                .build();
+            .recruitId(recruit.getId())
+            .route(routeResponse)
+            .totalMinutes(totalMinutes)
+            .baseFee(baseFee)
+            .expectedTaxiFee(expectedTaxiFee)
+            .build();
     }
 
     /**
@@ -264,6 +273,7 @@ public class RecruitService {
      *   <li>2. 진행중인 목록: '동행중' 상태를 최상단에 표시, 동행일 오름차순 정렬</li>
      *   <li>3. 완료된 목록: 동행일 내림차순 정렬</li>
      * </ul>
+     *
      * @param helperUserId (helperUserId)
      * @return 분리된 '동행 신청 목록'응답 DTO
      */
@@ -271,7 +281,8 @@ public class RecruitService {
     public RecruitListResponse getRecruitListAsHelperByUserId(Long helperUserId) {
         // 도우미가 지원한 동행 신청 목록중 Application Status가 PENDING, MATCHED인 동행 신청 목록을 조회함 (FAILED 제외)
         List<RecruitSimpleResponse> rawList =
-            recruitQueryRepository.findListByHelperUserIdAndApplicationStatus(helperUserId, List.of(ApplicationStatus.MATCHED, ApplicationStatus.PENDING));
+            recruitQueryRepository.findListByHelperUserIdAndApplicationStatus(helperUserId,
+                List.of(ApplicationStatus.MATCHED, ApplicationStatus.PENDING));
 
         List<RecruitSimpleResponse> inProgressList = new ArrayList<>();
         List<RecruitSimpleResponse> completedList = new ArrayList<>();
@@ -287,7 +298,8 @@ public class RecruitService {
 
         // 진행중인 목록의 경우, 진행중인 목록 먼저 필터링 하고, 이후에 동행일 기준 오름차순 정렬
         inProgressList.sort(Comparator
-            .comparing((RecruitSimpleResponse r) -> RecruitStatus.from(r.getRecruitStatus()).get() != RecruitStatus.IN_PROGRESS)
+            .comparing((RecruitSimpleResponse r) -> RecruitStatus.from(r.getRecruitStatus()).get()
+                != RecruitStatus.IN_PROGRESS)
             .thenComparing(RecruitSimpleResponse::getEscortDate)
         );
 
@@ -311,14 +323,16 @@ public class RecruitService {
      *   <li>1. 만남 장소 기준으로 필터링</li>
      *   <li>2. 동행일 오름차순 정렬 + 가까운 기준 정렬</li>
      * </ul>
-     * @param area String
+     *
+     * @param area      String
      * @param startDate LocalDate
-     * @param endDate LocalDate
+     * @param endDate   LocalDate
      * @return 검색되는 '동행 신청 목록'응답 DTO
      */
-    public RecruitSearchListResponse getRecruitListBySearch(long authId, String area, LocalDate startDate, LocalDate endDate) {
-        List<Recruit> recruitList = recruitQueryRepository.findListByDateRangeAndStatus(authId, area, startDate, endDate, List.of(RecruitStatus.MATCHING));
-
+    public RecruitSearchListResponse getRecruitListBySearch(long authId, String area,
+        LocalDate startDate, LocalDate endDate) {
+        List<Recruit> recruitList = recruitQueryRepository.findListByDateRangeAndStatus(authId,
+            area, startDate, endDate, List.of(RecruitStatus.MATCHING));
 
         // 동행일 기준으로 오름차순 + 만남 장소 기준으로 필터링
         recruitList = recruitList.stream()
@@ -334,7 +348,8 @@ public class RecruitService {
                 throw new RouteNotFoundException();
             }
 
-            if (recruit.getRoute().getMeetingLocationInfo() == null || recruit.getRoute().getHospitalLocationInfo() == null) {
+            if (recruit.getRoute().getMeetingLocationInfo() == null
+                || recruit.getRoute().getHospitalLocationInfo() == null) {
                 throw new LocationNotFoundException();
             }
 
@@ -363,12 +378,12 @@ public class RecruitService {
         }
 
         // 날짜별로 그룹핑
-         Map<LocalDate, List<RecruitSimpleResponse>> dtoGroupByDate = dtoList.stream()
-             .collect(Collectors.groupingBy(
-                 RecruitSimpleResponse::getEscortDate,
-                 LinkedHashMap::new,
-                 Collectors.toList()
-             ));
+        Map<LocalDate, List<RecruitSimpleResponse>> dtoGroupByDate = dtoList.stream()
+            .collect(Collectors.groupingBy(
+                RecruitSimpleResponse::getEscortDate,
+                LinkedHashMap::new,
+                Collectors.toList()
+            ));
 
         return RecruitSearchListResponse.builder()
             .inProgressMap(dtoGroupByDate)
@@ -380,9 +395,9 @@ public class RecruitService {
         Recruit recruit = getRecruitById(recruitId);
 
         return RecruitStatusResponse.builder()
-                .recruitId(recruit.getId())
-                .recruitStatus(recruit.getStatus().getLabel())
-                .build();
+            .recruitId(recruit.getId())
+            .recruitStatus(recruit.getStatus().getLabel())
+            .build();
     }
 
     public List<Recruit> getAllRecruits() {
@@ -391,5 +406,10 @@ public class RecruitService {
 
     public boolean existsById(Long recruitId) {
         return recruitJpaRepository.existsById(recruitId);
+    }
+
+    public void updateStatusForRecruitBeforeMeeting(LocalDate today, LocalTime from, LocalTime to,
+        ZonedDateTime now) {
+        recruitQueryRepository.updateStatusForRecruitBeforeMeeting(today, from, to, now);
     }
 }
