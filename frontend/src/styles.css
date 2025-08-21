@@ -163,6 +163,10 @@
     scroll-behavior: smooth;
   }
 
+  body {
+    overscroll-behavior: none;
+  }
+
   p {
     word-break: keep-all;
     white-space: pre-line;
