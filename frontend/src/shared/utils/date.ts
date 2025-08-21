@@ -6,6 +6,8 @@ import {
   format,
   parse,
   isValid,
+  startOfDay,
+  isBefore,
 } from 'date-fns';
 import { ko } from 'date-fns/locale';
 
@@ -164,4 +166,14 @@ export const getDifferenceInSecondsFromNow = (date: string) => {
   const target = new Date(date);
   const now = new Date();
   return differenceInSeconds(target, now);
+};
+
+/**
+ * 날짜가 오늘 이전인지 확인 (시간은 무시하고 날짜만 비교)
+ * @param date - 확인할 날짜
+ * @returns 오늘 이전이면 true, 오늘 이후면 false
+ */
+export const isBeforeToday = (date: Date): boolean => {
+  const today = startOfDay(new Date());
+  return isBefore(date, today);
 };
