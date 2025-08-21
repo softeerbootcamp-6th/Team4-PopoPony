@@ -25,7 +25,7 @@ function RouteComponent() {
   const { helperLocations } = useSSE(String(escortId), 'patient');
 
   const mapRef = useRef<HTMLDivElement>(null);
-  const { mapInstance, setCurrentLocation, handleSetCenterAndZoom, addMarker, addCustomMarker } =
+  const { mapInstance, setCurrentLocation, fitBoundsToCoordinates, addMarker, addCustomMarker } =
     useMap(mapRef as React.RefObject<HTMLDivElement>);
 
   const patientMarker = useRef<TMapMarker>(null);
@@ -76,16 +76,10 @@ function RouteComponent() {
     if (curLocation?.lat && curLocation?.lon) {
       if (!patientMarker.current) {
         patientMarker.current = addMarker(curLocation.lat, curLocation.lon, 'me');
-        handleSetCenterAndZoom(
-          {
-            lat: curLocation?.lat ?? 0,
-            lon: curLocation?.lon ?? 0,
-          },
-          {
-            lat: helperLocations?.latitude ?? 0,
-            lon: helperLocations?.longitude ?? 0,
-          }
-        );
+        fitBoundsToCoordinates([
+          { lat: curLocation?.lat ?? 0, lon: curLocation?.lon ?? 0 },
+          { lat: helperLocations?.latitude ?? 0, lon: helperLocations?.longitude ?? 0 },
+        ]);
       } else {
         patientMarker.current?.setPosition(new Tmapv3.LatLng(curLocation.lat, curLocation.lon));
       }
@@ -105,16 +99,10 @@ function RouteComponent() {
           `${helperName} 도우미`,
           helperImageUrl
         );
-        handleSetCenterAndZoom(
-          {
-            lat: helperLocations?.latitude ?? 0,
-            lon: helperLocations?.longitude ?? 0,
-          },
-          {
-            lat: curLocation?.lat ?? 0,
-            lon: curLocation?.lon ?? 0,
-          }
-        );
+        fitBoundsToCoordinates([
+          { lat: helperLocations?.latitude ?? 0, lon: helperLocations?.longitude ?? 0 },
+          { lat: curLocation?.lat ?? 0, lon: curLocation?.lon ?? 0 },
+        ]);
       } else {
         helperMarker.current?.setPosition(
           new Tmapv3.LatLng(helperLocations.latitude, helperLocations.longitude)

@@ -4,7 +4,7 @@ import { z } from 'zod';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { Calendar, EmptyCard, EscortCard, StrengthTagList } from '@components';
 import { getSearchRecruits } from '@helper/apis';
-import { dateFormat, timeDuration, timeFormat } from '@utils';
+import { dateFormat, timeDuration, timeFormat, isBeforeToday } from '@utils';
 import { useMemo, useRef, useState } from 'react';
 import type { DateRange } from 'react-day-picker';
 import { useClickOutside } from '@hooks';
@@ -101,6 +101,7 @@ function RouteComponent() {
                   mode='range'
                   selected={selectedDateRange}
                   captionLayout='dropdown'
+                  disabled={isBeforeToday}
                   onSelect={(dateRange) => {
                     setSelectedDateRange(dateRange);
                   }}
