@@ -3,10 +3,10 @@ import { Button } from '@components';
 
 const FallbackUI = ({
   error,
-  resetErrorBoundary,
+  resetErrorBoundary = () => {},
 }: {
   error: Error;
-  resetErrorBoundary: () => void;
+  resetErrorBoundary?: () => void;
 }) => {
   return (
     <div className='flex h-full w-full flex-col items-center gap-2 p-[5rem]'>
