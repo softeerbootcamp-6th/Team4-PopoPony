@@ -1,5 +1,12 @@
 import { useState } from 'react';
-import { EscortCard, ProgressIndicator, Tabs, Button, FallbackUI } from '@components';
+import {
+  EscortCard,
+  ProgressIndicator,
+  Tabs,
+  Button,
+  FallbackUI,
+  PageLayoutFallbackUI,
+} from '@components';
 import { DetailTab, HelperTab, ReportTab } from '@customer/components';
 import { PageLayout } from '@layouts';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
@@ -11,6 +18,12 @@ import { $api } from '@apis';
 import { useQueryClient } from '@tanstack/react-query';
 
 export const Route = createFileRoute('/customer/escort/$escortId/')({
+  errorComponent: ({ error, reset }) => (
+    <PageLayoutFallbackUI
+      error={error instanceof Error ? error : new Error(String(error))}
+      resetErrorBoundary={reset}
+    />
+  ),
   component: RouteComponent,
 });
 
