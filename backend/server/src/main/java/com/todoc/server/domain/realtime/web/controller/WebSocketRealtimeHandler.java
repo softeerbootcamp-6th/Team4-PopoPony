@@ -6,7 +6,6 @@ import com.todoc.server.domain.realtime.exception.WebSocketInvalidEnvelopeExcept
 import com.todoc.server.domain.realtime.service.WebSocketFacadeService;
 import com.todoc.server.domain.realtime.web.dto.request.LocationRequest;
 import com.todoc.server.domain.realtime.web.dto.response.Envelope;
-import com.todoc.server.domain.realtime.web.dto.response.ErrorResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
@@ -16,7 +15,7 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 @Component
 @RequiredArgsConstructor
-public class WebSocketHandler extends TextWebSocketHandler {
+public class WebSocketRealtimeHandler extends TextWebSocketHandler {
 
     private final WebSocketFacadeService webSocketFacadeService;
 
