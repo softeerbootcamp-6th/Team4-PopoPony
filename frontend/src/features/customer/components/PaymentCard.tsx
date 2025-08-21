@@ -1,7 +1,6 @@
 import { Button, Divider } from '@components';
 import { useMap } from '@hooks';
 import type { components } from '@schema';
-import type { TMapMarker } from '@types';
 import { useEffect, useRef } from 'react';
 
 interface Props {
