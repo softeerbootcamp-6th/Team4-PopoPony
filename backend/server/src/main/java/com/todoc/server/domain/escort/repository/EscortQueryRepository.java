@@ -35,16 +35,14 @@ public class EscortQueryRepository {
      * 3. Recruit의 escortDate가 현재 날짜와 같고,
      * 4. Recruit의 estimatedMeetingTime이 현재 시간으로부터 3시간 이내 (180분)인 경우
      */
-    public long updateStatusForEscortBeforeMeeting(LocalDate todayUtc,
-                                                   LocalTime from, LocalTime to) {
-        var nowUtc = OffsetDateTime.now(ZoneOffset.UTC).toLocalDateTime();
-
+    public long updateStatusForEscortBeforeMeeting(LocalDate today,
+                                                   LocalTime from, LocalTime to, ZonedDateTime now) {
         QEscort e = escort;
         QRecruit r = new QRecruit("rForUpdate");
 
         return queryFactory.update(e)
                 .set(e.status, EscortStatus.MEETING)
-                .set(e.updatedAt, nowUtc)
+                .set(e.updatedAt, now.toLocalDateTime())
                 .where(
                         e.deletedAt.isNull(),
                         e.status.eq(EscortStatus.PREPARING),
@@ -54,9 +52,8 @@ public class EscortQueryRepository {
                                         .select(r.id)
                                         .from(r)
                                         .where(
-                                                r.deletedAt.isNull(),
                                                 r.status.eq(RecruitStatus.COMPLETED),
-                                                r.escortDate.eq(todayUtc),
+                                                r.escortDate.eq(today),
                                                 r.estimatedMeetingTime.between(from, to)
                                         )
                         )

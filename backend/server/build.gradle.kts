@@ -80,6 +80,10 @@ dependencies {
 
 	// WebSocket
 	implementation ("org.springframework.boot:spring-boot-starter-websocket")
+
+	// test-container
+	testImplementation("org.testcontainers:junit-jupiter:1.20.3") // 최신버전 확인
+	testImplementation("org.testcontainers:mysql:1.20.3")
 }
 
 val querydslDir = layout.buildDirectory.dir("generated/querydsl")

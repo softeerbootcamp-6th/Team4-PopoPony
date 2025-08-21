@@ -8,12 +8,14 @@ import com.todoc.server.common.enumeration.Gender;
 import com.todoc.server.common.util.DateTimeUtils;
 import com.todoc.server.common.util.ImageUrlUtils;
 import com.todoc.server.common.util.JsonUtils;
+import com.todoc.server.domain.escort.repository.dto.ApplicationFlatDto;
 import com.todoc.server.domain.helper.entity.Certificate;
 import com.todoc.server.domain.helper.entity.HelperProfile;
 import com.todoc.server.domain.helper.exception.HelperProfileAreaInvalidException;
 import com.todoc.server.domain.helper.exception.HelperProfileNotFoundException;
 import com.todoc.server.domain.helper.repository.HelperJpaRepository;
 import com.todoc.server.domain.helper.repository.HelperQueryRepository;
+import com.todoc.server.domain.helper.repository.dto.HelperSimpleFlatDto;
 import com.todoc.server.domain.helper.repository.dto.HelperUpdateDefaultFlatDto;
 import com.todoc.server.domain.helper.web.dto.request.CertificateCreateRequest;
 import com.todoc.server.domain.helper.web.dto.request.HelperProfileCreateRequest;
@@ -52,7 +54,7 @@ public class HelperService {
     @Transactional(readOnly = true)
     public HelperSimpleResponse getHelperSimpleByHelperProfileId(Long helperProfileId) {
 
-        List<Tuple> tuples = helperQueryRepository.getHelperSimpleByHelperProfileId(helperProfileId);
+        List<ApplicationFlatDto> tuples = helperQueryRepository.getHelperSimpleByHelperProfileId(helperProfileId);
         if (tuples.isEmpty()) {
             throw new HelperProfileNotFoundException();
         }
@@ -60,19 +62,19 @@ public class HelperService {
     }
 
     @Transactional(readOnly = true)
-    public HelperSimpleResponse buildHelperSimpleByHelperProfileId(List<Tuple> tuples) {
+    public HelperSimpleResponse buildHelperSimpleByHelperProfileId(List<ApplicationFlatDto> applicationFlatDtoList) {
 
         // 1. 필드 추출
-        Tuple first = tuples.getFirst();
-        Long helperProfileId = first.get(helperProfile.id);
-        String name = first.get(auth.name);
-        LocalDate birthDate = first.get(auth.birthDate);
-        Gender gender = first.get(auth.gender);
-        String contact = first.get(auth.contact);
+        ApplicationFlatDto first = applicationFlatDtoList.getFirst();
+        Long helperProfileId = first.getHelperProfileId();
+        String name = first.getName();
+        LocalDate birthDate = first.getBirthDate();
+        Gender gender = first.getGender();
+        String contact = first.getContact();
 
-        ImageFile helperProfileImage = first.get(helperProfile.helperProfileImage);
-        String shortBio = first.get(helperProfile.shortBio);
-        String strengthJson = first.get(helperProfile.strength);
+        ImageFile helperProfileImage = first.getHelperProfileImage();
+        String shortBio = first.getShortBio();
+        String strengthJson = first.getStrength();
 
         // 2. 나이 계산
         int age = (birthDate != null) ? DateTimeUtils.calculateAge(birthDate) : 0;
@@ -85,8 +87,8 @@ public class HelperService {
         }
 
         // 4. certificate 중복 제거 및 수집
-        List<String> certificateList = tuples.stream()
-                .map(t -> t.get(certificate.type))
+        List<String> certificateList = applicationFlatDtoList.stream()
+                .map(t -> t.getCertificateType())
                 .filter(Objects::nonNull)
                 .distinct()
                 .toList();

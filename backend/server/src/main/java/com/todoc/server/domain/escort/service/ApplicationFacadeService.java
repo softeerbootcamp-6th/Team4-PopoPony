@@ -13,8 +13,10 @@ import com.todoc.server.domain.escort.exception.ApplicationInvalidSelectExceptio
 import com.todoc.server.domain.escort.exception.ApplicationNotFoundException;
 import com.todoc.server.domain.escort.exception.RecruitInvalidException;
 import com.todoc.server.domain.escort.exception.RecruitNotFoundException;
+import com.todoc.server.domain.escort.repository.dto.ApplicationFlatDto;
 import com.todoc.server.domain.escort.web.dto.response.ApplicationListResponse;
 import com.todoc.server.domain.escort.web.dto.response.ApplicationSimpleResponse;
+import com.todoc.server.domain.helper.repository.dto.HelperSimpleFlatDto;
 import com.todoc.server.domain.helper.service.HelperService;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
@@ -38,34 +40,18 @@ public class ApplicationFacadeService {
     @Transactional(readOnly = true)
     public ApplicationListResponse getApplicationListByRecruitId(Long recruitId) {
 
-        /**
-         * Key : applicationId
-         * Value : Tuple 리스트
-         *
-         * Tuple에 포함된 값 (도우미 정보)
-         *      auth.id : Auth Id
-         *      auth.name : 성명
-         *      auth.birthDate : 생년월일
-         *      auth.gender : 성별
-         *      auth.contact : 연락처
-         *      helperProfile.id : 도우미 프로필 ID
-         *      helperProfile.imageUrl : 프로필 이미지 URL
-         *      helperProfile.strength : 강점 목록 (JSON 문자열) ex. "['안전한 부축으로 편안한 이동','인지 장애 어르신 맞춤 케어']"
-         *      helperProfile.shortBio : 한 줄 소개
-         *      certificate.type : 자격증 종류
-         */
-        Map<Long, List<Tuple>> groupedByApplication = applicationService.getApplicationListByRecruitId(recruitId);
+        Map<Long, List<ApplicationFlatDto>> groupedByRecruit = applicationService.getApplicationListByRecruitId(recruitId);
 
-        if (groupedByApplication.isEmpty()) {
+        if (groupedByRecruit.isEmpty()) {
             if (!recruitService.existsById(recruitId)) {
                 throw new RecruitNotFoundException();
             }
         }
 
-        List<ApplicationSimpleResponse> list = groupedByApplication.entrySet().stream()
+        List<ApplicationSimpleResponse> list = groupedByRecruit.entrySet().stream()
                 .map(entry -> {
                     Long applicationId = entry.getKey();
-                    List<Tuple> groupedTuples = entry.getValue();
+                    List<ApplicationFlatDto> groupedTuples = entry.getValue();
 
                     return ApplicationSimpleResponse.builder()
                             .applicationId(applicationId)
@@ -108,8 +94,7 @@ public class ApplicationFacadeService {
         }
     }
 
-    @Transactional
-    public void matchApplicationWithRecruit(Application application) {
+    private void matchApplicationWithRecruit(Application application) {
 
         // 고객이 선택한 지원 -> 매칭 성공
         application.setStatus(ApplicationStatus.MATCHED);
