@@ -19,3 +19,24 @@ spring:
     console:
       enabled: true
       path: /h2-console
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,metrics,info
+
+  metrics:
+    tags:
+      application: app
+    export:
+      cloudwatch:
+        enabled: true
+        namespace: "SpringApp-JVM"
+        step: 60s
+        region: ap-northeast-2
+    enable:
+      all: false
+      jvm: true
+      process: true
+      system: true

@@ -29,10 +29,12 @@ import IcCloseM from './close-M.svg?react';
 import IcCloseS from './close-S.svg?react';
 import IcCoinFill from './coin-fill.svg?react';
 import IcDownArrow from './down-arrow.svg?react';
+import IcButtonClose from './button-close.svg?react';
 
 // Transportation Icons
 import IcBusFill from './bus-fill.svg?react';
 import IcSubwayFill from './subway-fill.svg?react';
+import IcTaxiBadge from './taxi-badge.svg?react';
 import IcTaxiFill from './taxi-fill.svg?react';
 
 // User & Profile Icons
@@ -58,7 +60,7 @@ import IcPlusSideLeft from './plus-side-left.svg?react';
 import IcSearch from './search.svg?react';
 import IcSpinner from './Spiner.svg?react';
 import IcStarBadge from './star-badge.svg?react';
-import IcVariant34 from './Variant34.svg?react';
+import IcCurrentLocation from './current-location.svg?react';
 import IcVerified from './verified.svg?react';
 import IcVerifiedUser from './verified_user.svg?react';
 
@@ -69,6 +71,10 @@ import IcNumber1 from './number-1.svg?react';
 import IcNumber2 from './number-2.svg?react';
 import IcNumber3 from './number-3.svg?react';
 import IcTextGo from './text-go.svg?react';
+
+import IcMarker1 from './marker1.svg?react';
+import IcMarker2 from './marker2.svg?react';
+import IcMarker3 from './marker3.svg?react';
 
 export {
   // Basic Icons
@@ -102,10 +108,12 @@ export {
   IcCloseS,
   IcCoinFill,
   IcDownArrow,
+  IcButtonClose,
 
   // Transportation Icons
   IcBusFill,
   IcSubwayFill,
+  IcTaxiBadge,
   IcTaxiFill,
 
   // User & Profile Icons
@@ -131,7 +139,7 @@ export {
   IcSearch,
   IcSpinner,
   IcStarBadge,
-  IcVariant34,
+  IcCurrentLocation,
   IcVerified,
   IcVerifiedUser,
 
@@ -143,4 +151,9 @@ export {
   IcNumber2,
   IcNumber3,
   IcTextGo,
+
+  // Marker Icons
+  IcMarker1,
+  IcMarker2,
+  IcMarker3,
 };

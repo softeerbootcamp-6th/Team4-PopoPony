@@ -5,7 +5,9 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 @Getter
 @Setter
@@ -21,12 +23,12 @@ public class EscortStatusResponse {
     private String escortStatus;
 
     @NotNull
-    @Schema(description = "동행 상태", example = "병원행")
-    private LocalDateTime timestamp;
+    @Schema(description = "타임스탬프")
+    private Instant timestamp;
 
     public EscortStatusResponse(Long escortId, String escortStatus, LocalDateTime timestamp) {
         this.escortId = escortId;
         this.escortStatus = escortStatus;
-        this.timestamp = timestamp;
+        this.timestamp = timestamp.atZone(ZoneId.of("Asia/Seoul")).toInstant();
     }
 }

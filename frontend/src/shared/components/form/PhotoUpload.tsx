@@ -23,7 +23,7 @@ const PhotoUpload = ({ name, prefix }: Props) => {
     if (!file) return;
 
     try {
-      const { imageData, previewUrl } = await uploadImage(file, prefix);
+      const imageData = await uploadImage(file, prefix);
       setValue(
         name,
         {
@@ -31,7 +31,7 @@ const PhotoUpload = ({ name, prefix }: Props) => {
         },
         { shouldValidate: true, shouldDirty: true }
       );
-      setValue('imageUrl', previewUrl);
+      setValue('imageUrl', imageData.previewUrl);
     } catch (err) {
       console.error(err);
       alert('업로드에 실패했습니다. 다시 시도해주세요.');

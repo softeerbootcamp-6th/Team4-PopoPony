@@ -41,7 +41,7 @@ class EscortIntegrationTest extends IntegrationTestBase {
 
     private static final Long ESCORT_ID_MEETING    = 10L;      // 상태가 MEETING 인 escort (HEADING_TO_HOSPITAL 로 진행)
     private static final Long ESCORT_ID_RETURNING    = 9L;      // 상태가 RETURNING 인 escort (WRITING_REPORT 로 진행)
-    private static final Long ESCORT_ID_PREPARING      = 8L;      // 상태가 MEETING 인 escort (진행 불가 예외)
+    private static final Long ESCORT_ID_PREPARING      = 7L;      // 상태가 MEETING 인 escort (진행 불가 예외)
     private static final Long ANY_ESCORT_ID_FOR_MEMO = 5L;      // 메모 갱신 검증용(아무거나 존재하는 ID)
 
     @Nested

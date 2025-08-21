@@ -88,6 +88,10 @@ public class ReportService {
         return reportJpaRepository.save(report);
     }
 
+    public boolean isReportExist(long recruitId) {
+        return reportJpaRepository.existsById(recruitId);
+    }
+
     public long getCount() {
         return reportJpaRepository.count();
     }
