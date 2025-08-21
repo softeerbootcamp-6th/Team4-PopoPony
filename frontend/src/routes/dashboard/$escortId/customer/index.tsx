@@ -48,7 +48,7 @@ function RouteComponent() {
     mapInstance,
     isMapReady,
     addPolyline,
-    handleSetCenterAndZoom,
+    fitBoundsToCoordinates,
     addMarker,
     addCustomMarker,
     resetPolyline,
@@ -126,10 +126,10 @@ function RouteComponent() {
           isHospital: false,
           isReturn: false,
         });
-        handleSetCenterAndZoom(
+        fitBoundsToCoordinates([
           { lat: helperLocations?.latitude ?? 0, lon: helperLocations?.longitude ?? 0 },
-          { lat: patientLocations?.latitude ?? 0, lon: patientLocations?.longitude ?? 0 }
-        );
+          { lat: patientLocations?.latitude ?? 0, lon: patientLocations?.longitude ?? 0 },
+        ]);
         break;
       case '병원행':
         handleSetMarkerVisible({
@@ -140,7 +140,7 @@ function RouteComponent() {
           isReturn: false,
         });
         addPolyline(meetingToHospital, 'meetingToHospital');
-        handleSetCenterAndZoom(
+        fitBoundsToCoordinates([
           {
             lat: meetingLocationInfo?.lat ?? 0,
             lon: meetingLocationInfo?.lon ?? 0,
@@ -148,8 +148,8 @@ function RouteComponent() {
           {
             lat: hospitalLocationInfo?.lat ?? 0,
             lon: hospitalLocationInfo?.lon ?? 0,
-          }
-        );
+          },
+        ]);
         break;
       case '진료중':
         handleSetMarkerVisible({
@@ -159,10 +159,12 @@ function RouteComponent() {
           isHospital: true,
           isReturn: false,
         });
-        handleSetCenterAndZoom({
-          lat: hospitalLocationInfo?.lat ?? 0,
-          lon: hospitalLocationInfo?.lon ?? 0,
-        });
+        fitBoundsToCoordinates([
+          {
+            lat: hospitalLocationInfo?.lat ?? 0,
+            lon: hospitalLocationInfo?.lon ?? 0,
+          },
+        ]);
         break;
       case '복귀중':
         handleSetMarkerVisible({
@@ -173,7 +175,7 @@ function RouteComponent() {
           isReturn: true,
         });
         addPolyline(hospitalToReturn, 'hospitalToReturn');
-        handleSetCenterAndZoom(
+        fitBoundsToCoordinates([
           {
             lat: hospitalLocationInfo?.lat ?? 0,
             lon: hospitalLocationInfo?.lon ?? 0,
@@ -181,8 +183,8 @@ function RouteComponent() {
           {
             lat: returnLocationInfo?.lat ?? 0,
             lon: returnLocationInfo?.lon ?? 0,
-          }
-        );
+          },
+        ]);
         break;
       default:
         break;
