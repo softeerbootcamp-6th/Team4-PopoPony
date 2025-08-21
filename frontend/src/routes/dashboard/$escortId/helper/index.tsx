@@ -101,7 +101,7 @@ function RouteComponent() {
     escortDetailOrigin.data;
   const [escortStatus, setEscortStatus] = useState(escortDetailOrigin.data.escortStatus);
   const [curLocation, setCurLocation] = useState<Position | null>(null);
-  const { patientLocations } = useSSE(String(recruitId), 'helper');
+  const { patientLocations } = useSSE(String(escortId), 'helper');
 
   const {
     meetingLocationInfo,

@@ -1,3 +1,9 @@
 # https://www.robotstxt.org/robotstxt.html
 User-agent: *
-Disallow:
+Allow: /
+
+# Sitemap
+Sitemap: https://todoc.kr/sitemap.xml
+
+# Crawl-delay (optional - for rate limiting)
+Crawl-delay: 1
