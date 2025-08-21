@@ -5,6 +5,6 @@
  */
 export const call = (phoneNumber: string) => {
   const formattedPhoneNumber = phoneNumber.replaceAll(/[^0-9]/g, '');
-  window.open(`tel:${formattedPhoneNumber}`, '_blank');
+  window.open(`tel:${formattedPhoneNumber}`, '_self');
   return;
 };
