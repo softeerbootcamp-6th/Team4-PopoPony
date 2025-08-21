@@ -34,6 +34,7 @@ function RouteComponent() {
   const navigate = useNavigate();
   const { escortId } = Route.useParams();
   const { data, isLoading } = getRecruitById(Number(escortId));
+  const { status } = data?.data ?? {};
   const { mutate: postApplication } = postApplicationByRecruitId();
   const handleSubmit = () => {
     postApplication(
@@ -210,12 +211,13 @@ function RouteComponent() {
           </div>
         </>
       </PageLayout.Content>
-      <PageLayout.Footer>
-        {/* TODO: 중복 지원 시 처리로직 추가 */}
-        <TermsBottomSheet onSubmit={handleSubmit}>
-          <Button>지원하기</Button>
-        </TermsBottomSheet>
-      </PageLayout.Footer>
+      {status === '매칭중' && (
+        <PageLayout.Footer>
+          <TermsBottomSheet onSubmit={handleSubmit}>
+            <Button>지원하기</Button>
+          </TermsBottomSheet>
+        </PageLayout.Footer>
+      )}
     </PageLayout>
   );
 }
