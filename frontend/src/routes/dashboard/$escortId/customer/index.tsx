@@ -16,6 +16,7 @@ import { FloatingButton } from '@components';
 import type { TMapMarker } from '@types';
 import { useSSE } from '@dashboard/hooks';
 import { updatedBefore } from '@helper/utils';
+import { call } from '@utils';
 
 export const Route = createFileRoute('/dashboard/$escortId/customer/')({
   beforeLoad: async ({ context, params }) => {
@@ -79,12 +80,6 @@ function RouteComponent() {
   const { name: patientName, imageUrl: patientImageUrl } = patient;
   const { name: helperName, imageUrl: helperImageUrl, contact: helperContact } = helper;
 
-  const handleClickCallHelper = () => {
-    window.open(`tel:${helperContact}`, '_blank');
-  };
-  const handleClickGoToCustomerCenter = () => {
-    window.open(`tel:010-2514-9058`, '_blank');
-  };
   const handleClickGoToReport = () => {
     router.navigate({
       to: '/customer/escort/$escortId',
@@ -284,8 +279,8 @@ function RouteComponent() {
           <Footer
             escortStatus={currentStatus as EscortStatusProps}
             handleClickGoToReport={handleClickGoToReport}
-            handleClickCallHelper={handleClickCallHelper}
-            handleClickGoToCustomerCenter={handleClickGoToCustomerCenter}
+            handleClickCallHelper={() => call(helperContact)}
+            handleClickGoToCustomerCenter={() => call(import.meta.env.VITE_CUSTOMER_PHONE_NUMBER)}
           />
         </PageLayout.Footer>
       </PageLayout>
@@ -303,8 +298,8 @@ function RouteComponent() {
           <Footer
             escortStatus={currentStatus as EscortStatusProps}
             handleClickGoToReport={handleClickGoToReport}
-            handleClickCallHelper={handleClickCallHelper}
-            handleClickGoToCustomerCenter={handleClickGoToCustomerCenter}
+            handleClickCallHelper={() => call(helperContact)}
+            handleClickGoToCustomerCenter={() => call(import.meta.env.VITE_CUSTOMER_PHONE_NUMBER)}
           />
         </PageLayout.Footer>
       </PageLayout>
@@ -335,8 +330,8 @@ function RouteComponent() {
         <Footer
           escortStatus={currentStatus as EscortStatusProps}
           handleClickGoToReport={handleClickGoToReport}
-          handleClickCallHelper={handleClickCallHelper}
-          handleClickGoToCustomerCenter={handleClickGoToCustomerCenter}
+          handleClickCallHelper={() => call(helperContact)}
+          handleClickGoToCustomerCenter={() => call(import.meta.env.VITE_CUSTOMER_PHONE_NUMBER)}
         />
       </PageLayout.Footer>
     </PageLayout>

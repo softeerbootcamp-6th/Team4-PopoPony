@@ -8,6 +8,7 @@ import { useMap } from '@hooks';
 import type { Position, TMapMarker } from '@types';
 import { useSSE } from '@dashboard/hooks';
 import { updatedBefore } from '@helper/utils';
+import { call } from '@utils';
 export const Route = createFileRoute('/dashboard/$escortId/map')({
   component: RouteComponent,
 });
@@ -140,13 +141,6 @@ function RouteComponent() {
     );
   }, [mapInstance]);
 
-  const handleClickCallHelper = () => {
-    window.open(`tel:${helperContact}`, '_blank');
-  };
-  const handleClickGoToCustomerCenter = () => {
-    window.open(`tel:010-2514-9058`, '_blank');
-  };
-
   return (
     <PageLayout>
       <Header showBack={false} updateBefore={updatedBefore(helperLocations?.timestamp)} />
@@ -187,8 +181,8 @@ function RouteComponent() {
       <PageLayout.Footer>
         <Footer
           escortStatus={escortData?.data.escortStatus}
-          handleClickCallHelper={handleClickCallHelper}
-          handleClickGoToCustomerCenter={handleClickGoToCustomerCenter}
+          handleClickCallHelper={() => call(helper.contact)}
+          handleClickGoToCustomerCenter={() => call(import.meta.env.VITE_CUSTOMER_PHONE_NUMBER)}
         />
       </PageLayout.Footer>
       <TermsBottomSheet
