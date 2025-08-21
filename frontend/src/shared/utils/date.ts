@@ -5,8 +5,49 @@ import {
   differenceInSeconds,
   format,
   parse,
+  isValid,
 } from 'date-fns';
 import { ko } from 'date-fns/locale';
+
+/**
+ * 시간 문자열을 Date 객체로 파싱 (HH:mm 또는 HH:mm:ss 형식 지원)
+ * @param timeString - "HH:mm" 또는 "HH:mm:ss" 형태의 시간 문자열
+ * @returns 파싱된 Date 객체
+ */
+export const parseTimeString = (timeString: string): Date => {
+  // HH:mm:ss 형식인지 확인
+  if (timeString.length === 8 && timeString.includes(':')) {
+    return parse(timeString, 'HH:mm:ss', new Date());
+  }
+  // HH:mm 형식
+  return parse(timeString, 'HH:mm', new Date());
+};
+
+/**
+ * 시간 문자열이 유효한지 검증
+ * @param timeString - 검증할 시간 문자열
+ * @returns 유효성 여부
+ */
+export const isValidTimeString = (timeString: string): boolean => {
+  try {
+    const parsed = parseTimeString(timeString);
+    return isValid(parsed);
+  } catch {
+    return false;
+  }
+};
+
+/**
+ * 두 시간 문자열 비교
+ * @param time1 - 첫 번째 시간 문자열
+ * @param time2 - 두 번째 시간 문자열
+ * @returns time1이 time2보다 이전이면 true
+ */
+export const isTimeBefore = (time1: string, time2: string): boolean => {
+  const parsed1 = parseTimeString(time1);
+  const parsed2 = parseTimeString(time2);
+  return parsed1 < parsed2;
+};
 
 /**
  * 날짜 문자열을 지정된 포맷으로 변환
@@ -53,14 +94,14 @@ export const timeFormatTo24Hour = (time: string): string => {
 };
 
 /**
- * 시작-종료 시간 차이를 한국어로 표기
- * @param startTime - "HH:mm:ss" 형식의 시작 시간
- * @param endTime - "HH:mm:ss" 형식의 종료 시간
+ * 시작-종료 시간 차이를 한국어로 표기 (HH:mm 또는 HH:mm:ss 형식 지원)
+ * @param startTime - "HH:mm" 또는 "HH:mm:ss" 형식의 시작 시간
+ * @param endTime - "HH:mm" 또는 "HH:mm:ss" 형식의 종료 시간
  * @returns "X시간 Y분", "Y분", "X시간" 형태의 문자열
  */
 export const timeDuration = (startTime: string, endTime: string): string => {
-  const start = parse(startTime, 'HH:mm:ss', new Date());
-  const end = parse(endTime, 'HH:mm:ss', new Date());
+  const start = parseTimeString(startTime);
+  const end = parseTimeString(endTime);
 
   let totalMinutes = differenceInMinutes(end, start);
 
