@@ -30,7 +30,7 @@ const Time = ({ handleNextStep }: FunnelStepProps) => {
         <FormLayout.TitleWrapper>
           <FormLayout.Title>
             <strong className='text-text-mint-on-primary'>
-              총 {timeDuration(actualMeetingTime ?? '00:00:00', actualReturnTime ?? '00:00:00')}
+              총 {timeDuration(actualMeetingTime ?? '00:00', actualReturnTime ?? '00:00')}
             </strong>
             <br />
             동행을 마무리하셨어요!

@@ -105,6 +105,10 @@ export const timeDuration = (startTime: string, endTime: string): string => {
 
   let totalMinutes = differenceInMinutes(end, start);
 
+  if (totalMinutes < 0) {
+    return '0분';
+  }
+
   const hours = Math.floor(totalMinutes / 60);
   const minutes = totalMinutes % 60;
 
