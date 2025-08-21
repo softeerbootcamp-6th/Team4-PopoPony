@@ -36,6 +36,7 @@ import StrengthTagList from './StrengthTagList';
 import { Toaster } from './Toaster';
 import FloatingButton from './FloatingButton';
 import SlideButton from './SlideButton';
+import FallbackUI from './FallbackUI';
 
 export {
   Button,
@@ -75,4 +76,5 @@ export {
   FloatingButton,
   SlideButton,
   Toaster,
+  FallbackUI,
 };
