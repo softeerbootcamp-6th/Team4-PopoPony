@@ -1,6 +1,6 @@
 package com.todoc.server.common.config;
 
-import com.todoc.server.domain.realtime.web.controller.WebSocketHandler;
+import com.todoc.server.domain.realtime.web.controller.WebSocketRealtimeHandler;
 import com.todoc.server.domain.realtime.web.controller.WebSocketAuthHandshakeInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
@@ -11,10 +11,10 @@ import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry
 @EnableWebSocket
 public class WebSocketConfig implements WebSocketConfigurer {
 
-    private final WebSocketHandler handler;
+    private final WebSocketRealtimeHandler handler;
     private final WebSocketAuthHandshakeInterceptor authInterceptor;
 
-    public WebSocketConfig(WebSocketHandler handler, WebSocketAuthHandshakeInterceptor authInterceptor) {
+    public WebSocketConfig(WebSocketRealtimeHandler handler, WebSocketAuthHandshakeInterceptor authInterceptor) {
         this.handler = handler;
         this.authInterceptor = authInterceptor;
     }
