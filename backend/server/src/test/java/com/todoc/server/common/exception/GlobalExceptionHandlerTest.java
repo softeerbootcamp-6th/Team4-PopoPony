@@ -26,8 +26,8 @@ class GlobalExceptionHandlerTest {
         mockMvc.perform(get("/test/auth"))
                 .andExpect(jsonPath("$.code").value(11001))
                 .andExpect(jsonPath("$.status").value(404))
-                .andExpect(jsonPath("$.message").value(CommonResponseCode.NOT_FOUND.toString()))
-                .andExpect(jsonPath("$.data").value("유저가 존재하지 않습니다."));
+                .andExpect(jsonPath("$.data").value(CommonResponseCode.NOT_FOUND.toString()))
+                .andExpect(jsonPath("$.message").value("유저가 존재하지 않습니다."));
     }
 
     @Test
@@ -36,7 +36,7 @@ class GlobalExceptionHandlerTest {
         mockMvc.perform(get("/test"))
                 .andExpect(jsonPath("$.code").value(10009))
                 .andExpect(jsonPath("$.status").value(500))
-                .andExpect(jsonPath("$.message").value(CommonResponseCode.INTERNAL_SERVER_ERROR.toString()))
-                .andExpect(jsonPath("$.data").value("Internal Server Error."));
+                .andExpect(jsonPath("$.data").value(CommonResponseCode.INTERNAL_SERVER_ERROR.toString()))
+                .andExpect(jsonPath("$.message").value("Internal Server Error."));
     }
 }
