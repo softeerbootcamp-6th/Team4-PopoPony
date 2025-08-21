@@ -22,7 +22,7 @@ function RouteComponent() {
   const { mutate: postCurrentPositionCall } = postCurrentPosition();
   const timerRef = useRef<number | null>(null);
   const [curLocation, setCurLocation] = useState<Position | null>(null);
-  const { helperLocations } = useSSE(String(recruitId), 'patient');
+  const { helperLocations } = useSSE(String(escortId), 'patient');
 
   const mapRef = useRef<HTMLDivElement>(null);
   const { mapInstance, setCurrentLocation, handleSetCenterAndZoom, addMarker, addCustomMarker } =
