@@ -20,7 +20,7 @@ public class ErrorResponse {
     }
 
     public static ErrorResponse from(ResponseCode responseCode) {
-        return new ErrorResponse(responseCode.getCode(), responseCode.getStatus(), responseCode.toString(), responseCode.getMessage());
+        return new ErrorResponse(responseCode.getCode(), responseCode.getStatus(), responseCode.getMessage(), responseCode.toString());
     }
 
     public static ErrorResponse from(ResponseCode responseCode, String message) {
