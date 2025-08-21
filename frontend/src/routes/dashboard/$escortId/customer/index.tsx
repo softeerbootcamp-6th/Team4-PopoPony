@@ -12,7 +12,6 @@ import {
 } from '@dashboard/components';
 import { useEffect, useRef } from 'react';
 import { useMap } from '@hooks';
-import { FloatingButton } from '@components';
 import type { TMapMarker } from '@types';
 import { useSSE } from '@dashboard/hooks';
 import { updatedBefore } from '@helper/utils';
@@ -49,7 +48,6 @@ function RouteComponent() {
     mapInstance,
     isMapReady,
     addPolyline,
-    setCurrentLocation,
     handleSetCenterAndZoom,
     addMarker,
     addCustomMarker,
@@ -318,11 +316,6 @@ function RouteComponent() {
           {/* 지도 */}
           <div className='bg-background-default-white2 flex-center relative h-[27rem] w-full'>
             <div ref={mapRef}></div>
-            <FloatingButton
-              icon='current'
-              position='bottom-left'
-              onClick={() => setCurrentLocation()}
-            />
           </div>
           <CustomerDashboardLive
             escortStatus={currentStatus as StatusTitleProps}
