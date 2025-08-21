@@ -1,16 +1,37 @@
 import { Button, Divider } from '@components';
+import { useMap } from '@hooks';
+import type { components } from '@schema';
+import type { TMapMarker } from '@types';
+import { useEffect, useRef } from 'react';
 
 interface Props {
+  routeSimple: components['schemas']['RouteSimpleResponse'];
   usageFee: number;
   estimatedTaxiFare: number;
   onClick?: () => void;
 }
 
-const PaymentCard = ({ usageFee, estimatedTaxiFare, onClick }: Props) => {
+const PaymentCard = ({ routeSimple, usageFee, estimatedTaxiFare, onClick }: Props) => {
+  const mapRef = useRef<HTMLDivElement>(null);
+  const { mapInstance, addRoutePolyline } = useMap(mapRef as React.RefObject<HTMLDivElement>);
+
+  useEffect(() => {
+    if (!mapInstance || !routeSimple) return;
+
+    addRoutePolyline(routeSimple);
+  }, [mapInstance, routeSimple]);
+
   const totalFee = usageFee + estimatedTaxiFare;
   return (
     <div className='bg-background-default-white flex-col-start shadow-card border-neutral-20 gap-[1.2rem] rounded-[1.2rem] border p-[1.6rem]'>
-      <div className='bg-neutral-10 flex-center h-[17.3rem] w-full rounded-[0.8rem]'>지도</div>
+      <div
+        className='bg-neutral-0 flex-center border-stroke-neutral-dark relative h-[17.3rem] w-full overflow-hidden rounded-[0.8rem] border'
+        onMouseDown={(e) => e.preventDefault()}
+        onTouchStart={(e) => e.preventDefault()}
+        onWheel={(e) => e.preventDefault()}
+        style={{ pointerEvents: 'none' }}>
+        <div ref={mapRef} style={{ pointerEvents: 'none' }}></div>
+      </div>
       <div className='w-full gap-[0.8rem]'>
         <h6 className='label2-14-medium text-text-mint-primary'>결제 진행</h6>
         <div className='flex-between mt-[0.4rem]'>

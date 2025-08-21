@@ -32,7 +32,6 @@ export const useMap = (mapRef: React.RefObject<HTMLDivElement>) => {
         width: '100%',
         height: '100%',
         zoom: DEFAULT_ZOOM_LEVEL,
-        zoomControl: false,
       });
 
       map.setZoomLimit(MIN_ZOOM_LEVEL, MAX_ZOOM_LEVEL);
@@ -287,10 +286,10 @@ export const useMap = (mapRef: React.RefObject<HTMLDivElement>) => {
       }
 
       const meetingToHospitalPath = meetingToHospital.map(
-        ({ lat, lon }) => new Tmapv3.LatLng(lon, lat)
+        ({ lat, lon }) => new Tmapv3.LatLng(lat, lon)
       );
       const hospitalToReturnPath = hospitalToReturn.map(
-        ({ lat, lon }) => new Tmapv3.LatLng(lon, lat)
+        ({ lat, lon }) => new Tmapv3.LatLng(lat, lon)
       );
 
       mapInstance.on('ConfigLoad', () => {
@@ -308,14 +307,18 @@ export const useMap = (mapRef: React.RefObject<HTMLDivElement>) => {
         });
       });
 
-      const startPoint = meetingToHospital[0];
-      const endPoint = meetingToHospital[meetingToHospital.length - 1];
-      const middlePoint = new Tmapv3.LatLng(
-        (startPoint.lon + endPoint.lon) / 2,
-        (startPoint.lat + endPoint.lat) / 2
-      );
-      mapInstance.setCenter(middlePoint);
-      mapInstance.setZoom(6);
+      const bounds = new Tmapv3.LatLngBounds();
+
+      bounds.extend(new Tmapv3.LatLng(meetingLocationInfo.lat, meetingLocationInfo.lon));
+      bounds.extend(new Tmapv3.LatLng(hospitalLocationInfo.lat, hospitalLocationInfo.lon));
+      bounds.extend(new Tmapv3.LatLng(returnLocationInfo.lat, returnLocationInfo.lon));
+
+      mapInstance.fitBounds(bounds, {
+        left: 50,
+        top: 50,
+        right: 50,
+        bottom: 30,
+      });
     } catch (error) {
       console.error('폴리라인 그리기 오류:', error);
     }
