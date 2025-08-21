@@ -276,7 +276,7 @@ function RouteComponent() {
   if (currentStatus === '리포트작성중') {
     return (
       <PageLayout>
-        <PageLayout.Header showClose={true} onClose={() => router.history.back()} />
+        <PageLayout.Header showClose={true} onClose={() => router.navigate({ to: '/customer' })} />
         <PageLayout.Content>
           <WritingReport />
         </PageLayout.Content>
