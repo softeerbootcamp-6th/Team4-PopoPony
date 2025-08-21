@@ -38,6 +38,7 @@ import FloatingButton from './FloatingButton';
 import SlideButton from './SlideButton';
 import FallbackUI from './catchThrow/FallbackUI';
 import SuspenseUI from './catchThrow/SuspenseUI';
+import PageLayoutFallbackUI from './catchThrow/PageLayoutFallbackUI';
 
 export {
   Button,
@@ -79,4 +80,5 @@ export {
   Toaster,
   FallbackUI,
   SuspenseUI,
+  PageLayoutFallbackUI,
 };
