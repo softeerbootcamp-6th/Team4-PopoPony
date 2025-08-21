@@ -155,6 +155,10 @@
 /*        BASE STYLES        */
 /* ========================= */
 @layer base {
+  * {
+    scrollbar-width: none;
+  }
+
   html {
     font-size: 62.5%;
     font-family: var(--font-pretendard);
@@ -178,10 +182,6 @@
 
   input:disabled {
     cursor: not-allowed;
-  }
-
-  ::-webkit-scrollbar {
-    display: none;
   }
 }
 
