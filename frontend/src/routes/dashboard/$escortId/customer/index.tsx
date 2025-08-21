@@ -58,7 +58,7 @@ function RouteComponent() {
 
   const { route, patient, helper, estimatedMeetingTime, escortId } = data.data;
   const { helperLocations, patientLocations, escortStatuses } = useSSE(
-    String(recruitId),
+    String(escortId),
     'customer'
   );
   const currentStatus = escortStatuses?.escortStatus ?? '만남중';
