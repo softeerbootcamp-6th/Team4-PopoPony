@@ -28,8 +28,8 @@ const Time = ({ handleNextStep }: FunnelStepProps) => {
       return '0분';
     }
 
-    const meetingTime = new Date(`2025-01-01T${actualMeetingTime}`);
-    const returnTime = new Date(`2025-01-01T${actualReturnTime}`);
+    const meetingTime = new Date(actualMeetingTime);
+    const returnTime = new Date(actualReturnTime);
     const totalTime = Math.abs(differenceInMinutes(meetingTime, returnTime));
     const hours = Math.floor(totalTime / 60);
     const minutes = totalTime % 60;

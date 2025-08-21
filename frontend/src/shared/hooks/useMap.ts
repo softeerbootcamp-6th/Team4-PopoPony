@@ -1,20 +1,26 @@
 import { useEffect, useState } from 'react';
-import type { MarkerType, RouteSegment, TMap } from '@types';
+import type { MarkerType, Position, TMap, TMapPolyline } from '@types';
 import {
+  DEFAULT_POLYLINE_COLOR,
+  DEFAULT_POLYLINE_STROKE_WEIGHT,
   DEFAULT_ZOOM_LEVEL,
   INITIAL_LATITUDE,
   INITIAL_LONGITUDE,
   MAX_ZOOM_LEVEL,
   MIN_ZOOM_LEVEL,
 } from '@dashboard/constants';
+import type { RouteSimpleResponse } from '@customer/types';
+import { calculateCenterAndZoom } from '@helper/utils';
 
 const { Tmapv3 } = window;
 
 export const useMap = (mapRef: React.RefObject<HTMLDivElement>) => {
   const [mapInstance, setMapInstance] = useState<TMap | null>(null);
   const [isTmapLoaded, setIsTmapLoaded] = useState(false);
+  const [isMapReady, setIsMapReady] = useState(false);
+  const [polylineInstances, setPolylineInstances] = useState<Map<string, TMapPolyline>>(new Map());
 
-  // 지도 초기화 함수
+  // 지도 초기화 함수 (초기 로딩시 사용되는 함수)
   const initMap = () => {
     if (!mapRef?.current || mapRef.current?.firstChild || mapInstance || !isTmapLoaded) {
       return null;
@@ -30,6 +36,12 @@ export const useMap = (mapRef: React.RefObject<HTMLDivElement>) => {
       });
 
       map.setZoomLimit(MIN_ZOOM_LEVEL, MAX_ZOOM_LEVEL);
+
+      // ConfigLoad 이벤트 리스너 추가
+      map.on('ConfigLoad', () => {
+        setIsMapReady(true);
+      });
+
       setMapInstance(map);
 
       return map;
@@ -39,6 +51,29 @@ export const useMap = (mapRef: React.RefObject<HTMLDivElement>) => {
     }
   };
 
+  // 폴리라인 제거 함수
+  const resetPolyline = (name?: string) => {
+    if (name) {
+      // 특정 이름의 polyline 제거
+      const polyline = polylineInstances.get(name);
+      if (polyline) {
+        polyline.setMap(null);
+        setPolylineInstances((prev) => {
+          const newMap = new Map(prev);
+          newMap.delete(name);
+          return newMap;
+        });
+      }
+    } else {
+      // 모든 polyline 제거
+      polylineInstances.forEach((polyline) => {
+        polyline.setMap(null);
+      });
+      setPolylineInstances(new Map());
+    }
+  };
+
+  // 지도를 특정 위치(위도, 경도)로 이동
   const setCenter = (lat: number, lng: number) => {
     if (mapInstance) {
       mapInstance.setCenter(new Tmapv3.LatLng(lat, lng));
@@ -46,6 +81,24 @@ export const useMap = (mapRef: React.RefObject<HTMLDivElement>) => {
     }
   };
 
+  const setZoom = (zoom: number) => {
+    if (mapInstance) {
+      mapInstance.setZoom(zoom);
+    }
+  };
+
+  const handleSetCenterAndZoom = (position1: Position, position2?: Position) => {
+    if (!position2) {
+      setCenter(position1.lat, position1.lon);
+      setZoom(DEFAULT_ZOOM_LEVEL);
+      return;
+    }
+    const { center, zoom } = calculateCenterAndZoom(position1, position2);
+    setCenter(center.lat, center.lng);
+    setZoom(zoom);
+  };
+
+  // 지도를 현재 위치로 이동
   const setCurrentLocation = () => {
     if (mapInstance) {
       if ('geolocation' in navigator) {
@@ -58,7 +111,8 @@ export const useMap = (mapRef: React.RefObject<HTMLDivElement>) => {
     }
   };
 
-  const addMarker = (lat: number, lng: number, type?: MarkerType) => {
+  // 마커 추가 함수
+  const addMarker = (lat: number, lng: number, type?: MarkerType, label?: string) => {
     if (!mapInstance) {
       return null;
     }
@@ -86,15 +140,19 @@ export const useMap = (mapRef: React.RefObject<HTMLDivElement>) => {
       position: new Tmapv3.LatLng(lat, lng),
       map: mapInstance,
       icon: iconPath(),
+      label: label,
     });
 
     return marker;
   };
 
-  const addCustomMarker = (lat: number, lng: number, name: string, imageUrl: string) => {
-    if (!mapInstance) {
+  // 커스텀 마커 추가 함수 (프로필 이미지 표시)
+  const addCustomMarker = (lat?: number, lng?: number, name?: string, imageUrl?: string) => {
+    if (!mapInstance || !lat || !lng || !name || !imageUrl) {
       return null;
     }
+
+    const previewUrl = `${import.meta.env.VITE_API_BASE_URL}${imageUrl}`;
 
     const marker = new Tmapv3.Marker({
       position: new Tmapv3.LatLng(lat, lng),
@@ -123,7 +181,7 @@ export const useMap = (mapRef: React.RefObject<HTMLDivElement>) => {
                 border-radius: 50%;
               ">
                 <img
-                  src="${imageUrl}"
+                  src="${previewUrl}"
                   style="width: 100%; height: 100%; object-fit: cover;"
                   alt="프로필"
                 />
@@ -150,77 +208,114 @@ export const useMap = (mapRef: React.RefObject<HTMLDivElement>) => {
     }
   };
 
-  const addPolyline = (segments: RouteSegment[]) => {
+  // 지도 생성 이후 폴리라인 추가하는 함수
+  // 폴리라인 인스턴스 반환
+  const addPolyline = (positions: Position[], name: string) => {
+    if (!mapInstance) {
+      return;
+    }
+
+    if (positions.length < 2) {
+      console.warn('경로 좌표가 부족합니다.');
+      return;
+    }
+
+    const existingPolyline = polylineInstances.get(name);
+    if (existingPolyline) {
+      existingPolyline.setMap(null);
+    }
+
+    const path = positions.map(({ lat, lon }) => new Tmapv3.LatLng(lat, lon));
+
+    try {
+      const polyline = new Tmapv3.Polyline({
+        path,
+        strokeColor: DEFAULT_POLYLINE_COLOR,
+        strokeWeight: DEFAULT_POLYLINE_STROKE_WEIGHT,
+        map: mapInstance,
+      });
+
+      setPolylineInstances((prev) => {
+        const newMap = new Map(prev);
+        newMap.set(name, polyline);
+        return newMap;
+      });
+    } catch (error) {
+      console.error('polyline 생성 실패:', error);
+    }
+  };
+
+  // 경로 폴리라인 추가 (만남 -> 병원 -> 복귀)
+  // 초기 로딩시 사용되는 함수로, ConfigLoad 이벤트 발생 후 폴리라인 추가하며 폴리라인 인스턴스 반환 안함
+  const addRoutePolyline = (route: RouteSimpleResponse) => {
     if (!mapInstance) {
       return;
     }
 
     try {
-      // 1. 모든 고유 지점 추출 (중복 방지)
-      const uniquePoints = new Map<string, { lat: number; lng: number; markerType: MarkerType }>();
+      const {
+        meetingLocationInfo,
+        hospitalLocationInfo,
+        returnLocationInfo,
+        meetingToHospital,
+        hospitalToReturn,
+      } = route;
 
-      segments.forEach((segment) => {
-        const startPoint = segment.pathCoordinates[0];
-        const endPoint = segment.pathCoordinates[segment.pathCoordinates.length - 1];
+      const isSameStartEnd =
+        meetingLocationInfo.lat === returnLocationInfo.lat &&
+        meetingLocationInfo.lon === returnLocationInfo.lon;
 
-        const startKey = `${startPoint.lat},${startPoint.lon}`;
-        const endKey = `${endPoint.lat},${endPoint.lon}`;
-
-        uniquePoints.set(startKey, {
-          lat: startPoint.lat,
-          lng: startPoint.lon,
-          markerType: segment.startMarkerType,
-        });
-        uniquePoints.set(endKey, {
-          lat: endPoint.lat,
-          lng: endPoint.lon,
-          markerType: segment.endMarkerType,
-        });
-      });
-
-      // 2. 고유 지점에만 마커 생성
-      uniquePoints.forEach((point) => {
-        // TODO 위도 경도 바꿔야함
-        addMarker(point.lng, point.lat, point.markerType as MarkerType);
-      });
-
-      // 3. 모든 경로 그리기
-      mapInstance.on('ConfigLoad', () => {
-        segments.forEach((segment) => {
-          if (segment.pathCoordinates.length < 2) {
-            console.warn('경로 좌표가 부족합니다.');
-            return;
-          }
-
-          // LatLng 객체 배열 생성
-          // TODO 위도 경도 바꿔야함
-          const path = segment.pathCoordinates.map(({ lat, lon }) => new Tmapv3.LatLng(lon, lat));
-
-          // Tmap 공식 문서 방식으로 폴리라인 생성
-          new Tmapv3.Polyline({
-            path: path,
-            strokeColor: '#39bdea',
-            strokeWeight: 6,
-            direction: true,
-            map: mapInstance,
-          });
-        });
-      });
-
-      // 4. 경로에 맞게 지도 중심과 줌 조정 (첫 번째 세그먼트 기준)
-      if (segments.length > 0 && segments[0].pathCoordinates.length > 0) {
-        const startPoint = segments[0].pathCoordinates[0];
-        const endPoint = segments[0].pathCoordinates[segments[0].pathCoordinates.length - 1];
-
-        const middlePoint = new Tmapv3.LatLng(
-          (startPoint.lon + endPoint.lon) / 2,
-          (startPoint.lat + endPoint.lat) / 2
+      addMarker(
+        meetingLocationInfo.lat,
+        meetingLocationInfo.lon,
+        'home',
+        meetingLocationInfo.placeName
+      );
+      addMarker(
+        hospitalLocationInfo.lat,
+        hospitalLocationInfo.lon,
+        'hospital',
+        hospitalLocationInfo.placeName
+      );
+      if (!isSameStartEnd) {
+        addMarker(
+          returnLocationInfo.lat,
+          returnLocationInfo.lon,
+          'home',
+          returnLocationInfo.placeName
         );
-
-        // TODO 위도 경도 바꿔야함
-        mapInstance.setCenter(middlePoint);
-        mapInstance.setZoom(6);
       }
+
+      const meetingToHospitalPath = meetingToHospital.map(
+        ({ lat, lon }) => new Tmapv3.LatLng(lon, lat)
+      );
+      const hospitalToReturnPath = hospitalToReturn.map(
+        ({ lat, lon }) => new Tmapv3.LatLng(lon, lat)
+      );
+
+      mapInstance.on('ConfigLoad', () => {
+        new Tmapv3.Polyline({
+          path: meetingToHospitalPath,
+          strokeColor: DEFAULT_POLYLINE_COLOR,
+          strokeWeight: DEFAULT_POLYLINE_STROKE_WEIGHT,
+          map: mapInstance,
+        });
+        new Tmapv3.Polyline({
+          path: hospitalToReturnPath,
+          strokeColor: DEFAULT_POLYLINE_COLOR,
+          strokeWeight: DEFAULT_POLYLINE_STROKE_WEIGHT,
+          map: mapInstance,
+        });
+      });
+
+      const startPoint = meetingToHospital[0];
+      const endPoint = meetingToHospital[meetingToHospital.length - 1];
+      const middlePoint = new Tmapv3.LatLng(
+        (startPoint.lon + endPoint.lon) / 2,
+        (startPoint.lat + endPoint.lat) / 2
+      );
+      mapInstance.setCenter(middlePoint);
+      mapInstance.setZoom(6);
     } catch (error) {
       console.error('폴리라인 그리기 오류:', error);
     }
@@ -251,12 +346,17 @@ export const useMap = (mapRef: React.RefObject<HTMLDivElement>) => {
   return {
     mapInstance,
     isTmapLoaded,
+    isMapReady,
+    polylineInstances,
     setCenter,
+    setZoom,
+    handleSetCenterAndZoom,
     setCurrentLocation,
     addMarker,
     addCustomMarker,
     addUserLocationMarker,
     addPolyline,
-    initMap,
+    addRoutePolyline,
+    resetPolyline,
   };
 };
