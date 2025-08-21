@@ -9,6 +9,8 @@ export const convertFormToApiRequest = (
   formData: ReportFormValues
 ): components['schemas']['ReportCreateRequest'] => {
   const {
+    actualMeetingTime,
+    actualReturnTime,
     imageCreateRequestList,
     taxiFeeCreateRequest,
     reservationDate,
@@ -32,6 +34,8 @@ export const convertFormToApiRequest = (
 
   return {
     ...rest,
+    actualMeetingTime: `${actualMeetingTime}:00`,
+    actualReturnTime: `${actualReturnTime}:00`,
     nextAppointmentTime,
     imageCreateRequestList: apiImageList,
     taxiFeeCreateRequest: apiTaxiFee,
