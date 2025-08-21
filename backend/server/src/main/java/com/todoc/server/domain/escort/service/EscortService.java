@@ -11,8 +11,9 @@ import com.todoc.server.domain.escort.repository.EscortJpaRepository;
 import com.todoc.server.domain.escort.repository.EscortQueryRepository;
 import com.todoc.server.domain.escort.web.dto.request.EscortMemoUpdateRequest;
 import com.todoc.server.domain.escort.web.dto.response.EscortStatusResponse;
-import com.todoc.server.domain.helper.service.HelperService;
+import com.todoc.server.domain.realtime.service.WebSocketSessionRegistry;
 import com.todoc.server.domain.realtime.service.SseEmitterManager;
+import com.todoc.server.domain.realtime.web.dto.response.Envelope;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,10 +25,11 @@ import java.time.*;
 @Transactional
 public class EscortService {
 
+    // TODO :: 웹소켓 연결 후 SSE는 제거
     private final EscortJpaRepository escortJpaRepository;
     private final EscortQueryRepository escortQueryRepository;
     private final SseEmitterManager emitterManager;
-    private final HelperService helperService;
+    private final WebSocketSessionRegistry sessionRegistry;
 
     @Transactional(readOnly = true)
     public Long getCountByHelperUserId(Long helperId) {
@@ -81,7 +83,9 @@ public class EscortService {
             if (nextStatus == EscortStatus.HEADING_TO_HOSPITAL) {
                 escort.setActualMeetingTime(now);
 
+                // TODO :: 웹소켓 연결 후 SSE는 제거
                 emitterManager.close(escortId, Role.PATIENT);
+                sessionRegistry.remove(escortId, Role.PATIENT);
             }
 
             // 동행 복귀 완료
@@ -92,7 +96,9 @@ public class EscortService {
             }
 
             // TODO :: 진행 상태 변화 고객에게 알림 (Web Push, SMS, E-mail 등)
+            // TODO :: 웹소켓 연결 후 SSE는 제거
             emitterManager.send(escortId, Role.CUSTOMER, "status", new EscortStatusResponse(escortId, nextStatus.getLabel(), now));
+            sessionRegistry.sendToRole(escortId, Role.CUSTOMER, new Envelope("status", new EscortStatusResponse(escortId, nextStatus.getLabel(), now)));
 
         } else {
             throw new EscortInvalidProceedException();

@@ -77,6 +77,9 @@ dependencies {
 	// CloudWatch
 	implementation(platform("software.amazon.awssdk:bom:2.31.78"))
 	implementation("software.amazon.awssdk:cloudwatch")
+
+	// WebSocket
+	implementation ("org.springframework.boot:spring-boot-starter-websocket")
 }
 
 val querydslDir = layout.buildDirectory.dir("generated/querydsl")
