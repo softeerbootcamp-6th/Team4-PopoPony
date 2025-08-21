@@ -2,6 +2,7 @@ import { useState, useCallback } from 'react';
 import type { ImagePrefix, ImageWithPreviewUrl } from '@types';
 import { postPresignedUrl, putS3Upload } from '@apis';
 import { calculateMD5 } from '@utils';
+import { toast } from 'sonner';
 
 export interface UseImageUploadReturn {
   uploadImage: (file: File, prefix: ImagePrefix) => Promise<ImageWithPreviewUrl>;
@@ -63,6 +64,7 @@ export const useImageUpload = (): UseImageUploadReturn => {
         return result;
       } catch (err) {
         const errorMessage = err instanceof Error ? err.message : '업로드 중 오류가 발생했습니다.';
+        toast.error(errorMessage);
         throw new Error(errorMessage);
       } finally {
         setIsUploading(false);
