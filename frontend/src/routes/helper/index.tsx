@@ -41,7 +41,7 @@ const refineEscortData = (escortData: RecruitSimpleResponse): RefinedEscortData 
     statusText = escortStatusMessageMap[escortData.escortStatus as NonNullable<EscortStatus>] ?? '';
   } else {
     if (escortData.recruitStatus === '동행완료') {
-      statusText = statusMessageMap[escortData.recruitStatus] + (escortData.escortId || '');
+      statusText = statusMessageMap[escortData.recruitStatus] + (escortData.recruitId || '');
     } else {
       statusText = statusMessageMap[escortData.recruitStatus];
     }
