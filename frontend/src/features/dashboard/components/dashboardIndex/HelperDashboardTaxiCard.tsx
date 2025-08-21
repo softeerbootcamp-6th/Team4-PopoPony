@@ -11,13 +11,13 @@ const HelperDashboardTaxiCard = ({
   estimatedTaxiTime: number;
   estimatedTaxiFee: number;
 }) => {
-  const [texiStatus, setTaxiStatus] = useState<'called' | 'waiting'>('called');
+  const [taxiStatus, setTaxiStatus] = useState<'called' | 'waiting'>('called');
   return (
     <DashBoardCard.Card>
       <h4 className='title-20-bold text-text-neutral-primary'>택시를 호출하세요</h4>
       <div className='flex w-full justify-center'>
-        {texiStatus === 'called' && <IcTaxiCalled className='w-full' />}
-        {texiStatus === 'waiting' && <IcTaxiWaiting className='w-full' />}
+        {taxiStatus === 'called' && <IcTaxiCalled className='w-full' />}
+        {taxiStatus === 'waiting' && <IcTaxiWaiting className='w-full' />}
       </div>
       <div className='bg-neutral-20 mt-[2.8rem] flex w-full gap-[0.1rem]'>
         <div className='bg-background-default-white flex-center flex flex-1 flex-col gap-[0.4rem]'>
@@ -32,12 +32,12 @@ const HelperDashboardTaxiCard = ({
         </div>
       </div>
       <div className='mt-[1.6rem] w-full'>
-        {texiStatus === 'called' && (
+        {taxiStatus === 'called' && (
           <Button variant='secondary' size='md' onClick={() => setTaxiStatus('waiting')}>
             택시 호출하기
           </Button>
         )}
-        {texiStatus === 'waiting' && (
+        {taxiStatus === 'waiting' && (
           <Button variant='assistive' size='md' onClick={() => setTaxiStatus('called')}>
             취소하기
           </Button>
