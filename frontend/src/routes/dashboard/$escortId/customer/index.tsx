@@ -56,6 +56,7 @@ function RouteComponent() {
     resetPolyline,
   } = useMap(mapRef as React.RefObject<HTMLDivElement>);
 
+  const { route, patient, helper, estimatedMeetingTime, escortId } = data.data;
   const { helperLocations, patientLocations, escortStatuses } = useSSE(
     String(recruitId),
     'customer'
@@ -68,7 +69,6 @@ function RouteComponent() {
   const hospitalMarker = useRef<TMapMarker>(null);
   const returnMarker = useRef<TMapMarker>(null);
 
-  let { route, patient, helper, estimatedMeetingTime } = data.data;
   const {
     meetingLocationInfo,
     hospitalLocationInfo,
