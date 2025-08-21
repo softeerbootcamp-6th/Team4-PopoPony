@@ -2,9 +2,10 @@ import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
 import { Outlet, createRootRouteWithContext, redirect } from '@tanstack/react-router';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import type { QueryClient } from '@tanstack/react-query';
-import { Landing } from '@components';
+import { Landing, RootFallbackUI, Button } from '@components';
 import { RootLayout } from '@layouts';
 import { authStorage } from '@auth/utils';
+import { ErrorBoundary } from 'react-error-boundary';
 
 interface MyRouterContext {
   queryClient: QueryClient;
@@ -26,7 +27,9 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
     <>
       <RootLayout>
         <Landing />
-        <Outlet />
+        <ErrorBoundary fallbackRender={({ error }) => <RootFallbackUI error={error} />}>
+          <Outlet />
+        </ErrorBoundary>
       </RootLayout>
       <div className='text-[16px]'>
         <TanStackRouterDevtools />

@@ -39,6 +39,7 @@ import SlideButton from './SlideButton';
 import FallbackUI from './catchThrow/FallbackUI';
 import SuspenseUI from './catchThrow/SuspenseUI';
 import PageLayoutFallbackUI from './catchThrow/PageLayoutFallbackUI';
+import RootFallbackUI from './catchThrow/RootFallbackUI';
 
 export {
   Button,
@@ -81,4 +82,5 @@ export {
   FallbackUI,
   SuspenseUI,
   PageLayoutFallbackUI,
+  RootFallbackUI,
 };

@@ -11,7 +11,7 @@ const PageLayoutFallbackUI = ({
 }) => {
   return (
     <PageLayout>
-      <div className='flex-center h-full w-full flex-col gap-2'>
+      <div className='flex-center h-full w-full flex-col gap-[2rem]'>
         <IcAlertCircle className='text-text-red-primary' />
         <p className='body1-16-medium text-text-neutral-primary'>에러가 발생했습니다.</p>
         <p className='body1-16-medium text-text-neutral-primary'>{error.message}</p>
