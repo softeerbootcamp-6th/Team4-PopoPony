@@ -136,7 +136,7 @@ function RouteComponent() {
                       <div className='flex-start flex-wrap gap-[0.4rem]'>
                         <EscortCard.Info
                           type='time'
-                          text={`${date} ${timeFormat(escort.estimatedMeetingTime)} ~ ${timeFormat(escort.estimatedReturnTime)} ${timeDuration(escort.estimatedMeetingTime, escort.estimatedReturnTime)}`}
+                          text={`${date} ${timeFormat(escort.estimatedMeetingTime)} ~ ${timeFormat(escort.estimatedReturnTime)}`}
                         />
                         <span className='label2-14-bold text-text-neutral-secondary'>
                           {timeDuration(escort.estimatedMeetingTime, escort.estimatedReturnTime)}
