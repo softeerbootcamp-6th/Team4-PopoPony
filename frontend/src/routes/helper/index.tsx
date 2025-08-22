@@ -77,7 +77,7 @@ function RouteComponent() {
   const handleClickApplication = () => {
     if (hasProfile && helperProfileId) {
       navigate({
-        to: '/helper/profile/$helperId',
+        to: '/helper/application',
         params: { helperId: helperProfileId.toString() },
       });
     } else {
