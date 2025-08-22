@@ -10,6 +10,7 @@ import {
   MIN_ZOOM_LEVEL,
 } from '@dashboard/constants';
 import type { RouteSimpleResponse } from '@customer/types';
+import { calculateCenterAndZoom } from '@helper/utils';
 
 const { Tmapv3 } = window;
 
@@ -84,6 +85,17 @@ export const useMap = (mapRef: React.RefObject<HTMLDivElement>) => {
     if (mapInstance) {
       mapInstance.setZoom(zoom);
     }
+  };
+
+  const handleSetCenterAndZoom = (position1: Position, position2?: Position) => {
+    if (!position2) {
+      setCenter(position1.lat, position1.lon);
+      setZoom(DEFAULT_ZOOM_LEVEL);
+      return;
+    }
+    const { center, zoom } = calculateCenterAndZoom(position1, position2);
+    setCenter(center.lat, center.lng);
+    setZoom(zoom);
   };
 
   // 지도를 현재 위치로 이동
@@ -338,6 +350,7 @@ export const useMap = (mapRef: React.RefObject<HTMLDivElement>) => {
     polylineInstances,
     setCenter,
     setZoom,
+    handleSetCenterAndZoom,
     setCurrentLocation,
     addMarker,
     addCustomMarker,

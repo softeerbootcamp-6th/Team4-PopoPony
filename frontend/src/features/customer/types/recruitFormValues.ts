@@ -94,7 +94,6 @@ export const dateSchema = z.object({
     .refine(
       (date) => {
         const today = new Date();
-        today.setHours(23, 59, 59, 999);
         const selectedDate = new Date(date);
         return selectedDate > today;
       },

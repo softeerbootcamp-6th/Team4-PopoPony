@@ -1,15 +1,24 @@
 import { createFileRoute, Link } from '@tanstack/react-router';
+import { useQueryClient } from '@tanstack/react-query';
 import { PageLayout } from '@layouts';
-import { Button, EscortCard, Tabs, EmptyCard } from '@components';
+import { Button, EscortCard, Tabs, EmptyCard, PageLayoutFallbackUI, FallbackUI } from '@components';
 import { IcPlusSideLeft } from '@icons';
 import type { RecruitSimpleResponse } from '@customer/types';
 import { getRecruitsCustomer } from '@customer/apis';
 import { dateFormat, timeFormat } from '@utils';
 import { useNavigate } from '@tanstack/react-router';
 import type { EscortStatus } from '@types';
+import { useEffect, useState } from 'react';
+import { $api } from '@apis';
 
 export const Route = createFileRoute('/customer/')({
   component: RouteComponent,
+  errorComponent: ({ error, reset }) => (
+    <PageLayoutFallbackUI
+      error={error instanceof Error ? error : new Error(String(error))}
+      resetErrorBoundary={reset}
+    />
+  ),
 });
 
 const escortStatusMessageMap: Record<NonNullable<EscortStatus>, string> = {
@@ -49,7 +58,15 @@ const refineRecruitData = (recruitData: RecruitSimpleResponse) => {
 };
 
 function RouteComponent() {
-  const { data: escortData } = getRecruitsCustomer();
+  const [apiError, setApiError] = useState<Error | null>(null);
+  const { data: escortData, error } = getRecruitsCustomer();
+  const qc = useQueryClient();
+  const helperListOpts = $api.queryOptions('get', '/api/recruits/helper');
+  useEffect(() => {
+    if (error) {
+      setApiError(error);
+    }
+  }, [error]);
   const { inProgressList, completedList } = escortData?.data ?? {};
   const navigate = useNavigate();
   const handleEscortCardClick = (recruitId: number) => {
@@ -104,7 +121,17 @@ function RouteComponent() {
           </Tabs.TabsList>
           <Tabs.TabsContent value='신청'>
             <div className='flex-col-start gap-[1.2rem] p-[2rem]'>
-              {inProgressList && inProgressList.length > 0 ? (
+              {apiError && (
+                <FallbackUI
+                  error={apiError}
+                  resetErrorBoundary={() => {
+                    qc.invalidateQueries(helperListOpts);
+                  }}
+                />
+              )}
+              {inProgressList &&
+                inProgressList.length > 0 &&
+                !apiError &&
                 inProgressList.map((escort) => {
                   const { statusText, title, timeText, locationText } = refineRecruitData(escort);
                   return (
@@ -135,15 +162,25 @@ function RouteComponent() {
                       )}
                     </EscortCard>
                   );
-                })
-              ) : (
+                })}
+              {inProgressList && inProgressList.length === 0 && (
                 <EmptyCard text='현재 신청중인 동행 내역이 없어요' />
               )}
             </div>
           </Tabs.TabsContent>
           <Tabs.TabsContent value='완료'>
             <div className='flex-col-start gap-[1.2rem] p-[2rem]'>
-              {completedList && completedList.length > 0 ? (
+              {apiError && (
+                <FallbackUI
+                  error={apiError}
+                  resetErrorBoundary={() => {
+                    qc.invalidateQueries(helperListOpts);
+                  }}
+                />
+              )}
+              {completedList &&
+                completedList.length > 0 &&
+                !apiError &&
                 completedList.map((escort) => {
                   const { statusText, title, timeText, locationText } = refineRecruitData(escort);
                   return (
@@ -162,8 +199,8 @@ function RouteComponent() {
                       </EscortCard.InfoSection>
                     </EscortCard>
                   );
-                })
-              ) : (
+                })}
+              {completedList && completedList.length === 0 && !apiError && (
                 <EmptyCard text='완료된 동행 내역이 없어요' />
               )}
             </div>

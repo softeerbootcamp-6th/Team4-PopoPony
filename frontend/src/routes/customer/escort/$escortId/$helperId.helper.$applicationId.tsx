@@ -6,7 +6,7 @@ import { IcPhoneFill, IcVerified } from '@icons';
 import { PageLayout } from '@layouts';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import type { EscortStrength } from '@types';
-import { dateFormat, formatImageUrl } from '@utils';
+import { call, dateFormat, formatImageUrl } from '@utils';
 
 export const Route = createFileRoute('/customer/escort/$escortId/$helperId/helper/$applicationId')({
   validateSearch: (search: { canSelect?: string } | undefined) => ({
@@ -63,7 +63,9 @@ function RouteComponent() {
             variant='secondary'
             size='md'
             onClick={() => {
-              window.open(`tel:${contact}`, '_blank');
+              if (contact) {
+                call(contact);
+              }
             }}>
             <IcPhoneFill className='[&_path]:fill-icon-neutral-primary' />
             <span className='ml-[0.8rem]'>도우미에게 전화걸기</span>

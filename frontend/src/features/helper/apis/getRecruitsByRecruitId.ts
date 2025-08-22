@@ -1,14 +1,13 @@
 import { $api } from '@apis';
 
-const getRecruitById = (recruitId: number) => {
+const getRecruitsByRecruitId = (recruitId: number) => {
   return $api.useQuery('get', '/api/recruits/{recruitId}', {
     params: {
       path: {
-        recruitId,
+        recruitId: recruitId,
       },
     },
-    throwOnError: true,
   });
 };
 
-export default getRecruitById;
+export default getRecruitsByRecruitId;

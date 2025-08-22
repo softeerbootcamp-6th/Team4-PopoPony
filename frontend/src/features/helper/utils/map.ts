@@ -73,5 +73,5 @@ export const updatedBefore = (timestamp?: Date) => {
   const diff = now.getTime() - new Date(timestamp).getTime();
   const minutes = Math.floor(diff / (1000 * 60));
   if (minutes < 1) return '방금';
-  return minutes.toString();
+  return `${minutes.toString()}분`;
 };
