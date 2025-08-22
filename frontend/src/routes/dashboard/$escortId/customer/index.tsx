@@ -67,13 +67,8 @@ function RouteComponent() {
   const hospitalMarker = useRef<TMapMarker>(null);
   const returnMarker = useRef<TMapMarker>(null);
 
-  const {
-    meetingLocationInfo,
-    hospitalLocationInfo,
-    returnLocationInfo,
-    meetingToHospital,
-    hospitalToReturn,
-  } = route.routeSimple;
+  const { meetingToHospital, hospitalToReturn } = route;
+  const { meetingLocationInfo, hospitalLocationInfo, returnLocationInfo } = route.routeSimple;
   const { name: patientName, imageUrl: patientImageUrl } = patient;
   const { name: helperName, imageUrl: helperImageUrl, contact: helperContact } = helper;
 
