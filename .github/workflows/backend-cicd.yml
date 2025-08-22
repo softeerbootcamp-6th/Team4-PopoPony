@@ -46,8 +46,8 @@ jobs:
         run: |
           mkdir -p bundle
           cp backend/server/cicd/appspec.yml bundle/
-          cp backend/server/cicd/deploy.sh bundle/
           cp backend/server/cicd/docker-compose.yml bundle/
+          cp backend/server/cicd/deploy.sh bundle/
           cp backend/server/cicd/cleanup.sh bundle/
           cd bundle && zip -r $GITHUB_WORKSPACE/deploy.zip .
 

@@ -38,7 +38,6 @@ function RouteComponent() {
   const isAlreadyApplied = recruitList?.data?.inProgressList.some(
     (recruit) => recruit.recruitId === Number(escortId)
   );
-  console.log(isAlreadyApplied);
   const { status } = data?.data ?? {};
   const { mutate: postApplication } = postApplicationByRecruitId();
   const handleSubmit = () => {
