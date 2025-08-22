@@ -39,6 +39,10 @@ export type TMap = {
   setZoomLimit: (minZoom: number, maxZoom: number) => void;
   setZoom: (zoomLevel: number) => void;
   setOptions: ({ zoomControl }: MapOptions) => void;
+  fitBounds: (
+    bounds: TMapLatLngBounds,
+    padding?: { left: number; top: number; right: number; bottom: number } | number
+  ) => void;
   destroy: () => void;
   on: (eventType: EventType, listener: (event: TMapEvent) => void) => void;
 };
@@ -53,6 +57,10 @@ export type TMapLatLng = {
   lng: () => number;
   _lat: number;
   _lng: number;
+};
+
+export type TMapLatLngBounds = {
+  extend: (latLng: TMapLatLng) => void;
 };
 
 export type TMapMarker = {

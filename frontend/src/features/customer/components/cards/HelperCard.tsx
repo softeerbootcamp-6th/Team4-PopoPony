@@ -69,7 +69,7 @@ export default function HelperCard({ helper, onClick }: HelperCardProps) {
         </div>
       </div>
 
-      <div className='flex-start mt-[1.2rem] gap-[0.4rem]'>
+      <div className='flex-start mt-[1.2rem] flex-wrap gap-[0.4rem]'>
         {strengthList &&
           sortStrengthList(strengthList).map((strength) => (
             <StrengthTag key={strength} type={strength as EscortStrength} />

@@ -15,7 +15,7 @@ const PageLayout = ({ children, background = 'bg-background-default-white' }: Pa
   return (
     <div
       id='page-layout-container'
-      className={`shadow-page relative flex h-[100dvh] min-h-[100dvh] w-full max-w-[500px] min-w-[375px] flex-col ${background}`}>
+      className={`shadow-page relative left-1/2 flex min-h-[100dvh] w-full max-w-[500px] min-w-[375px] -translate-x-1/2 flex-col min-[1200px]:left-auto min-[1200px]:ml-[calc(50dvw+7rem)] min-[1200px]:-translate-x-0 ${background}`}>
       {children}
     </div>
   );
@@ -35,7 +35,7 @@ const Header = ({ title, showBack, showClose, background, onClose, className }: 
 };
 
 const PageLayoutContent = ({ children }: PageLayoutContentProps) => {
-  return <div className='flex-1 overflow-y-auto'>{children}</div>;
+  return <div className='flex-1'>{children}</div>;
 };
 
 const Footer = ({ children }: BottomCTAProps) => {
