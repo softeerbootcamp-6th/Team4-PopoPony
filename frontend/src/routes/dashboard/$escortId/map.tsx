@@ -181,6 +181,7 @@ function RouteComponent() {
       </PageLayout.Footer>
       <TermsBottomSheet
         defaultOpen={!localStorage.getItem('termsAgreement')}
+        closeOnBackdrop={false}
         onSubmit={() => {
           localStorage.setItem('termsAgreement', 'true');
         }}

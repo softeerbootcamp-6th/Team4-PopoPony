@@ -28,23 +28,22 @@ public class EscortQueryRepository {
     private final JPAQueryFactory queryFactory;
 
     /**
-     * 0시 ~ 21시 이전
      * 다음 기준을 충족하는 Escort 대해 Status를 PREPARING("동행준비") -> MEETING("만남중")으로 업데이트
-     * 1. Escort.Recruit의 status가 COMPLETED("매칭완료")
-     * 2. Escort의 status가 PREPARING("동행준비")
-     * 3. Recruit의 escortDate가 현재 날짜와 같고,
-     * 4. Recruit의 estimatedMeetingTime이 현재 시간으로부터 3시간 이내 (180분)인 경우
+     * <ul>
+     * <li>1. Escort.Recruit의 status가 COMPLETED("매칭완료")</li>
+     * <li>2. Escort의 status가 PREPARING("동행준비")</li>
+     * <li>3. Recruit의 escortDate가 now와 같고,</li>
+     * <li>4. Recruit의 estimatedMeetingTime이 현재 시간으로부터 3시간 이내 (180분)인 경우</li>
+     * </ul>
      */
-    public long updateStatusForEscortBeforeMeeting(LocalDate todayUtc,
-                                                   LocalTime from, LocalTime to) {
-        var nowUtc = OffsetDateTime.now(ZoneOffset.UTC).toLocalDateTime();
-
+    public long updateStatusForEscortBeforeMeeting(LocalDate today,
+                                                   LocalTime from, LocalTime to, ZonedDateTime now) {
         QEscort e = escort;
         QRecruit r = new QRecruit("rForUpdate");
 
         return queryFactory.update(e)
                 .set(e.status, EscortStatus.MEETING)
-                .set(e.updatedAt, nowUtc)
+                .set(e.updatedAt, now.toLocalDateTime())
                 .where(
                         e.deletedAt.isNull(),
                         e.status.eq(EscortStatus.PREPARING),
@@ -54,9 +53,8 @@ public class EscortQueryRepository {
                                         .select(r.id)
                                         .from(r)
                                         .where(
-                                                r.deletedAt.isNull(),
                                                 r.status.eq(RecruitStatus.COMPLETED),
-                                                r.escortDate.eq(todayUtc),
+                                                r.escortDate.eq(today),
                                                 r.estimatedMeetingTime.between(from, to)
                                         )
                         )

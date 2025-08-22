@@ -36,38 +36,45 @@ const ReportTab = () => {
         {reviewData && reviewData.status === 200 && (
           <>
             <div>
-              <div className='border-stroke-neutral-dark flex flex-col gap-[1.2rem] rounded-[0.8rem] border px-[1.6rem] py-[1.2rem]'>
-                <div className='flex-start gap-[1.2rem]'>
-                  <img
-                    src={`/images/status-${statusMap[reviewData?.data?.satisfactionLevel as keyof typeof statusMap]}.svg`}
-                    alt={`status-${statusMap[reviewData?.data?.satisfactionLevel as keyof typeof statusMap]}`}
-                    className='h-[4rem] w-[4rem]'
-                  />
-                  <div className='flex flex-col gap-[0.2rem]'>
-                    <h6 className='body2-14-bold text-text-neutral-primary'>
-                      {reviewData?.data?.satisfactionLevel}
-                    </h6>
-                    <p className='body2-14-medium text-text-neutral-primary'>
-                      {reviewData?.data?.shortComment}
-                    </p>
+              {reviewData.status === 200 && (
+                <div className='border-stroke-neutral-dark flex flex-col gap-[1.2rem] rounded-[0.8rem] border px-[1.6rem] py-[1.2rem]'>
+                  <div className='flex-start gap-[1.2rem]'>
+                    <img
+                      src={`/images/status-${statusMap[reviewData?.data?.satisfactionLevel as keyof typeof statusMap]}.svg`}
+                      alt={`status-${statusMap[reviewData?.data?.satisfactionLevel as keyof typeof statusMap]}`}
+                      className='h-[4rem] w-[4rem]'
+                    />
+                    <div className='flex flex-col gap-[0.2rem]'>
+                      <h6 className='body2-14-bold text-text-neutral-primary'>
+                        {reviewData?.data?.satisfactionLevel}
+                      </h6>
+                      <p className='body2-14-medium text-text-neutral-primary'>
+                        {reviewData?.data?.shortComment}
+                      </p>
+                    </div>
                   </div>
-                </div>
-                <div className='bg-stroke-neutral-light h-[0.1rem] w-full rounded-full'></div>
-                <div className='flex-start min-h-[2.8rem] gap-[2.8rem]'>
-                  <span className='label2-14-bold text-text-neutral-secondary'>좋은 점</span>
-                  <div className='flex-start flex-wrap gap-[0.4rem]'>
+                  <div className='bg-stroke-neutral-light h-[0.1rem] w-full rounded-full'></div>
+                  <div className='flex-start gap-[2.8rem]'>
+                    {reviewData.data?.positiveFeedbackList &&
+                      reviewData.data?.positiveFeedbackList?.length > 0 && (
+                        <span className='label2-14-bold text-text-neutral-secondary'>좋은 점</span>
+                      )}
                     {reviewData.data?.positiveFeedbackList &&
                       reviewData.data?.positiveFeedbackList?.length > 0 &&
                       reviewData.data?.positiveFeedbackList?.map((item, index) => (
-                        <div
-                          className='flex-center label2-14-medium bg-neutral-10 text-text-neutral-secondary h-[2.8rem] rounded-[0.4rem] px-[0.8rem]'
-                          key={index}>
-                          {item}
-                        </div>
+                        <>
+                          <div className='flex-start flex-wrap gap-[0.4rem]'>
+                            <div
+                              className='flex-center label2-14-medium bg-neutral-10 text-text-neutral-secondary h-[2.8rem] rounded-[0.4rem] px-[0.8rem]'
+                              key={index}>
+                              {item}
+                            </div>
+                          </div>
+                        </>
                       ))}
                   </div>
                 </div>
-              </div>
+              )}
               <h3 className='subtitle-18-bold text-text-neutral-primary mt-[2rem]'>동행 리포트</h3>
               <div className='mt-[1.2rem] flex flex-col gap-[2rem]'>
                 <InfoSection title='진행 시간'>
@@ -79,33 +86,35 @@ const ReportTab = () => {
                   ) : (
                     <span className='body1-16-medium text-text-neutral-secondary'>-</span>
                   )}
-                  <div className='flex-start gap-[0.4rem]'>
-                    <IcAlertCircle
-                      className='[&_path]:fill-icon-red-primary'
-                      width={16}
-                      height={16}
-                    />
-                    {reportData?.data?.extraMinutes && reportData?.data?.extraMinutes > 0 && (
+                  {reportData?.data?.extraMinutes && reportData?.data?.extraMinutes > 0 ? (
+                    <div className='flex-start gap-[0.4rem]'>
+                      <IcAlertCircle
+                        className='[&_path]:fill-icon-red-primary'
+                        width={16}
+                        height={16}
+                      />
                       <span className='label3-12-medium text-text-red-primary'>
                         예상 동행 시간보다 {reportData?.data?.extraMinutes}분 초과되었어요!
                       </span>
-                    )}
-                  </div>
+                    </div>
+                  ) : null}
                 </InfoSection>
                 <Divider />
                 {reportData?.data?.hasNextAppointment && (
-                  <InfoSection title='다음 예약'>
-                    <span className='body1-16-medium text-text-neutral-primary'>
-                      {reportData?.data?.nextAppointmentTime &&
-                        dateFormat(
-                          reportData?.data?.nextAppointmentTime,
-                          'yyyy년 MM월 dd일 aaa HH시 mm분'
-                        )}
-                    </span>
-                  </InfoSection>
+                  <>
+                    <InfoSection title='다음 예약'>
+                      <span className='body1-16-medium text-text-neutral-primary'>
+                        {reportData?.data?.nextAppointmentTime &&
+                          dateFormat(
+                            reportData?.data?.nextAppointmentTime,
+                            'yyyy년 MM월 dd일 aaa HH시 mm분'
+                          )}
+                      </span>
+                    </InfoSection>
+                    <Divider />
+                  </>
                 )}
 
-                <Divider />
                 <InfoSection title='전달 내용'>
                   <div className='bg-neutral-10 label2-14-medium text-text-neutral-primary flex flex-col rounded-[0.6rem] p-[1rem]'>
                     <span>{reportData?.data?.description}</span>

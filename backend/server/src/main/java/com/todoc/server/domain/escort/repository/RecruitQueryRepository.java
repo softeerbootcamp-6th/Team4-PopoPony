@@ -9,6 +9,8 @@ import com.todoc.server.domain.escort.repository.dto.RecruitHistoryDetailFlatDto
 import com.todoc.server.domain.escort.web.dto.response.RecruitHistorySimpleResponse;
 import com.todoc.server.domain.route.entity.QLocationInfo;
 import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.ZonedDateTime;
 import java.util.List;
 import com.todoc.server.domain.escort.entity.Recruit;
 import com.todoc.server.domain.escort.web.dto.response.RecruitSimpleResponse;
@@ -215,5 +217,26 @@ public class RecruitQueryRepository {
         if (start != null) return recruit.escortDate.goe(start);
         if (end != null) return recruit.escortDate.loe(end);
         return null;
+    }
+
+    /**
+     * 다음 기준을 충족하는 Recruit 대해 Status를 COMPLETED("매칭완료") -> IN_PROGRESS("동행중")으로 업데이트
+     * <ul>
+     * <li>1. Recruit의 status가 COMPLETED("매칭완료")</li>
+     * <li>3. Recruit의 escortDate가 now와 같고,</li>
+     * <li>4. Recruit의 estimatedMeetingTime이 현재 시간으로부터 3시간 이내 (180분)인 경우</li>
+     * </ul>
+     */
+    public long updateStatusForRecruitBeforeMeeting(LocalDate today, LocalTime from, LocalTime to, ZonedDateTime now) {
+
+        return queryFactory.update(recruit)
+            .set(recruit.status, RecruitStatus.IN_PROGRESS)
+            .set(recruit.updatedAt, now.toLocalDateTime())
+            .where(
+                recruit.status.eq(RecruitStatus.COMPLETED),
+                recruit.escortDate.eq(today),
+                recruit.estimatedMeetingTime.between(from,to)
+            )
+            .execute();
     }
 }

@@ -383,7 +383,6 @@ function RouteComponent() {
         ),
       };
     }
-    //TODO: Footer 버튼 상황에 따른 라우팅
     if (escortStatus === '진료중') {
       return {
         escortStatus: escortStatus,

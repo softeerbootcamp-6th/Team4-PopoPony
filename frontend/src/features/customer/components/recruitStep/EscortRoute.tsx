@@ -11,8 +11,7 @@ import type { FunnelStepProps } from '@types';
 const EscortRoute = memo(({ handleNextStep }: FunnelStepProps) => {
   const { setValue } = useFormContext();
   const navigate = useNavigate();
-  const { values, fieldErrors, isFormValid, markFieldAsTouched } =
-    useFormValidation(routeFormSchema);
+  const { values, fieldErrors, isFormValid } = useFormValidation(routeFormSchema);
 
   useEffect(() => {
     if (values.meetingLocationDetail && values.returnLocationDetail) {
@@ -59,6 +58,22 @@ const EscortRoute = memo(({ handleNextStep }: FunnelStepProps) => {
   };
   const handleSameLocationChange = (checked: boolean) => {
     setValue('isMeetingLocationSameAsDestination', checked);
+    if (!checked) {
+      setValue('returnLocationDetail', {
+        placeName: '',
+        upperAddrName: '',
+        middleAddrName: '',
+        lowerAddrName: '',
+        firstAddrNo: '',
+        secondAddrNo: '',
+        roadName: '',
+        firstBuildingNo: '',
+        secondBuildingNo: '',
+        detailAddress: '',
+        longitude: 0,
+        latitude: 0,
+      });
+    }
 
     if (checked && values.meetingLocationDetail) {
       // meetingLocationDetail의 모든 정보를 returnLocationDetail에 복사
@@ -77,9 +92,6 @@ const EscortRoute = memo(({ handleNextStep }: FunnelStepProps) => {
         longitude: meetingData.longitude,
         latitude: meetingData.latitude,
       });
-
-      // returnLocationDetail 필드를 터치된 상태로 만들기
-      markFieldAsTouched('returnLocationDetail');
     }
   };
 
