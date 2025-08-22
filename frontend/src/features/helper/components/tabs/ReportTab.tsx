@@ -56,12 +56,13 @@ const ReportTab = () => {
                   <div className='bg-stroke-neutral-light h-[0.1rem] w-full rounded-full'></div>
                   <div className='flex-start gap-[2.8rem]'>
                     {reviewData.data?.positiveFeedbackList &&
+                      reviewData.data?.positiveFeedbackList?.length > 0 && (
+                        <span className='label2-14-bold text-text-neutral-secondary'>좋은 점</span>
+                      )}
+                    {reviewData.data?.positiveFeedbackList &&
                       reviewData.data?.positiveFeedbackList?.length > 0 &&
                       reviewData.data?.positiveFeedbackList?.map((item, index) => (
                         <>
-                          <span className='label2-14-bold text-text-neutral-secondary'>
-                            좋은 점
-                          </span>
                           <div className='flex-start flex-wrap gap-[0.4rem]'>
                             <div
                               className='flex-center label2-14-medium bg-neutral-10 text-text-neutral-secondary h-[2.8rem] rounded-[0.4rem] px-[0.8rem]'
