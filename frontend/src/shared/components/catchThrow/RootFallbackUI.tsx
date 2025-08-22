@@ -12,7 +12,7 @@ const RootFallbackUI = ({ error }: { error: Error }) => {
 
   return (
     <PageLayout>
-      <div className='flex h-full w-full flex-col items-center gap-[2rem]'>
+      <div className='flex-center h-full w-full flex-col gap-[2rem] p-[5rem]'>
         <IcAlertCircle className='text-text-red-primary' />
         <p className='body1-16-medium text-text-neutral-primary'>에러가 발생했습니다.</p>
         <p className='body1-16-medium text-text-neutral-primary'>{error.message}</p>
