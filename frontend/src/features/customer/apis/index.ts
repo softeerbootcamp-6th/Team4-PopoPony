@@ -16,16 +16,12 @@ import getRecruitReportByRecruitId from './getRecruitReportByRecruitId';
 import getRecruitReviewByRecruitId from './getRecruitReviewByRecruitId';
 import getTMapSearch from './getTMapSearch';
 
-// TODO: 추후 삭제
-import { searchRoute } from './search';
-
 export {
   getRecruitsCustomer,
   getRecruitById,
   getPaymentById,
   postRecruit,
   patchCancelRecruit,
-  searchRoute,
   getHelperById,
   postHelperReview,
   getPastPatientInfo,
