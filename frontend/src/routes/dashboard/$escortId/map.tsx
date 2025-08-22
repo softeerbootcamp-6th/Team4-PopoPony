@@ -77,8 +77,8 @@ function RouteComponent() {
       if (!patientMarker.current) {
         patientMarker.current = addMarker(curLocation.lat, curLocation.lon, 'me');
         fitBoundsToCoordinates([
-          { lat: curLocation?.lat ?? 0, lon: curLocation?.lon ?? 0 },
-          { lat: helperLocations?.latitude ?? 0, lon: helperLocations?.longitude ?? 0 },
+          { lat: curLocation.lat, lon: curLocation.lon },
+          { lat: helperLocations?.latitude, lon: helperLocations?.longitude },
         ]);
       } else {
         patientMarker.current?.setPosition(new Tmapv3.LatLng(curLocation.lat, curLocation.lon));
@@ -100,8 +100,8 @@ function RouteComponent() {
           helperImageUrl
         );
         fitBoundsToCoordinates([
-          { lat: helperLocations?.latitude ?? 0, lon: helperLocations?.longitude ?? 0 },
-          { lat: curLocation?.lat ?? 0, lon: curLocation?.lon ?? 0 },
+          { lat: helperLocations?.latitude, lon: helperLocations?.longitude },
+          { lat: curLocation?.lat, lon: curLocation?.lon },
         ]);
       } else {
         helperMarker.current?.setPosition(

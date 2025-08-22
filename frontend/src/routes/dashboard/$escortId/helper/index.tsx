@@ -243,8 +243,8 @@ function RouteComponent() {
           isReturn: false,
         });
         fitBoundsToCoordinates([
-          { lat: meetingLocationInfo?.lat ?? 0, lon: meetingLocationInfo?.lon ?? 0 },
-          { lat: patientLocations?.latitude ?? 0, lon: patientLocations?.longitude ?? 0 },
+          { lat: meetingLocationInfo?.lat, lon: meetingLocationInfo?.lon },
+          { lat: patientLocations?.latitude, lon: patientLocations?.longitude },
         ]);
         break;
       case '병원행':
@@ -257,12 +257,12 @@ function RouteComponent() {
         addPolyline(meetingToHospital, 'meetingToHospital');
         fitBoundsToCoordinates([
           {
-            lat: meetingLocationInfo?.lat ?? 0,
-            lon: meetingLocationInfo?.lon ?? 0,
+            lat: meetingLocationInfo?.lat,
+            lon: meetingLocationInfo?.lon,
           },
           {
-            lat: hospitalLocationInfo?.lat ?? 0,
-            lon: hospitalLocationInfo?.lon ?? 0,
+            lat: hospitalLocationInfo?.lat,
+            lon: hospitalLocationInfo?.lon,
           },
         ]);
         break;
@@ -275,8 +275,8 @@ function RouteComponent() {
         });
         fitBoundsToCoordinates([
           {
-            lat: hospitalLocationInfo?.lat ?? 0,
-            lon: hospitalLocationInfo?.lon ?? 0,
+            lat: hospitalLocationInfo?.lat,
+            lon: hospitalLocationInfo?.lon,
           },
         ]);
         break;
@@ -290,12 +290,12 @@ function RouteComponent() {
         addPolyline(hospitalToReturn, 'hospitalToReturn');
         fitBoundsToCoordinates([
           {
-            lat: hospitalLocationInfo?.lat ?? 0,
-            lon: hospitalLocationInfo?.lon ?? 0,
+            lat: hospitalLocationInfo?.lat,
+            lon: hospitalLocationInfo?.lon,
           },
           {
-            lat: returnLocationInfo?.lat ?? 0,
-            lon: returnLocationInfo?.lon ?? 0,
+            lat: returnLocationInfo?.lat,
+            lon: returnLocationInfo?.lon,
           },
         ]);
         break;
