@@ -91,7 +91,7 @@ function RouteComponent() {
   return (
     <PageLayout>
       <PageLayout.Header title='내역 상세보기' showBack />
-      <PageLayout.Content>
+      <PageLayout.Content className='overflow-y-auto'>
         <div className='bg-neutral-10 flex-col-start gap-[1.2rem] px-[2rem] py-[1.6rem]'>
           <EscortCard>
             <EscortCard.StatusHeader text={statusText} title={cardTitle} hasOnClickEvent={false} />

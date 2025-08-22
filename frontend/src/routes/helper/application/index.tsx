@@ -79,7 +79,7 @@ function RouteComponent() {
   return (
     <PageLayout>
       <PageLayout.Header title='일감 찾기' showBack={true} />
-      <PageLayout.Content>
+      <PageLayout.Content className='overflow-y-auto'>
         <section className='flex-start gap-[1.2rem] px-[2rem] py-[1.2rem]'>
           <RegionBottomSheet onSelect={handleSelectRegion}>
             <FilterButton
