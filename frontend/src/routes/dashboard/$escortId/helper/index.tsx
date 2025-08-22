@@ -104,12 +104,10 @@ function RouteComponent() {
   const { patientLocations } = useSSE(String(escortId), 'helper');
 
   const {
-    meetingLocationInfo,
-    hospitalLocationInfo,
-    returnLocationInfo,
     meetingToHospital,
     hospitalToReturn,
-  } = route.routeSimple;
+    routeSimple: { meetingLocationInfo, hospitalLocationInfo, returnLocationInfo },
+  } = route;
 
   const mapRef = useRef<HTMLDivElement>(null);
   const {

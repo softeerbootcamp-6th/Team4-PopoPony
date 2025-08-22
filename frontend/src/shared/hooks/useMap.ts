@@ -9,7 +9,7 @@ import {
   MAX_ZOOM_LEVEL,
   MIN_ZOOM_LEVEL,
 } from '@dashboard/constants';
-import type { RouteSimpleResponse } from '@customer/types';
+import type { RouteDetailResponse } from '@customer/types';
 
 const { Tmapv3 } = window;
 
@@ -251,16 +251,14 @@ export const useMap = (mapRef: React.RefObject<HTMLDivElement>) => {
 
   // 경로 폴리라인 추가 (만남 -> 병원 -> 복귀)
   // 초기 로딩시 사용되는 함수로, ConfigLoad 이벤트 발생 후 폴리라인 추가하며 폴리라인 인스턴스 반환 안함
-  const addRoutePolyline = (route: RouteSimpleResponse) => {
+  const addRoutePolyline = (route: RouteDetailResponse) => {
     if (!mapInstance) {
       return;
     }
 
     try {
       const {
-        meetingLocationInfo,
-        hospitalLocationInfo,
-        returnLocationInfo,
+        routeSimple: { meetingLocationInfo, hospitalLocationInfo, returnLocationInfo },
         meetingToHospital,
         hospitalToReturn,
       } = route;

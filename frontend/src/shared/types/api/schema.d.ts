@@ -500,6 +500,22 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/api/realtime/_diag/beans': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: operations['beans'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/api/images/{imageFileId}/presigned': {
     parameters: {
       query?: never;
@@ -1288,12 +1304,6 @@ export interface components {
       /** @description 응답 body 필드 */
       data: components['schemas']['RecruitSearchListResponse'];
     };
-    Coordinate: {
-      /** Format: double */
-      lat: number;
-      /** Format: double */
-      lon: number;
-    };
     /** @description 장소 요약 정보 DTO */
     LocationInfoSimpleResponse: {
       /**
@@ -1447,42 +1457,6 @@ export interface components {
       hospitalLocationInfo: components['schemas']['LocationInfoSimpleResponse'];
       /** @description 복귀 장소 위치 정보 */
       returnLocationInfo: components['schemas']['LocationInfoSimpleResponse'];
-      /**
-       * @description 병원까지의 경로 정보 ([위도, 경도] 배열)
-       * @example [
-       *       [
-       *         12,
-       *         23
-       *       ],
-       *       [
-       *         13,
-       *         45
-       *       ],
-       *       [
-       *         12,
-       *         66
-       *       ]
-       *     ]
-       */
-      meetingToHospital: components['schemas']['Coordinate'][];
-      /**
-       * @description 복귀장소까지의 경로 정보 ([위도, 경도] 배열)
-       * @example [
-       *       [
-       *         12,
-       *         23
-       *       ],
-       *       [
-       *         13,
-       *         45
-       *       ],
-       *       [
-       *         12,
-       *         66
-       *       ]
-       *     ]
-       */
-      hospitalToReturn: components['schemas']['Coordinate'][];
     };
     /** @description 동행 신청 상태 응답 DTO */
     RecruitStatusResponse: {
@@ -1517,6 +1491,12 @@ export interface components {
       message: string;
       /** @description 응답 body 필드 */
       data: components['schemas']['RecruitStatusResponse'];
+    };
+    Coordinate: {
+      /** Format: double */
+      lat: number;
+      /** Format: double */
+      lon: number;
     };
     /** @description 동행 신청 결제 정보 조회 응답 DTO */
     RecruitPaymentResponse: {
@@ -2840,6 +2820,28 @@ export interface operations {
         };
         content: {
           'text/event-stream': components['schemas']['SseEmitter'];
+        };
+      };
+    };
+  };
+  beans: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          '*/*': {
+            [key: string]: unknown;
+          };
         };
       };
     };

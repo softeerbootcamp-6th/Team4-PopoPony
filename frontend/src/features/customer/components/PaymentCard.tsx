@@ -4,21 +4,21 @@ import type { components } from '@schema';
 import { useEffect, useRef } from 'react';
 
 interface Props {
-  routeSimple: components['schemas']['RouteSimpleResponse'];
+  route: components['schemas']['RouteDetailResponse'];
   usageFee: number;
   estimatedTaxiFare: number;
   onClick?: () => void;
 }
 
-const PaymentCard = ({ routeSimple, usageFee, estimatedTaxiFare, onClick }: Props) => {
+const PaymentCard = ({ route, usageFee, estimatedTaxiFare, onClick }: Props) => {
   const mapRef = useRef<HTMLDivElement>(null);
   const { mapInstance, addRoutePolyline } = useMap(mapRef as React.RefObject<HTMLDivElement>);
 
   useEffect(() => {
-    if (!mapInstance || !routeSimple) return;
+    if (!mapInstance || !route) return;
 
-    addRoutePolyline(routeSimple);
-  }, [mapInstance, routeSimple]);
+    addRoutePolyline(route);
+  }, [mapInstance, route]);
 
   const totalFee = usageFee + estimatedTaxiFare;
   return (

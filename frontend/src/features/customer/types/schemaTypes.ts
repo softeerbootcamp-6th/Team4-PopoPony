@@ -20,3 +20,4 @@ export type LocationInfoSimpleResponse = components['schemas']['LocationInfoSimp
 export type HelperSimpleResponse = components['schemas']['HelperSimpleResponse'];
 export type PositiveFeedbackStatList =
   components['schemas']['HelperDetailResponse']['positiveFeedbackStatList'];
+export type RouteDetailResponse = components['schemas']['RouteDetailResponse'];
