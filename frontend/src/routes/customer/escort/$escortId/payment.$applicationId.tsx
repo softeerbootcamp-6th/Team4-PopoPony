@@ -15,7 +15,6 @@ function RouteComponent() {
   const { data } = getRecruitPayment(Number(escortId));
   //TODO: route추가로 지도 정보 가져올 수 있음
   const { baseFee, expectedTaxiFee, route } = data.data;
-  const routeSimple = route.routeSimple;
 
   const { mutate } = postSelectApplication();
 
@@ -45,7 +44,7 @@ function RouteComponent() {
           <div className='bg-background-default-white flex flex-col gap-[1.6rem] px-[2rem] py-[1.6rem]'>
             <h2 className='title-20-bold text-text-neutral-primary'>결제 예정금액</h2>
             <PaymentCard
-              routeSimple={routeSimple}
+              route={route}
               usageFee={baseFee || 0}
               estimatedTaxiFare={expectedTaxiFee || 0}
               onClick={handleSelectApplication}
