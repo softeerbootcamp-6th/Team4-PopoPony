@@ -6,7 +6,7 @@ import type { RecruitDetailResponse } from '@customer/types';
 import { IcCheck } from '@icons';
 import { PageLayout } from '@layouts';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
-import { postApplicationByRecruitId } from '@helper/apis';
+import { postApplicationByRecruitId, getRecruitList } from '@helper/apis';
 import {
   dateFormat,
   formatImageUrl,
@@ -34,6 +34,11 @@ function RouteComponent() {
   const navigate = useNavigate();
   const { escortId } = Route.useParams();
   const { data, isLoading } = getRecruitById(Number(escortId));
+  const { data: recruitList } = getRecruitList();
+  const isAlreadyApplied = recruitList?.data?.inProgressList.some(
+    (recruit) => recruit.recruitId === Number(escortId)
+  );
+  console.log(isAlreadyApplied);
   const { status } = data?.data ?? {};
   const { mutate: postApplication } = postApplicationByRecruitId();
   const handleSubmit = () => {
@@ -211,7 +216,7 @@ function RouteComponent() {
           </div>
         </>
       </PageLayout.Content>
-      {status === '매칭중' && (
+      {status === '매칭중' && !isAlreadyApplied && (
         <PageLayout.Footer>
           <TermsBottomSheet onSubmit={handleSubmit}>
             <Button>지원하기</Button>
