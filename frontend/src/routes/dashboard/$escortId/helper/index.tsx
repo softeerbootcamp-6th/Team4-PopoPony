@@ -438,7 +438,7 @@ function RouteComponent() {
         updateBefore={updatedBefore(patientLocations?.timestamp)}
         showUpdateBefore={escortStatus === '만남중'}
       />
-      <PageLayout.Content>
+      <PageLayout.Content className='overflow-y-auto'>
         <div className='bg-background-default-white2 flex-center relative h-[27rem] w-full'>
           <div ref={mapRef}></div>
           <FloatingButton

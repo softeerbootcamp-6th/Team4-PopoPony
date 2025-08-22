@@ -20,10 +20,7 @@ import com.todoc.server.domain.route.entity.Route;
 import com.todoc.server.domain.route.exception.RouteNotFoundException;
 import com.todoc.server.domain.route.web.dto.response.RouteSimpleResponse;
 
-import java.time.Duration;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.ZonedDateTime;
+import java.time.*;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
@@ -42,6 +39,7 @@ public class RecruitService {
 
     private final RecruitJpaRepository recruitJpaRepository;
     private final RecruitQueryRepository recruitQueryRepository;
+    private final Clock clock;
 
     /**
      * 고객 입장에서 홈 화면에서 '동행 신청' 목록을 조회하는 함수
@@ -326,7 +324,7 @@ public class RecruitService {
      */
     public RecruitSearchListResponse getRecruitListBySearch(long authId, String area,
                                                             LocalDate startDate, LocalDate endDate) {
-        List<Recruit> recruitList = recruitQueryRepository.findListByDateRangeAndStatus(authId, area, startDate, endDate, List.of(RecruitStatus.MATCHING));
+        List<Recruit> recruitList = recruitQueryRepository.findListByDateRangeAndStatus(authId, area, startDate, endDate, List.of(RecruitStatus.MATCHING), ZonedDateTime.now(clock).toLocalDate());
 
         // 동행일 기준으로 오름차순 + 만남 장소 기준으로 필터링
         recruitList = recruitList.stream()
