@@ -32,8 +32,9 @@ const FormInput = ({
   const finalDescription = type === 'cost' ? '원' : description;
 
   if (type === 'date' || type === 'time') {
+    const { getValues } = useFormContext();
     const { onChange, onBlur, ...registerProps } = register(name);
-    const [hasValue, setHasValue] = useState(false);
+    const [hasValue, setHasValue] = useState(!!getValues(name));
     const [isFocused, setIsFocused] = useState(false);
 
     return (

@@ -79,7 +79,7 @@ function RouteComponent() {
   return (
     <PageLayout>
       <PageLayout.Header title='일감 찾기' showBack={true} />
-      <PageLayout.Content>
+      <PageLayout.Content className='overflow-y-auto'>
         <section className='flex-start gap-[1.2rem] px-[2rem] py-[1.2rem]'>
           <RegionBottomSheet onSelect={handleSelectRegion}>
             <FilterButton
@@ -137,7 +137,7 @@ function RouteComponent() {
                       <div className='flex-start flex-wrap gap-[0.4rem]'>
                         <EscortCard.Info
                           type='time'
-                          text={`${date} ${timeFormat(escort.estimatedMeetingTime)} ~ ${timeFormat(escort.estimatedReturnTime)} ${timeDuration(escort.estimatedMeetingTime, escort.estimatedReturnTime)}`}
+                          text={`${date} ${timeFormat(escort.estimatedMeetingTime, 'HH시')} ~ ${timeFormat(escort.estimatedReturnTime, 'HH시')}`}
                         />
                         <span className='label2-14-bold text-text-neutral-secondary'>
                           {timeDuration(escort.estimatedMeetingTime, escort.estimatedReturnTime)}

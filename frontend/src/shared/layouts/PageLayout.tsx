@@ -9,6 +9,7 @@ interface PageLayoutProps {
 
 interface PageLayoutContentProps {
   children: React.ReactNode;
+  className?: string;
 }
 
 const PageLayout = ({ children, background = 'bg-background-default-white' }: PageLayoutProps) => {
@@ -34,8 +35,8 @@ const Header = ({ title, showBack, showClose, background, onClose, className }: 
   );
 };
 
-const PageLayoutContent = ({ children }: PageLayoutContentProps) => {
-  return <div className='flex-1'>{children}</div>;
+const PageLayoutContent = ({ children, className }: PageLayoutContentProps) => {
+  return <div className={`flex-1 ${className}`}>{children}</div>;
 };
 
 const Footer = ({ children }: BottomCTAProps) => {

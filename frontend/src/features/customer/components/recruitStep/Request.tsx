@@ -15,7 +15,7 @@ const Request = ({ handleNextStep }: FunnelStepProps) => {
           <FormLayout.Title>요청 사항이 있나요?</FormLayout.Title>
           <FormLayout.SubTitle>작성해주신 요청사항은 도우미에게 전달돼요.</FormLayout.SubTitle>
         </FormLayout.TitleWrapper>
-        <LabeledSection label='요청 사항' isChecked={!fieldErrors.purpose && !!values.purpose}>
+        <LabeledSection label='방문 목적' isChecked={!fieldErrors.purpose && !!values.purpose}>
           <FormTextarea
             name='purpose'
             placeholder='병원에 방문한 목적과 수행 업무에 대해서 알려주세요.'
