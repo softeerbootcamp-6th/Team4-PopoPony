@@ -30,9 +30,7 @@ const SubTitle = ({ className, children }: { className?: string; children: React
 
 const Content = ({ children }: FormLayoutProps) => {
   return (
-    <div className='bg-background-default-white flex flex-1 flex-col gap-[3.2rem] overflow-y-auto p-[2rem]'>
-      {children}
-    </div>
+    <div className='flex flex-1 flex-col gap-[3.2rem] overflow-y-auto p-[2rem]'>{children}</div>
   );
 };
 
