@@ -97,9 +97,7 @@ const ReportTab = () => {
                         예상 동행 시간보다 {reportData?.data?.extraMinutes}분 초과되었어요!
                       </span>
                     </div>
-                  ) : (
-                    <></>
-                  )}
+                  ) : null}
                 </InfoSection>
                 <Divider />
                 {reportData?.data?.hasNextAppointment && (
