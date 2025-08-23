@@ -3,8 +3,9 @@ import { Outlet, createRootRouteWithContext, redirect } from '@tanstack/react-ro
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { type QueryClient } from '@tanstack/react-query';
 import { Landing, RootFallbackUI, ErrorSuspenseBoundary } from '@components';
-import { RootLayout } from '@layouts';
+import { RootLayout, PageLayout } from '@layouts';
 import { authStorage } from '@auth/utils';
+import { Toaster } from 'sonner';
 
 interface MyRouterContext {
   queryClient: QueryClient;
@@ -33,7 +34,15 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
       <RootLayout>
         <Landing />
         <ErrorSuspenseBoundary isRoot>
-          <Outlet />
+          <PageLayout>
+            <Outlet />
+            <Toaster
+              position='top-center'
+              style={{ position: 'absolute' }}
+              duration={1000}
+              richColors={true}
+            />
+          </PageLayout>
         </ErrorSuspenseBoundary>
       </RootLayout>
       <div className='text-[16px]'>
