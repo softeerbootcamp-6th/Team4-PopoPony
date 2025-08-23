@@ -12,7 +12,7 @@ interface MyRouterContext {
 
 export const Route = createRootRouteWithContext<MyRouterContext>()({
   beforeLoad: async ({ location }) => {
-    if (location.pathname === '/login') {
+    if (location.pathname === '/login' || location.pathname.startsWith('/dashboard/map/')) {
       return;
     }
     if (!(await authStorage.getIsLoggedIn())) {
