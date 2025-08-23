@@ -4,7 +4,7 @@ import com.todoc.server.common.enumeration.Role;
 import com.todoc.server.common.util.JsonUtils;
 import com.todoc.server.domain.realtime.exception.WebSocketInvalidEnvelopeException;
 import com.todoc.server.domain.realtime.service.WebSocketFacadeService;
-import com.todoc.server.domain.realtime.web.dto.request.LocationRequest;
+import com.todoc.server.domain.realtime.web.dto.request.LocationUpdateRequest;
 import com.todoc.server.domain.realtime.web.dto.response.Envelope;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -55,12 +55,12 @@ public class WebSocketRealtimeHandler extends TextWebSocketHandler {
 
         if (type.equals("location")) {
             try {
-                LocationRequest locationRequest = JsonUtils.fromJson(payloadJson, LocationRequest.class);
-                if (locationRequest == null) {
+                LocationUpdateRequest locationUpdateRequest = JsonUtils.fromJson(payloadJson, LocationUpdateRequest.class);
+                if (locationUpdateRequest == null) {
                     webSocketFacadeService.sendError(session, new WebSocketInvalidEnvelopeException());
                     return;
                 }
-                webSocketFacadeService.handleLocationUpdate(session, locationRequest);
+                webSocketFacadeService.handleLocationUpdate(session, locationUpdateRequest);
 
             } catch (RuntimeException ex) {
                 session.close(CloseStatus.POLICY_VIOLATION.withReason(ex.getMessage()));
