@@ -40,17 +40,10 @@ springdoc:
   show-actuator: false
 
 management:
-  endpoints:
-    web:
-      exposure:
-        include: health
-  endpoint:
-    health:
-      show-details: always
-    endpoints:
-      web:
-        exposure:
-          include: health, mappings
+  metrics:
+    export:
+      cloudwatch:
+        enabled: false   # 기본은 꺼둠
 
 aws:
   s3:
@@ -68,3 +61,6 @@ upload:
 
 tmap:
   app-key: ${TMAP_API_KEY:}
+sms:
+  app-key: ${SMS_API_KEY}
+  app-secret-key: ${SMS_API_SECRET_KEY}

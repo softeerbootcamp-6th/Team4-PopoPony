@@ -15,6 +15,13 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
+    hikari:
+      maximum-pool-size: 30
+      minimum-idle: 5
+      idle-timeout: 600000        # 10분 (기본)
+      max-lifetime: 1800000       # 30분 (DB wait_timeout보다 짧게)
+      connection-timeout: 30000   # 커넥션 획득 대기 30초
+      leak-detection-threshold: 20000 # 20초 이상 반환 안되면 로그 경고
   h2:
     console:
       enabled: true
@@ -25,6 +32,14 @@ management:
     web:
       exposure:
         include: health,metrics,info
+  endpoint:
+    health:
+      show-details: always
+    endpoints:
+      web:
+        exposure:
+          include: health, mappings
+
 
   metrics:
     tags:
