@@ -31,8 +31,7 @@ public class PresenceController {
             nchanPublisher.publish(escortId, webSocketFacadeService.getLocationSnapshot(escortId, Role.PATIENT));
 
         } catch (Exception e) {
-            // 콜백에서 500을 내면 구독 자체가 거부되니, 웬만하면 200을 유지하고 내부 로깅만
-            // 필요하면 실패해도 200 반환하고 다음 틱에서 다시 보낼 구상(재발행 스케줄러)도 가능
+            // TODO : 인증 절차 추가
         }
         return ResponseEntity.ok().build();
     }

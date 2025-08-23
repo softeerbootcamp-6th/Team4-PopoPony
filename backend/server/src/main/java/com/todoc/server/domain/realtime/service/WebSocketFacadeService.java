@@ -15,7 +15,6 @@ import com.todoc.server.domain.realtime.web.dto.response.ErrorResponse;
 import com.todoc.server.domain.realtime.web.dto.response.LocationResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 

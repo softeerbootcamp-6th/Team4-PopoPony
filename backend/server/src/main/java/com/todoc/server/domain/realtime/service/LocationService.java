@@ -19,8 +19,6 @@ public class LocationService {
 
     public LocationUpdateResult registerByWebSocket(WebSocketSession session, LocationUpdateRequest request) {
 
-        // locationCacheRepository.saveSimple(escortId, role, request);
-
         return locationCacheRepository.upsertLatest(session, request);
     }
 

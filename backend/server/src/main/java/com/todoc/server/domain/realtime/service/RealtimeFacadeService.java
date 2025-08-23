@@ -70,11 +70,14 @@ public class RealtimeFacadeService {
             throw new RealtimeCustomerLocationException();
         }
 
-        Instant timestamp = Objects.requireNonNullElseGet(request.getTimestamp(), Instant::now);
+        if (request.getTimestamp() == null) {
+            request.setTimestamp(Instant.now());
+        }
+
         LocationResponse location = LocationResponse.builder()
                 .latitude(request.getLatitude())
                 .longitude(request.getLongitude())
-                .timestamp(timestamp)
+                .timestamp(request.getTimestamp())
                 .build();
 
         Set<Role> roleSet = role == Role.HELPER ? Role.TO_CUSTOMER_AND_PATIENT : Role.TO_CUSTOMER_AND_HELPER;

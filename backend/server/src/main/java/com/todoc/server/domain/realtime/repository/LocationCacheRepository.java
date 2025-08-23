@@ -12,7 +12,6 @@ import com.todoc.server.domain.realtime.web.dto.request.LocationUpdateRequest;
 import com.todoc.server.domain.realtime.web.dto.response.LocationResponse;
 import com.todoc.server.domain.realtime.web.dto.response.LocationRichResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.stereotype.Repository;
@@ -27,7 +26,6 @@ import org.springframework.web.socket.WebSocketSession;
 @RequiredArgsConstructor
 public class LocationCacheRepository {
 
-    //private final RedisTemplate<String, Object> redisTemplate;
     private final StringRedisTemplate stringRedisTemplate;
     private final DefaultRedisScript<String> updateLocationLua;
     private final ObjectMapper objectMapper;
@@ -65,18 +63,6 @@ public class LocationCacheRepository {
                 String.valueOf(ACCURACY_MAX), String.valueOf(MAX_SPEED),
                 String.valueOf(MIN_DT), String.valueOf(MAX_DT)
         };
-
-//        // Lua 스크립트 실행
-//        @SuppressWarnings("unchecked")
-//        List<Object> res = (List<Object>) redisTemplate.execute(
-//                updateLocationLua,
-//                Collections.singletonList(key),
-//                argv
-//        );
-//
-//        int code = ((Number) res.get(0)).intValue();
-//        String reason = String.valueOf(res.get(1));
-//        return new LocationUpdateResult(code == 1, reason);
 
         try {
             String res = stringRedisTemplate.execute(
