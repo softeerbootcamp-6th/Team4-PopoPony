@@ -1,7 +1,6 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { QueryErrorResetBoundary } from '@tanstack/react-query';
 import { ErrorBoundary } from 'react-error-boundary';
-import { Suspense } from 'react';
 import { SuspenseUI, FallbackUI, RootFallbackUI } from '@components';
 
 type Props = {
@@ -14,25 +13,20 @@ const ErrorSuspenseBoundary = ({ children, isRoot = false }: Props) => {
     <QueryErrorResetBoundary>
       {({ reset }) => (
         <ErrorBoundary
-          fallbackRender={({ error, resetErrorBoundary }) =>
-            isRoot ? (
-              <RootFallbackUI
-                error={error}
-                onReset={() => {
-                  reset();
-                  resetErrorBoundary();
-                }}
-              />
+          resetKeys={isRoot ? [location.pathname] : undefined}
+          onReset={reset}
+          fallbackRender={({ error, resetErrorBoundary }) => {
+            const handleReset = () => {
+              reset();
+              resetErrorBoundary();
+            };
+
+            return isRoot ? (
+              <RootFallbackUI error={error} onReset={handleReset} />
             ) : (
-              <FallbackUI
-                error={error}
-                onReset={() => {
-                  reset();
-                  resetErrorBoundary();
-                }}
-              />
-            )
-          }>
+              <FallbackUI error={error} onReset={handleReset} />
+            );
+          }}>
           <Suspense fallback={<SuspenseUI />}>{children}</Suspense>
         </ErrorBoundary>
       )}
