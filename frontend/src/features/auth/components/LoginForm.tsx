@@ -6,6 +6,7 @@ import { useNavigate } from '@tanstack/react-router';
 import { postLogin } from '@auth/apis';
 import { AuthInput } from '@auth/components';
 import { toast } from 'sonner';
+import { getErrorLabel } from '@apis';
 
 const LoginForm = () => {
   const navigate = useNavigate();
@@ -34,6 +35,7 @@ const LoginForm = () => {
         onSuccess: (data) => {
           if (data.status === 200) {
             authStorage.setIsLoggedIn(true);
+            toast.success('로그인에 성공했어요.');
             navigate({
               to: '/',
             });
@@ -41,8 +43,10 @@ const LoginForm = () => {
             toast.error(data.message);
           }
         },
-        onError: (error: { message: string }) => {
-          toast.error(error.message);
+        onError: (error: unknown) => {
+          const label = getErrorLabel(error);
+          const message = error instanceof Error ? error.message : '로그인에 실패했어요.';
+          toast.error(`[${label}] ${message}`);
         },
       }
     );
