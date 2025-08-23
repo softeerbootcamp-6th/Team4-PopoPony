@@ -18,7 +18,7 @@ const RootFallbackUI = ({ error, onReset }: { error: Error; onReset?: () => void
         <p className='body1-16-medium text-text-neutral-primary'>에러가 발생했습니다.</p>
         <p className='body1-16-medium text-text-neutral-primary'>{error.name}</p>
         <p className='body1-16-medium text-text-neutral-primary'>{error.message}</p>
-        <Button variant='secondary' size='md' onClick={handleClick}>
+        <Button size='md' onClick={handleClick}>
           홈으로 이동
         </Button>
       </div>
