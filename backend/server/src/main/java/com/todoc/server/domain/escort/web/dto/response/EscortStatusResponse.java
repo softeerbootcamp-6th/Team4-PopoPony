@@ -15,10 +15,6 @@ import java.time.ZoneId;
 public class EscortStatusResponse {
 
     @NotNull
-    @Schema(description = "동행 ID")
-    private Long escortId;
-
-    @NotNull
     @Schema(description = "동행 상태", example = "병원행")
     private String escortStatus;
 
@@ -26,8 +22,7 @@ public class EscortStatusResponse {
     @Schema(description = "타임스탬프")
     private Instant timestamp;
 
-    public EscortStatusResponse(Long escortId, String escortStatus, LocalDateTime timestamp) {
-        this.escortId = escortId;
+    public EscortStatusResponse(String escortStatus, LocalDateTime timestamp) {
         this.escortStatus = escortStatus;
         this.timestamp = timestamp.atZone(ZoneId.of("Asia/Seoul")).toInstant();
     }

@@ -80,6 +80,9 @@ dependencies {
 
 	// WebSocket
 	implementation ("org.springframework.boot:spring-boot-starter-websocket")
+
+	// SMS
+	implementation("net.nurigo:sdk:4.3.2")
 }
 
 val querydslDir = layout.buildDirectory.dir("generated/querydsl")
