@@ -60,7 +60,11 @@ const Comment = ({ escortId, handleNextStep }: CommentProps) => {
         <FormTextarea name='reviewComment' placeholder='최소 5자 이상 작성해주세요.' rows={5} />
       </FormLayout.Content>
       <FormLayout.Footer>
-        <FormLayout.FooterPrevNext handleClickNext={handleClickNext} disabled={!isFormValid} />
+        <FormLayout.FooterPrevNext
+          handleClickNext={handleClickNext}
+          disabled={!isFormValid}
+          nextButtonText='완료'
+        />
       </FormLayout.Footer>
     </FormLayout>
   );

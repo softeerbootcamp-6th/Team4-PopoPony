@@ -14,6 +14,7 @@ import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.server.HandshakeInterceptor;
 
 import java.util.Map;
+import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
@@ -53,6 +54,7 @@ public class WebSocketAuthHandshakeInterceptor implements HandshakeInterceptor {
         attrs.put("authId", authId);
         attrs.put("role", role);
         attrs.put("escortId", escortId);
+        attrs.put("sessionId", UUID.randomUUID().toString());
 
         return true;
     }

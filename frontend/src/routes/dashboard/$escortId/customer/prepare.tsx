@@ -56,7 +56,7 @@ function RouteComponent() {
   useEffect(() => {
     if (!mapInstance) return;
 
-    addRoutePolyline(route);
+    addRoutePolyline(escortDetail.route);
   }, [mapInstance]);
 
   if (!isTmapLoaded) return <div>Loading...</div>;

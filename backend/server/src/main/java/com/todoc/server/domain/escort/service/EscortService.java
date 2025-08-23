@@ -11,9 +11,11 @@ import com.todoc.server.domain.escort.repository.EscortJpaRepository;
 import com.todoc.server.domain.escort.repository.EscortQueryRepository;
 import com.todoc.server.domain.escort.web.dto.request.EscortMemoUpdateRequest;
 import com.todoc.server.domain.escort.web.dto.response.EscortStatusResponse;
+import com.todoc.server.domain.realtime.service.NchanPublisher;
 import com.todoc.server.domain.realtime.service.WebSocketSessionRegistry;
 import com.todoc.server.domain.realtime.service.SseEmitterManager;
 import com.todoc.server.domain.realtime.web.dto.response.Envelope;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,6 +32,7 @@ public class EscortService {
     private final EscortQueryRepository escortQueryRepository;
     private final SseEmitterManager emitterManager;
     private final WebSocketSessionRegistry sessionRegistry;
+    private final NchanPublisher nchanPublisher;
 
     @Transactional(readOnly = true)
     public Long getCountByHelperUserId(Long helperId) {
@@ -97,8 +100,11 @@ public class EscortService {
 
             // TODO :: 진행 상태 변화 고객에게 알림 (Web Push, SMS, E-mail 등)
             // TODO :: 웹소켓 연결 후 SSE는 제거
-            emitterManager.send(escortId, Role.CUSTOMER, "status", new EscortStatusResponse(escortId, nextStatus.getLabel(), now));
-            sessionRegistry.sendToRole(escortId, Role.CUSTOMER, new Envelope("status", new EscortStatusResponse(escortId, nextStatus.getLabel(), now)));
+            Envelope envelope = new Envelope("status", new EscortStatusResponse(nextStatus.getLabel(), now));
+
+            emitterManager.send(escortId, Role.CUSTOMER, "status", new EscortStatusResponse(nextStatus.getLabel(), now));
+            sessionRegistry.sendToRole(escortId, Role.CUSTOMER, envelope);
+            nchanPublisher.publish(escortId, envelope);
 
         } else {
             throw new EscortInvalidProceedException();
@@ -125,7 +131,9 @@ public class EscortService {
             if (nextStatus == EscortStatus.HEADING_TO_HOSPITAL) {
                 escort.setActualMeetingTime(now);
 
+                // TODO :: 웹소켓 연결 후 SSE는 제거
                 emitterManager.close(escortId, Role.PATIENT);
+                sessionRegistry.remove(escortId, Role.PATIENT);
             }
 
             // 동행 복귀 완료
@@ -136,7 +144,12 @@ public class EscortService {
             }
 
             // TODO :: 진행 상태 변화 고객에게 알림 (Web Push, SMS, E-mail 등)
-            emitterManager.send(escortId, Role.CUSTOMER, "status", new EscortStatusResponse(escortId, nextStatus.getLabel(), now));
+            // TODO :: 웹소켓 연결 후 SSE는 제거
+            Envelope envelope = new Envelope("status", new EscortStatusResponse(nextStatus.getLabel(), now));
+
+            emitterManager.send(escortId, Role.CUSTOMER, "status", new EscortStatusResponse(nextStatus.getLabel(), now));
+            sessionRegistry.sendToRole(escortId, Role.CUSTOMER, envelope);
+            nchanPublisher.publish(escortId, envelope);
 
         } else {
             throw new EscortInvalidProceedException();
@@ -150,27 +163,17 @@ public class EscortService {
         escort.setMemo(request.getMemo());
     }
 
-    /**
-     * 다음 기준을 충족하는 Escort 대해 Status를 PREPARING("동행준비") -> MEETING("만남중")으로 업데이트
-     * 스케쥴러가 동작하는 시각이 00시 ~ 21시 이전일 때와 21시 ~ 00시 사이에 따라 다르게 동작
-     * 1. Escort.Recruit의 status가 COMPLETED("매칭완료")
-     * 2. Escort의 status가 PREPARING("동행준비")
-     * 3. Recruit의 escortDate가 현재 날짜와 같고,
-     * 4. Recruit의 estimatedMeetingTime이 현재 시간보다 3시간 이내 (180분)인 경우
-     */
-    public void updateStatusForEscortBeforeMeeting() {
+    @Transactional
+    public void updateStatusForEscortBeforeMeeting(LocalDate today,
+                                                   LocalTime from, LocalTime to, ZonedDateTime now) {
+        escortQueryRepository.updateStatusForEscortBeforeMeeting(today, from, to, now);
+    }
 
-        OffsetDateTime now = OffsetDateTime.now(ZoneId.of("Asia/Seoul"));
-        LocalDate todayUtc = now.toLocalDate();
-        LocalTime from = now.toLocalTime();
-        LocalTime to = from.plusHours(3);
 
-        if (OffsetDateTime.now(ZoneOffset.UTC).getHour() < 21) {
-            escortQueryRepository.updateStatusForEscortBeforeMeeting(todayUtc, from, to);
-        } else {
-            // 자정 넘김(예: 22:00~익일 01:00) 케이스는 두 구간으로 쪼개 호출
-            escortQueryRepository.updateStatusForEscortBeforeMeeting(todayUtc, from, LocalTime.MAX);
-            escortQueryRepository.updateStatusForEscortBeforeMeeting(todayUtc.plusDays(1), LocalTime.MIN, to);
-        }
+    @Transactional
+    public List<Escort> getEscortForPreparingAndBetween(LocalDate date, LocalTime from, LocalTime to) {
+        List<Escort> recruitList = escortQueryRepository.getEscortForPreparingAndBetween(date, from, to);
+
+        return recruitList;
     }
 }

@@ -8,24 +8,25 @@ import { useMap } from '@hooks';
 import type { Position, TMapMarker } from '@types';
 import { useSSE } from '@dashboard/hooks';
 import { updatedBefore } from '@helper/utils';
-export const Route = createFileRoute('/dashboard/$escortId/map')({
+export const Route = createFileRoute('/dashboard/map/$encryptedId')({
   component: RouteComponent,
 });
 
 const { Tmapv3 } = window;
 
 function RouteComponent() {
-  const { escortId: recruitId } = Route.useParams();
+  // 암호화된 아이디를 복호화하여 동행 아이디로 변환
+  const { encryptedId: recruitId } = Route.useParams();
   const { data: escortData } = getEscortDetail(Number(recruitId));
   //필요한 데이터 추가로 escortData.data에서 가져오기
   const { estimatedMeetingTime, helper, route, escortId } = escortData?.data ?? {};
   const { mutate: postCurrentPositionCall } = postCurrentPosition();
   const timerRef = useRef<number | null>(null);
   const [curLocation, setCurLocation] = useState<Position | null>(null);
-  const { helperLocations } = useSSE(String(recruitId), 'patient');
+  const { helperLocations } = useSSE(String(escortId), 'patient');
 
   const mapRef = useRef<HTMLDivElement>(null);
-  const { mapInstance, setCurrentLocation, handleSetCenterAndZoom, addMarker, addCustomMarker } =
+  const { mapInstance, setCurrentLocation, fitBoundsToCoordinates, addMarker, addCustomMarker } =
     useMap(mapRef as React.RefObject<HTMLDivElement>);
 
   const patientMarker = useRef<TMapMarker>(null);
@@ -76,16 +77,10 @@ function RouteComponent() {
     if (curLocation?.lat && curLocation?.lon) {
       if (!patientMarker.current) {
         patientMarker.current = addMarker(curLocation.lat, curLocation.lon, 'me');
-        handleSetCenterAndZoom(
-          {
-            lat: curLocation?.lat ?? 0,
-            lon: curLocation?.lon ?? 0,
-          },
-          {
-            lat: helperLocations?.latitude ?? 0,
-            lon: helperLocations?.longitude ?? 0,
-          }
-        );
+        fitBoundsToCoordinates([
+          { lat: curLocation.lat, lon: curLocation.lon },
+          { lat: helperLocations?.latitude, lon: helperLocations?.longitude },
+        ]);
       } else {
         patientMarker.current?.setPosition(new Tmapv3.LatLng(curLocation.lat, curLocation.lon));
       }
@@ -105,16 +100,10 @@ function RouteComponent() {
           `${helperName} 도우미`,
           helperImageUrl
         );
-        handleSetCenterAndZoom(
-          {
-            lat: helperLocations?.latitude ?? 0,
-            lon: helperLocations?.longitude ?? 0,
-          },
-          {
-            lat: curLocation?.lat ?? 0,
-            lon: curLocation?.lon ?? 0,
-          }
-        );
+        fitBoundsToCoordinates([
+          { lat: helperLocations?.latitude, lon: helperLocations?.longitude },
+          { lat: curLocation?.lat, lon: curLocation?.lon },
+        ]);
       } else {
         helperMarker.current?.setPosition(
           new Tmapv3.LatLng(helperLocations.latitude, helperLocations.longitude)
@@ -193,6 +182,7 @@ function RouteComponent() {
       </PageLayout.Footer>
       <TermsBottomSheet
         defaultOpen={!localStorage.getItem('termsAgreement')}
+        closeOnBackdrop={false}
         onSubmit={() => {
           localStorage.setItem('termsAgreement', 'true');
         }}

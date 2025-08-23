@@ -4,7 +4,7 @@ import { z } from 'zod';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { Calendar, EmptyCard, EscortCard, StrengthTagList } from '@components';
 import { getSearchRecruits } from '@helper/apis';
-import { dateFormat, timeDuration, timeFormat } from '@utils';
+import { dateFormat, timeDuration, timeFormat, isBeforeToday } from '@utils';
 import { useMemo, useRef, useState } from 'react';
 import type { DateRange } from 'react-day-picker';
 import { useClickOutside } from '@hooks';
@@ -79,7 +79,7 @@ function RouteComponent() {
   return (
     <PageLayout>
       <PageLayout.Header title='일감 찾기' showBack={true} />
-      <PageLayout.Content>
+      <PageLayout.Content className='overflow-y-auto'>
         <section className='flex-start gap-[1.2rem] px-[2rem] py-[1.2rem]'>
           <RegionBottomSheet onSelect={handleSelectRegion}>
             <FilterButton
@@ -101,6 +101,7 @@ function RouteComponent() {
                   mode='range'
                   selected={selectedDateRange}
                   captionLayout='dropdown'
+                  disabled={isBeforeToday}
                   onSelect={(dateRange) => {
                     setSelectedDateRange(dateRange);
                   }}
@@ -136,7 +137,7 @@ function RouteComponent() {
                       <div className='flex-start flex-wrap gap-[0.4rem]'>
                         <EscortCard.Info
                           type='time'
-                          text={`${date} ${timeFormat(escort.estimatedMeetingTime)} ~ ${timeFormat(escort.estimatedReturnTime)} ${timeDuration(escort.estimatedMeetingTime, escort.estimatedReturnTime)}`}
+                          text={`${date} ${timeFormat(escort.estimatedMeetingTime, 'HH시')} ~ ${timeFormat(escort.estimatedReturnTime, 'HH시')}`}
                         />
                         <span className='label2-14-bold text-text-neutral-secondary'>
                           {timeDuration(escort.estimatedMeetingTime, escort.estimatedReturnTime)}

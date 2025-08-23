@@ -5,6 +5,7 @@ import type { RecruitStatus } from '@types';
 import { dateFormat, timeFormat } from '@utils';
 import { getRecruitList, getProfileExistance } from '@helper/apis';
 import type { RecruitSimpleResponse, EscortStatus } from '@helper/types';
+// import { toast } from 'sonner';
 
 export const Route = createFileRoute('/helper/')({
   component: RouteComponent,
@@ -41,7 +42,7 @@ const refineEscortData = (escortData: RecruitSimpleResponse): RefinedEscortData 
     statusText = escortStatusMessageMap[escortData.escortStatus as NonNullable<EscortStatus>] ?? '';
   } else {
     if (escortData.recruitStatus === '동행완료') {
-      statusText = statusMessageMap[escortData.recruitStatus] + (escortData.escortId || '');
+      statusText = statusMessageMap[escortData.recruitStatus] + (escortData.recruitId || '');
     } else {
       statusText = statusMessageMap[escortData.recruitStatus];
     }
@@ -73,6 +74,17 @@ function RouteComponent() {
   const { inProgressList: inProgressListData, completedList: completedListData } =
     recruitListData?.data ?? {};
   const navigate = useNavigate();
+  const handleClickApplication = () => {
+    if (hasProfile && helperProfileId) {
+      navigate({
+        to: '/helper/application',
+        params: { helperId: helperProfileId.toString() },
+      });
+    } else {
+      alert('프로필을 작성해주세요.');
+      // toast.error('프로필을 작성해주세요.');
+    }
+  };
   const handleEscortCardClick = (recruitId: number, isCompleted: boolean) => {
     if (isCompleted) {
       navigate({
@@ -125,11 +137,9 @@ function RouteComponent() {
                 )}
               </div>
               <div className='flex-1'>
-                <Link to='/helper/application'>
-                  <Button size='md'>
-                    <span className='text-text-neutral-0'>일감찾기</span>
-                  </Button>
-                </Link>
+                <Button size='md' onClick={handleClickApplication}>
+                  <span className='text-text-neutral-0'>일감찾기</span>
+                </Button>
               </div>
             </div>
           </div>

@@ -3,7 +3,7 @@ interface Props {
 }
 
 const RootLayout = ({ children }: Props) => {
-  return <div className='flex h-[100dvh] justify-center gap-[14rem]'>{children}</div>;
+  return <div className='flex min-h-[100dvh]'>{children}</div>;
 };
 
 export default RootLayout;

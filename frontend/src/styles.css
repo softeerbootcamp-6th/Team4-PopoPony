@@ -155,12 +155,20 @@
 /*        BASE STYLES        */
 /* ========================= */
 @layer base {
+  * {
+    scrollbar-width: none;
+  }
+
   html {
     font-size: 62.5%;
     font-family: var(--font-pretendard);
     overscroll-behavior: none;
     background-color: var(--color-neutral-10);
     scroll-behavior: smooth;
+  }
+
+  body {
+    overscroll-behavior: none;
   }
 
   p {
@@ -178,10 +186,6 @@
 
   input:disabled {
     cursor: not-allowed;
-  }
-
-  ::-webkit-scrollbar {
-    display: none;
   }
 }
 

@@ -32,7 +32,13 @@ public class LoggingAspect {
         String methodName = joinPoint.getSignature().toShortString();
         Object[] args = joinPoint.getArgs();
 
-        log.info("➡️ {} 호출  parameters= {}", methodName, args);
+        // 파라미터 줄이기
+        StringBuilder params = new StringBuilder();
+        for (Object arg : args) {
+            params.append(truncate(arg)).append(", ");
+        }
+
+        log.info("➡️ {} 호출  parameters= {}", methodName, params);
 
         try {
             Object result = joinPoint.proceed();
@@ -46,4 +52,11 @@ public class LoggingAspect {
             throw t;
         }
     }
+
+    private String truncate(Object arg) {
+        String str = String.valueOf(arg);
+        int maxLength = 200; // 최대 200자까지만
+        return str.length() > maxLength ? str.substring(0, maxLength) + "...(truncated)" : str;
+    }
+
 }
