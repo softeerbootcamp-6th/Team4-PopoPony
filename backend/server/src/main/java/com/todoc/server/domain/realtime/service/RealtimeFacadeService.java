@@ -7,7 +7,7 @@ import com.todoc.server.domain.escort.web.dto.response.EscortStatusResponse;
 import com.todoc.server.domain.realtime.exception.RealtimeAlreadyMetPatientException;
 import com.todoc.server.domain.realtime.exception.RealtimeCustomerLocationException;
 import com.todoc.server.domain.realtime.exception.RealtimeInvalidRoleException;
-import com.todoc.server.domain.realtime.web.dto.request.LocationRequest;
+import com.todoc.server.domain.realtime.web.dto.request.LocationUpdateRequest;
 import com.todoc.server.domain.realtime.web.dto.response.LocationResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -42,7 +42,7 @@ public class RealtimeFacadeService {
         try {
             emitter.send(SseEmitter.event()
                     .name("status")
-                    .data(new EscortStatusResponse(escortId, escortStatus.getLabel(), LocalDateTime.now())));
+                    .data(new EscortStatusResponse(escortStatus.getLabel(), LocalDateTime.now())));
 
             if (role != Role.PATIENT) {
                 if (escortStatus == EscortStatus.MEETING) {
@@ -61,7 +61,7 @@ public class RealtimeFacadeService {
     /**
      * Escort의 도우미/환자의 최근 위치 정보를 갱신
      */
-    public void updateLocation(Long escortId, String roleString, LocationRequest request) {
+    public void updateLocation(Long escortId, String roleString, LocationUpdateRequest request) {
 
         Role role = getRole(roleString);
         validateAlreadyMetPatient(role, escortService.getById(escortId).getStatus());
@@ -70,9 +70,8 @@ public class RealtimeFacadeService {
             throw new RealtimeCustomerLocationException();
         }
 
-        Instant timestamp = Instant.now();
+        Instant timestamp = Objects.requireNonNullElseGet(request.getTimestamp(), Instant::now);
         LocationResponse location = LocationResponse.builder()
-                .escortId(escortId)
                 .latitude(request.getLatitude())
                 .longitude(request.getLongitude())
                 .timestamp(timestamp)
@@ -81,7 +80,7 @@ public class RealtimeFacadeService {
         Set<Role> roleSet = role == Role.HELPER ? Role.TO_CUSTOMER_AND_PATIENT : Role.TO_CUSTOMER_AND_HELPER;
         emitterManager.send(escortId, roleSet, role.getLabel() + "-location", location);
 
-        locationService.register(escortId, role, request, timestamp);
+        locationService.registerBySse(escortId, role, request);
     }
 
     private Role getRole(String roleString) {
