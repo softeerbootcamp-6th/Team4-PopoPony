@@ -9,6 +9,7 @@ import com.todoc.server.domain.escort.entity.QEscort;
 import com.todoc.server.domain.escort.entity.QRecruit;
 import com.todoc.server.domain.route.entity.QLocationInfo;
 import com.todoc.server.domain.route.entity.QRouteLeg;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -84,5 +85,20 @@ public class EscortQueryRepository {
                 .leftJoin(route.hospitalToReturn, hospitalToReturn).fetchJoin()
                 .where(escort.recruit.id.eq(recruitId))
                 .fetchOne();
+    }
+
+    public List<Escort> getEscortForPreparingAndBetween(LocalDate date, LocalTime from, LocalTime to) {
+        return queryFactory
+            .select(escort)
+            .from(escort)
+            .join(escort.recruit, recruit).fetchJoin()
+            .join(recruit.patient, patient).fetchJoin()
+            .where(
+                recruit.status.eq(RecruitStatus.COMPLETED),
+                escort.status.eq(EscortStatus.PREPARING),
+                recruit.escortDate.eq(date),
+                recruit.estimatedMeetingTime.between(from, to)
+            )
+            .fetch();
     }
 }
