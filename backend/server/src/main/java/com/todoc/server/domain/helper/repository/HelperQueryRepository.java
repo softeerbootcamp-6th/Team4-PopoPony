@@ -2,9 +2,13 @@ package com.todoc.server.domain.helper.repository;
 
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.todoc.server.domain.escort.repository.dto.ApplicationFlatDto;
 import com.todoc.server.domain.helper.entity.HelperProfile;
+import com.todoc.server.domain.helper.repository.dto.HelperSimpleFlatDto;
 import com.todoc.server.domain.helper.repository.dto.HelperUpdateDefaultFlatDto;
+import com.todoc.server.domain.helper.web.dto.response.HelperSimpleResponse;
 import com.todoc.server.domain.image.entity.QImageFile;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -24,10 +28,10 @@ public class HelperQueryRepository {
     private final JPAQueryFactory queryFactory;
 
     @Transactional(readOnly = true)
-    public List<Tuple> getHelperSimpleByHelperProfileId(Long helperProfileId) {
+    public List<HelperSimpleFlatDto> getHelperSimpleByHelperProfileId(Long helperProfileId) {
 
         return queryFactory
-                .select(
+                .select(Projections.constructor(HelperSimpleFlatDto.class,
                         helperProfile.id,
                         helperProfile.helperProfileImage,
                         helperProfile.strength,
@@ -37,7 +41,7 @@ public class HelperQueryRepository {
                         auth.birthDate,
                         auth.gender,
                         auth.contact,
-                        certificate.type
+                        certificate.type)
                 )
                 .from(helperProfile)
                 .join(helperProfile.auth, auth)

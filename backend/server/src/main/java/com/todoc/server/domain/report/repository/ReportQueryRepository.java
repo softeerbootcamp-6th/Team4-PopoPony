@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 import static com.todoc.server.domain.report.entity.QReport.report;
 import static com.todoc.server.domain.report.entity.QTaxiFee.taxiFee;
 import static com.todoc.server.domain.escort.entity.QRecruit.recruit;
@@ -37,7 +39,7 @@ public class ReportQueryRepository {
 
         Long reportId = tuple.get(report).getId();
 
-        java.util.List<Long> imageIds = queryFactory
+        List<Long> imageIds = queryFactory
                 .select(imageFile.id)
                 .from(imageAttachment)
                 .join(imageAttachment.imageFile, imageFile)

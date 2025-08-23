@@ -1,128 +1,150 @@
 package com.todoc.server.domain.escort.service;
 
-import com.todoc.server.IntegrationTestBase;
-import com.todoc.server.common.enumeration.ApplicationStatus;
-import com.todoc.server.common.enumeration.RecruitStatus;
-import com.todoc.server.domain.auth.service.AuthService;
+import com.todoc.server.IntegrationTest;
 import com.todoc.server.domain.escort.entity.Application;
-import com.todoc.server.domain.escort.entity.Escort;
-import com.todoc.server.domain.escort.entity.Recruit;
-import com.todoc.server.domain.escort.exception.ApplicationInvalidSelectException;
-import com.todoc.server.domain.escort.exception.RecruitNotFoundException;
-import com.todoc.server.domain.escort.web.dto.response.ApplicationListResponse;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
+import com.todoc.server.domain.escort.exception.ApplicationNotFoundException;
+import com.todoc.server.domain.escort.repository.dto.ApplicationFlatDto;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.*;
 
-@SpringBootTest
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE) // 실제 DB 사용 시
-@Transactional
-@ActiveProfiles("test")
 @Sql("/sql/data.sql")
-public class ApplicationIntegrationTest extends IntegrationTestBase {
+public class ApplicationIntegrationTest extends IntegrationTest {
 
     @Autowired
     private ApplicationService applicationService;
+    @Nested
+    @DisplayName("getApplicationListByRecruitId")
+    class GetApplicationListByRecruitId {
 
-    @Autowired
-    private EscortService escortService;
+        @Test
+        void getApplicationListByRecruitId_정상() {
+            // given
+            Long recruitId = 7L; // data.sql 기준, 지원 3명이 있는 recruit
 
-    @Autowired
-    private RecruitService recruitService;
+            // when
+            Map<Long, List<ApplicationFlatDto>> grouped =
+                    applicationService.getApplicationListByRecruitId(recruitId);
 
-    @Autowired
-    private ApplicationFacadeService applicationFacadeService;
+            // then
+            assertThat(grouped).isNotEmpty();
+            assertThat(grouped.values().stream().flatMap(List::stream).toList())
+                    .extracting(ApplicationFlatDto::getName)
+                    .containsExactlyInAnyOrder("정우성", "이서연", "김민수");
+        }
 
-    @Autowired
-    private AuthService authService;
+        @Test
+        void getApplicationListByRecruitId_없는RecruitId() {
+            // given
+            Long recruitId = 999L;
 
-    @PersistenceContext
-    private EntityManager em;
+            // when
+            Map<Long, List<ApplicationFlatDto>> grouped = applicationService.getApplicationListByRecruitId(recruitId);
 
-    @Test
-    @DisplayName("동행 신청에 대한 지원 목록 조회 - 정상")
-    void getApplicationListByRecruitId_정상() {
-        // given
-        Long recruitId = 7L;
-
-        // when
-        ApplicationListResponse response = applicationFacadeService.getApplicationListByRecruitId(recruitId);
-
-        // then
-        assertThat(response).isNotNull();
-        assertThat(response.getApplicationList().size()).isEqualTo(3);
-        assertThat(response.getApplicationList().getFirst().getHelper().getName()).isEqualTo("김민수");
+            // then
+            assertThat(grouped).isEmpty();
+        }
     }
 
-    @Test
-    @DisplayName("동행 신청에 대한 지원 목록 조회 - 존재하지 않는 신청")
-    void getApplicationListByRecruitId_존재하지않는신청() {
-        // given
-        Long recruitId = 999L;
+    @Nested
+    @DisplayName("getApplicationsInSameRecruit")
+    class GetApplicationsInSameRecruit {
 
-        // when & then
-        assertThatThrownBy(() -> applicationFacadeService.getApplicationListByRecruitId(recruitId))
-                .isInstanceOf(RecruitNotFoundException.class);
+        @Test
+        void getApplicationsInSameRecruit_정상() {
+            // given
+            Long applicationId = 13L; // recruit 7의 지원 중 하나
+
+            // when
+            List<Application> applications = applicationService.getApplicationsInSameRecruit(applicationId);
+
+            // then
+            assertThat(applications).isNotEmpty();
+            assertThat(applications).allMatch(a -> a.getRecruit().getId().equals(7L));
+        }
+
+        @Test
+        void getApplicationsInSameRecruit_없는Application_비어있음() {
+            // given
+            Long applicationId = 9999L;
+
+            // when
+            List<Application> applications =
+                    applicationService.getApplicationsInSameRecruit(applicationId);
+
+            // then
+            assertThat(applications).isEmpty();
+        }
     }
 
-    @Test
-    @DisplayName("지원 선택 - 정상 케이스")
-    void selectApplication_정상() {
-        // given
-        Long targetApplicationId = 13L;
+    @Nested
+    @DisplayName("getMatchedApplicationByRecruitId")
+    class GetMatchedApplicationByRecruitId {
 
-        // when
-        applicationFacadeService.selectApplication(targetApplicationId);
+        @Test
+        void getMatchedApplicationByRecruitId_정상() {
+            // given
+            Long recruitId = 1L; // data.sql에서 이미 MATCHED된 recruit
 
-        // then
-        List<Application> applications = applicationService.getApplicationsInSameRecruit(targetApplicationId);
-        Recruit recruit = applications.getFirst().getRecruit();
+            // when
+            Application matched = applicationService.getMatchedApplicationByRecruitId(recruitId);
 
-        // 선택된 지원이 MATCHED 되었는지 확인
-        Application matched = applications.stream()
-                .filter(a -> a.getId().equals(targetApplicationId))
-                .findFirst()
-                .orElseThrow();
-        assertThat(matched.getStatus()).isEqualTo(ApplicationStatus.MATCHED);
+            // then
+            assertThat(matched.getStatus().name()).isEqualTo("MATCHED");
+        }
 
-        // 나머지는 FAILED 되었는지 확인
-        applications.stream()
-                .filter(a -> !a.getId().equals(targetApplicationId))
-                .forEach(a -> assertThat(a.getStatus()).isEqualTo(ApplicationStatus.FAILED));
+        @Test
+        void getMatchedApplicationByRecruitId_신청이_없으면_예외() {
+            // given
+            Long recruitId = 999L;
 
-        // recruit 상태가 COMPLETED로 바뀌었는지 확인
-        Recruit updatedRecruit = recruitService.getRecruitById(recruit.getId());
-        assertThat(updatedRecruit.getStatus()).isEqualTo(RecruitStatus.COMPLETED);
+            // when & then
+            assertThatThrownBy(() -> applicationService.getMatchedApplicationByRecruitId(recruitId))
+                    .isInstanceOf(ApplicationNotFoundException.class);
+        }
 
-        // escort 생성 여부 확인
-        Escort escort = escortService.getByRecruitId(recruit.getId());
-        assertThat(escort.getRecruit().getId()).isEqualTo(recruit.getId());
-        assertThat(escort.getCustomer()).isEqualTo(recruit.getCustomer());
-        assertThat(escort.getHelper()).isEqualTo(matched.getHelper());
+        @Test
+        void getMatchedApplicationByRecruitId_매칭된_지원이_없으면_예외() {
+            // given
+            Long recruitId = 7L; // 모든 application들이 PENDING상태
+
+            // when & then
+            assertThatThrownBy(() -> applicationService.getMatchedApplicationByRecruitId(recruitId))
+                    .isInstanceOf(ApplicationNotFoundException.class);
+        }
     }
 
-    // 예외 케이스: 이미 매칭된 지원 선택 시
-    @Test
-    @DisplayName("지원 선택 - 이미 매칭된 지원 선택 시 예외")
-    void selectApplication_이미매칭된지원() {
-        // given
-        Long alreadyMatchedApplicationId = 1L;
+    @Nested
+    @DisplayName("getApplicationById / save")
+    class SaveAndGetApplication {
 
-        // when & then
-        assertThatThrownBy(() ->
-                applicationFacadeService.selectApplication(alreadyMatchedApplicationId))
-                .isInstanceOf(ApplicationInvalidSelectException.class);
+        @Test
+        void save_그리고_getApplicationById_정상() {
+            // given
+            Long existedApplicationId = 1L;
+
+            // when
+            Application found = applicationService.getApplicationById(existedApplicationId);
+
+            // then
+            assertThat(found.getId()).isEqualTo(existedApplicationId);
+        }
+
+        @Test
+        void getApplicationById_없으면_예외() {
+            // given
+            Long applicationId = 9999L;
+
+            // when & then
+            assertThatThrownBy(() -> applicationService.getApplicationById(applicationId))
+                    .isInstanceOf(ApplicationNotFoundException.class);
+        }
     }
 }
