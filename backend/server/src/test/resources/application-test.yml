@@ -14,3 +14,6 @@ spring:
 
 tmap:
   api-key: ${TMAP_API_KEY:}
+sms:
+  app-key: dummy-test-key
+  app-secret-key: dummy-test-secret

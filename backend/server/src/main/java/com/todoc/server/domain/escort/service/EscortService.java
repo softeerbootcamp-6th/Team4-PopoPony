@@ -15,6 +15,7 @@ import com.todoc.server.domain.realtime.service.NchanPublisher;
 import com.todoc.server.domain.realtime.service.WebSocketSessionRegistry;
 import com.todoc.server.domain.realtime.service.SseEmitterManager;
 import com.todoc.server.domain.realtime.web.dto.response.Envelope;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -166,5 +167,13 @@ public class EscortService {
     public void updateStatusForEscortBeforeMeeting(LocalDate today,
                                                    LocalTime from, LocalTime to, ZonedDateTime now) {
         escortQueryRepository.updateStatusForEscortBeforeMeeting(today, from, to, now);
+    }
+
+
+    @Transactional
+    public List<Escort> getEscortForPreparingAndBetween(LocalDate date, LocalTime from, LocalTime to) {
+        List<Escort> recruitList = escortQueryRepository.getEscortForPreparingAndBetween(date, from, to);
+
+        return recruitList;
     }
 }
