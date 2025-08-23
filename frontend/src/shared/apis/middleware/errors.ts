@@ -60,6 +60,17 @@ export function isAuthError(err: unknown): err is AuthError {
   return err instanceof AuthError;
 }
 
+export const getErrorLabel = (error: unknown) => {
+  if (error instanceof AuthError) return 'AuthError';
+  if (error instanceof ApiError) return 'ApiError';
+  if (error instanceof HTTPError) return 'HTTPError';
+  if (error instanceof ServerError) return 'ServerError';
+  if (error instanceof TimeoutError) return 'TimeoutError';
+  if (error instanceof NetworkError) return 'NetworkError';
+  if (error instanceof NotFoundError) return 'NotFoundError';
+  return 'Error';
+};
+
 export class NotFoundError extends Error {
   constructor(
     public status: number,
