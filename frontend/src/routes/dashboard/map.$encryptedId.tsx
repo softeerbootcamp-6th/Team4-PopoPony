@@ -8,15 +8,20 @@ import { useMap } from '@hooks';
 import type { Position, TMapMarker } from '@types';
 import { useSSE } from '@dashboard/hooks';
 import { updatedBefore } from '@helper/utils';
+<<<<<<< HEAD:frontend/src/routes/dashboard/$escortId/map.tsx
 import { call } from '@utils';
 export const Route = createFileRoute('/dashboard/$escortId/map')({
+=======
+export const Route = createFileRoute('/dashboard/map/$encryptedId')({
+>>>>>>> FE/QA/BYJ:frontend/src/routes/dashboard/map.$encryptedId.tsx
   component: RouteComponent,
 });
 
 const { Tmapv3 } = window;
 
 function RouteComponent() {
-  const { escortId: recruitId } = Route.useParams();
+  // 암호화된 아이디를 복호화하여 동행 아이디로 변환
+  const { encryptedId: recruitId } = Route.useParams();
   const { data: escortData } = getEscortDetail(Number(recruitId));
   //필요한 데이터 추가로 escortData.data에서 가져오기
   const { estimatedMeetingTime, helper, route, escortId } = escortData?.data ?? {};
