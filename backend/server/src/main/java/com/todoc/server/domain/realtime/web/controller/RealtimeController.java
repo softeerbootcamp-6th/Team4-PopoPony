@@ -3,7 +3,7 @@ package com.todoc.server.domain.realtime.web.controller;
 import com.todoc.server.common.response.EmptyBody;
 import com.todoc.server.common.response.Response;
 import com.todoc.server.domain.realtime.service.RealtimeFacadeService;
-import com.todoc.server.domain.realtime.web.dto.request.LocationRequest;
+import com.todoc.server.domain.realtime.web.dto.request.LocationUpdateRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -43,7 +43,7 @@ public class RealtimeController {
     @PostMapping(value = "/escorts/{escortId}/locations", produces = MediaType.APPLICATION_JSON_VALUE)
     public Response<EmptyBody> updateLocation(@PathVariable(name = "escortId") Long escortId,
                                          @RequestParam String role,
-                                         @RequestBody LocationRequest request) {
+                                         @RequestBody LocationUpdateRequest request) {
 
         realtimeFacadeService.updateLocation(escortId, role, request);
         return Response.from();
