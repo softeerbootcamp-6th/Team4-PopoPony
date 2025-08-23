@@ -157,8 +157,7 @@ const DetailTab = ({ data }: { data: RecruitDetailResponse }) => {
             )}
           </div>
         </div>
-        {/* TODO:도우미 후기가 있으면 버튼 안 뜨기 */}
-        {data.status !== '동행완료' && (
+        {data.status === '매칭중' && (
           <Button variant='assistive' onClick={openDeleteRecruitModal}>
             신청 취소하기
           </Button>

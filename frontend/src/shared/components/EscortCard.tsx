@@ -82,7 +82,15 @@ const CardTags = ({ tags }: { tags: EscortStrength[] }) => {
 };
 
 const CardButton = ({ onClick }: { onClick: () => void }) => {
-  return <Button onClick={onClick}>대시보드 확인하기</Button>;
+  return (
+    <Button
+      onClick={(e) => {
+        e.stopPropagation();
+        onClick();
+      }}>
+      대시보드 확인하기
+    </Button>
+  );
 };
 
 EscortCard.Divider = CardDivider;

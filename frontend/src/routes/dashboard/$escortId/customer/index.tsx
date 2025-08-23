@@ -12,7 +12,6 @@ import {
 } from '@dashboard/components';
 import { useEffect, useRef } from 'react';
 import { useMap } from '@hooks';
-import { FloatingButton } from '@components';
 import type { TMapMarker } from '@types';
 import { useSSE } from '@dashboard/hooks';
 import { updatedBefore } from '@helper/utils';
@@ -50,15 +49,15 @@ function RouteComponent() {
     mapInstance,
     isMapReady,
     addPolyline,
-    setCurrentLocation,
-    handleSetCenterAndZoom,
+    fitBoundsToCoordinates,
     addMarker,
     addCustomMarker,
     resetPolyline,
   } = useMap(mapRef as React.RefObject<HTMLDivElement>);
 
+  const { route, patient, helper, estimatedMeetingTime, escortId } = data.data;
   const { helperLocations, patientLocations, escortStatuses } = useSSE(
-    String(recruitId),
+    String(escortId),
     'customer'
   );
   const currentStatus = escortStatuses?.escortStatus ?? '만남중';
@@ -69,14 +68,8 @@ function RouteComponent() {
   const hospitalMarker = useRef<TMapMarker>(null);
   const returnMarker = useRef<TMapMarker>(null);
 
-  let { route, patient, helper, estimatedMeetingTime } = data.data;
-  const {
-    meetingLocationInfo,
-    hospitalLocationInfo,
-    returnLocationInfo,
-    meetingToHospital,
-    hospitalToReturn,
-  } = route.routeSimple;
+  const { meetingToHospital, hospitalToReturn } = route;
+  const { meetingLocationInfo, hospitalLocationInfo, returnLocationInfo } = route.routeSimple;
   const { name: patientName, imageUrl: patientImageUrl } = patient;
   const { name: helperName, imageUrl: helperImageUrl, contact: helperContact } = helper;
 
@@ -123,10 +116,10 @@ function RouteComponent() {
           isHospital: false,
           isReturn: false,
         });
-        handleSetCenterAndZoom(
+        fitBoundsToCoordinates([
           { lat: helperLocations?.latitude ?? 0, lon: helperLocations?.longitude ?? 0 },
-          { lat: patientLocations?.latitude ?? 0, lon: patientLocations?.longitude ?? 0 }
-        );
+          { lat: patientLocations?.latitude ?? 0, lon: patientLocations?.longitude ?? 0 },
+        ]);
         break;
       case '병원행':
         handleSetMarkerVisible({
@@ -137,7 +130,7 @@ function RouteComponent() {
           isReturn: false,
         });
         addPolyline(meetingToHospital, 'meetingToHospital');
-        handleSetCenterAndZoom(
+        fitBoundsToCoordinates([
           {
             lat: meetingLocationInfo?.lat ?? 0,
             lon: meetingLocationInfo?.lon ?? 0,
@@ -145,8 +138,8 @@ function RouteComponent() {
           {
             lat: hospitalLocationInfo?.lat ?? 0,
             lon: hospitalLocationInfo?.lon ?? 0,
-          }
-        );
+          },
+        ]);
         break;
       case '진료중':
         handleSetMarkerVisible({
@@ -156,10 +149,12 @@ function RouteComponent() {
           isHospital: true,
           isReturn: false,
         });
-        handleSetCenterAndZoom({
-          lat: hospitalLocationInfo?.lat ?? 0,
-          lon: hospitalLocationInfo?.lon ?? 0,
-        });
+        fitBoundsToCoordinates([
+          {
+            lat: hospitalLocationInfo?.lat ?? 0,
+            lon: hospitalLocationInfo?.lon ?? 0,
+          },
+        ]);
         break;
       case '복귀중':
         handleSetMarkerVisible({
@@ -170,7 +165,7 @@ function RouteComponent() {
           isReturn: true,
         });
         addPolyline(hospitalToReturn, 'hospitalToReturn');
-        handleSetCenterAndZoom(
+        fitBoundsToCoordinates([
           {
             lat: hospitalLocationInfo?.lat ?? 0,
             lon: hospitalLocationInfo?.lon ?? 0,
@@ -178,8 +173,8 @@ function RouteComponent() {
           {
             lat: returnLocationInfo?.lat ?? 0,
             lon: returnLocationInfo?.lon ?? 0,
-          }
-        );
+          },
+        ]);
         break;
       default:
         break;
@@ -271,7 +266,7 @@ function RouteComponent() {
   if (currentStatus === '리포트작성중') {
     return (
       <PageLayout>
-        <PageLayout.Header showClose={true} onClose={() => router.history.back()} />
+        <PageLayout.Header showClose={true} onClose={() => router.navigate({ to: '/customer' })} />
         <PageLayout.Content>
           <WritingReport />
         </PageLayout.Content>
@@ -313,11 +308,6 @@ function RouteComponent() {
           {/* 지도 */}
           <div className='bg-background-default-white2 flex-center relative h-[27rem] w-full'>
             <div ref={mapRef}></div>
-            <FloatingButton
-              icon='current'
-              position='bottom-left'
-              onClick={() => setCurrentLocation()}
-            />
           </div>
           <CustomerDashboardLive
             escortStatus={currentStatus as StatusTitleProps}

@@ -7,6 +7,7 @@ import { PageLayout } from '@layouts';
 import { createFileRoute, useRouter } from '@tanstack/react-router';
 import { FormProvider, useForm } from 'react-hook-form';
 import type { ReportFormValues } from '@helper/types';
+import { dateFormat } from '@utils';
 
 export const Route = createFileRoute('/helper/escort/$escortId/report/$step')({
   component: RouteComponent,
@@ -25,9 +26,10 @@ function RouteComponent() {
 
   useEffect(() => {
     if (reportDefault) {
+      console.log(reportDefault);
       methods.reset({
-        actualMeetingTime: reportDefault.actualMeetingTime || '',
-        actualReturnTime: reportDefault.actualReturnTime || '',
+        actualMeetingTime: `${dateFormat(reportDefault.actualMeetingTime, 'HH:mm')}` || '',
+        actualReturnTime: `${dateFormat(reportDefault.actualReturnTime, 'HH:mm')}` || '',
         hasNextAppointment: true,
         nextAppointmentTime: undefined,
         description: reportDefault.memo || '',

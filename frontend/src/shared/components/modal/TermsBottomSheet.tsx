@@ -9,9 +9,15 @@ interface TermsBottomSheetProps {
   children?: React.ReactNode;
   onSubmit: () => void;
   defaultOpen?: boolean;
+  closeOnBackdrop?: boolean; // overlay/backdrop 클릭 시 닫힘 여부 (기본값: true)
 }
 
-const TermsBottomSheet = ({ children, onSubmit, defaultOpen = false }: TermsBottomSheetProps) => {
+const TermsBottomSheet = ({
+  children,
+  onSubmit,
+  defaultOpen = false,
+  closeOnBackdrop = true,
+}: TermsBottomSheetProps) => {
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(defaultOpen);
   const [selectedTerms, setSelectedTerms] = useState<TermsData | null>(null);
   const [isTermsModalOpen, setIsTermsModalOpen] = useState(false);
@@ -48,7 +54,7 @@ const TermsBottomSheet = ({ children, onSubmit, defaultOpen = false }: TermsBott
       <BottomSheet open={isBottomSheetOpen} onOpenChange={setIsBottomSheetOpen}>
         {children ? <BottomSheet.Trigger asChild>{children}</BottomSheet.Trigger> : null}
 
-        <BottomSheet.Content disableOutsideClose hideCloseButton>
+        <BottomSheet.Content disableOutsideClose={!closeOnBackdrop} hideCloseButton>
           <BottomSheet.Header>
             <BottomSheet.Title>이용 약관 동의가 필요해요!</BottomSheet.Title>
             <div className='flex flex-col gap-[1.5rem]'>

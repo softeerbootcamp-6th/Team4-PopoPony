@@ -1,4 +1,4 @@
-import { TMapLatLng, TMap, TMapSize, TMapMarker, TMapPolyline } from './tmap';
+import { TMapLatLng, TMap, TMapSize, TMapMarker, TMapPolyline, TMapLatLngBounds } from './tmap';
 
 declare global {
   interface Window {
@@ -30,6 +30,7 @@ declare global {
         direction?: boolean;
         map: TMap;
       }) => TMapPolyline;
+      LatLngBounds: new () => TMapLatLngBounds;
       Size: new (width: number, height: number) => TMapSize;
     };
   }

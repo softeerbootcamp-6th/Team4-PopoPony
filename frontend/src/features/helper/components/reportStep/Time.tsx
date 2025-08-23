@@ -3,15 +3,16 @@ import { IcChevronDown } from '@icons';
 import { FormLayout } from '@layouts';
 import type { FunnelStepProps } from '@types';
 import { useFormContext } from 'react-hook-form';
-import { differenceInMinutes } from 'date-fns';
+import { timeDuration, isTimeBefore } from '@utils';
 
 const Time = ({ handleNextStep }: FunnelStepProps) => {
-  const { register, watch, setValue } = useFormContext();
+  const { register, watch } = useFormContext();
 
   const actualMeetingTime = watch('actualMeetingTime');
   const actualReturnTime = watch('actualReturnTime');
 
-  const isValidTime = actualMeetingTime && actualReturnTime && actualMeetingTime < actualReturnTime;
+  const isValidTime =
+    actualMeetingTime && actualReturnTime && isTimeBefore(actualMeetingTime, actualReturnTime);
 
   const getTimeErrorMessage = () => {
     if (!actualMeetingTime || !actualReturnTime) {
@@ -23,25 +24,14 @@ const Time = ({ handleNextStep }: FunnelStepProps) => {
     return undefined;
   };
 
-  const getTotalTime = () => {
-    if (!actualMeetingTime || !actualReturnTime) {
-      return '0분';
-    }
-
-    const meetingTime = new Date(actualMeetingTime);
-    const returnTime = new Date(actualReturnTime);
-    const totalTime = Math.abs(differenceInMinutes(meetingTime, returnTime));
-    const hours = Math.floor(totalTime / 60);
-    const minutes = totalTime % 60;
-    return `${hours}시간 ${minutes}분`;
-  };
-
   return (
     <FormLayout>
       <FormLayout.Content>
         <FormLayout.TitleWrapper>
           <FormLayout.Title>
-            <strong className='text-text-mint-on-primary'>총 {getTotalTime()}</strong>
+            <strong className='text-text-mint-on-primary'>
+              총 {timeDuration(actualMeetingTime ?? '00:00', actualReturnTime ?? '00:00')}
+            </strong>
             <br />
             동행을 마무리하셨어요!
           </FormLayout.Title>
@@ -55,11 +45,7 @@ const Time = ({ handleNextStep }: FunnelStepProps) => {
                   <input
                     type='time'
                     className='body1-16-medium text-text-neutral-primary w-full bg-transparent outline-none disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:top-0 [&::-webkit-calendar-picker-indicator]:left-0 [&::-webkit-calendar-picker-indicator]:h-full [&::-webkit-calendar-picker-indicator]:w-full [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:opacity-0'
-                    {...register('actualMeetingTime', {
-                      onChange: (e) => {
-                        setValue('actualMeetingTime', `${e.target.value}:00`);
-                      },
-                    })}
+                    {...register('actualMeetingTime')}
                   />
                   {!actualMeetingTime && (
                     <div className='body1-16-medium bg-background-default-white text-text-neutral-assistive pointer-events-none absolute top-0 left-0 w-full'>
@@ -74,11 +60,7 @@ const Time = ({ handleNextStep }: FunnelStepProps) => {
                   <input
                     type='time'
                     className='body1-16-medium text-text-neutral-primary w-full bg-transparent outline-none disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:top-0 [&::-webkit-calendar-picker-indicator]:left-0 [&::-webkit-calendar-picker-indicator]:h-full [&::-webkit-calendar-picker-indicator]:w-full [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:opacity-0'
-                    {...register('actualReturnTime', {
-                      onChange: (e) => {
-                        setValue('actualReturnTime', `${e.target.value}:00`);
-                      },
-                    })}
+                    {...register('actualReturnTime')}
                   />
                   {!actualReturnTime && (
                     <div className='body1-16-medium bg-background-default-white text-text-neutral-assistive pointer-events-none absolute top-0 left-0 w-full'>

@@ -25,7 +25,7 @@ function RouteComponent() {
         showClose={true}
         onClose={() => navigate({ to: '/helper' })}
       />
-      <PageLayout.Content>
+      <PageLayout.Content className='overflow-y-auto'>
         <div className='flex h-full flex-col'>
           <div className='flex-col-center gap-[1.2rem]'>
             <div className='aspect-square w-full max-w-[30rem]'>

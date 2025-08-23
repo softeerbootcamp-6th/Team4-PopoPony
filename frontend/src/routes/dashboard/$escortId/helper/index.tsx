@@ -101,15 +101,13 @@ function RouteComponent() {
     escortDetailOrigin.data;
   const [escortStatus, setEscortStatus] = useState(escortDetailOrigin.data.escortStatus);
   const [curLocation, setCurLocation] = useState<Position | null>(null);
-  const { patientLocations } = useSSE(String(recruitId), 'helper');
+  const { patientLocations } = useSSE(String(escortId), 'helper');
 
   const {
-    meetingLocationInfo,
-    hospitalLocationInfo,
-    returnLocationInfo,
     meetingToHospital,
     hospitalToReturn,
-  } = route.routeSimple;
+    routeSimple: { meetingLocationInfo, hospitalLocationInfo, returnLocationInfo },
+  } = route;
 
   const mapRef = useRef<HTMLDivElement>(null);
   const {
@@ -117,7 +115,7 @@ function RouteComponent() {
     isMapReady,
     addPolyline,
     setCurrentLocation,
-    handleSetCenterAndZoom,
+    fitBoundsToCoordinates,
     addMarker,
     resetPolyline,
   } = useMap(mapRef as React.RefObject<HTMLDivElement>);
@@ -244,10 +242,10 @@ function RouteComponent() {
           isHospital: false,
           isReturn: false,
         });
-        handleSetCenterAndZoom(
-          { lat: meetingLocationInfo?.lat ?? 0, lon: meetingLocationInfo?.lon ?? 0 }
-          // { lat: patientLocations?.latitude ?? 0, lon: patientLocations?.longitude ?? 0 }
-        );
+        fitBoundsToCoordinates([
+          { lat: meetingLocationInfo?.lat ?? 0, lon: meetingLocationInfo?.lon ?? 0 },
+          { lat: patientLocations?.latitude ?? 0, lon: patientLocations?.longitude ?? 0 },
+        ]);
         break;
       case '병원행':
         handleSetMarkerVisible({
@@ -257,7 +255,7 @@ function RouteComponent() {
           isReturn: false,
         });
         addPolyline(meetingToHospital, 'meetingToHospital');
-        handleSetCenterAndZoom(
+        fitBoundsToCoordinates([
           {
             lat: meetingLocationInfo?.lat ?? 0,
             lon: meetingLocationInfo?.lon ?? 0,
@@ -265,8 +263,8 @@ function RouteComponent() {
           {
             lat: hospitalLocationInfo?.lat ?? 0,
             lon: hospitalLocationInfo?.lon ?? 0,
-          }
-        );
+          },
+        ]);
         break;
       case '진료중':
         handleSetMarkerVisible({
@@ -275,10 +273,12 @@ function RouteComponent() {
           isHospital: true,
           isReturn: false,
         });
-        handleSetCenterAndZoom({
-          lat: hospitalLocationInfo?.lat ?? 0,
-          lon: hospitalLocationInfo?.lon ?? 0,
-        });
+        fitBoundsToCoordinates([
+          {
+            lat: hospitalLocationInfo?.lat ?? 0,
+            lon: hospitalLocationInfo?.lon ?? 0,
+          },
+        ]);
         break;
       case '복귀중':
         handleSetMarkerVisible({
@@ -288,7 +288,7 @@ function RouteComponent() {
           isReturn: true,
         });
         addPolyline(hospitalToReturn, 'hospitalToReturn');
-        handleSetCenterAndZoom(
+        fitBoundsToCoordinates([
           {
             lat: hospitalLocationInfo?.lat ?? 0,
             lon: hospitalLocationInfo?.lon ?? 0,
@@ -296,8 +296,8 @@ function RouteComponent() {
           {
             lat: returnLocationInfo?.lat ?? 0,
             lon: returnLocationInfo?.lon ?? 0,
-          }
-        );
+          },
+        ]);
         break;
       default:
         break;
@@ -381,7 +381,6 @@ function RouteComponent() {
         ),
       };
     }
-    //TODO: Footer 버튼 상황에 따른 라우팅
     if (escortStatus === '진료중') {
       return {
         escortStatus: escortStatus,
@@ -439,7 +438,7 @@ function RouteComponent() {
         updateBefore={updatedBefore(patientLocations?.timestamp)}
         showUpdateBefore={escortStatus === '만남중'}
       />
-      <PageLayout.Content>
+      <PageLayout.Content className='overflow-y-auto'>
         <div className='bg-background-default-white2 flex-center relative h-[27rem] w-full'>
           <div ref={mapRef}></div>
           <FloatingButton

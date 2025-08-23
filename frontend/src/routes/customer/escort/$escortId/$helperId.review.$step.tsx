@@ -5,6 +5,7 @@ import { ProgressBar, Modal } from '@components';
 import { Summary, Detail, Comment } from '@customer/components';
 import { FormProvider, useForm } from 'react-hook-form';
 import { type EscortReviewFormValues } from '@customer/types';
+import { getApplicationListById } from '@customer/apis';
 
 export const Route = createFileRoute('/customer/escort/$escortId/$helperId/review/$step')({
   component: RouteComponent,
@@ -23,8 +24,8 @@ function RouteComponent() {
     paramPath: '/customer/escort/$escortId/$helperId/review/$step',
     stepList: stepList,
   });
-  // const { data: helperDetail } = getHelperById(Number(escortId));
-  const helperName = '동행 도우미';
+  const { data: applicationList } = getApplicationListById(Number(escortId));
+  const helperName = applicationList?.data.applicationList[0].helper.name || '동행도우미';
   const handleClose = () => {
     openModal();
   };

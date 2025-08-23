@@ -9,8 +9,7 @@ import {
   MAX_ZOOM_LEVEL,
   MIN_ZOOM_LEVEL,
 } from '@dashboard/constants';
-import type { RouteSimpleResponse } from '@customer/types';
-import { calculateCenterAndZoom } from '@helper/utils';
+import type { RouteDetailResponse } from '@customer/types';
 
 const { Tmapv3 } = window;
 
@@ -32,7 +31,6 @@ export const useMap = (mapRef: React.RefObject<HTMLDivElement>) => {
         width: '100%',
         height: '100%',
         zoom: DEFAULT_ZOOM_LEVEL,
-        zoomControl: false,
       });
 
       map.setZoomLimit(MIN_ZOOM_LEVEL, MAX_ZOOM_LEVEL);
@@ -85,17 +83,6 @@ export const useMap = (mapRef: React.RefObject<HTMLDivElement>) => {
     if (mapInstance) {
       mapInstance.setZoom(zoom);
     }
-  };
-
-  const handleSetCenterAndZoom = (position1: Position, position2?: Position) => {
-    if (!position2) {
-      setCenter(position1.lat, position1.lon);
-      setZoom(DEFAULT_ZOOM_LEVEL);
-      return;
-    }
-    const { center, zoom } = calculateCenterAndZoom(position1, position2);
-    setCenter(center.lat, center.lng);
-    setZoom(zoom);
   };
 
   // 지도를 현재 위치로 이동
@@ -245,18 +232,33 @@ export const useMap = (mapRef: React.RefObject<HTMLDivElement>) => {
     }
   };
 
+  // n개의 좌표로 지도 영역을 조정하는 함수
+  const fitBoundsToCoordinates = (coordinates: Array<{ lat: number; lon: number }>) => {
+    if (!mapInstance || coordinates.length === 0) return;
+
+    const bounds = new Tmapv3.LatLngBounds();
+    coordinates.forEach(({ lat, lon }) => {
+      bounds.extend(new Tmapv3.LatLng(lat, lon));
+    });
+
+    mapInstance.fitBounds(bounds, {
+      left: 50,
+      top: 50,
+      right: 50,
+      bottom: 30,
+    });
+  };
+
   // 경로 폴리라인 추가 (만남 -> 병원 -> 복귀)
   // 초기 로딩시 사용되는 함수로, ConfigLoad 이벤트 발생 후 폴리라인 추가하며 폴리라인 인스턴스 반환 안함
-  const addRoutePolyline = (route: RouteSimpleResponse) => {
+  const addRoutePolyline = (route: RouteDetailResponse) => {
     if (!mapInstance) {
       return;
     }
 
     try {
       const {
-        meetingLocationInfo,
-        hospitalLocationInfo,
-        returnLocationInfo,
+        routeSimple: { meetingLocationInfo, hospitalLocationInfo, returnLocationInfo },
         meetingToHospital,
         hospitalToReturn,
       } = route;
@@ -287,10 +289,10 @@ export const useMap = (mapRef: React.RefObject<HTMLDivElement>) => {
       }
 
       const meetingToHospitalPath = meetingToHospital.map(
-        ({ lat, lon }) => new Tmapv3.LatLng(lon, lat)
+        ({ lat, lon }) => new Tmapv3.LatLng(lat, lon)
       );
       const hospitalToReturnPath = hospitalToReturn.map(
-        ({ lat, lon }) => new Tmapv3.LatLng(lon, lat)
+        ({ lat, lon }) => new Tmapv3.LatLng(lat, lon)
       );
 
       mapInstance.on('ConfigLoad', () => {
@@ -308,14 +310,15 @@ export const useMap = (mapRef: React.RefObject<HTMLDivElement>) => {
         });
       });
 
-      const startPoint = meetingToHospital[0];
-      const endPoint = meetingToHospital[meetingToHospital.length - 1];
-      const middlePoint = new Tmapv3.LatLng(
-        (startPoint.lon + endPoint.lon) / 2,
-        (startPoint.lat + endPoint.lat) / 2
-      );
-      mapInstance.setCenter(middlePoint);
-      mapInstance.setZoom(6);
+      // 좌표 배열 생성
+      const coordinates = [
+        { lat: meetingLocationInfo.lat, lon: meetingLocationInfo.lon },
+        { lat: hospitalLocationInfo.lat, lon: hospitalLocationInfo.lon },
+        { lat: returnLocationInfo.lat, lon: returnLocationInfo.lon },
+      ];
+
+      // 지도 영역 조정
+      fitBoundsToCoordinates(coordinates);
     } catch (error) {
       console.error('폴리라인 그리기 오류:', error);
     }
@@ -350,7 +353,6 @@ export const useMap = (mapRef: React.RefObject<HTMLDivElement>) => {
     polylineInstances,
     setCenter,
     setZoom,
-    handleSetCenterAndZoom,
     setCurrentLocation,
     addMarker,
     addCustomMarker,
@@ -358,5 +360,6 @@ export const useMap = (mapRef: React.RefObject<HTMLDivElement>) => {
     addPolyline,
     addRoutePolyline,
     resetPolyline,
+    fitBoundsToCoordinates,
   };
 };

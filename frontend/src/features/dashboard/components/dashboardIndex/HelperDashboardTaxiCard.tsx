@@ -22,7 +22,9 @@ const HelperDashboardTaxiCard = ({
       <div className='bg-neutral-20 mt-[2.8rem] flex w-full gap-[0.1rem]'>
         <div className='bg-background-default-white flex-center flex flex-1 flex-col gap-[0.4rem]'>
           <h6 className='body2-14-medium text-text-neutral-secondar'>예상 소요시간</h6>
-          <h6 className='subtitle-18-bold text-text-neutral-primary'>{estimatedTaxiTime}분</h6>
+          <h6 className='subtitle-18-bold text-text-neutral-primary'>
+            {Math.floor(estimatedTaxiTime / 60)}분
+          </h6>
         </div>
         <div className='bg-background-default-white flex-center flex flex-1 flex-col gap-[0.4rem]'>
           <h6 className='body2-14-medium text-text-neutral-secondary'>예상 금액</h6>

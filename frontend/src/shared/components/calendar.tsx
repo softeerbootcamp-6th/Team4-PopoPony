@@ -13,6 +13,8 @@ const Calendar = ({
   buttonVariant = 'ghost',
   formatters,
   components,
+  startMonth = new Date(2024, 0),
+  endMonth = new Date(2030, 11),
   ...props
 }: React.ComponentProps<typeof DayPicker> & {
   buttonVariant?: React.ComponentProps<typeof Button>['variant'];
@@ -22,6 +24,8 @@ const Calendar = ({
   return (
     <DayPicker
       showOutsideDays={showOutsideDays}
+      startMonth={startMonth}
+      endMonth={endMonth}
       className={cn(
         'bg-background-default-white shadow-card border-stroke-neutral-dark group/calendar rounded-md border p-3 [--cell-size:--spacing(8)] [[data-slot=card-content]_&]:bg-transparent [[data-slot=popover-content]_&]:bg-transparent',
         String.raw`rtl:**:[.rdp-button\_next>svg]:rotate-180`,

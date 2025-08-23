@@ -184,7 +184,6 @@ const Profile = memo(({ handleNextStep }: FunnelStepProps) => {
       </FormLayout.Content>
 
       <FormLayout.Footer>
-        {/* TODO: 추후 PR반영되면 머지 후 s3 반영 */}
         <Button variant='primary' onClick={handleNextStep} disabled={!isFormValid}>
           다음
         </Button>
