@@ -5,10 +5,7 @@ import com.todoc.server.domain.realtime.service.NchanPublisher;
 import com.todoc.server.domain.realtime.service.WebSocketFacadeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -18,7 +15,7 @@ public class PresenceController {
     private final WebSocketFacadeService webSocketFacadeService; // 상태/위치 조회
     private final NchanPublisher nchanPublisher;   // HTTP POST 퍼블리시(앞서 만든 것: WebClient/HttpClient/RestTemplate 아무거나)
 
-    @PostMapping("/sub")
+    @GetMapping("/sub")
     public ResponseEntity<Void> onSubscribe(@RequestHeader("X-Escort-Id") long escortId) {
         try {
             // 1. 동행 상태 스냅샷
