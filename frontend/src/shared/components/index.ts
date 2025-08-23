@@ -41,7 +41,7 @@ import SuspenseUI from './catchThrow/SuspenseUI';
 import PageLayoutFallbackUI from './catchThrow/PageLayoutFallbackUI';
 import RootFallbackUI from './catchThrow/RootFallbackUI';
 import ErrorSuspenseBoundary from './catchThrow/ErrorSuspenseBoundary';
-
+import PageLayoutSuspenseUI from './catchThrow/PageLayoutSuspenseUI';
 export {
   Button,
   BottomCTA,
@@ -85,4 +85,5 @@ export {
   PageLayoutFallbackUI,
   RootFallbackUI,
   ErrorSuspenseBoundary,
+  PageLayoutSuspenseUI,
 };
