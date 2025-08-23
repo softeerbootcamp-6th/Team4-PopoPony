@@ -1,29 +1,13 @@
 import { useState } from 'react';
-import {
-  EscortCard,
-  ProgressIndicator,
-  Tabs,
-  Button,
-  FallbackUI,
-  PageLayoutFallbackUI,
-} from '@components';
+import { EscortCard, ProgressIndicator, Tabs, Button, ErrorSuspenseBoundary } from '@components';
 import { DetailTab, HelperTab, ReportTab } from '@customer/components';
 import { PageLayout } from '@layouts';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import type { RecruitDetailResponse } from '@customer/types';
 import { getRecruitById } from '@customer/apis';
 import { dateFormat, timeFormat } from '@utils';
-import { ErrorBoundary } from 'react-error-boundary';
-import { $api } from '@apis';
-import { useQueryClient } from '@tanstack/react-query';
 
 export const Route = createFileRoute('/customer/escort/$escortId/')({
-  errorComponent: ({ error, reset }) => (
-    <PageLayoutFallbackUI
-      error={error instanceof Error ? error : new Error(String(error))}
-      resetErrorBoundary={reset}
-    />
-  ),
   component: RouteComponent,
 });
 
@@ -39,10 +23,6 @@ const refineCardData = (recruitData: RecruitDetailResponse) => {
 };
 
 function RouteComponent() {
-  // 쿼리 클라이언트 초기화
-  const qc = useQueryClient();
-  const helperListOpts = $api.queryOptions('get', '/api/recruits/helper');
-
   const navigate = useNavigate();
   const [hasReview, setHasReview] = useState(false);
   const [helperId, setHelperId] = useState<number | null>(null);
@@ -92,15 +72,9 @@ function RouteComponent() {
             <Tabs.TabsTrigger value='신청 내역'>신청 내역</Tabs.TabsTrigger>
           </Tabs.TabsList>
           <Tabs.TabsContent value='도우미'>
-            <ErrorBoundary
-              fallbackRender={({ error, resetErrorBoundary }) => (
-                <FallbackUI error={error} resetErrorBoundary={resetErrorBoundary} />
-              )}
-              onReset={() => {
-                qc.invalidateQueries(helperListOpts);
-              }}>
+            <ErrorSuspenseBoundary isRoot={false}>
               <HelperTab status={recruitData.data.status} />
-            </ErrorBoundary>
+            </ErrorSuspenseBoundary>
           </Tabs.TabsContent>
           <Tabs.TabsContent value='리포트'>
             <ReportTab setHasReview={setHasReview} setHelperId={setHelperId} />
