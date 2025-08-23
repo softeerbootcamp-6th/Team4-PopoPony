@@ -8,6 +8,7 @@ import { useMap } from '@hooks';
 import type { Position, TMapMarker } from '@types';
 import { useSSE } from '@dashboard/hooks';
 import { updatedBefore } from '@helper/utils';
+import { call } from '@utils';
 export const Route = createFileRoute('/dashboard/map/$encryptedId')({
   component: RouteComponent,
 });
