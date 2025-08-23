@@ -40,6 +40,7 @@ import FallbackUI from './catchThrow/FallbackUI';
 import SuspenseUI from './catchThrow/SuspenseUI';
 import PageLayoutFallbackUI from './catchThrow/PageLayoutFallbackUI';
 import RootFallbackUI from './catchThrow/RootFallbackUI';
+import ErrorSuspenseBoundary from './catchThrow/ErrorSuspenseBoundary';
 
 export {
   Button,
@@ -83,4 +84,5 @@ export {
   SuspenseUI,
   PageLayoutFallbackUI,
   RootFallbackUI,
+  ErrorSuspenseBoundary,
 };
