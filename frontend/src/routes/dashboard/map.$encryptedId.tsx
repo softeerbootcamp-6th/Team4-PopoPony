@@ -8,12 +8,7 @@ import { useMap } from '@hooks';
 import type { Position, TMapMarker } from '@types';
 import { useSSE } from '@dashboard/hooks';
 import { updatedBefore } from '@helper/utils';
-<<<<<<< HEAD:frontend/src/routes/dashboard/$escortId/map.tsx
-import { call } from '@utils';
-export const Route = createFileRoute('/dashboard/$escortId/map')({
-=======
 export const Route = createFileRoute('/dashboard/map/$encryptedId')({
->>>>>>> FE/QA/BYJ:frontend/src/routes/dashboard/map.$encryptedId.tsx
   component: RouteComponent,
 });
 
