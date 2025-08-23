@@ -14,6 +14,8 @@ import { useNavigate } from '@tanstack/react-router';
 import type { FunnelStepProps } from '@types';
 import { postRecruit } from '@customer/apis';
 import { buildRecruitCreateRequest } from '@customer/utils';
+import { getErrorLabel } from '@apis';
+import { toast } from 'sonner';
 
 const Final = ({ handleBackStep }: FunnelStepProps) => {
   const { getValues } = useFormContext<RecruitFormValues>();
@@ -29,12 +31,12 @@ const Final = ({ handleBackStep }: FunnelStepProps) => {
       },
       {
         onSuccess: () => {
-          alert('동행 신청이 완료되었습니다!');
           navigate({ to: '/customer/recruit/completed' });
         },
-        onError: (error) => {
-          console.error('제출 실패:', error);
-          alert('제출 중 오류가 발생했습니다. 다시 시도해주세요.');
+        onError: (error: unknown) => {
+          const label = getErrorLabel(error);
+          const message = error instanceof Error ? error.message : '동행 신청에 실패했어요.';
+          toast.error(`[${label}] ${message}`);
         },
       }
     );
