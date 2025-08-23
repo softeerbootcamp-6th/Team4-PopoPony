@@ -104,7 +104,7 @@ function RouteComponent() {
   };
 
   return (
-    <PageLayout>
+    <>
       <PageLayout.Content>
         <div className='bg-neutral-10 relative h-full max-h-[22rem] p-[2rem]'>
           <div className='absolute z-10 w-[calc(100%-4rem)]'>
@@ -225,6 +225,6 @@ function RouteComponent() {
           </Tabs.TabsContent>
         </Tabs>
       </PageLayout.Content>
-    </PageLayout>
+    </>
   );
 }

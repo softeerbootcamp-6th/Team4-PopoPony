@@ -22,7 +22,7 @@ const landingButtonData = [
 
 function App() {
   return (
-    <PageLayout>
+    <>
       <PageLayout.Content>
         <div className='h-full bg-[url("/images/landing-background.png")] bg-cover bg-center px-[2rem]'>
           <div className='flex-col-center gap-[1.6rem] pt-[9.6rem]'>
@@ -52,6 +52,6 @@ function App() {
           </div>
         </div>
       </PageLayout.Content>
-    </PageLayout>
+    </>
   );
 }

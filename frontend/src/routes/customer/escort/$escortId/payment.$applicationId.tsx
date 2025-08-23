@@ -37,7 +37,7 @@ function RouteComponent() {
   };
 
   return (
-    <PageLayout>
+    <>
       <PageLayout.Header title='결제하기' showBack />
       <PageLayout.Content>
         <div className='flex h-full flex-col justify-between'>
@@ -68,6 +68,6 @@ function RouteComponent() {
           </div>
         </div>
       </PageLayout.Content>
-    </PageLayout>
+    </>
   );
 }

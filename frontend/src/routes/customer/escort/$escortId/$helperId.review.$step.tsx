@@ -39,7 +39,7 @@ function RouteComponent() {
     closeModal();
   };
   return (
-    <PageLayout>
+    <>
       <PageLayout.Header
         title='동행 후기 작성하기'
         showBack={false}
@@ -87,6 +87,6 @@ function RouteComponent() {
           </Modal.ButtonContainer>
         </Modal>
       </PageLayout.Content>
-    </PageLayout>
+    </>
   );
 }

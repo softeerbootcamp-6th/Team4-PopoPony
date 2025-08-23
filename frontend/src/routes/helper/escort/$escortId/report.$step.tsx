@@ -65,7 +65,7 @@ function RouteComponent() {
   };
 
   return (
-    <PageLayout>
+    <>
       <PageLayout.Header
         title='동행 리포트 작성'
         showBack={currentStep.includes('searchRoute')}
@@ -110,6 +110,6 @@ function RouteComponent() {
           <Modal.ConfirmButton onClick={handleApproveClose}>확인</Modal.ConfirmButton>
         </Modal.ButtonContainer>
       </Modal>
-    </PageLayout>
+    </>
   );
 }

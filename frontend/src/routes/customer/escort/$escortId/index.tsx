@@ -1,5 +1,13 @@
 import { useState } from 'react';
-import { EscortCard, ProgressIndicator, Tabs, Button, ErrorSuspenseBoundary } from '@components';
+import {
+  EscortCard,
+  ProgressIndicator,
+  Tabs,
+  Button,
+  ErrorSuspenseBoundary,
+  SuspenseUI,
+  PageLayoutSuspenseUI,
+} from '@components';
 import { DetailTab, HelperTab, ReportTab } from '@customer/components';
 import { PageLayout } from '@layouts';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
@@ -31,13 +39,13 @@ function RouteComponent() {
   const { data: recruitData, isLoading } = getRecruitById(Number(escortId));
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <PageLayoutSuspenseUI />;
   }
   if (!recruitData || !recruitData.data) {
     return null;
   }
   const { statusText, cardTitle, cardTimeText, cardLocationText } = refineCardData(
-    recruitData.data
+    recruitData?.data || {}
   );
   const handleReviewClick = () => {
     navigate({
@@ -47,7 +55,7 @@ function RouteComponent() {
   };
 
   return (
-    <PageLayout>
+    <>
       <PageLayout.Header title='내역 상세보기' showBack />
       <PageLayout.Content>
         <div className='bg-neutral-10 flex-col-start gap-[1.2rem] px-[2rem] py-[1.6rem]'>
@@ -89,6 +97,6 @@ function RouteComponent() {
           <Button onClick={handleReviewClick}>도우미 후기 남기기</Button>
         </PageLayout.Footer>
       )}
-    </PageLayout>
+    </>
   );
 }

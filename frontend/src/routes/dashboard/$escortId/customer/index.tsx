@@ -265,7 +265,7 @@ function RouteComponent() {
 
   if (currentStatus === '리포트작성중') {
     return (
-      <PageLayout>
+      <>
         <PageLayout.Header showClose={true} onClose={() => router.navigate({ to: '/customer' })} />
         <PageLayout.Content>
           <WritingReport />
@@ -278,13 +278,13 @@ function RouteComponent() {
             handleClickGoToCustomerCenter={() => call(import.meta.env.VITE_CUSTOMER_PHONE_NUMBER)}
           />
         </PageLayout.Footer>
-      </PageLayout>
+      </>
     );
   }
 
   if (currentStatus === '동행완료') {
     return (
-      <PageLayout>
+      <>
         <PageLayout.Header showClose={true} onClose={() => router.history.back()} />
         <PageLayout.Content>
           <EscortCompleted />
@@ -297,11 +297,11 @@ function RouteComponent() {
             handleClickGoToCustomerCenter={() => call(import.meta.env.VITE_CUSTOMER_PHONE_NUMBER)}
           />
         </PageLayout.Footer>
-      </PageLayout>
+      </>
     );
   }
   return (
-    <PageLayout>
+    <>
       <Header updateBefore={updatedBefore(helperLocations?.timestamp)} showBack={true} />
       <PageLayout.Content>
         <div className='flex h-full flex-col'>
@@ -324,6 +324,6 @@ function RouteComponent() {
           handleClickGoToCustomerCenter={() => call(import.meta.env.VITE_CUSTOMER_PHONE_NUMBER)}
         />
       </PageLayout.Footer>
-    </PageLayout>
+    </>
   );
 }

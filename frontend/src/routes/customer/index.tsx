@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from '@tanstack/react-router';
 import { useQueryClient } from '@tanstack/react-query';
 import { PageLayout } from '@layouts';
-import { Button, EscortCard, Tabs, EmptyCard, PageLayoutFallbackUI, FallbackUI } from '@components';
+import { Button, EscortCard, Tabs, EmptyCard, FallbackUI } from '@components';
 import { IcPlusSideLeft } from '@icons';
 import type { RecruitSimpleResponse } from '@customer/types';
 import { getRecruitsCustomer } from '@customer/apis';
@@ -73,7 +73,7 @@ function RouteComponent() {
   };
 
   return (
-    <PageLayout>
+    <>
       <PageLayout.Content>
         <div className='bg-neutral-10 relative h-full max-h-[22rem] p-[2rem]'>
           <div className='absolute z-10'>
@@ -118,7 +118,7 @@ function RouteComponent() {
               {apiError && (
                 <FallbackUI
                   error={apiError}
-                  resetErrorBoundary={() => {
+                  onReset={() => {
                     qc.invalidateQueries(helperListOpts);
                   }}
                 />
@@ -167,7 +167,7 @@ function RouteComponent() {
               {apiError && (
                 <FallbackUI
                   error={apiError}
-                  resetErrorBoundary={() => {
+                  onReset={() => {
                     qc.invalidateQueries(helperListOpts);
                   }}
                 />
@@ -201,6 +201,6 @@ function RouteComponent() {
           </Tabs.TabsContent>
         </Tabs>
       </PageLayout.Content>
-    </PageLayout>
+    </>
   );
 }

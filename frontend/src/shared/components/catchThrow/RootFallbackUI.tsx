@@ -12,7 +12,7 @@ const RootFallbackUI = ({ error, onReset }: { error: Error; onReset?: () => void
   };
 
   return (
-    <PageLayout>
+    <>
       <div className='flex-center h-full w-full flex-col gap-[2rem] p-[5rem] text-center'>
         <IcAlertCircle className='text-text-red-primary' />
         <p className='body1-16-medium text-text-neutral-primary'>에러가 발생했습니다.</p>
@@ -22,7 +22,7 @@ const RootFallbackUI = ({ error, onReset }: { error: Error; onReset?: () => void
           홈으로 이동
         </Button>
       </div>
-    </PageLayout>
+    </>
   );
 };
 

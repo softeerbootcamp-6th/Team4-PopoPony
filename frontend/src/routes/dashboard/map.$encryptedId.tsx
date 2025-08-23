@@ -131,7 +131,7 @@ function RouteComponent() {
   }, [mapInstance]);
 
   return (
-    <PageLayout>
+    <>
       <Header showBack={false} updateBefore={updatedBefore(helperLocations?.timestamp)} />
       <PageLayout.Content>
         <div className='flex h-full flex-col'>
@@ -181,6 +181,6 @@ function RouteComponent() {
           localStorage.setItem('termsAgreement', 'true');
         }}
       />
-    </PageLayout>
+    </>
   );
 }
