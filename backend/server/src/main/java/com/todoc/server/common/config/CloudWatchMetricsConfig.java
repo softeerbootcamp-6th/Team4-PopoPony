@@ -5,6 +5,7 @@ import io.micrometer.cloudwatch2.CloudWatchMeterRegistry;
 import io.micrometer.core.instrument.Clock;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import software.amazon.awssdk.services.cloudwatch.CloudWatchAsyncClient;
 
 import java.time.Duration;
@@ -12,6 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Configuration
+@Profile("prod")
 public class CloudWatchMetricsConfig {
 
     @Bean
