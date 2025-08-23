@@ -2,7 +2,7 @@ import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
 import { Outlet, createRootRouteWithContext, redirect } from '@tanstack/react-router';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import type { QueryClient } from '@tanstack/react-query';
-import { Landing, RootFallbackUI, Button } from '@components';
+import { Landing, RootFallbackUI } from '@components';
 import { RootLayout } from '@layouts';
 import { authStorage } from '@auth/utils';
 import { ErrorBoundary } from 'react-error-boundary';
@@ -22,6 +22,12 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
       });
     }
   },
+  errorComponent: ({ error }) => (
+    <RootLayout>
+      <Landing />
+      <RootFallbackUI error={error} />
+    </RootLayout>
+  ),
 
   component: () => (
     <>
