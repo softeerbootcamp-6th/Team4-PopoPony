@@ -76,7 +76,7 @@ function RouteComponent() {
         </div>
 
         <Tabs defaultValue='자기소개'>
-          <Tabs.TabsList>
+          <Tabs.TabsList withHeader>
             <Tabs.TabsTrigger value='자기소개'>자기소개</Tabs.TabsTrigger>
             <Tabs.TabsTrigger value='동행후기'>동행후기</Tabs.TabsTrigger>
           </Tabs.TabsList>

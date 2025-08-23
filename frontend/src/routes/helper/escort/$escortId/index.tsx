@@ -55,7 +55,7 @@ function RouteComponent() {
           <ProgressIndicator currentStatus={recruitData.data.status} />
         </div>
         <Tabs defaultValue='리포트'>
-          <Tabs.TabsList>
+          <Tabs.TabsList withHeader>
             <Tabs.TabsTrigger value='리포트'>리포트</Tabs.TabsTrigger>
             <Tabs.TabsTrigger value='지원 내역'>지원 내역</Tabs.TabsTrigger>
           </Tabs.TabsList>
