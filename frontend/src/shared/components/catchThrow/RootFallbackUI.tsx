@@ -3,18 +3,20 @@ import { IcAlertCircle } from '@icons';
 import { PageLayout } from '@layouts';
 import { Button } from '@components';
 
-const RootFallbackUI = ({ error }: { error: Error }) => {
+const RootFallbackUI = ({ error, onReset }: { error: Error; onReset?: () => void }) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
+    if (onReset) onReset();
     navigate({ to: '/' });
   };
 
   return (
     <PageLayout>
-      <div className='flex-center h-full w-full flex-col gap-[2rem] p-[5rem]'>
+      <div className='flex-center h-full w-full flex-col gap-[2rem] p-[5rem] text-center'>
         <IcAlertCircle className='text-text-red-primary' />
         <p className='body1-16-medium text-text-neutral-primary'>에러가 발생했습니다.</p>
+        <p className='body1-16-medium text-text-neutral-primary'>{error.name}</p>
         <p className='body1-16-medium text-text-neutral-primary'>{error.message}</p>
         <Button variant='secondary' size='md' onClick={handleClick}>
           홈으로 이동
