@@ -9,16 +9,9 @@ interface BottomSheetProps extends React.ComponentProps<typeof SheetPrimitive.Ro
 }
 
 const BottomSheet = ({ children, ...props }: BottomSheetProps) => {
-  const containerId = 'page-layout-container';
   return (
     <SheetPrimitive.Root data-slot='bottom-sheet' {...props}>
-      {React.Children.map(children, (child) =>
-        React.isValidElement(child) && child.type === BottomSheetContent
-          ? React.cloneElement(child as React.ReactElement<BottomSheetContentProps>, {
-              containerId,
-            })
-          : child
-      )}
+      {children}
     </SheetPrimitive.Root>
   );
 };
@@ -30,7 +23,6 @@ const BottomSheetTrigger = ({ ...props }: React.ComponentProps<typeof SheetPrimi
 interface BottomSheetContentProps extends React.ComponentProps<typeof SheetPrimitive.Content> {
   className?: string;
   children: React.ReactNode;
-  containerId?: string;
   disableOutsideClose?: boolean;
   hideCloseButton?: boolean;
 }
@@ -38,42 +30,23 @@ interface BottomSheetContentProps extends React.ComponentProps<typeof SheetPrimi
 const BottomSheetContent = ({
   className,
   children,
-  containerId = 'page-layout-container',
   disableOutsideClose = false,
   hideCloseButton = false,
   ...props
 }: BottomSheetContentProps) => {
-  const [container, setContainer] = React.useState<HTMLElement | null>(null);
-
-  // container element를 찾아서 상태로 관리
-  React.useEffect(() => {
-    const containerElement = document.getElementById(containerId);
-    setContainer(containerElement);
-
-    // container에 relative position 설정 (absolute positioning의 기준점 설정)
-    if (containerElement) {
-      const originalPosition = containerElement.style.position;
-      if (!originalPosition || originalPosition === 'static') {
-        containerElement.style.position = 'relative';
-      }
-    }
-  }, [containerId]);
-
-  // container가 없으면 렌더링하지 않음
-  if (!container) {
-    return null;
-  }
-
   return (
-    <SheetPrimitive.Portal container={container}>
+    <SheetPrimitive.Portal>
       <SheetPrimitive.Overlay
         data-slot='bottom-sheet-overlay'
-        className={cn('bg-black-opacity-60 absolute inset-0 z-50', className)}
+        className={cn(
+          'bg-black-opacity-60 fixed top-0 left-1/2 z-50 h-[100dvh] w-full max-w-[500px] min-w-[375px] -translate-x-1/2 min-[1200px]:left-auto min-[1200px]:ml-[calc(50dvw+7rem)] min-[1200px]:-translate-x-0',
+          className
+        )}
       />
       <SheetPrimitive.Content
         data-slot='bottom-sheet-content'
         className={cn(
-          'shadow-bottom-sheet bg-background-default-white absolute inset-x-0 bottom-0 z-50 h-auto rounded-t-[1.2rem]',
+          'shadow-bottom-sheet bg-background-default-white fixed bottom-0 left-1/2 z-50 h-auto w-full max-w-[500px] min-w-[375px] -translate-x-1/2 rounded-t-[1.2rem] min-[1200px]:left-auto min-[1200px]:ml-[calc(50dvw+7rem)] min-[1200px]:-translate-x-0',
           className
         )}
         onInteractOutside={disableOutsideClose ? (e) => e.preventDefault() : undefined}

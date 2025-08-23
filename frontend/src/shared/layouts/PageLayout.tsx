@@ -15,7 +15,6 @@ interface PageLayoutContentProps {
 const PageLayout = ({ children, background = 'bg-background-default-white' }: PageLayoutProps) => {
   return (
     <div
-      id='page-layout-container'
       className={`shadow-page relative left-1/2 flex min-h-[100dvh] w-full max-w-[500px] min-w-[375px] -translate-x-1/2 flex-col min-[1200px]:left-auto min-[1200px]:ml-[calc(50dvw+7rem)] min-[1200px]:-translate-x-0 ${background}`}>
       {children}
     </div>
