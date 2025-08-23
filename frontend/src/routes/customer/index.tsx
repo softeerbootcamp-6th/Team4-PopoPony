@@ -13,12 +13,6 @@ import { $api } from '@apis';
 
 export const Route = createFileRoute('/customer/')({
   component: RouteComponent,
-  errorComponent: ({ error, reset }) => (
-    <PageLayoutFallbackUI
-      error={error instanceof Error ? error : new Error(String(error))}
-      resetErrorBoundary={reset}
-    />
-  ),
 });
 
 const escortStatusMessageMap: Record<NonNullable<EscortStatus>, string> = {
