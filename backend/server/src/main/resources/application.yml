@@ -62,5 +62,5 @@ upload:
 tmap:
   app-key: ${TMAP_API_KEY:}
 sms:
-  app-key: ${SMS_API_KEY}
-  app-secret-key: ${SMS_API_SECRET_KEY}
+  app-key: ${SMS_API_KEY:}
+  app-secret-key: ${SMS_API_SECRET_KEY:}
