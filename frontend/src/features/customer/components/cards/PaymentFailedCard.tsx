@@ -1,4 +1,5 @@
 import { Button } from '@components';
+import { call } from '@utils';
 
 const PaymentFailedCard = () => {
   return (
@@ -12,7 +13,7 @@ const PaymentFailedCard = () => {
         </div>
         <img src='/images/card-failed.svg' alt='결제 실패' />
       </div>
-      <Button variant='assistive' size='md' onClick={() => alert('준비중인 기능이에요')}>
+      <Button variant='assistive' size='md' onClick={() => call('010-2514-9058')}>
         고객센터 연락하기
       </Button>
     </div>
