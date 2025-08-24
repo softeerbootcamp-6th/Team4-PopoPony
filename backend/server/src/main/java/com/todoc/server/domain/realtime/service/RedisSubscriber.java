@@ -1,10 +1,8 @@
-package com.todoc.server.domain.realtime.web.controller;
+package com.todoc.server.domain.realtime.service;
 
 import com.todoc.server.common.enumeration.Role;
 import com.todoc.server.common.util.JsonUtils;
 import com.todoc.server.domain.realtime.exception.RealtimeInvalidRoleException;
-import com.todoc.server.domain.realtime.service.NchanPublisher;
-import com.todoc.server.domain.realtime.service.WebSocketSessionRegistry;
 import com.todoc.server.domain.realtime.web.dto.response.Envelope;
 import com.todoc.server.domain.realtime.web.dto.response.LocationRedisDto;
 import com.todoc.server.domain.realtime.web.dto.response.LocationResponse;
@@ -25,20 +23,20 @@ import java.util.regex.Pattern;
 public class RedisSubscriber implements MessageListener {
 
     private static final Logger log = LoggerFactory.getLogger(RedisSubscriber.class);
-
     private final WebSocketSessionRegistry sessionRegistry;
-
     private final NchanPublisher nchanPublisher;
-
 
     // escort:ch:{escortId}:{role}
     private static final Pattern CH = Pattern.compile("^escort:ch:([^:]+):([^:]+)$");
 
-    /** Lua에서 publish한 payload 그대로 들어옴: {"latitude":...,"longitude":...,"timestamp":...,...} */
+    /**
+     * Lua에서 publish한 메세지를 수신
+     * publish한 payload 형태 그대로 수신 -> {"latitude":...,"longitude":...,"timestamp":...,...}
+     */
     @Override
-    public void onMessage(Message m, byte[] pattern) {
-        String channel = new String(m.getChannel(), StandardCharsets.UTF_8);
-        String data = new String(m.getBody(), StandardCharsets.UTF_8);
+    public void onMessage(Message message, byte[] pattern) {
+        String channel = new String(message.getChannel(), StandardCharsets.UTF_8);
+        String data = new String(message.getBody(), StandardCharsets.UTF_8);
 
         var matcher = CH.matcher(channel);
         if (!matcher.matches()) {
@@ -56,8 +54,6 @@ public class RedisSubscriber implements MessageListener {
             return;
         }
 
-        String eventName = roleRaw.toLowerCase(Locale.ROOT) + "-location";
-
         LocationRedisDto dto;
         try {
             dto = JsonUtils.fromJson(data, LocationRedisDto.class);
@@ -67,6 +63,7 @@ public class RedisSubscriber implements MessageListener {
             return;
         }
 
+        String eventName = roleRaw.toLowerCase(Locale.ROOT) + "-location";
         Envelope envelope = new Envelope(eventName, LocationResponse.from(dto));
 
         Role role = Role.from(roleRaw).orElseThrow(RealtimeInvalidRoleException::new);
