@@ -37,6 +37,7 @@ public class LocationCacheRepository {
     private static final double MAX_SPEED = 50.0;    // m/s (0 비활성)
     private static final double MIN_DT = 0.2;        // s
     private static final double MAX_DT = 60.0;       // s
+    private static final double REFRESH_SEC = 30.0;    // s
 
     /** Lua 기반 원자적 upsert: 변화 있을 때만 갱신 + TTL + Pub/Sub */
     public LocationUpdateResult upsertLatestLocation(WebSocketSession session, LocationUpdateRequest request) {
@@ -60,7 +61,7 @@ public class LocationCacheRepository {
                 role.getLabel(),
                 sessionId,
                 String.valueOf(ACCURACY_MAX), String.valueOf(MAX_SPEED),
-                String.valueOf(MIN_DT), String.valueOf(MAX_DT)
+                String.valueOf(MIN_DT), String.valueOf(MAX_DT), String.valueOf(REFRESH_SEC)
         };
 
         try {
