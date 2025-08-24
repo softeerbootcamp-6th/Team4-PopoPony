@@ -1,4 +1,4 @@
-import { TopAppBar, BottomCTA, Toaster } from '@components';
+import { TopAppBar, BottomCTA } from '@components';
 import type { TopAppBarProps } from '../components/TopAppBar';
 import type { BottomCTAProps } from '../components/BottomCTA';
 
