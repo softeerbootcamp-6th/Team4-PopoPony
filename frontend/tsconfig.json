@@ -37,6 +37,8 @@
       "@dashboard/*": ["src/features/dashboard/*"],
       "@helper/*": ["src/features/helper/*"],
       "@schema": ["src/shared/types/api/schema"],
+      "@pages/*": ["src/pages/*"],
+      "@shared/*": ["src/shared/*"],
       "@/*": ["src/*"]
     }
   }
