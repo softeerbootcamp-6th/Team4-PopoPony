@@ -9,7 +9,6 @@ import com.todoc.server.domain.escort.exception.EscortNotFoundException;
 import com.todoc.server.domain.escort.repository.EscortJpaRepository;
 import com.todoc.server.domain.escort.web.dto.request.EscortMemoUpdateRequest;
 import com.todoc.server.domain.realtime.service.NchanPublisher;
-import com.todoc.server.domain.realtime.service.SseEmitterManager;
 import com.todoc.server.domain.realtime.service.WebSocketSessionRegistry;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -30,7 +29,6 @@ import static org.mockito.Mockito.*;
 class EscortServiceTest {
 
     @Mock private EscortJpaRepository escortJpaRepository;
-    @Mock private SseEmitterManager sseEmitterManager;
     @Mock private WebSocketSessionRegistry webSocketSessionRegistry;
     @Mock private NchanPublisher nchanPublisher;
 
