@@ -8,7 +8,7 @@ import { useMap } from '@hooks';
 import type { Position, TMapMarker } from '@types';
 
 import { updatedBefore } from '@helper/utils';
-import { useWebSocket } from '@dashboard/hooks';
+import { useSocket } from '@dashboard/hooks';
 export const Route = createFileRoute('/dashboard/map/$encryptedId')({
   component: RouteComponent,
 });
@@ -30,7 +30,7 @@ function RouteComponent() {
 
   const timerRef = useRef<number | null>(null);
   const [curLocation, setCurLocation] = useState<Position | null>(null);
-  const { helperLocations, sendLocation } = useWebSocket(String(escortId), 'patient');
+  const { helperLocations, sendLocation } = useSocket(String(escortId), 'patient');
 
   const mapRef = useRef<HTMLDivElement>(null);
   const { mapInstance, setCurrentLocation, fitBoundsToCoordinates, addMarker, addCustomMarker } =

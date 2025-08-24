@@ -13,7 +13,7 @@ import {
 import { useEffect, useRef } from 'react';
 import { useMap } from '@hooks';
 import type { TMapMarker } from '@types';
-import { useWebSocket } from '@dashboard/hooks';
+import { useSocket } from '@dashboard/hooks';
 import { updatedBefore } from '@helper/utils';
 
 export const Route = createFileRoute('/dashboard/$escortId/customer/')({
@@ -55,7 +55,7 @@ function RouteComponent() {
   } = useMap(mapRef as React.RefObject<HTMLDivElement>);
 
   const { route, patient, helper, estimatedMeetingTime, escortId } = data.data;
-  const { helperLocations, patientLocations, escortStatuses } = useWebSocket(
+  const { helperLocations, patientLocations, escortStatuses } = useSocket(
     String(escortId),
     'customer'
   );
