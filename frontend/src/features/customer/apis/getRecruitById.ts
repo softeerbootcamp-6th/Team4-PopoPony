@@ -7,7 +7,6 @@ const getRecruitById = (recruitId: number) => {
         recruitId,
       },
     },
-    throwOnError: true,
   });
 };
 

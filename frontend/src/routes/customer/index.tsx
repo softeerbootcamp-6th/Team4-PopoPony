@@ -8,7 +8,6 @@ import { getRecruitsCustomer } from '@customer/apis';
 import { dateFormat, timeFormat } from '@utils';
 import { useNavigate } from '@tanstack/react-router';
 import type { EscortStatus } from '@types';
-import { useEffect, useState } from 'react';
 import { $api } from '@apis';
 
 export const Route = createFileRoute('/customer/')({
@@ -52,15 +51,10 @@ const refineRecruitData = (recruitData: RecruitSimpleResponse) => {
 };
 
 function RouteComponent() {
-  const [apiError, setApiError] = useState<Error | null>(null);
   const { data: escortData, error } = getRecruitsCustomer();
   const qc = useQueryClient();
   const helperListOpts = $api.queryOptions('get', '/api/recruits/helper');
-  useEffect(() => {
-    if (error) {
-      setApiError(error);
-    }
-  }, [error]);
+
   const { inProgressList, completedList } = escortData?.data ?? {};
   const navigate = useNavigate();
   const handleEscortCardClick = (recruitId: number) => {
@@ -115,9 +109,9 @@ function RouteComponent() {
           </Tabs.TabsList>
           <Tabs.TabsContent value='신청'>
             <div className='flex-col-start gap-[1.2rem] p-[2rem]'>
-              {apiError && (
+              {error && (
                 <FallbackUI
-                  error={apiError}
+                  error={error}
                   onReset={() => {
                     qc.invalidateQueries(helperListOpts);
                   }}
@@ -125,7 +119,7 @@ function RouteComponent() {
               )}
               {inProgressList &&
                 inProgressList.length > 0 &&
-                !apiError &&
+                !error &&
                 inProgressList.map((escort) => {
                   const { statusText, title, timeText, locationText } = refineRecruitData(escort);
                   return (
@@ -164,9 +158,9 @@ function RouteComponent() {
           </Tabs.TabsContent>
           <Tabs.TabsContent value='완료'>
             <div className='flex-col-start gap-[1.2rem] p-[2rem]'>
-              {apiError && (
+              {error && (
                 <FallbackUI
-                  error={apiError}
+                  error={error}
                   onReset={() => {
                     qc.invalidateQueries(helperListOpts);
                   }}
@@ -174,7 +168,7 @@ function RouteComponent() {
               )}
               {completedList &&
                 completedList.length > 0 &&
-                !apiError &&
+                !error &&
                 completedList.map((escort) => {
                   const { statusText, title, timeText, locationText } = refineRecruitData(escort);
                   return (
@@ -194,7 +188,7 @@ function RouteComponent() {
                     </EscortCard>
                   );
                 })}
-              {completedList && completedList.length === 0 && !apiError && (
+              {completedList && completedList.length === 0 && !error && (
                 <EmptyCard text='완료된 동행 내역이 없어요' />
               )}
             </div>
