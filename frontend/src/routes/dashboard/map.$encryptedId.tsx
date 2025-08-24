@@ -181,6 +181,7 @@ function RouteComponent() {
           localStorage.setItem('termsAgreement', 'true');
         }}
       />
+
     </>
   );
 }

@@ -30,6 +30,7 @@ public class WebSocketSessionRegistry {
         }
     }
 
+    /** 기존 연결 제거 */
     public void remove(Long escortId, Role role) {
         AtomicReference<WebSocketSession> ref = getRoleMap(escortId).get(role);
         WebSocketSession prev = ref.getAndSet(null);      // 현재 무엇이든 제거
@@ -38,6 +39,7 @@ public class WebSocketSessionRegistry {
         }
     }
 
+    /** 특정 동행 ID에 대한 Role별 session 목록 반환 */
     private EnumMap<Role, AtomicReference<WebSocketSession>> getRoleMap(Long escortId) {
         return map.computeIfAbsent(escortId, k -> {
             EnumMap<Role, AtomicReference<WebSocketSession>> roleMap = new EnumMap<>(Role.class);
@@ -48,6 +50,7 @@ public class WebSocketSessionRegistry {
         });
     }
 
+    /** 특정 동행 ID, Role에 대한 단일 session 반환 */
     public WebSocketSession getSession(Long escortId, Role role) {
         return getRoleMap(escortId).get(role).get();
     }
@@ -65,7 +68,7 @@ public class WebSocketSessionRegistry {
         }
     }
 
-    /** 여러 Role에게 브로드캐스팅 (역할당 최대 1세션 가정) */
+    /** 여러 Role에게 브로드캐스팅 */
     public void broadcastToRoles(Long escortId, Set<Role> roleSet, Envelope envelope) {
 
         for (Role role : roleSet) {

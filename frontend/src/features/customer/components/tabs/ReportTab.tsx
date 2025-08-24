@@ -134,20 +134,19 @@ const ReportTab = ({ setHasReview, setHelperId }: ReportTabProps) => {
                 ) : (
                   <span className='body1-16-medium text-text-neutral-secondary'>-</span>
                 )}
-                <div className='flex-start gap-[0.4rem]'>
-                  <IcAlertCircle
-                    className='[&_path]:fill-icon-red-primary'
-                    width={16}
-                    height={16}
-                  />
-                  {reportData?.extraMinutes && reportData?.extraMinutes > 0 && (
+                {reportData?.extraMinutes && reportData?.extraMinutes > 0 && (
+                  <div className='flex-start gap-[0.4rem]'>
+                    <IcAlertCircle
+                      className='[&_path]:fill-icon-red-primary'
+                      width={16}
+                      height={16}
+                    />
                     <span className='label3-12-medium text-text-red-primary'>
                       예상 동행 시간보다 {reportData?.extraMinutes}분 초과되었어요!
                     </span>
-                  )}
-                </div>
+                  </div>
+                )}
               </InfoSection>
-              <Divider />
               {reportData?.hasNextAppointment && (
                 <InfoSection title='다음 예약'>
                   <span className='body1-16-medium text-text-neutral-primary'>

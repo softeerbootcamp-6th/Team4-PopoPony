@@ -14,11 +14,15 @@ import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.server.HandshakeInterceptor;
 
 import java.util.Map;
+import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
 public class WebSocketAuthHandshakeInterceptor implements HandshakeInterceptor {
 
+    /**
+     * WebSocket 세션 연결 전에 요청 정보 파싱 및 인증 절차 수행
+     */
     @Override
     public boolean beforeHandshake(ServerHttpRequest req,
                                    ServerHttpResponse res,
@@ -46,13 +50,13 @@ public class WebSocketAuthHandshakeInterceptor implements HandshakeInterceptor {
             return false;
         }
 
-        // TODO: 인증 토큰으로 userId 등 추가
         SessionAuth auth = (SessionAuth) session.getAttribute("AUTH_USER");
         long authId = auth.id();
 
         attrs.put("authId", authId);
         attrs.put("role", role);
         attrs.put("escortId", escortId);
+        attrs.put("sessionId", UUID.randomUUID().toString());
 
         return true;
     }
