@@ -17,10 +17,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mindrot.jbcrypt.BCrypt.gensalt;
 import static org.mindrot.jbcrypt.BCrypt.hashpw;
 
-@SpringBootTest
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE) // 실제 DB 사용 시
-@Transactional
-@ActiveProfiles("test")
 @Sql("/sql/data.sql")
 class AuthIntegrationTest extends IntegrationTest {
 

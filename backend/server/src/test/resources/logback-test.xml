@@ -1,0 +1,50 @@
+<!-- src/test/resources/logback-test.xml -->
+<configuration>
+  <!-- 로그 디렉터리: Gradle에서 넘기는 LOG_DIR(권장) 없으면 build/logs/test -->
+  <property name="LOG_DIR" value="${LOG_DIR:-build/logs/test}"/>
+
+  <!-- 콘솔 (원하면 유지) -->
+  <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <charset>UTF-8</charset>
+      <pattern>%d{HH:mm:ss.SSS} %-5level [%logger{36}] %msg%n</pattern>
+    </encoder>
+  </appender>
+
+  <!-- 파일 -->
+  <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>${LOG_DIR}/test.log</file>
+    <encoder>
+      <charset>UTF-8</charset>
+      <pattern>%d{HH:mm:ss.SSS} %-5level [%logger{36}] %msg%n</pattern>
+    </encoder>
+    <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+      <fileNamePattern>${LOG_DIR}/test.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+      <maxFileSize>10MB</maxFileSize>
+      <maxHistory>7</maxHistory>
+      <totalSizeCap>100MB</totalSizeCap>
+    </rollingPolicy>
+  </appender>
+
+  <!-- 기본은 WARN으로 소음 최소화 -->
+  <root level="WARN">
+    <appender-ref ref="CONSOLE"/>
+    <appender-ref ref="FILE"/>
+  </root>
+
+  <!-- 보고 싶은 것만 파일에 DEBUG로 -->
+  <logger name="org.springframework.test.context.cache" level="DEBUG" additivity="false">
+    <appender-ref ref="FILE"/>
+  </logger>
+  <logger name="org.springframework.test.context.jdbc" level="DEBUG" additivity="false">
+    <appender-ref ref="FILE"/>
+  </logger>
+  <logger name="org.springframework.jdbc.datasource.init" level="DEBUG" additivity="false">
+    <appender-ref ref="FILE"/>
+  </logger>
+
+  <!-- 시끄러운 것들 낮추기 -->
+  <logger name="org.hibernate.SQL" level="WARN"/>
+  <logger name="org.hibernate.tool.schema" level="ERROR"/>
+  <logger name="org.springframework.transaction" level="WARN"/>
+</configuration>
