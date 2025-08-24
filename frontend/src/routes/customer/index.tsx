@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from '@tanstack/react-router';
 import { PageLayout } from '@layouts';
-import { Button, EscortCard, Tabs, EmptyCard } from '@components';
+import { Button, EscortCard, Tabs, EmptyCard, Logo } from '@components';
 import { IcPlusSideLeft } from '@icons';
 import type { RecruitSimpleResponse } from '@customer/types';
 import { getRecruitsCustomer } from '@customer/apis';
@@ -67,7 +67,7 @@ function RouteComponent() {
         <div className='bg-neutral-10 relative h-full max-h-[22rem] p-[2rem]'>
           <div className='absolute z-10'>
             <Link to='/'>
-              <img src='/images/logo-text.svg' alt='logo-text' className='w-[4rem]' />
+              <Logo className='text-[2rem]' />
             </Link>
             <h2 className='headline-24-bold text-text-neutral-primary mt-[2.4rem] mb-[3rem]'>
               토닥과 함께 <br />

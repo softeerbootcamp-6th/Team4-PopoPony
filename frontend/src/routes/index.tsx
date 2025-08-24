@@ -1,3 +1,4 @@
+import { Logo } from '@components';
 import { PageLayout } from '@layouts';
 import { createFileRoute, Link } from '@tanstack/react-router';
 
@@ -26,7 +27,7 @@ function App() {
       <div className='flex-1'>
         <div className='h-full bg-[url("/images/landing-background.png")] bg-cover bg-center px-[2rem]'>
           <div className='flex-col-center gap-[1.6rem] pt-[9.6rem]'>
-            <img src='/images/logo-text.svg' alt='logo-text' className='w-[7.2rem]' />
+            <Logo className='text-[3.6rem]' />
             <h2 className='title-20-bold text-text-neutral-secondary'>토닥과 함께, 투-닥터!</h2>
           </div>
 
