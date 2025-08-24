@@ -56,7 +56,7 @@ function RouteComponent() {
   }, [helperData, reset]);
 
   return (
-    <PageLayout>
+    <>
       <PageLayout.Header
         title='동행 신청하기'
         showBack={true}
@@ -82,6 +82,6 @@ function RouteComponent() {
           <Modal.CloseButton onClick={handleDenyClose}>아니오</Modal.CloseButton>
         </Modal.ButtonContainer>
       </Modal>
-    </PageLayout>
+    </>
   );
 }

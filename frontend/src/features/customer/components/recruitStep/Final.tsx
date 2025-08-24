@@ -29,12 +29,7 @@ const Final = ({ handleBackStep }: FunnelStepProps) => {
       },
       {
         onSuccess: () => {
-          alert('동행 신청이 완료되었습니다!');
           navigate({ to: '/customer/recruit/completed' });
-        },
-        onError: (error) => {
-          console.error('제출 실패:', error);
-          alert('제출 중 오류가 발생했습니다. 다시 시도해주세요.');
         },
       }
     );
@@ -78,7 +73,7 @@ const Final = ({ handleBackStep }: FunnelStepProps) => {
   return (
     <>
       <FormLayout>
-        <FormLayout.Content>
+        <FormLayout.Content className='bg-neutral-10'>
           <div className='flex flex-col gap-[2rem]'>
             <FormLayout.TitleWrapper>
               <FormLayout.Title>동행 신청 확인</FormLayout.Title>

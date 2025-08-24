@@ -33,7 +33,7 @@ function RouteComponent() {
     helperSimple || {};
 
   return (
-    <PageLayout>
+    <>
       <PageLayout.Header title='도우미' showBack />
       <PageLayout.Content>
         <div className='flex flex-col gap-[0.8rem] px-[2rem] py-[1.6rem]'>
@@ -146,6 +146,6 @@ function RouteComponent() {
           </Tabs.TabsContent>
         </Tabs>
       </PageLayout.Content>
-    </PageLayout>
+    </>
   );
 }

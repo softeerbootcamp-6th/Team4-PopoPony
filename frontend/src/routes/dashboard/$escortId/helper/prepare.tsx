@@ -58,7 +58,7 @@ function RouteComponent() {
   if (!isTmapLoaded) return <div>Loading...</div>;
 
   return (
-    <PageLayout>
+    <>
       <div className='flex-start mb-[2.4rem] h-[5.6rem] w-full px-[2rem]'>
         <button
           type='button'
@@ -143,6 +143,6 @@ function RouteComponent() {
           </div>
         </div>
       </PageLayout.Content>
-    </PageLayout>
+    </>
   );
 }

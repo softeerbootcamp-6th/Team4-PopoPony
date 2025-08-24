@@ -9,6 +9,7 @@ import type { Position, TMapMarker } from '@types';
 
 import { updatedBefore } from '@helper/utils';
 import { useSocket } from '@dashboard/hooks';
+import { call } from '@utils';
 export const Route = createFileRoute('/dashboard/map/$encryptedId')({
   component: RouteComponent,
 });
@@ -41,7 +42,7 @@ function RouteComponent() {
   const meetingMarker = useRef<TMapMarker>(null);
 
   const { meetingLocationInfo } = route.routeSimple;
-  const { name: helperName, imageUrl: helperImageUrl, contact: helperContact } = helper;
+  const { name: helperName, imageUrl: helperImageUrl } = helper;
 
   useEffect(() => {
     if (!('geolocation' in navigator)) return;
@@ -128,15 +129,8 @@ function RouteComponent() {
     );
   }, [mapInstance]);
 
-  const handleClickCallHelper = () => {
-    window.open(`tel:${helperContact}`, '_blank');
-  };
-  const handleClickGoToCustomerCenter = () => {
-    window.open(`tel:010-2514-9058`, '_blank');
-  };
-
   return (
-    <PageLayout>
+    <>
       <Header showBack={false} updateBefore={updatedBefore(helperLocations?.timestamp)} />
       <PageLayout.Content>
         <div className='flex h-full flex-col'>
@@ -175,8 +169,8 @@ function RouteComponent() {
       <PageLayout.Footer>
         <Footer
           escortStatus={escortData?.data.escortStatus}
-          handleClickCallHelper={handleClickCallHelper}
-          handleClickGoToCustomerCenter={handleClickGoToCustomerCenter}
+          handleClickCallHelper={() => call(helper.contact)}
+          handleClickGoToCustomerCenter={() => call(import.meta.env.VITE_CUSTOMER_PHONE_NUMBER)}
         />
       </PageLayout.Footer>
       <TermsBottomSheet
@@ -186,6 +180,6 @@ function RouteComponent() {
           localStorage.setItem('termsAgreement', 'true');
         }}
       />
-    </PageLayout>
+    </>
   );
 }

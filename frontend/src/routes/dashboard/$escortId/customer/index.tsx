@@ -15,6 +15,7 @@ import { useMap } from '@hooks';
 import type { TMapMarker } from '@types';
 import { useSocket } from '@dashboard/hooks';
 import { updatedBefore } from '@helper/utils';
+import { call } from '@utils';
 
 export const Route = createFileRoute('/dashboard/$escortId/customer/')({
   beforeLoad: async ({ context, params }) => {
@@ -72,12 +73,6 @@ function RouteComponent() {
   const { name: patientName, imageUrl: patientImageUrl } = patient;
   const { name: helperName, imageUrl: helperImageUrl, contact: helperContact } = helper;
 
-  const handleClickCallHelper = () => {
-    window.open(`tel:${helperContact}`, '_blank');
-  };
-  const handleClickGoToCustomerCenter = () => {
-    window.open(`tel:010-2514-9058`, '_blank');
-  };
   const handleClickGoToReport = () => {
     router.navigate({
       to: '/customer/escort/$escortId',
@@ -270,7 +265,7 @@ function RouteComponent() {
 
   if (currentStatus === '리포트작성중') {
     return (
-      <PageLayout>
+      <>
         <PageLayout.Header showClose={true} onClose={() => router.navigate({ to: '/customer' })} />
         <PageLayout.Content>
           <WritingReport />
@@ -279,17 +274,17 @@ function RouteComponent() {
           <Footer
             escortStatus={currentStatus as EscortStatusProps}
             handleClickGoToReport={handleClickGoToReport}
-            handleClickCallHelper={handleClickCallHelper}
-            handleClickGoToCustomerCenter={handleClickGoToCustomerCenter}
+            handleClickCallHelper={() => call(helperContact)}
+            handleClickGoToCustomerCenter={() => call(import.meta.env.VITE_CUSTOMER_PHONE_NUMBER)}
           />
         </PageLayout.Footer>
-      </PageLayout>
+      </>
     );
   }
 
   if (currentStatus === '동행완료') {
     return (
-      <PageLayout>
+      <>
         <PageLayout.Header showClose={true} onClose={() => router.history.back()} />
         <PageLayout.Content>
           <EscortCompleted />
@@ -298,15 +293,15 @@ function RouteComponent() {
           <Footer
             escortStatus={currentStatus as EscortStatusProps}
             handleClickGoToReport={handleClickGoToReport}
-            handleClickCallHelper={handleClickCallHelper}
-            handleClickGoToCustomerCenter={handleClickGoToCustomerCenter}
+            handleClickCallHelper={() => call(helperContact)}
+            handleClickGoToCustomerCenter={() => call(import.meta.env.VITE_CUSTOMER_PHONE_NUMBER)}
           />
         </PageLayout.Footer>
-      </PageLayout>
+      </>
     );
   }
   return (
-    <PageLayout>
+    <>
       <Header updateBefore={updatedBefore(helperLocations?.timestamp)} showBack={true} />
       <PageLayout.Content>
         <div className='flex h-full flex-col'>
@@ -325,10 +320,10 @@ function RouteComponent() {
         <Footer
           escortStatus={currentStatus as EscortStatusProps}
           handleClickGoToReport={handleClickGoToReport}
-          handleClickCallHelper={handleClickCallHelper}
-          handleClickGoToCustomerCenter={handleClickGoToCustomerCenter}
+          handleClickCallHelper={() => call(helperContact)}
+          handleClickGoToCustomerCenter={() => call(import.meta.env.VITE_CUSTOMER_PHONE_NUMBER)}
         />
       </PageLayout.Footer>
-    </PageLayout>
+    </>
   );
 }

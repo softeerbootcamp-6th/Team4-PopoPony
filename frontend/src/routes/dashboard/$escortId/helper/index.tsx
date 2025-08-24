@@ -425,7 +425,7 @@ function RouteComponent() {
   };
 
   return (
-    <PageLayout>
+    <>
       <Header
         updateBefore={updatedBefore(patientLocations?.timestamp)}
         showUpdateBefore={escortStatus === '만남중'}
@@ -479,6 +479,6 @@ function RouteComponent() {
         </DashBoardCard>
       </PageLayout.Content>
       <PageLayout.Footer>{dashboardCardProps().button}</PageLayout.Footer>
-    </PageLayout>
+    </>
   );
 }

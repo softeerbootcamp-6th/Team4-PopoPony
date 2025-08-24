@@ -56,8 +56,7 @@ function RouteComponent() {
   };
 
   return (
-    <PageLayout
-      background={currentStep === 'final' ? 'bg-neutral-10' : 'bg-background-default-white'}>
+    <>
       <PageLayout.Header
         title='동행 신청하기'
         showBack={currentStep.includes('searchRoute')}
@@ -106,6 +105,6 @@ function RouteComponent() {
           <Modal.CloseButton onClick={handleDenyClose}>아니오</Modal.CloseButton>
         </Modal.ButtonContainer>
       </Modal>
-    </PageLayout>
+    </>
   );
 }
