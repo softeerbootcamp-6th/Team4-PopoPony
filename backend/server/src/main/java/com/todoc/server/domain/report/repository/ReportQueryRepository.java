@@ -1,11 +1,12 @@
 package com.todoc.server.domain.report.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.todoc.server.domain.report.exception.ReportNotFoundException;
 import com.todoc.server.domain.report.repository.dto.ReportDetailFlatDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 import static com.todoc.server.domain.report.entity.QReport.report;
 import static com.todoc.server.domain.report.entity.QTaxiFee.taxiFee;
@@ -32,12 +33,12 @@ public class ReportQueryRepository {
                 .fetchOne();
 
         if (tuple == null) {
-            throw new ReportNotFoundException();
+            return null;
         }
 
         Long reportId = tuple.get(report).getId();
 
-        java.util.List<Long> imageIds = queryFactory
+        List<Long> imageIds = queryFactory
                 .select(imageFile.id)
                 .from(imageAttachment)
                 .join(imageAttachment.imageFile, imageFile)
