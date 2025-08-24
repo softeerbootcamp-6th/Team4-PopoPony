@@ -5,33 +5,19 @@ import { createFileRoute, useParams, redirect } from '@tanstack/react-router';
 import type { RecruitDetailResponse } from '@helper/types';
 import { getRecruitById } from '@helper/apis';
 import { dateFormat, timeFormat } from '@utils';
-import { $api, NotFoundError } from '@apis';
+import { $api } from '@apis';
+import { validateRecruitExistsByRecruitId } from '@utils';
 
 export const Route = createFileRoute('/helper/escort/$escortId/')({
   beforeLoad: async ({ context, params }) => {
-    const { queryClient } = context;
     const escortId = Number(params.escortId);
-    const existsOptions = $api.queryOptions(
-      'get',
-      '/api/recruits/{recruitId}/status',
-      { params: { path: { recruitId: escortId } } },
-      { throwOnError: true, staleTime: 30_000, gcTime: 300_000 }
-    );
-
-    // 존재하지 않는 리소스(404)는 즉시 상위 에러 핸들링으로 위임
-    try {
-      await queryClient.ensureQueryData(existsOptions);
-    } catch (err) {
-      if (err instanceof NotFoundError) {
-        throw err;
-      }
-      // 기타 오류는 아래 리포트 분기로 처리
-    }
+    await validateRecruitExistsByRecruitId(escortId);
+    const { queryClient } = context;
     const options = $api.queryOptions(
       'get',
       '/api/reports/recruits/{recruitId}',
       { params: { path: { recruitId: escortId } } },
-      { throwOnError: false, staleTime: 30_000, gcTime: 300_000 }
+      { throwOnError: false }
     );
 
     try {

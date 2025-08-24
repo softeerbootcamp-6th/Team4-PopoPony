@@ -4,3 +4,4 @@ export * from './parseType';
 export * from './image';
 export * from './call';
 export * from './showToastError';
+export * from './validation';
