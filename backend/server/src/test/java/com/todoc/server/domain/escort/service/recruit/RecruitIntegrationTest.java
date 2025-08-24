@@ -16,8 +16,8 @@ import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.util.ReflectionTestUtils;
 
@@ -43,10 +43,10 @@ public class RecruitIntegrationTest extends IntegrationTest {
     @PersistenceContext
     private EntityManager em;
 
-    @Mock
+    @MockitoBean
     private TMapRouteService tMapRouteService;
 
-    @Mock
+    @MockitoBean
     private TMapRouteParser tMapRouteParser;
 
     @Nested

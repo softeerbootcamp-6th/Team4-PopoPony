@@ -79,9 +79,16 @@ public class ReviewIntegrationTest extends IntegrationTest {
         // given
         Long recruitId = 7L;
 
-        // when & then
-        assertThatThrownBy(() -> reviewFacadeService.getReviewDetailByRecruitId(recruitId))
-                .isInstanceOf(ReviewNotFoundException.class);
+        // when
+        ReviewDetailResponse response = reviewFacadeService.getReviewDetailByRecruitId(recruitId);
+
+        //  then
+        assertThat(response).isNotNull();
+        assertThat(response.getReviewId()).isEqualTo(0L);
+        assertThat(response.getSatisfactionLevel()).isEqualTo("");
+        assertThat(response.getCreatedAt()).isNotNull();
+        assertThat(response.getShortComment()).isNull();
+        assertThat(response.getPositiveFeedbackList().isEmpty()).isTrue();
     }
 
     @Test
