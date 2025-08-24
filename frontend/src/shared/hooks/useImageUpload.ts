@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react';
 import type { ImagePrefix, ImageWithPreviewUrl } from '@shared/types';
-import { postPresignedUrl, putS3Upload } from '@shared/apis';
-import { calculateMD5 } from '@shared/utils';
+import { postPresignedUrl, putS3Upload } from '@shared/api';
+import { calculateMD5 } from '@shared/lib';
 
 export interface UseImageUploadReturn {
   uploadImage: (file: File, prefix: ImagePrefix) => Promise<ImageWithPreviewUrl>;

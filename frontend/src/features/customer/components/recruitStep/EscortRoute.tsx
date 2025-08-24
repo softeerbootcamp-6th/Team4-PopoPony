@@ -1,9 +1,10 @@
 import { memo, useEffect } from 'react';
 import { routeFormSchema } from '@customer/types';
 import { useNavigate } from '@tanstack/react-router';
-import { FormLayout } from '@shared/layouts';
+import { FormLayout } from '@shared/ui/layout';
 import { useFormContext } from 'react-hook-form';
-import { FormInput, LabeledSection, Dot, Checkbox } from '@shared/components';
+import { Dot, Checkbox } from '@shared/ui';
+import { FormInput, LabeledSection } from '@shared/ui/form';
 import { SearchButton } from '@customer/components';
 import { useFormValidation } from '@shared/hooks';
 import type { FunnelStepProps } from '@shared/types';

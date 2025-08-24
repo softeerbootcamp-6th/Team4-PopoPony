@@ -1,4 +1,4 @@
-import { $api } from '@shared/apis';
+import { $api } from '@shared/api';
 
 const getRecruitReportByRecruitId = (recruitId: number) => {
   return $api.useQuery('get', '/api/reports/recruits/{recruitId}', {

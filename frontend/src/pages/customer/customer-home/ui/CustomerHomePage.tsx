@@ -1,14 +1,15 @@
 import { Link } from '@tanstack/react-router';
 import { useQueryClient } from '@tanstack/react-query';
-import { PageLayout } from '@shared/layouts';
-import { Button, EscortCard, Tabs, EmptyCard, Logo, FallbackUI } from '@shared/components';
+import { PageLayout } from '@shared/ui/layout';
+import { Button, Tabs, EmptyCard, Logo, FallbackUI } from '@shared/ui';
+import { RecruitCard } from '@widgets/ui';
 import { IcPlusSideLeft } from '@icons';
 import type { RecruitSimpleResponse } from '@customer/types';
 import { getRecruitsCustomer } from '@customer/apis';
-import { dateFormat, timeFormat } from '@shared/utils';
+import { dateFormat, timeFormat } from '@shared/lib';
 import { useNavigate } from '@tanstack/react-router';
 import type { EscortStatus } from '@shared/types';
-import { $api } from '@shared/apis';
+import { $api } from '@shared/api';
 
 const escortStatusMessageMap: Record<NonNullable<EscortStatus>, string> = {
   //동행준비, 리포트 작성중, 동행완료는 차피 쓰이지 않음. 타입 에러 해결 위해 넣음.
@@ -123,21 +124,21 @@ const CustomerHomePage = () => {
               inProgressList.map((escort) => {
                 const { statusText, title, timeText, locationText } = refineRecruitData(escort);
                 return (
-                  <EscortCard
+                  <RecruitCard
                     key={escort.recruitId}
                     onClick={() => handleEscortCardClick(escort.recruitId)}>
-                    <EscortCard.StatusHeader
+                    <RecruitCard.StatusHeader
                       status={escort.recruitStatus}
                       text={statusText}
                       title={title}
                     />
-                    <EscortCard.Divider />
-                    <EscortCard.InfoSection>
-                      <EscortCard.Info type='time' text={timeText} />
-                      <EscortCard.Info type='location' text={locationText} />
-                    </EscortCard.InfoSection>
+                    <RecruitCard.Divider />
+                    <RecruitCard.InfoSection>
+                      <RecruitCard.Info type='time' text={timeText} />
+                      <RecruitCard.Info type='location' text={locationText} />
+                    </RecruitCard.InfoSection>
                     {escort.recruitStatus === '동행중' && (
-                      <EscortCard.DashboardButton
+                      <RecruitCard.DashboardButton
                         onClick={() => {
                           navigate({
                             to: '/dashboard/$escortId/customer',
@@ -148,7 +149,7 @@ const CustomerHomePage = () => {
                         }}
                       />
                     )}
-                  </EscortCard>
+                  </RecruitCard>
                 );
               })}
             {inProgressList && inProgressList.length === 0 && (
@@ -172,20 +173,20 @@ const CustomerHomePage = () => {
               completedList.map((escort) => {
                 const { statusText, title, timeText, locationText } = refineRecruitData(escort);
                 return (
-                  <EscortCard
+                  <RecruitCard
                     key={escort.recruitId}
                     onClick={() => handleEscortCardClick(escort.recruitId)}>
-                    <EscortCard.StatusHeader
+                    <RecruitCard.StatusHeader
                       status={escort.recruitStatus}
                       text={statusText}
                       title={title}
                     />
-                    <EscortCard.Divider />
-                    <EscortCard.InfoSection>
-                      <EscortCard.Info type='time' text={timeText} />
-                      <EscortCard.Info type='location' text={locationText} />
-                    </EscortCard.InfoSection>
-                  </EscortCard>
+                    <RecruitCard.Divider />
+                    <RecruitCard.InfoSection>
+                      <RecruitCard.Info type='time' text={timeText} />
+                      <RecruitCard.Info type='location' text={locationText} />
+                    </RecruitCard.InfoSection>
+                  </RecruitCard>
                 );
               })}
             {completedList && completedList.length === 0 && !error && (

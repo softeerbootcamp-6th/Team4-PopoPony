@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { RegionFormSchema, type ProfileStepProps, REGION_OPTIONS } from '@helper/types';
 import { useFormValidation } from '@shared/hooks';
-import { FormLayout } from '@shared/layouts';
-import { LabeledSection, PhotoUpload, Button } from '@shared/components';
+import { FormLayout } from '@shared/ui/layout';
+import { LabeledSection, PhotoUpload } from '@shared/ui/form';
+import { Button } from '@shared/ui';
 import { RegionBottomSheetForm } from '@helper/components';
 import { IcChevronDown } from '@assets/icons';
 

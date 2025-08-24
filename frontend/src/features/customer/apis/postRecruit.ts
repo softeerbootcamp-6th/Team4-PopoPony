@@ -1,4 +1,4 @@
-import { $api } from '@shared/apis';
+import { $api } from '@shared/api';
 
 const postRecruit = () => {
   return $api.useMutation('post', '/api/recruits');

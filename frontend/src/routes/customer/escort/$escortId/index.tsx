@@ -1,18 +1,13 @@
 import { useState } from 'react';
-import {
-  EscortCard,
-  ProgressIndicator,
-  Tabs,
-  Button,
-  ErrorSuspenseBoundary,
-  SuspenseUI,
-} from '@shared/components';
+import { Tabs, Button, ErrorSuspenseBoundary, SuspenseUI } from '@shared/ui';
+import { ProgressIndicator } from '@entities/recruit/ui';
+import { RecruitCard } from '@widgets/ui';
 import { DetailTab, HelperTab, ReportTab } from '@customer/components';
-import { PageLayout } from '@shared/layouts';
+import { PageLayout } from '@shared/ui/layout';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import type { RecruitDetailResponse } from '@customer/types';
 import { getRecruitById } from '@customer/apis';
-import { dateFormat, timeFormat } from '@shared/utils';
+import { dateFormat, timeFormat } from '@shared/lib';
 
 export const Route = createFileRoute('/customer/escort/$escortId/')({
   component: RouteComponent,
@@ -58,14 +53,14 @@ function RouteComponent() {
       <PageLayout.Header title='내역 상세보기' showBack />
       <PageLayout.Content>
         <div className='bg-neutral-10 flex-col-start gap-[1.2rem] px-[2rem] py-[1.6rem]'>
-          <EscortCard>
-            <EscortCard.StatusHeader text={statusText} title={cardTitle} hasOnClickEvent={false} />
-            <EscortCard.Divider />
-            <EscortCard.InfoSection>
-              <EscortCard.Info type='time' text={cardTimeText} />
-              <EscortCard.Info type='location' text={cardLocationText} />
-            </EscortCard.InfoSection>
-          </EscortCard>
+          <RecruitCard>
+            <RecruitCard.StatusHeader text={statusText} title={cardTitle} hasOnClickEvent={false} />
+            <RecruitCard.Divider />
+            <RecruitCard.InfoSection>
+              <RecruitCard.Info type='time' text={cardTimeText} />
+              <RecruitCard.Info type='location' text={cardLocationText} />
+            </RecruitCard.InfoSection>
+          </RecruitCard>
           <ProgressIndicator currentStatus={recruitData.data.status} />
         </div>
 

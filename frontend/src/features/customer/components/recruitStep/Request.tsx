@@ -1,6 +1,6 @@
 import { requestFormSchema } from '@customer/types';
-import { FormTextarea, LabeledSection } from '@shared/components';
-import { FormLayout } from '@shared/layouts';
+import { FormTextarea, LabeledSection } from '@shared/ui/form';
+import { FormLayout } from '@shared/ui/layout';
 import { useFormValidation } from '@shared/hooks';
 import type { FunnelStepProps } from '@shared/types';
 

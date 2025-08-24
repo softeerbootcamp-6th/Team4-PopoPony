@@ -1,6 +1,6 @@
 import type { RecruitFormValues } from '@customer/types';
 import type { operations } from '@schema';
-import { parseStringToBoolean } from '@shared/utils';
+import { parseStringToBoolean } from '@shared/lib';
 
 type RecruitCreateJson = NonNullable<
   operations['createRecruit']['requestBody']

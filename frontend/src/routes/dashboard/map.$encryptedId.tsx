@@ -1,15 +1,15 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { PageLayout } from '@shared/layouts';
+import { PageLayout } from '@shared/ui/layout';
 import { Header, Footer, DashBoardCard } from '@dashboard/components';
 import { getEscortDetail } from '@dashboard/apis';
-import { FloatingButton, TermsBottomSheet } from '@shared/components';
+import { FloatingButton, TermsBottomSheet } from '@shared/ui';
 import { useEffect, useRef, useState } from 'react';
 import { useMap } from '@shared/hooks';
 import type { Position, TMapMarker } from '@shared/types';
 
 import { updatedBefore } from '@helper/utils';
 import { useSocket } from '@dashboard/hooks';
-import { call } from '@shared/utils';
+import { call } from '@shared/lib';
 export const Route = createFileRoute('/dashboard/map/$encryptedId')({
   component: RouteComponent,
 });

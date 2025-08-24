@@ -1,6 +1,6 @@
 import { getRouteApi, useRouter } from '@tanstack/react-router';
 import { getEscortDetail } from '@dashboard/apis';
-import { PageLayout } from '@shared/layouts';
+import { PageLayout } from '@shared/ui/layout';
 import { type StatusTitleProps, type EscortStatusProps } from '@dashboard/types';
 import {
   Header,
@@ -14,7 +14,7 @@ import { useMap } from '@shared/hooks';
 import type { TMapMarker } from '@shared/types';
 import { useSocket } from '@dashboard/hooks';
 import { updatedBefore } from '@helper/utils';
-import { call } from '@shared/utils';
+import { call } from '@shared/lib';
 
 const { Tmapv3 } = window;
 

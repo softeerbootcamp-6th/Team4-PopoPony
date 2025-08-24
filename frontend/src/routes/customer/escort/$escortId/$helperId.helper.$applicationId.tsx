@@ -1,12 +1,12 @@
-import { Button, Modal, StrengthTag, Tabs } from '@shared/components';
+import { Button, Modal, StrengthTag, Tabs } from '@shared/ui';
 import { getHelperById } from '@customer/apis';
 import { KeywordTag, ReviewCard, SatisfactionGraph, StatsSummaryCard } from '@customer/components';
 import { useModal } from '@shared/hooks';
 import { IcPhoneFill, IcVerified } from '@icons';
-import { PageLayout } from '@shared/layouts';
+import { PageLayout } from '@shared/ui/layout';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import type { EscortStrength } from '@shared/types';
-import { call, dateFormat, formatImageUrl } from '@shared/utils';
+import { call, dateFormat, formatImageUrl } from '@shared/lib';
 
 export const Route = createFileRoute('/customer/escort/$escortId/$helperId/helper/$applicationId')({
   validateSearch: (search: { canSelect?: string } | undefined) => ({

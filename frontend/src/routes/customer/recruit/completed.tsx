@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
-import { PageLayout, FormLayout } from '@shared/layouts';
-import { Button } from '@shared/components';
+import { PageLayout, FormLayout } from '@shared/ui/layout';
+import { Button } from '@shared/ui';
 
 export const Route = createFileRoute('/customer/recruit/completed')({
   component: RouteComponent,

@@ -1,17 +1,10 @@
-import {
-  Button,
-  Divider,
-  EscortCard,
-  StrengthTag,
-  TermsBottomSheet,
-  Spinner,
-} from '@shared/components';
+import { Button, Divider, EscortCard, StrengthTag, TermsBottomSheet, Spinner } from '@shared/ui';
 import { getRecruitById } from '@customer/apis';
 import { GrayBox, InfoSection, RouteButton } from '@customer/components';
 import { type EscortStrength } from '@shared/types';
 import type { RecruitDetailResponse } from '@customer/types';
 import { IcCheck } from '@icons';
-import { PageLayout } from '@shared/layouts';
+import { PageLayout } from '@shared/ui/layout';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { postApplicationByRecruitId, getRecruitList } from '@helper/apis';
 import {
@@ -20,7 +13,7 @@ import {
   timeDuration,
   timeFormat,
   timeFormatWithOptionalMinutes,
-} from '@shared/utils';
+} from '@shared/lib';
 
 export const Route = createFileRoute('/helper/application/$escortId/')({
   component: RouteComponent,
@@ -104,14 +97,14 @@ function RouteComponent() {
       <PageLayout.Header title='내역 상세보기' showBack />
       <PageLayout.Content className='overflow-y-auto'>
         <div className='bg-neutral-10 flex-col-start gap-[1.2rem] px-[2rem] py-[1.6rem]'>
-          <EscortCard>
-            <EscortCard.StatusHeader text={statusText} title={cardTitle} hasOnClickEvent={false} />
-            <EscortCard.Divider />
-            <EscortCard.InfoSection>
-              <EscortCard.Info type='time' text={cardTimeText} />
-              <EscortCard.Info type='location' text={cardLocationText} />
-            </EscortCard.InfoSection>
-          </EscortCard>
+          <RecruitCard>
+            <RecruitCard.StatusHeader text={statusText} title={cardTitle} hasOnClickEvent={false} />
+            <RecruitCard.Divider />
+            <RecruitCard.InfoSection>
+              <RecruitCard.Info type='time' text={cardTimeText} />
+              <RecruitCard.Info type='location' text={cardLocationText} />
+            </RecruitCard.InfoSection>
+          </RecruitCard>
         </div>
         <>
           {/* 환자 및 동행 정보 */}

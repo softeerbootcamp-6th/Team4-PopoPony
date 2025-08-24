@@ -1,6 +1,6 @@
 import { memo, useEffect, useState } from 'react';
-import { FormInput, LabeledSection } from '@shared/components';
-import { FormLayout } from '@shared/layouts';
+import { FormInput, LabeledSection } from '@shared/ui/form';
+import { FormLayout } from '@shared/ui/layout';
 import { useFormValidation } from '@shared/hooks';
 import { timeSchema, dateSchema } from '@customer/types';
 import { IcAlertCircle } from '@icons';

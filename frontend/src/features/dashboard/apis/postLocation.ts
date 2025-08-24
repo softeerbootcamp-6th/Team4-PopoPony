@@ -1,4 +1,4 @@
-import { $api } from '@shared/apis';
+import { $api } from '@shared/api';
 
 const postLocation = async () => {
   return $api.useMutation('post', '/api/realtime/escorts/{escortId}/locations');

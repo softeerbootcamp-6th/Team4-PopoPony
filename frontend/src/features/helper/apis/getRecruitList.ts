@@ -1,4 +1,4 @@
-import { $api } from '@shared/apis';
+import { $api } from '@shared/api';
 
 const getRecruitList = () => {
   return $api.useQuery('get', '/api/recruits/helper');

@@ -1,8 +1,8 @@
 import { createFileRoute, Link, useNavigate } from '@tanstack/react-router';
-import { PageLayout } from '@shared/layouts';
-import { Button, EscortCard, Logo, Tabs } from '@shared/components';
+import { PageLayout } from '@shared/ui/layout';
+import { Button, EscortCard, Logo, Tabs } from '@shared/ui';
 import type { RecruitStatus } from '@shared/types';
-import { dateFormat, timeFormat } from '@shared/utils';
+import { dateFormat, timeFormat } from '@shared/lib';
 import { getRecruitList, getProfileExistance } from '@helper/apis';
 import type { RecruitSimpleResponse, EscortStatus } from '@helper/types';
 // import { toast } from 'sonner';
@@ -170,21 +170,21 @@ function RouteComponent() {
               {inProgressListData?.map((escort) => {
                 const refinedData = refineEscortData(escort);
                 return (
-                  <EscortCard
+                  <RecruitCard
                     key={escort.recruitId}
                     onClick={() => handleEscortCardClick(escort.recruitId, false)}>
-                    <EscortCard.StatusHeader
+                    <RecruitCard.StatusHeader
                       status={refinedData.status}
                       text={refinedData.statusText}
                       title={refinedData.title}
                     />
-                    <EscortCard.Divider />
-                    <EscortCard.InfoSection>
-                      <EscortCard.Info type='time' text={refinedData.timeText} />
-                      <EscortCard.Info type='location' text={refinedData.locationText} />
-                    </EscortCard.InfoSection>
+                    <RecruitCard.Divider />
+                    <RecruitCard.InfoSection>
+                      <RecruitCard.Info type='time' text={refinedData.timeText} />
+                      <RecruitCard.Info type='location' text={refinedData.locationText} />
+                    </RecruitCard.InfoSection>
                     {refinedData.status === '동행중' && (
-                      <EscortCard.DashboardButton
+                      <RecruitCard.DashboardButton
                         onClick={() => {
                           navigate({
                             to: '/dashboard/$escortId/helper',
@@ -195,7 +195,7 @@ function RouteComponent() {
                         }}
                       />
                     )}
-                  </EscortCard>
+                  </RecruitCard>
                 );
               })}
             </div>
@@ -205,20 +205,20 @@ function RouteComponent() {
               {completedListData?.map((escort) => {
                 const refinedData = refineEscortData(escort);
                 return (
-                  <EscortCard
+                  <RecruitCard
                     key={escort.recruitId}
                     onClick={() => handleEscortCardClick(escort.recruitId, true)}>
-                    <EscortCard.StatusHeader
+                    <RecruitCard.StatusHeader
                       status={refinedData.status}
                       text={refinedData.statusText}
                       title={refinedData.title}
                     />
-                    <EscortCard.Divider />
-                    <EscortCard.InfoSection>
-                      <EscortCard.Info type='time' text={refinedData.timeText} />
-                      <EscortCard.Info type='location' text={refinedData.locationText} />
-                    </EscortCard.InfoSection>
-                  </EscortCard>
+                    <RecruitCard.Divider />
+                    <RecruitCard.InfoSection>
+                      <RecruitCard.Info type='time' text={refinedData.timeText} />
+                      <RecruitCard.Info type='location' text={refinedData.locationText} />
+                    </RecruitCard.InfoSection>
+                  </RecruitCard>
                 );
               })}
             </div>

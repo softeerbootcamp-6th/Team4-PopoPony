@@ -1,5 +1,5 @@
-import { Button } from '@shared/components';
-import { PageLayout } from '@shared/layouts';
+import { Button } from '@shared/ui';
+import { PageLayout } from '@shared/ui/layout';
 import { useNavigate } from '@tanstack/react-router';
 
 const ReportCompletePage = () => {

@@ -1,4 +1,4 @@
-import { FormLayout } from '@shared/layouts';
+import { FormLayout } from '@shared/ui/layout';
 import type { FunnelStepProps } from '@shared/types';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { TaxiFeeSection } from '@helper/components';

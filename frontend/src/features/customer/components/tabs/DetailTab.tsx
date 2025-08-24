@@ -1,4 +1,5 @@
-import { Tabs, Divider, Button, Modal, StrengthTagList, ShowMapButton } from '@shared/components';
+import { Tabs, Divider, Button, Modal, ShowMapButton } from '@shared/ui';
+import { StrengthTagList } from '@entities/helper/ui';
 import { InfoSection, RouteButton, GrayBox } from '@customer/components';
 import { useModal } from '@shared/hooks';
 import { IcCheck } from '@icons';
@@ -8,7 +9,7 @@ import {
   timeFormatWithOptionalMinutes,
   timeDuration,
   formatImageUrl,
-} from '@shared/utils';
+} from '@shared/lib';
 import { useNavigate, getRouteApi } from '@tanstack/react-router';
 import { deleteRecruit } from '@customer/apis';
 

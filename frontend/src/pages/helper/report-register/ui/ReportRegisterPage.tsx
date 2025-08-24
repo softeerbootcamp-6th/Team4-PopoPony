@@ -1,13 +1,13 @@
 import { useEffect } from 'react';
-import { Modal } from '@shared/components';
+import { Modal } from '@shared/ui';
 import { getReportDefault } from '@helper/apis';
 import { ReportDetail, Reservation, Taxi, Time } from '@helper/components';
 import { useFunnel, useModal } from '@shared/hooks';
-import { PageLayout } from '@shared/layouts';
+import { PageLayout } from '@shared/ui/layout';
 import { getRouteApi, useRouter } from '@tanstack/react-router';
 import { FormProvider, useForm } from 'react-hook-form';
 import type { ReportFormValues } from '@helper/types';
-import { dateFormat } from '@shared/utils';
+import { dateFormat } from '@shared/lib';
 
 const stepList = ['time', 'reservation', 'taxi', 'detail'];
 

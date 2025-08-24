@@ -1,4 +1,4 @@
-import { Button, ShowMapButton } from '@shared/components';
+import { Button, ShowMapButton } from '@shared/ui';
 import { IcChevronDown } from '@icons';
 import { useState } from 'react';
 import type { LocationInfoSimpleResponse } from '@customer/types';

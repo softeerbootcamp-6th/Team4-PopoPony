@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
-import { Modal } from '@shared/components';
-import { PageLayout } from '@shared/layouts';
+import { Modal } from '@shared/ui';
+import { PageLayout } from '@shared/ui/layout';
 import { type ProfileFormValues } from '@helper/types';
 import { toProfileFormValues } from '@helper/utils';
 import { useFunnel, useModal } from '@shared/hooks';

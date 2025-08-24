@@ -1,7 +1,7 @@
-import { TwoOptionSelector, LabeledSection } from '@shared/components';
+import { TwoOptionSelector, LabeledSection } from '@shared/ui/form';
 import { useFormContext } from 'react-hook-form';
 import { memo } from 'react';
-import { FormLayout } from '@shared/layouts';
+import { FormLayout } from '@shared/ui/layout';
 import { useFormValidation } from '@shared/hooks';
 import { conditionSchema } from '@customer/types';
 import type { FunnelStepProps } from '@shared/types';

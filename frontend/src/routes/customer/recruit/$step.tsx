@@ -1,5 +1,5 @@
-import { Modal } from '@shared/components';
-import { PageLayout } from '@shared/layouts';
+import { Modal } from '@shared/ui';
+import { PageLayout } from '@shared/ui/layout';
 import { recruitStepSearchSchema, type RecruitFormValues } from '@customer/types';
 import { useFunnel, useModal } from '@shared/hooks';
 import { createFileRoute, redirect, useRouter } from '@tanstack/react-router';

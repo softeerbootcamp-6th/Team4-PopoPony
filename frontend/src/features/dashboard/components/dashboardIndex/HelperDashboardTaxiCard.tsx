@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { DashBoardCard } from '@dashboard/components';
 import { IcTaxiCalled, IcTaxiWaiting } from '@icons';
-import { Button } from '@shared/components';
+import { Button } from '@shared/ui';
 import { WarningBox } from '@customer/components';
 
 const HelperDashboardTaxiCard = ({

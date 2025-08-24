@@ -1,6 +1,6 @@
-import { Checkbox, LabeledSection } from '@shared/components';
+import { Checkbox, LabeledSection } from '@shared/ui';
 import { IcChevronDown } from '@icons';
-import { FormLayout } from '@shared/layouts';
+import { FormLayout } from '@shared/ui/layout';
 import type { FunnelStepProps } from '@shared/types';
 import { isBefore } from 'date-fns';
 import { useFormContext } from 'react-hook-form';

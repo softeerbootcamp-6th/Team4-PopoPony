@@ -1,16 +1,15 @@
 import { DetailFormSchema, CERTIFICATE_OPTIONS, STRENGTH_OPTIONS } from '@helper/types';
 import type { PostResponse } from '@shared/types';
 import { useFormValidation } from '@shared/hooks';
-import { FormLayout } from '@shared/layouts';
+import { FormLayout } from '@shared/ui/layout';
 import { useNavigate } from '@tanstack/react-router';
+import { Divider, Button } from '@shared/ui';
 import {
   LabeledSection,
   FormInput,
   MultiOptionSelector,
-  Divider,
   MultiOptionSelectorCol,
-  Button,
-} from '@shared/components';
+} from '@shared/ui/form';
 import { CertificateImageUploader } from '@helper/components';
 import {
   IcWheelchair,

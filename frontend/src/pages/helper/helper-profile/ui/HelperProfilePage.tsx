@@ -1,11 +1,11 @@
-import { Button, StrengthTag, Tabs } from '@shared/components';
+import { Button, StrengthTag, Tabs } from '@shared/ui';
 import { getHelperById } from '@customer/apis';
 import { KeywordTag, ReviewCard, SatisfactionGraph, StatsSummaryCard } from '@customer/components';
 import { IcVerified } from '@icons';
-import { PageLayout } from '@shared/layouts';
+import { PageLayout } from '@shared/ui/layout';
 import { useNavigate, useParams } from '@tanstack/react-router';
 import type { EscortStrength } from '@shared/types';
-import { dateFormat, formatImageUrl } from '@shared/utils';
+import { dateFormat, formatImageUrl } from '@shared/lib';
 
 const HelperProfilePage = () => {
   const navigate = useNavigate();

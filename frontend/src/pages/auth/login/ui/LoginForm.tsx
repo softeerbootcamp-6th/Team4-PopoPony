@@ -1,5 +1,5 @@
 import { useForm } from 'react-hook-form';
-import { Button } from '@shared/components';
+import { Button } from '@shared/ui';
 import type { LoginFormValues } from '@auth/types';
 import { authStorage } from '@auth/utils';
 import { useNavigate } from '@tanstack/react-router';

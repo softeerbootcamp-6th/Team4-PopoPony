@@ -1,14 +1,14 @@
 import { getEscortDetail } from '@dashboard/apis';
 import { useMap } from '@shared/hooks';
 import { IcArrowLeft, IcPinFillEffect } from '@icons';
-import { PageLayout } from '@shared/layouts';
+import { PageLayout } from '@shared/ui/layout';
 import { getRouteApi, useRouter } from '@tanstack/react-router';
 import {
   dateFormat,
   getDaysLeft,
   getDifferenceInSecondsFromNow,
   timeFormatTo24Hour,
-} from '@shared/utils';
+} from '@shared/lib';
 import { useEffect, useRef } from 'react';
 import type { components } from '@schema';
 import { PlaceInfo, TaxiInfo } from '@dashboard/components';

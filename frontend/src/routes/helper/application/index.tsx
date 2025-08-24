@@ -1,10 +1,10 @@
 import { FilterButton, RegionBottomSheet } from '@helper/components';
-import { PageLayout } from '@shared/layouts';
+import { PageLayout } from '@shared/ui/layout';
 import { z } from 'zod';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
-import { Calendar, EmptyCard, EscortCard, StrengthTagList } from '@shared/components';
+import { Calendar, EmptyCard, EscortCard, StrengthTagList } from '@shared/ui';
 import { getSearchRecruits } from '@helper/apis';
-import { dateFormat, timeDuration, timeFormat, isBeforeToday } from '@shared/utils';
+import { dateFormat, timeDuration, timeFormat, isBeforeToday } from '@shared/lib';
 import { useMemo, useRef, useState } from 'react';
 import type { DateRange } from 'react-day-picker';
 import { useClickOutside } from '@shared/hooks';
@@ -119,7 +119,7 @@ function RouteComponent() {
               </span>
               {searchData?.[date]?.map((escort) => {
                 return (
-                  <EscortCard
+                  <RecruitCard
                     key={escort.recruitId}
                     onClick={() => {
                       navigate({
@@ -127,15 +127,15 @@ function RouteComponent() {
                         params: { escortId: escort.recruitId.toString() },
                       });
                     }}>
-                    <EscortCard.StatusHeader
+                    <RecruitCard.StatusHeader
                       status={escort.recruitStatus}
                       text={`${escort.numberOfApplication}명이 현재 지원 중이에요!`}
                       title={`${date} ${escort.destination}`}
                     />
-                    <EscortCard.Divider />
-                    <EscortCard.InfoSection>
+                    <RecruitCard.Divider />
+                    <RecruitCard.InfoSection>
                       <div className='flex-start flex-wrap gap-[0.4rem]'>
-                        <EscortCard.Info
+                        <RecruitCard.Info
                           type='time'
                           text={`${date} ${timeFormat(escort.estimatedMeetingTime, 'HH시')} ~ ${timeFormat(escort.estimatedReturnTime, 'HH시')}`}
                         />
@@ -143,21 +143,21 @@ function RouteComponent() {
                           {timeDuration(escort.estimatedMeetingTime, escort.estimatedReturnTime)}
                         </span>
                       </div>
-                      <EscortCard.Info
+                      <RecruitCard.Info
                         type='location'
                         text={`${escort.departureLocation} → ${escort.destination}`}
                       />
-                      <EscortCard.Info
+                      <RecruitCard.Info
                         type='price'
                         text={`${escort.estimatedPayment.toLocaleString()}원`}
                       />
-                    </EscortCard.InfoSection>
+                    </RecruitCard.InfoSection>
                     <StrengthTagList
                       needsHelping={escort.needsHelping}
                       usesWheelchair={escort.usesWheelchair}
                       hasCognitiveIssue={escort.hasCognitiveIssue}
                     />
-                  </EscortCard>
+                  </RecruitCard>
                 );
               })}
             </div>

@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { Button, ProgressBar, Modal, PhotoUpload, CheckboxCircle } from '@shared/components';
+import { Button, ProgressBar, Modal, PhotoUpload, CheckboxCircle } from '@shared/ui';
 import { useForm, FormProvider } from 'react-hook-form';
 import type { HTMLAttributes } from 'react';
 import { useModal } from '@shared/hooks';

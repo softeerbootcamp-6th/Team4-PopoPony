@@ -1,7 +1,7 @@
 import { DashBoardCard } from '@dashboard/components';
 import { IcArrowRotateRight01 } from '@icons';
 //TODO: IcBusFill, IcSubwayFill 추가
-import { Button } from '@shared/components';
+import { Button } from '@shared/ui';
 
 const HelperDashboardSearchCard = () => {
   return (

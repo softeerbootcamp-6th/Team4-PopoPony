@@ -1,4 +1,4 @@
-import { $api } from '@shared/apis';
+import { $api } from '@shared/api';
 
 const getRecruitReviewByRecruitId = (recruitId: number, isReviewEnabled: boolean) => {
   return $api.useQuery('get', '/api/reviews/recruits/{recruitId}', {

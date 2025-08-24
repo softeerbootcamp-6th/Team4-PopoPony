@@ -1,6 +1,6 @@
 import { useNavigate } from '@tanstack/react-router';
-import { PageLayout, FormLayout } from '@shared/layouts';
-import { Button } from '@shared/components';
+import { PageLayout, FormLayout } from '@shared/ui/layout';
+import { Button } from '@shared/ui';
 
 const HelperProfileCompletePage = () => {
   const navigate = useNavigate();

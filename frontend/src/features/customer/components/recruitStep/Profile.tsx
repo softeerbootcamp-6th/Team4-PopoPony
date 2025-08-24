@@ -1,19 +1,13 @@
-import {
-  TwoOptionSelector,
-  FormInput,
-  LabeledSection,
-  PhotoUpload,
-  Button,
-  BottomSheet,
-} from '@shared/components';
+import { Button, BottomSheet } from '@shared/ui';
+import { TwoOptionSelector, FormInput, LabeledSection, PhotoUpload } from '@shared/ui/form';
 import { memo, useState, useEffect } from 'react';
-import { FormLayout } from '@shared/layouts';
+import { FormLayout } from '@shared/ui/layout';
 import { useFormValidation } from '@shared/hooks';
 import { profileSchema } from '@customer/types';
 import { getPastPatientInfo, getPastPatientInfoDetail } from '@customer/apis';
 import { IcRadioOff, IcRadioOn } from '@assets/icons';
 import { useFormContext } from 'react-hook-form';
-import { booleanToString, numberToString, formatPhoneNumber, formatImageUrl } from '@shared/utils';
+import { booleanToString, numberToString, formatPhoneNumber, formatImageUrl } from '@shared/lib';
 import type { FunnelStepProps } from '@shared/types';
 
 const Profile = memo(({ handleNextStep }: FunnelStepProps) => {
