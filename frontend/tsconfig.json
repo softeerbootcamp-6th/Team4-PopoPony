@@ -31,9 +31,9 @@
       "@helper/*": ["src/features/helper/*"],
       "@schema": ["src/shared/types/api/schema"],
       "@pages/*": ["src/pages/*"],
+      "@widgets/*": ["src/widgets/*"],
       "@entities/*": ["src/entities/*"],
       "@shared/*": ["src/shared/*"],
-      "@widgets/*": ["src/widgets/*"],
       "@/*": ["src/*"]
     }
   }
