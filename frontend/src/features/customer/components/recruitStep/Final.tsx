@@ -14,7 +14,6 @@ import { useNavigate } from '@tanstack/react-router';
 import type { FunnelStepProps } from '@types';
 import { postRecruit } from '@customer/apis';
 import { buildRecruitCreateRequest } from '@customer/utils';
-import { showToastError } from '@utils';
 
 const Final = ({ handleBackStep }: FunnelStepProps) => {
   const { getValues } = useFormContext<RecruitFormValues>();
@@ -31,9 +30,6 @@ const Final = ({ handleBackStep }: FunnelStepProps) => {
       {
         onSuccess: () => {
           navigate({ to: '/customer/recruit/completed' });
-        },
-        onError: (error: unknown) => {
-          showToastError(error);
         },
       }
     );

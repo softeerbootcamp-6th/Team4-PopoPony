@@ -8,6 +8,7 @@ import ReactDOM from 'react-dom/client';
 import { routeTree } from './routeTree.gen';
 
 import './styles.css';
+import { showToastError } from '@utils';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -22,6 +23,9 @@ const queryClient = new QueryClient({
     mutations: {
       retry: false,
       throwOnError: false,
+      onError: (error: unknown) => {
+        showToastError(error);
+      },
     },
   },
 });
