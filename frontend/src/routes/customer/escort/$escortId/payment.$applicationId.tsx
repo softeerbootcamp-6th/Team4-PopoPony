@@ -2,6 +2,7 @@ import { PaymentCard, WarningBox } from '@customer/components';
 import { PageLayout } from '@layouts';
 import { createFileRoute, useNavigate, getRouteApi } from '@tanstack/react-router';
 import { getRecruitPayment, postSelectApplication } from '@customer/apis';
+import { showToastError } from '@utils';
 
 const routeApi = getRouteApi('/customer/escort/$escortId/payment/$applicationId');
 
@@ -31,6 +32,9 @@ function RouteComponent() {
               escortId: escortId,
             },
           });
+        },
+        onError: (error: unknown) => {
+          showToastError(error);
         },
       }
     );
