@@ -1,5 +1,3 @@
-// src/lib/errorMessages.ts
-// Domain codes → English labels (per convention)
 const domainLabel: Record<string, string> = {
   '10': 'Common',
   '11': 'Auth',
@@ -15,7 +13,6 @@ const domainLabel: Record<string, string> = {
   '21': 'WebSocket',
 };
 
-// Type codes → English labels (per convention)
 const errorTypeLabel: Record<string, string> = {
   '00': 'Success',
   '01': 'Not Found',
