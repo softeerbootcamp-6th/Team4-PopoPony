@@ -83,6 +83,10 @@ dependencies {
 
 	// SMS
 	implementation("net.nurigo:sdk:4.3.2")
+
+	// test-container
+	testImplementation("org.testcontainers:junit-jupiter:1.20.3") // 최신버전 확인
+	testImplementation("org.testcontainers:mysql:1.20.3")
 }
 
 val querydslDir = layout.buildDirectory.dir("generated/querydsl")
