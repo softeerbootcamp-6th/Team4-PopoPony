@@ -7,6 +7,7 @@ import { postLogin } from '@auth/apis';
 import { AuthInput } from '@auth/components';
 import { toast } from 'sonner';
 import { getErrorLabel } from '@apis';
+import { showToastError } from '@utils';
 
 const LoginForm = () => {
   const navigate = useNavigate();
@@ -44,9 +45,7 @@ const LoginForm = () => {
           }
         },
         onError: (error: unknown) => {
-          const label = getErrorLabel(error);
-          const message = error instanceof Error ? error.message : '로그인에 실패했어요.';
-          toast.error(`[${label}] ${message}`);
+          showToastError(error);
         },
       }
     );
