@@ -55,7 +55,11 @@ function RouteComponent() {
 
   return (
     <>
-      <PageLayout.Header title='내역 상세보기' showBack />
+      <PageLayout.Header
+        title='내역 상세보기'
+        showBack
+        onBack={() => navigate({ to: '/customer' })}
+      />
       <PageLayout.Content>
         <div className='bg-neutral-10 flex-col-start gap-[1.2rem] px-[2rem] py-[1.6rem]'>
           <EscortCard>

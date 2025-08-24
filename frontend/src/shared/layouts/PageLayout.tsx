@@ -22,7 +22,7 @@ const PageLayout = ({ children, background = 'bg-background-default-white' }: Pa
   );
 };
 
-const Header = ({ title, showBack, showClose, background, onClose, className }: TopAppBarProps) => {
+const Header = ({ title, showBack, showClose, background, onClose, onBack }: TopAppBarProps) => {
   return (
     <TopAppBar
       title={title}
@@ -30,7 +30,7 @@ const Header = ({ title, showBack, showClose, background, onClose, className }: 
       showClose={showClose}
       background={background}
       onClose={onClose}
-      className={className}
+      onBack={onBack}
     />
   );
 };

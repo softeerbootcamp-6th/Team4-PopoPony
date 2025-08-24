@@ -7,7 +7,7 @@ export interface TopAppBarProps {
   showClose?: boolean;
   background?: boolean;
   onClose?: () => void;
-  className?: string;
+  onBack?: () => void;
 }
 
 const TopAppBar = ({
@@ -16,18 +16,22 @@ const TopAppBar = ({
   showClose = false,
   background = true,
   onClose,
-  className = '',
+  onBack,
 }: TopAppBarProps) => {
   const router = useRouter();
   const handleBack = () => {
-    router.history.back();
+    if (onBack) {
+      onBack();
+    } else {
+      router.history.back();
+    }
   };
 
   const backgroundClass = background ? 'bg-background-default-white' : 'bg-transparent';
 
   return (
     <header
-      className={`flex-between z-20 h-[5.6rem] min-h-[5.6rem] w-full px-[2rem] ${backgroundClass} ${className}`}>
+      className={`flex-between z-20 h-[5.6rem] min-h-[5.6rem] w-full px-[2rem] ${backgroundClass}`}>
       <div className='flex-start h-[4rem] w-[4rem]'>
         {showBack && (
           <button
