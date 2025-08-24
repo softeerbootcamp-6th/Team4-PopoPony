@@ -1,5 +1,4 @@
 import { DetailFormSchema, CERTIFICATE_OPTIONS, STRENGTH_OPTIONS } from '@helper/types';
-import type { PostResponse } from '@types';
 import { useFormValidation } from '@hooks';
 import { FormLayout } from '@layouts';
 import { useNavigate } from '@tanstack/react-router';

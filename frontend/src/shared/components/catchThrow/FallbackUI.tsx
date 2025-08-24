@@ -1,4 +1,3 @@
-import { IcAlertCircle } from '@icons';
 import { Button } from '@components';
 import { ApiError, AuthError, NotFoundError } from '@apis';
 import { useNavigate } from '@tanstack/react-router';
