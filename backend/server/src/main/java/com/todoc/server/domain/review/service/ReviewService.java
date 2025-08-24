@@ -91,7 +91,7 @@ public class ReviewService {
 
         List<ReviewDetailFlatDto> rows = reviewQueryRepository.getReviewDetailByRecruitId(recruitId);
         if (rows.isEmpty()) {
-            throw new ReviewNotFoundException();
+            return new ReviewDetailResponse();
         }
 
         ReviewDetailFlatDto first = rows.getFirst();

@@ -1,7 +1,6 @@
 package com.todoc.server.domain.helper.service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.querydsl.core.Tuple;
 import com.todoc.server.common.dto.request.ImageCreateRequest;
 import com.todoc.server.common.enumeration.Area;
 import com.todoc.server.common.enumeration.Gender;
@@ -14,6 +13,7 @@ import com.todoc.server.domain.helper.exception.HelperProfileAreaInvalidExceptio
 import com.todoc.server.domain.helper.exception.HelperProfileNotFoundException;
 import com.todoc.server.domain.helper.repository.HelperJpaRepository;
 import com.todoc.server.domain.helper.repository.HelperQueryRepository;
+import com.todoc.server.domain.helper.repository.dto.HelperSimpleFlatDto;
 import com.todoc.server.domain.helper.repository.dto.HelperUpdateDefaultFlatDto;
 import com.todoc.server.domain.helper.web.dto.request.CertificateCreateRequest;
 import com.todoc.server.domain.helper.web.dto.request.HelperProfileCreateRequest;
@@ -30,10 +30,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-
-import static com.todoc.server.domain.auth.entity.QAuth.auth;
-import static com.todoc.server.domain.helper.entity.QCertificate.certificate;
-import static com.todoc.server.domain.helper.entity.QHelperProfile.helperProfile;
 
 @Service
 @RequiredArgsConstructor
@@ -52,7 +48,7 @@ public class HelperService {
     @Transactional(readOnly = true)
     public HelperSimpleResponse getHelperSimpleByHelperProfileId(Long helperProfileId) {
 
-        List<Tuple> tuples = helperQueryRepository.getHelperSimpleByHelperProfileId(helperProfileId);
+        List<HelperSimpleFlatDto> tuples = helperQueryRepository.getHelperSimpleByHelperProfileId(helperProfileId);
         if (tuples.isEmpty()) {
             throw new HelperProfileNotFoundException();
         }
@@ -60,19 +56,19 @@ public class HelperService {
     }
 
     @Transactional(readOnly = true)
-    public HelperSimpleResponse buildHelperSimpleByHelperProfileId(List<Tuple> tuples) {
+    public HelperSimpleResponse buildHelperSimpleByHelperProfileId(List<HelperSimpleFlatDto> applicationFlatDtoList) {
 
         // 1. 필드 추출
-        Tuple first = tuples.getFirst();
-        Long helperProfileId = first.get(helperProfile.id);
-        String name = first.get(auth.name);
-        LocalDate birthDate = first.get(auth.birthDate);
-        Gender gender = first.get(auth.gender);
-        String contact = first.get(auth.contact);
+        HelperSimpleFlatDto first = applicationFlatDtoList.getFirst();
+        Long helperProfileId = first.getHelperProfileId();
+        String name = first.getName();
+        LocalDate birthDate = first.getBirthDate();
+        Gender gender = first.getGender();
+        String contact = first.getContact();
 
-        ImageFile helperProfileImage = first.get(helperProfile.helperProfileImage);
-        String shortBio = first.get(helperProfile.shortBio);
-        String strengthJson = first.get(helperProfile.strength);
+        ImageFile helperProfileImage = first.getHelperProfileImage();
+        String shortBio = first.getShortBio();
+        String strengthJson = first.getStrength();
 
         // 2. 나이 계산
         int age = (birthDate != null) ? DateTimeUtils.calculateAge(birthDate) : 0;
@@ -85,8 +81,8 @@ public class HelperService {
         }
 
         // 4. certificate 중복 제거 및 수집
-        List<String> certificateList = tuples.stream()
-                .map(t -> t.get(certificate.type))
+        List<String> certificateList = applicationFlatDtoList.stream()
+                .map(t -> t.getCertificateType())
                 .filter(Objects::nonNull)
                 .distinct()
                 .toList();
@@ -203,10 +199,22 @@ public class HelperService {
      */
     public List<HelperProfile> getHelperProfileListByRecruitId(Long recruitId) {
 
-        List<HelperProfile> list = helperQueryRepository.getHelperProfileListByRecruitId(recruitId);
-        if (list.isEmpty()) {
+        List<HelperProfile> list = helperQueryRepository.findHelperProfileListByRecruitId(recruitId);
+
+        return list;
+    }
+
+    /**
+     * 동행에 매칭된 도우미를 조회하는 함수
+     */
+    public HelperProfile getHelperProfileByEscortId(Long escortId) {
+
+        HelperProfile profile = helperQueryRepository.findHelperProfileByEscortId(escortId);
+
+        if (profile == null) {
             throw new HelperProfileNotFoundException();
         }
-        return list;
+
+        return profile;
     }
 }

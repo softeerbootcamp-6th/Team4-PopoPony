@@ -4,6 +4,7 @@ import com.todoc.server.common.util.JsonUtils;
 import com.todoc.server.domain.realtime.web.dto.response.Envelope;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
@@ -45,5 +46,11 @@ public class NchanPublisher {
         } catch (Exception ex) {
             log.warn("Nchan publish failed: escortId={}, ex={}", escortId, ex.toString());
         }
+    }
+
+    /** 비동기 Publish */
+    @Async("wsExecutor")
+    public void publishAsync(long escortId, Envelope envelope) {
+        publish(escortId, envelope);
     }
 }

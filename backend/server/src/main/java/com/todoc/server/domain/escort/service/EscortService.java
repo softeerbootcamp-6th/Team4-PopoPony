@@ -3,6 +3,7 @@ package com.todoc.server.domain.escort.service;
 import com.todoc.server.common.enumeration.EscortStatus;
 import com.todoc.server.common.enumeration.RecruitStatus;
 import com.todoc.server.common.enumeration.Role;
+import com.todoc.server.common.util.TransactionUtils;
 import com.todoc.server.domain.escort.entity.Escort;
 import com.todoc.server.domain.escort.entity.Recruit;
 import com.todoc.server.domain.escort.exception.EscortInvalidProceedException;
@@ -18,6 +19,8 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import java.time.*;
 
@@ -64,95 +67,37 @@ public class EscortService {
                 .orElseThrow(EscortNotFoundException::new);
     }
 
-    // TODO : 테스트 끝나고 제거
-    @Transactional
-    public void proceedEscortForTest(Long escortId) {
-
-        Escort escort = getById(escortId);
-        EscortStatus currentStatus = escort.getStatus();
-
-        EscortStatus[] statuses = EscortStatus.values();
-        int currentIndex = currentStatus.ordinal();
-
-        if (true) {
-            int nextIndex = (currentIndex + 1) % statuses.length;
-
-            EscortStatus nextStatus = statuses[nextIndex];
-            escort.setStatus(nextStatus);
-            LocalDateTime now = LocalDateTime.now();
-
-            // 동행 만남 완료
-            if (nextStatus == EscortStatus.HEADING_TO_HOSPITAL) {
-                escort.setActualMeetingTime(now);
-
-                // TODO :: 웹소켓 연결 후 SSE는 제거
-//                emitterManager.close(escortId, Role.PATIENT);
-                sessionRegistry.remove(escortId, Role.PATIENT);
-            }
-
-            // 동행 복귀 완료
-            if (nextStatus == EscortStatus.WRITING_REPORT) {
-                escort.setActualReturnTime(now);
-                Recruit recruit = escort.getRecruit();
-                recruit.setStatus(RecruitStatus.DONE);
-            }
-
-            // TODO :: 진행 상태 변화 고객에게 알림 (Web Push, SMS, E-mail 등)
-            // TODO :: 웹소켓 연결 후 SSE는 제거
-            Envelope envelope = new Envelope("status", new EscortStatusResponse(nextStatus.getLabel(), now));
-
-//            emitterManager.send(escortId, Role.CUSTOMER, "status", new EscortStatusResponse(nextStatus.getLabel(), now));
-            sessionRegistry.sendToRole(escortId, Role.CUSTOMER, envelope);
-            nchanPublisher.publish(escortId, envelope);
-
-        } else {
-            throw new EscortInvalidProceedException();
-        }
-    }
-
     @Transactional
     public void proceedEscort(Long escortId) {
 
         Escort escort = getById(escortId);
-        EscortStatus currentStatus = escort.getStatus();
+        EscortStatus from = escort.getStatus();
+        EscortStatus to = nextOf(from);
 
-        EscortStatus[] statuses = EscortStatus.values();
-        int currentIndex = currentStatus.ordinal();
+        Instant now = Instant.now();
+        ZoneId ZONE = ZoneId.of("Asia/Seoul");
+        LocalDateTime kstNow = LocalDateTime.ofInstant(now, ZONE);
 
-        if (0 < currentIndex && currentIndex < statuses.length - 1) {
-            int nextIndex = (currentIndex + 1) % statuses.length;
-
-            EscortStatus nextStatus = statuses[nextIndex];
-            escort.setStatus(nextStatus);
-            LocalDateTime now = LocalDateTime.now();
-
-            // 동행 만남 완료
-            if (nextStatus == EscortStatus.HEADING_TO_HOSPITAL) {
-                escort.setActualMeetingTime(now);
-
-                // TODO :: 웹소켓 연결 후 SSE는 제거
-//                emitterManager.close(escortId, Role.PATIENT);
-                sessionRegistry.remove(escortId, Role.PATIENT);
-            }
-
-            // 동행 복귀 완료
-            if (nextStatus == EscortStatus.WRITING_REPORT) {
-                escort.setActualReturnTime(now);
-                Recruit recruit = escort.getRecruit();
-                recruit.setStatus(RecruitStatus.DONE);
-            }
-
-            // TODO :: 진행 상태 변화 고객에게 알림 (Web Push, SMS, E-mail 등)
-            // TODO :: 웹소켓 연결 후 SSE는 제거
-            Envelope envelope = new Envelope("status", new EscortStatusResponse(nextStatus.getLabel(), now));
-
-//            emitterManager.send(escortId, Role.CUSTOMER, "status", new EscortStatusResponse(nextStatus.getLabel(), now));
-            sessionRegistry.sendToRole(escortId, Role.CUSTOMER, envelope);
-            nchanPublisher.publish(escortId, envelope);
-
-        } else {
-            throw new EscortInvalidProceedException();
+        if (to == EscortStatus.HEADING_TO_HOSPITAL) {
+            escort.setActualMeetingTime(kstNow);
         }
+        if (to == EscortStatus.WRITING_REPORT) {
+            escort.setActualReturnTime(kstNow);
+            Recruit recruit = escort.getRecruit();
+            recruit.setStatus(RecruitStatus.DONE);
+        }
+        escort.setStatus(to);
+
+        // 커밋 후 비동기 알림/세션 조작
+        TransactionUtils.runAfterCommitOrNow(() -> {
+            Envelope env = new Envelope("status", new EscortStatusResponse(to.getLabel(), kstNow));
+            sessionRegistry.sendToRoleAsync(escortId, Role.CUSTOMER, env);
+            nchanPublisher.publishAsync(escortId, env);
+
+            if (to == EscortStatus.HEADING_TO_HOSPITAL) {
+                sessionRegistry.removeAsync(escortId, Role.PATIENT);
+            }
+        });
     }
 
     @Transactional
@@ -174,5 +119,17 @@ public class EscortService {
         List<Escort> recruitList = escortQueryRepository.getEscortForPreparingAndBetween(date, from, to);
 
         return recruitList;
+    }
+
+    private static EscortStatus nextOf(EscortStatus s) {
+        return switch (s) {
+            case PREPARING -> throw new EscortInvalidProceedException();
+            case MEETING -> EscortStatus.HEADING_TO_HOSPITAL;
+            case HEADING_TO_HOSPITAL -> EscortStatus.IN_TREATMENT;
+            case IN_TREATMENT -> EscortStatus.RETURNING;
+            case RETURNING -> EscortStatus.WRITING_REPORT;
+            case WRITING_REPORT -> throw new EscortInvalidProceedException();
+            case DONE -> throw new EscortInvalidProceedException();
+        };
     }
 }

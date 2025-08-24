@@ -1,4 +1,4 @@
-package com.todoc.server.domain.escort.service;
+package com.todoc.server.domain.escort.service.escort;
 
 import com.todoc.server.common.enumeration.EscortStatus;
 import com.todoc.server.common.enumeration.RecruitStatus;
@@ -7,9 +7,11 @@ import com.todoc.server.domain.escort.entity.Recruit;
 import com.todoc.server.domain.escort.exception.EscortInvalidProceedException;
 import com.todoc.server.domain.escort.exception.EscortNotFoundException;
 import com.todoc.server.domain.escort.repository.EscortJpaRepository;
+import com.todoc.server.domain.escort.service.EscortService;
 import com.todoc.server.domain.escort.web.dto.request.EscortMemoUpdateRequest;
 import com.todoc.server.domain.realtime.service.NchanPublisher;
 import com.todoc.server.domain.realtime.service.WebSocketSessionRegistry;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -55,6 +57,7 @@ class EscortServiceTest {
     }
 
     @Nested
+    @Transactional
     @DisplayName("proceedEscort")
     class ProceedEscort {
 

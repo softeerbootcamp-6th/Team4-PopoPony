@@ -3,6 +3,7 @@ package com.todoc.server.domain.realtime.service;
 import com.todoc.server.common.enumeration.Role;
 import com.todoc.server.common.util.JsonUtils;
 import com.todoc.server.domain.realtime.web.dto.response.Envelope;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
@@ -74,5 +75,25 @@ public class WebSocketSessionRegistry {
         for (Role role : roleSet) {
             sendToRole(escortId, role, envelope);
         }
+    }
+
+    /** 비동기 전송 */
+    @Async("wsExecutor")
+    public void sendToRoleAsync(Long escortId, Role role, Envelope envelope) {
+        sendToRole(escortId, role, envelope);
+    }
+
+    /** 비동기 브로드캐스팅 */
+    @Async("wsExecutor")
+    public void broadcastToRolesAsync(Long escortId, Set<Role> roleSet, Envelope envelope) {
+        for (Role role : roleSet) {
+            sendToRole(escortId, role, envelope);
+        }
+    }
+
+    /** 비동기 종료 */
+    @Async("wsExecutor")
+    public void removeAsync(Long escortId, Role role) {
+        remove(escortId, role);
     }
 }

@@ -1,4 +1,4 @@
-package com.todoc.server.domain.escort.service;
+package com.todoc.server.domain.escort.service.recruit;
 
 import com.todoc.server.common.enumeration.ApplicationStatus;
 import com.todoc.server.common.enumeration.Gender;
@@ -11,6 +11,7 @@ import com.todoc.server.domain.escort.exception.RecruitNotFoundException;
 import com.todoc.server.domain.escort.repository.RecruitJpaRepository;
 import com.todoc.server.domain.escort.repository.RecruitQueryRepository;
 import com.todoc.server.domain.escort.repository.dto.RecruitHistoryDetailFlatDto;
+import com.todoc.server.domain.escort.service.RecruitService;
 import com.todoc.server.domain.escort.web.dto.response.*;
 import com.todoc.server.domain.image.entity.ImageFile;
 import com.todoc.server.domain.image.entity.ImageMeta;

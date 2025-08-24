@@ -51,7 +51,7 @@ public class EscortFacadeService {
             throw new RouteNotFoundException();
         }
 
-        HelperProfile helper = helperService.getHelperProfileListByRecruitId(recruitId).getFirst();
+        HelperProfile helper = helperService.getHelperProfileByEscortId(escort.getId());
 
         return EscortDetailResponse.builder()
                 .escortId(escort.getId())
