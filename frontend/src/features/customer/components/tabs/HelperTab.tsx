@@ -1,8 +1,8 @@
-import { Tabs, EmptyCard } from '@components';
+import { Tabs, EmptyCard } from '@shared/components';
 import { HelperCard, HelperSelectInfoCard } from '@customer/components';
 import { useNavigate, getRouteApi } from '@tanstack/react-router';
 import { getApplicationListById } from '@customer/apis';
-import { SuspenseUI } from '@components';
+import { SuspenseUI } from '@shared/components';
 
 const routeApi = getRouteApi('/customer/escort/$escortId/');
 

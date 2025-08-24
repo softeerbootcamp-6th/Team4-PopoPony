@@ -1,4 +1,4 @@
-import type { RecruitStatus } from '@types';
+import type { RecruitStatus } from '@shared/types';
 
 interface ProgressIndicatorProps {
   currentStatus: RecruitStatus;

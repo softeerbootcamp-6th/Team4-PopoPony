@@ -1,4 +1,4 @@
-import type { RecruitStatus } from '@types';
+import type { RecruitStatus } from '@shared/types';
 
 const StatusTag = ({ status }: { status: RecruitStatus }) => {
   const statusMap = {

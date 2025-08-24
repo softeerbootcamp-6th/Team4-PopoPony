@@ -1,10 +1,17 @@
-import { Button, Divider, EscortCard, StrengthTag, TermsBottomSheet, Spinner } from '@components';
+import {
+  Button,
+  Divider,
+  EscortCard,
+  StrengthTag,
+  TermsBottomSheet,
+  Spinner,
+} from '@shared/components';
 import { getRecruitById } from '@customer/apis';
 import { GrayBox, InfoSection, RouteButton } from '@customer/components';
-import { type EscortStrength } from '@types';
+import { type EscortStrength } from '@shared/types';
 import type { RecruitDetailResponse } from '@customer/types';
 import { IcCheck } from '@icons';
-import { PageLayout } from '@layouts';
+import { PageLayout } from '@shared/layouts';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { postApplicationByRecruitId, getRecruitList } from '@helper/apis';
 import {
@@ -13,7 +20,7 @@ import {
   timeDuration,
   timeFormat,
   timeFormatWithOptionalMinutes,
-} from '@utils';
+} from '@shared/utils';
 
 export const Route = createFileRoute('/helper/application/$escortId/')({
   component: RouteComponent,

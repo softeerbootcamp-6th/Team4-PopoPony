@@ -1,4 +1,4 @@
-import { $api } from '@apis';
+import { $api } from '@shared/apis';
 
 const getEscortDetail = (escortId: number) => {
   return $api.useSuspenseQuery(

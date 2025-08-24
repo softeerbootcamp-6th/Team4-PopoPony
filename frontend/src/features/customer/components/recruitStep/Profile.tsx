@@ -5,16 +5,16 @@ import {
   PhotoUpload,
   Button,
   BottomSheet,
-} from '@components';
+} from '@shared/components';
 import { memo, useState, useEffect } from 'react';
-import { FormLayout } from '@layouts';
-import { useFormValidation } from '@hooks';
+import { FormLayout } from '@shared/layouts';
+import { useFormValidation } from '@shared/hooks';
 import { profileSchema } from '@customer/types';
 import { getPastPatientInfo, getPastPatientInfoDetail } from '@customer/apis';
 import { IcRadioOff, IcRadioOn } from '@assets/icons';
 import { useFormContext } from 'react-hook-form';
-import { booleanToString, numberToString, formatPhoneNumber, formatImageUrl } from '@utils';
-import type { FunnelStepProps } from '@types';
+import { booleanToString, numberToString, formatPhoneNumber, formatImageUrl } from '@shared/utils';
+import type { FunnelStepProps } from '@shared/types';
 
 const Profile = memo(({ handleNextStep }: FunnelStepProps) => {
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);

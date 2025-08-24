@@ -1,6 +1,6 @@
 import { useNavigate } from '@tanstack/react-router';
-import { PageLayout, FormLayout } from '@layouts';
-import { Button } from '@components';
+import { PageLayout, FormLayout } from '@shared/layouts';
+import { Button } from '@shared/components';
 
 const RecruitRegisterCompletePage = () => {
   const navigate = useNavigate();

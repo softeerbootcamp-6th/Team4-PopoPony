@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
-import { Modal } from '@components';
-import { PageLayout } from '@layouts';
+import { Modal } from '@shared/components';
+import { PageLayout } from '@shared/layouts';
 import { type ProfileFormValues } from '@helper/types';
 import { toProfileFormValues } from '@helper/utils';
-import { useFunnel, useModal } from '@hooks';
+import { useFunnel, useModal } from '@shared/hooks';
 import { useRouter } from '@tanstack/react-router';
 import { getProfileExistance, getReviseHelperProfileInfo } from '@helper/apis';
 import { Region, Detail } from '@helper/components';

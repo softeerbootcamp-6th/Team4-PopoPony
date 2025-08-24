@@ -1,8 +1,8 @@
-import { Button, ShowMapButton } from '@components';
-import { PageLayout } from '@layouts';
+import { Button, ShowMapButton } from '@shared/components';
+import { PageLayout } from '@shared/layouts';
 import { useNavigate, getRouteApi } from '@tanstack/react-router';
 import { getRecruitById } from '@customer/apis';
-import { dateFormat, timeFormatWithOptionalMinutes, timeDuration } from '@utils';
+import { dateFormat, timeFormatWithOptionalMinutes, timeDuration } from '@shared/utils';
 
 const Route = getRouteApi('/customer/escort/$escortId/completed');
 

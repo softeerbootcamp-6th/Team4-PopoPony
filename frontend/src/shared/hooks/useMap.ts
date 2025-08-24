@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import type { MarkerType, Position, TMap, TMapPolyline } from '@types';
+import type { MarkerType, Position, TMap, TMapPolyline } from '@shared/types';
 import {
   DEFAULT_POLYLINE_COLOR,
   DEFAULT_POLYLINE_STROKE_WEIGHT,

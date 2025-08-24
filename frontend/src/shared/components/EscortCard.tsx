@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
-import { Button, StatusTag, StrengthTag } from '@components';
+import { Button, StatusTag, StrengthTag } from '@shared/components';
 import { IcChevronRightSecondary, IcClockFill, IcCoinFill, IcMarkFill } from '@icons';
-import type { RecruitStatus, EscortStrength } from '@types';
+import type { RecruitStatus, EscortStrength } from '@shared/types';
 
 type Props = {
   children: React.ReactNode;

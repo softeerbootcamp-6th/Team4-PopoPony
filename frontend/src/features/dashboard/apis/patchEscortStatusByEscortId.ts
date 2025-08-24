@@ -1,4 +1,4 @@
-import { $api } from '@apis';
+import { $api } from '@shared/apis';
 
 const patchEscortStatusByEscortId = () => {
   return $api.useMutation('patch', '/api/escorts/{escortId}/status');

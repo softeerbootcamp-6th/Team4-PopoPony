@@ -1,4 +1,4 @@
-import { formatFormInputValue } from '@utils';
+import { formatFormInputValue } from '@shared/utils';
 import { useFormContext } from 'react-hook-form';
 import ReceiptImageUpload from './ReceiptImageUpload';
 

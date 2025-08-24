@@ -1,7 +1,7 @@
-import { ShowMapButton } from '@components';
+import { ShowMapButton } from '@shared/components';
 import { type StatusTitleProps } from '@dashboard/types';
 import { IcHomeFill, IcHospitalFill, IcClockFill, IcMarkFill } from '@icons';
-import { timeFormat } from '@utils';
+import { timeFormat } from '@shared/utils';
 
 const DashBoardCard = ({ children }: { children: React.ReactNode }) => {
   return <div className='shadow-bottom-sheet relative z-10 flex-1'>{children}</div>;

@@ -1,7 +1,7 @@
 import { type RecruitStepProps, detailOption } from '@customer/types';
-import { FormLayout } from '@layouts';
-import { useFormValidation } from '@hooks';
-import { MultiOptionSelector, Checkbox } from '@components';
+import { FormLayout } from '@shared/layouts';
+import { useFormValidation } from '@shared/hooks';
+import { MultiOptionSelector, Checkbox } from '@shared/components';
 import { detailSchema } from '@customer/types';
 import { useFormContext } from 'react-hook-form';
 

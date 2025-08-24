@@ -1,4 +1,4 @@
-import type { TermsData } from '@types';
+import type { TermsData } from '@shared/types';
 
 export const termsData: TermsData[] = [
   {

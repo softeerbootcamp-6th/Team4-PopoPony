@@ -1,8 +1,8 @@
 import { createFileRoute, Link, useNavigate } from '@tanstack/react-router';
-import { PageLayout } from '@layouts';
-import { Button, EscortCard, Logo, Tabs } from '@components';
-import type { RecruitStatus } from '@types';
-import { dateFormat, timeFormat } from '@utils';
+import { PageLayout } from '@shared/layouts';
+import { Button, EscortCard, Logo, Tabs } from '@shared/components';
+import type { RecruitStatus } from '@shared/types';
+import { dateFormat, timeFormat } from '@shared/utils';
 import { getRecruitList, getProfileExistance } from '@helper/apis';
 import type { RecruitSimpleResponse, EscortStatus } from '@helper/types';
 // import { toast } from 'sonner';

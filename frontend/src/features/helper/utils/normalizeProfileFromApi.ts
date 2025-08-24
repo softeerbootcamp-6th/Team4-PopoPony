@@ -5,7 +5,7 @@ import {
   STRENGTH_OPTIONS,
   REGION_OPTIONS,
 } from '@helper/types/ProfileFormValues';
-import { formatImageUrl } from '@utils';
+import { formatImageUrl } from '@shared/utils';
 
 type HelperProfileApi = HelperUpdateDefaultResponse;
 

@@ -1,6 +1,6 @@
 import { createFileRoute, redirect, useRouter } from '@tanstack/react-router';
 import { getEscortDetail, patchEscortStatusByEscortId, patchEscortMemo } from '@dashboard/apis';
-import { PageLayout } from '@layouts';
+import { PageLayout } from '@shared/layouts';
 import {
   Header,
   DashBoardCard,
@@ -8,13 +8,13 @@ import {
   HelperDashboardTaxiCard,
   HelperDashboardSummary,
 } from '@dashboard/components';
-import { $api } from '@apis';
+import { $api } from '@shared/apis';
 import type { StatusTitleProps, EscortStatus } from '@dashboard/types';
-import { Button, FloatingButton, SlideButton } from '@components';
+import { Button, FloatingButton, SlideButton } from '@shared/components';
 import { IcHeadphoneQuestionmark } from '@icons';
 import { useState, useEffect, useRef, type ReactNode } from 'react';
-import { useMap } from '@hooks';
-import type { Position, TMapMarker } from '@types';
+import { useMap } from '@shared/hooks';
+import type { Position, TMapMarker } from '@shared/types';
 import { useWebSocket } from '@dashboard/hooks';
 import { updatedBefore } from '@helper/utils';
 

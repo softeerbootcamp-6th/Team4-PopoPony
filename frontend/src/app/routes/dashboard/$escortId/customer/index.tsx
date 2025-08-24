@@ -1,5 +1,5 @@
 import { createFileRoute, redirect } from '@tanstack/react-router';
-import { $api } from '@apis';
+import { $api } from '@shared/apis';
 import { CustomerDashboardPage } from '@pages/dashboard/customer';
 
 export const Route = createFileRoute('/dashboard/$escortId/customer/')({

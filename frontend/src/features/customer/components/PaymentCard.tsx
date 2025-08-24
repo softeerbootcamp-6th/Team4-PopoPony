@@ -1,5 +1,5 @@
-import { Button, Divider } from '@components';
-import { useMap } from '@hooks';
+import { Button, Divider } from '@shared/components';
+import { useMap } from '@shared/hooks';
 import type { components } from '@schema';
 import { useEffect, useRef } from 'react';
 

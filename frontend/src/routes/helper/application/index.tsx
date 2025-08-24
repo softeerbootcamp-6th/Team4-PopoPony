@@ -1,13 +1,13 @@
 import { FilterButton, RegionBottomSheet } from '@helper/components';
-import { PageLayout } from '@layouts';
+import { PageLayout } from '@shared/layouts';
 import { z } from 'zod';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
-import { Calendar, EmptyCard, EscortCard, StrengthTagList } from '@components';
+import { Calendar, EmptyCard, EscortCard, StrengthTagList } from '@shared/components';
 import { getSearchRecruits } from '@helper/apis';
-import { dateFormat, timeDuration, timeFormat, isBeforeToday } from '@utils';
+import { dateFormat, timeDuration, timeFormat, isBeforeToday } from '@shared/utils';
 import { useMemo, useRef, useState } from 'react';
 import type { DateRange } from 'react-day-picker';
-import { useClickOutside } from '@hooks';
+import { useClickOutside } from '@shared/hooks';
 
 const filterSearchSchema = z.object({
   region: z.string().optional(),

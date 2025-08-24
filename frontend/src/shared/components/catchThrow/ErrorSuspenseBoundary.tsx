@@ -1,7 +1,7 @@
 import React, { Suspense } from 'react';
 import { QueryErrorResetBoundary } from '@tanstack/react-query';
 import { ErrorBoundary } from 'react-error-boundary';
-import { SuspenseUI, FallbackUI, RootFallbackUI } from '@components';
+import { SuspenseUI, FallbackUI, RootFallbackUI } from '@shared/components';
 
 type Props = {
   children: React.ReactNode;

@@ -6,13 +6,13 @@ import {
   Button,
   ErrorSuspenseBoundary,
   SuspenseUI,
-} from '@components';
+} from '@shared/components';
 import { DetailTab, HelperTab, ReportTab } from '@customer/components';
-import { PageLayout } from '@layouts';
+import { PageLayout } from '@shared/layouts';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import type { RecruitDetailResponse } from '@customer/types';
 import { getRecruitById } from '@customer/apis';
-import { dateFormat, timeFormat } from '@utils';
+import { dateFormat, timeFormat } from '@shared/utils';
 
 export const Route = createFileRoute('/customer/escort/$escortId/')({
   component: RouteComponent,

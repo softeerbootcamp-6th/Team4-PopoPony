@@ -1,8 +1,8 @@
 import React, { useRef } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { IcCheckBox } from '@icons';
-import { useImageUpload } from '@hooks';
-import type { ImagePrefix } from '@types';
+import { useImageUpload } from '@shared/hooks';
+import type { ImagePrefix } from '@shared/types';
 
 interface Props {
   name: string;

@@ -1,4 +1,4 @@
-import { Tabs, Divider, Spinner } from '@components';
+import { Tabs, Divider, Spinner } from '@shared/components';
 import { HelperCard, InfoSection, ReportInfoCard, WarningBox } from '@customer/components';
 import { IcAlertCircle } from '@icons';
 import {
@@ -7,7 +7,7 @@ import {
   getRecruitReviewByRecruitId,
 } from '@customer/apis';
 import { getRouteApi, useNavigate } from '@tanstack/react-router';
-import { dateFormat, timeFormat } from '@utils';
+import { dateFormat, timeFormat } from '@shared/utils';
 
 type ReportTabProps = {
   setHasReview: (hasReview: boolean) => void;

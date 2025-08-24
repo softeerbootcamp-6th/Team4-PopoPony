@@ -1,4 +1,4 @@
-import { Logo } from '@components';
+import { Logo } from '@shared/components';
 import { createFileRoute, Link } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/')({

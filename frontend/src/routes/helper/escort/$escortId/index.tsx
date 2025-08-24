@@ -1,10 +1,10 @@
-import { EscortCard, ProgressIndicator, Tabs, Spinner } from '@components';
+import { EscortCard, ProgressIndicator, Tabs, Spinner } from '@shared/components';
 import { DetailTab, ReportTab } from '@helper/components';
-import { PageLayout } from '@layouts';
+import { PageLayout } from '@shared/layouts';
 import { createFileRoute, useParams } from '@tanstack/react-router';
 import type { RecruitDetailResponse } from '@helper/types';
 import { getRecruitById } from '@helper/apis';
-import { dateFormat, timeFormat } from '@utils';
+import { dateFormat, timeFormat } from '@shared/utils';
 
 export const Route = createFileRoute('/helper/escort/$escortId/')({
   component: RouteComponent,

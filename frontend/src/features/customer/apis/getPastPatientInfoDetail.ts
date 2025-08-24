@@ -1,4 +1,4 @@
-import { $api } from '@apis';
+import { $api } from '@shared/apis';
 
 const getPastPatientInfoDetail = (recruitId: number, isPatientIdConfirmed: boolean) => {
   return $api.useQuery(

@@ -1,9 +1,14 @@
-import { Tabs, Divider, Button, Modal, StrengthTagList, ShowMapButton } from '@components';
+import { Tabs, Divider, Button, Modal, StrengthTagList, ShowMapButton } from '@shared/components';
 import { InfoSection, RouteButton, GrayBox } from '@customer/components';
-import { useModal } from '@hooks';
+import { useModal } from '@shared/hooks';
 import { IcCheck } from '@icons';
 import type { RecruitDetailResponse } from '@customer/types';
-import { dateFormat, timeFormatWithOptionalMinutes, timeDuration, formatImageUrl } from '@utils';
+import {
+  dateFormat,
+  timeFormatWithOptionalMinutes,
+  timeDuration,
+  formatImageUrl,
+} from '@shared/utils';
 import { useNavigate, getRouteApi } from '@tanstack/react-router';
 import { deleteRecruit } from '@customer/apis';
 

@@ -1,6 +1,6 @@
 import { getRouteApi, useRouter } from '@tanstack/react-router';
 import { getEscortDetail } from '@dashboard/apis';
-import { PageLayout } from '@layouts';
+import { PageLayout } from '@shared/layouts';
 import { type StatusTitleProps, type EscortStatusProps } from '@dashboard/types';
 import {
   Header,
@@ -10,11 +10,11 @@ import {
   Footer,
 } from '@dashboard/components';
 import { useEffect, useRef } from 'react';
-import { useMap } from '@hooks';
-import type { TMapMarker } from '@types';
+import { useMap } from '@shared/hooks';
+import type { TMapMarker } from '@shared/types';
 import { useSocket } from '@dashboard/hooks';
 import { updatedBefore } from '@helper/utils';
-import { call } from '@utils';
+import { call } from '@shared/utils';
 
 const { Tmapv3 } = window;
 

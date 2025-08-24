@@ -1,8 +1,8 @@
 import { PaymentCard, WarningBox } from '@customer/components';
-import { PageLayout } from '@layouts';
+import { PageLayout } from '@shared/layouts';
 import { createFileRoute, useNavigate, getRouteApi } from '@tanstack/react-router';
 import { getRecruitPayment, postSelectApplication } from '@customer/apis';
-import { showToastError } from '@utils';
+import { showToastError } from '@shared/utils';
 
 const routeApi = getRouteApi('/customer/escort/$escortId/payment/$applicationId');
 

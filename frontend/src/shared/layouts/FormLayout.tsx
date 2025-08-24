@@ -1,4 +1,4 @@
-import { BottomCTA, Button } from '@components';
+import { BottomCTA, Button } from '@shared/components';
 import { useRouter } from '@tanstack/react-router';
 
 interface FormLayoutProps {

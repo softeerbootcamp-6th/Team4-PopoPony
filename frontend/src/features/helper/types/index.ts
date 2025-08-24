@@ -1,5 +1,5 @@
 import type { components } from '@schema';
-import type { ImageWithPreviewUrl } from '@types';
+import type { ImageWithPreviewUrl } from '@shared/types';
 
 export * from './ProfileFormValues';
 export * from './ProfileStepTypes';

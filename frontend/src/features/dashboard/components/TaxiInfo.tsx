@@ -1,5 +1,5 @@
 import { IcTaxiBadge } from '@icons';
-import { secondsToTime } from '@utils';
+import { secondsToTime } from '@shared/utils';
 
 interface TaxiInfoProps {
   time: number;

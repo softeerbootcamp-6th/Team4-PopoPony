@@ -1,8 +1,8 @@
 import { createFileRoute, useRouter, redirect } from '@tanstack/react-router';
 import { getEscortDetail } from '@dashboard/apis';
-import { PageLayout } from '@layouts';
+import { PageLayout } from '@shared/layouts';
 import { type StatusTitleProps, type EscortStatusProps } from '@dashboard/types';
-import { $api } from '@apis';
+import { $api } from '@shared/apis';
 import {
   Header,
   EscortCompleted,
@@ -11,11 +11,11 @@ import {
   Footer,
 } from '@dashboard/components';
 import { useEffect, useRef } from 'react';
-import { useMap } from '@hooks';
-import type { TMapMarker } from '@types';
+import { useMap } from '@shared/hooks';
+import type { TMapMarker } from '@shared/types';
 import { useSocket } from '@dashboard/hooks';
 import { updatedBefore } from '@helper/utils';
-import { call } from '@utils';
+import { call } from '@shared/utils';
 
 export const Route = createFileRoute('/dashboard/$escortId/customer/')({
   beforeLoad: async ({ context, params }) => {

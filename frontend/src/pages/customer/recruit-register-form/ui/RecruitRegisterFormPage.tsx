@@ -1,7 +1,7 @@
-import { Modal } from '@components';
-import { PageLayout } from '@layouts';
+import { Modal } from '@shared/components';
+import { PageLayout } from '@shared/layouts';
 import { type RecruitFormValues } from '@customer/types';
-import { useFunnel, useModal } from '@hooks';
+import { useFunnel, useModal } from '@shared/hooks';
 import { useRouter } from '@tanstack/react-router';
 import { FormProvider, useForm } from 'react-hook-form';
 import {

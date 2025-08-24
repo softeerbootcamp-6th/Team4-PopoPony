@@ -1,4 +1,4 @@
-import { ShowMapButton } from '@components';
+import { ShowMapButton } from '@shared/components';
 import { IcMarker1, IcMarker2, IcMarker3 } from '@icons';
 import { useMemo } from 'react';
 

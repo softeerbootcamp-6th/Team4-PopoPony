@@ -1,5 +1,5 @@
 import { IcRecognize, IcShoes, IcWheelchair } from '@icons';
-import type { EscortStrength } from '@types';
+import type { EscortStrength } from '@shared/types';
 import Tag from './Tag';
 
 interface Props {

@@ -1,4 +1,4 @@
-import { $api } from '@apis';
+import { $api } from '@shared/apis';
 
 const getRecruitPayment = (recruitId: number) => {
   return $api.useSuspenseQuery('get', '/api/recruits/{recruitId}/payments', {

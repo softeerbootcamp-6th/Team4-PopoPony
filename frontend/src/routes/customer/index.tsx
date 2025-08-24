@@ -1,14 +1,14 @@
 import { createFileRoute, Link } from '@tanstack/react-router';
 import { useQueryClient } from '@tanstack/react-query';
-import { PageLayout } from '@layouts';
-import { Button, EscortCard, Tabs, EmptyCard, Logo, FallbackUI } from '@components';
+import { PageLayout } from '@shared/layouts';
+import { Button, EscortCard, Tabs, EmptyCard, Logo, FallbackUI } from '@shared/components';
 import { IcPlusSideLeft } from '@icons';
 import type { RecruitSimpleResponse } from '@customer/types';
 import { getRecruitsCustomer } from '@customer/apis';
-import { dateFormat, timeFormat } from '@utils';
+import { dateFormat, timeFormat } from '@shared/utils';
 import { useNavigate } from '@tanstack/react-router';
-import type { EscortStatus } from '@types';
-import { $api } from '@apis';
+import type { EscortStatus } from '@shared/types';
+import { $api } from '@shared/apis';
 
 export const Route = createFileRoute('/customer/')({
   component: RouteComponent,

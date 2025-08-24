@@ -1,4 +1,4 @@
-import { TopAppBar, BottomCTA, ProgressBar } from '@components';
+import { TopAppBar, BottomCTA, ProgressBar } from '@shared/components';
 import type { TopAppBarProps } from '../components/TopAppBar';
 import type { BottomCTAProps } from '../components/BottomCTA';
 

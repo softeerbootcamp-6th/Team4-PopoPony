@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { imageSchema } from '@types';
+import { imageSchema } from '@shared/types';
 
 export const REGION_OPTIONS = [
   { label: '서울특별시', value: '서울' },

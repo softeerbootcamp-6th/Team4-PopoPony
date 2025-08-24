@@ -1,7 +1,7 @@
 import { getRouteApi, useRouter } from '@tanstack/react-router';
-import { useFunnel, useModal } from '@hooks';
-import { PageLayout } from '@layouts';
-import { ProgressBar, Modal } from '@components';
+import { useFunnel, useModal } from '@shared/hooks';
+import { PageLayout } from '@shared/layouts';
+import { ProgressBar, Modal } from '@shared/components';
 import { Summary, Detail, Comment } from '@customer/components';
 import { FormProvider, useForm } from 'react-hook-form';
 import { type EscortReviewFormValues } from '@customer/types';

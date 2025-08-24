@@ -1,6 +1,6 @@
-import { FloatingButton } from '@components';
+import { FloatingButton } from '@shared/components';
 import { INITIAL_LATITUDE, INITIAL_LONGITUDE } from '@dashboard/constants';
-import { useMap } from '@hooks';
+import { useMap } from '@shared/hooks';
 import { createFileRoute, useRouter } from '@tanstack/react-router';
 import { useEffect, useRef } from 'react';
 import z from 'zod';

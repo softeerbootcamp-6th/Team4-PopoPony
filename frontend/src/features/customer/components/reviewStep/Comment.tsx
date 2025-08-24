@@ -1,9 +1,9 @@
 import { type RecruitStepProps } from '@customer/types';
 import { useFormContext } from 'react-hook-form';
-import { useFormValidation } from '@hooks';
+import { useFormValidation } from '@shared/hooks';
 import { reviewSchema } from '@customer/types';
-import { FormLayout } from '@layouts';
-import { FormTextarea } from '@components';
+import { FormLayout } from '@shared/layouts';
+import { FormTextarea } from '@shared/components';
 import { postHelperReview } from '@customer/apis';
 import { getRouteApi } from '@tanstack/react-router';
 

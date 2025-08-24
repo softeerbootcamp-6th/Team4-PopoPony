@@ -1,14 +1,14 @@
 import { StrictMode } from 'react';
 import { RouterProvider, createRouter } from '@tanstack/react-router';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { AuthError } from '@apis';
+import { AuthError } from '@shared/apis';
 import ReactDOM from 'react-dom/client';
 
 // Import the generated route tree
 import { routeTree } from './app/routeTree.gen';
 
 import './styles.css';
-import { showToastError } from '@utils';
+import { showToastError } from '@shared/utils';
 
 const queryClient = new QueryClient({
   defaultOptions: {

@@ -1,12 +1,12 @@
-import { Button, Modal, StrengthTag, Tabs } from '@components';
+import { Button, Modal, StrengthTag, Tabs } from '@shared/components';
 import { getHelperById } from '@customer/apis';
 import { KeywordTag, ReviewCard, SatisfactionGraph, StatsSummaryCard } from '@customer/components';
-import { useModal } from '@hooks';
+import { useModal } from '@shared/hooks';
 import { IcPhoneFill, IcVerified } from '@icons';
-import { PageLayout } from '@layouts';
+import { PageLayout } from '@shared/layouts';
 import { getRouteApi, useNavigate } from '@tanstack/react-router';
-import type { EscortStrength } from '@types';
-import { call, dateFormat, formatImageUrl } from '@utils';
+import type { EscortStrength } from '@shared/types';
+import { call, dateFormat, formatImageUrl } from '@shared/utils';
 
 const Route = getRouteApi('/customer/escort/$escortId/$helperId/helper/$applicationId');
 

@@ -1,4 +1,4 @@
-import { StrengthTag } from '@components';
+import { StrengthTag } from '@shared/components';
 
 interface Props {
   needsHelping: boolean;

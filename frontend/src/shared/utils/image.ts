@@ -1,4 +1,4 @@
-import type { ImageType, ImageWithPreviewUrl } from '@types';
+import type { ImageType, ImageWithPreviewUrl } from '@shared/types';
 import CryptoJS from 'crypto-js';
 
 // MD5 checksum 계산 유틸리티 (crypto-js 사용)

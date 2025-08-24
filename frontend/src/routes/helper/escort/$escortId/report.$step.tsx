@@ -1,13 +1,13 @@
 import { useEffect } from 'react';
-import { Modal } from '@components';
+import { Modal } from '@shared/components';
 import { getReportDefault } from '@helper/apis';
 import { ReportDetail, Reservation, Taxi, Time } from '@helper/components';
-import { useFunnel, useModal } from '@hooks';
-import { PageLayout } from '@layouts';
+import { useFunnel, useModal } from '@shared/hooks';
+import { PageLayout } from '@shared/layouts';
 import { createFileRoute, useRouter } from '@tanstack/react-router';
 import { FormProvider, useForm } from 'react-hook-form';
 import type { ReportFormValues } from '@helper/types';
-import { dateFormat } from '@utils';
+import { dateFormat } from '@shared/utils';
 
 export const Route = createFileRoute('/helper/escort/$escortId/report/$step')({
   component: RouteComponent,

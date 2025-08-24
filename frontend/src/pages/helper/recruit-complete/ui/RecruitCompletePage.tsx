@@ -1,8 +1,8 @@
-import { Button } from '@components';
-import { PageLayout } from '@layouts';
+import { Button } from '@shared/components';
+import { PageLayout } from '@shared/layouts';
 import { getRouteApi, useNavigate } from '@tanstack/react-router';
 import { getRecruitsByRecruitId } from '@helper/apis';
-import { dateFormat, timeFormatWithOptionalMinutes, timeDuration } from '@utils';
+import { dateFormat, timeFormatWithOptionalMinutes, timeDuration } from '@shared/utils';
 import { CompletedInfoRow } from '@helper/components';
 
 const Route = getRouteApi('/helper/application/$escortId/completed');

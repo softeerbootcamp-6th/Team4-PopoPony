@@ -8,10 +8,10 @@ import type {
   RouteFormValues,
 } from '@customer/types';
 import { CardWrapper } from '@customer/components';
-import { Button, TermsBottomSheet } from '@components';
-import { FormLayout } from '@layouts';
+import { Button, TermsBottomSheet } from '@shared/components';
+import { FormLayout } from '@shared/layouts';
 import { useNavigate } from '@tanstack/react-router';
-import type { FunnelStepProps } from '@types';
+import type { FunnelStepProps } from '@shared/types';
 import { postRecruit } from '@customer/apis';
 import { buildRecruitCreateRequest } from '@customer/utils';
 

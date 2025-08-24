@@ -1,4 +1,4 @@
-import { BottomSheet } from '@components';
+import { BottomSheet } from '@shared/components';
 import { REGION_OPTIONS } from '@helper/types';
 import { useState } from 'react';
 

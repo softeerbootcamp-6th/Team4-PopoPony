@@ -1,9 +1,14 @@
 import { getEscortDetail } from '@dashboard/apis';
-import { useMap } from '@hooks';
+import { useMap } from '@shared/hooks';
 import { IcArrowLeft, IcPinFillEffect } from '@icons';
-import { PageLayout } from '@layouts';
+import { PageLayout } from '@shared/layouts';
 import { createFileRoute, useRouter } from '@tanstack/react-router';
-import { dateFormat, getDaysLeft, getDifferenceInSecondsFromNow, timeFormatTo24Hour } from '@utils';
+import {
+  dateFormat,
+  getDaysLeft,
+  getDifferenceInSecondsFromNow,
+  timeFormatTo24Hour,
+} from '@shared/utils';
 import { useEffect, useRef } from 'react';
 import type { components } from '@schema';
 import { PlaceInfo, TaxiInfo } from '@dashboard/components';

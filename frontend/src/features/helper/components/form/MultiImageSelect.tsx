@@ -1,6 +1,6 @@
-import { useImageUpload } from '@hooks';
+import { useImageUpload } from '@shared/hooks';
 import { IcButtonClose, IcCameraFill } from '@icons';
-import type { ImagePrefix, ImageWithPreviewUrl } from '@types';
+import type { ImagePrefix, ImageWithPreviewUrl } from '@shared/types';
 import { useFormContext } from 'react-hook-form';
 
 interface Props {

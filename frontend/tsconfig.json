@@ -25,19 +25,13 @@
     "paths": {
       "@icons": ["src/assets/icons"],
       "@assets/*": ["src/assets/*"],
-      "@apis": ["src/shared/apis"],
-      "@layouts": ["src/shared/layouts"],
-      "@components": ["src/shared/components"],
-      "@hooks": ["src/shared/hooks"],
-      "@types": ["src/shared/types"],
-      "@utils": ["src/shared/utils"],
-      "@constants": ["src/shared/constants"],
       "@auth/*": ["src/features/auth/*"],
       "@customer/*": ["src/features/customer/*"],
       "@dashboard/*": ["src/features/dashboard/*"],
       "@helper/*": ["src/features/helper/*"],
       "@schema": ["src/shared/types/api/schema"],
       "@pages/*": ["src/pages/*"],
+      "@entities/*": ["src/entities/*"],
       "@shared/*": ["src/shared/*"],
       "@/*": ["src/*"]
     }

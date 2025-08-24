@@ -1,4 +1,4 @@
-import { $api } from '@apis';
+import { $api } from '@shared/apis';
 
 const getReviseHelperProfileInfo = (helperProfileId: number, enable: boolean) => {
   return $api.useQuery(

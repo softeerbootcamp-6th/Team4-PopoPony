@@ -1,8 +1,8 @@
 import { requestFormSchema } from '@customer/types';
-import { FormTextarea, LabeledSection } from '@components';
-import { FormLayout } from '@layouts';
-import { useFormValidation } from '@hooks';
-import type { FunnelStepProps } from '@types';
+import { FormTextarea, LabeledSection } from '@shared/components';
+import { FormLayout } from '@shared/layouts';
+import { useFormValidation } from '@shared/hooks';
+import type { FunnelStepProps } from '@shared/types';
 
 const Request = ({ handleNextStep }: FunnelStepProps) => {
   const { values, fieldErrors, isFormValid, markFieldAsTouched } =

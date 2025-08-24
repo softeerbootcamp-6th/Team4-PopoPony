@@ -1,10 +1,15 @@
-import { StrengthTag, Tabs, Divider } from '@components';
+import { StrengthTag, Tabs, Divider } from '@shared/components';
 import { InfoSection, RouteButton, GrayBox } from '@customer/components';
 
 import { IcCheck } from '@icons';
-import type { EscortStrength } from '@types';
+import type { EscortStrength } from '@shared/types';
 import type { RecruitDetailResponse } from '@customer/types';
-import { dateFormat, timeFormatWithOptionalMinutes, timeDuration, formatImageUrl } from '@utils';
+import {
+  dateFormat,
+  timeFormatWithOptionalMinutes,
+  timeDuration,
+  formatImageUrl,
+} from '@shared/utils';
 
 const DetailTab = ({ data }: { data: RecruitDetailResponse }) => {
   const taglist = [];
