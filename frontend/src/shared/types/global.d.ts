@@ -29,6 +29,7 @@ declare global {
         strokeWeight?: number;
         direction?: boolean;
         map: TMap;
+        strokeOpacity?: number;
       }) => TMapPolyline;
       LatLngBounds: new () => TMapLatLngBounds;
       Size: new (width: number, height: number) => TMapSize;

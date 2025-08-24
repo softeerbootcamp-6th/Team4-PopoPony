@@ -220,6 +220,7 @@ export const useMap = (mapRef: React.RefObject<HTMLDivElement>) => {
         strokeColor: DEFAULT_POLYLINE_COLOR,
         strokeWeight: DEFAULT_POLYLINE_STROKE_WEIGHT,
         map: mapInstance,
+        strokeOpacity: 1,
       });
 
       setPolylineInstances((prev) => {
@@ -233,12 +234,12 @@ export const useMap = (mapRef: React.RefObject<HTMLDivElement>) => {
   };
 
   // n개의 좌표로 지도 영역을 조정하는 함수
-  const fitBoundsToCoordinates = (coordinates: Array<{ lat: number; lon: number }>) => {
+  const fitBoundsToCoordinates = (coordinates: Array<{ lat?: number; lon?: number }>) => {
     if (!mapInstance || coordinates.length === 0) return;
 
     const bounds = new Tmapv3.LatLngBounds();
     coordinates.forEach(({ lat, lon }) => {
-      bounds.extend(new Tmapv3.LatLng(lat, lon));
+      bounds.extend(new Tmapv3.LatLng(lat ?? INITIAL_LATITUDE, lon ?? INITIAL_LONGITUDE));
     });
 
     mapInstance.fitBounds(bounds, {

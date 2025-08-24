@@ -26,13 +26,13 @@ const useModal = () => {
   // 모달이 열려있을 때 body 스크롤 방지
   useEffect(() => {
     if (isOpen) {
-      const container = document.getElementById('page-layout-container');
-      if (container) {
-        const originalOverflow = container.style.overflow;
-        container.style.overflow = 'hidden';
+      const body = document.body;
+      if (body) {
+        const originalOverflow = body.style.overflow;
+        body.style.overflow = 'hidden';
 
         return () => {
-          container.style.overflow = originalOverflow;
+          body.style.overflow = originalOverflow;
         };
       }
     }

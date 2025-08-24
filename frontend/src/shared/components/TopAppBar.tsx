@@ -27,7 +27,7 @@ const TopAppBar = ({
 
   return (
     <header
-      className={`flex-between z-20 h-[5.6rem] min-h-[5.6rem] w-full px-[2rem] ${backgroundClass} ${className}`}>
+      className={`flex-between h-[5.6rem] min-h-[5.6rem] w-full px-[2rem] ${backgroundClass} ${className}`}>
       <div className='flex-start h-[4rem] w-[4rem]'>
         {showBack && (
           <button

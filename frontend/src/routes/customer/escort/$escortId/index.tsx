@@ -70,7 +70,7 @@ function RouteComponent() {
         </div>
 
         <Tabs defaultValue={recruitData.data.status === '동행완료' ? '리포트' : '도우미'}>
-          <Tabs.TabsList>
+          <Tabs.TabsList withHeader>
             {recruitData.data.status !== '동행완료' ? (
               <Tabs.TabsTrigger value='도우미'>도우미</Tabs.TabsTrigger>
             ) : (

@@ -1,4 +1,4 @@
-import { ProgressBar, Modal } from '@components';
+import { Modal } from '@components';
 import { PageLayout } from '@layouts';
 import { recruitStepSearchSchema, type RecruitFormValues } from '@customer/types';
 import { useFunnel, useModal } from '@hooks';
@@ -63,48 +63,39 @@ function RouteComponent() {
         showClose={true}
         onClose={handleClose}
         background={currentStep === 'final' ? false : true}
+        showProgress={currentStep !== 'final' && !currentStep.includes('searchRoute')}
+        currentStep={stepList.indexOf(currentStep) + 1}
+        maxStep={stepList.length - 1}
       />
       <PageLayout.Content>
-        <div className='flex h-full flex-col'>
-          {currentStep !== 'final' && !currentStep.includes('searchRoute') ? (
-            <div className='flex-shrink-0 px-[2rem] pb-[2rem]'>
-              <ProgressBar
-                maxStep={stepList.length - 1}
-                currentStep={stepList.indexOf(currentStep) + 1}
-              />
-            </div>
-          ) : null}
-          <div className='flex-1 overflow-hidden'>
-            <FormProvider {...methods}>
-              <Funnel>
-                <Step name='profile'>
-                  <Profile handleNextStep={nextStep} />
-                </Step>
-                <Step name='condition'>
-                  <Condition handleNextStep={nextStep} handleBackStep={handleBackStep} />
-                </Step>
-                <Step name='communication'>
-                  <Communication handleNextStep={nextStep} handleBackStep={handleBackStep} />
-                </Step>
-                <Step name='time'>
-                  <Time handleNextStep={nextStep} handleBackStep={handleBackStep} />
-                </Step>
-                <Step name='route'>
-                  <EscortRoute handleNextStep={nextStep} handleBackStep={handleBackStep} />
-                </Step>
-                <Step name='searchRoute'>
-                  <SearchRoute handleSelectRoute={handleBackStep} />
-                </Step>
-                <Step name='request'>
-                  <Request handleNextStep={nextStep} handleBackStep={handleBackStep} />
-                </Step>
-                <Step name='final'>
-                  <Final handleBackStep={handleBackStep} />
-                </Step>
-              </Funnel>
-            </FormProvider>
-          </div>
-        </div>
+        <FormProvider {...methods}>
+          <Funnel>
+            <Step name='profile'>
+              <Profile handleNextStep={nextStep} />
+            </Step>
+            <Step name='condition'>
+              <Condition handleNextStep={nextStep} handleBackStep={handleBackStep} />
+            </Step>
+            <Step name='communication'>
+              <Communication handleNextStep={nextStep} handleBackStep={handleBackStep} />
+            </Step>
+            <Step name='time'>
+              <Time handleNextStep={nextStep} handleBackStep={handleBackStep} />
+            </Step>
+            <Step name='route'>
+              <EscortRoute handleNextStep={nextStep} handleBackStep={handleBackStep} />
+            </Step>
+            <Step name='searchRoute'>
+              <SearchRoute handleSelectRoute={handleBackStep} />
+            </Step>
+            <Step name='request'>
+              <Request handleNextStep={nextStep} handleBackStep={handleBackStep} />
+            </Step>
+            <Step name='final'>
+              <Final handleBackStep={handleBackStep} />
+            </Step>
+          </Funnel>
+        </FormProvider>
       </PageLayout.Content>
 
       <Modal isOpen={isOpen} onClose={handleDenyClose}>
