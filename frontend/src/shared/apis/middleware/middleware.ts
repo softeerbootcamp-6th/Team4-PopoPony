@@ -58,6 +58,9 @@ export const errorMiddleware: Middleware = {
       });
       throw new AuthError(status, message, body?.code);
     }
+    if (status === 404) {
+      throw new NotFoundError(status, 'Not Found', body?.code);
+    }
     if (!response.ok) {
       throw new HTTPError(status, response.statusText || 'HTTP Error');
     }
@@ -82,7 +85,7 @@ export const errorMiddleware: Middleware = {
     if (error && typeof error === 'object' && (error as Error).name === 'AbortError') {
       throw new TimeoutError('서버 응답이 없습니다. 다시 시도해주세요.');
     }
-    if (error instanceof TypeError && error.message === 'Failed to fetch') {
+    if (error instanceof TypeError) {
       throw new NetworkError(
         '네트워크 오류가 발생했습니다. 인터넷 연결 또는 서버 상태를 확인해주세요.'
       );
