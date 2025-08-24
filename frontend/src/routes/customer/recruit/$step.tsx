@@ -1,4 +1,4 @@
-import { ProgressBar, Modal, Button } from '@components';
+import { Modal } from '@components';
 import { PageLayout } from '@layouts';
 import { recruitStepSearchSchema, type RecruitFormValues } from '@customer/types';
 import { useFunnel, useModal } from '@hooks';

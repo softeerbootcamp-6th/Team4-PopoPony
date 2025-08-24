@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Modal, ProgressBar } from '@components';
+import { Modal } from '@components';
 import { getReportDefault } from '@helper/apis';
 import { ReportDetail, Reservation, Taxi, Time } from '@helper/components';
 import { useFunnel, useModal } from '@hooks';
