@@ -1,7 +1,7 @@
 import { FormLayout } from '@shared/layouts';
 import { MultiImageSelect } from '@helper/components';
 import { useFormContext, useWatch } from 'react-hook-form';
-import { cn } from '@/shared/libs/utils';
+import { cn } from '@shared/libs';
 import { Modal } from '@shared/components';
 import { useModal } from '@shared/hooks';
 import type { ReportFormValues } from '@helper/types';

@@ -8,7 +8,7 @@ import {
   useTransform,
 } from 'framer-motion';
 import { IcChevronDoubleLeft } from '@icons';
-import { cn } from '@/shared/libs/utils';
+import { cn } from '@shared/libs';
 
 type SlideButtonProps = {
   onConfirm?: () => void;

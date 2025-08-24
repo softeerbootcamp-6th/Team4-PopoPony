@@ -1,5 +1,5 @@
 import { IcArrowLeft, IcCurrentLocation } from '@icons';
-import { cn } from '../libs/utils';
+import { cn } from '@shared/libs';
 
 interface Props {
   color?: 'white' | 'mint';

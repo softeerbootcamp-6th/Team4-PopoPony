@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as SheetPrimitive from '@radix-ui/react-dialog';
 import { XIcon } from 'lucide-react';
-import { cn } from '@/shared/libs/utils';
+import { cn } from '@shared/libs';
 
 // Main BottomSheet Component
 interface BottomSheetProps extends React.ComponentProps<typeof SheetPrimitive.Root> {

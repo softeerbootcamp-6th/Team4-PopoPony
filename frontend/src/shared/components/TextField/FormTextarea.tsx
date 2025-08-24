@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useFormContext } from 'react-hook-form';
-import { cn } from '@/shared/libs/utils';
+import { cn } from '@shared/libs';
 
 interface FormTextareaProps extends Omit<React.ComponentProps<'textarea'>, 'name'> {
   name: string;

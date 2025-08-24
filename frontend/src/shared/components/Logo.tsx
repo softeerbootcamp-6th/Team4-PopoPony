@@ -1,4 +1,4 @@
-import { cn } from '../libs/utils';
+import { cn } from '@shared/libs';
 
 interface LogoProps {
   className?: string;
