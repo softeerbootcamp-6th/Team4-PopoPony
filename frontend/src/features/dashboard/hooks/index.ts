@@ -1,3 +1,3 @@
-import useSSE from './useSSE';
+import useWebSocket from './useWebSocket';
 
-export { useSSE };
+export { useWebSocket };
