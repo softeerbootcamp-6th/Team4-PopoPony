@@ -1,7 +1,9 @@
-import { Button, Divider } from '@shared/ui';
-import { useMap } from '@shared/hooks';
 import type { components } from '@schema';
+
 import { useEffect, useRef } from 'react';
+
+import { useMap } from '@shared/hooks';
+import { Button, Divider } from '@shared/ui';
 
 interface Props {
   route: components['schemas']['RouteDetailResponse'];

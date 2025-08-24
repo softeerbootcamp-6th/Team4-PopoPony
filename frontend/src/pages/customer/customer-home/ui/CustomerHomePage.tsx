@@ -1,15 +1,18 @@
-import { Link } from '@tanstack/react-router';
-import { useQueryClient } from '@tanstack/react-query';
-import { PageLayout } from '@shared/ui/layout';
-import { Button, Tabs, EmptyCard, Logo, FallbackUI } from '@shared/ui';
-import { RecruitCard } from '@widgets/ui';
 import { IcPlusSideLeft } from '@icons';
-import type { RecruitSimpleResponse } from '@customer/types';
-import { getRecruitsCustomer } from '@customer/apis';
-import { dateFormat, timeFormat } from '@shared/lib';
+import { useQueryClient } from '@tanstack/react-query';
+import { Link } from '@tanstack/react-router';
 import { useNavigate } from '@tanstack/react-router';
-import type { EscortStatus } from '@shared/types';
+
+import { RecruitCard } from '@widgets/ui';
+
 import { $api } from '@shared/api';
+import { dateFormat, timeFormat } from '@shared/lib';
+import type { EscortStatus } from '@shared/types';
+import { Button, EmptyCard, FallbackUI, Logo, Tabs } from '@shared/ui';
+import { PageLayout } from '@shared/ui/layout';
+
+import { getRecruitsCustomer } from '@customer/apis';
+import type { RecruitSimpleResponse } from '@customer/types';
 
 const escortStatusMessageMap: Record<NonNullable<EscortStatus>, string> = {
   //동행준비, 리포트 작성중, 동행완료는 차피 쓰이지 않음. 타입 에러 해결 위해 넣음.

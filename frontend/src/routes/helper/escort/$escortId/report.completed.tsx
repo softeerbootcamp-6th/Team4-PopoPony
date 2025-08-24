@@ -1,6 +1,7 @@
+import { createFileRoute, useNavigate } from '@tanstack/react-router';
+
 import { Button } from '@shared/ui';
 import { PageLayout } from '@shared/ui/layout';
-import { createFileRoute, useNavigate } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/helper/escort/$escortId/report/completed')({
   component: RouteComponent,

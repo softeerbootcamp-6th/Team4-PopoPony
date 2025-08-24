@@ -1,6 +1,8 @@
 import { createFileRoute, redirect } from '@tanstack/react-router';
-import { $api } from '@shared/api';
+
 import { CustomerDashboardPage } from '@pages/dashboard/customer';
+
+import { $api } from '@shared/api';
 
 export const Route = createFileRoute('/dashboard/$escortId/customer/')({
   beforeLoad: async ({ context, params }) => {

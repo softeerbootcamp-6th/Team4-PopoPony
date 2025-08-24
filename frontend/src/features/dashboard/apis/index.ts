@@ -1,8 +1,8 @@
 import getEscortDetail from './getEscortDetail';
-import patchEscortStatusByEscortId from './patchEscortStatusByEscortId';
 import patchEscortMemo from './patchEscortMemo';
-import postLocation from './postLocation';
+import patchEscortStatusByEscortId from './patchEscortStatusByEscortId';
 import postCurrentPosition from './postCurrentPosition';
+import postLocation from './postLocation';
 
 export {
   getEscortDetail,

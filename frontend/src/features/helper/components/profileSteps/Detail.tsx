@@ -1,26 +1,29 @@
-import { DetailFormSchema, CERTIFICATE_OPTIONS, STRENGTH_OPTIONS } from '@helper/types';
-import type { PostResponse } from '@shared/types';
-import { useFormValidation } from '@shared/hooks';
-import { FormLayout } from '@shared/ui/layout';
-import { useNavigate } from '@tanstack/react-router';
-import { Divider, Button } from '@shared/ui';
 import {
-  LabeledSection,
-  FormInput,
-  MultiOptionSelector,
-  MultiOptionSelectorCol,
-} from '@shared/ui/form';
-import { CertificateImageUploader } from '@helper/components';
-import {
-  IcWheelchair,
-  IcWheelchairDisabled,
   IcRecognize,
   IcRecognizeDisabled,
   IcShoes,
   IcShoesDisabled,
+  IcWheelchair,
+  IcWheelchairDisabled,
 } from '@icons';
-import { postHelperProfile, putHelperProfile } from '@helper/apis';
+import { useNavigate } from '@tanstack/react-router';
+
 import { useFormContext } from 'react-hook-form';
+
+import { useFormValidation } from '@shared/hooks';
+import type { PostResponse } from '@shared/types';
+import { Button, Divider } from '@shared/ui';
+import {
+  FormInput,
+  LabeledSection,
+  MultiOptionSelector,
+  MultiOptionSelectorCol,
+} from '@shared/ui/form';
+import { FormLayout } from '@shared/ui/layout';
+
+import { postHelperProfile, putHelperProfile } from '@helper/apis';
+import { CertificateImageUploader } from '@helper/components';
+import { CERTIFICATE_OPTIONS, DetailFormSchema, STRENGTH_OPTIONS } from '@helper/types';
 
 const Detail = () => {
   const navigate = useNavigate();

@@ -1,10 +1,13 @@
+import { IcChevronRightSecondary, IcClockFill, IcCoinFill, IcMarkFill } from '@icons';
+
 import type { ReactNode } from 'react';
-import { Button } from '@shared/ui';
+
+import type { EscortStrength } from '@entities/escort/types';
 import { StrengthTag } from '@entities/helper/ui';
 import { RecruitStatusTag } from '@entities/recruit/ui';
-import { IcChevronRightSecondary, IcClockFill, IcCoinFill, IcMarkFill } from '@icons';
+
 import type { RecruitStatus } from '@shared/types';
-import type { EscortStrength } from '@entities/escort/types';
+import { Button } from '@shared/ui';
 
 type Props = {
   children: React.ReactNode;

@@ -1,13 +1,17 @@
-import { useState, useEffect, useRef } from 'react';
-import { FormLayout } from '@shared/ui/layout';
-import { useFormContext } from 'react-hook-form';
 import { getRouteApi } from '@tanstack/react-router';
-import type { PlaceType, SearchLocationDetail, TMapPOI } from '@customer/types';
-import SearchInput from '../search/searchInput';
 
-import useTMapSearch from '@customer/apis/getTMapSearch';
+import { useEffect, useRef, useState } from 'react';
+
+import { useFormContext } from 'react-hook-form';
+
 import { useDebounce } from '@shared/hooks';
 import { Spinner } from '@shared/ui';
+import { FormLayout } from '@shared/ui/layout';
+
+import useTMapSearch from '@customer/apis/getTMapSearch';
+import type { PlaceType, SearchLocationDetail, TMapPOI } from '@customer/types';
+
+import SearchInput from '../search/searchInput';
 
 interface SearchRouteProps {
   handleSelectRoute: () => void;

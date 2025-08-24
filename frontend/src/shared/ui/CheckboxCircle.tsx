@@ -1,4 +1,5 @@
 import { IcCheck } from '@icons';
+
 import type { InputHTMLAttributes } from 'react';
 
 interface CheckboxCircleProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type'> {

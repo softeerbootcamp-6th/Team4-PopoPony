@@ -1,8 +1,10 @@
-import { PaymentCard, WarningBox } from '@customer/components';
-import { PageLayout } from '@shared/ui/layout';
-import { createFileRoute, useNavigate, getRouteApi } from '@tanstack/react-router';
-import { getRecruitPayment, postSelectApplication } from '@customer/apis';
+import { createFileRoute, getRouteApi, useNavigate } from '@tanstack/react-router';
+
 import { showToastError } from '@shared/lib';
+import { PageLayout } from '@shared/ui/layout';
+
+import { getRecruitPayment, postSelectApplication } from '@customer/apis';
+import { PaymentCard, WarningBox } from '@customer/components';
 
 const routeApi = getRouteApi('/customer/escort/$escortId/payment/$applicationId');
 

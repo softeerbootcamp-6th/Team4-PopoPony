@@ -1,5 +1,5 @@
 // SlideButton.tsx
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { IcChevronDoubleLeft } from '@icons';
 import {
   motion,
   useAnimation,
@@ -7,7 +7,9 @@ import {
   useMotionValue,
   useTransform,
 } from 'framer-motion';
-import { IcChevronDoubleLeft } from '@icons';
+
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+
 import { cn } from '@shared/lib';
 
 type SlideButtonProps = {

@@ -1,14 +1,11 @@
-import { Button, Divider, TermsBottomSheet, Spinner } from '@shared/ui';
-import { StrengthTag } from '@entities/helper/ui';
-import { RecruitCard } from '@widgets/ui';
-import { getRecruitById } from '@customer/apis';
-import { GrayBox, InfoSection, RouteButton } from '@customer/components';
-import { type EscortStrength } from '@entities/escort/types';
-import type { RecruitDetailResponse } from '@customer/types';
 import { IcCheck } from '@icons';
-import { PageLayout } from '@shared/ui/layout';
 import { getRouteApi, useNavigate } from '@tanstack/react-router';
-import { postApplicationByRecruitId, getRecruitList } from '@helper/apis';
+
+import { RecruitCard } from '@widgets/ui';
+
+import { type EscortStrength } from '@entities/escort/types';
+import { StrengthTag } from '@entities/helper/ui';
+
 import {
   dateFormat,
   formatImageUrl,
@@ -16,6 +13,14 @@ import {
   timeFormat,
   timeFormatWithOptionalMinutes,
 } from '@shared/lib';
+import { Button, Divider, Spinner, TermsBottomSheet } from '@shared/ui';
+import { PageLayout } from '@shared/ui/layout';
+
+import { getRecruitById } from '@customer/apis';
+import { GrayBox, InfoSection, RouteButton } from '@customer/components';
+import type { RecruitDetailResponse } from '@customer/types';
+
+import { getRecruitList, postApplicationByRecruitId } from '@helper/apis';
 
 const refineCardData = (recruitData: RecruitDetailResponse) => {
   const statusText = '동행번호 NO.' + recruitData.recruitId;

@@ -1,4 +1,5 @@
 import { IcAlertCircle } from '@icons';
+
 import { Button } from '@shared/ui';
 
 const FallbackUI = ({ error, onReset }: { error: Error; onReset?: () => void }) => {

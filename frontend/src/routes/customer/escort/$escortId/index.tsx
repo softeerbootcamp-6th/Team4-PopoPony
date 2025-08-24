@@ -1,13 +1,18 @@
-import { useState } from 'react';
-import { Tabs, Button, ErrorSuspenseBoundary, SuspenseUI } from '@shared/ui';
-import { ProgressIndicator } from '@entities/recruit/ui';
-import { RecruitCard } from '@widgets/ui';
-import { DetailTab, HelperTab, ReportTab } from '@customer/components';
-import { PageLayout } from '@shared/ui/layout';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
-import type { RecruitDetailResponse } from '@customer/types';
-import { getRecruitById } from '@customer/apis';
+
+import { useState } from 'react';
+
+import { RecruitCard } from '@widgets/ui';
+
+import { ProgressIndicator } from '@entities/recruit/ui';
+
 import { dateFormat, timeFormat } from '@shared/lib';
+import { Button, ErrorSuspenseBoundary, SuspenseUI, Tabs } from '@shared/ui';
+import { PageLayout } from '@shared/ui/layout';
+
+import { getRecruitById } from '@customer/apis';
+import { DetailTab, HelperTab, ReportTab } from '@customer/components';
+import type { RecruitDetailResponse } from '@customer/types';
 
 export const Route = createFileRoute('/customer/escort/$escortId/')({
   component: RouteComponent,

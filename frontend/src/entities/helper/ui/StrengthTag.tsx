@@ -1,5 +1,7 @@
 import { IcRecognize, IcShoes, IcWheelchair } from '@icons';
+
 import type { EscortStrength } from '@entities/escort/types';
+
 import { Tag } from '@shared/ui';
 
 interface TagProps {

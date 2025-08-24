@@ -1,5 +1,5 @@
-import { Modal } from '@shared/ui';
 import type { TermsData } from '@shared/config';
+import { Modal } from '@shared/ui';
 
 export interface TermsModalProps {
   isOpen: boolean;

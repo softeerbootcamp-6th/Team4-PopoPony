@@ -1,4 +1,4 @@
-import { forwardRef, type InputHTMLAttributes } from 'react';
+import { type InputHTMLAttributes, forwardRef } from 'react';
 
 interface AuthInputProps extends InputHTMLAttributes<HTMLInputElement> {
   placeholder?: string;

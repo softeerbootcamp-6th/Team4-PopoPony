@@ -1,12 +1,16 @@
-import { Tabs, Spinner } from '@shared/ui';
-import { ProgressIndicator } from '@entities/recruit/ui';
-import { RecruitCard } from '@widgets/ui';
-import { DetailTab, ReportTab } from '@helper/components';
-import { PageLayout } from '@shared/ui/layout';
 import { createFileRoute, useParams } from '@tanstack/react-router';
-import type { RecruitDetailResponse } from '@helper/types';
-import { getRecruitById } from '@helper/apis';
+
+import { RecruitCard } from '@widgets/ui';
+
+import { ProgressIndicator } from '@entities/recruit/ui';
+
 import { dateFormat, timeFormat } from '@shared/lib';
+import { Spinner, Tabs } from '@shared/ui';
+import { PageLayout } from '@shared/ui/layout';
+
+import { getRecruitById } from '@helper/apis';
+import { DetailTab, ReportTab } from '@helper/components';
+import type { RecruitDetailResponse } from '@helper/types';
 
 export const Route = createFileRoute('/helper/escort/$escortId/')({
   component: RouteComponent,

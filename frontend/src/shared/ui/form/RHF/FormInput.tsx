@@ -1,7 +1,11 @@
-import { useFormContext } from 'react-hook-form';
-import { type InputHTMLAttributes, useState } from 'react';
 import { IcChevronDown } from '@icons';
+
+import { type InputHTMLAttributes, useState } from 'react';
+
+import { useFormContext } from 'react-hook-form';
+
 import { formatFormInputValue } from '@shared/lib';
+
 type InputType = 'date' | 'time' | 'cost' | 'number' | 'text' | 'contact';
 
 interface FormInputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'size' | 'type'> {

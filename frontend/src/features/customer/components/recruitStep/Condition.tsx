@@ -1,10 +1,13 @@
-import { TwoOptionSelector, LabeledSection } from '@shared/ui/form';
-import { useFormContext } from 'react-hook-form';
 import { memo } from 'react';
-import { FormLayout } from '@shared/ui/layout';
+
+import { useFormContext } from 'react-hook-form';
+
 import { useFormValidation } from '@shared/hooks';
-import { conditionSchema } from '@customer/types';
 import type { FunnelStepProps } from '@shared/types';
+import { LabeledSection, TwoOptionSelector } from '@shared/ui/form';
+import { FormLayout } from '@shared/ui/layout';
+
+import { conditionSchema } from '@customer/types';
 
 const Condition = memo(({ handleNextStep }: FunnelStepProps) => {
   const { values, isFormValid, fieldErrors, markFieldAsTouched } =

@@ -1,11 +1,12 @@
+import { formatImageUrl } from '@shared/lib';
+
 import type { ProfileFormValues } from '@helper/types/ProfileFormValues';
-import type { HelperUpdateDefaultResponse } from '@helper/types/schemaTypes';
 import {
   CERTIFICATE_OPTIONS,
-  STRENGTH_OPTIONS,
   REGION_OPTIONS,
+  STRENGTH_OPTIONS,
 } from '@helper/types/ProfileFormValues';
-import { formatImageUrl } from '@shared/lib';
+import type { HelperUpdateDefaultResponse } from '@helper/types/schemaTypes';
 
 type HelperProfileApi = HelperUpdateDefaultResponse;
 

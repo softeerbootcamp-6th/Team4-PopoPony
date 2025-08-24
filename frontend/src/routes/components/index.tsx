@@ -1,9 +1,12 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { Button, ProgressBar, Modal, PhotoUpload, CheckboxCircle } from '@shared/ui';
-import { useForm, FormProvider } from 'react-hook-form';
+
 import type { HTMLAttributes } from 'react';
-import { useModal } from '@shared/hooks';
 import { useState } from 'react';
+
+import { FormProvider, useForm } from 'react-hook-form';
+
+import { useModal } from '@shared/hooks';
+import { Button, CheckboxCircle, Modal, PhotoUpload, ProgressBar } from '@shared/ui';
 
 export const Route = createFileRoute('/components/')({
   component: RouteComponent,

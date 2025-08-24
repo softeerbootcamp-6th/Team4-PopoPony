@@ -1,9 +1,12 @@
-import { FloatingButton } from '@shared/ui';
-import { INITIAL_LATITUDE, INITIAL_LONGITUDE } from '@dashboard/constants';
-import { useMap } from '@shared/hooks';
 import { createFileRoute, useRouter } from '@tanstack/react-router';
-import { useEffect, useRef } from 'react';
 import z from 'zod';
+
+import { useEffect, useRef } from 'react';
+
+import { useMap } from '@shared/hooks';
+import { FloatingButton } from '@shared/ui';
+
+import { INITIAL_LATITUDE, INITIAL_LONGITUDE } from '@dashboard/constants';
 
 const mapSearchSchema = z.object({
   lat: z.number().default(INITIAL_LATITUDE),

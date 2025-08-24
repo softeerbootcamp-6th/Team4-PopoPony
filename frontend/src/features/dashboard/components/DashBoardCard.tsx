@@ -1,7 +1,9 @@
-import { ShowMapButton } from '@shared/ui';
-import { type StatusTitleProps } from '@dashboard/types';
-import { IcHomeFill, IcHospitalFill, IcClockFill, IcMarkFill } from '@icons';
+import { IcClockFill, IcHomeFill, IcHospitalFill, IcMarkFill } from '@icons';
+
 import { timeFormat } from '@shared/lib';
+import { ShowMapButton } from '@shared/ui';
+
+import { type StatusTitleProps } from '@dashboard/types';
 
 const DashBoardCard = ({ children }: { children: React.ReactNode }) => {
   return <div className='shadow-bottom-sheet relative z-10 flex-1'>{children}</div>;

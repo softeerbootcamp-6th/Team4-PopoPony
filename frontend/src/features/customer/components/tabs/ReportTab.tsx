@@ -1,13 +1,15 @@
-import { Tabs, Divider, Spinner } from '@shared/ui';
-import { HelperCard, InfoSection, ReportInfoCard, WarningBox } from '@customer/components';
 import { IcAlertCircle } from '@icons';
+import { getRouteApi, useNavigate } from '@tanstack/react-router';
+
+import { dateFormat, timeFormat } from '@shared/lib';
+import { Divider, Spinner, Tabs } from '@shared/ui';
+
 import {
   getApplicationListById,
   getRecruitReportByRecruitId,
   getRecruitReviewByRecruitId,
 } from '@customer/apis';
-import { getRouteApi, useNavigate } from '@tanstack/react-router';
-import { dateFormat, timeFormat } from '@shared/lib';
+import { HelperCard, InfoSection, ReportInfoCard, WarningBox } from '@customer/components';
 
 type ReportTabProps = {
   setHasReview: (hasReview: boolean) => void;

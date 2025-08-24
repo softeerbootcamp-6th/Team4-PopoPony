@@ -1,6 +1,9 @@
-import React, { useRef } from 'react';
-import { useFormContext } from 'react-hook-form';
 import { IcCheckBox } from '@icons';
+
+import React, { useRef } from 'react';
+
+import { useFormContext } from 'react-hook-form';
+
 import { useImageUpload } from '@shared/hooks';
 import type { ImagePrefix } from '@shared/types';
 

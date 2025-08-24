@@ -1,6 +1,7 @@
-import type { paths } from '../types/api/schema';
 import createFetchClient from 'openapi-fetch';
 import createClient from 'openapi-react-query';
+
+import type { paths } from '../types/api/schema';
 import errorMiddleware from './middleware/middleware';
 
 const client = createFetchClient<paths>({

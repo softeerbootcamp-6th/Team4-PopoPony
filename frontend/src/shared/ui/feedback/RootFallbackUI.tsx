@@ -1,5 +1,6 @@
-import { useNavigate } from '@tanstack/react-router';
 import { IcAlertCircle } from '@icons';
+import { useNavigate } from '@tanstack/react-router';
+
 import { Button } from '@shared/ui';
 
 const RootFallbackUI = ({ error, onReset }: { error: Error; onReset?: () => void }) => {

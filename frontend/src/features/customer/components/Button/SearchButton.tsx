@@ -1,5 +1,6 @@
-import type { ButtonHTMLAttributes } from 'react';
 import { IcSearch } from '@icons';
+
+import type { ButtonHTMLAttributes } from 'react';
 
 interface SearchButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   text?: string;

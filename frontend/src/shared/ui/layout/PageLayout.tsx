@@ -1,4 +1,5 @@
-import { TopAppBar, BottomCTA, ProgressBar } from '@shared/ui';
+import { BottomCTA, ProgressBar, TopAppBar } from '@shared/ui';
+
 import type { TopAppBarProps } from '../TopAppBar';
 import type { BottomCTAProps } from './BottomCTA';
 

@@ -1,5 +1,6 @@
-import { useFormContext } from 'react-hook-form';
 import { IcCheck } from '@icons';
+
+import { useFormContext } from 'react-hook-form';
 
 interface Props {
   name: string;

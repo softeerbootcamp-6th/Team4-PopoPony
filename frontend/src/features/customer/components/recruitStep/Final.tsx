@@ -1,18 +1,21 @@
+import { useNavigate } from '@tanstack/react-router';
+
 import { useFormContext } from 'react-hook-form';
-import type {
-  RecruitFormValues,
-  ProfileFormValues,
-  ConditionFormValues,
-  CommunicationFormValues,
-  TimeFormValues,
-  RouteFormValues,
-} from '@customer/types';
-import { CardWrapper } from '@customer/components';
+
+import type { FunnelStepProps } from '@shared/types';
 import { Button, TermsBottomSheet } from '@shared/ui';
 import { FormLayout } from '@shared/ui/layout';
-import { useNavigate } from '@tanstack/react-router';
-import type { FunnelStepProps } from '@shared/types';
+
 import { postRecruit } from '@customer/apis';
+import { CardWrapper } from '@customer/components';
+import type {
+  CommunicationFormValues,
+  ConditionFormValues,
+  ProfileFormValues,
+  RecruitFormValues,
+  RouteFormValues,
+  TimeFormValues,
+} from '@customer/types';
 import { buildRecruitCreateRequest } from '@customer/utils';
 
 const Final = ({ handleBackStep }: FunnelStepProps) => {

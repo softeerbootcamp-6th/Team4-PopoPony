@@ -1,10 +1,13 @@
-import { type RecruitStepProps } from '@customer/types';
-import { FormLayout } from '@shared/ui/layout';
+import { Fragment } from 'react';
+
+import { useFormContext } from 'react-hook-form';
+
 import { useFormValidation } from '@shared/hooks';
 import { Button, FormTextarea } from '@shared/ui';
-import { summarySchema, satisfactionLevel } from '@customer/types';
-import { useFormContext } from 'react-hook-form';
-import { Fragment } from 'react';
+import { FormLayout } from '@shared/ui/layout';
+
+import { type RecruitStepProps } from '@customer/types';
+import { satisfactionLevel, summarySchema } from '@customer/types';
 
 interface SummaryProps extends RecruitStepProps {
   name: string;

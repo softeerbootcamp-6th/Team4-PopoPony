@@ -1,11 +1,15 @@
+import { IcAlertCircle } from '@icons';
+
 import { memo, useEffect, useState } from 'react';
+
+import { useFormContext } from 'react-hook-form';
+
+import { useFormValidation } from '@shared/hooks';
+import type { FunnelStepProps } from '@shared/types';
 import { FormInput, LabeledSection } from '@shared/ui/form';
 import { FormLayout } from '@shared/ui/layout';
-import { useFormValidation } from '@shared/hooks';
-import { timeSchema, dateSchema } from '@customer/types';
-import { IcAlertCircle } from '@icons';
-import { useFormContext } from 'react-hook-form';
-import type { FunnelStepProps } from '@shared/types';
+
+import { dateSchema, timeSchema } from '@customer/types';
 
 const Time = memo(({ handleNextStep }: FunnelStepProps) => {
   const { setValue } = useFormContext();

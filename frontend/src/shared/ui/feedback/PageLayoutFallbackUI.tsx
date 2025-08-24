@@ -1,5 +1,6 @@
-import { Button } from '@shared/ui';
 import { IcAlertCircle } from '@icons';
+
+import { Button } from '@shared/ui';
 
 const PageLayoutFallbackUI = ({
   error,

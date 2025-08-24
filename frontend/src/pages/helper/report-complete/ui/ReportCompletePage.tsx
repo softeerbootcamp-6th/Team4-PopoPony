@@ -1,6 +1,7 @@
+import { useNavigate } from '@tanstack/react-router';
+
 import { Button } from '@shared/ui';
 import { PageLayout } from '@shared/ui/layout';
-import { useNavigate } from '@tanstack/react-router';
 
 const ReportCompletePage = () => {
   const navigate = useNavigate();

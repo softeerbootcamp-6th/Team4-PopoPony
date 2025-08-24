@@ -1,17 +1,20 @@
-import { Tabs, Divider, Button, Modal, ShowMapButton } from '@shared/ui';
-import { StrengthTagList } from '@entities/helper/ui';
-import { InfoSection, RouteButton, GrayBox } from '@customer/components';
-import { useModal } from '@shared/hooks';
 import { IcCheck } from '@icons';
-import type { RecruitDetailResponse } from '@customer/types';
+import { getRouteApi, useNavigate } from '@tanstack/react-router';
+
+import { StrengthTagList } from '@entities/helper/ui';
+
+import { useModal } from '@shared/hooks';
 import {
   dateFormat,
-  timeFormatWithOptionalMinutes,
-  timeDuration,
   formatImageUrl,
+  timeDuration,
+  timeFormatWithOptionalMinutes,
 } from '@shared/lib';
-import { useNavigate, getRouteApi } from '@tanstack/react-router';
+import { Button, Divider, Modal, ShowMapButton, Tabs } from '@shared/ui';
+
 import { deleteRecruit } from '@customer/apis';
+import { GrayBox, InfoSection, RouteButton } from '@customer/components';
+import type { RecruitDetailResponse } from '@customer/types';
 
 const routeApi = getRouteApi('/customer/escort/$escortId/');
 

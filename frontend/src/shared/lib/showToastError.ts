@@ -1,4 +1,5 @@
 import { toast } from 'sonner';
+
 import { getErrorLabel } from '@shared/api';
 
 export const showToastError = (error: unknown) => {

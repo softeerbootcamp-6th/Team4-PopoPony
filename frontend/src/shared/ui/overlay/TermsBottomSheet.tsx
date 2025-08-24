@@ -1,7 +1,9 @@
-import { useState } from 'react';
-import { BottomSheet, CheckboxCircle, Button } from '@shared/ui';
 import { IcChevronRight } from '@icons';
-import { getTermsById, type TermsData } from '@shared/config';
+
+import { useState } from 'react';
+
+import { type TermsData, getTermsById } from '@shared/config';
+import { BottomSheet, Button, CheckboxCircle } from '@shared/ui';
 
 import TermsModal from './TermsModal';
 

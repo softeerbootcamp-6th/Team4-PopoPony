@@ -1,13 +1,17 @@
-import { memo, useEffect } from 'react';
-import { routeFormSchema } from '@customer/types';
 import { useNavigate } from '@tanstack/react-router';
-import { FormLayout } from '@shared/ui/layout';
+
+import { memo, useEffect } from 'react';
+
 import { useFormContext } from 'react-hook-form';
-import { Dot, Checkbox } from '@shared/ui';
-import { FormInput, LabeledSection } from '@shared/ui/form';
-import { SearchButton } from '@customer/components';
+
 import { useFormValidation } from '@shared/hooks';
 import type { FunnelStepProps } from '@shared/types';
+import { Checkbox, Dot } from '@shared/ui';
+import { FormInput, LabeledSection } from '@shared/ui/form';
+import { FormLayout } from '@shared/ui/layout';
+
+import { SearchButton } from '@customer/components';
+import { routeFormSchema } from '@customer/types';
 
 const EscortRoute = memo(({ handleNextStep }: FunnelStepProps) => {
   const { setValue } = useFormContext();

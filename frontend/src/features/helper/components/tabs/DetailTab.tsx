@@ -1,16 +1,18 @@
-import { Tabs, Divider } from '@shared/ui';
-import { StrengthTag } from '@entities/helper/ui';
-import { InfoSection, RouteButton, GrayBox } from '@customer/components';
-
 import { IcCheck } from '@icons';
+
 import type { EscortStrength } from '@entities/escort/types';
-import type { RecruitDetailResponse } from '@customer/types';
+import { StrengthTag } from '@entities/helper/ui';
+
 import {
   dateFormat,
-  timeFormatWithOptionalMinutes,
-  timeDuration,
   formatImageUrl,
+  timeDuration,
+  timeFormatWithOptionalMinutes,
 } from '@shared/lib';
+import { Divider, Tabs } from '@shared/ui';
+
+import { GrayBox, InfoSection, RouteButton } from '@customer/components';
+import type { RecruitDetailResponse } from '@customer/types';
 
 const DetailTab = ({ data }: { data: RecruitDetailResponse }) => {
   const taglist = [];

@@ -1,16 +1,19 @@
-import { getEscortDetail } from '@dashboard/apis';
-import { useMap } from '@shared/hooks';
 import { IcArrowLeft, IcPinFillEffect } from '@icons';
-import { PageLayout } from '@shared/ui/layout';
+import type { components } from '@schema';
 import { createFileRoute, useRouter } from '@tanstack/react-router';
+
+import { useEffect, useRef } from 'react';
+
+import { useMap } from '@shared/hooks';
 import {
   dateFormat,
   getDaysLeft,
   getDifferenceInSecondsFromNow,
   timeFormatTo24Hour,
 } from '@shared/lib';
-import { useEffect, useRef } from 'react';
-import type { components } from '@schema';
+import { PageLayout } from '@shared/ui/layout';
+
+import { getEscortDetail } from '@dashboard/apis';
 import { PlaceInfo, TaxiInfo } from '@dashboard/components';
 
 export const Route = createFileRoute('/dashboard/$escortId/helper/prepare')({

@@ -1,5 +1,6 @@
-import type { ImageType, ImageWithPreviewUrl } from '@shared/types';
 import CryptoJS from 'crypto-js';
+
+import type { ImageType, ImageWithPreviewUrl } from '@shared/types';
 
 // MD5 checksum 계산 유틸리티 (crypto-js 사용)
 export const calculateMD5 = async (file: File): Promise<string> => {

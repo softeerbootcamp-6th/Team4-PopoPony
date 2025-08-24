@@ -1,9 +1,12 @@
-import React, { useRef } from 'react';
-import { useFormContext } from 'react-hook-form';
 import { IcCamera, IcEdit } from '@icons';
+import { toast } from 'sonner';
+
+import React, { useRef } from 'react';
+
+import { useFormContext } from 'react-hook-form';
+
 import { useImageUpload } from '@shared/hooks';
 import type { ImagePrefix } from '@shared/types';
-import { toast } from 'sonner';
 
 interface Props {
   name: string;

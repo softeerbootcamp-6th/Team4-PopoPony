@@ -1,7 +1,10 @@
-import { BottomSheet } from '@shared/ui';
-import { REGION_OPTIONS } from '@helper/types';
 import { useState } from 'react';
+
 import { useFormContext } from 'react-hook-form';
+
+import { BottomSheet } from '@shared/ui';
+
+import { REGION_OPTIONS } from '@helper/types';
 
 interface RegionBottomSheetFormProps {
   children: React.ReactNode;

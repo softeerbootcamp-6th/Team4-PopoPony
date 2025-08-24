@@ -1,11 +1,14 @@
 import { getRouteApi, useRouter } from '@tanstack/react-router';
-import { useFunnel, useModal } from '@shared/hooks';
-import { PageLayout } from '@shared/ui/layout';
-import { ProgressBar, Modal } from '@shared/ui';
-import { Summary, Detail, Comment } from '@customer/components';
+
 import { FormProvider, useForm } from 'react-hook-form';
-import { type EscortReviewFormValues } from '@customer/types';
+
+import { useFunnel, useModal } from '@shared/hooks';
+import { Modal, ProgressBar } from '@shared/ui';
+import { PageLayout } from '@shared/ui/layout';
+
 import { getApplicationListById } from '@customer/apis';
+import { Comment, Detail, Summary } from '@customer/components';
+import { type EscortReviewFormValues } from '@customer/types';
 
 const stepList = ['summary', 'detail', 'comment'];
 

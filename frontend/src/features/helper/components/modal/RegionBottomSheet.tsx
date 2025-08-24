@@ -1,6 +1,8 @@
-import { BottomSheet } from '@shared/ui';
-import { REGION_OPTIONS } from '@helper/types';
 import { useState } from 'react';
+
+import { BottomSheet } from '@shared/ui';
+
+import { REGION_OPTIONS } from '@helper/types';
 
 interface RegionBottomSheetProps {
   children: React.ReactNode;

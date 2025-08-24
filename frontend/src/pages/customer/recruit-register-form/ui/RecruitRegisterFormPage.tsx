@@ -1,19 +1,22 @@
+import { useRouter } from '@tanstack/react-router';
+
+import { FormProvider, useForm } from 'react-hook-form';
+
+import { useFunnel, useModal } from '@shared/hooks';
 import { Modal } from '@shared/ui';
 import { PageLayout } from '@shared/ui/layout';
-import { type RecruitFormValues } from '@customer/types';
-import { useFunnel, useModal } from '@shared/hooks';
-import { useRouter } from '@tanstack/react-router';
-import { FormProvider, useForm } from 'react-hook-form';
+
 import {
-  Profile,
-  Condition,
   Communication,
-  Time,
+  Condition,
   EscortRoute,
-  SearchRoute,
-  Request,
   Final,
+  Profile,
+  Request,
+  SearchRoute,
+  Time,
 } from '@customer/components';
+import { type RecruitFormValues } from '@customer/types';
 
 const stepList = ['profile', 'condition', 'communication', 'time', 'route', 'request', 'final'];
 

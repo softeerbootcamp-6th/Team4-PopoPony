@@ -1,5 +1,6 @@
-import { BottomCTA, Button } from '@shared/ui';
 import { useRouter } from '@tanstack/react-router';
+
+import { BottomCTA, Button } from '@shared/ui';
 
 interface FormLayoutProps {
   children: React.ReactNode;

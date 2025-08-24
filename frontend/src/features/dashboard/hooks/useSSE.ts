@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+
 import { type EscortStatusProps } from '@dashboard/types';
 
 // SSE 이벤트 타입 정의

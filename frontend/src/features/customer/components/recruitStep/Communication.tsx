@@ -1,15 +1,18 @@
-import { useFormContext, useWatch } from 'react-hook-form';
 import { memo, useEffect, useRef } from 'react';
-import { FormLayout } from '@shared/ui/layout';
+
+import { useFormContext, useWatch } from 'react-hook-form';
+
 import { useFormValidation } from '@shared/hooks';
-import { COGNITIVE_ISSUES_OPTIONS, CognitiveSchema, CommunicationSchema } from '@customer/types';
 import type { FunnelStepProps } from '@shared/types';
 import {
-  TwoOptionSelector,
-  MultiOptionSelectorCol,
-  LabeledSection,
   FormInput,
+  LabeledSection,
+  MultiOptionSelectorCol,
+  TwoOptionSelector,
 } from '@shared/ui/form';
+import { FormLayout } from '@shared/ui/layout';
+
+import { COGNITIVE_ISSUES_OPTIONS, CognitiveSchema, CommunicationSchema } from '@customer/types';
 
 const Communication = memo(({ handleNextStep }: FunnelStepProps) => {
   const { setValue, control } = useFormContext();

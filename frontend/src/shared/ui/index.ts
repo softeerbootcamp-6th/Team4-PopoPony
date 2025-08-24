@@ -1,6 +1,6 @@
 import Checkbox from './Checkbox';
 import CheckboxCircle from './CheckboxCircle';
-import { DatePicker, CalendarDayButton } from './DatePicker';
+import { CalendarDayButton, DatePicker } from './DatePicker';
 import Dot from './Dot';
 import Logo from './Logo';
 import Tabs from './Tabs';

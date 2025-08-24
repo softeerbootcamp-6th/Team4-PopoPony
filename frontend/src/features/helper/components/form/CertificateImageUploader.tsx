@@ -1,9 +1,12 @@
 import { useState } from 'react';
+
 import { useFormContext } from 'react-hook-form';
-import { Button } from '@shared/ui';
-import type { CertificateItemValues } from '@helper/types';
+
 import { useImageUpload } from '@shared/hooks';
 import type { ImagePrefix } from '@shared/types';
+import { Button } from '@shared/ui';
+
+import type { CertificateItemValues } from '@helper/types';
 
 interface Props {
   selectedCertificates: Array<CertificateItemValues>;

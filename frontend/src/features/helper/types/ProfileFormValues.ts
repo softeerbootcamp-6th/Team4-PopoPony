@@ -1,4 +1,5 @@
 import { z } from 'zod';
+
 import { imageSchema } from '@shared/types';
 
 export const REGION_OPTIONS = [

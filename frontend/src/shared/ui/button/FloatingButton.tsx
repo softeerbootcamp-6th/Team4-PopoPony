@@ -1,4 +1,5 @@
 import { IcArrowLeft, IcCurrentLocation } from '@icons';
+
 import { cn } from '@shared/lib';
 
 interface Props {

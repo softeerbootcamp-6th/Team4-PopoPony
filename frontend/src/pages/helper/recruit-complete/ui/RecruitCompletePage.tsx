@@ -1,8 +1,10 @@
+import { getRouteApi, useNavigate } from '@tanstack/react-router';
+
+import { dateFormat, timeDuration, timeFormatWithOptionalMinutes } from '@shared/lib';
 import { Button } from '@shared/ui';
 import { PageLayout } from '@shared/ui/layout';
-import { getRouteApi, useNavigate } from '@tanstack/react-router';
+
 import { getRecruitsByRecruitId } from '@helper/apis';
-import { dateFormat, timeFormatWithOptionalMinutes, timeDuration } from '@shared/lib';
 import { CompletedInfoRow } from '@helper/components';
 
 const Route = getRouteApi('/helper/application/$escortId/completed');

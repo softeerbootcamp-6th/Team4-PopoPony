@@ -1,5 +1,5 @@
-import { useRouter } from '@tanstack/react-router';
 import { IcArrowLeft, IcCloseM } from '@icons';
+import { useRouter } from '@tanstack/react-router';
 
 export interface TopAppBarProps {
   title?: string;

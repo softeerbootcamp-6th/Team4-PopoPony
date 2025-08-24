@@ -1,13 +1,17 @@
+import { useRouter } from '@tanstack/react-router';
+
 import { useEffect } from 'react';
+
+import { FormProvider, useForm } from 'react-hook-form';
+
+import { useFunnel, useModal } from '@shared/hooks';
 import { Modal } from '@shared/ui';
 import { PageLayout } from '@shared/ui/layout';
+
+import { getProfileExistance, getReviseHelperProfileInfo } from '@helper/apis';
+import { Detail, Region } from '@helper/components';
 import { type ProfileFormValues } from '@helper/types';
 import { toProfileFormValues } from '@helper/utils';
-import { useFunnel, useModal } from '@shared/hooks';
-import { useRouter } from '@tanstack/react-router';
-import { getProfileExistance, getReviseHelperProfileInfo } from '@helper/apis';
-import { Region, Detail } from '@helper/components';
-import { FormProvider, useForm } from 'react-hook-form';
 
 const stepList = ['region', 'detail'];
 

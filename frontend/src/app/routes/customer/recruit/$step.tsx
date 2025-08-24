@@ -1,6 +1,8 @@
-import { recruitStepSearchSchema } from '@customer/types';
-import { RecruitRegisterFormPage } from '@pages/customer/recruit-register-form';
 import { createFileRoute, redirect } from '@tanstack/react-router';
+
+import { RecruitRegisterFormPage } from '@pages/customer/recruit-register-form';
+
+import { recruitStepSearchSchema } from '@customer/types';
 
 export const Route = createFileRoute('/customer/recruit/$step')({
   validateSearch: recruitStepSearchSchema,
