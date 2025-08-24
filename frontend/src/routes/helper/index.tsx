@@ -5,7 +5,7 @@ import type { RecruitStatus } from '@types';
 import { dateFormat, timeFormat } from '@utils';
 import { getRecruitList, getProfileExistance } from '@helper/apis';
 import type { RecruitSimpleResponse, EscortStatus } from '@helper/types';
-// import { toast } from 'sonner';
+import { toast } from 'sonner';
 
 export const Route = createFileRoute('/helper/')({
   component: RouteComponent,
@@ -81,8 +81,7 @@ function RouteComponent() {
         params: { helperId: helperProfileId.toString() },
       });
     } else {
-      alert('프로필을 작성해주세요.');
-      // toast.error('프로필을 작성해주세요.');
+      toast.error('프로필을 작성해주세요.');
     }
   };
   const handleEscortCardClick = (recruitId: number, isCompleted: boolean) => {
