@@ -31,16 +31,12 @@ const LoginForm = () => {
         },
       },
       {
-        onSuccess: (data) => {
-          if (data.status === 200) {
-            authStorage.setIsLoggedIn(true);
-            toast.success('로그인에 성공했어요.');
-            navigate({
-              to: '/',
-            });
-          } else {
-            toast.error(data.message);
-          }
+        onSuccess: () => {
+          authStorage.setIsLoggedIn(true);
+          toast.success('로그인에 성공했어요.');
+          navigate({
+            to: '/',
+          });
         },
       }
     );
