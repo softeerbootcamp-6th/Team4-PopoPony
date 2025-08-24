@@ -13,7 +13,6 @@ import com.todoc.server.domain.escort.web.dto.request.EscortMemoUpdateRequest;
 import com.todoc.server.domain.escort.web.dto.response.EscortStatusResponse;
 import com.todoc.server.domain.realtime.service.NchanPublisher;
 import com.todoc.server.domain.realtime.service.WebSocketSessionRegistry;
-import com.todoc.server.domain.realtime.service.SseEmitterManager;
 import com.todoc.server.domain.realtime.web.dto.response.Envelope;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +29,7 @@ public class EscortService {
     // TODO :: 웹소켓 연결 후 SSE는 제거
     private final EscortJpaRepository escortJpaRepository;
     private final EscortQueryRepository escortQueryRepository;
-    private final SseEmitterManager emitterManager;
+//    private final SseEmitterManager emitterManager;
     private final WebSocketSessionRegistry sessionRegistry;
     private final NchanPublisher nchanPublisher;
 
@@ -86,7 +85,7 @@ public class EscortService {
                 escort.setActualMeetingTime(now);
 
                 // TODO :: 웹소켓 연결 후 SSE는 제거
-                emitterManager.close(escortId, Role.PATIENT);
+//                emitterManager.close(escortId, Role.PATIENT);
                 sessionRegistry.remove(escortId, Role.PATIENT);
             }
 
@@ -101,7 +100,7 @@ public class EscortService {
             // TODO :: 웹소켓 연결 후 SSE는 제거
             Envelope envelope = new Envelope("status", new EscortStatusResponse(nextStatus.getLabel(), now));
 
-            emitterManager.send(escortId, Role.CUSTOMER, "status", new EscortStatusResponse(nextStatus.getLabel(), now));
+//            emitterManager.send(escortId, Role.CUSTOMER, "status", new EscortStatusResponse(nextStatus.getLabel(), now));
             sessionRegistry.sendToRole(escortId, Role.CUSTOMER, envelope);
             nchanPublisher.publish(escortId, envelope);
 

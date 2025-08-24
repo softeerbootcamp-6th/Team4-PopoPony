@@ -1,29 +1,37 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { PageLayout } from '@layouts';
 import { Header, Footer, DashBoardCard } from '@dashboard/components';
-import { getEscortDetail, postCurrentPosition } from '@dashboard/apis';
+import { getEscortDetail } from '@dashboard/apis';
 import { FloatingButton, TermsBottomSheet } from '@components';
 import { useEffect, useRef, useState } from 'react';
 import { useMap } from '@hooks';
 import type { Position, TMapMarker } from '@types';
-import { useSSE } from '@dashboard/hooks';
+
 import { updatedBefore } from '@helper/utils';
+import { useSocket } from '@dashboard/hooks';
+import { call } from '@utils';
 export const Route = createFileRoute('/dashboard/map/$encryptedId')({
   component: RouteComponent,
 });
 
 const { Tmapv3 } = window;
 
+const decryptId = (encryptedId: string) => {
+  const encoded = parseInt(encryptedId, 16);
+  const decryptedId = (encoded - 13579) / 73;
+  return decryptedId;
+};
+
 function RouteComponent() {
-  // 암호화된 아이디를 복호화하여 동행 아이디로 변환
-  const { encryptedId: recruitId } = Route.useParams();
-  const { data: escortData } = getEscortDetail(Number(recruitId));
-  //필요한 데이터 추가로 escortData.data에서 가져오기
+  const { encryptedId } = Route.useParams();
+  const decryptedId = decryptId(encryptedId);
+  const { data: escortData } = getEscortDetail(Number(decryptedId));
+
   const { estimatedMeetingTime, helper, route, escortId } = escortData?.data ?? {};
-  const { mutate: postCurrentPositionCall } = postCurrentPosition();
+
   const timerRef = useRef<number | null>(null);
   const [curLocation, setCurLocation] = useState<Position | null>(null);
-  const { helperLocations } = useSSE(String(escortId), 'patient');
+  const { helperLocations, sendLocation } = useSocket(String(escortId), 'patient');
 
   const mapRef = useRef<HTMLDivElement>(null);
   const { mapInstance, setCurrentLocation, fitBoundsToCoordinates, addMarker, addCustomMarker } =
@@ -34,13 +42,13 @@ function RouteComponent() {
   const meetingMarker = useRef<TMapMarker>(null);
 
   const { meetingLocationInfo } = route.routeSimple;
-  const { name: helperName, imageUrl: helperImageUrl, contact: helperContact } = helper;
+  const { name: helperName, imageUrl: helperImageUrl } = helper;
 
   useEffect(() => {
     if (!('geolocation' in navigator)) return;
 
     navigator.geolocation.getCurrentPosition((position) => {
-      const { latitude, longitude } = position.coords;
+      const { latitude, longitude, accuracy } = position.coords;
 
       if (timerRef.current) {
         clearInterval(timerRef.current);
@@ -52,13 +60,7 @@ function RouteComponent() {
           lat: latitude,
           lon: longitude,
         });
-        postCurrentPositionCall({
-          params: { path: { escortId: Number(escortId) }, query: { role: 'patient' } },
-          body: {
-            latitude: latitude,
-            longitude: longitude,
-          },
-        });
+        sendLocation(latitude, longitude, accuracy);
       }, 1000);
     });
 
@@ -68,7 +70,7 @@ function RouteComponent() {
         timerRef.current = null;
       }
     };
-  }, [escortId]);
+  }, [escortId, sendLocation]);
 
   useEffect(() => {
     if (!mapInstance || !curLocation) return;
@@ -78,8 +80,8 @@ function RouteComponent() {
       if (!patientMarker.current) {
         patientMarker.current = addMarker(curLocation.lat, curLocation.lon, 'me');
         fitBoundsToCoordinates([
-          { lat: curLocation?.lat ?? 0, lon: curLocation?.lon ?? 0 },
-          { lat: helperLocations?.latitude ?? 0, lon: helperLocations?.longitude ?? 0 },
+          { lat: curLocation.lat, lon: curLocation.lon },
+          { lat: helperLocations?.latitude, lon: helperLocations?.longitude },
         ]);
       } else {
         patientMarker.current?.setPosition(new Tmapv3.LatLng(curLocation.lat, curLocation.lon));
@@ -90,10 +92,8 @@ function RouteComponent() {
   useEffect(() => {
     if (!mapInstance || !helperName || !helperImageUrl) return;
 
-    // 도우미 마커 생성 또는 업데이트
     if (helperLocations?.latitude && helperLocations?.longitude) {
       if (!helperMarker.current) {
-        // 마커가 없으면 새로 생성
         helperMarker.current = addCustomMarker(
           helperLocations.latitude,
           helperLocations.longitude,
@@ -101,8 +101,8 @@ function RouteComponent() {
           helperImageUrl
         );
         fitBoundsToCoordinates([
-          { lat: helperLocations?.latitude ?? 0, lon: helperLocations?.longitude ?? 0 },
-          { lat: curLocation?.lat ?? 0, lon: curLocation?.lon ?? 0 },
+          { lat: helperLocations?.latitude, lon: helperLocations?.longitude },
+          { lat: curLocation?.lat, lon: curLocation?.lon },
         ]);
       } else {
         helperMarker.current?.setPosition(
@@ -129,15 +129,8 @@ function RouteComponent() {
     );
   }, [mapInstance]);
 
-  const handleClickCallHelper = () => {
-    window.open(`tel:${helperContact}`, '_blank');
-  };
-  const handleClickGoToCustomerCenter = () => {
-    window.open(`tel:010-2514-9058`, '_blank');
-  };
-
   return (
-    <PageLayout>
+    <>
       <Header showBack={false} updateBefore={updatedBefore(helperLocations?.timestamp)} />
       <PageLayout.Content>
         <div className='flex h-full flex-col'>
@@ -176,8 +169,8 @@ function RouteComponent() {
       <PageLayout.Footer>
         <Footer
           escortStatus={escortData?.data.escortStatus}
-          handleClickCallHelper={handleClickCallHelper}
-          handleClickGoToCustomerCenter={handleClickGoToCustomerCenter}
+          handleClickCallHelper={() => call(helper.contact)}
+          handleClickGoToCustomerCenter={() => call(import.meta.env.VITE_CUSTOMER_PHONE_NUMBER)}
         />
       </PageLayout.Footer>
       <TermsBottomSheet
@@ -187,6 +180,6 @@ function RouteComponent() {
           localStorage.setItem('termsAgreement', 'true');
         }}
       />
-    </PageLayout>
+    </>
   );
 }

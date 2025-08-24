@@ -15,6 +15,9 @@ public class PresenceController {
     private final WebSocketFacadeService webSocketFacadeService; // 상태/위치 조회
     private final NchanPublisher nchanPublisher;   // HTTP POST 퍼블리시(앞서 만든 것: WebClient/HttpClient/RestTemplate 아무거나)
 
+    /**
+     * Nchan 채널 구독 시 실행되는 메서드 -> 스냅샷 전송
+     */
     @GetMapping("/sub")
     public ResponseEntity<Void> onSubscribe(@RequestHeader("X-Escort-Id") String escortIdHeader) {
 

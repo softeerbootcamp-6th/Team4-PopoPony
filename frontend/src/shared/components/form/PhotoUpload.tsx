@@ -3,6 +3,7 @@ import { useFormContext } from 'react-hook-form';
 import { IcCamera, IcEdit } from '@icons';
 import { useImageUpload } from '@hooks';
 import type { ImagePrefix } from '@types';
+import { toast } from 'sonner';
 
 interface Props {
   name: string;
@@ -34,7 +35,7 @@ const PhotoUpload = ({ name, prefix }: Props) => {
       setValue('imageUrl', imageData.previewUrl);
     } catch (err) {
       console.error(err);
-      alert('업로드에 실패했습니다. 다시 시도해주세요.');
+      toast.error(err instanceof Error ? err.message : '업로드에 실패했습니다. 다시 시도해주세요.');
     }
 
     // 파일 input 초기화

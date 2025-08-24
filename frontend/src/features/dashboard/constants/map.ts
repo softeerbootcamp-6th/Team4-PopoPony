@@ -3,6 +3,6 @@ export const INITIAL_LONGITUDE = 127.0390183;
 export const DEFAULT_ZOOM_LEVEL = 15;
 export const MAX_ZOOM_LEVEL = 15;
 export const MIN_ZOOM_LEVEL = 6;
-export const DEFAULT_POLYLINE_COLOR = '#0046FF';
+export const DEFAULT_POLYLINE_COLOR = '#00C89A';
 export const DEFAULT_POLYLINE_STROKE_WEIGHT = 8;
 export const ZOOM_BASE_DISTANCE = 1000;

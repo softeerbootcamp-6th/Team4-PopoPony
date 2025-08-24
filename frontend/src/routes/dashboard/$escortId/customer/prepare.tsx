@@ -1,6 +1,6 @@
 import { getEscortDetail } from '@dashboard/apis';
 import { useMap } from '@hooks';
-import { IcPinFillEffect } from '@icons';
+import { IcArrowLeft, IcPinFillEffect } from '@icons';
 import { PageLayout } from '@layouts';
 import { createFileRoute, useRouter } from '@tanstack/react-router';
 import {
@@ -62,8 +62,16 @@ function RouteComponent() {
   if (!isTmapLoaded) return <div>Loading...</div>;
 
   return (
-    <PageLayout>
-      <PageLayout.Header showBack={true} background={false} />
+    <>
+      <div className='flex-start mb-[2.4rem] h-[5.6rem] w-full px-[2rem]'>
+        <button
+          type='button'
+          onClick={() => router.history.back()}
+          className='flex-center text-text-neutral-primary absolute z-10'
+          aria-label='뒤로 가기'>
+          <IcArrowLeft className='h-[2.4rem] w-[2.4rem]' />
+        </button>
+      </div>
       <PageLayout.Content>
         <img
           src='/images/dashboard-background.png'
@@ -141,6 +149,6 @@ function RouteComponent() {
           </div>
         </div>
       </PageLayout.Content>
-    </PageLayout>
+    </>
   );
 }

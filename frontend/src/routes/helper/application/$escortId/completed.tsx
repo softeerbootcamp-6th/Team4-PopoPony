@@ -18,7 +18,7 @@ function RouteComponent() {
   const { placeName: hospitalName } = hospitalLocationInfo || {};
   const { placeName: meetingName } = meetingLocationInfo || {};
   return (
-    <PageLayout background='bg-neutral-2'>
+    <>
       <PageLayout.Header
         background={false}
         showBack={false}
@@ -68,6 +68,6 @@ function RouteComponent() {
       <PageLayout.Footer>
         <Button onClick={() => navigate({ to: '/helper' })}>홈으로 가기</Button>
       </PageLayout.Footer>
-    </PageLayout>
+    </>
   );
 }

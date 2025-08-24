@@ -1,6 +1,5 @@
 package com.todoc.server.domain.realtime.repository;
 
-import java.time.Duration;
 import java.time.Instant;
 import java.util.*;
 
@@ -10,7 +9,6 @@ import com.todoc.server.common.enumeration.Role;
 import com.todoc.server.domain.realtime.repository.dto.LocationUpdateResult;
 import com.todoc.server.domain.realtime.web.dto.request.LocationUpdateRequest;
 import com.todoc.server.domain.realtime.web.dto.response.LocationResponse;
-import com.todoc.server.domain.realtime.web.dto.response.LocationRichResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
@@ -18,8 +16,8 @@ import org.springframework.stereotype.Repository;
 import org.springframework.web.socket.WebSocketSession;
 
 /**
- * 역할별 최신 위치를 Redis Hash에 저장/조회.
- * 키: escort:loc:{escortId}:{role}  (예: escort:loc:8:HELPER, escort:loc:8:PATIENT)
+ * 역할별 최신 위치를 Redis Hash에 저장/조회
+ * 키: escort:location:{escortId}:{role}
  * 필드: lat, lon, ts(epoch ms), seq(long), ema(double), moving(0|1), acc(optional)
  */
 @Repository
@@ -39,9 +37,10 @@ public class LocationCacheRepository {
     private static final double MAX_SPEED = 50.0;    // m/s (0 비활성)
     private static final double MIN_DT = 0.2;        // s
     private static final double MAX_DT = 60.0;       // s
+    private static final double REFRESH_SEC = 30.0;    // s
 
     /** Lua 기반 원자적 upsert: 변화 있을 때만 갱신 + TTL + Pub/Sub */
-    public LocationUpdateResult upsertLatest(WebSocketSession session, LocationUpdateRequest request) {
+    public LocationUpdateResult upsertLatestLocation(WebSocketSession session, LocationUpdateRequest request) {
 
         Role role = (Role) session.getAttributes().get("role");
         Long escortId = (Long) session.getAttributes().get("escortId");
@@ -49,6 +48,7 @@ public class LocationCacheRepository {
 
         String key = key(escortId, role);
 
+        // Lua 인자 정의
         Object[] argv = new Object[] {
                 String.valueOf(request.getLatitude()),
                 String.valueOf(request.getLongitude()),
@@ -61,10 +61,11 @@ public class LocationCacheRepository {
                 role.getLabel(),
                 sessionId,
                 String.valueOf(ACCURACY_MAX), String.valueOf(MAX_SPEED),
-                String.valueOf(MIN_DT), String.valueOf(MAX_DT)
+                String.valueOf(MIN_DT), String.valueOf(MAX_DT), String.valueOf(REFRESH_SEC)
         };
 
         try {
+            // Lua 실행
             String res = stringRedisTemplate.execute(
                     updateLocationLua,
                     Collections.singletonList(key),
@@ -81,24 +82,23 @@ public class LocationCacheRepository {
             return new LocationUpdateResult(code == 1, reason);
 
         } catch (Exception e) {
-            // 필요 시 로그
             return new LocationUpdateResult(false, "lua-error:" + e.getMessage());
         }
     }
 
     /** 단순 저장: Lua 없이 바로 PUT */
-    public void saveSimple(long escortId, Role role, LocationUpdateRequest request) {
-        String k = key(escortId, role);
-        Map<String, Object> map = new HashMap<>();
-        map.put("latitude", Double.toString(request.getLatitude()));
-        map.put("longitude", Double.toString(request.getLongitude()));
-        map.put("timestamp", Long.toString(request.getTimestamp().toEpochMilli()));
+//    public void saveSimple(long escortId, Role role, LocationUpdateRequest request) {
+//        String k = key(escortId, role);
+//        Map<String, Object> map = new HashMap<>();
+//        map.put("latitude", Double.toString(request.getLatitude()));
+//        map.put("longitude", Double.toString(request.getLongitude()));
+//        map.put("timestamp", Long.toString(request.getTimestamp().toEpochMilli()));
+//
+//        stringRedisTemplate.opsForHash().putAll(k, map);
+//        stringRedisTemplate.expire(k, Duration.ofSeconds(TTL_SECONDS));
+//    }
 
-        stringRedisTemplate.opsForHash().putAll(k, map);
-        stringRedisTemplate.expire(k, Duration.ofSeconds(TTL_SECONDS));
-    }
-
-    /** 최신 위치 조회 (필요 시 ema/moving/seq도 DTO에 매핑 확장 가능) */
+    /** 최신 위치 조회 */
     public Optional<LocationResponse> findLatestLocation(long escortId, Role role) {
         String k = key(escortId, role);
         Map<Object, Object> entries = stringRedisTemplate.opsForHash().entries(k);
@@ -117,25 +117,23 @@ public class LocationCacheRepository {
         );
     }
 
-    /** 필요하다면 속도/상태까지 함께 리턴하는 확장 버전 */
-    public Optional<LocationRichResponse> findLatestLocationRich(long escortId, Role role) {
-        String k = key(escortId, role);
-        Map<Object, Object> entries = stringRedisTemplate.opsForHash().entries(k);
-        if (entries.isEmpty()) return Optional.empty();
-
-        return Optional.of(LocationRichResponse.builder()
-                        .escortId(escortId)
-                        .latitude(parseDouble(entries.get("lat")))
-                        .longitude(parseDouble(entries.get("lon")))
-                        .timestamp(Instant.ofEpochMilli(parseLong(entries.get("ts"))))
-                        .seq(optLong(entries.get("seq")))
-                        .speedEma(optDouble(entries.get("ema")))
-                        .moving(optInt(entries.get("moving")))
-                        .build()
-        );
-    }
-
-    // ---------- helpers ----------
+    /** 속도/상태 정보 포함한 최신 위치 조회 */
+//    public Optional<LocationRichResponse> findLatestLocationRich(long escortId, Role role) {
+//        String k = key(escortId, role);
+//        Map<Object, Object> entries = stringRedisTemplate.opsForHash().entries(k);
+//        if (entries.isEmpty()) return Optional.empty();
+//
+//        return Optional.of(LocationRichResponse.builder()
+//                        .escortId(escortId)
+//                        .latitude(parseDouble(entries.get("lat")))
+//                        .longitude(parseDouble(entries.get("lon")))
+//                        .timestamp(Instant.ofEpochMilli(parseLong(entries.get("ts"))))
+//                        .seq(optLong(entries.get("seq")))
+//                        .speedEma(optDouble(entries.get("ema")))
+//                        .moving(optInt(entries.get("moving")))
+//                        .build()
+//        );
+//    }
 
     private static String key(long escortId, Role role) {
         return "escort:location:" + escortId + ":" + role.getLabel();
@@ -143,7 +141,4 @@ public class LocationCacheRepository {
 
     private static double parseDouble(Object v) { return Double.parseDouble(String.valueOf(v)); }
     private static long parseLong(Object v) { return Long.parseLong(String.valueOf(v)); }
-    private static Long optLong(Object v) { return v==null? null : Long.parseLong(String.valueOf(v)); }
-    private static Double optDouble(Object v) { return v==null? null : Double.parseDouble(String.valueOf(v)); }
-    private static Integer optInt(Object v) { return v==null? null : Integer.parseInt(String.valueOf(v)); }
 }
