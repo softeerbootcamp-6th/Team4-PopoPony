@@ -65,20 +65,25 @@ const CustomerHomePage = () => {
   return (
     <PageLayout.Content>
       <div className='bg-neutral-10 relative h-full max-h-[22rem] p-[2rem]'>
-        <div className='absolute z-10'>
+        <div className='absolute z-10 flex h-[18rem] w-[calc(100%-4rem)] flex-col justify-between'>
           <Link to='/'>
             <Logo className='text-[2rem]' />
           </Link>
-          <h2 className='headline-24-bold text-text-neutral-primary mt-[2.4rem] mb-[3rem]'>
+          <h2 className='headline-24-bold text-text-neutral-primary'>
             토닥과 함께 <br />
             안전하게 동행하세요!
           </h2>
-          <Link to='/customer/recruit/$step' params={{ step: 'profile' }}>
-            <Button variant='assistive' size='md'>
+          <div className='w-[20rem]'>
+            <Button
+              variant='assistive'
+              size='md'
+              onClick={() =>
+                navigate({ to: '/customer/recruit/$step', params: { step: 'profile' } })
+              }>
               <IcPlusSideLeft />
               <span className='text-text-neutral-primary'>새로운 동행 신청하기</span>
             </Button>
-          </Link>
+          </div>
         </div>
         <img
           src='/images/home-graphic.svg'

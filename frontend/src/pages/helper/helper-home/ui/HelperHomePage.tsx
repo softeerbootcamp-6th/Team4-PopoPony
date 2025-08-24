@@ -103,40 +103,45 @@ const HelperHomePage = () => {
     <>
       <PageLayout.Content>
         <div className='bg-neutral-10 relative h-full max-h-[22rem] p-[2rem]'>
-          <div className='absolute z-10 w-[calc(100%-4rem)]'>
+          <div className='absolute z-10 flex h-[18rem] w-[calc(100%-4rem)] flex-col justify-between'>
             <Link to='/'>
               <Logo className='text-[2rem]' />
             </Link>
-            <h2 className='headline-24-bold text-text-neutral-primary mt-[2.4rem] mb-[3rem]'>
+            <h2 className='headline-24-bold text-text-neutral-primary'>
               토닥과 함께 <br />
               안전하게 동행하세요!
             </h2>
-            <div className='flex-between flex w-full gap-[1.2rem]'>
-              <div className='flex-1'>
-                {hasProfile && helperProfileId ? (
-                  <Link
-                    to={`/helper/profile/$helperId`}
-                    params={{ helperId: helperProfileId.toString() }}>
-                    <Button variant='assistive' size='md'>
-                      <span className='text-text-neutral-primary'>프로필 바로가기</span>
-                    </Button>
-                  </Link>
-                ) : (
-                  <Link
-                    to='/helper/profile/new/$step'
-                    params={{ step: 'region' }}
-                    search={{ mode: 'new' }}>
-                    <Button variant='assistive' size='md'>
-                      <span className='text-text-neutral-primary'>프로필 작성하기</span>
-                    </Button>
-                  </Link>
-                )}
-              </div>
-              <div className='flex-1'>
-                <Button size='md' onClick={handleClickApplication}>
-                  <span className='text-text-neutral-0'>일감찾기</span>
+            <div className='flex w-full gap-[1.2rem]'>
+              {hasProfile && helperProfileId ? (
+                <Button
+                  variant='assistive'
+                  size='md'
+                  onClick={() => {
+                    navigate({
+                      to: '/helper/profile/$helperId',
+                      params: { helperId: helperProfileId.toString() },
+                    });
+                  }}>
+                  <span className='text-text-neutral-primary'>프로필 바로가기</span>
                 </Button>
-              </div>
+              ) : (
+                <Button
+                  variant='assistive'
+                  size='md'
+                  onClick={() => {
+                    navigate({
+                      to: '/helper/profile/new/$step',
+                      params: { step: 'region' },
+                      search: { mode: 'new' },
+                    });
+                  }}>
+                  <span className='text-text-neutral-primary'>프로필 작성하기</span>
+                </Button>
+              )}
+
+              <Button size='md' onClick={handleClickApplication}>
+                <span className='text-text-neutral-0'>일감찾기</span>
+              </Button>
             </div>
           </div>
           <img
