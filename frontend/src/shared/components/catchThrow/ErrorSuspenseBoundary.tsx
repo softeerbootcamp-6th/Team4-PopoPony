@@ -2,6 +2,7 @@ import React, { Suspense } from 'react';
 import { QueryErrorResetBoundary } from '@tanstack/react-query';
 import { ErrorBoundary } from 'react-error-boundary';
 import { SuspenseUI, FallbackUI, RootFallbackUI } from '@components';
+import { useRouterState } from '@tanstack/react-router';
 
 type Props = {
   children: React.ReactNode;
@@ -9,11 +10,13 @@ type Props = {
 };
 
 const ErrorSuspenseBoundary = ({ children, isRoot = false }: Props) => {
+  const { location } = useRouterState();
+  const resetKeys = [location.pathname];
   return (
     <QueryErrorResetBoundary>
       {({ reset }) => (
         <ErrorBoundary
-          resetKeys={isRoot ? [location.pathname] : undefined}
+          resetKeys={resetKeys}
           onReset={reset}
           fallbackRender={({ error, resetErrorBoundary }) => {
             const handleReset = () => {
