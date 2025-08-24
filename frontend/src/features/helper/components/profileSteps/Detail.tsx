@@ -67,15 +67,8 @@ const Detail = () => {
           },
         },
         {
-          onSuccess: (response: PostResponse) => {
-            if (response.status !== 200) {
-              alert(response.message ?? '도우미 등록에 실패했습니다. 다시 시도해주세요.');
-              return;
-            }
+          onSuccess: () => {
             navigate({ to: '/helper/profile/new/completed' });
-          },
-          onError: () => {
-            alert('도우미 등록에 실패했습니다. 다시 시도해주세요.');
           },
         }
       );
@@ -91,15 +84,8 @@ const Detail = () => {
           },
         },
         {
-          onSuccess: (response: PostResponse) => {
-            if (response.status !== 200) {
-              alert(response.message ?? '도우미 등록에 실패했습니다. 다시 시도해주세요.');
-              return;
-            }
+          onSuccess: () => {
             navigate({ to: '/helper/profile/new/completed' });
-          },
-          onError: () => {
-            alert('도우미 등록에 실패했습니다. 다시 시도해주세요.');
           },
         }
       );
