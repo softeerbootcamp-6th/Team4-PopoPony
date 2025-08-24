@@ -1,11 +1,12 @@
 package com.todoc.server.domain.escort.repository;
 
-import com.querydsl.core.Tuple;
+import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.todoc.server.common.enumeration.ApplicationStatus;
 import com.todoc.server.domain.escort.entity.Application;
 import com.todoc.server.domain.escort.entity.QApplication;
+import com.todoc.server.domain.escort.repository.dto.ApplicationFlatDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -29,21 +30,21 @@ public class ApplicationQueryRepository {
      * @param recruitId 동행 신청 ID
      * @return 지원, 도우미 정보가 담긴 튜플들의 리스트
      */
-    public List<Tuple> findApplicationWithHelperByRecruitId(Long recruitId) {
+    public List<ApplicationFlatDto> findApplicationWithHelperByRecruitId(Long recruitId) {
 
         return queryFactory
-                .select(
-                        application.id,
-                        helperProfile.id,
-                        helperProfile.helperProfileImage,
-                        auth.id,
-                        auth.name,
-                        auth.birthDate,
-                        auth.gender,
-                        auth.contact,
-                        helperProfile.strength,
-                        helperProfile.shortBio,
-                        certificate.type
+                .select(Projections.constructor(ApplicationFlatDto.class,
+                    application.id,
+                    helperProfile.id,
+                    helperProfile.helperProfileImage,
+                    auth.id,
+                    auth.name,
+                    auth.birthDate,
+                    auth.gender,
+                    auth.contact,
+                    helperProfile.strength,
+                    helperProfile.shortBio,
+                    certificate.type)
                 )
                 .from(application)
                 .join(application.helper, auth)

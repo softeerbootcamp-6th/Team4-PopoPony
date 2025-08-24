@@ -1,6 +1,6 @@
 package com.todoc.server.domain.auth.service;
 
-import com.todoc.server.IntegrationTestBase;
+import com.todoc.server.IntegrationTest;
 import com.todoc.server.domain.auth.entity.Auth;
 import com.todoc.server.domain.auth.exception.AuthNotFoundException;
 import com.todoc.server.domain.auth.repository.AuthJpaRepository;
@@ -22,7 +22,7 @@ import static org.mindrot.jbcrypt.BCrypt.hashpw;
 @Transactional
 @ActiveProfiles("test")
 @Sql("/sql/data.sql")
-class AuthIntegrationTest extends IntegrationTestBase {
+class AuthIntegrationTest extends IntegrationTest {
 
     @Autowired AuthService authService;
     @Autowired AuthJpaRepository authJpaRepository;
@@ -41,35 +41,45 @@ class AuthIntegrationTest extends IntegrationTestBase {
         savedId = auth.getId();
     }
 
-    @Test
-    void authenticate_성공() {
-        var session = authService.authenticate(username, rawPassword);
-        assertThat(session).isNotNull();
-        assertThat(session.id()).isEqualTo(savedId);
-        assertThat(session.loginId()).isEqualTo(username);
+    @Nested
+    @DisplayName("사용자 인증")
+    class ProceedAuthentication {
+
+        @Test
+        void authenticate_성공() {
+            var session = authService.authenticate(username, rawPassword);
+            assertThat(session).isNotNull();
+            assertThat(session.id()).isEqualTo(savedId);
+            assertThat(session.loginId()).isEqualTo(username);
+        }
+
+        @Test
+        void authenticate_비밀번호_불일치() {
+            assertThatThrownBy(() -> authService.authenticate(username, "wrong"))
+                    .isInstanceOf(AuthNotFoundException.class);
+        }
+
+        @Test
+        void authenticate_없는_사용자() {
+            assertThatThrownBy(() -> authService.authenticate("none", rawPassword))
+                    .isInstanceOf(AuthNotFoundException.class);
+        }
     }
 
-    @Test
-    void authenticate_비밀번호_불일치() {
-        assertThatThrownBy(() -> authService.authenticate(username, "wrong"))
-                .isInstanceOf(AuthNotFoundException.class);
-    }
+    @Nested
+    @DisplayName("사용자 조회 - ID")
+    class ProceedGetAuth {
 
-    @Test
-    void authenticate_없는_사용자() {
-        assertThatThrownBy(() -> authService.authenticate("none", rawPassword))
-                .isInstanceOf(AuthNotFoundException.class);
-    }
+        @Test
+        void getAuthById_성공() {
+            var found = authService.getAuthById(savedId);
+            assertThat(found.getLoginId()).isEqualTo(username);
+        }
 
-    @Test
-    void getAuthById_성공() {
-        var found = authService.getAuthById(savedId);
-        assertThat(found.getLoginId()).isEqualTo(username);
-    }
-
-    @Test
-    void getAuthById_없음() {
-        assertThatThrownBy(() -> authService.getAuthById(999_999L))
-                .isInstanceOf(AuthNotFoundException.class);
+        @Test
+        void getAuthById_없음() {
+            assertThatThrownBy(() -> authService.getAuthById(999_999L))
+                    .isInstanceOf(AuthNotFoundException.class);
+        }
     }
 }
