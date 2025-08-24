@@ -936,11 +936,17 @@ export interface components {
       destinationDetail?: components['schemas']['LocationDetail'];
       returnLocationDetail?: components['schemas']['LocationDetail'];
     };
-    LocationRequest: {
+    LocationUpdateRequest: {
       /** Format: double */
-      latitude?: number;
+      latitude: number;
       /** Format: double */
-      longitude?: number;
+      longitude: number;
+      /** Format: date-time */
+      timestamp?: string;
+      /** Format: double */
+      accuracyMeters?: number;
+      /** Format: int64 */
+      seq?: number;
     };
     /** @description 단일 파일에 대한 Presigned URL 발급에 필요한 메타데이터 */
     FileSpec: {
@@ -2363,7 +2369,7 @@ export interface operations {
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['LocationRequest'];
+        'application/json': components['schemas']['LocationUpdateRequest'];
       };
     };
     responses: {
