@@ -1,8 +1,9 @@
 import { FilterButton, RegionBottomSheet } from '@helper/components';
-import { PageLayout } from '@shared/ui/layout';
 import { z } from 'zod';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
-import { Calendar, EmptyCard, EscortCard, StrengthTagList } from '@shared/ui';
+import { DatePicker, EmptyCard, PageLayout } from '@shared/ui';
+import { RecruitCard } from '@widgets/ui';
+import { StrengthTagList } from '@entities/helper/ui';
 import { getSearchRecruits } from '@helper/apis';
 import { dateFormat, timeDuration, timeFormat, isBeforeToday } from '@shared/lib';
 import { useMemo, useRef, useState } from 'react';
@@ -97,7 +98,7 @@ function RouteComponent() {
             />
             {isOpenCalendar && (
               <div className='absolute top-[4rem] left-0 z-10 translate-x-[-30%]'>
-                <Calendar
+                <DatePicker
                   mode='range'
                   selected={selectedDateRange}
                   captionLayout='dropdown'

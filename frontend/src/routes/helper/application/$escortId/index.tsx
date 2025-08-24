@@ -1,10 +1,11 @@
-import { Button, Divider, EscortCard, StrengthTag, TermsBottomSheet, Spinner } from '@shared/ui';
+import { PageLayout, Button, Divider, TermsBottomSheet, Spinner } from '@shared/ui';
+import { RecruitCard } from '@widgets/ui';
+import { StrengthTag } from '@entities/helper/ui';
 import { getRecruitById } from '@customer/apis';
 import { GrayBox, InfoSection, RouteButton } from '@customer/components';
-import { type EscortStrength } from '@shared/types';
+import { type EscortStrength } from '@entities/escort/types';
 import type { RecruitDetailResponse } from '@customer/types';
 import { IcCheck } from '@icons';
-import { PageLayout } from '@shared/ui/layout';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { postApplicationByRecruitId, getRecruitList } from '@helper/apis';
 import {

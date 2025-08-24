@@ -1,7 +1,8 @@
 import { createFileRoute, Link } from '@tanstack/react-router';
 import { useQueryClient } from '@tanstack/react-query';
 import { PageLayout } from '@shared/ui/layout';
-import { Button, EscortCard, Tabs, EmptyCard, Logo, FallbackUI } from '@shared/ui';
+import { Button, Tabs, EmptyCard, Logo, FallbackUI } from '@shared/ui';
+import { RecruitCard } from '@widgets/ui';
 import { IcPlusSideLeft } from '@icons';
 import type { RecruitSimpleResponse } from '@customer/types';
 import { getRecruitsCustomer } from '@customer/apis';

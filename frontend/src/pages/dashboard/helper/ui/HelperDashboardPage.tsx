@@ -9,7 +9,8 @@ import {
   HelperDashboardSummary,
 } from '@dashboard/components';
 import type { StatusTitleProps, EscortStatus } from '@dashboard/types';
-import { Button, FloatingButton, SlideButton } from '@shared/ui';
+import { Button, FloatingButton } from '@shared/ui';
+import { SlideButton } from '@entities/escort/ui';
 import { IcHeadphoneQuestionmark } from '@icons';
 import { useState, useEffect, useRef, type ReactNode } from 'react';
 import { useMap } from '@shared/hooks';

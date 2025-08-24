@@ -1,6 +1,7 @@
 import { createFileRoute, Link, useNavigate } from '@tanstack/react-router';
 import { PageLayout } from '@shared/ui/layout';
-import { Button, EscortCard, Logo, Tabs } from '@shared/ui';
+import { Button, Logo, Tabs } from '@shared/ui';
+import { RecruitCard } from '@widgets/ui';
 import type { RecruitStatus } from '@shared/types';
 import { dateFormat, timeFormat } from '@shared/lib';
 import { getRecruitList, getProfileExistance } from '@helper/apis';

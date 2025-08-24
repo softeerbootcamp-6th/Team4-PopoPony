@@ -2,9 +2,10 @@ import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
 import { Outlet, createRootRouteWithContext, redirect } from '@tanstack/react-router';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { type QueryClient } from '@tanstack/react-query';
-import { Landing, RootFallbackUI, ErrorSuspenseBoundary } from '@shared/ui';
+import { RootFallbackUI, ErrorSuspenseBoundary } from '@shared/ui';
 import { RootLayout, PageLayout } from '@shared/ui/layout';
 import { authStorage } from '@auth/utils';
+import { Landing } from '@widgets/ui';
 import { Toaster } from 'sonner';
 
 interface MyRouterContext {

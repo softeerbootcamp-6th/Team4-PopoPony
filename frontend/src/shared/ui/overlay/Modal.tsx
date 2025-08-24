@@ -2,7 +2,7 @@ import { type ReactNode } from 'react';
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { Button } from '@shared/ui';
-import type { ButtonProps } from '../Button';
+import type { ButtonProps } from '@shared/ui/button/Button';
 
 // Main Modal Component
 interface ModalProps {
