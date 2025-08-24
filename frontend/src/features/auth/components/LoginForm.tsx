@@ -6,8 +6,6 @@ import { useNavigate } from '@tanstack/react-router';
 import { postLogin } from '@auth/apis';
 import { AuthInput } from '@auth/components';
 import { toast } from 'sonner';
-import { getErrorLabel } from '@apis';
-import { showToastError } from '@utils';
 
 const LoginForm = () => {
   const navigate = useNavigate();
@@ -43,9 +41,6 @@ const LoginForm = () => {
           } else {
             toast.error(data.message);
           }
-        },
-        onError: (error: unknown) => {
-          showToastError(error);
         },
       }
     );
