@@ -1,4 +1,3 @@
-import { PageLayout } from '@layouts';
 import { Button } from '@components';
 import { IcAlertCircle } from '@icons';
 

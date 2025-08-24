@@ -6,7 +6,6 @@ import { FormLayout } from '@layouts';
 import { FormTextarea } from '@components';
 import { postHelperReview } from '@customer/apis';
 import { getRouteApi } from '@tanstack/react-router';
-import { showToastError } from '@utils';
 
 interface CommentProps extends RecruitStepProps {
   escortId: string;
@@ -40,7 +39,6 @@ const Comment = ({ escortId, handleNextStep }: CommentProps) => {
       },
       {
         onSuccess: () => {
-          alert('후기가 등록되었어요!');
           handleNextStep();
         },
       }

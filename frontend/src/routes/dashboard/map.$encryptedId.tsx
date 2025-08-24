@@ -35,7 +35,7 @@ function RouteComponent() {
   const meetingMarker = useRef<TMapMarker>(null);
 
   const { meetingLocationInfo } = route.routeSimple;
-  const { name: helperName, imageUrl: helperImageUrl, contact: helperContact } = helper;
+  const { name: helperName, imageUrl: helperImageUrl } = helper;
 
   useEffect(() => {
     if (!('geolocation' in navigator)) return;

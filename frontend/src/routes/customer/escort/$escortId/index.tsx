@@ -6,7 +6,6 @@ import {
   Button,
   ErrorSuspenseBoundary,
   SuspenseUI,
-  PageLayoutSuspenseUI,
 } from '@components';
 import { DetailTab, HelperTab, ReportTab } from '@customer/components';
 import { PageLayout } from '@layouts';
@@ -39,7 +38,7 @@ function RouteComponent() {
   const { data: recruitData, isLoading } = getRecruitById(Number(escortId));
 
   if (isLoading) {
-    return <PageLayoutSuspenseUI />;
+    return <SuspenseUI />;
   }
   if (!recruitData || !recruitData.data) {
     return null;
