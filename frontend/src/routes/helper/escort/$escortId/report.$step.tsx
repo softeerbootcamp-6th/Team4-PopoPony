@@ -4,13 +4,27 @@ import { getReportDefault } from '@helper/apis';
 import { ReportDetail, Reservation, Taxi, Time } from '@helper/components';
 import { useFunnel, useModal } from '@hooks';
 import { PageLayout } from '@layouts';
-import { createFileRoute, useRouter } from '@tanstack/react-router';
+import { createFileRoute, useRouter, redirect } from '@tanstack/react-router';
+import { useQueryClient, type QueryClient } from '@tanstack/react-query';
 import { FormProvider, useForm } from 'react-hook-form';
 import type { ReportFormValues } from '@helper/types';
 import { dateFormat } from '@utils';
 
 export const Route = createFileRoute('/helper/escort/$escortId/report/$step')({
   component: RouteComponent,
+  beforeLoad: async ({ params, context }) => {
+    const { step, escortId } = params;
+    const { queryClient } = context as { queryClient: QueryClient };
+    if (step !== 'time') {
+      const started = queryClient.getQueryData<boolean>(['reportFormStarted', escortId]);
+      if (!started) {
+        throw redirect({
+          to: '/helper/escort/$escortId/report/$step',
+          params: { escortId, step: 'time' },
+        });
+      }
+    }
+  },
 });
 
 const stepList = ['time', 'reservation', 'taxi', 'detail'];
@@ -20,6 +34,7 @@ function RouteComponent() {
   const { isOpen, openModal, closeModal } = useModal();
   const methods = useForm<ReportFormValues>();
   const { escortId } = Route.useParams();
+  const queryClient = useQueryClient();
 
   const { data: reportDefaultResponse } = getReportDefault(Number(escortId));
   const reportDefault = reportDefaultResponse?.data;
@@ -40,8 +55,9 @@ function RouteComponent() {
           returnReceipt: {} as ReportFormValues['taxiFeeCreateRequest']['returnReceipt'],
         },
       });
+      queryClient.setQueryData(['reportFormStarted', escortId], true);
     }
-  }, [reportDefault, methods]);
+  }, [reportDefault, methods, escortId, queryClient]);
 
   const { Funnel, Step, nextStep, currentStep, handleBackStep } = useFunnel({
     defaultStep: 'time',

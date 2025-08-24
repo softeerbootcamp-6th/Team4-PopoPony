@@ -1,6 +1,7 @@
 import { Button } from '@components';
 import { PageLayout } from '@layouts';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
+import { useQueryClient } from '@tanstack/react-query';
 
 export const Route = createFileRoute('/helper/escort/$escortId/report/completed')({
   component: RouteComponent,
@@ -8,6 +9,8 @@ export const Route = createFileRoute('/helper/escort/$escortId/report/completed'
 
 function RouteComponent() {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
+  const { escortId } = Route.useParams();
 
   return (
     <>
@@ -15,7 +18,10 @@ function RouteComponent() {
         background={false}
         showBack={false}
         showClose={true}
-        onClose={() => navigate({ to: '/helper' })}
+        onClose={() => {
+          queryClient.removeQueries({ queryKey: ['reportFormStarted', escortId] });
+          navigate({ to: '/helper' });
+        }}
       />
       <PageLayout.Content>
         <div className='flex h-full flex-col'>
@@ -40,7 +46,13 @@ function RouteComponent() {
         </div>
       </PageLayout.Content>
       <PageLayout.Footer>
-        <Button onClick={() => navigate({ to: '/helper' })}>홈으로 가기</Button>
+        <Button
+          onClick={() => {
+            queryClient.removeQueries({ queryKey: ['reportFormStarted', escortId] });
+            navigate({ to: '/helper' });
+          }}>
+          홈으로 가기
+        </Button>
       </PageLayout.Footer>
     </>
   );

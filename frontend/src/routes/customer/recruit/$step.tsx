@@ -3,6 +3,7 @@ import { PageLayout } from '@layouts';
 import { recruitStepSearchSchema, type RecruitFormValues } from '@customer/types';
 import { useFunnel, useModal } from '@hooks';
 import { createFileRoute, redirect, useRouter } from '@tanstack/react-router';
+import { useQueryClient, type QueryClient } from '@tanstack/react-query';
 import { FormProvider, useForm } from 'react-hook-form';
 import {
   Profile,
@@ -17,12 +18,17 @@ import {
 
 export const Route = createFileRoute('/customer/recruit/$step')({
   validateSearch: recruitStepSearchSchema,
-  beforeLoad: async ({ search }) => {
-    const { place } = search;
-    if (place && !(place === 'meeting' || place === 'hospital' || place === 'return')) {
-      throw redirect({
-        to: '/customer',
-      });
+  beforeLoad: async ({ params, context }) => {
+    const { step } = params;
+    const { queryClient } = context as { queryClient: QueryClient };
+    if (step !== 'profile') {
+      const started = queryClient.getQueryData<boolean>(['recruitFormStarted']);
+      if (!started) {
+        throw redirect({
+          to: '/customer/recruit/$step',
+          params: { step: 'profile' },
+        });
+      }
     }
   },
   component: RouteComponent,
@@ -34,6 +40,8 @@ function RouteComponent() {
   const router = useRouter();
   const { isOpen, openModal, closeModal } = useModal();
   const methods = useForm<RecruitFormValues>({ shouldUnregister: false });
+  const queryClient = useQueryClient();
+  queryClient.setQueryData(['recruitFormStarted'], true);
 
   const { Funnel, Step, nextStep, currentStep, handleBackStep } = useFunnel({
     defaultStep: 'profile',
