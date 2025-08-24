@@ -1,12 +1,55 @@
 import { EscortCard, ProgressIndicator, Tabs, Spinner } from '@components';
 import { DetailTab, ReportTab } from '@helper/components';
 import { PageLayout } from '@layouts';
-import { createFileRoute, useParams } from '@tanstack/react-router';
+import { createFileRoute, useParams, redirect } from '@tanstack/react-router';
 import type { RecruitDetailResponse } from '@helper/types';
 import { getRecruitById } from '@helper/apis';
 import { dateFormat, timeFormat } from '@utils';
+import { $api, NotFoundError } from '@apis';
 
 export const Route = createFileRoute('/helper/escort/$escortId/')({
+  beforeLoad: async ({ context, params }) => {
+    const { queryClient } = context;
+    const escortId = Number(params.escortId);
+    const existsOptions = $api.queryOptions(
+      'get',
+      '/api/recruits/{recruitId}/status',
+      { params: { path: { recruitId: escortId } } },
+      { throwOnError: true, staleTime: 30_000, gcTime: 300_000 }
+    );
+
+    // 존재하지 않는 리소스(404)는 즉시 상위 에러 핸들링으로 위임
+    try {
+      await queryClient.ensureQueryData(existsOptions);
+    } catch (err) {
+      if (err instanceof NotFoundError) {
+        throw err;
+      }
+      // 기타 오류는 아래 리포트 분기로 처리
+    }
+    const options = $api.queryOptions(
+      'get',
+      '/api/reports/recruits/{recruitId}',
+      { params: { path: { recruitId: escortId } } },
+      { throwOnError: false, staleTime: 30_000, gcTime: 300_000 }
+    );
+
+    try {
+      const report = await queryClient.ensureQueryData(options);
+      const hasReport = Boolean(report?.data && report.data.reportId !== 0);
+      if (!hasReport) {
+        throw redirect({
+          to: '/helper/escort/$escortId/report/$step',
+          params: { escortId: params.escortId, step: 'time' },
+        });
+      }
+    } catch {
+      throw redirect({
+        to: '/helper/escort/$escortId/report/$step',
+        params: { escortId: params.escortId, step: 'time' },
+      });
+    }
+  },
   component: RouteComponent,
 });
 
@@ -22,6 +65,7 @@ const refineCardData = (recruitData: RecruitDetailResponse) => {
 };
 
 function RouteComponent() {
+  // const navigate = useNavigate();
   const { escortId } = useParams({ from: '/helper/escort/$escortId/' });
   const { data: recruitData, isLoading } = getRecruitById(Number(escortId));
 
