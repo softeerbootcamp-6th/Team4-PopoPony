@@ -76,17 +76,14 @@ public class LocationCacheRepository {
                     argv
             );
 
-            if (res == null) {
-                return new LocationUpdateResult(false, "no-reply");
-            }
-
             JsonNode node = objectMapper.readTree(res);
             int code = node.path("code").asInt(0);
             String reason = node.path("reason").asText("");
-            return new LocationUpdateResult(code == 1, reason);
+            boolean published = node.path("published").asBoolean(false);
+            return new LocationUpdateResult(code == 1, reason, published);
 
         } catch (Exception e) {
-            return new LocationUpdateResult(false, "lua-error:" + e.getMessage());
+            return new LocationUpdateResult(false, "lua-error:" + e.getMessage(), false);
         }
     }
 

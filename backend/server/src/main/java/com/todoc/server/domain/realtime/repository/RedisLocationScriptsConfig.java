@@ -37,7 +37,7 @@ public class RedisLocationScriptsConfig {
                 return cjson.encode({ code = 1, reason = reason, published = published or false })
               end
               local function err(reason)
-                return cjson.encode({ code = 0, reason = reason })
+                return cjson.encode({ code = 0, reason = reason, published = false })
               end
         
               -- ============ 유틸 ============
