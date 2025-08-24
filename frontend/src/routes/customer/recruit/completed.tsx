@@ -10,7 +10,7 @@ function RouteComponent() {
   const navigate = useNavigate();
 
   return (
-    <PageLayout background='bg-neutral-2'>
+    <>
       <PageLayout.Header
         background={false}
         showBack={false}
@@ -47,6 +47,6 @@ function RouteComponent() {
           신청 내역 보기
         </Button>
       </PageLayout.Footer>
-    </PageLayout>
+    </>
   );
 }

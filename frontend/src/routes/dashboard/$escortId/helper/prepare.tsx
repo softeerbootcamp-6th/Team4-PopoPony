@@ -58,7 +58,7 @@ function RouteComponent() {
   if (!isTmapLoaded) return <div>Loading...</div>;
 
   return (
-    <PageLayout>
+    <>
       <PageLayout.Header showBack={true} background={false} />
       <PageLayout.Content>
         <img
@@ -135,6 +135,6 @@ function RouteComponent() {
           </div>
         </div>
       </PageLayout.Content>
-    </PageLayout>
+    </>
   );
 }
