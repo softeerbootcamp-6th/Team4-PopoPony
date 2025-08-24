@@ -89,7 +89,7 @@ public class ReportService {
     }
 
     public boolean isReportExist(long recruitId) {
-        return reportJpaRepository.existsById(recruitId);
+        return reportJpaRepository.existsByRecruitId(recruitId);
     }
 
     public long getCount() {
