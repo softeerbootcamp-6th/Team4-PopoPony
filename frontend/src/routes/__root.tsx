@@ -25,7 +25,11 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
   errorComponent: ({ error }) => (
     <RootLayout>
       <Landing />
-      <RootFallbackUI error={error} />
+      <PageLayout>
+        <ErrorSuspenseBoundary isRoot>
+          <RootFallbackUI error={error} />
+        </ErrorSuspenseBoundary>
+      </PageLayout>
     </RootLayout>
   ),
 
@@ -33,8 +37,8 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
     <>
       <RootLayout>
         <Landing />
-        <ErrorSuspenseBoundary isRoot>
-          <PageLayout>
+        <PageLayout>
+          <ErrorSuspenseBoundary isRoot>
             <Outlet />
             <Toaster
               position='top-center'
@@ -42,8 +46,8 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
               duration={1000}
               richColors={true}
             />
-          </PageLayout>
-        </ErrorSuspenseBoundary>
+          </ErrorSuspenseBoundary>
+        </PageLayout>
       </RootLayout>
       <div className='text-[16px]'>
         <TanStackRouterDevtools />
