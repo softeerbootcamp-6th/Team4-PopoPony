@@ -35,44 +35,57 @@ public class RedisSubscriber implements MessageListener {
      */
     @Override
     public void onMessage(Message message, byte[] pattern) {
-        String channel = new String(message.getChannel(), StandardCharsets.UTF_8);
-        String data = new String(message.getBody(), StandardCharsets.UTF_8);
-
-        var matcher = CH.matcher(channel);
-        if (!matcher.matches()) {
-            return;
-        }
-
-        String escortIdStr = matcher.group(1);
-        String roleRaw = matcher.group(2); // helper | patient (대소문자 섞여도 허용)
-
-        long escortId;
         try {
-            escortId = Long.parseLong(escortIdStr);
-        } catch (NumberFormatException e) {
-            log.warn("Ignore pubsub (invalid escortId): channel={}, data={}", channel, data);
-            return;
-        }
+            final String channel = new String(message.getChannel(), StandardCharsets.UTF_8);
+            final String data    = new String(message.getBody(), StandardCharsets.UTF_8);
 
-        LocationRedisDto dto;
-        try {
-            dto = JsonUtils.fromJson(data, LocationRedisDto.class);
-            if (dto == null) return;
+            var matcher = CH.matcher(channel);
+            if (!matcher.matches()) {
+                log.debug("Ignore pubsub (channel mismatch): {}", channel);
+                return;
+            }
+
+            final long escortId;
+            try {
+                escortId = Long.parseLong(matcher.group(1));
+            } catch (NumberFormatException e) {
+                log.warn("Ignore pubsub (invalid escortId): channel={}, data={}", channel, data);
+                return;
+            }
+
+            final String roleRaw = matcher.group(2); // HELPER|PATIENT (대소문자 섞여도 허용)
+            final Role role = Role.from(roleRaw).orElse(null);
+            if (role == null) {
+                log.warn("Ignore pubsub (invalid role): channel={}, data={}", channel, data);
+                return;
+            }
+
+            final LocationRedisDto dto = JsonUtils.fromJson(data, LocationRedisDto.class);
+            if (dto == null) {
+                log.warn("Ignore pubsub (null dto): channel={}, data={}", channel, data);
+                return;
+            }
+
+            final String eventName = roleRaw.toLowerCase(Locale.ROOT) + "-location";
+            final Envelope envelope = new Envelope(eventName, LocationResponse.from(dto));
+
+            final Set<Role> targets = (role == Role.HELPER)
+                    ? Role.TO_CUSTOMER_AND_PATIENT
+                    : Role.TO_CUSTOMER_AND_HELPER;
+
+            try {
+                sessionRegistry.broadcastToRolesAsync(escortId, targets, envelope);
+            } catch (Exception e) {
+                log.warn("broadcastToRoles failed: escortId={}, err={}", escortId, e.toString());
+            }
+            try {
+                nchanPublisher.publishAsync(escortId, envelope);
+            } catch (Exception e) {
+                log.warn("nchan publish async failed: escortId={}, err={}", escortId, e.toString());
+            }
+
         } catch (Exception ex) {
-            log.warn("Ignore pubsub (parse fail): channel={}, data={}", channel, data, ex);
-            return;
+            log.warn("onMessage failed: {}", ex.toString());
         }
-
-        String eventName = roleRaw.toLowerCase(Locale.ROOT) + "-location";
-        Envelope envelope = new Envelope(eventName, LocationResponse.from(dto));
-
-        Role role = Role.from(roleRaw).orElseThrow(RealtimeInvalidRoleException::new);
-        Set<Role> targets = (role == Role.HELPER)
-                ? Role.TO_CUSTOMER_AND_PATIENT
-                : Role.TO_CUSTOMER_AND_HELPER;
-
-        sessionRegistry.broadcastToRoles(escortId, targets, envelope);
-
-        nchanPublisher.publish(escortId, envelope);
     }
 }

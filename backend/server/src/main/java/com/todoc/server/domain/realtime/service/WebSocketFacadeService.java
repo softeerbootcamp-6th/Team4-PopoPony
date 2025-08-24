@@ -8,13 +8,18 @@ import com.todoc.server.domain.escort.service.EscortService;
 import com.todoc.server.domain.escort.web.dto.response.EscortStatusResponse;
 import com.todoc.server.domain.realtime.exception.RealtimeAlreadyMetPatientException;
 import com.todoc.server.domain.realtime.exception.RealtimeCustomerLocationException;
+import com.todoc.server.domain.realtime.exception.RealtimeLocationNotUpdatedException;
 import com.todoc.server.domain.realtime.repository.dto.LocationUpdateResult;
 import com.todoc.server.domain.realtime.web.dto.request.LocationUpdateRequest;
 import com.todoc.server.domain.realtime.web.dto.response.Envelope;
 import com.todoc.server.domain.realtime.web.dto.response.ErrorResponse;
 import com.todoc.server.domain.realtime.web.dto.response.LocationResponse;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 
@@ -26,9 +31,11 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class WebSocketFacadeService {
 
+    private static final Logger log = LoggerFactory.getLogger(WebSocketFacadeService.class);
     private final WebSocketSessionRegistry sessionRegistry;
     private final EscortService escortService;
     private final LocationService locationService;
+    private final ThreadPoolTaskExecutor wsExecutor;
 
     /** WebSocket 연결 직후 검증·등록·스냅샷 전송 */
     public void onConnect(Long escortId, Role role, WebSocketSession session) throws Exception {
@@ -36,20 +43,27 @@ public class WebSocketFacadeService {
         EscortStatus escortStatus = escortService.getById(escortId).getStatus();
 
         if (role == Role.PATIENT && escortStatus != EscortStatus.MEETING) {
-            throw new RealtimeAlreadyMetPatientException();
+            session.close(CloseStatus.POLICY_VIOLATION.withReason("patient-not-in-meeting"));
+            return;
         }
         sessionRegistry.register(escortId, role, session);
 
-        // 동행 상태 알림
-        sendStatusSnapshot(session, escortId);
+        wsExecutor.execute(() -> {
+            try {
+                // 동행 상태 알림
+                if (session.isOpen()) sendStatusSnapshot(session, escortId);
 
-        // 마지막 위치 스냅샷
-        if (role != Role.PATIENT && escortStatus == EscortStatus.MEETING) {
-            sendLocationSnapshot(session, escortId, Role.PATIENT);
-        }
-        if (role != Role.HELPER) {
-            sendLocationSnapshot(session, escortId, Role.HELPER);
-        }
+                // 마지막 위치 스냅샷
+                if (session.isOpen() && role != Role.PATIENT && escortStatus == EscortStatus.MEETING) {
+                    sendLocationSnapshot(session, escortId, Role.PATIENT);
+                }
+                if (session.isOpen() && role != Role.HELPER) {
+                    sendLocationSnapshot(session, escortId, Role.HELPER);
+                }
+            } catch (Exception e) {
+                log.warn("init snapshot failed: {}", e.toString());
+            }
+        });
     }
 
     /** 위치 업데이트에 대한 처리 */
@@ -70,9 +84,16 @@ public class WebSocketFacadeService {
         request.setSeq(seq);
 
         // 저장 + TTL + PUBLISH
-        LocationUpdateResult result = locationService.updateLatestLocationByWebSocket(session, request);
+        try {
+            LocationUpdateResult result = locationService.updateLatestLocationByWebSocket(session, request);
 
-        System.out.println(result.getReason());
+            // 위치 갱신 안한 경우 클라이언트에 이유 전달
+            if (!result.isUpdated()) {
+                sendError(session, new RealtimeLocationNotUpdatedException(result.getReason()));
+            }
+        } catch (Exception e) {
+            sendError(session, new RealtimeLocationNotUpdatedException("server-error"));
+        }
     }
 
     /** 마지막 위치 스냅샷 전송 */

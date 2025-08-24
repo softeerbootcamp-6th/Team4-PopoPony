@@ -27,6 +27,12 @@ public class WebSocketRealtimeHandler extends TextWebSocketHandler {
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
         Role role = (Role) session.getAttributes().get("role");
         Long escortId = (Long) session.getAttributes().get("escortId");
+
+        if (role == null || escortId == null) {
+            session.close(CloseStatus.POLICY_VIOLATION.withReason("bad-session"));
+            return;
+        }
+
         try {
             webSocketFacadeService.onConnect(escortId, role, session);
         } catch (RuntimeException ex) {
@@ -39,6 +45,9 @@ public class WebSocketRealtimeHandler extends TextWebSocketHandler {
      */
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
+
+        if (!session.isOpen()) return;
+
         String text = message.getPayload();
 
         Envelope envelope = JsonUtils.fromJson(text, new TypeReference<>() {});
