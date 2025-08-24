@@ -1,5 +1,4 @@
 import { Logo } from '@components';
-import { PageLayout } from '@layouts';
 import { createFileRoute, Link } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/')({
