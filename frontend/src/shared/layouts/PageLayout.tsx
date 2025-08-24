@@ -1,4 +1,4 @@
-import { TopAppBar, BottomCTA } from '@components';
+import { TopAppBar, BottomCTA, ProgressBar } from '@components';
 import type { TopAppBarProps } from '../components/TopAppBar';
 import type { BottomCTAProps } from '../components/BottomCTA';
 
@@ -21,20 +21,41 @@ const PageLayout = ({ children, background = 'bg-background-default-white' }: Pa
   );
 };
 
-const Header = ({ title, showBack, showClose, background, onClose, className }: TopAppBarProps) => {
+const Header = ({
+  title,
+  showBack,
+  showClose,
+  background,
+  onClose,
+  className,
+  showProgress,
+  currentStep,
+  maxStep,
+}: TopAppBarProps & {
+  showProgress?: boolean;
+  currentStep?: number;
+  maxStep?: number;
+}) => {
   return (
-    <TopAppBar
-      title={title}
-      showBack={showBack}
-      showClose={showClose}
-      background={background}
-      onClose={onClose}
-      className={className}
-    />
+    <div className='sticky top-0 z-20'>
+      <TopAppBar
+        title={title}
+        showBack={showBack}
+        showClose={showClose}
+        background={background}
+        onClose={onClose}
+        className={className}
+      />
+      {showProgress && maxStep && currentStep && (
+        <div className='bg-background-default-white flex-shrink-0 px-[2rem] pb-[1.2rem]'>
+          <ProgressBar maxStep={maxStep} currentStep={currentStep} />
+        </div>
+      )}
+    </div>
   );
 };
 
-const PageLayoutContent = ({ children, className }: PageLayoutContentProps) => {
+const PageLayoutContent = ({ children, className = '' }: PageLayoutContentProps) => {
   return <div className={`flex-1 ${className}`}>{children}</div>;
 };
 

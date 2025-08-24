@@ -71,36 +71,27 @@ function RouteComponent() {
         showBack={currentStep.includes('searchRoute')}
         showClose={true}
         onClose={handleClose}
+        showProgress={currentStep !== 'final' && !currentStep.includes('searchRoute')}
+        currentStep={stepList.indexOf(currentStep) + 1}
+        maxStep={stepList.length}
       />
       <PageLayout.Content>
-        <div className='flex h-full flex-col'>
-          {currentStep !== 'final' && !currentStep.includes('searchRoute') ? (
-            <div className='flex-shrink-0 px-[2rem] pb-[2rem]'>
-              <ProgressBar
-                maxStep={stepList.length}
-                currentStep={stepList.indexOf(currentStep) + 1}
-              />
-            </div>
-          ) : null}
-          <div className='flex-1 overflow-hidden'>
-            <FormProvider {...methods}>
-              <Funnel>
-                <Step name='time'>
-                  <Time handleNextStep={nextStep} />
-                </Step>
-                <Step name='reservation'>
-                  <Reservation handleNextStep={nextStep} handleBackStep={handleBackStep} />
-                </Step>
-                <Step name='taxi'>
-                  <Taxi handleNextStep={nextStep} handleBackStep={handleBackStep} />
-                </Step>
-                <Step name='detail'>
-                  <ReportDetail />
-                </Step>
-              </Funnel>
-            </FormProvider>
-          </div>
-        </div>
+        <FormProvider {...methods}>
+          <Funnel>
+            <Step name='time'>
+              <Time handleNextStep={nextStep} />
+            </Step>
+            <Step name='reservation'>
+              <Reservation handleNextStep={nextStep} handleBackStep={handleBackStep} />
+            </Step>
+            <Step name='taxi'>
+              <Taxi handleNextStep={nextStep} handleBackStep={handleBackStep} />
+            </Step>
+            <Step name='detail'>
+              <ReportDetail />
+            </Step>
+          </Funnel>
+        </FormProvider>
       </PageLayout.Content>
 
       <Modal isOpen={isOpen} onClose={handleDenyClose}>
