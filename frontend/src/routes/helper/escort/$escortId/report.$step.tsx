@@ -26,7 +26,6 @@ function RouteComponent() {
 
   useEffect(() => {
     if (reportDefault) {
-      console.log(reportDefault);
       methods.reset({
         actualMeetingTime: `${dateFormat(reportDefault.actualMeetingTime, 'HH:mm')}` || '',
         actualReturnTime: `${dateFormat(reportDefault.actualReturnTime, 'HH:mm')}` || '',

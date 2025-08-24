@@ -36,7 +36,7 @@ export const errorMiddleware: Middleware = {
   async onResponse({ response }) {
     const status = response.status;
     const body = await readJson<TBusinessResponse>(response);
-    console.log('body from middleware', body);
+    // console.log('body from middleware', body);
     /**
      * body는 네트워크 에러가 아닌 이상 항상
      * code: number, status: number, message: string, data:[]
@@ -62,7 +62,7 @@ export const errorMiddleware: Middleware = {
       throw new HTTPError(status, response.statusText || 'HTTP Error');
     }
 
-    // Business layer (HTTP 2xx but body indicates error)
+    // 백엔드 컨벤션 관련 에러 (HTTP 2xx 이지만 body에 에러 정보가 있음)
     if (body && typeof body.status === 'number' && body.status !== 200) {
       const message = resolveMessage({
         message: body.message,
@@ -77,8 +77,8 @@ export const errorMiddleware: Middleware = {
     return response;
   },
   async onError({ error }) {
-    // Map fetch aborts to TimeoutError
-    console.log('error from middleware', error);
+    // TimeoutError
+    // console.log('error from middleware', error);
     if (error && typeof error === 'object' && (error as Error).name === 'AbortError') {
       throw new TimeoutError('서버 응답이 없습니다. 다시 시도해주세요.');
     }
