@@ -11,7 +11,7 @@ type Props = {
 
 const ErrorSuspenseBoundary = ({ children, isRoot = false }: Props) => {
   const { location } = useRouterState();
-  const resetKeys = [location.pathname];
+  const resetKeys = [location.href];
   return (
     <QueryErrorResetBoundary>
       {({ reset }) => (

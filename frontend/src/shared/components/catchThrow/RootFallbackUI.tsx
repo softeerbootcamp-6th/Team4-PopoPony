@@ -5,16 +5,15 @@ import { ApiError, AuthError, NotFoundError } from '@apis';
 const RootFallbackUI = ({ error, onReset }: { error: Error; onReset?: () => void }) => {
   const navigate = useNavigate();
 
-  const handleClickHome = () => {
+  const handleClickHome = async () => {
+    await navigate({ to: '/' });
     if (onReset) onReset();
-    navigate({ to: '/' });
   };
-  const handleClickLogin = () => {
+  const handleClickLogin = async () => {
+    await navigate({ to: '/login' });
     if (onReset) onReset();
-    navigate({ to: '/login' });
   };
-  const handleClickRefresh = () => {
-    if (onReset) onReset();
+  const handleClickRefresh = async () => {
     window.location.reload();
   };
 
