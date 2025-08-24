@@ -10,6 +10,7 @@ import com.todoc.server.domain.escort.repository.EscortJpaRepository;
 import com.todoc.server.domain.escort.web.dto.request.EscortMemoUpdateRequest;
 import com.todoc.server.domain.realtime.service.NchanPublisher;
 import com.todoc.server.domain.realtime.service.WebSocketSessionRegistry;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -55,6 +56,7 @@ class EscortServiceTest {
     }
 
     @Nested
+    @Transactional
     @DisplayName("proceedEscort")
     class ProceedEscort {
 

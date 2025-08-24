@@ -218,7 +218,7 @@ INSERT INTO recruit (
        CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 
       (8, 3, 4, 3, '2025-08-08', '08:30:00', '11:00:00',
-       '물리치료', '약 복용 시간 고려해 주세요.', 24000, 'IN_PROGRESS',
+       '물리치료', '약 복용 시간 고려해 주세요.', 24000, 'DONE',
        CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 
       (9, 4, 5, 4, '2025-08-09', '14:00:00', '17:00:00',

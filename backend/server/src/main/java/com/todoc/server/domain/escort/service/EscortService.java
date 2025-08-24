@@ -3,6 +3,7 @@ package com.todoc.server.domain.escort.service;
 import com.todoc.server.common.enumeration.EscortStatus;
 import com.todoc.server.common.enumeration.RecruitStatus;
 import com.todoc.server.common.enumeration.Role;
+import com.todoc.server.common.util.TransactionUtils;
 import com.todoc.server.domain.escort.entity.Escort;
 import com.todoc.server.domain.escort.entity.Recruit;
 import com.todoc.server.domain.escort.exception.EscortInvalidProceedException;
@@ -128,19 +129,19 @@ public class EscortService {
         }
         if (to == EscortStatus.WRITING_REPORT) {
             escort.setActualReturnTime(kstNow);
+            Recruit recruit = escort.getRecruit();
+            recruit.setStatus(RecruitStatus.DONE);
         }
         escort.setStatus(to);
 
         // 커밋 후 비동기 알림/세션 조작
-        TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
-            @Override public void afterCommit() {
-                Envelope envelope = new Envelope("status", new EscortStatusResponse(to.getLabel(), kstNow));
-                sessionRegistry.sendToRoleAsync(escortId, Role.CUSTOMER, envelope);
-                nchanPublisher.publishAsync(escortId, envelope);
+        TransactionUtils.runAfterCommitOrNow(() -> {
+            Envelope env = new Envelope("status", new EscortStatusResponse(to.getLabel(), kstNow));
+            sessionRegistry.sendToRoleAsync(escortId, Role.CUSTOMER, env);
+            nchanPublisher.publishAsync(escortId, env);
 
-                if (to == EscortStatus.HEADING_TO_HOSPITAL) {
-                    sessionRegistry.removeAsync(escortId, Role.PATIENT); // 기존 SSE/WS 정리
-                }
+            if (to == EscortStatus.HEADING_TO_HOSPITAL) {
+                sessionRegistry.removeAsync(escortId, Role.PATIENT);
             }
         });
     }
