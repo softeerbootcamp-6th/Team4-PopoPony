@@ -3,6 +3,7 @@ import { useRouter } from '@tanstack/react-router';
 
 interface FormLayoutProps {
   children: React.ReactNode;
+  className?: string;
 }
 
 const FormLayout = ({ children }: FormLayoutProps) => {
@@ -28,20 +29,16 @@ const SubTitle = ({ className, children }: { className?: string; children: React
   );
 };
 
-const Content = ({ children }: FormLayoutProps) => {
+const Content = ({ children, className = 'bg-background-default-white' }: FormLayoutProps) => {
   return (
-    <div className='bg-background-default-white flex flex-1 flex-col gap-[3.2rem] overflow-y-auto p-[2rem]'>
+    <div className={`flex flex-1 flex-col gap-[3.2rem] overflow-y-auto p-[2rem] ${className}`}>
       {children}
     </div>
   );
 };
 
 const Footer = ({ children }: FormLayoutProps) => {
-  return (
-    <div className='flex-shrink-0'>
-      <BottomCTA>{children}</BottomCTA>
-    </div>
-  );
+  return <BottomCTA>{children}</BottomCTA>;
 };
 
 const FooterPrevNext = ({

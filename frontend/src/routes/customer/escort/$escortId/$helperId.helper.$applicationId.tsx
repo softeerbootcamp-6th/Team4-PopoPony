@@ -6,7 +6,7 @@ import { IcPhoneFill, IcVerified } from '@icons';
 import { PageLayout } from '@layouts';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import type { EscortStrength } from '@types';
-import { dateFormat, formatImageUrl } from '@utils';
+import { call, dateFormat, formatImageUrl } from '@utils';
 
 export const Route = createFileRoute('/customer/escort/$escortId/$helperId/helper/$applicationId')({
   validateSearch: (search: { canSelect?: string } | undefined) => ({
@@ -39,7 +39,7 @@ function RouteComponent() {
     helperSimple || {};
 
   return (
-    <PageLayout>
+    <>
       <PageLayout.Header title='도우미' showBack />
       <PageLayout.Content>
         <div className='flex flex-col gap-[0.8rem] px-[2rem] py-[1.6rem]'>
@@ -63,7 +63,9 @@ function RouteComponent() {
             variant='secondary'
             size='md'
             onClick={() => {
-              window.open(`tel:${contact}`, '_blank');
+              if (contact) {
+                call(contact);
+              }
             }}>
             <IcPhoneFill className='[&_path]:fill-icon-neutral-primary' />
             <span className='ml-[0.8rem]'>도우미에게 전화걸기</span>
@@ -78,7 +80,7 @@ function RouteComponent() {
         </div>
 
         <Tabs defaultValue='동행후기'>
-          <Tabs.TabsList>
+          <Tabs.TabsList withHeader>
             <Tabs.TabsTrigger value='자기소개'>자기소개</Tabs.TabsTrigger>
             <Tabs.TabsTrigger value='동행후기'>동행후기</Tabs.TabsTrigger>
           </Tabs.TabsList>
@@ -173,6 +175,6 @@ function RouteComponent() {
           <Modal.CloseButton onClick={closeModal}>돌아가기</Modal.CloseButton>
         </Modal.ButtonContainer>
       </Modal>
-    </PageLayout>
+    </>
   );
 }

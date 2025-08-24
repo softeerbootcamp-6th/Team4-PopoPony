@@ -33,7 +33,7 @@ function RouteComponent() {
     helperSimple || {};
 
   return (
-    <PageLayout>
+    <>
       <PageLayout.Header title='도우미' showBack />
       <PageLayout.Content>
         <div className='flex flex-col gap-[0.8rem] px-[2rem] py-[1.6rem]'>
@@ -76,7 +76,7 @@ function RouteComponent() {
         </div>
 
         <Tabs defaultValue='자기소개'>
-          <Tabs.TabsList>
+          <Tabs.TabsList withHeader>
             <Tabs.TabsTrigger value='자기소개'>자기소개</Tabs.TabsTrigger>
             <Tabs.TabsTrigger value='동행후기'>동행후기</Tabs.TabsTrigger>
           </Tabs.TabsList>
@@ -146,6 +146,6 @@ function RouteComponent() {
           </Tabs.TabsContent>
         </Tabs>
       </PageLayout.Content>
-    </PageLayout>
+    </>
   );
 }

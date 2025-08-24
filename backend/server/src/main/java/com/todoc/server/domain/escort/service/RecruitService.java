@@ -48,7 +48,6 @@ public class RecruitService {
      *   <li>2. 진행중인 목록: '동행중' 상태를 최상단에 표시, 동행일 오름차순 정렬</li>
      *   <li>3. 완료된 목록: 동행일 내림차순 정렬</li>
      * </ul>
-     *
      * @param userId (authId)
      * @return 분리된 '동행 신청 목록'응답 DTO
      */
@@ -123,14 +122,12 @@ public class RecruitService {
 
     /**
      * userId에 해당하는 고객의 이전 동행 신청 목록을 조회하는 함수
-     *
      * @param userId
      * @return 이전 동행 신청 목록 응답 DTO(RecruitHistoryListResponse) size = 5
      */
     @Transactional(readOnly = true)
     public RecruitHistoryListResponse getRecruitHistoryListByUserId(Long userId) {
-        List<RecruitHistorySimpleResponse> recruitList = recruitQueryRepository.findRecruitListSortedByUserId(
-                userId, 5);
+        List<RecruitHistorySimpleResponse> recruitList = recruitQueryRepository.findRecruitListSortedByUserId(userId, 5);
 
         return RecruitHistoryListResponse.builder()
                 .beforeList(recruitList)
@@ -139,7 +136,6 @@ public class RecruitService {
 
     /**
      * recruitId에 해당하는 동행 신청에 대한 상세 정보를 조회하는 함수 (Request 형식과 동일한 형식의 Response DTO)
-     *
      * @param recruitId
      * @return 동행 신청 상세 정보 DTO(RecruitHistoryDetailResponse)
      */
@@ -268,7 +264,6 @@ public class RecruitService {
      *   <li>2. 진행중인 목록: '동행중' 상태를 최상단에 표시, 동행일 오름차순 정렬</li>
      *   <li>3. 완료된 목록: 동행일 내림차순 정렬</li>
      * </ul>
-     *
      * @param helperUserId (helperUserId)
      * @return 분리된 '동행 신청 목록'응답 DTO
      */

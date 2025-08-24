@@ -145,7 +145,7 @@ public class LocationCacheRepository {
 //                        .build()
 //        );
 //    }
-
+  
     private static String key(long escortId, Role role) {
         return "escort:location:" + escortId + ":" + role.getLabel();
     }
@@ -159,6 +159,7 @@ public class LocationCacheRepository {
         if (s.isEmpty() || s.equalsIgnoreCase("null")) return null;
         try { return Double.parseDouble(s); } catch (NumberFormatException e) { return null; }
     }
+
 
     private static Long parseNullableLong(Object v) {
         if (v == null) return null;
@@ -180,4 +181,8 @@ public class LocationCacheRepository {
     private static String epochOrNow(Instant ts) {
         return Long.toString(ts == null ? System.currentTimeMillis() : ts.toEpochMilli());
     }
+
+    private static double parseDouble(Object v) { return Double.parseDouble(String.valueOf(v)); }
+    private static long parseLong(Object v) { return Long.parseLong(String.valueOf(v)); }
+
 }

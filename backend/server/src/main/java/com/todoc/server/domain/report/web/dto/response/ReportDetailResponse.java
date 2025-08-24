@@ -72,4 +72,18 @@ public class ReportDetailResponse {
         this.taxiFee = taxiFee;
         this.extraTimeFee = extraTimeFee;
     }
+
+    public ReportDetailResponse() {
+        this.reportId = 0L;
+        this.actualMeetingTime = LocalTime.now();
+        this.actualReturnTime = LocalTime.now();
+        this.extraMinutes = 0;
+        this.hasNextAppointment = false;
+        this.baseFee = 0;
+        this.taxiFee = 0;
+        this.extraTimeFee = 0;
+        this.nextAppointmentTime = null;
+        this.imageAttachmentList = null;
+        this.description = null;
+    }
 }
