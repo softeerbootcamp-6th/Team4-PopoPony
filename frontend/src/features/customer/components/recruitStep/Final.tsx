@@ -73,7 +73,7 @@ const Final = ({ handleBackStep }: FunnelStepProps) => {
   return (
     <>
       <FormLayout>
-        <FormLayout.Content>
+        <FormLayout.Content className='bg-neutral-10'>
           <div className='flex flex-col gap-[2rem]'>
             <FormLayout.TitleWrapper>
               <FormLayout.Title>동행 신청 확인</FormLayout.Title>
