@@ -68,35 +68,34 @@ public class WebSocketAuthHandshakeInterceptor implements HandshakeInterceptor {
             return false;
         }
 
-        // 세션 인증 확인
-        HttpSession httpSession = request.getSession(false);
-        if (httpSession == null) {
-            res.setStatusCode(HttpStatus.UNAUTHORIZED);
-            res.getHeaders().add("X-WS-Reason", "no-session");
-            return false;
-        }
-        Object authObj = httpSession.getAttribute("AUTH_USER");
-        if (!(authObj instanceof SessionAuth auth)) {
-            res.setStatusCode(HttpStatus.UNAUTHORIZED);
-            res.getHeaders().add("X-WS-Reason", "no-auth");
-            return false;
-        }
-
-        // MEETING 가드: 환자는 MEETING 상태에서만 업그레이드 허용
-        EscortStatus status = escortService.getById(escortId).getStatus();
-        if (role == Role.PATIENT && status != EscortStatus.MEETING) {
-            res.setStatusCode(HttpStatus.FORBIDDEN); // 403 → 소켓 "아예 안 열림"
-            res.getHeaders().add("X-WS-Reason", "patient-not-in-meeting");
-            return false;
-        }
-
-        // 이후 핸들러에서 사용할 속성 세팅
-        attrs.put("authId", auth.id());
         attrs.put("role", role);
         attrs.put("escortId", escortId);
         attrs.put("sessionId", UUID.randomUUID().toString());
 
-        return true; // 업그레이드 진행
+        // 환자는 세션/인증 정보 없어도 만남중 상태면 연결
+        if (role == Role.PATIENT) {
+            EscortStatus status = escortService.getById(escortId).getStatus();
+            if (status != EscortStatus.MEETING) {
+                res.setStatusCode(HttpStatus.FORBIDDEN); // 403 → 소켓 "아예 안 열림"
+                res.getHeaders().add("X-WS-Reason", "patient-not-in-meeting");
+                return false;
+            }
+            return true;
+        }
+
+        // 세션 인증 확인
+        HttpSession session = request.getSession(false);
+        if (session == null) {
+            res.setStatusCode(HttpStatus.UNAUTHORIZED);
+            res.getHeaders().add("X-WS-Reason", "no-session");
+            return false;
+        }
+
+        SessionAuth auth = (SessionAuth) session.getAttribute("AUTH_USER");
+        long authId = auth.id();
+        attrs.put("authId", authId);
+
+        return true;
     }
 
     @Override public void afterHandshake(ServerHttpRequest req,
