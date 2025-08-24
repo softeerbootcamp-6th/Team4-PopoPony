@@ -23,6 +23,9 @@ public class NchanPublisher {
             .connectTimeout(Duration.ofSeconds(2))
             .build();
 
+    /**
+     * 서버에서 Nchan으로 메세지 Publish
+     */
     public void publish(long escortId, Envelope envelope) {
 
         try {

@@ -5,8 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
 
 /**
- * Redis에서 실행할 Lua 스크립트 Bean 등록
- * 기능: 변화감지(최소이동/seq 가드) → 속도 계산 → EMA → moving 판정 → HSET+TTL → PUBLISH 까지 원자 실행
+ * Redis에서 실행할 Lua 스크립트를 Bean으로 등록
  */
 @Configuration
 public class RedisLocationScriptsConfig {
@@ -23,7 +22,7 @@ public class RedisLocationScriptsConfig {
               --   - Redis Hash(HSET + TTL) 저장과 Pub/Sub 발행을 한 번에(원자적으로) 처리
               --
               --   - 각 역할(HELPER/PATIENT)의 최신 위치를 별도 키에 저장
-              --   - 키 형식: KEYS[1] = "escort:loc:{escortId}:{role}"
+              --   - 키 형식: KEYS[1] = "escort:location:{escortId}:{role}"
               --   - Pub/Sub 채널: "escort:ch:{escortId}:{role}"
               --
               -- 인자 목록:

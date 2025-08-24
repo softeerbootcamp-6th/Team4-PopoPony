@@ -30,7 +30,7 @@ public class WebSocketFacadeService {
     private final EscortService escortService;
     private final LocationService locationService;
 
-    /** 연결 직후 검증·등록·스냅샷 전송 */
+    /** WebSocket 연결 직후 검증·등록·스냅샷 전송 */
     public void onConnect(Long escortId, Role role, WebSocketSession session) throws Exception {
 
         EscortStatus escortStatus = escortService.getById(escortId).getStatus();
@@ -70,7 +70,7 @@ public class WebSocketFacadeService {
         request.setSeq(seq);
 
         // 저장 + TTL + PUBLISH
-        LocationUpdateResult result = locationService.registerByWebSocket(session, request);
+        LocationUpdateResult result = locationService.updateLatestLocationByWebSocket(session, request);
 
         System.out.println(result.getReason());
     }
@@ -80,12 +80,12 @@ public class WebSocketFacadeService {
         sendEnvelope(session, getLocationSnapshot(escortId, targetRole));
     }
 
-    /** 마지막 위치 스냅샷 전송 */
+    /** 동행 상태 스냅샷 전송 */
     private void sendStatusSnapshot(WebSocketSession session, Long escortId) {
         sendEnvelope(session, getStatusSnapshot(escortId));
     }
 
-    /** 전송 헬퍼: 항상 {type, payload} 포맷으로 보냄 */
+    /** Envelope를 JSON 문자열로 변환하여 WebSocket 세션에 전송 */
     public void sendEnvelope(WebSocketSession session, Envelope envelope) {
         if (session == null || !session.isOpen()) return;
         String json = JsonUtils.toJson(envelope);
@@ -95,12 +95,13 @@ public class WebSocketFacadeService {
         } catch (Exception ignore) {}
     }
 
-    /** 에러 응답 전송 헬퍼 */
+    /** 에러 응답 전송 */
     public void sendError(WebSocketSession session, Exception e) {
         ErrorResponse errorResponse = new ErrorResponse(e.getClass().getSimpleName(), e.getMessage());
         sendEnvelope(session, new Envelope(WebSocketMsgType.ERROR.getLabel(), errorResponse));
     }
 
+    /** 마지막 위치 스냅샷 생성 */
     public Envelope getLocationSnapshot(long escortId, Role targetRole) {
 
         LocationResponse latestLocation = locationService.getLatestLocation(escortId, targetRole);
@@ -108,6 +109,7 @@ public class WebSocketFacadeService {
                 Objects.requireNonNullElse(latestLocation, "NO_LOCATION"));
     }
 
+    /** 동행 상태 스냅샷 생성 */
     public Envelope getStatusSnapshot(long escortId) {
 
         EscortStatus escortStatus = escortService.getById(escortId).getStatus();
