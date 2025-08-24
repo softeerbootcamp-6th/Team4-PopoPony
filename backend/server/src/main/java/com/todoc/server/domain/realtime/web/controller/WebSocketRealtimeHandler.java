@@ -1,5 +1,6 @@
 package com.todoc.server.domain.realtime.web.controller;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.todoc.server.common.enumeration.Role;
 import com.todoc.server.common.util.JsonUtils;
 import com.todoc.server.domain.realtime.exception.WebSocketInvalidEnvelopeException;
@@ -20,7 +21,7 @@ public class WebSocketRealtimeHandler extends TextWebSocketHandler {
     private final WebSocketFacadeService webSocketFacadeService;
 
     /**
-     * 연결 직후 실행되는 메서드
+     * 연결 직후 실행되는 메서드 -> 스냅샷 전송
      */
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
@@ -34,13 +35,13 @@ public class WebSocketRealtimeHandler extends TextWebSocketHandler {
     }
 
     /**
-     * 수신한 메세지를 처리
+     * 수신한 메세지를 처리 -> 최신 위치 갱신
      */
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
         String text = message.getPayload();
 
-        Envelope envelope = JsonUtils.fromJson(text, new com.fasterxml.jackson.core.type.TypeReference<>() {});
+        Envelope envelope = JsonUtils.fromJson(text, new TypeReference<>() {});
         if (envelope == null || envelope.getType() == null) {
             webSocketFacadeService.sendError(session, new WebSocketInvalidEnvelopeException());
             return;
