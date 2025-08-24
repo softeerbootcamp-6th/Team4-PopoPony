@@ -7,4 +7,5 @@ import java.util.Optional;
 
 public interface ReportJpaRepository extends JpaRepository<Report, Long> {
     Optional<Report> findByRecruitId(Long recruitId);
+    boolean existsByRecruitId(Long recruitId);
 }

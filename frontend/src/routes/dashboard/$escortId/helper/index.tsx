@@ -1,10 +1,5 @@
 import { createFileRoute, redirect, useRouter } from '@tanstack/react-router';
-import {
-  getEscortDetail,
-  patchEscortStatusByEscortId,
-  patchEscortMemo,
-  postCurrentPosition,
-} from '@dashboard/apis';
+import { getEscortDetail, patchEscortStatusByEscortId, patchEscortMemo } from '@dashboard/apis';
 import { PageLayout } from '@layouts';
 import {
   Header,
@@ -20,7 +15,7 @@ import { IcHeadphoneQuestionmark } from '@icons';
 import { useState, useEffect, useRef, type ReactNode } from 'react';
 import { useMap } from '@hooks';
 import type { Position, TMapMarker } from '@types';
-import { useSSE } from '@dashboard/hooks';
+import { useWebSocket } from '@dashboard/hooks';
 import { updatedBefore } from '@helper/utils';
 
 export const Route = createFileRoute('/dashboard/$escortId/helper/')({
@@ -94,14 +89,14 @@ function RouteComponent() {
   const { data: escortDetailOrigin } = getEscortDetail(Number(recruitId));
   const { mutate: patchEscortMemoCall } = patchEscortMemo();
   const { mutate: patchEscortStatusByEscortIdCall } = patchEscortStatusByEscortId();
-  const { mutate: postCurrentPositionCall } = postCurrentPosition();
+  // const { mutate: postCurrentPositionCall } = postCurrentPosition();
   const timerRef = useRef<number | null>(null);
   const [memo, setMemo] = useState('');
   const { escortId, route, patient, customerContact, estimatedMeetingTime, purpose, extraRequest } =
     escortDetailOrigin.data;
   const [escortStatus, setEscortStatus] = useState(escortDetailOrigin.data.escortStatus);
   const [curLocation, setCurLocation] = useState<Position | null>(null);
-  const { patientLocations } = useSSE(String(escortId), 'helper');
+  const { patientLocations, sendLocation } = useWebSocket(String(escortId), 'helper');
 
   const {
     meetingToHospital,
@@ -147,7 +142,7 @@ function RouteComponent() {
     if (!('geolocation' in navigator)) return;
 
     navigator.geolocation.getCurrentPosition((position) => {
-      const { latitude, longitude } = position.coords;
+      const { latitude, longitude, accuracy } = position.coords;
 
       if (timerRef.current) {
         clearInterval(timerRef.current);
@@ -159,13 +154,7 @@ function RouteComponent() {
           lat: latitude,
           lon: longitude,
         });
-        postCurrentPositionCall({
-          params: { path: { escortId: Number(escortId) }, query: { role: 'helper' } },
-          body: {
-            latitude: latitude,
-            longitude: longitude,
-          },
-        });
+        sendLocation(latitude, longitude, accuracy);
       }, 1000);
     });
 
@@ -202,6 +191,9 @@ function RouteComponent() {
           const nextIndex = Math.min(currentIndex + 1, ESCORT_STATUS_ORDER.length - 1);
           const nextStatus = ESCORT_STATUS_ORDER[nextIndex];
           setEscortStatus(nextStatus);
+        },
+        onError: (error) => {
+          console.error('Failed to update escort status:', error);
         },
       }
     );
@@ -243,8 +235,8 @@ function RouteComponent() {
           isReturn: false,
         });
         fitBoundsToCoordinates([
-          { lat: meetingLocationInfo?.lat ?? 0, lon: meetingLocationInfo?.lon ?? 0 },
-          { lat: patientLocations?.latitude ?? 0, lon: patientLocations?.longitude ?? 0 },
+          { lat: meetingLocationInfo?.lat, lon: meetingLocationInfo?.lon },
+          { lat: patientLocations?.latitude, lon: patientLocations?.longitude },
         ]);
         break;
       case '병원행':
@@ -257,12 +249,12 @@ function RouteComponent() {
         addPolyline(meetingToHospital, 'meetingToHospital');
         fitBoundsToCoordinates([
           {
-            lat: meetingLocationInfo?.lat ?? 0,
-            lon: meetingLocationInfo?.lon ?? 0,
+            lat: meetingLocationInfo?.lat,
+            lon: meetingLocationInfo?.lon,
           },
           {
-            lat: hospitalLocationInfo?.lat ?? 0,
-            lon: hospitalLocationInfo?.lon ?? 0,
+            lat: hospitalLocationInfo?.lat,
+            lon: hospitalLocationInfo?.lon,
           },
         ]);
         break;
@@ -275,8 +267,8 @@ function RouteComponent() {
         });
         fitBoundsToCoordinates([
           {
-            lat: hospitalLocationInfo?.lat ?? 0,
-            lon: hospitalLocationInfo?.lon ?? 0,
+            lat: hospitalLocationInfo?.lat,
+            lon: hospitalLocationInfo?.lon,
           },
         ]);
         break;
@@ -290,12 +282,12 @@ function RouteComponent() {
         addPolyline(hospitalToReturn, 'hospitalToReturn');
         fitBoundsToCoordinates([
           {
-            lat: hospitalLocationInfo?.lat ?? 0,
-            lon: hospitalLocationInfo?.lon ?? 0,
+            lat: hospitalLocationInfo?.lat,
+            lon: hospitalLocationInfo?.lon,
           },
           {
-            lat: returnLocationInfo?.lat ?? 0,
-            lon: returnLocationInfo?.lon ?? 0,
+            lat: returnLocationInfo?.lat,
+            lon: returnLocationInfo?.lon,
           },
         ]);
         break;

@@ -13,11 +13,10 @@ interface ModalProps {
 }
 
 const Modal = ({ children, isOpen = false, onClose, size = 'md' }: ModalProps) => {
-  const [container, setContainer] = useState<HTMLElement | null>(null);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    const containerElement = document.getElementById('page-layout-container');
-    setContainer(containerElement);
+    setMounted(true);
   }, []);
 
   useEffect(() => {
@@ -32,24 +31,21 @@ const Modal = ({ children, isOpen = false, onClose, size = 'md' }: ModalProps) =
     };
   }, [isOpen]);
 
-  if (!container || !isOpen) return null;
+  if (!isOpen || !mounted) return null;
 
   const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    // 클릭된 요소가 backdrop이라면
     if (e.target === e.currentTarget) {
       onClose?.();
     }
   };
 
-  return createPortal(
-    <>
-      {size !== 'full' && (
-        <div className='bg-black-opacity-40 absolute inset-0 z-40' onClick={handleBackdropClick} />
-      )}
-
+  const modalContent = (
+    <div
+      className='bg-black-opacity-40 fixed top-0 left-1/2 z-40 h-[100dvh] w-full max-w-[500px] min-w-[375px] -translate-x-1/2 min-[1200px]:left-auto min-[1200px]:ml-[calc(50dvw+7rem)] min-[1200px]:-translate-x-0'
+      onClick={handleBackdropClick}>
       {size === 'full' ? (
         <div
-          className='bg-background-default-white absolute inset-0 z-100 flex h-full max-h-[100dvh] w-full flex-col p-[2rem]'
+          className='bg-background-default-white absolute inset-0 z-50 flex h-full max-h-[100dvh] w-full flex-col p-[2rem]'
           role='dialog'
           aria-modal='true'>
           {children}
@@ -67,9 +63,10 @@ const Modal = ({ children, isOpen = false, onClose, size = 'md' }: ModalProps) =
           </div>
         </div>
       )}
-    </>,
-    container
+    </div>
   );
+
+  return createPortal(modalContent, document.body);
 };
 
 // Title Component

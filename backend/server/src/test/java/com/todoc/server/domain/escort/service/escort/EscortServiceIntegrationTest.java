@@ -1,16 +1,21 @@
-package com.todoc.server.domain.escort.service;
+package com.todoc.server.domain.escort.service.escort;
 
-import com.todoc.server.IntegrationTestBase;
+import com.todoc.server.IntegrationTest;
 import com.todoc.server.common.enumeration.EscortStatus;
 import com.todoc.server.common.enumeration.RecruitStatus;
 import com.todoc.server.domain.escort.entity.Escort;
 import com.todoc.server.domain.escort.entity.Recruit;
 import com.todoc.server.domain.escort.exception.EscortInvalidProceedException;
 import com.todoc.server.domain.escort.exception.EscortNotFoundException;
-import com.todoc.server.domain.escort.web.dto.response.EscortDetailResponse;
+import com.todoc.server.domain.escort.service.EscortFacadeService;
+import com.todoc.server.domain.escort.service.EscortService;
+import com.todoc.server.domain.escort.service.RecruitService;
 import com.todoc.server.domain.escort.web.dto.request.EscortMemoUpdateRequest;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -23,12 +28,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.Assertions.*;
 
-@SpringBootTest
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE) // 실제 DB/H2 설정 유지
-@Transactional
-@ActiveProfiles("test")
 @Sql("/sql/data.sql")
-class EscortIntegrationTest extends IntegrationTestBase {
+class EscortServiceIntegrationTest extends IntegrationTest {
 
     @Autowired private EscortFacadeService escortFacadeService;
     @Autowired private EscortService escortService;
@@ -39,10 +40,13 @@ class EscortIntegrationTest extends IntegrationTestBase {
     private static final Long RECRUIT_ID_WITH_DETAIL = 5L;       // route/route_leg 두 레그가 모두 있는 recruit
     private static final Long NON_EXIST_RECRUIT_ID   = 99999L;
 
-    private static final Long ESCORT_ID_MEETING    = 10L;      // 상태가 MEETING 인 escort (HEADING_TO_HOSPITAL 로 진행)
+    private static final Long ESCORT_ID_EXISTING = 7L;
+    private static final Long ESCORT_ID_MEETING    = 12L;      // 상태가 MEETING 인 escort (HEADING_TO_HOSPITAL 로 진행)
     private static final Long ESCORT_ID_RETURNING    = 9L;      // 상태가 RETURNING 인 escort (WRITING_REPORT 로 진행)
     private static final Long ESCORT_ID_PREPARING      = 7L;      // 상태가 MEETING 인 escort (진행 불가 예외)
     private static final Long ANY_ESCORT_ID_FOR_MEMO = 5L;      // 메모 갱신 검증용(아무거나 존재하는 ID)
+
+    private static final Long HELPER_ID = 2L;
 
     @Nested
     @DisplayName("동행 진행")
@@ -107,40 +111,9 @@ class EscortIntegrationTest extends IntegrationTestBase {
     }
 
     @Nested
-    @DisplayName("동행 상세 조회")
-    class GetEscortDetail {
-
-        @Test
-        @DisplayName("정상 (두 레그 모두 존재)")
-        void getEscortDetailByRecruitId_정상() {
-            // when
-            EscortDetailResponse response = escortFacadeService.getEscortDetailByRecruitId(RECRUIT_ID_WITH_DETAIL);
-
-            // then
-            assertThat(response).isNotNull();
-            assertThat(response.getEscortId()).isNotNull();
-            assertThat(response.getRoute()).isNotNull();
-            assertThat(response.getPatient()).isNotNull();
-            // 필요한 경우 추가 검증
-            assertThat(response.getEscortStatus()).isNotBlank();
-            assertThat(response.getCustomerContact()).isNotBlank();
-        }
-
-        @Test
-        @DisplayName("존재하지 않는 신청")
-        void getEscortDetailByRecruitId_존재하지않음() {
-            assertThatThrownBy(() ->
-                    escortFacadeService.getEscortDetailByRecruitId(NON_EXIST_RECRUIT_ID))
-                    .isInstanceOf(com.todoc.server.domain.escort.exception.EscortNotFoundException.class);
-        }
-    }
-
-    @Nested
-    @DisplayName("메모 수정")
     class UpdateMemo {
 
         @Test
-        @DisplayName("정상")
         void updateMemo_정상() {
             // given
             EscortMemoUpdateRequest req = new EscortMemoUpdateRequest();
@@ -148,11 +121,106 @@ class EscortIntegrationTest extends IntegrationTestBase {
 
             // when
             escortService.updateMemo(ANY_ESCORT_ID_FOR_MEMO, req);
-            em.flush(); em.clear();
+            em.flush();
+            em.clear();
 
             // then
             Escort updated = escortService.getById(ANY_ESCORT_ID_FOR_MEMO);
             assertThat(updated.getMemo()).isEqualTo("환자분 병원 도착 전 간단 간식 요청");
+        }
+    }
+
+    @Nested
+    class GetById {
+
+        @Test
+        void getById_정상조회() {
+            // when
+            Escort escort = escortService.getById(ESCORT_ID_EXISTING);
+
+            // then
+            assertThat(escort).isNotNull();
+            assertThat(escort.getId()).isEqualTo(ESCORT_ID_EXISTING);
+        }
+
+        @Test
+        void getById_존재하지않음() {
+
+            // when & then
+            assertThatThrownBy(() -> escortService.getById(987654321L))
+                .isInstanceOf(EscortNotFoundException.class);
+        }
+    }
+
+    @Nested
+    class CountByHelperId {
+
+        @Test
+        void getCountByHelperUserId_정상조회_존재할_경우() {
+            // when
+            Long count = escortService.getCountByHelperUserId(HELPER_ID);
+
+            // then
+            assertThat(count).isNotNull();
+            assertThat(count).isGreaterThanOrEqualTo(0);
+        }
+
+        @Test
+        void getCountByHelperUserId_정상조회_존재하지않을_경우() {
+            // given
+            Long notExistHelperId = 999999L;
+
+            // when
+            Long count = escortService.getCountByHelperUserId(notExistHelperId);
+
+            // then
+            assertThat(count).isNotNull();
+            assertThat(count).isZero();
+        }
+    }
+
+    @Nested
+    class GetEscortWithDetailByRecruitId {
+
+        @Test
+        void getEscortWithDetailByRecruitId_정상조회() {
+            // when
+            Escort escort = escortService.getEscortWithDetailByRecruitId(RECRUIT_ID_WITH_DETAIL);
+
+            // then
+            assertThat(escort).isNotNull();
+            assertThat(escort.getRecruit().getId()).isEqualTo(RECRUIT_ID_WITH_DETAIL);
+        }
+
+        @Test
+        void getEscortWithDetailByRecruitId_없으면_예외() {
+            // when // then
+            assertThatThrownBy(() -> escortService.getEscortWithDetailByRecruitId(NON_EXIST_RECRUIT_ID))
+                .isInstanceOf(EscortNotFoundException.class);
+        }
+    }
+
+    @Nested
+    class GetEscortForPreparingAndBetween {
+
+        @Test
+        void getEscortForPreparingAndBetween_정상조회() {
+            // given
+            LocalDate targetDate = LocalDate.of(2025, 8, 23);
+            LocalTime from = LocalTime.of(12, 0);
+            LocalTime to = LocalTime.of(15, 0);
+
+            // when
+            List<Escort> escorts = escortService.getEscortForPreparingAndBetween(targetDate, from, to);
+
+            // then
+            assertThat(escorts).isNotEmpty();
+            assertThat(escorts).allSatisfy(escort -> {
+                assertThat(escort.getStatus()).isEqualTo(EscortStatus.PREPARING);
+                assertThat(escort.getRecruit().getStatus()).isEqualTo(RecruitStatus.COMPLETED);
+                assertThat(escort.getRecruit().getEscortDate()).isEqualTo(targetDate);
+                assertThat(escort.getRecruit().getEstimatedMeetingTime()).isBetween(from, to);
+            });
         }
     }
 }

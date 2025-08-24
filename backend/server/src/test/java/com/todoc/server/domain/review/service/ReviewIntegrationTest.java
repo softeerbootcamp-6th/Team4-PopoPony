@@ -1,6 +1,6 @@
 package com.todoc.server.domain.review.service;
 
-import com.todoc.server.IntegrationTestBase;
+import com.todoc.server.IntegrationTest;
 import com.todoc.server.domain.escort.exception.RecruitNotFoundException;
 import com.todoc.server.domain.review.entity.PositiveFeedbackChoice;
 import com.todoc.server.domain.review.entity.Review;
@@ -30,7 +30,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 @Transactional
 @ActiveProfiles("test")
 @Sql("/sql/data.sql")
-public class ReviewIntegrationTest extends IntegrationTestBase {
+public class ReviewIntegrationTest extends IntegrationTest {
 
     @Autowired
     private ReviewFacadeService reviewFacadeService;
@@ -79,9 +79,16 @@ public class ReviewIntegrationTest extends IntegrationTestBase {
         // given
         Long recruitId = 7L;
 
-        // when & then
-        assertThatThrownBy(() -> reviewFacadeService.getReviewDetailByRecruitId(recruitId))
-                .isInstanceOf(ReviewNotFoundException.class);
+        // when
+        ReviewDetailResponse response = reviewFacadeService.getReviewDetailByRecruitId(recruitId);
+
+        //  then
+        assertThat(response).isNotNull();
+        assertThat(response.getReviewId()).isEqualTo(0L);
+        assertThat(response.getSatisfactionLevel()).isEqualTo("");
+        assertThat(response.getCreatedAt()).isNotNull();
+        assertThat(response.getShortComment()).isNull();
+        assertThat(response.getPositiveFeedbackList().isEmpty()).isTrue();
     }
 
     @Test
@@ -92,6 +99,7 @@ public class ReviewIntegrationTest extends IntegrationTestBase {
         Long authId = 1L;
         int beforeCount = reviewService.getAllReviews().size();
         ReviewCreateRequest request = createSampleRequest();
+        long beforePfCount = positiveFeedbackChoiceService.getAllPositiveFeedbackChoice().size();
 
         // when
         reviewFacadeService.createReview(authId, request);
@@ -105,9 +113,8 @@ public class ReviewIntegrationTest extends IntegrationTestBase {
         assertThat(created.getShortComment()).isEqualTo("너무 감사드립니다!");
         assertThat(created.getSatisfactionLevel().getLabel()).isEqualTo("좋았어요");
 
-        List<PositiveFeedbackChoice> feedbackChoices = positiveFeedbackChoiceService.getAllPositiveFeedbackChoice();
-        assertThat(feedbackChoices.size()).isEqualTo(23);
-        assertThat(feedbackChoices.getLast().getReview()).isEqualTo(created);
+        long afterPfCount = positiveFeedbackChoiceService.getAllPositiveFeedbackChoice().size();
+        assertThat(afterPfCount).isEqualTo(beforePfCount+2);
     }
 
     public static ReviewCreateRequest createSampleRequest() {

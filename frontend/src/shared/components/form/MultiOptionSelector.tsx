@@ -57,7 +57,7 @@ const MultiOptionSelector = ({
         );
       })}
       {showHelperText && (
-        <p className='caption12-12-medium text-text-neutral-assistive w-full'>*복수선택 가능</p>
+        <p className='caption1-12-medium text-text-neutral-assistive w-full'>*복수선택 가능</p>
       )}
     </div>
   );

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.todoc.server.common.enumeration.SatisfactionLevel;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
+import java.time.LocalDate;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -41,5 +42,13 @@ public class ReviewDetailResponse {
         this.createdAt = createdAt;
         this.positiveFeedbackList = positiveFeedbackList;
         this.shortComment = shortComment;
+    }
+
+    public ReviewDetailResponse() {
+        this.reviewId = 0L;
+        this.satisfactionLevel = "";
+        this.createdAt = LocalDateTime.now();
+        this.positiveFeedbackList = List.of();
+        this.shortComment = null;
     }
 }

@@ -38,11 +38,7 @@ const Content = ({ children, className = 'bg-background-default-white' }: FormLa
 };
 
 const Footer = ({ children }: FormLayoutProps) => {
-  return (
-    <div className='flex-shrink-0'>
-      <BottomCTA>{children}</BottomCTA>
-    </div>
-  );
+  return <BottomCTA>{children}</BottomCTA>;
 };
 
 const FooterPrevNext = ({
