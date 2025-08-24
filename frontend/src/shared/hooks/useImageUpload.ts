@@ -61,9 +61,8 @@ export const useImageUpload = (): UseImageUploadReturn => {
         };
 
         return result;
-      } catch (err) {
-        const errorMessage = err instanceof Error ? err.message : '업로드 중 오류가 발생했습니다.';
-        throw new Error(errorMessage);
+      } catch {
+        throw new Error('업로드 중 오류가 발생했습니다.');
       } finally {
         setIsUploading(false);
       }

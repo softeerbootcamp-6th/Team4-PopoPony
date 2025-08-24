@@ -2,6 +2,7 @@ import { PaymentCard, WarningBox } from '@customer/components';
 import { PageLayout } from '@layouts';
 import { createFileRoute, useNavigate, getRouteApi } from '@tanstack/react-router';
 import { getRecruitPayment, postSelectApplication } from '@customer/apis';
+import { showToastError } from '@utils';
 
 const routeApi = getRouteApi('/customer/escort/$escortId/payment/$applicationId');
 
@@ -32,12 +33,15 @@ function RouteComponent() {
             },
           });
         },
+        onError: (error: unknown) => {
+          showToastError(error);
+        },
       }
     );
   };
 
   return (
-    <PageLayout>
+    <>
       <PageLayout.Header title='결제하기' showBack />
       <PageLayout.Content>
         <div className='flex h-full flex-col justify-between'>
@@ -68,6 +72,6 @@ function RouteComponent() {
           </div>
         </div>
       </PageLayout.Content>
-    </PageLayout>
+    </>
   );
 }

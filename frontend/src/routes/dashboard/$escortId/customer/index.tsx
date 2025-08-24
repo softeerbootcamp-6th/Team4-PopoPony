@@ -13,8 +13,9 @@ import {
 import { useEffect, useRef } from 'react';
 import { useMap } from '@hooks';
 import type { TMapMarker } from '@types';
-import { useSSE } from '@dashboard/hooks';
+import { useSocket } from '@dashboard/hooks';
 import { updatedBefore } from '@helper/utils';
+import { call } from '@utils';
 
 export const Route = createFileRoute('/dashboard/$escortId/customer/')({
   beforeLoad: async ({ context, params }) => {
@@ -55,7 +56,7 @@ function RouteComponent() {
   } = useMap(mapRef as React.RefObject<HTMLDivElement>);
 
   const { route, patient, helper, estimatedMeetingTime, escortId } = data.data;
-  const { helperLocations, patientLocations, escortStatuses } = useSSE(
+  const { helperLocations, patientLocations, escortStatuses } = useSocket(
     String(escortId),
     'customer'
   );
@@ -72,12 +73,6 @@ function RouteComponent() {
   const { name: patientName, imageUrl: patientImageUrl } = patient;
   const { name: helperName, imageUrl: helperImageUrl, contact: helperContact } = helper;
 
-  const handleClickCallHelper = () => {
-    window.open(`tel:${helperContact}`, '_blank');
-  };
-  const handleClickGoToCustomerCenter = () => {
-    window.open(`tel:010-2514-9058`, '_blank');
-  };
   const handleClickGoToReport = () => {
     router.navigate({
       to: '/customer/escort/$escortId',
@@ -122,8 +117,8 @@ function RouteComponent() {
           isReturn: false,
         });
         fitBoundsToCoordinates([
-          { lat: helperLocations?.latitude ?? 0, lon: helperLocations?.longitude ?? 0 },
-          { lat: patientLocations?.latitude ?? 0, lon: patientLocations?.longitude ?? 0 },
+          { lat: helperLocations?.latitude, lon: helperLocations?.longitude },
+          { lat: patientLocations?.latitude, lon: patientLocations?.longitude },
         ]);
         break;
       case '병원행':
@@ -137,12 +132,12 @@ function RouteComponent() {
         addPolyline(meetingToHospital, 'meetingToHospital');
         fitBoundsToCoordinates([
           {
-            lat: meetingLocationInfo?.lat ?? 0,
-            lon: meetingLocationInfo?.lon ?? 0,
+            lat: meetingLocationInfo?.lat,
+            lon: meetingLocationInfo?.lon,
           },
           {
-            lat: hospitalLocationInfo?.lat ?? 0,
-            lon: hospitalLocationInfo?.lon ?? 0,
+            lat: hospitalLocationInfo?.lat,
+            lon: hospitalLocationInfo?.lon,
           },
         ]);
         break;
@@ -156,8 +151,8 @@ function RouteComponent() {
         });
         fitBoundsToCoordinates([
           {
-            lat: hospitalLocationInfo?.lat ?? 0,
-            lon: hospitalLocationInfo?.lon ?? 0,
+            lat: hospitalLocationInfo?.lat,
+            lon: hospitalLocationInfo?.lon,
           },
         ]);
         break;
@@ -172,12 +167,12 @@ function RouteComponent() {
         addPolyline(hospitalToReturn, 'hospitalToReturn');
         fitBoundsToCoordinates([
           {
-            lat: hospitalLocationInfo?.lat ?? 0,
-            lon: hospitalLocationInfo?.lon ?? 0,
+            lat: hospitalLocationInfo?.lat,
+            lon: hospitalLocationInfo?.lon,
           },
           {
-            lat: returnLocationInfo?.lat ?? 0,
-            lon: returnLocationInfo?.lon ?? 0,
+            lat: returnLocationInfo?.lat,
+            lon: returnLocationInfo?.lon,
           },
         ]);
         break;
@@ -270,7 +265,7 @@ function RouteComponent() {
 
   if (currentStatus === '리포트작성중') {
     return (
-      <PageLayout>
+      <>
         <PageLayout.Header showClose={true} onClose={() => router.navigate({ to: '/customer' })} />
         <PageLayout.Content>
           <WritingReport />
@@ -279,17 +274,17 @@ function RouteComponent() {
           <Footer
             escortStatus={currentStatus as EscortStatusProps}
             handleClickGoToReport={handleClickGoToReport}
-            handleClickCallHelper={handleClickCallHelper}
-            handleClickGoToCustomerCenter={handleClickGoToCustomerCenter}
+            handleClickCallHelper={() => call(helperContact)}
+            handleClickGoToCustomerCenter={() => call(import.meta.env.VITE_CUSTOMER_PHONE_NUMBER)}
           />
         </PageLayout.Footer>
-      </PageLayout>
+      </>
     );
   }
 
   if (currentStatus === '동행완료') {
     return (
-      <PageLayout>
+      <>
         <PageLayout.Header showClose={true} onClose={() => router.history.back()} />
         <PageLayout.Content>
           <EscortCompleted />
@@ -298,15 +293,15 @@ function RouteComponent() {
           <Footer
             escortStatus={currentStatus as EscortStatusProps}
             handleClickGoToReport={handleClickGoToReport}
-            handleClickCallHelper={handleClickCallHelper}
-            handleClickGoToCustomerCenter={handleClickGoToCustomerCenter}
+            handleClickCallHelper={() => call(helperContact)}
+            handleClickGoToCustomerCenter={() => call(import.meta.env.VITE_CUSTOMER_PHONE_NUMBER)}
           />
         </PageLayout.Footer>
-      </PageLayout>
+      </>
     );
   }
   return (
-    <PageLayout>
+    <>
       <Header updateBefore={updatedBefore(helperLocations?.timestamp)} showBack={true} />
       <PageLayout.Content>
         <div className='flex h-full flex-col'>
@@ -325,10 +320,10 @@ function RouteComponent() {
         <Footer
           escortStatus={currentStatus as EscortStatusProps}
           handleClickGoToReport={handleClickGoToReport}
-          handleClickCallHelper={handleClickCallHelper}
-          handleClickGoToCustomerCenter={handleClickGoToCustomerCenter}
+          handleClickCallHelper={() => call(helperContact)}
+          handleClickGoToCustomerCenter={() => call(import.meta.env.VITE_CUSTOMER_PHONE_NUMBER)}
         />
       </PageLayout.Footer>
-    </PageLayout>
+    </>
   );
 }

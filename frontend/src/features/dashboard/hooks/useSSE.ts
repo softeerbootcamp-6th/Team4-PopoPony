@@ -39,27 +39,51 @@ const useSSE = (escortId: string, role: string) => {
     };
 
     es.addEventListener('helper-location', (e) => {
-      const data: LocationResponse = JSON.parse(e.data);
-      const koreaTime = new Date(data.timestamp);
-      const locationWithKoreaTime = { ...data, timestamp: koreaTime };
-      console.log('helper-location', locationWithKoreaTime);
-      setHelperLocations(locationWithKoreaTime);
+      try {
+        if (e.data === 'NO_LOCATION') {
+          console.log('helper-location: NO_LOCATION');
+          setHelperLocations(null);
+          return;
+        }
+
+        const data: LocationResponse = JSON.parse(e.data);
+        const koreaTime = new Date(data.timestamp);
+        const locationWithKoreaTime = { ...data, timestamp: koreaTime };
+        console.log('helper-location', locationWithKoreaTime);
+        setHelperLocations(locationWithKoreaTime);
+      } catch (error) {
+        console.error('Failed to parse helper-location data:', error);
+      }
     });
 
     es.addEventListener('patient-location', (e) => {
-      const data: LocationResponse = JSON.parse(e.data);
-      const koreaTime = new Date(data.timestamp);
-      const locationWithKoreaTime = { ...data, timestamp: koreaTime };
-      console.log('patient-location', locationWithKoreaTime);
-      setPatientLocations(locationWithKoreaTime);
+      try {
+        if (e.data === 'NO_LOCATION') {
+          console.log('patient-location: NO_LOCATION');
+          setPatientLocations(null);
+          return;
+        }
+
+        const data: LocationResponse = JSON.parse(e.data);
+        const koreaTime = new Date(data.timestamp);
+        const locationWithKoreaTime = { ...data, timestamp: koreaTime };
+        console.log('patient-location', locationWithKoreaTime);
+        setPatientLocations(locationWithKoreaTime);
+      } catch (error) {
+        console.error('Failed to parse patient-location data:', error);
+      }
     });
 
     es.addEventListener('status', (e) => {
-      const data: EscortStatusResponse = JSON.parse(e.data);
-      const koreaTime = new Date(data.timestamp);
-      const statusWithKoreaTime = { ...data, timestamp: koreaTime };
-      console.log('status', statusWithKoreaTime);
-      setEscortStatuses(statusWithKoreaTime);
+      try {
+        const data: EscortStatusResponse = JSON.parse(e.data);
+        const koreaTime = new Date(data.timestamp);
+        const statusWithKoreaTime = { ...data, timestamp: koreaTime };
+        console.log('status', statusWithKoreaTime);
+        setEscortStatuses(statusWithKoreaTime);
+      } catch (error) {
+        console.error('Failed to parse status data:', error);
+      }
     });
 
     es.onerror = (err) => {

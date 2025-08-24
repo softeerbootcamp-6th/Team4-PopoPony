@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate } from '@tanstack/react-router';
 import { PageLayout } from '@layouts';
-import { Button, EscortCard, Tabs } from '@components';
+import { Button, EscortCard, Logo, Tabs } from '@components';
 import type { RecruitStatus } from '@types';
 import { dateFormat, timeFormat } from '@utils';
 import { getRecruitList, getProfileExistance } from '@helper/apis';
@@ -104,12 +104,12 @@ function RouteComponent() {
   };
 
   return (
-    <PageLayout>
+    <>
       <PageLayout.Content>
         <div className='bg-neutral-10 relative h-full max-h-[22rem] p-[2rem]'>
           <div className='absolute z-10 w-[calc(100%-4rem)]'>
             <Link to='/'>
-              <img src='/images/logo-text.svg' alt='logo-text' className='w-[4rem]' />
+              <Logo className='text-[2rem]' />
             </Link>
             <h2 className='headline-24-bold text-text-neutral-primary mt-[2.4rem] mb-[3rem]'>
               토닥과 함께 <br />
@@ -225,6 +225,6 @@ function RouteComponent() {
           </Tabs.TabsContent>
         </Tabs>
       </PageLayout.Content>
-    </PageLayout>
+    </>
   );
 }

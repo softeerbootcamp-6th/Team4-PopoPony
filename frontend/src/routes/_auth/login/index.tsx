@@ -1,6 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { LoginForm } from '@auth/components';
-import { PageLayout } from '@layouts';
 
 export const Route = createFileRoute('/_auth/login/')({
   component: RouteComponent,
@@ -8,7 +7,7 @@ export const Route = createFileRoute('/_auth/login/')({
 
 function RouteComponent() {
   return (
-    <PageLayout>
+    <>
       <div className='bg-background-default-white flex min-h-screen items-center justify-center px-[2.0rem]'>
         <div className='flex w-full max-w-[40.0rem] flex-col items-center gap-[4.8rem]'>
           <div className='flex flex-col items-center gap-[1.6rem]'>
@@ -25,6 +24,6 @@ function RouteComponent() {
           </div>
         </div>
       </div>
-    </PageLayout>
+    </>
   );
 }

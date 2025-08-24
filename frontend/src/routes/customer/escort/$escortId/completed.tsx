@@ -16,7 +16,7 @@ function RouteComponent() {
   const { data } = getRecruitById(Number(escortId));
   const { escortDate, estimatedMeetingTime, estimatedReturnTime, route } = data?.data || {};
   return (
-    <PageLayout background='bg-neutral-2'>
+    <>
       <PageLayout.Header
         background={false}
         showBack={false}
@@ -79,6 +79,6 @@ function RouteComponent() {
       <PageLayout.Footer>
         <Button onClick={() => navigate({ to: '/customer' })}>홈으로 가기</Button>
       </PageLayout.Footer>
-    </PageLayout>
+    </>
   );
 }

@@ -4,11 +4,10 @@ import type { LoginFormValues } from '@auth/types';
 import { authStorage } from '@auth/utils';
 import { useNavigate } from '@tanstack/react-router';
 import { postLogin } from '@auth/apis';
-import { useState } from 'react';
 import { AuthInput } from '@auth/components';
+import { toast } from 'sonner';
 
 const LoginForm = () => {
-  const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
   const { mutate } = postLogin();
 
@@ -32,18 +31,12 @@ const LoginForm = () => {
         },
       },
       {
-        onSuccess: (data) => {
-          if (data.status === 200) {
-            authStorage.setIsLoggedIn(true);
-            navigate({
-              to: '/',
-            });
-          } else {
-            setError(data.message);
-          }
-        },
-        onError: (error: { message: string }) => {
-          setError(error.message);
+        onSuccess: () => {
+          authStorage.setIsLoggedIn(true);
+          toast.success('로그인에 성공했어요.');
+          navigate({
+            to: '/',
+          });
         },
       }
     );
@@ -58,7 +51,6 @@ const LoginForm = () => {
           type='password'
           placeholder='비밀번호를 입력해주세요'
         />
-        {error && <p className='body1-16-medium text-text-red-primary'>{error}</p>}
       </div>
 
       <Button type='submit' variant='primary' size='lg' disabled={!isFormValid} className='w-full'>
