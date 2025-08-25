@@ -55,7 +55,7 @@ const RecruitRegisterFormPage = () => {
         showBack={currentStep.includes('searchRoute')}
         showClose={true}
         onClose={handleClose}
-        background={currentStep === 'final' ? false : true}
+        background={true}
         showProgress={currentStep !== 'final' && !currentStep.includes('searchRoute')}
         currentStep={stepList.indexOf(currentStep) + 1}
         maxStep={stepList.length - 1}
