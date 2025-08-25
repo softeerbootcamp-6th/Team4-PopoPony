@@ -10,6 +10,8 @@ import IcArrowLeft from './arrow-left.svg?react';
 import IcArrowRight from './arrow-right.svg?react';
 import IcArrowRotateRight01 from './arrow-rotate-right-01.svg?react';
 import IcArrowUp from './arrow-up.svg?react';
+import IcStartMarker from './start-marker.svg?react';
+import IcArriveMarker from './arrive-marker.svg?react';
 // Transportation Icons
 import IcWalk from './walk.svg?react';
 import IcAirplane from './airplane-sharp.svg?react';
@@ -111,7 +113,8 @@ export {
   IcCoinFill,
   IcDownArrow,
   IcButtonClose,
-
+  IcStartMarker,
+  IcArriveMarker,
   // Transportation Icons
   IcWalk,
   IcAirplane,
