@@ -1,38 +1,35 @@
-import RouteButton from './RouteButton';
-import InfoSection from './InfoSection';
-import GrayBox from './GrayBox';
-import Profile from './recruitStep/Profile';
-import Condition from './recruitStep/Condition';
-import Communication from './recruitStep/Communication';
-import Time from './recruitStep/Time';
-import EscortRoute from './recruitStep/EscortRoute';
-import SearchRoute from './recruitStep/SearchRoute';
-import Request from './recruitStep/Request';
-import Final from './recruitStep/Final';
+//Button
+import SearchButton from './Button/SearchButton';
 import CardWrapper from './Card/CardWrapper';
-import PaymentCard from './PaymentCard';
-import WarningBox from './WarningBox';
-import StatsSummaryCard from './StatsSummaryCard';
-import SatisfactionGraph from './SatisfactionGraph';
+import GrayBox from './GrayBox';
+import InfoSection from './InfoSection';
 import KeywordTag from './KeywordTag';
+import PaymentCard from './PaymentCard';
 import ReviewCard from './ReviewCard';
-import Summary from './reviewStep/Summary';
-import Detail from './reviewStep/Detail';
-import Comment from './reviewStep/Comment';
-
+import RouteButton from './RouteButton';
+import SatisfactionGraph from './SatisfactionGraph';
+import StatsSummaryCard from './StatsSummaryCard';
+import WarningBox from './WarningBox';
 // Cards
 import HelperCard from './cards/HelperCard';
 import HelperSelectInfoCard from './cards/HelperSelectInfoCard';
-import ReportInfoCard from './cards/ReportInfoCard';
 import PaymentFailedCard from './cards/PaymentFailedCard';
-
+import ReportInfoCard from './cards/ReportInfoCard';
+import Communication from './recruitStep/Communication';
+import Condition from './recruitStep/Condition';
+import EscortRoute from './recruitStep/EscortRoute';
+import Final from './recruitStep/Final';
+import Profile from './recruitStep/Profile';
+import Request from './recruitStep/Request';
+import SearchRoute from './recruitStep/SearchRoute';
+import Time from './recruitStep/Time';
+import Comment from './reviewStep/Comment';
+import Detail from './reviewStep/Detail';
+import Summary from './reviewStep/Summary';
+import DetailTab from './tabs/DetailTab';
 // Tabs
 import HelperTab from './tabs/HelperTab';
 import ReportTab from './tabs/ReportTab';
-import DetailTab from './tabs/DetailTab';
-
-//Button
-import SearchButton from './Button/SearchButton';
 
 export {
   RouteButton,

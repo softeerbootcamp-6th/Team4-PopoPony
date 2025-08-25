@@ -1,5 +1,7 @@
-import { formatFormInputValue } from '@utils';
 import { useFormContext } from 'react-hook-form';
+
+import { formatFormInputValue } from '@shared/lib';
+
 import ReceiptImageUpload from './ReceiptImageUpload';
 
 interface TaxiFeeSectionProps {

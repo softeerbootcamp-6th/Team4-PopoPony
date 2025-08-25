@@ -1,11 +1,14 @@
-import { type RecruitStepProps } from '@customer/types';
-import { useFormContext } from 'react-hook-form';
-import { useFormValidation } from '@hooks';
-import { reviewSchema } from '@customer/types';
-import { FormLayout } from '@layouts';
-import { FormTextarea } from '@components';
-import { postHelperReview } from '@customer/apis';
 import { getRouteApi } from '@tanstack/react-router';
+
+import { useFormContext } from 'react-hook-form';
+
+import { useFormValidation } from '@shared/hooks';
+import { FormTextarea } from '@shared/ui';
+import { FormLayout } from '@shared/ui/layout';
+
+import { postHelperReview } from '@customer/apis';
+import { type RecruitStepProps } from '@customer/types';
+import { reviewSchema } from '@customer/types';
 
 interface CommentProps extends RecruitStepProps {
   escortId: string;

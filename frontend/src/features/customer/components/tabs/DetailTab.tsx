@@ -1,11 +1,20 @@
-import { Tabs, Divider, Button, Modal, StrengthTagList, ShowMapButton } from '@components';
-import { InfoSection, RouteButton, GrayBox } from '@customer/components';
-import { useModal } from '@hooks';
 import { IcCheck } from '@icons';
-import type { RecruitDetailResponse } from '@customer/types';
-import { dateFormat, timeFormatWithOptionalMinutes, timeDuration, formatImageUrl } from '@utils';
-import { useNavigate, getRouteApi } from '@tanstack/react-router';
+import { getRouteApi, useNavigate } from '@tanstack/react-router';
+
+import { StrengthTagList } from '@entities/helper/ui';
+
+import { useModal } from '@shared/hooks';
+import {
+  dateFormat,
+  formatImageUrl,
+  timeDuration,
+  timeFormatWithOptionalMinutes,
+} from '@shared/lib';
+import { Button, Divider, Modal, ShowMapButton, Tabs } from '@shared/ui';
+
 import { deleteRecruit } from '@customer/apis';
+import { GrayBox, InfoSection, RouteButton } from '@customer/components';
+import type { RecruitDetailResponse } from '@customer/types';
 
 const routeApi = getRouteApi('/customer/escort/$escortId/');
 
@@ -34,9 +43,6 @@ const DetailTab = ({ data }: { data: RecruitDetailResponse }) => {
       {
         onSuccess: () => {
           openDeleteRecruitSuccessModal();
-        },
-        onError: () => {
-          alert('동행 신청 취소에 실패했습니다.');
         },
       }
     );

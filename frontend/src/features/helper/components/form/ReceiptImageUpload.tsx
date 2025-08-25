@@ -1,8 +1,12 @@
-import React, { useRef } from 'react';
-import { useFormContext } from 'react-hook-form';
 import { IcCheckBox } from '@icons';
-import { useImageUpload } from '@hooks';
-import type { ImagePrefix } from '@types';
+import { toast } from 'sonner';
+
+import React, { useRef } from 'react';
+
+import { useFormContext } from 'react-hook-form';
+
+import { useImageUpload } from '@shared/hooks';
+import type { ImagePrefix } from '@shared/types';
 
 interface Props {
   name: string;
@@ -32,9 +36,8 @@ const ReceiptImageUpload = ({ name, prefix, placeholder }: Props) => {
         },
         { shouldValidate: true, shouldDirty: true }
       );
-    } catch (err) {
-      console.error(err);
-      alert('업로드에 실패했습니다. 다시 시도해주세요.');
+    } catch {
+      toast.error('업로드에 실패했습니다. 다시 시도해주세요.');
     }
 
     // 파일 input 초기화

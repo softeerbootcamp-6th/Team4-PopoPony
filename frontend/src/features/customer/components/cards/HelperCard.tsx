@@ -1,9 +1,14 @@
-import { StrengthTag, Tag } from '@components';
 import { IcChevronRightSecondary } from '@icons';
-import type { EscortStrength } from '@types';
+
+import type { EscortStrength } from '@entities/escort/types';
+import { StrengthTag } from '@entities/helper/ui';
+
+import { formatImageUrl } from '@shared/lib';
+import { Tag } from '@shared/ui';
+
 import type { HelperSimpleResponse } from '@customer/types';
+
 import { STRENGTH_OPTIONS } from '@helper/types';
-import { formatImageUrl } from '@utils';
 
 interface HelperCardProps {
   helper: HelperSimpleResponse;

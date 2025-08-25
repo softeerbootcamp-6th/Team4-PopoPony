@@ -1,19 +1,26 @@
-import { Button, Divider, EscortCard, StrengthTag, TermsBottomSheet, Spinner } from '@components';
-import { getRecruitById } from '@customer/apis';
-import { GrayBox, InfoSection, RouteButton } from '@customer/components';
-import { type EscortStrength } from '@types';
-import type { RecruitDetailResponse } from '@customer/types';
 import { IcCheck } from '@icons';
-import { PageLayout } from '@layouts';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
-import { postApplicationByRecruitId, getRecruitList } from '@helper/apis';
+
+import { RecruitCard } from '@widgets/ui';
+
+import { type EscortStrength } from '@entities/escort/types';
+import { StrengthTag } from '@entities/helper/ui';
+
 import {
   dateFormat,
   formatImageUrl,
   timeDuration,
   timeFormat,
   timeFormatWithOptionalMinutes,
-} from '@utils';
+} from '@shared/lib';
+import { Button, Divider, ShowMapButton, Spinner, TermsBottomSheet } from '@shared/ui';
+import { PageLayout } from '@shared/ui/layout';
+
+import { getRecruitById } from '@customer/apis';
+import { GrayBox, InfoSection, RouteButton } from '@customer/components';
+import type { RecruitDetailResponse } from '@customer/types';
+
+import { getRecruitList, postApplicationByRecruitId } from '@helper/apis';
 
 export const Route = createFileRoute('/helper/application/$escortId/')({
   component: RouteComponent,
@@ -97,14 +104,14 @@ function RouteComponent() {
       <PageLayout.Header title='내역 상세보기' showBack />
       <PageLayout.Content className='overflow-y-auto'>
         <div className='bg-neutral-10 flex-col-start gap-[1.2rem] px-[2rem] py-[1.6rem]'>
-          <EscortCard>
-            <EscortCard.StatusHeader text={statusText} title={cardTitle} hasOnClickEvent={false} />
-            <EscortCard.Divider />
-            <EscortCard.InfoSection>
-              <EscortCard.Info type='time' text={cardTimeText} />
-              <EscortCard.Info type='location' text={cardLocationText} />
-            </EscortCard.InfoSection>
-          </EscortCard>
+          <RecruitCard>
+            <RecruitCard.StatusHeader text={statusText} title={cardTitle} hasOnClickEvent={false} />
+            <RecruitCard.Divider />
+            <RecruitCard.InfoSection>
+              <RecruitCard.Info type='time' text={cardTimeText} />
+              <RecruitCard.Info type='location' text={cardLocationText} />
+            </RecruitCard.InfoSection>
+          </RecruitCard>
         </div>
         <>
           {/* 환자 및 동행 정보 */}
@@ -145,10 +152,13 @@ function RouteComponent() {
                   <span className='text-text-neutral-secondary'>
                     {hospitalLocationInfo.placeName}
                   </span>
-                  {/* 이 지도보기 버튼의 onclick은 무엇을 해줘야 할까요 */}
-                  <button className='caption2-10-medium text-text-neutral-secondary border-stroke-neutral-dark w-fit rounded-[0.4rem] border px-[0.5rem] py-[0.2rem]'>
-                    지도 보기
-                  </button>
+                  <ShowMapButton
+                    businessAddress={hospitalLocationInfo.placeName}
+                    pos={{
+                      lat: hospitalLocationInfo.lat,
+                      lng: hospitalLocationInfo.lon,
+                    }}
+                  />
                 </div>
               </div>
             </div>

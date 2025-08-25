@@ -1,8 +1,11 @@
-import { Button, ShowMapButton } from '@components';
-import { PageLayout } from '@layouts';
-import { createFileRoute, useNavigate, getRouteApi } from '@tanstack/react-router';
+import { useQueryClient } from '@tanstack/react-query';
+import { createFileRoute, getRouteApi, useNavigate } from '@tanstack/react-router';
+
+import { dateFormat, timeDuration, timeFormatWithOptionalMinutes } from '@shared/lib';
+import { Button, ShowMapButton } from '@shared/ui';
+import { PageLayout } from '@shared/ui/layout';
+
 import { getRecruitById } from '@customer/apis';
-import { dateFormat, timeFormatWithOptionalMinutes, timeDuration } from '@utils';
 
 const routeApi = getRouteApi('/customer/escort/$escortId/completed');
 
@@ -13,6 +16,7 @@ export const Route = createFileRoute('/customer/escort/$escortId/completed')({
 function RouteComponent() {
   const navigate = useNavigate();
   const { escortId } = routeApi.useParams();
+  const queryClient = useQueryClient();
   const { data } = getRecruitById(Number(escortId));
   const { escortDate, estimatedMeetingTime, estimatedReturnTime, route } = data?.data || {};
   return (
@@ -21,7 +25,10 @@ function RouteComponent() {
         background={false}
         showBack={false}
         showClose={true}
-        onClose={() => navigate({ to: '/customer' })}
+        onClose={() => {
+          queryClient.removeQueries({ queryKey: ['escortFormStarted'] });
+          navigate({ to: '/customer' });
+        }}
       />
       <PageLayout.Content>
         <div className='flex h-full flex-col'>
@@ -77,7 +84,13 @@ function RouteComponent() {
         </div>
       </PageLayout.Content>
       <PageLayout.Footer>
-        <Button onClick={() => navigate({ to: '/customer' })}>홈으로 가기</Button>
+        <Button
+          onClick={() => {
+            queryClient.removeQueries({ queryKey: ['escortFormStarted'] });
+            navigate({ to: '/customer' });
+          }}>
+          홈으로 가기
+        </Button>
       </PageLayout.Footer>
     </>
   );

@@ -1,4 +1,4 @@
-import { $api } from '@apis';
+import { $api } from '@shared/api';
 
 const getRecruitsCustomer = () => {
   return $api.useQuery('get', '/api/recruits/customer', undefined, {

@@ -1,6 +1,8 @@
-import { ShowMapButton } from '@components';
 import { IcMarker1, IcMarker2, IcMarker3 } from '@icons';
+
 import { useMemo } from 'react';
+
+import { ShowMapButton } from '@shared/ui';
 
 interface PlaceInfoProps {
   sequence: number;

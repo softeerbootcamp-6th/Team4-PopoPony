@@ -1,20 +1,18 @@
-import {
-  TwoOptionSelector,
-  FormInput,
-  LabeledSection,
-  PhotoUpload,
-  Button,
-  BottomSheet,
-} from '@components';
-import { memo, useState, useEffect } from 'react';
-import { FormLayout } from '@layouts';
-import { useFormValidation } from '@hooks';
-import { profileSchema } from '@customer/types';
-import { getPastPatientInfo, getPastPatientInfoDetail } from '@customer/apis';
-import { IcRadioOff, IcRadioOn } from '@assets/icons';
+import { memo, useEffect, useState } from 'react';
+
 import { useFormContext } from 'react-hook-form';
-import { booleanToString, numberToString, formatPhoneNumber, formatImageUrl } from '@utils';
-import type { FunnelStepProps } from '@types';
+
+import { useFormValidation } from '@shared/hooks';
+import { booleanToString, formatImageUrl, formatPhoneNumber, numberToString } from '@shared/lib';
+import type { FunnelStepProps } from '@shared/types';
+import { BottomSheet, Button } from '@shared/ui';
+import { FormInput, LabeledSection, PhotoUpload, TwoOptionSelector } from '@shared/ui/form';
+import { FormLayout } from '@shared/ui/layout';
+
+import { getPastPatientInfo, getPastPatientInfoDetail } from '@customer/apis';
+import { profileSchema } from '@customer/types';
+
+import { IcRadioOff, IcRadioOn } from '@assets/icons';
 
 const Profile = memo(({ handleNextStep }: FunnelStepProps) => {
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);

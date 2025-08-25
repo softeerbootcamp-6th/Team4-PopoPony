@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState, useCallback } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+
 import { type EscortStatusProps } from '@dashboard/types';
 
 // WebSocket 메시지 타입 정의

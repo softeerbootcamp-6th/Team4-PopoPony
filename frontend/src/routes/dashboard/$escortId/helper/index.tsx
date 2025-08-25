@@ -1,21 +1,27 @@
-import { createFileRoute, redirect, useRouter } from '@tanstack/react-router';
-import { getEscortDetail, patchEscortStatusByEscortId, patchEscortMemo } from '@dashboard/apis';
-import { PageLayout } from '@layouts';
-import {
-  Header,
-  DashBoardCard,
-  HelperDashboardSearchCard,
-  HelperDashboardTaxiCard,
-  HelperDashboardSummary,
-} from '@dashboard/components';
-import { $api } from '@apis';
-import type { StatusTitleProps, EscortStatus } from '@dashboard/types';
-import { Button, FloatingButton, SlideButton } from '@components';
 import { IcHeadphoneQuestionmark } from '@icons';
-import { useState, useEffect, useRef, type ReactNode } from 'react';
-import { useMap } from '@hooks';
-import type { Position, TMapMarker } from '@types';
+import { createFileRoute, redirect, useRouter } from '@tanstack/react-router';
+
+import { type ReactNode, useEffect, useRef, useState } from 'react';
+
+import { SlideButton } from '@entities/escort/ui';
+
+import { $api } from '@shared/api';
+import { useMap } from '@shared/hooks';
+import type { Position, TMapMarker } from '@shared/types';
+import { Button, FloatingButton } from '@shared/ui';
+import { PageLayout } from '@shared/ui/layout';
+
+import { getEscortDetail, patchEscortMemo, patchEscortStatusByEscortId } from '@dashboard/apis';
+import {
+  DashBoardCard,
+  Header,
+  HelperDashboardSearchCard,
+  HelperDashboardSummary,
+  HelperDashboardTaxiCard,
+} from '@dashboard/components';
 import { useWebSocket } from '@dashboard/hooks';
+import type { EscortStatus, StatusTitleProps } from '@dashboard/types';
+
 import { updatedBefore } from '@helper/utils';
 
 export const Route = createFileRoute('/dashboard/$escortId/helper/')({
@@ -343,7 +349,11 @@ function RouteComponent() {
         escortStatus: escortStatus,
         title: '만남장소로 이동하세요',
         address: route.routeSimple.meetingLocationInfo,
-        card: <HelperDashboardSearchCard />,
+        card: (
+          <HelperDashboardSearchCard
+            destination={{ lat: 37.479103923078995, lon: 127.03747630119366 }}
+          />
+        ),
         button: (
           <SlideButton
             onConfirm={handleClickNextStep}

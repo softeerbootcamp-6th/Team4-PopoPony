@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState, useCallback } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+
 import { type EscortStatusProps } from '@dashboard/types';
 
 // WebSocket 메시지 타입 정의
@@ -199,7 +200,7 @@ const useWebSocket = (escortId: string, role: string) => {
 
     // Nchan 브로드캐스팅 채널 연결 (수신용)
     const nchanUrl = `${import.meta.env.VITE_API_BASE_URL}/sub/escorts/${escortId}`;
-    const nchan = new EventSource(nchanUrl, { withCredentials: true });
+    const nchan = new EventSource(nchanUrl);
     nchanRef.current = nchan;
 
     nchan.onopen = (event) => {

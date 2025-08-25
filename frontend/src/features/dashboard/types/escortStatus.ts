@@ -1,4 +1,4 @@
-import { type EscortStatus } from '@types';
+import { type EscortStatus } from '@shared/types';
 
 export type EscortStatusProps = Exclude<EscortStatus, undefined>;
 

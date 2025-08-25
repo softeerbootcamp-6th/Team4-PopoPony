@@ -1,9 +1,11 @@
-import { Button, LabeledSection } from '@components';
 import { IcChevronDown } from '@icons';
-import { FormLayout } from '@layouts';
-import type { FunnelStepProps } from '@types';
+
 import { useFormContext } from 'react-hook-form';
-import { timeDuration, isTimeBefore } from '@utils';
+
+import { isTimeBefore, timeDuration } from '@shared/lib';
+import type { FunnelStepProps } from '@shared/types';
+import { Button, LabeledSection } from '@shared/ui';
+import { FormLayout } from '@shared/ui/layout';
 
 const Time = ({ handleNextStep }: FunnelStepProps) => {
   const { register, watch } = useFormContext();

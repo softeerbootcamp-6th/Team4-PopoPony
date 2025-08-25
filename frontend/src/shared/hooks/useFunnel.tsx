@@ -1,6 +1,8 @@
-import { type ReactElement, type ReactNode, useEffect, useState } from 'react';
 import { useParams, useRouter } from '@tanstack/react-router';
-import type { FunnelRoute } from '@types';
+
+import { type ReactElement, type ReactNode, useEffect, useState } from 'react';
+
+import type { FunnelRoute } from '@shared/types';
 
 interface UseFunnelProps {
   defaultStep: string;
