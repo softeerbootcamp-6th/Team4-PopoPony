@@ -7,5 +7,5 @@ export const Route = createFileRoute('/customer/escort/$escortId/payment/$applic
 });
 
 function RouteComponent() {
-  <RecruitPaymentPage />;
+  return <RecruitPaymentPage />;
 }
