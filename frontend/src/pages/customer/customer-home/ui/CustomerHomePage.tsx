@@ -70,9 +70,7 @@ const CustomerHomePage = () => {
     <PageLayout.Content>
       <div className='bg-neutral-10 relative h-full max-h-[22rem] p-[2rem]'>
         <div className='absolute z-10 flex h-[18rem] w-[calc(100%-4rem)] flex-col justify-between'>
-          <Link to='/'>
-            <Logo className='text-[2rem]' />
-          </Link>
+          <Logo className='text-[2rem]' />
           <h2 className='headline-24-bold text-text-neutral-primary'>
             토닥과 함께 <br />
             안전하게 동행하세요!
