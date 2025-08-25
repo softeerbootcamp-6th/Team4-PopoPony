@@ -86,7 +86,7 @@ const TransportIcon = ({
   const getIcon = () => {
     switch (mode) {
       case 'WALK':
-        return <IcWalk className='h-[3rem] [&_path]:fill-icon-neutral-secondary' />;
+        return <IcWalk className='[&_path]:fill-icon-neutral-secondary h-[3rem]' />;
       case 'SUBWAY':
         return <IcSubwayFill className='h-[1.6rem] w-[1.6rem] [&_path]:fill-white' />;
       case 'BUS':
@@ -166,14 +166,14 @@ const TransportResult = ({
     <>
       <div className='mt-[1.6rem]'>
         <div className='flex justify-between'>
-          <div className='flex-center flex-col flex-1'>
+          <div className='flex-center flex-1 flex-col'>
             <p className='body2-14-medium text-text-neutral-secondary'>예상 소요시간</p>
             <p className='headline-24-bold text-text-neutral-primary mt-[0.4rem]'>
               {formatDuration(totalTimeSec)}
             </p>
           </div>
           <div className='bg-stroke-neutral-light h-[5rem] w-[0.3rem]' />
-          <div className='flex-center flex-col flex-1'>
+          <div className='flex-center flex-1 flex-col'>
             <p className='body2-14-medium text-text-neutral-secondary'>예상 도착시간</p>
             <p className='headline-24-bold text-text-neutral-primary mt-[0.4rem]'>
               {formatArrival(totalTimeSec)}
@@ -186,7 +186,7 @@ const TransportResult = ({
         <ul className='flex flex-col'>
           {/* 출발지 표시 */}
           <li className='flex items-center gap-[1.2rem]'>
-            <div className='flex h-[2.4rem] w-[2.4rem] items-center justify-center rounded-full bg-status-destructive-primary'>
+            <div className='bg-status-destructive-primary flex h-[2.4rem] w-[2.4rem] items-center justify-center rounded-full'>
               <IcStartMarker className='h-[2.4rem]' />
             </div>
             <span className='body1-16-medium text-text-neutral-primary'>출발</span>
@@ -201,15 +201,15 @@ const TransportResult = ({
             const time = leg.sectionTime ? formatDuration(leg.sectionTime) : undefined;
             if (mode === 'WALK') {
               return (
-                <li key={idx} className='flex items-center gap-[1.2rem] h-[6rem]'>
-                  <div className='h-full flex items-center relative overflow-visible border-l-2 ml-[1rem] border-dotted border-stroke-neutral-dark'>
+                <li key={idx} className='flex h-[6rem] items-center gap-[1.2rem]'>
+                  <div className='border-stroke-neutral-dark relative ml-[1rem] flex h-full items-center overflow-visible border-l-2 border-dotted'>
                     <span className='body2-14-medium text-text-neutral-secondary pl-[2.5rem]'>
                       도보로 이동 {time ? `(${time})` : ''}
                     </span>
                     <TransportIcon
                       mode={mode}
                       color={hex}
-                      className='absolute left-[-0.75rem] top-1/2 -translate-y-1/2'
+                      className='absolute top-1/2 left-[-0.75rem] -translate-y-1/2'
                     />
                   </div>
                 </li>
@@ -220,25 +220,26 @@ const TransportResult = ({
               const line = (leg.laneName || leg.route || '').replace('(급행)', '').trim();
               const lineColor = hex;
               return (
-                <li key={idx} className='flex items-center gap-[1.2rem] h-[6rem]'>
+                <li key={idx} className='flex h-[6rem] items-center gap-[1.2rem]'>
                   <div
-                    className='h-full flex items-center relative overflow-visible border-l-2 ml-[1rem] pl-[1.5rem]'
+                    className='relative ml-[1rem] flex h-full items-center overflow-visible border-l-2 pl-[1.5rem]'
                     style={{ borderColor: lineColor }}>
                     <TransportIcon
                       mode={mode}
                       color={lineColor}
                       className='absolute top-0 left-[-1.3rem]'
                     />
-                    <div className='flex flex-col justify-between pl-[1rem] h-full'>
+                    <div className='flex h-full flex-col justify-between pl-[1rem]'>
                       <span className='body1-16-bold' style={{ color: lineColor }}>
                         {line || '지하철'}
                       </span>
                       <span className='body2-14-medium text-text-neutral-secondary relative top-[0.7rem]'>
-                        {leg.start?.name ?? ''} 승차 → {leg.end?.name ?? ''} 하차 {time ? `(${time})` : ''}
+                        {leg.start?.name ?? ''} 승차 → {leg.end?.name ?? ''} 하차{' '}
+                        {time ? `(${time})` : ''}
                       </span>
                     </div>
                     <div
-                      className='w-[0.8rem] h-[0.8rem] rounded-full absolute bottom-0 left-[-0.5rem]'
+                      className='absolute bottom-0 left-[-0.5rem] h-[0.8rem] w-[0.8rem] rounded-full'
                       style={{ backgroundColor: hex }}></div>
                   </div>
                 </li>
@@ -249,25 +250,26 @@ const TransportResult = ({
               const busNo = leg.route || '버스';
               const lineColor = hex;
               return (
-                <li key={idx} className='flex items-center gap-[1.2rem] h-[6rem]'>
+                <li key={idx} className='flex h-[6rem] items-center gap-[1.2rem]'>
                   <div
-                    className='h-full flex items-center relative overflow-visible border-l-2 ml-[1rem] pl-[1.5rem]'
+                    className='relative ml-[1rem] flex h-full items-center overflow-visible border-l-2 pl-[1.5rem]'
                     style={{ borderColor: lineColor }}>
                     <TransportIcon
                       mode={mode}
                       color={lineColor}
                       className='absolute top-0 left-[-1.3rem]'
                     />
-                    <div className='flex flex-col justify-between pl-[1rem] h-full'>
+                    <div className='flex h-full flex-col justify-between pl-[1rem]'>
                       <span className='body1-16-bold' style={{ color: lineColor }}>
                         {busNo}
                       </span>
                       <span className='body2-14-medium text-text-neutral-secondary relative top-[0.7rem]'>
-                        {leg.start?.name ?? ''} 승차 → {leg.end?.name ?? ''} 하차 {time ? `(${time})` : ''}
+                        {leg.start?.name ?? ''} 승차 → {leg.end?.name ?? ''} 하차{' '}
+                        {time ? `(${time})` : ''}
                       </span>
                     </div>
                     <div
-                      className='w-[0.8rem] h-[0.8rem] rounded-full absolute bottom-0 left-[-0.5rem]'
+                      className='absolute bottom-0 left-[-0.5rem] h-[0.8rem] w-[0.8rem] rounded-full'
                       style={{ backgroundColor: hex }}></div>
                   </div>
                 </li>
@@ -277,9 +279,9 @@ const TransportResult = ({
             if (mode === 'AIRPLANE') {
               const lineColor = hex;
               return (
-                <li key={idx} className='flex items-center gap-[1.2rem] h-[6rem]'>
+                <li key={idx} className='flex h-[6rem] items-center gap-[1.2rem]'>
                   <div
-                    className='h-full flex items-center relative overflow-visible border-l-2 ml-[1rem] pl-[1.5rem]'
+                    className='relative ml-[1rem] flex h-full items-center overflow-visible border-l-2 pl-[1.5rem]'
                     style={{ borderColor: lineColor }}>
                     <TransportIcon
                       mode={mode}
@@ -290,7 +292,7 @@ const TransportResult = ({
                       항공편 이용 {time ? `(${time})` : ''}
                     </span>
                     <div
-                      className='w-[0.8rem] h-[0.8rem] rounded-full absolute bottom-0 left-[-0.5rem]'
+                      className='absolute bottom-0 left-[-0.5rem] h-[0.8rem] w-[0.8rem] rounded-full'
                       style={{ backgroundColor: hex }}></div>
                   </div>
                 </li>
@@ -300,9 +302,9 @@ const TransportResult = ({
             if (mode === 'FERRY') {
               const lineColor = hex;
               return (
-                <li key={idx} className='flex items-center gap-[1.2rem] h-[6rem]'>
+                <li key={idx} className='flex h-[6rem] items-center gap-[1.2rem]'>
                   <div
-                    className='h-full flex items-center relative overflow-visible border-l-2 ml-[1rem] pl-[1.5rem]'
+                    className='relative ml-[1rem] flex h-full items-center overflow-visible border-l-2 pl-[1.5rem]'
                     style={{ borderColor: lineColor }}>
                     <TransportIcon
                       mode={mode}
@@ -313,7 +315,7 @@ const TransportResult = ({
                       해운 이용 {time ? `(${time})` : ''}
                     </span>
                     <div
-                      className='w-[0.8rem] h-[0.8rem] rounded-full absolute bottom-0 left-[-0.5rem]'
+                      className='absolute bottom-0 left-[-0.5rem] h-[0.8rem] w-[0.8rem] rounded-full'
                       style={{ backgroundColor: hex }}></div>
                   </div>
                 </li>
@@ -328,7 +330,7 @@ const TransportResult = ({
             );
           })}
           <li className='flex items-center gap-[1.2rem]'>
-            <div className='flex h-[2.4rem] w-[2.4rem] items-center justify-center rounded-full bg-status-destructive-primary'>
+            <div className='bg-status-destructive-primary flex h-[2.4rem] w-[2.4rem] items-center justify-center rounded-full'>
               <IcArriveMarker className='h-[2.4rem]' />
             </div>
             <span className='body1-16-medium text-text-neutral-primary'>도착</span>

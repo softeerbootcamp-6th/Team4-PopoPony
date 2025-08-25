@@ -51,7 +51,7 @@ const TitleWrapper = ({ children }: { children: React.ReactNode }) => {
 const Card = ({ children, className }: { children: React.ReactNode; className?: string }) => {
   return (
     <div
-      className={`bg-background-default-white shadow-card mt-[3.6rem] flex flex-col gap-[0.8rem] rounded-[1.2rem] p-[1.6rem] border border-stroke-neutral-dark ${className}`}>
+      className={`bg-background-default-white shadow-card border-stroke-neutral-dark mt-[3.6rem] flex flex-col gap-[0.8rem] rounded-[1.2rem] border p-[1.6rem] ${className}`}>
       {children}
     </div>
   );
