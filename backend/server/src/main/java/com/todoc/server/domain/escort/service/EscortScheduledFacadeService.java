@@ -65,7 +65,7 @@ public class EscortScheduledFacadeService {
 
         for (Escort escort : escorts) {
             // SMS 발송
-            smsService.sendSms(escort.getRecruit().getPatient().getContact(), "01026458362", buildEscortStartMessage(escort.getId()));
+            smsService.sendSms(escort.getRecruit().getPatient().getContact(), "01026458362", buildEscortStartMessage(escort.getRecruit().getId()));
 
             // 현재는 dirtychecking으로 처리
             escort.setStatus(EscortStatus.MEETING);
@@ -77,8 +77,8 @@ public class EscortScheduledFacadeService {
 //        recruitService.updateStatusForRecruitBeforeMeeting(date, from, to, now);
     }
 
-    private String buildEscortStartMessage(Long escortId) {
-        String encoded = encodeEscortId(escortId); // escortId → 암호화된 값
+    private String buildEscortStartMessage(Long recruitId) {
+        String encoded = encodeEscortId(recruitId); // escortId → 암호화된 값
         return """
         [토닥]
         곧 도우미와의 병원 동행이 시작됩니다!
@@ -88,8 +88,8 @@ public class EscortScheduledFacadeService {
         """.formatted(encoded);
     }
 
-    private String encodeEscortId(Long escortId) {
-        long encoded = escortId * 73 + 13579;   // 예시 수식
+    private String encodeEscortId(Long recruitId) {
+        long encoded = recruitId * 73 + 13579;   // 예시 수식
         return Long.toHexString(encoded);       // 사람이 보기 어렵게 16진수 변환
     }
 }
