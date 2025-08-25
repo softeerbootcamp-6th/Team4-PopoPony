@@ -31,10 +31,8 @@
   <!-- ====== 여기부터 “무엇을 보기 위한” 로거 설정 ====== -->
 
   <!-- 1) Spring TestContext 캐시 히트/미스/통계 보기 -->
-  <logger name="org.springframework.test.context.cache" level="DEBUG" additivity="false">
-    <appender-ref ref="CONSOLE"/>
-    <appender-ref ref="FILE"/>
-  </logger>
+  <logger name="org.springframework.test.context.cache" level="TRACE"/>
+  <logger name="org.springframework.test.context" level="DEBUG"/>
 
   <!-- 2) @Sql 스크립트 실행 로그 (시작/종료/경과시간) -->
   <logger name="org.springframework.jdbc.datasource.init" level="DEBUG" additivity="false">
