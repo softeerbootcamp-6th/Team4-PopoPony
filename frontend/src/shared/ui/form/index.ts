@@ -1,5 +1,6 @@
 import LabeledSection from './LabeledSection';
 import ProgressBar from './ProgressBar';
+import DatePickerInput from './RHF/DatePickerInput';
 import FormInput from './RHF/FormInput';
 import FormTextarea from './RHF/FormTextarea';
 import MultiOptionSelector from './RHF/MultiOptionSelector';
@@ -8,6 +9,7 @@ import PhotoUpload from './RHF/PhotoUpload';
 import TwoOptionSelector from './RHF/TwoOptionSelector';
 
 export {
+  DatePickerInput,
   FormInput,
   FormTextarea,
   MultiOptionSelector,

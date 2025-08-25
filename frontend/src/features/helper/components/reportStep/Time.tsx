@@ -1,6 +1,6 @@
 import { IcChevronDown } from '@icons';
 
-import { useFormContext } from 'react-hook-form';
+import { useFormContext, useWatch } from 'react-hook-form';
 
 import { isTimeBefore, timeDuration } from '@shared/lib';
 import type { FunnelStepProps } from '@shared/types';
@@ -8,10 +8,10 @@ import { Button, LabeledSection } from '@shared/ui';
 import { FormLayout } from '@shared/ui/layout';
 
 const Time = ({ handleNextStep }: FunnelStepProps) => {
-  const { register, watch } = useFormContext();
+  const { register, control } = useFormContext();
 
-  const actualMeetingTime = watch('actualMeetingTime');
-  const actualReturnTime = watch('actualReturnTime');
+  const actualMeetingTime = useWatch({ control, name: 'actualMeetingTime' });
+  const actualReturnTime = useWatch({ control, name: 'actualReturnTime' });
 
   const isValidTime =
     actualMeetingTime && actualReturnTime && isTimeBefore(actualMeetingTime, actualReturnTime);
@@ -61,6 +61,7 @@ const Time = ({ handleNextStep }: FunnelStepProps) => {
                 <div className='relative flex-1'>
                   <input
                     type='time'
+                    min={'14:00'}
                     className='body1-16-medium text-text-neutral-primary w-full bg-transparent outline-none disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:top-0 [&::-webkit-calendar-picker-indicator]:left-0 [&::-webkit-calendar-picker-indicator]:h-full [&::-webkit-calendar-picker-indicator]:w-full [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:opacity-0'
                     {...register('actualReturnTime')}
                   />
