@@ -25,6 +25,10 @@ public class AuthInterceptor implements HandlerInterceptor {
             return true;
         }
 
+        if ("GET".equalsIgnoreCase(method) && uri.contains("/api/escorts/recruits/")) {
+            return true;
+        }
+
         // 2) Swagger, API 문서 등 화이트리스트
         if (uri.startsWith("/api/auth") || uri.startsWith("/v3/api-docs") || uri.startsWith("/swagger-ui")) {
             return true;
