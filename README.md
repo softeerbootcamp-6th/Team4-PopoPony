@@ -52,23 +52,6 @@
 <br />
 <br />
 
-## 🧐 서비스 배경
-
-<img width="100%" alt="프로젝트 배경" src="https://github.com/user-attachments/assets/f89aab1c-9211-43a7-928d-f5684bae6af9" />
-<img width="100%" alt="문제 정의" src="https://github.com/user-attachments/assets/5c67ac6f-10ed-4982-8eb1-1a4ada8b7640" />
-
-## 💁 서비스 소개 및 주요 기능
-
-<img width="100%" alt="서비스 개요" src="https://github.com/user-attachments/assets/1f3a8cd2-d0de-41bf-b0a9-cb6bd761f0cd" />
-<img width="100%" alt="서비스 플로우" src="https://github.com/user-attachments/assets/2ffc9698-8143-4848-a102-02117b8bdffd" />
-
-## 🪧 서비스 로드맵
-
-<img width="100%" alt="단계별 로드맵" src="https://github.com/user-attachments/assets/da12145a-47ec-4a66-b5f2-5285149c3c12" />
-
-<br />
-<br />
-
 
 ## 🧩 팀 포포포니 소개
 
