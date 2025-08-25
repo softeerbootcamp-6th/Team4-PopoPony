@@ -146,18 +146,14 @@ const RecruitDetailPage = () => {
               </div>
               <div className='flex-start body1-16-medium gap-[2rem]'>
                 <span className='text-text-neutral-primary'>동행 병원</span>
-                <div className='flex-start gap-[0.8rem]'>
-                  <span className='text-text-neutral-secondary'>
-                    {hospitalLocationInfo.placeName}
-                  </span>
-                  <ShowMapButton
-                    businessAddress={hospitalLocationInfo.placeName}
-                    pos={{
-                      lat: hospitalLocationInfo.lat,
-                      lng: hospitalLocationInfo.lon,
-                    }}
-                  />
-                </div>
+                <ShowMapButton
+                  businessAddress={hospitalLocationInfo.placeName}
+                  fontSize='medium'
+                  pos={{
+                    lat: hospitalLocationInfo.lat,
+                    lng: hospitalLocationInfo.lon,
+                  }}
+                />
               </div>
             </div>
             <RouteButton

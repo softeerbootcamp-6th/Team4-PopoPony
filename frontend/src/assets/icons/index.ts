@@ -11,6 +11,8 @@ import IcArrowRight from './arrow-right.svg?react';
 import IcArrowRotateRight01 from './arrow-rotate-right-01.svg?react';
 import IcArrowUp from './arrow-up.svg?react';
 // Transportation Icons
+import IcAirplane from './airplane-sharp.svg?react';
+import IcFerry from './ferry.svg?react';
 import IcBusFill from './bus-fill.svg?react';
 import IcButtonClose from './button-close.svg?react';
 import IcCalendar from './calendar.svg?react';
@@ -110,6 +112,8 @@ export {
   IcButtonClose,
 
   // Transportation Icons
+  IcAirplane,
+  IcFerry,
   IcBusFill,
   IcSubwayFill,
   IcTaxiBadge,
