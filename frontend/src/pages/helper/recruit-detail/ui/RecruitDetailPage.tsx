@@ -165,7 +165,7 @@ const RecruitDetailPage = () => {
           <div className='flex flex-col gap-[2.4rem] p-[2rem]'>
             <h3 className='subtitle-18-bold text-text-neutral-primary'>환자 상태</h3>
             <div className='mt-[1.2rem] flex flex-col gap-[2rem]'>
-              <InfoSection title='보행 상태'>
+              <InfoSection title='보행 상태' status={taglist.length === 0 ? '괜찮아요' : undefined}>
                 <div className='flex-start gap-[0.4rem]'>
                   {taglist.map((tag) => (
                     <StrengthTag key={tag} type={tag as EscortStrength} />
