@@ -1,6 +1,5 @@
 import { IcPlusSideLeft } from '@icons';
 import { useQueryClient } from '@tanstack/react-query';
-import { Link } from '@tanstack/react-router';
 import { useNavigate } from '@tanstack/react-router';
 
 import { RecruitCard } from '@widgets/ui';
