@@ -9,6 +9,7 @@ import com.todoc.server.domain.customer.web.dto.response.PatientSimpleResponse;
 import com.todoc.server.domain.escort.entity.Recruit;
 import com.todoc.server.domain.escort.exception.RecruitInvalidCancelException;
 import com.todoc.server.domain.escort.exception.RecruitNotFoundException;
+import com.todoc.server.domain.escort.repository.ApplicationJpaRepository;
 import com.todoc.server.domain.escort.repository.RecruitJpaRepository;
 import com.todoc.server.domain.escort.repository.RecruitQueryRepository;
 import com.todoc.server.domain.escort.repository.dto.RecruitHistoryDetailFlatDto;
@@ -39,6 +40,10 @@ public class RecruitService {
 
     private final RecruitJpaRepository recruitJpaRepository;
     private final RecruitQueryRepository recruitQueryRepository;
+
+    // TODO : 책임 분리
+    private final ApplicationJpaRepository applicationJpaRepository;
+
     private final Clock clock;
 
     /**
@@ -343,11 +348,13 @@ public class RecruitService {
                 throw new PatientNotFoundException();
             }
 
+            long applicationCount = applicationJpaRepository.countByRecruitId(recruit.getId());
+
             RecruitSimpleResponse dto = RecruitSimpleResponse.builder()
                     .recruitId(recruit.getId())
                     .escortId(null)
                     .recruitStatus(recruit.getStatus().getLabel())
-                    .numberOfApplication(0L)
+                    .numberOfApplication(applicationCount)
                     .escortDate(recruit.getEscortDate())
                     .estimatedMeetingTime(recruit.getEstimatedMeetingTime())
                     .estimatedReturnTime(recruit.getEstimatedReturnTime())

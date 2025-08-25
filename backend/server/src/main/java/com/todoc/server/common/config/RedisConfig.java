@@ -74,18 +74,6 @@ public class RedisConfig {
         return new MessageListenerAdapter(subscriber, "onMessage");
     }
 
-//    @Bean
-//    public RedisMessageListenerContainer container(RedisConnectionFactory connectionFactory,
-//                                                   MessageListenerAdapter listener) {
-//        RedisMessageListenerContainer container = new RedisMessageListenerContainer();
-//        container.setConnectionFactory(connectionFactory);
-//
-//        // 특정 채널만 구독
-//        container.addMessageListener(listener, new PatternTopic("escort:ch:*"));
-//
-//        return container;
-//    }
-
     @Bean
     public RedisMessageListenerContainer container(RedisConnectionFactory cf,
                                                    RedisSubscriber subscriber) {
