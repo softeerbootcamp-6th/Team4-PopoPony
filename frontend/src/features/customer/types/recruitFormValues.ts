@@ -75,6 +75,18 @@ export const CommunicationSchema = z
       message: '구체적인 문제점을 도우미에게 알려주세요',
       path: ['communicationIssueDetail'],
     }
+  )
+  .refine(
+    (data) => {
+      if (data.hasCommunicationIssue === 'true') {
+        return !!data.communicationIssueDetail && data.communicationIssueDetail.length < 100;
+      }
+      return true;
+    },
+    {
+      message: '100자 이하로 입력해주세요',
+      path: ['communicationIssueDetail'],
+    }
   );
 
 export const IntegratedCommSchema = z.intersection(CognitiveSchema, CommunicationSchema);
@@ -167,8 +179,23 @@ export type LocationDetail = z.infer<typeof locationDetailSchema>;
 export type RouteFormValues = z.infer<typeof routeFormSchema>;
 
 export const requestFormSchema = z.object({
-  purpose: z.string().min(1, '요청 사항을 입력해주세요'),
-  extraRequest: z.string().optional(),
+  purpose: z.string().min(1, '요청 사항을 입력해주세요').max(100, {
+    message: '100자 이하로 입력해주세요',
+  }),
+  extraRequest: z
+    .string()
+    .optional()
+    .refine(
+      (data) => {
+        if (data) {
+          return data.length < 100;
+        }
+        return true;
+      },
+      {
+        message: '100자 이하로 입력해주세요',
+      }
+    ),
 });
 export type RequestFormValues = z.infer<typeof requestFormSchema>;
 

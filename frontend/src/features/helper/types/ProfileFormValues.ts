@@ -59,7 +59,9 @@ const CertificateItemSchema = z.object({
 export type CertificateItemValues = z.infer<typeof CertificateItemSchema>;
 
 export const DetailFormSchema = z.object({
-  shortBio: z.string().min(1, '간단한 자기소개를 입력해주세요'),
+  shortBio: z.string().min(1, '간단한 자기소개를 입력해주세요').max(100, {
+    message: '100자 이하로 입력해주세요',
+  }),
   strengthList: z
     .array(z.enum(STRENGTH_OPTIONS.map((o) => o.value)))
     .max(3, '강점은 최대 3개까지 선택 가능합니다')
