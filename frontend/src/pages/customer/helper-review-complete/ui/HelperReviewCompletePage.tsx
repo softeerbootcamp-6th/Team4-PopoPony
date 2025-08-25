@@ -32,11 +32,10 @@ const HelperReviewCompletePage = () => {
                 <source src='/video/process_completed.webm' type='video/webm' />
               </video>
             </div>
-            <h2 className='headline-24-bold text-text-neutral-primary'>
-              도우미 후기를 남겼어요!
-            </h2>
+            <h2 className='headline-24-bold text-text-neutral-primary'>도우미 후기를 남겼어요!</h2>
             <p className='body1-16-medium text-text-neutral-secondary text-center'>
-              남겨주신 후기는 다른 동행 고객 분들께<br /> 큰 도움이 될 거예요.
+              남겨주신 후기는 다른 동행 고객 분들께
+              <br /> 큰 도움이 될 거예요.
             </p>
           </div>
         </div>
