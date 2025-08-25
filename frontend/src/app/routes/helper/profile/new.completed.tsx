@@ -7,5 +7,5 @@ export const Route = createFileRoute('/helper/profile/new/completed')({
 });
 
 function RouteComponent() {
-  <HelperProfileCompletePage />;
+  return <HelperProfileCompletePage />;
 }
