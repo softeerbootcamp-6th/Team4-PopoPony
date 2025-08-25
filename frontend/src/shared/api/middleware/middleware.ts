@@ -37,7 +37,7 @@ export const errorMiddleware: Middleware = {
   async onResponse({ response }) {
     const status = response.status;
     const body = await readJson<TBusinessResponse>(response);
-    console.log('body from middleware', body);
+    // console.log('body from middleware', body);
     /**
      * body는 네트워크 에러가 아닌 이상 항상
      * code: number, status: number, message: string, data:[]
