@@ -1,9 +1,8 @@
 import { IcHeadphoneQuestionmark } from '@icons';
 import { getRouteApi, useRouter } from '@tanstack/react-router';
+import { toast } from 'sonner';
 
 import { type ReactNode, useEffect, useRef, useState } from 'react';
-
-import { toast } from 'sonner';
 
 import { SlideButton } from '@entities/escort/ui';
 

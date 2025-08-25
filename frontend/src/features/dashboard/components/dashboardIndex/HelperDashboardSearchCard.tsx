@@ -1,11 +1,11 @@
 import { IcArriveMarker, IcArrowRotateRight01 } from '@icons';
-import { IcAirplane, IcBusFill, IcFerry, IcSubwayFill, IcWalk, IcStartMarker } from '@icons';
+import { IcAirplane, IcBusFill, IcFerry, IcStartMarker, IcSubwayFill, IcWalk } from '@icons';
 import { useSuspenseQuery } from '@tanstack/react-query';
 
 import { useEffect, useState } from 'react';
 
-import { Button, ErrorSuspenseBoundary } from '@shared/ui';
 import { cn } from '@shared/lib';
+import { Button, ErrorSuspenseBoundary } from '@shared/ui';
 
 import { postTmapTransport } from '@dashboard/apis';
 
@@ -72,7 +72,15 @@ type TmapResponse = {
 };
 
 // 교통수단 아이콘 컴포넌트
-const TransportIcon = ({ mode, color, className }: { mode: string; color?: string, className?: string }) => {
+const TransportIcon = ({
+  mode,
+  color,
+  className,
+}: {
+  mode: string;
+  color?: string;
+  className?: string;
+}) => {
   const hex = color ? (color.startsWith('#') ? color : `#${color}`) : undefined;
   const colorClass = hex ? `bg-[${hex}]` : 'bg-bg-neutral-tertiary';
   const getIcon = () => {
@@ -101,12 +109,11 @@ const TransportIcon = ({ mode, color, className }: { mode: string; color?: strin
       className={cn(
         'flex h-[2.4rem] w-[2.4rem] items-center justify-center rounded-full',
         colorClass,
-        className,
+        className
       )}
       style={{
         backgroundColor: hex,
-      }}
-      >
+      }}>
       {getIcon()}
     </div>
   );
@@ -186,18 +193,25 @@ const TransportResult = ({
           </li>
           {legs.map((leg: TmapLeg, idx: number) => {
             const mode = leg.mode ?? '';
-            const hex = leg.routeColor ? (leg.routeColor.startsWith('#') ? leg.routeColor : `#${leg.routeColor}`) : '#00C89A';
+            const hex = leg.routeColor
+              ? leg.routeColor.startsWith('#')
+                ? leg.routeColor
+                : `#${leg.routeColor}`
+              : '#00C89A';
 
             if (mode === 'WALK') {
               return (
                 <li key={idx} className='flex items-center gap-[1.2rem] h-[6rem]'>
                   <div className='h-full flex items-center relative overflow-visible border-l-2 ml-[1rem] border-dotted border-stroke-neutral-dark'>
-                  <span className='body2-14-medium text-text-neutral-secondary pl-[2.5rem]'>도보로 이동</span>
-                  <TransportIcon mode={mode} color={hex} className='absolute left-[-0.75rem] top-1/2 -translate-y-1/2' />
-                  
+                    <span className='body2-14-medium text-text-neutral-secondary pl-[2.5rem]'>
+                      도보로 이동
+                    </span>
+                    <TransportIcon
+                      mode={mode}
+                      color={hex}
+                      className='absolute left-[-0.75rem] top-1/2 -translate-y-1/2'
+                    />
                   </div>
-                  
-                  
                 </li>
               );
             }
@@ -209,8 +223,7 @@ const TransportResult = ({
                 <li key={idx} className='flex items-center gap-[1.2rem] h-[6rem]'>
                   <div
                     className='h-full flex items-center relative overflow-visible border-l-2 ml-[1rem] pl-[1.5rem]'
-                    style={{ borderColor: lineColor }}
-                  >
+                    style={{ borderColor: lineColor }}>
                     <TransportIcon
                       mode={mode}
                       color={lineColor}
@@ -224,7 +237,9 @@ const TransportResult = ({
                         {leg.start?.name ?? ''} 승차 → {leg.end?.name ?? ''} 하차
                       </span>
                     </div>
-                    <div className='w-[0.8rem] h-[0.8rem] rounded-full absolute bottom-0 left-[-0.5rem]' style={{ backgroundColor: hex }}></div>
+                    <div
+                      className='w-[0.8rem] h-[0.8rem] rounded-full absolute bottom-0 left-[-0.5rem]'
+                      style={{ backgroundColor: hex }}></div>
                   </div>
                 </li>
               );
@@ -237,8 +252,7 @@ const TransportResult = ({
                 <li key={idx} className='flex items-center gap-[1.2rem] h-[6rem]'>
                   <div
                     className='h-full flex items-center relative overflow-visible border-l-2 ml-[1rem] pl-[1.5rem]'
-                    style={{ borderColor: lineColor }}
-                  >
+                    style={{ borderColor: lineColor }}>
                     <TransportIcon
                       mode={mode}
                       color={lineColor}
@@ -252,7 +266,9 @@ const TransportResult = ({
                         {leg.start?.name ?? ''} 승차 → {leg.end?.name ?? ''} 하차
                       </span>
                     </div>
-                    <div className='w-[0.8rem] h-[0.8rem] rounded-full absolute bottom-0 left-[-0.5rem]' style={{ backgroundColor: hex }}></div>
+                    <div
+                      className='w-[0.8rem] h-[0.8rem] rounded-full absolute bottom-0 left-[-0.5rem]'
+                      style={{ backgroundColor: hex }}></div>
                   </div>
                 </li>
               );
@@ -264,15 +280,18 @@ const TransportResult = ({
                 <li key={idx} className='flex items-center gap-[1.2rem] h-[6rem]'>
                   <div
                     className='h-full flex items-center relative overflow-visible border-l-2 ml-[1rem] pl-[1.5rem]'
-                    style={{ borderColor: lineColor }}
-                  >
+                    style={{ borderColor: lineColor }}>
                     <TransportIcon
                       mode={mode}
                       color={lineColor}
                       className='absolute top-0 left-[-1.3rem]'
                     />
-                    <span className='body1-16-bold pl-[1rem]' style={{ color: lineColor }}>항공편 이용</span>
-                    <div className='w-[0.8rem] h-[0.8rem] rounded-full absolute bottom-0 left-[-0.5rem]' style={{ backgroundColor: hex }}></div>
+                    <span className='body1-16-bold pl-[1rem]' style={{ color: lineColor }}>
+                      항공편 이용
+                    </span>
+                    <div
+                      className='w-[0.8rem] h-[0.8rem] rounded-full absolute bottom-0 left-[-0.5rem]'
+                      style={{ backgroundColor: hex }}></div>
                   </div>
                 </li>
               );
@@ -284,15 +303,18 @@ const TransportResult = ({
                 <li key={idx} className='flex items-center gap-[1.2rem] h-[6rem]'>
                   <div
                     className='h-full flex items-center relative overflow-visible border-l-2 ml-[1rem] pl-[1.5rem]'
-                    style={{ borderColor: lineColor }}
-                  >
+                    style={{ borderColor: lineColor }}>
                     <TransportIcon
                       mode={mode}
                       color={lineColor}
                       className='absolute top-0 left-[-1.3rem]'
                     />
-                    <span className='body2-14-medium text-text-neutral-primary pl-[1rem]'>해운 이용</span>
-                    <div className='w-[0.8rem] h-[0.8rem] rounded-full absolute bottom-0 left-[-0.5rem]' style={{ backgroundColor: hex }}></div>
+                    <span className='body2-14-medium text-text-neutral-primary pl-[1rem]'>
+                      해운 이용
+                    </span>
+                    <div
+                      className='w-[0.8rem] h-[0.8rem] rounded-full absolute bottom-0 left-[-0.5rem]'
+                      style={{ backgroundColor: hex }}></div>
                   </div>
                 </li>
               );
