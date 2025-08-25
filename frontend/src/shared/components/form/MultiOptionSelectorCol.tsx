@@ -30,7 +30,7 @@ const MultiOptionSelectorCol = ({ name, options, showHelperText = true }: Props)
         />
       ))}
       {showHelperText && (
-        <p className='caption12-12-medium text-text-neutral-assistive'>*복수선택 가능</p>
+        <p className='caption1-12-medium text-text-neutral-assistive'>*복수선택 가능</p>
       )}
     </div>
   );

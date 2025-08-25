@@ -15,8 +15,23 @@ public class PresenceController {
     private final WebSocketFacadeService webSocketFacadeService; // 상태/위치 조회
     private final NchanPublisher nchanPublisher;   // HTTP POST 퍼블리시(앞서 만든 것: WebClient/HttpClient/RestTemplate 아무거나)
 
+    /**
+     * Nchan 채널 구독 시 실행되는 메서드 -> 스냅샷 전송
+     */
     @GetMapping("/sub")
-    public ResponseEntity<Void> onSubscribe(@RequestHeader("X-Escort-Id") long escortId) {
+    public ResponseEntity<Void> onSubscribe(@RequestHeader("X-Escort-Id") String escortIdHeader) {
+
+        if (escortIdHeader == null || escortIdHeader.isBlank()) {
+            return ResponseEntity.status(401).build();
+        }
+
+        long escortId;
+        try {
+            escortId = Long.parseLong(escortIdHeader);
+        } catch (NumberFormatException e) {
+            return ResponseEntity.status(401).build();
+        }
+
         try {
             // 1. 동행 상태 스냅샷
             nchanPublisher.publish(escortId, webSocketFacadeService.getStatusSnapshot(escortId));

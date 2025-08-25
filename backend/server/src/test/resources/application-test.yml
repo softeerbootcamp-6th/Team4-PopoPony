@@ -5,12 +5,12 @@ spring:
     password:
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: create
     show-sql: true
     database-platform: org.hibernate.dialect.MySQL8Dialect
-    properties:
-      hibernate:
-        format_sql: true
+#    properties:
+#      hibernate:
+#        format_sql: true
 
 tmap:
   api-key: ${TMAP_API_KEY:}

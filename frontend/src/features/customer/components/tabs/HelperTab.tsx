@@ -1,7 +1,8 @@
-import { Spinner, Tabs, EmptyCard } from '@components';
+import { Tabs, EmptyCard } from '@components';
 import { HelperCard, HelperSelectInfoCard } from '@customer/components';
 import { useNavigate, getRouteApi } from '@tanstack/react-router';
 import { getApplicationListById } from '@customer/apis';
+import { SuspenseUI } from '@components';
 
 const routeApi = getRouteApi('/customer/escort/$escortId/');
 
@@ -35,7 +36,7 @@ const HelperTab = ({ status }: { status: string }) => {
     }
   };
 
-  if (isLoading) return <Spinner />;
+  if (isLoading) return <SuspenseUI />;
 
   return (
     <Tabs.TabsContentSection>

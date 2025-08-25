@@ -1,4 +1,4 @@
-package com.todoc.server.domain.escort.service;
+package com.todoc.server.domain.escort.service.application;
 
 import com.todoc.server.common.enumeration.ApplicationStatus;
 import com.todoc.server.common.enumeration.Gender;
@@ -13,6 +13,10 @@ import com.todoc.server.domain.escort.exception.ApplicationNotFoundException;
 import com.todoc.server.domain.escort.exception.RecruitInvalidException;
 import com.todoc.server.domain.escort.exception.RecruitNotFoundException;
 import com.todoc.server.domain.escort.repository.dto.ApplicationFlatDto;
+import com.todoc.server.domain.escort.service.ApplicationFacadeService;
+import com.todoc.server.domain.escort.service.ApplicationService;
+import com.todoc.server.domain.escort.service.EscortService;
+import com.todoc.server.domain.escort.service.RecruitService;
 import com.todoc.server.domain.escort.web.dto.response.ApplicationListResponse;
 import com.todoc.server.domain.escort.web.dto.response.ApplicationSimpleResponse;
 import com.todoc.server.domain.helper.service.HelperService;

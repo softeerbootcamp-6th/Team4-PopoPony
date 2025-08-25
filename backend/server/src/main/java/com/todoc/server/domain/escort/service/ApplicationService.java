@@ -1,6 +1,5 @@
 package com.todoc.server.domain.escort.service;
 
-import com.querydsl.core.Tuple;
 import com.todoc.server.domain.escort.entity.Application;
 import com.todoc.server.domain.escort.exception.ApplicationNotFoundException;
 import com.todoc.server.domain.escort.repository.ApplicationJpaRepository;
@@ -13,8 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
-import static com.todoc.server.domain.escort.entity.QApplication.application;
 
 @Service
 @RequiredArgsConstructor

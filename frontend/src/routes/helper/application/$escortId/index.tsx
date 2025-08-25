@@ -93,7 +93,7 @@ function RouteComponent() {
   }
 
   return (
-    <PageLayout>
+    <>
       <PageLayout.Header title='내역 상세보기' showBack />
       <PageLayout.Content className='overflow-y-auto'>
         <div className='bg-neutral-10 flex-col-start gap-[1.2rem] px-[2rem] py-[1.6rem]'>
@@ -222,6 +222,6 @@ function RouteComponent() {
           </TermsBottomSheet>
         </PageLayout.Footer>
       )}
-    </PageLayout>
+    </>
   );
 }

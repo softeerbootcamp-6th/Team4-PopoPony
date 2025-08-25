@@ -227,7 +227,7 @@ INSERT INTO recruit (
        '건강검진', '대중교통 이동 가능 여부 알려주세요.', 26000, 'MATCHING',
        CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, null),
 
-      (8, 3, 4, 3, '2025-08-08', '08:30:00', '11:00:00',
+      (8, 2, 4, 3, '2025-08-08', '08:30:00', '11:00:00',
        '물리치료', '약 복용 시간 고려해 주세요.', 24000, 'IN_PROGRESS',
        CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, null),
 
@@ -241,6 +241,22 @@ INSERT INTO recruit (
 
       (11, 2, 1, 2, '2025-08-11', '10:00:00', '12:30:00',
        '정기검진', '처방전 잘 챙겨주세요.', 29000, 'DONE',
+       CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, null),
+
+      (12, 2, 1, 2, '2025-08-23', '15:00:00', '18:30:00',
+       '정기검진', '처방전 잘 챙겨주세요.', 29000, 'COMPLETED',
+       CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, null),
+
+      (13, 3, 2, 3, '2025-08-23', '15:30:00', '18:30:00',
+       '정기검진', '처방전 잘 챙겨주세요.', 29000, 'COMPLETED',
+       CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, null),
+
+      (14, 3, 1, 1, '2025-08-12', '09:00:00', '11:30:00',
+       '정기검진', '빠른 이동 부탁드립니다.', 30000, 'IN_PROGRESS',
+       CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, null),
+
+      (15, 3, 2, 2, '2025-08-13', '10:00:00', '12:30:00',
+       '물리치료', '도착 시 연락 부탁드립니다.', 28000, 'IN_PROGRESS',
        CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, null);
 
 
@@ -267,15 +283,20 @@ INSERT INTO escort (
     created_at, updated_at, deleted_at
 ) VALUES
       (1, 1, 1, 1, '다음 진료 예약 잡았습니다.', 'DONE', null, null, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, null),
-      (2, 2, 2, 3, '상태 많이 호전되셨어요.', 'WRITING_REPORT', null, null,CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, null),
-      (3, 3, 3, 4, '추가 검진 필요하다고 합니다.', 'DONE', null, null,CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, null),
-      (4, 4, 4, 2, '교통체증으로 복귀가 조금 늦었습니다.', 'WRITING_REPORT', null, null,CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, null),
-      (5, 5, 5, 1, '약 식후 30분에 드시면 됩니다.', 'DONE', null, null,CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, null),
-      (6, 6, 1, 5, '약 다른 걸로 바꿔야 한다고 하네요.', 'DONE', null, null,CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, null),
-      (7, 10, 5, 3, '주사 한 방 맞았습니다.', 'PREPARING', null, null,CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, null),
-      (8, 9, 4, 4, NULL, 'WRITING_REPORT', null, null,CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, null),
-      (9, 8, 3, 5, '혈압 전보다 낮아지셨습니다.', 'RETURNING', null, null,CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, null),
-      (10, 11, 2, 2, NULL, 'MEETING', null, null,CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, null);
+      (2, 2, 2, 3, '상태 많이 호전되셨어요.', 'DONE', null, null, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, null),
+      (3, 3, 3, 4, '추가 검진 필요하다고 합니다.', 'DONE', null, null, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, null),
+      (4, 4, 4, 2, '교통체증으로 복귀가 조금 늦었습니다.', 'DONE', null, null, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, null),
+      (5, 5, 5, 1, '약 식후 30분에 드시면 됩니다.', 'DONE', null, null, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, null),
+      (6, 6, 1, 5, '약 다른 걸로 바꿔야 한다고 하네요.', 'DONE', null, null, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, null),
+      (7, 10, 5, 3, '주사 한 방 맞았습니다.', 'PREPARING', null, null, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, null),
+      (8, 9, 4, 4, NULL, 'WRITING_REPORT', null, null, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, null),
+      (9, 8, 3, 5, '혈압 전보다 낮아지셨습니다.', 'RETURNING', null, null, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, null),
+      (10, 11, 2, 3, NULL, 'DONE', null, null, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, null),
+      (11, 12, 2, 2, NULL, 'PREPARING', null, null, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, null),
+      (12, 13, 3, 2, NULL, 'MEETING', null, null, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, null),
+      (13, 14, 1, 2, NULL, 'HEADING_TO_HOSPITAL', null, null, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, null),
+      (14, 15, 2, 3, NULL, 'IN_TREATMENT', null, null, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, null);
+
 
 
 INSERT INTO review (
@@ -293,10 +314,7 @@ INSERT INTO review (
 
       (5, 5, 5, 1, 'GOOD', NULL, '시간 약속 잘 지켜주셨어요.', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, null),
 
-      (6, 6, 1, 5, 'BAD', '소통이 조금 어려웠어요.', '개선되면 좋겠어요.', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, null),
-
-      (7, 10, 5, 3, 'GOOD', NULL, '안심하고 맡길 수 있었어요.', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, null);
-
+      (6, 6, 1, 5, 'BAD', '소통이 조금 어려웠어요.', '개선되면 좋겠어요.', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, null);
 
 INSERT INTO positive_feedback (id, description, created_at, updated_at)
 VALUES
@@ -326,13 +344,7 @@ VALUES
     (12, 5, 6, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
     (13, 5, 7, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
     (14, 6, 4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-    (15, 6, 8, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-    (16, 7, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-    (17, 7, 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-    (18, 7, 3, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-    (19, 7, 5, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-    (20, 7, 6, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-    (21, 7, 8, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+    (15, 6, 8, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 
 INSERT INTO report (

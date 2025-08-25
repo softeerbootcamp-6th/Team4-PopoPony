@@ -17,16 +17,22 @@ public class LocationService {
 
     private final LocationCacheRepository locationCacheRepository;
 
-    public LocationUpdateResult registerByWebSocket(WebSocketSession session, LocationUpdateRequest request) {
+    /**
+     * WebSocket을 통해 최신 위치 업데이트
+     */
+    public LocationUpdateResult updateLatestLocationByWebSocket(WebSocketSession session, LocationUpdateRequest request) {
 
-        return locationCacheRepository.upsertLatest(session, request);
+        return locationCacheRepository.upsertLatestLocation(session, request);
     }
 
-    public void registerBySse(long escortId, Role role, LocationUpdateRequest request) {
+//    public void registerBySse(long escortId, Role role, LocationUpdateRequest request) {
+//
+//        locationCacheRepository.saveSimple(escortId, role, request);
+//    }
 
-        locationCacheRepository.saveSimple(escortId, role, request);
-    }
-
+    /**
+     * 최신 위치 조회
+     */
     public LocationResponse getLatestLocation(Long escortId, Role role) {
         return locationCacheRepository.findLatestLocation(escortId, role).orElse(null);
     }

@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface ImageAttachmentJpaRepository extends JpaRepository<ImageAttachment, Long> {
     List<ImageAttachment> findByReportId(Long reportId);
+    long countByReportId(Long reportId);
 }

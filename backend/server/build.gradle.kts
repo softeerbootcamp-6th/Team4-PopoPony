@@ -81,14 +81,12 @@ dependencies {
 	// WebSocket
 	implementation ("org.springframework.boot:spring-boot-starter-websocket")
 
-<<<<<<< Updated upstream
 	// SMS
 	implementation("net.nurigo:sdk:4.3.2")
-=======
+
 	// test-container
 	testImplementation("org.testcontainers:junit-jupiter:1.20.3") // 최신버전 확인
 	testImplementation("org.testcontainers:mysql:1.20.3")
->>>>>>> Stashed changes
 }
 
 val querydslDir = layout.buildDirectory.dir("generated/querydsl")
@@ -103,6 +101,25 @@ tasks.withType<JavaCompile>().configureEach {
 	)
 }
 
-tasks.withType<Test> {
+tasks.withType<Test>().configureEach {
 	useJUnitPlatform()
+
+	// 로그 파일 위치를 Logback에 전달
+	systemProperty("LOG_DIR", "$buildDir/logs/test")
+	// (선택) logback-test.xml을 확실히 사용하게
+	systemProperty("logging.config", "classpath:logback-test.xml")
+	// 한글 깨짐 방지
+	jvmArgs("-Dfile.encoding=UTF-8")
+
+	// 디렉터리 미리 만들어두기 (윈도우 포함 안전)
+	doFirst {
+		file("$buildDir/logs/test").mkdirs()
+	}
+
+	// 콘솔은 조용히 하고 싶다면 아래 그대로 두고,
+	// 콘솔에도 보고 싶으면 showStandardStreams = true 로 바꿔.
+	testLogging {
+		events("failed")             // 실패만 이벤트 출력
+		showStandardStreams = false  // 표준 출력은 숨김(파일로만)
+	}
 }

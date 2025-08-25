@@ -56,7 +56,7 @@ function RouteComponent() {
   }, [helperData, reset]);
 
   return (
-    <PageLayout>
+    <>
       <PageLayout.Header
         title='동행 신청하기'
         showBack={true}
@@ -64,18 +64,16 @@ function RouteComponent() {
         onClose={handleClose}
       />
       <PageLayout.Content>
-        <div className='h-full flex-1 overflow-hidden'>
-          <FormProvider {...methods}>
-            <Funnel>
-              <Step name='region'>
-                <Region handleNextStep={nextStep} />
-              </Step>
-              <Step name='detail'>
-                <Detail />
-              </Step>
-            </Funnel>
-          </FormProvider>
-        </div>
+        <FormProvider {...methods}>
+          <Funnel>
+            <Step name='region'>
+              <Region handleNextStep={nextStep} />
+            </Step>
+            <Step name='detail'>
+              <Detail />
+            </Step>
+          </Funnel>
+        </FormProvider>
       </PageLayout.Content>
       <Modal isOpen={isOpen} onClose={handleDenyClose}>
         <Modal.Title>프로필 작성을 중단하시겠어요?</Modal.Title>
@@ -84,6 +82,6 @@ function RouteComponent() {
           <Modal.CloseButton onClick={handleDenyClose}>아니오</Modal.CloseButton>
         </Modal.ButtonContainer>
       </Modal>
-    </PageLayout>
+    </>
   );
 }

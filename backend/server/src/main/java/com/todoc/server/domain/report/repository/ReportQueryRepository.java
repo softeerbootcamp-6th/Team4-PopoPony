@@ -1,7 +1,6 @@
 package com.todoc.server.domain.report.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.todoc.server.domain.report.exception.ReportNotFoundException;
 import com.todoc.server.domain.report.repository.dto.ReportDetailFlatDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -34,7 +33,7 @@ public class ReportQueryRepository {
                 .fetchOne();
 
         if (tuple == null) {
-            throw new ReportNotFoundException();
+            return null;
         }
 
         Long reportId = tuple.get(report).getId();

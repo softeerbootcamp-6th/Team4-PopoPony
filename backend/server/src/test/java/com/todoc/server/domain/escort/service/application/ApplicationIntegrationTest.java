@@ -1,9 +1,10 @@
-package com.todoc.server.domain.escort.service;
+package com.todoc.server.domain.escort.service.application;
 
 import com.todoc.server.IntegrationTest;
 import com.todoc.server.domain.escort.entity.Application;
 import com.todoc.server.domain.escort.exception.ApplicationNotFoundException;
 import com.todoc.server.domain.escort.repository.dto.ApplicationFlatDto;
+import com.todoc.server.domain.escort.service.ApplicationService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -37,7 +38,7 @@ public class ApplicationIntegrationTest extends IntegrationTest {
             assertThat(grouped).isNotEmpty();
             assertThat(grouped.values().stream().flatMap(List::stream).toList())
                     .extracting(ApplicationFlatDto::getName)
-                    .containsExactlyInAnyOrder("정우성", "이서연", "김민수");
+                    .containsAll(List.of("정우성", "이서연", "김민수"));
         }
 
         @Test

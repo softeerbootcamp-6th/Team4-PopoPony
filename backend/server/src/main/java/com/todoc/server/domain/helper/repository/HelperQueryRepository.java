@@ -1,6 +1,5 @@
 package com.todoc.server.domain.helper.repository;
 
-import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -15,9 +14,11 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import static com.todoc.server.domain.escort.entity.QApplication.application;
+import static com.todoc.server.domain.escort.entity.QEscort.escort;
 import static com.todoc.server.domain.helper.entity.QHelperProfile.helperProfile;
 import static com.todoc.server.domain.helper.entity.QCertificate.certificate;
 import static com.todoc.server.domain.auth.entity.QAuth.auth;
+import static com.todoc.server.domain.image.entity.QImageFile.imageFile;
 
 import java.util.List;
 
@@ -70,7 +71,7 @@ public class HelperQueryRepository {
     }
 
     @Transactional(readOnly = true)
-    public List<HelperProfile> getHelperProfileListByRecruitId(Long recruitId) {
+    public List<HelperProfile> findHelperProfileListByRecruitId(Long recruitId) {
 
         return queryFactory
                 .select(helperProfile)
@@ -79,5 +80,18 @@ public class HelperQueryRepository {
                 .join(helperProfile).on(helperProfile.auth.eq(auth))
                 .where(application.recruit.id.eq(recruitId))
                 .fetch();
+    }
+
+    @Transactional(readOnly = true)
+    public HelperProfile findHelperProfileByEscortId(Long escortId) {
+
+        return queryFactory
+            .select(helperProfile)
+            .from(escort)
+            .join(escort.helper, auth)
+            .join(helperProfile).on(helperProfile.auth.eq(auth))
+            .join(helperProfile.helperProfileImage, imageFile).fetchJoin()
+            .where(escort.id.eq(escortId))
+            .fetchOne();
     }
 }

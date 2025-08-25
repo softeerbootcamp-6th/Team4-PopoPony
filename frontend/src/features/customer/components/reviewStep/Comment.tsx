@@ -39,11 +39,7 @@ const Comment = ({ escortId, handleNextStep }: CommentProps) => {
       },
       {
         onSuccess: () => {
-          alert('후기가 등록되었어요!');
           handleNextStep();
-        },
-        onError: () => {
-          alert('후기 등록에 실패했어요. 다시 시도해주세요.');
         },
       }
     );

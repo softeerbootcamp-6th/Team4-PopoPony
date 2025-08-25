@@ -1,7 +1,6 @@
 package com.todoc.server.domain.helper.service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.querydsl.core.Tuple;
 import com.todoc.server.common.dto.request.ImageCreateRequest;
 import com.todoc.server.common.enumeration.Area;
 import com.todoc.server.common.enumeration.Gender;
@@ -32,10 +31,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-
-import static com.todoc.server.domain.auth.entity.QAuth.auth;
-import static com.todoc.server.domain.helper.entity.QCertificate.certificate;
-import static com.todoc.server.domain.helper.entity.QHelperProfile.helperProfile;
 
 @Service
 @RequiredArgsConstructor
@@ -205,10 +200,22 @@ public class HelperService {
      */
     public List<HelperProfile> getHelperProfileListByRecruitId(Long recruitId) {
 
-        List<HelperProfile> list = helperQueryRepository.getHelperProfileListByRecruitId(recruitId);
-        if (list.isEmpty()) {
+        List<HelperProfile> list = helperQueryRepository.findHelperProfileListByRecruitId(recruitId);
+
+        return list;
+    }
+
+    /**
+     * 동행에 매칭된 도우미를 조회하는 함수
+     */
+    public HelperProfile getHelperProfileByEscortId(Long escortId) {
+
+        HelperProfile profile = helperQueryRepository.findHelperProfileByEscortId(escortId);
+
+        if (profile == null) {
             throw new HelperProfileNotFoundException();
         }
-        return list;
+
+        return profile;
     }
 }
