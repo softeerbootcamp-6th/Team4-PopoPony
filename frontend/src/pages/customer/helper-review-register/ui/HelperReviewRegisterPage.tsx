@@ -18,7 +18,7 @@ const Route = getRouteApi('/customer/escort/$escortId/$helperId/review/$step');
 const HelperReviewRegisterPage = () => {
   const queryClient = useQueryClient();
   const router = useRouter();
-  const { escortId } = Route.useParams();
+  const { escortId, helperId } = Route.useParams();
   const methods = useForm<EscortReviewFormValues>({ shouldUnregister: false, delayError: 400 });
   const { isOpen, openModal, closeModal } = useModal();
   const { Funnel, Step, nextStep, currentStep } = useFunnel({
@@ -73,8 +73,8 @@ const HelperReviewRegisterPage = () => {
                     escortId={escortId}
                     handleNextStep={() => {
                       router.navigate({
-                        to: '/customer/escort/$escortId/completed',
-                        params: { escortId },
+                        to: '/customer/escort/$escortId/$helperId/review/completed',
+                        params: { escortId, helperId },
                       });
                     }}
                   />
