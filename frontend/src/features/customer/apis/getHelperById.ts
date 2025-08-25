@@ -1,4 +1,4 @@
-import { $api } from '@apis';
+import { $api } from '@shared/api';
 
 const getHelperById = (helperProfileId: number) => {
   return $api.useQuery('get', '/api/helpers/{helperProfileId}', {

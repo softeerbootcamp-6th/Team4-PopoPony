@@ -1,5 +1,9 @@
 import { useEffect, useState } from 'react';
-import type { MarkerType, Position, TMap, TMapPolyline } from '@types';
+
+import type { MarkerType, Position, TMap, TMapPolyline } from '@shared/types';
+
+import type { RouteDetailResponse } from '@customer/types';
+
 import {
   DEFAULT_POLYLINE_COLOR,
   DEFAULT_POLYLINE_STROKE_WEIGHT,
@@ -9,7 +13,6 @@ import {
   MAX_ZOOM_LEVEL,
   MIN_ZOOM_LEVEL,
 } from '@dashboard/constants';
-import type { RouteDetailResponse } from '@customer/types';
 
 const { Tmapv3 } = window;
 

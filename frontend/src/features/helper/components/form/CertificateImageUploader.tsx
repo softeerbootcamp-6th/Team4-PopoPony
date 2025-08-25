@@ -1,9 +1,14 @@
+import { toast } from 'sonner';
+
 import { useState } from 'react';
+
 import { useFormContext } from 'react-hook-form';
-import { Button } from '@components';
+
+import { useImageUpload } from '@shared/hooks';
+import type { ImagePrefix } from '@shared/types';
+import { Button } from '@shared/ui';
+
 import type { CertificateItemValues } from '@helper/types';
-import { useImageUpload } from '@hooks';
-import type { ImagePrefix } from '@types';
 
 interface Props {
   selectedCertificates: Array<CertificateItemValues>;
@@ -41,9 +46,8 @@ const CertificateImageUploader = ({ selectedCertificates, prefix }: Props) => {
         shouldValidate: true,
         shouldDirty: true,
       });
-    } catch (err) {
-      console.error(err);
-      alert('업로드에 실패했습니다. 다시 시도해주세요.');
+    } catch {
+      toast.error('업로드에 실패했습니다. 다시 시도해주세요.');
     } finally {
       event.target.value = '';
       setUploadingType(null);

@@ -1,6 +1,8 @@
-import { FormLayout } from '@layouts';
-import type { FunnelStepProps } from '@types';
 import { useFormContext, useWatch } from 'react-hook-form';
+
+import type { FunnelStepProps } from '@shared/types';
+import { FormLayout } from '@shared/ui/layout';
+
 import { TaxiFeeSection } from '@helper/components';
 
 const Taxi = ({ handleNextStep }: FunnelStepProps) => {

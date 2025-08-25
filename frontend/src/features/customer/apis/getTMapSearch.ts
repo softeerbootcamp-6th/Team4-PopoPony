@@ -1,5 +1,6 @@
-import type { TMapSearchParams, TMapSearchResponse } from '@customer/types';
 import { useInfiniteQuery } from '@tanstack/react-query';
+
+import type { TMapSearchParams, TMapSearchResponse } from '@customer/types';
 
 const fetchTMapSearch = async (params: TMapSearchParams): Promise<TMapSearchResponse> => {
   const searchParams = new URLSearchParams({

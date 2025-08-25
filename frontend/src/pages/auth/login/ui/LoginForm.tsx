@@ -1,0 +1,67 @@
+import { useNavigate } from '@tanstack/react-router';
+import { toast } from 'sonner';
+
+import { useForm } from 'react-hook-form';
+
+import { Button } from '@shared/ui';
+
+import { postLogin } from '@auth/apis';
+import type { LoginFormValues } from '@auth/types';
+import { authStorage } from '@auth/utils';
+
+import AuthInput from './AuthInput';
+
+const LoginForm = () => {
+  const navigate = useNavigate();
+  const { mutate } = postLogin();
+
+  const { register, handleSubmit, watch } = useForm<LoginFormValues>({
+    defaultValues: {
+      loginId: '',
+      password: '',
+    },
+  });
+
+  const loginId = watch('loginId');
+  const password = watch('password');
+
+  const isFormValid = loginId.trim() !== '' && password.trim() !== '';
+
+  const handleLogin = async (data: LoginFormValues) => {
+    mutate(
+      {
+        body: {
+          ...data,
+        },
+      },
+      {
+        onSuccess: () => {
+          authStorage.setIsLoggedIn(true);
+          toast.success('로그인에 성공했어요.');
+          navigate({
+            to: '/',
+          });
+        },
+      }
+    );
+  };
+
+  return (
+    <form onSubmit={handleSubmit(handleLogin)} className='flex w-full flex-col gap-[2.4rem]'>
+      <div className='flex flex-col gap-[1.6rem]'>
+        <AuthInput {...register('loginId')} type='text' placeholder='아이디를 입력해주세요' />
+        <AuthInput
+          {...register('password')}
+          type='password'
+          placeholder='비밀번호를 입력해주세요'
+        />
+      </div>
+
+      <Button type='submit' variant='primary' size='lg' disabled={!isFormValid} className='w-full'>
+        로그인
+      </Button>
+    </form>
+  );
+};
+
+export default LoginForm;

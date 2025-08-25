@@ -1,5 +1,6 @@
-import { DashBoardCard } from '@dashboard/components';
 import type { RouteSimpleResponse } from '@customer/types';
+
+import { DashBoardCard } from '@dashboard/components';
 import type { StatusTitleProps } from '@dashboard/types';
 
 type Props = {
