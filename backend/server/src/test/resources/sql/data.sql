@@ -257,7 +257,19 @@ INSERT INTO recruit (
 
       (15, 3, 2, 2, '2025-08-13', '10:00:00', '12:30:00',
        '물리치료', '도착 시 연락 부탁드립니다.', 28000, 'IN_PROGRESS',
-       CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, null);
+       CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, null),
+
+      (16, 3, 1, 1, '2025-08-23', '18:30:00', '21:00:00',
+       '정기검진', '테스트 케이스 - 3시간 이내', 29000, 'COMPLETED',
+       CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+
+      (17, 3, 1, 1, '2025-08-23', '22:10:00', '23:50:00',
+       '정기검진', '테스트 케이스 - 자정 전', 29000, 'COMPLETED',
+       CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+
+      (18, 3, 1, 1, '2025-08-24', '00:30:00', '02:00:00',
+       '정기검진', '테스트 케이스 - 자정 후', 29000, 'COMPLETED',
+       CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL);
 
 
 INSERT INTO application (id, recruit_id, helper_id, status, created_at, updated_at, deleted_at)
@@ -295,7 +307,10 @@ INSERT INTO escort (
       (11, 12, 2, 2, NULL, 'PREPARING', null, null, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, null),
       (12, 13, 3, 2, NULL, 'MEETING', null, null, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, null),
       (13, 14, 1, 2, NULL, 'HEADING_TO_HOSPITAL', null, null, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, null),
-      (14, 15, 2, 3, NULL, 'IN_TREATMENT', null, null, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, null);
+      (14, 15, 2, 3, NULL, 'IN_TREATMENT', null, null, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, null),
+      (16, 16, 1, 1, NULL, 'PREPARING', NULL, NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+      (17, 17, 1, 1, NULL, 'PREPARING', NULL, NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+      (18, 18, 1, 1, NULL, 'PREPARING', NULL, NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL);
 
 
 
