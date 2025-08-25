@@ -1,18 +1,19 @@
 import { IcChevronDown } from '@icons';
 import { isBefore } from 'date-fns';
 
-import { useFormContext } from 'react-hook-form';
+import { useFormContext, useWatch } from 'react-hook-form';
 
+import { isBeforeToday } from '@shared/lib';
 import type { FunnelStepProps } from '@shared/types';
-import { Checkbox, LabeledSection } from '@shared/ui';
+import { Checkbox, DatePickerInput, LabeledSection } from '@shared/ui';
 import { FormLayout } from '@shared/ui/layout';
 
 const Reservation = ({ handleNextStep }: FunnelStepProps) => {
-  const { register, watch, setValue } = useFormContext();
+  const { register, setValue, control } = useFormContext();
 
-  const hasNextAppointment = watch('hasNextAppointment');
-  const reservationDate = watch('reservationDate');
-  const reservationTime = watch('reservationTime');
+  const hasNextAppointment = useWatch({ control, name: 'hasNextAppointment' });
+  const reservationDate = useWatch({ control, name: 'reservationDate' });
+  const reservationTime = useWatch({ control, name: 'reservationTime' });
 
   const nextReservationTime = new Date(`${reservationDate}T${reservationTime}`);
 
@@ -56,22 +57,11 @@ const Reservation = ({ handleNextStep }: FunnelStepProps) => {
         </FormLayout.TitleWrapper>
         <LabeledSection label='예약 일정' isChecked={isValidTime} message={getTimeErrorMessage()}>
           <div className='flex-start gap-[1.2rem]'>
-            <div className='border-stroke-neutral-dark bg-background-default-white focus-within:border-neutral-80 relative flex h-[5.1rem] w-full items-center border-b transition-[color,box-shadow] focus-within:ring-0'>
-              <div className='relative flex-1'>
-                <input
-                  type='date'
-                  disabled={!hasNextAppointment}
-                  className='body1-16-medium text-text-neutral-primary w-full bg-transparent outline-none disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:top-0 [&::-webkit-calendar-picker-indicator]:left-0 [&::-webkit-calendar-picker-indicator]:h-full [&::-webkit-calendar-picker-indicator]:w-full [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:opacity-0'
-                  {...register('reservationDate')}
-                />
-                {!reservationDate && (
-                  <div className='body1-16-medium bg-background-default-white text-text-neutral-assistive pointer-events-none absolute top-0 left-0 w-full'>
-                    {hasNextAppointment ? '날짜 선택' : '-'}
-                  </div>
-                )}
-              </div>
-              <IcChevronDown className='[&_path]:fill-icon-neutral-secondary pointer-events-none h-[2.4rem] w-[2.4rem] transition-transform duration-200' />
-            </div>
+            <DatePickerInput
+              name='reservationDate'
+              disabledDate={isBeforeToday}
+              disabled={!hasNextAppointment}
+            />
             <div className='border-stroke-neutral-dark bg-background-default-white focus-within:border-neutral-80 relative flex h-[5.1rem] w-full items-center border-b transition-[color,box-shadow] focus-within:ring-0'>
               <div className='relative flex-1'>
                 <input
