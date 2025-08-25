@@ -165,16 +165,16 @@ const TransportResult = ({
   return (
     <>
       <div className='mt-[1.6rem]'>
-        <div className='flex-center gap-[2.4rem]'>
-          <div className='flex-center flex-col w-[40%]'>
-            <p className='label1-12-medium text-text-neutral-secondary'>예상 소요시간</p>
+        <div className='flex justify-between'>
+          <div className='flex-center flex-col flex-1'>
+            <p className='body2-14-medium text-text-neutral-secondary'>예상 소요시간</p>
             <p className='headline-24-bold text-text-neutral-primary mt-[0.4rem]'>
               {formatDuration(totalTimeSec)}
             </p>
           </div>
           <div className='bg-stroke-neutral-light h-[5rem] w-[0.3rem]' />
-          <div className='flex-center flex-col w-[40%]'>
-            <p className='label1-12-medium text-text-neutral-secondary'>예상 도착시간</p>
+          <div className='flex-center flex-col flex-1'>
+            <p className='body2-14-medium text-text-neutral-secondary'>예상 도착시간</p>
             <p className='headline-24-bold text-text-neutral-primary mt-[0.4rem]'>
               {formatArrival(totalTimeSec)}
             </p>
@@ -182,7 +182,7 @@ const TransportResult = ({
         </div>
       </div>
 
-      <div className='mt-[1.6rem] overflow-x-visible pl-[2rem]'>
+      <div className='mt-[1.6rem] overflow-x-visible'>
         <ul className='flex flex-col'>
           {/* 출발지 표시 */}
           <li className='flex items-center gap-[1.2rem]'>
@@ -198,13 +198,13 @@ const TransportResult = ({
                 ? leg.routeColor
                 : `#${leg.routeColor}`
               : '#00C89A';
-
+            const time = leg.sectionTime ? formatDuration(leg.sectionTime) : undefined;
             if (mode === 'WALK') {
               return (
                 <li key={idx} className='flex items-center gap-[1.2rem] h-[6rem]'>
                   <div className='h-full flex items-center relative overflow-visible border-l-2 ml-[1rem] border-dotted border-stroke-neutral-dark'>
                     <span className='body2-14-medium text-text-neutral-secondary pl-[2.5rem]'>
-                      도보로 이동
+                      도보로 이동 {time ? `(${time})` : ''}
                     </span>
                     <TransportIcon
                       mode={mode}
@@ -234,7 +234,7 @@ const TransportResult = ({
                         {line || '지하철'}
                       </span>
                       <span className='body2-14-medium text-text-neutral-secondary relative top-[0.7rem]'>
-                        {leg.start?.name ?? ''} 승차 → {leg.end?.name ?? ''} 하차
+                        {leg.start?.name ?? ''} 승차 → {leg.end?.name ?? ''} 하차 {time ? `(${time})` : ''}
                       </span>
                     </div>
                     <div
@@ -263,7 +263,7 @@ const TransportResult = ({
                         {busNo}
                       </span>
                       <span className='body2-14-medium text-text-neutral-secondary relative top-[0.7rem]'>
-                        {leg.start?.name ?? ''} 승차 → {leg.end?.name ?? ''} 하차
+                        {leg.start?.name ?? ''} 승차 → {leg.end?.name ?? ''} 하차 {time ? `(${time})` : ''}
                       </span>
                     </div>
                     <div
@@ -287,7 +287,7 @@ const TransportResult = ({
                       className='absolute top-0 left-[-1.3rem]'
                     />
                     <span className='body1-16-bold pl-[1rem]' style={{ color: lineColor }}>
-                      항공편 이용
+                      항공편 이용 {time ? `(${time})` : ''}
                     </span>
                     <div
                       className='w-[0.8rem] h-[0.8rem] rounded-full absolute bottom-0 left-[-0.5rem]'
@@ -309,8 +309,8 @@ const TransportResult = ({
                       color={lineColor}
                       className='absolute top-0 left-[-1.3rem]'
                     />
-                    <span className='body2-14-medium text-text-neutral-primary pl-[1rem]'>
-                      해운 이용
+                    <span className='body1-16-bold pl-[1rem]' style={{ color: lineColor }}>
+                      해운 이용 {time ? `(${time})` : ''}
                     </span>
                     <div
                       className='w-[0.8rem] h-[0.8rem] rounded-full absolute bottom-0 left-[-0.5rem]'
