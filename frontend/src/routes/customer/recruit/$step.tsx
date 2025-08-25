@@ -1,28 +1,37 @@
-import { Modal } from '@components';
-import { PageLayout } from '@layouts';
-import { recruitStepSearchSchema, type RecruitFormValues } from '@customer/types';
-import { useFunnel, useModal } from '@hooks';
+import { type QueryClient, useQueryClient } from '@tanstack/react-query';
 import { createFileRoute, redirect, useRouter } from '@tanstack/react-router';
+
 import { FormProvider, useForm } from 'react-hook-form';
+
+import { useFunnel, useModal } from '@shared/hooks';
+import { Modal } from '@shared/ui';
+import { PageLayout } from '@shared/ui/layout';
+
 import {
-  Profile,
-  Condition,
   Communication,
-  Time,
+  Condition,
   EscortRoute,
-  SearchRoute,
-  Request,
   Final,
+  Profile,
+  Request,
+  SearchRoute,
+  Time,
 } from '@customer/components';
+import { type RecruitFormValues, recruitStepSearchSchema } from '@customer/types';
 
 export const Route = createFileRoute('/customer/recruit/$step')({
   validateSearch: recruitStepSearchSchema,
-  beforeLoad: async ({ search }) => {
-    const { place } = search;
-    if (place && !(place === 'meeting' || place === 'hospital' || place === 'return')) {
-      throw redirect({
-        to: '/customer',
-      });
+  beforeLoad: async ({ params, context }) => {
+    const { step } = params;
+    const { queryClient } = context as { queryClient: QueryClient };
+    if (step !== 'profile') {
+      const started = queryClient.getQueryData<boolean>(['recruitFormStarted']);
+      if (!started) {
+        throw redirect({
+          to: '/customer/recruit/$step',
+          params: { step: 'profile' },
+        });
+      }
     }
   },
   component: RouteComponent,
@@ -34,6 +43,8 @@ function RouteComponent() {
   const router = useRouter();
   const { isOpen, openModal, closeModal } = useModal();
   const methods = useForm<RecruitFormValues>({ shouldUnregister: false });
+  const queryClient = useQueryClient();
+  queryClient.setQueryData(['recruitFormStarted'], true);
 
   const { Funnel, Step, nextStep, currentStep, handleBackStep } = useFunnel({
     defaultStep: 'profile',

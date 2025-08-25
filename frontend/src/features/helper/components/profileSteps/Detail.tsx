@@ -1,27 +1,28 @@
-import { DetailFormSchema, CERTIFICATE_OPTIONS, STRENGTH_OPTIONS } from '@helper/types';
-import type { PostResponse } from '@types';
-import { useFormValidation } from '@hooks';
-import { FormLayout } from '@layouts';
-import { useNavigate } from '@tanstack/react-router';
 import {
-  LabeledSection,
-  FormInput,
-  MultiOptionSelector,
-  Divider,
-  MultiOptionSelectorCol,
-  Button,
-} from '@components';
-import { CertificateImageUploader } from '@helper/components';
-import {
-  IcWheelchair,
-  IcWheelchairDisabled,
   IcRecognize,
   IcRecognizeDisabled,
   IcShoes,
   IcShoesDisabled,
+  IcWheelchair,
+  IcWheelchairDisabled,
 } from '@icons';
-import { postHelperProfile, putHelperProfile } from '@helper/apis';
+import { useNavigate } from '@tanstack/react-router';
+
 import { useFormContext } from 'react-hook-form';
+
+import { useFormValidation } from '@shared/hooks';
+import { Button, Divider } from '@shared/ui';
+import {
+  FormInput,
+  LabeledSection,
+  MultiOptionSelector,
+  MultiOptionSelectorCol,
+} from '@shared/ui/form';
+import { FormLayout } from '@shared/ui/layout';
+
+import { postHelperProfile, putHelperProfile } from '@helper/apis';
+import { CertificateImageUploader } from '@helper/components';
+import { CERTIFICATE_OPTIONS, DetailFormSchema, STRENGTH_OPTIONS } from '@helper/types';
 
 const Detail = () => {
   const navigate = useNavigate();
@@ -67,15 +68,8 @@ const Detail = () => {
           },
         },
         {
-          onSuccess: (response: PostResponse) => {
-            if (response.status !== 200) {
-              alert(response.message ?? '도우미 등록에 실패했습니다. 다시 시도해주세요.');
-              return;
-            }
+          onSuccess: () => {
             navigate({ to: '/helper/profile/new/completed' });
-          },
-          onError: () => {
-            alert('도우미 등록에 실패했습니다. 다시 시도해주세요.');
           },
         }
       );
@@ -91,15 +85,8 @@ const Detail = () => {
           },
         },
         {
-          onSuccess: (response: PostResponse) => {
-            if (response.status !== 200) {
-              alert(response.message ?? '도우미 등록에 실패했습니다. 다시 시도해주세요.');
-              return;
-            }
+          onSuccess: () => {
             navigate({ to: '/helper/profile/new/completed' });
-          },
-          onError: () => {
-            alert('도우미 등록에 실패했습니다. 다시 시도해주세요.');
           },
         }
       );

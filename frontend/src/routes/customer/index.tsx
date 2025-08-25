@@ -1,14 +1,18 @@
-import { createFileRoute, Link } from '@tanstack/react-router';
-import { useQueryClient } from '@tanstack/react-query';
-import { PageLayout } from '@layouts';
-import { Button, EscortCard, Tabs, EmptyCard, Logo, FallbackUI } from '@components';
 import { IcPlusSideLeft } from '@icons';
-import type { RecruitSimpleResponse } from '@customer/types';
-import { getRecruitsCustomer } from '@customer/apis';
-import { dateFormat, timeFormat } from '@utils';
+import { useQueryClient } from '@tanstack/react-query';
+import { Link, createFileRoute } from '@tanstack/react-router';
 import { useNavigate } from '@tanstack/react-router';
-import type { EscortStatus } from '@types';
-import { $api } from '@apis';
+
+import { RecruitCard } from '@widgets/ui';
+
+import { $api } from '@shared/api';
+import { dateFormat, timeFormat } from '@shared/lib';
+import type { EscortStatus } from '@shared/types';
+import { Button, EmptyCard, FallbackUI, Logo, Tabs } from '@shared/ui';
+import { PageLayout } from '@shared/ui/layout';
+
+import { getRecruitsCustomer } from '@customer/apis';
+import type { RecruitSimpleResponse } from '@customer/types';
 
 export const Route = createFileRoute('/customer/')({
   component: RouteComponent,
@@ -123,21 +127,21 @@ function RouteComponent() {
                 inProgressList.map((escort) => {
                   const { statusText, title, timeText, locationText } = refineRecruitData(escort);
                   return (
-                    <EscortCard
+                    <RecruitCard
                       key={escort.recruitId}
                       onClick={() => handleEscortCardClick(escort.recruitId)}>
-                      <EscortCard.StatusHeader
+                      <RecruitCard.StatusHeader
                         status={escort.recruitStatus}
                         text={statusText}
                         title={title}
                       />
-                      <EscortCard.Divider />
-                      <EscortCard.InfoSection>
-                        <EscortCard.Info type='time' text={timeText} />
-                        <EscortCard.Info type='location' text={locationText} />
-                      </EscortCard.InfoSection>
+                      <RecruitCard.Divider />
+                      <RecruitCard.InfoSection>
+                        <RecruitCard.Info type='time' text={timeText} />
+                        <RecruitCard.Info type='location' text={locationText} />
+                      </RecruitCard.InfoSection>
                       {escort.recruitStatus === '동행중' && (
-                        <EscortCard.DashboardButton
+                        <RecruitCard.DashboardButton
                           onClick={() => {
                             navigate({
                               to: '/dashboard/$escortId/customer',
@@ -148,7 +152,7 @@ function RouteComponent() {
                           }}
                         />
                       )}
-                    </EscortCard>
+                    </RecruitCard>
                   );
                 })}
               {inProgressList && inProgressList.length === 0 && (
@@ -172,20 +176,20 @@ function RouteComponent() {
                 completedList.map((escort) => {
                   const { statusText, title, timeText, locationText } = refineRecruitData(escort);
                   return (
-                    <EscortCard
+                    <RecruitCard
                       key={escort.recruitId}
                       onClick={() => handleEscortCardClick(escort.recruitId)}>
-                      <EscortCard.StatusHeader
+                      <RecruitCard.StatusHeader
                         status={escort.recruitStatus}
                         text={statusText}
                         title={title}
                       />
-                      <EscortCard.Divider />
-                      <EscortCard.InfoSection>
-                        <EscortCard.Info type='time' text={timeText} />
-                        <EscortCard.Info type='location' text={locationText} />
-                      </EscortCard.InfoSection>
-                    </EscortCard>
+                      <RecruitCard.Divider />
+                      <RecruitCard.InfoSection>
+                        <RecruitCard.Info type='time' text={timeText} />
+                        <RecruitCard.Info type='location' text={locationText} />
+                      </RecruitCard.InfoSection>
+                    </RecruitCard>
                   );
                 })}
               {completedList && completedList.length === 0 && !error && (

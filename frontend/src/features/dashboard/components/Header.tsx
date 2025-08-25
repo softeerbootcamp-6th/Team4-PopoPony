@@ -1,5 +1,5 @@
-import { useRouter } from '@tanstack/react-router';
 import { IcArrowLeft } from '@icons';
+import { useRouter } from '@tanstack/react-router';
 
 type HeaderProps = {
   showBack?: boolean;

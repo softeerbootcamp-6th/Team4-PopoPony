@@ -1,9 +1,13 @@
 import { useState } from 'react';
-import { RegionFormSchema, type ProfileStepProps, REGION_OPTIONS } from '@helper/types';
-import { useFormValidation } from '@hooks';
-import { FormLayout } from '@layouts';
-import { LabeledSection, PhotoUpload, Button } from '@components';
+
+import { useFormValidation } from '@shared/hooks';
+import { Button } from '@shared/ui';
+import { LabeledSection, PhotoUpload } from '@shared/ui/form';
+import { FormLayout } from '@shared/ui/layout';
+
 import { RegionBottomSheetForm } from '@helper/components';
+import { type ProfileStepProps, REGION_OPTIONS, RegionFormSchema } from '@helper/types';
+
 import { IcChevronDown } from '@assets/icons';
 
 const Region = ({ handleNextStep }: ProfileStepProps) => {

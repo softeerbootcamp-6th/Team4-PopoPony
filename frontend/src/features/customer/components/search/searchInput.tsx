@@ -1,5 +1,6 @@
-import React, { useState, useEffect, useCallback } from 'react';
 import { IcSearch } from '@icons';
+
+import React, { useCallback, useEffect, useState } from 'react';
 
 interface SearchInputProps {
   value: string;

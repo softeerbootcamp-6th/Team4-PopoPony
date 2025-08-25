@@ -1,9 +1,11 @@
-import { Checkbox, LabeledSection } from '@components';
 import { IcChevronDown } from '@icons';
-import { FormLayout } from '@layouts';
-import type { FunnelStepProps } from '@types';
 import { isBefore } from 'date-fns';
+
 import { useFormContext } from 'react-hook-form';
+
+import type { FunnelStepProps } from '@shared/types';
+import { Checkbox, LabeledSection } from '@shared/ui';
+import { FormLayout } from '@shared/ui/layout';
 
 const Reservation = ({ handleNextStep }: FunnelStepProps) => {
   const { register, watch, setValue } = useFormContext();

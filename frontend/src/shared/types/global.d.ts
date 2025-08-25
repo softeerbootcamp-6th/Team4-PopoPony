@@ -1,4 +1,4 @@
-import { TMapLatLng, TMap, TMapSize, TMapMarker, TMapPolyline, TMapLatLngBounds } from './tmap';
+import { TMap, TMapLatLng, TMapLatLngBounds, TMapMarker, TMapPolyline, TMapSize } from './tmap';
 
 declare global {
   interface Window {

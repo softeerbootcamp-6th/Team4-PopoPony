@@ -1,6 +1,8 @@
 import type { components } from '@schema';
+
+import { removePreviewUrl } from '@shared/lib';
+
 import type { ReportFormValues } from '@helper/types';
-import { removePreviewUrl } from '@utils';
 
 /**
  * 폼 데이터에서 previewUrl을 제거하고 API 요청 형태로 변환

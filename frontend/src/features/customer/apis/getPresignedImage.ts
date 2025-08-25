@@ -1,4 +1,4 @@
-import { $api } from '@apis';
+import { $api } from '@shared/api';
 
 const getPresignedImage = (imageFileId: number, isEnabled: boolean) => {
   return $api.useQuery(

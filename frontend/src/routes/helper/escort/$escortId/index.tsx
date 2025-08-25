@@ -1,12 +1,47 @@
-import { EscortCard, ProgressIndicator, Tabs, Spinner } from '@components';
-import { DetailTab, ReportTab } from '@helper/components';
-import { PageLayout } from '@layouts';
-import { createFileRoute, useParams } from '@tanstack/react-router';
-import type { RecruitDetailResponse } from '@helper/types';
+import { createFileRoute, redirect, useParams } from '@tanstack/react-router';
+
+import { RecruitCard } from '@widgets/ui';
+
+import { ProgressIndicator } from '@entities/recruit/ui';
+
+import { $api } from '@shared/api';
+import { dateFormat, timeFormat } from '@shared/lib';
+import { validateRecruitExistsByRecruitId } from '@shared/lib';
+import { Spinner, Tabs } from '@shared/ui';
+import { PageLayout } from '@shared/ui/layout';
+
 import { getRecruitById } from '@helper/apis';
-import { dateFormat, timeFormat } from '@utils';
+import { DetailTab, ReportTab } from '@helper/components';
+import type { RecruitDetailResponse } from '@helper/types';
 
 export const Route = createFileRoute('/helper/escort/$escortId/')({
+  beforeLoad: async ({ context, params }) => {
+    const escortId = Number(params.escortId);
+    await validateRecruitExistsByRecruitId(escortId);
+    const { queryClient } = context;
+    const options = $api.queryOptions(
+      'get',
+      '/api/reports/recruits/{recruitId}',
+      { params: { path: { recruitId: escortId } } },
+      { throwOnError: false }
+    );
+
+    try {
+      const report = await queryClient.ensureQueryData(options);
+      const hasReport = Boolean(report?.data && report.data.reportId !== 0);
+      if (!hasReport) {
+        throw redirect({
+          to: '/helper/escort/$escortId/report/$step',
+          params: { escortId: params.escortId, step: 'time' },
+        });
+      }
+    } catch {
+      throw redirect({
+        to: '/helper/escort/$escortId/report/$step',
+        params: { escortId: params.escortId, step: 'time' },
+      });
+    }
+  },
   component: RouteComponent,
 });
 
@@ -22,6 +57,7 @@ const refineCardData = (recruitData: RecruitDetailResponse) => {
 };
 
 function RouteComponent() {
+  // const navigate = useNavigate();
   const { escortId } = useParams({ from: '/helper/escort/$escortId/' });
   const { data: recruitData, isLoading } = getRecruitById(Number(escortId));
 
@@ -44,14 +80,14 @@ function RouteComponent() {
       <PageLayout.Header title='내역 상세보기' showBack />
       <PageLayout.Content>
         <div className='bg-neutral-10 flex-col-start gap-[1.2rem] px-[2rem] py-[1.6rem]'>
-          <EscortCard>
-            <EscortCard.StatusHeader text={statusText} title={cardTitle} hasOnClickEvent={false} />
-            <EscortCard.Divider />
-            <EscortCard.InfoSection>
-              <EscortCard.Info type='time' text={cardTimeText} />
-              <EscortCard.Info type='location' text={cardLocationText} />
-            </EscortCard.InfoSection>
-          </EscortCard>
+          <RecruitCard>
+            <RecruitCard.StatusHeader text={statusText} title={cardTitle} hasOnClickEvent={false} />
+            <RecruitCard.Divider />
+            <RecruitCard.InfoSection>
+              <RecruitCard.Info type='time' text={cardTimeText} />
+              <RecruitCard.Info type='location' text={cardLocationText} />
+            </RecruitCard.InfoSection>
+          </RecruitCard>
           <ProgressIndicator currentStatus={recruitData.data.status} />
         </div>
         <Tabs defaultValue='리포트'>

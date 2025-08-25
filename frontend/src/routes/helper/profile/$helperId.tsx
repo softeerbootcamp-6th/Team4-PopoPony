@@ -1,11 +1,15 @@
-import { Button, StrengthTag, Tabs } from '@components';
+import { IcVerified } from '@icons';
+import { createFileRoute, useNavigate, useParams } from '@tanstack/react-router';
+
+import type { EscortStrength } from '@entities/escort/types';
+import { StrengthTag } from '@entities/helper/ui';
+
+import { dateFormat, formatImageUrl } from '@shared/lib';
+import { Button, Tabs } from '@shared/ui';
+import { PageLayout } from '@shared/ui/layout';
+
 import { getHelperById } from '@customer/apis';
 import { KeywordTag, ReviewCard, SatisfactionGraph, StatsSummaryCard } from '@customer/components';
-import { IcVerified } from '@icons';
-import { PageLayout } from '@layouts';
-import { createFileRoute, useNavigate, useParams } from '@tanstack/react-router';
-import type { EscortStrength } from '@types';
-import { dateFormat, formatImageUrl } from '@utils';
 
 export const Route = createFileRoute('/helper/profile/$helperId')({
   component: RouteComponent,

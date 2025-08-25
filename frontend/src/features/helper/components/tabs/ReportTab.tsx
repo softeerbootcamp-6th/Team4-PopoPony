@@ -1,9 +1,12 @@
-import { Tabs, Divider } from '@components';
-import { InfoSection, WarningBox } from '@customer/components';
 import { IcAlertCircle } from '@icons';
-import { getRecruitReportByRecruitId, getRecruitReviewByRecruitId } from '@helper/apis';
 import { useParams } from '@tanstack/react-router';
-import { dateFormat, timeFormat } from '@utils';
+
+import { dateFormat, timeFormat } from '@shared/lib';
+import { Divider, Tabs } from '@shared/ui';
+
+import { InfoSection, WarningBox } from '@customer/components';
+
+import { getRecruitReportByRecruitId, getRecruitReviewByRecruitId } from '@helper/apis';
 
 const statusMap = {
   좋았어요: 'good',

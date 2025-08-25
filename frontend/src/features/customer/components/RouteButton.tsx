@@ -1,6 +1,9 @@
-import { Button, ShowMapButton } from '@components';
 import { IcChevronDown } from '@icons';
+
 import { useState } from 'react';
+
+import { Button, ShowMapButton } from '@shared/ui';
+
 import type { LocationInfoSimpleResponse } from '@customer/types';
 
 const titleMap = ['만남장소', '병원', '도착장소'];

@@ -1,5 +1,7 @@
 import { z } from 'zod';
-import { imageSchema } from '@types';
+
+import { imageSchema } from '@shared/types';
+
 // 폼 단계별 타입 정의
 
 export const profileSchema = z.object({

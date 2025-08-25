@@ -1,18 +1,18 @@
-import { useState } from 'react';
-import {
-  EscortCard,
-  ProgressIndicator,
-  Tabs,
-  Button,
-  ErrorSuspenseBoundary,
-  SuspenseUI,
-} from '@components';
-import { DetailTab, HelperTab, ReportTab } from '@customer/components';
-import { PageLayout } from '@layouts';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
-import type { RecruitDetailResponse } from '@customer/types';
+
+import { useState } from 'react';
+
+import { RecruitCard } from '@widgets/ui';
+
+import { ProgressIndicator } from '@entities/recruit/ui';
+
+import { dateFormat, timeFormat } from '@shared/lib';
+import { Button, ErrorSuspenseBoundary, SuspenseUI, Tabs } from '@shared/ui';
+import { PageLayout } from '@shared/ui/layout';
+
 import { getRecruitById } from '@customer/apis';
-import { dateFormat, timeFormat } from '@utils';
+import { DetailTab, HelperTab, ReportTab } from '@customer/components';
+import type { RecruitDetailResponse } from '@customer/types';
 
 export const Route = createFileRoute('/customer/escort/$escortId/')({
   component: RouteComponent,
@@ -55,17 +55,21 @@ function RouteComponent() {
 
   return (
     <>
-      <PageLayout.Header title='내역 상세보기' showBack />
+      <PageLayout.Header
+        title='내역 상세보기'
+        showBack
+        onBack={() => navigate({ to: '/customer' })}
+      />
       <PageLayout.Content>
         <div className='bg-neutral-10 flex-col-start gap-[1.2rem] px-[2rem] py-[1.6rem]'>
-          <EscortCard>
-            <EscortCard.StatusHeader text={statusText} title={cardTitle} hasOnClickEvent={false} />
-            <EscortCard.Divider />
-            <EscortCard.InfoSection>
-              <EscortCard.Info type='time' text={cardTimeText} />
-              <EscortCard.Info type='location' text={cardLocationText} />
-            </EscortCard.InfoSection>
-          </EscortCard>
+          <RecruitCard>
+            <RecruitCard.StatusHeader text={statusText} title={cardTitle} hasOnClickEvent={false} />
+            <RecruitCard.Divider />
+            <RecruitCard.InfoSection>
+              <RecruitCard.Info type='time' text={cardTimeText} />
+              <RecruitCard.Info type='location' text={cardLocationText} />
+            </RecruitCard.InfoSection>
+          </RecruitCard>
           <ProgressIndicator currentStatus={recruitData.data.status} />
         </div>
 
@@ -84,7 +88,9 @@ function RouteComponent() {
             </ErrorSuspenseBoundary>
           </Tabs.TabsContent>
           <Tabs.TabsContent value='리포트'>
-            <ReportTab setHasReview={setHasReview} setHelperId={setHelperId} />
+            <ErrorSuspenseBoundary isRoot={false}>
+              <ReportTab setHasReview={setHasReview} setHelperId={setHelperId} />
+            </ErrorSuspenseBoundary>
           </Tabs.TabsContent>
           <Tabs.TabsContent value='신청 내역'>
             <DetailTab data={recruitData.data} />
