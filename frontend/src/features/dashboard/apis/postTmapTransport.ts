@@ -16,7 +16,7 @@ export const postTmapTransport = async ({
   lang = 0,
   format = 'json',
 }: TmapTransportRequest) => {
-  const appKey = import.meta.env.TMAP_TRANSPORT_API_KEY as string;
+  const appKey = import.meta.env.VITE_TMAP_TRANSPORT_API_KEY as string;
   if (!appKey) throw new Error('TMAP appKey is missing. Set TMAP_TRANSPORT_API_KEY in .env');
 
   const res = await fetch('https://apis.openapi.sk.com/transit/routes', {

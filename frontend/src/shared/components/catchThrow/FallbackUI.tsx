@@ -21,18 +21,18 @@ const FallbackUI = ({ error, onReset }: { error: Error; onReset?: () => void }) 
   const ButtonToSolution = () => {
     if (error instanceof AuthError)
       return (
-        <Button size='md' onClick={handleClickLogin}>
+        <Button variant='assistive' size='md' onClick={handleClickLogin}>
           로그인 화면으로 가기
         </Button>
       );
     if (error instanceof ApiError || error instanceof NotFoundError)
       return (
-        <Button size='md' onClick={handleClickHome}>
+        <Button variant='assistive' size='md' onClick={handleClickHome}>
           홈으로 이동
         </Button>
       );
     return (
-      <Button size='md' onClick={handleClickRefresh}>
+      <Button variant='assistive' size='md' onClick={handleClickRefresh}>
         새로고침
       </Button>
     );
