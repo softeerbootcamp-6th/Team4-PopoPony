@@ -9,4 +9,5 @@ import java.util.Optional;
 public interface ApplicationJpaRepository extends JpaRepository<Application, Long> {
     List<Application> findByRecruitId(Long recruitId);
     Optional<Application> findWithRecruitById(Long id);
+    long countByRecruitId(Long recruitId);
 }

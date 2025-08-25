@@ -11,7 +11,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 @EnableAsync
 public class AsyncConfig {
 
-    /** WebSocket/Nchan 알림용 실행기 */
+    /** WebSocket/Nchan 비동기 알림용 실행기 */
     @Bean("wsExecutor")
     public ThreadPoolTaskExecutor wsExecutor() {
         ThreadPoolTaskExecutor ex = new ThreadPoolTaskExecutor();
