@@ -1,6 +1,7 @@
 package com.todoc.server.domain.escort.service;
 
 import com.todoc.server.IntegrationTest;
+import com.todoc.server.MockitoBeanIntegrationTest;
 import com.todoc.server.common.enumeration.EscortStatus;
 import com.todoc.server.common.enumeration.RecruitStatus;
 import com.todoc.server.domain.escort.entity.Escort;
@@ -25,11 +26,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
-@SpringBootTest(properties = {
-        "spring.task.scheduling.enabled=false"
-})
 @Transactional
-class EscortScheduleServiceIntegrationTest extends IntegrationTest {
+class EscortScheduleServiceIntegrationTest extends MockitoBeanIntegrationTest {
 
     @Autowired
     private EscortScheduledFacadeService scheduledService;
@@ -42,9 +40,6 @@ class EscortScheduleServiceIntegrationTest extends IntegrationTest {
 
     @PersistenceContext
     private EntityManager em;
-
-    @MockitoBean
-    private SMSService smsService;
 
     private Clock fixedClock;
 
