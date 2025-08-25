@@ -124,7 +124,11 @@ const Profile = memo(({ handleNextStep }: FunnelStepProps) => {
           isChecked={!fieldErrors.profileImageCreateRequest && !!values.profileImageCreateRequest}
           message={fieldErrors.profileImageCreateRequest}>
           <div className='flex-center w-full'>
-            <PhotoUpload name='profileImageCreateRequest' prefix='uploads/patient' />
+            <PhotoUpload
+              name='profileImageCreateRequest'
+              prefix='uploads/patient'
+              placeholder='환자 사진'
+            />
           </div>
         </LabeledSection>
 

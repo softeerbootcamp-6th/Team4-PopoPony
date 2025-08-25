@@ -58,7 +58,7 @@ const HelperProfileRegisterPage = () => {
   return (
     <>
       <PageLayout.Header
-        title='동행 신청하기'
+        title='프로필 등록'
         showBack={true}
         showClose={true}
         onClose={handleClose}

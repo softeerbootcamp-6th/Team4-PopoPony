@@ -11,9 +11,10 @@ import type { ImagePrefix } from '@shared/types';
 interface Props {
   name: string;
   prefix: ImagePrefix;
+  placeholder?: string;
 }
 
-const PhotoUpload = ({ name, prefix }: Props) => {
+const PhotoUpload = ({ name, prefix, placeholder = '사진 업로드' }: Props) => {
   const { setValue, watch } = useFormContext();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -84,7 +85,7 @@ const PhotoUpload = ({ name, prefix }: Props) => {
               <IcCamera className='h-full w-full text-neutral-50' />
             </div>
             <div className='body1-16-medium text-neutral-70 text-center'>
-              {isUploading ? '업로드 중...' : '환자 사진'}
+              {isUploading ? '업로드 중...' : placeholder}
             </div>
           </>
         )}
