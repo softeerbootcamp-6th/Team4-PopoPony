@@ -1,9 +1,11 @@
 import { IcArrowRotateRight01 } from '@icons';
+import { IcAirplane, IcBusFill, IcFerry, IcMarkFill, IcSubwayFill, IcWalk } from '@icons';
 import { useSuspenseQuery } from '@tanstack/react-query';
 
 import { useState } from 'react';
 
 import { Button, ErrorSuspenseBoundary } from '@shared/ui';
+import { cn } from '@shared/lib';
 
 import { postTmapTransport } from '@dashboard/apis';
 
@@ -12,19 +14,6 @@ import DashBoardCard from '../DashBoardCard';
 interface HelperDashboardSearchCardProps {
   destination: { lat: number; lon: number };
 }
-
-const subwayColors: Record<string, string> = {
-  '1호선': 'bg-[#0052A4] text-white',
-  '2호선': 'bg-[#00A84D] text-white',
-  '3호선': 'bg-[#EF7C1C] text-white',
-  '4호선': 'bg-[#00A5DE] text-white',
-  '5호선': 'bg-[#996CAC] text-white',
-  '6호선': 'bg-[#CD7C2F] text-white',
-  '7호선': 'bg-[#747F00] text-white',
-  '8호선': 'bg-[#E6186C] text-white',
-  '9호선': 'bg-[#BDB092] text-white',
-  신분당선: 'bg-[#D31145] text-white',
-};
 
 const formatDuration = (seconds?: number) => {
   if (!seconds || seconds <= 0) return '-';
@@ -51,11 +40,78 @@ type TmapLeg = {
   start?: { name?: string };
   end?: { name?: string };
   laneName?: string;
+  routeColor?: string;
+  distance?: number;
+  totalWalkDistance?: number;
+};
+
+type TmapItinerary = {
+  totalTime?: number;
+  transferCount?: number;
+  totalWalkDistance?: number;
+  totalDistance?: number;
+  totalWalkTime?: number;
+  fare?: {
+    regular?: {
+      totalFare?: number;
+      currency?: {
+        symbol?: string;
+        currency?: string;
+        currencyCode?: string;
+      };
+    };
+  };
+  legs?: TmapLeg[];
 };
 
 type TmapResponse = {
-  metaData?: { plan?: { itineraries?: Array<{ totalTime?: number; legs?: TmapLeg[] }> } };
-  plan?: { itineraries?: Array<{ totalTime?: number; legs?: TmapLeg[] }> };
+  metaData?: { plan?: { itineraries?: TmapItinerary[] } };
+  plan?: { itineraries?: TmapItinerary[] };
+  status?: number;
+  message?: string;
+};
+
+// 교통수단 아이콘 컴포넌트
+const TransportIcon = ({ mode, color }: { mode: string; color?: string }) => {
+  const colorClass = color ? `bg-[#${color}]` : 'bg-bg-neutral-tertiary';
+  const getIcon = () => {
+    switch (mode) {
+      case 'WALK':
+        return <IcWalk className='h-[1.6rem] w-[1.6rem] [&_path]:fill-icon-neutral-secondary' />;
+      case 'SUBWAY':
+        return <IcSubwayFill className='h-[1.6rem] w-[1.6rem] [&_path]:fill-white' />;
+      case 'BUS':
+        return <IcBusFill className='h-[1.6rem] w-[1.6rem] [&_path]:fill-white' />;
+      case 'AIRPLANE':
+        return <IcAirplane className='h-[1.6rem] w-[1.6rem] [&_path]:fill-white' />;
+      case 'FERRY':
+        return <IcFerry className='h-[1.6rem] w-[1.6rem] [&_path]:fill-white' />;
+      default:
+        return <IcWalk className='h-[1.6rem] w-[1.6rem] [&_path]:fill-white' />;
+    }
+  };
+
+  if (mode === 'WALK') {
+    return (
+      <div className='flex items-center'>
+        <div className='h-[0.2rem] w-[1.2rem] border-t-[0.2rem] border-dotted border-border-neutral-secondary' />
+        <div className='mx-[0.4rem] flex h-[2.4rem] w-[2.4rem] items-center justify-center rounded-full bg-bg-neutral-tertiary'>
+          {getIcon()}
+        </div>
+        <div className='h-[0.2rem] w-[1.2rem] border-t-[0.2rem] border-dotted border-border-neutral-secondary' />
+      </div>
+    );
+  }
+
+  return (
+    <div
+      className={cn(
+        'flex h-[2.4rem] w-[2.4rem] items-center justify-center rounded-full',
+        colorClass,
+      )}>
+      {getIcon()}
+    </div>
+  );
 };
 
 const TransportResult = ({
@@ -79,6 +135,15 @@ const TransportResult = ({
     },
   });
 
+  // API 응답 상태 확인
+  if (data?.status && data.status !== 200) {
+    return (
+      <div className='label1-12-medium text-text-status-destructive'>
+        {data.message || '경로 탐색 중 오류가 발생했습니다.'}
+      </div>
+    );
+  }
+
   const itinerary =
     data?.metaData?.plan?.itineraries?.[0] ?? data?.plan?.itineraries?.[0] ?? undefined;
   const totalTimeSec: number | undefined = itinerary?.totalTime;
@@ -90,10 +155,6 @@ const TransportResult = ({
         출발지를 선택하면 경로가 표시됩니다.
       </div>
     );
-  }
-
-  if (!legs.length) {
-    return <div className='label1-12-medium text-text-neutral-secondary'>경로가 없어요</div>;
   }
 
   return (
@@ -118,45 +179,93 @@ const TransportResult = ({
 
       <div className='mt-[1.6rem] max-h-[32rem] overflow-y-auto pr-[0.4rem]'>
         <ul className='flex flex-col gap-[1.2rem]'>
+          {/* 출발지 표시 */}
+          <li className='flex items-center gap-[1.2rem]'>
+            <div className='flex h-[2.4rem] w-[2.4rem] items-center justify-center rounded-full bg-status-destructive-primary'>
+              <IcMarkFill className='h-[1.6rem] w-[1.6rem] [&_path]:fill-white' />
+            </div>
+            <span className='body2-14-medium text-text-neutral-primary'>출발</span>
+          </li>
           {legs.map((leg: TmapLeg, idx: number) => {
             const mode = leg.mode ?? '';
+
             if (mode === 'WALK') {
               return (
-                <li key={idx} className='text-text-neutral-secondary'>
-                  <span className='mr-[0.6rem]'>🚶‍♂️</span>도보로 이동
+                <li key={idx} className='flex items-center gap-[1.2rem]'>
+                  <TransportIcon mode={mode} />
+                  <span className='body2-14-medium text-text-neutral-secondary'>도보로 이동</span>
                 </li>
               );
             }
+
             if (mode === 'SUBWAY') {
               const line = (leg.laneName || leg.route || '').replace('(급행)', '').trim();
-              const colorClass = subwayColors[line] || 'bg-neutral-20 text-text-neutral-primary';
+              const lineColor = leg.routeColor || '#666';
               return (
-                <li key={idx} className='text-text-neutral-primary'>
-                  <span
-                    className={`mr-[0.6rem] inline-block rounded-[0.4rem] px-[0.6rem] py-[0.2rem] ${colorClass}`}>
-                    {line || '지하철'}
-                  </span>
-                  {leg.start?.name ?? ''} 승차 → {leg.end?.name ?? ''} 하차
+                <li key={idx} className='flex items-center gap-[1.2rem]'>
+                  <TransportIcon mode={mode} color={lineColor} />
+                  <div className='flex flex-col gap-[0.2rem]'>
+                    <span className='body2-14-medium text-text-neutral-primary'>
+                      {line || '지하철'} {leg.start?.name ?? ''}
+                    </span>
+                    <span className='body2-14-medium text-text-neutral-secondary'>
+                      {leg.start?.name ?? ''} 승차 → {leg.end?.name ?? ''} 하차
+                    </span>
+                  </div>
                 </li>
               );
             }
+
             if (mode === 'BUS') {
               const busNo = leg.route || '버스';
+              const busColor = leg.routeColor || '#1DA1F2';
               return (
-                <li key={idx} className='text-text-neutral-primary'>
-                  <span className='mr-[0.6rem] inline-block rounded-[0.4rem] bg-[#1DA1F2] px-[0.6rem] py-[0.2rem] text-white'>
-                    {busNo}
-                  </span>
-                  {leg.start?.name ?? ''} 승차 → {leg.end?.name ?? ''} 하차
+                <li key={idx} className='flex items-center gap-[1.2rem]'>
+                  <TransportIcon mode={mode} color={busColor} />
+                  <div className='flex flex-col gap-[0.2rem]'>
+                    <span className='body2-14-medium text-text-neutral-primary'>
+                      {busNo} {leg.start?.name ?? ''}
+                    </span>
+                    <span className='body2-14-medium text-text-neutral-secondary'>
+                      {leg.start?.name ?? ''} 승차 → {leg.end?.name ?? ''} 하차
+                    </span>
+                  </div>
                 </li>
               );
             }
+
+            if (mode === 'AIRPLANE') {
+              return (
+                <li key={idx} className='flex items-center gap-[1.2rem]'>
+                  <TransportIcon mode={mode} color={leg.routeColor || '#1DA1F2'} />
+                  <span className='body2-14-medium text-text-neutral-primary'>항공편 이용</span>
+                </li>
+              );
+            }
+
+            if (mode === 'FERRY') {
+              return (
+                <li key={idx} className='flex items-center gap-[1.2rem]'>
+                  <TransportIcon mode={mode} color={leg.routeColor || '#4ECDC4'} />
+                  <span className='body2-14-medium text-text-neutral-primary'>해운 이용</span>
+                </li>
+              );
+            }
+
             return (
-              <li key={idx} className='text-text-neutral-secondary'>
-                기타 이동
+              <li key={idx} className='flex items-center gap-[1.2rem]'>
+                <TransportIcon mode='WALK' />
+                <span className='body2-14-medium text-text-neutral-secondary'>기타 이동</span>
               </li>
             );
           })}
+          {/* 도착지 표시 */}
+          <li className='flex items-center gap-[1.2rem]'>
+            <div className='flex h-[2.4rem] w-[2.4rem] items-center justify-center rounded-full bg-status-success-primary'>
+              <IcMarkFill className='h-[1.6rem] w-[1.6rem] [&_path]:fill-white' />
+            </div>
+            <span className='body2-14-medium text-text-neutral-primary'>도착</span>
+          </li>
         </ul>
       </div>
     </>
