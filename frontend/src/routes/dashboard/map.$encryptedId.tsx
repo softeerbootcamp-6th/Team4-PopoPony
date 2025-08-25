@@ -10,7 +10,7 @@ import { PageLayout } from '@shared/ui/layout';
 
 import { getEscortDetail } from '@dashboard/apis';
 import { DashBoardCard, Footer, Header } from '@dashboard/components';
-import { useSocket } from '@dashboard/hooks';
+import { useWebSocket } from '@dashboard/hooks';
 
 import { updatedBefore } from '@helper/utils';
 
@@ -35,7 +35,7 @@ function RouteComponent() {
 
   const timerRef = useRef<number | null>(null);
   const [curLocation, setCurLocation] = useState<Position | null>(null);
-  const { helperLocations, sendLocation } = useSocket(String(escortId), 'patient');
+  const { helperLocations, sendLocation } = useWebSocket(String(escortId), 'patient');
 
   const mapRef = useRef<HTMLDivElement>(null);
   const { mapInstance, setCurrentLocation, fitBoundsToCoordinates, addMarker, addCustomMarker } =

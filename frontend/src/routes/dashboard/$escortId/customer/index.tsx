@@ -16,7 +16,7 @@ import {
   Header,
   WritingReport,
 } from '@dashboard/components';
-import { useSocket } from '@dashboard/hooks';
+import { useWebSocket } from '@dashboard/hooks';
 import { type EscortStatusProps, type StatusTitleProps } from '@dashboard/types';
 
 import { updatedBefore } from '@helper/utils';
@@ -60,7 +60,7 @@ function RouteComponent() {
   } = useMap(mapRef as React.RefObject<HTMLDivElement>);
 
   const { route, patient, helper, estimatedMeetingTime, escortId } = data.data;
-  const { helperLocations, patientLocations, escortStatuses } = useSocket(
+  const { helperLocations, patientLocations, escortStatuses } = useWebSocket(
     String(escortId),
     'customer'
   );
