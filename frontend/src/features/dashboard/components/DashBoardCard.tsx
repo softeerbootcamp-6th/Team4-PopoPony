@@ -6,7 +6,7 @@ import { ShowMapButton } from '@shared/ui';
 import { type StatusTitleProps } from '@dashboard/types';
 
 const DashBoardCard = ({ children }: { children: React.ReactNode }) => {
-  return <div className='shadow-bottom-sheet relative z-10 flex-1'>{children}</div>;
+  return <div className='shadow-bottom-sheet flex-1'>{children}</div>;
 };
 
 const Home = (active: boolean) => {
