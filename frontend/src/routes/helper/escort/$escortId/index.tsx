@@ -1,10 +1,12 @@
-import { createFileRoute, useParams } from '@tanstack/react-router';
+import { createFileRoute, redirect, useParams } from '@tanstack/react-router';
 
 import { RecruitCard } from '@widgets/ui';
 
 import { ProgressIndicator } from '@entities/recruit/ui';
 
+import { $api } from '@shared/api';
 import { dateFormat, timeFormat } from '@shared/lib';
+import { validateRecruitExistsByRecruitId } from '@shared/lib';
 import { Spinner, Tabs } from '@shared/ui';
 import { PageLayout } from '@shared/ui/layout';
 
@@ -13,6 +15,33 @@ import { DetailTab, ReportTab } from '@helper/components';
 import type { RecruitDetailResponse } from '@helper/types';
 
 export const Route = createFileRoute('/helper/escort/$escortId/')({
+  beforeLoad: async ({ context, params }) => {
+    const escortId = Number(params.escortId);
+    await validateRecruitExistsByRecruitId(escortId);
+    const { queryClient } = context;
+    const options = $api.queryOptions(
+      'get',
+      '/api/reports/recruits/{recruitId}',
+      { params: { path: { recruitId: escortId } } },
+      { throwOnError: false }
+    );
+
+    try {
+      const report = await queryClient.ensureQueryData(options);
+      const hasReport = Boolean(report?.data && report.data.reportId !== 0);
+      if (!hasReport) {
+        throw redirect({
+          to: '/helper/escort/$escortId/report/$step',
+          params: { escortId: params.escortId, step: 'time' },
+        });
+      }
+    } catch {
+      throw redirect({
+        to: '/helper/escort/$escortId/report/$step',
+        params: { escortId: params.escortId, step: 'time' },
+      });
+    }
+  },
   component: RouteComponent,
 });
 
@@ -28,6 +57,7 @@ const refineCardData = (recruitData: RecruitDetailResponse) => {
 };
 
 function RouteComponent() {
+  // const navigate = useNavigate();
   const { escortId } = useParams({ from: '/helper/escort/$escortId/' });
   const { data: recruitData, isLoading } = getRecruitById(Number(escortId));
 

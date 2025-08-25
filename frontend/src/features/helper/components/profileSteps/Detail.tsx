@@ -11,7 +11,6 @@ import { useNavigate } from '@tanstack/react-router';
 import { useFormContext } from 'react-hook-form';
 
 import { useFormValidation } from '@shared/hooks';
-import type { PostResponse } from '@shared/types';
 import { Button, Divider } from '@shared/ui';
 import {
   FormInput,
@@ -69,15 +68,8 @@ const Detail = () => {
           },
         },
         {
-          onSuccess: (response: PostResponse) => {
-            if (response.status !== 200) {
-              alert(response.message ?? '도우미 등록에 실패했습니다. 다시 시도해주세요.');
-              return;
-            }
+          onSuccess: () => {
             navigate({ to: '/helper/profile/new/completed' });
-          },
-          onError: () => {
-            alert('도우미 등록에 실패했습니다. 다시 시도해주세요.');
           },
         }
       );
@@ -93,15 +85,8 @@ const Detail = () => {
           },
         },
         {
-          onSuccess: (response: PostResponse) => {
-            if (response.status !== 200) {
-              alert(response.message ?? '도우미 등록에 실패했습니다. 다시 시도해주세요.');
-              return;
-            }
+          onSuccess: () => {
             navigate({ to: '/helper/profile/new/completed' });
-          },
-          onError: () => {
-            alert('도우미 등록에 실패했습니다. 다시 시도해주세요.');
           },
         }
       );

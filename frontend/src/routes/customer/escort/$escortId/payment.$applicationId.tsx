@@ -1,6 +1,5 @@
 import { createFileRoute, getRouteApi, useNavigate } from '@tanstack/react-router';
 
-import { showToastError } from '@shared/lib';
 import { PageLayout } from '@shared/ui/layout';
 
 import { getRecruitPayment, postSelectApplication } from '@customer/apis';
@@ -34,9 +33,6 @@ function RouteComponent() {
               escortId: escortId,
             },
           });
-        },
-        onError: (error: unknown) => {
-          showToastError(error);
         },
       }
     );

@@ -12,3 +12,6 @@ const client = createFetchClient<paths>({
 client.use(errorMiddleware);
 
 export const $api = createClient(client);
+
+// fetch: 빠른 단발성 체크용(validation 등)
+export const $fetch = client;

@@ -55,7 +55,11 @@ function RouteComponent() {
 
   return (
     <>
-      <PageLayout.Header title='내역 상세보기' showBack />
+      <PageLayout.Header
+        title='내역 상세보기'
+        showBack
+        onBack={() => navigate({ to: '/customer' })}
+      />
       <PageLayout.Content>
         <div className='bg-neutral-10 flex-col-start gap-[1.2rem] px-[2rem] py-[1.6rem]'>
           <RecruitCard>
@@ -84,7 +88,9 @@ function RouteComponent() {
             </ErrorSuspenseBoundary>
           </Tabs.TabsContent>
           <Tabs.TabsContent value='리포트'>
-            <ReportTab setHasReview={setHasReview} setHelperId={setHelperId} />
+            <ErrorSuspenseBoundary isRoot={false}>
+              <ReportTab setHasReview={setHasReview} setHelperId={setHelperId} />
+            </ErrorSuspenseBoundary>
           </Tabs.TabsContent>
           <Tabs.TabsContent value='신청 내역'>
             <DetailTab data={recruitData.data} />

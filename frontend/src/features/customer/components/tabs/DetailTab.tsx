@@ -44,9 +44,6 @@ const DetailTab = ({ data }: { data: RecruitDetailResponse }) => {
         onSuccess: () => {
           openDeleteRecruitSuccessModal();
         },
-        onError: () => {
-          alert('동행 신청 취소에 실패했습니다.');
-        },
       }
     );
   };

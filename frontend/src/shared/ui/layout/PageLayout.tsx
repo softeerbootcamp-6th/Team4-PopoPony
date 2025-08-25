@@ -28,6 +28,7 @@ const Header = ({
   showClose,
   background,
   onClose,
+  onBack,
   className,
   showProgress,
   currentStep,
@@ -45,6 +46,7 @@ const Header = ({
         showClose={showClose}
         background={background}
         onClose={onClose}
+        onBack={onBack}
         className={className}
       />
       {showProgress && maxStep && currentStep && (

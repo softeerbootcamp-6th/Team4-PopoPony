@@ -1,4 +1,5 @@
 import { Link, useNavigate } from '@tanstack/react-router';
+import { toast } from 'sonner';
 
 import { RecruitCard } from '@widgets/ui';
 
@@ -81,8 +82,7 @@ const HelperHomePage = () => {
         params: { helperId: helperProfileId.toString() },
       });
     } else {
-      alert('프로필을 작성해주세요.');
-      // toast.error('프로필을 작성해주세요.');
+      toast.error('프로필을 작성해주세요.');
     }
   };
   const handleEscortCardClick = (recruitId: number, isCompleted: boolean) => {
@@ -102,7 +102,6 @@ const HelperHomePage = () => {
       });
     }
   };
-
   return (
     <>
       <PageLayout.Content>

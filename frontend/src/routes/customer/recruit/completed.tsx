@@ -1,3 +1,4 @@
+import { useQueryClient } from '@tanstack/react-query';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 
 import { Button } from '@shared/ui';
@@ -9,14 +10,17 @@ export const Route = createFileRoute('/customer/recruit/completed')({
 
 function RouteComponent() {
   const navigate = useNavigate();
-
+  const queryClient = useQueryClient();
   return (
     <>
       <PageLayout.Header
         background={false}
         showBack={false}
         showClose={true}
-        onClose={() => navigate({ to: '/customer' })}
+        onClose={() => {
+          queryClient.removeQueries({ queryKey: ['recruitFormStarted'] });
+          navigate({ to: '/customer' });
+        }}
       />
       <PageLayout.Content>
         <FormLayout>
@@ -44,7 +48,13 @@ function RouteComponent() {
         </FormLayout>
       </PageLayout.Content>
       <PageLayout.Footer>
-        <Button variant='primary' className='w-full' onClick={() => navigate({ to: '/customer' })}>
+        <Button
+          variant='primary'
+          className='w-full'
+          onClick={() => {
+            queryClient.removeQueries({ queryKey: ['recruitFormStarted'] });
+            navigate({ to: '/customer' });
+          }}>
           신청 내역 보기
         </Button>
       </PageLayout.Footer>

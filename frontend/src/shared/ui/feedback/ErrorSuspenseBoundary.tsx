@@ -1,4 +1,5 @@
 import { QueryErrorResetBoundary } from '@tanstack/react-query';
+import { useRouterState } from '@tanstack/react-router';
 
 import React, { Suspense } from 'react';
 
@@ -12,11 +13,13 @@ type Props = {
 };
 
 const ErrorSuspenseBoundary = ({ children, isRoot = false }: Props) => {
+  const { location } = useRouterState();
+  const resetKeys = [location.href];
   return (
     <QueryErrorResetBoundary>
       {({ reset }) => (
         <ErrorBoundary
-          resetKeys={isRoot ? [location.pathname] : undefined}
+          resetKeys={resetKeys}
           onReset={reset}
           fallbackRender={({ error, resetErrorBoundary }) => {
             const handleReset = () => {

@@ -13,7 +13,8 @@ import {
   timeFormat,
   timeFormatWithOptionalMinutes,
 } from '@shared/lib';
-import { Button, Divider, PageLayout, Spinner, TermsBottomSheet } from '@shared/ui';
+import { Button, Divider, ShowMapButton, Spinner, TermsBottomSheet } from '@shared/ui';
+import { PageLayout } from '@shared/ui/layout';
 
 import { getRecruitById } from '@customer/apis';
 import { GrayBox, InfoSection, RouteButton } from '@customer/components';
@@ -151,10 +152,13 @@ function RouteComponent() {
                   <span className='text-text-neutral-secondary'>
                     {hospitalLocationInfo.placeName}
                   </span>
-                  {/* 이 지도보기 버튼의 onclick은 무엇을 해줘야 할까요 */}
-                  <button className='caption2-10-medium text-text-neutral-secondary border-stroke-neutral-dark w-fit rounded-[0.4rem] border px-[0.5rem] py-[0.2rem]'>
-                    지도 보기
-                  </button>
+                  <ShowMapButton
+                    businessAddress={hospitalLocationInfo.placeName}
+                    pos={{
+                      lat: hospitalLocationInfo.lat,
+                      lng: hospitalLocationInfo.lon,
+                    }}
+                  />
                 </div>
               </div>
             </div>

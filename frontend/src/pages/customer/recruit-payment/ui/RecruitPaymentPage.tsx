@@ -1,6 +1,5 @@
 import { getRouteApi, useNavigate } from '@tanstack/react-router';
 
-import { showToastError } from '@shared/lib';
 import { PageLayout } from '@shared/ui/layout';
 
 import { getRecruitPayment, postSelectApplication } from '@customer/apis';
@@ -30,9 +29,6 @@ const RecruitPaymentPage = () => {
               escortId: escortId,
             },
           });
-        },
-        onError: (error: unknown) => {
-          showToastError(error);
         },
       }
     );

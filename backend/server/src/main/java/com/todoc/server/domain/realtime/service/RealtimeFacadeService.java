@@ -54,6 +54,7 @@
 //            }
 //        } catch (Exception e) {
 //            emitter.completeWithError(e);
+//            return emitter;
 //        }
 //        return emitter;
 //    }

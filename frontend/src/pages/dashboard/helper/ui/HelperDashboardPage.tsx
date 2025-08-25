@@ -312,7 +312,7 @@ const HelperDashboardPage = () => {
         escortStatus: escortStatus,
         title: '만남장소로 이동하세요',
         address: route.routeSimple.meetingLocationInfo,
-        card: <HelperDashboardSearchCard />,
+        card: <HelperDashboardSearchCard destination={route.routeSimple.meetingLocationInfo} />,
         button: (
           <SlideButton
             onConfirm={handleClickNextStep}

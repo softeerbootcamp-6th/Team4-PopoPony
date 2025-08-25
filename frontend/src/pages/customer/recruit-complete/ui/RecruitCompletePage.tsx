@@ -1,3 +1,4 @@
+import { useQueryClient } from '@tanstack/react-query';
 import { getRouteApi, useNavigate } from '@tanstack/react-router';
 
 import { dateFormat, timeDuration, timeFormatWithOptionalMinutes } from '@shared/lib';
@@ -11,6 +12,7 @@ const Route = getRouteApi('/customer/escort/$escortId/completed');
 const RecruitCompletePage = () => {
   const navigate = useNavigate();
   const { escortId } = Route.useParams();
+  const queryClient = useQueryClient();
   const { data } = getRecruitById(Number(escortId));
   const { escortDate, estimatedMeetingTime, estimatedReturnTime, route } = data?.data || {};
   return (
@@ -19,7 +21,10 @@ const RecruitCompletePage = () => {
         background={false}
         showBack={false}
         showClose={true}
-        onClose={() => navigate({ to: '/customer' })}
+        onClose={() => {
+          queryClient.removeQueries({ queryKey: ['escortFormStarted'] });
+          navigate({ to: '/customer' });
+        }}
       />
       <PageLayout.Content>
         <div className='flex h-full flex-col'>

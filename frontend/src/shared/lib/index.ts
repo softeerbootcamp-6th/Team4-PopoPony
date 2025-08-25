@@ -5,3 +5,4 @@ export * from './formatValue';
 export * from './image';
 export * from './parseType';
 export * from './showToastError';
+export * from './validation';

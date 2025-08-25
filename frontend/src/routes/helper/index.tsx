@@ -1,4 +1,5 @@
 import { Link, createFileRoute, useNavigate } from '@tanstack/react-router';
+import { toast } from 'sonner';
 
 import { RecruitCard } from '@widgets/ui';
 
@@ -9,8 +10,6 @@ import { PageLayout } from '@shared/ui/layout';
 
 import { getProfileExistance, getRecruitList } from '@helper/apis';
 import type { EscortStatus, RecruitSimpleResponse } from '@helper/types';
-
-// import { toast } from 'sonner';
 
 export const Route = createFileRoute('/helper/')({
   component: RouteComponent,
@@ -86,8 +85,7 @@ function RouteComponent() {
         params: { helperId: helperProfileId.toString() },
       });
     } else {
-      alert('프로필을 작성해주세요.');
-      // toast.error('프로필을 작성해주세요.');
+      toast.error('프로필을 작성해주세요.');
     }
   };
   const handleEscortCardClick = (recruitId: number, isCompleted: boolean) => {

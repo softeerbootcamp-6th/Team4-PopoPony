@@ -1,4 +1,5 @@
 import { IcCheckBox } from '@icons';
+import { toast } from 'sonner';
 
 import React, { useRef } from 'react';
 
@@ -35,9 +36,8 @@ const ReceiptImageUpload = ({ name, prefix, placeholder }: Props) => {
         },
         { shouldValidate: true, shouldDirty: true }
       );
-    } catch (err) {
-      console.error(err);
-      alert('업로드에 실패했습니다. 다시 시도해주세요.');
+    } catch {
+      toast.error('업로드에 실패했습니다. 다시 시도해주세요.');
     }
 
     // 파일 input 초기화

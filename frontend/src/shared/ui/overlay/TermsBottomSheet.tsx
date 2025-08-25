@@ -25,9 +25,9 @@ const TermsBottomSheet = ({
   const [isTermsModalOpen, setIsTermsModalOpen] = useState(false);
   // 약관 동의 상태
   const [termsAgreement, setTermsAgreement] = useState({
-    serviceTerms: false,
-    privacyPolicy: false,
-    locationTerms: false,
+    serviceTerms: true,
+    privacyPolicy: true,
+    locationTerms: true,
   });
   const handleTermsClick = (termsId: string) => {
     const terms = getTermsById(termsId);

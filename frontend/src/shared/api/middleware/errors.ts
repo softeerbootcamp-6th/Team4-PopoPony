@@ -71,6 +71,17 @@ export const getErrorLabel = (error: unknown) => {
   return 'Error';
 };
 
+// export const getErrorDescription = (error: unknown) => {
+//   if (error instanceof AuthError) return '권한이 없습니다.';
+//   if (error instanceof ApiError) return 'API 오류가 발생했습니다.';
+//   if (error instanceof HTTPError) return 'HTTP 오류가 발생했습니다.';
+//   if (error instanceof ServerError) return '서버 오류가 발생했습니다.';
+//   if (error instanceof TimeoutError) return '요청 시간이 초과되었습니다.';
+//   if (error instanceof NetworkError) return '네트워크 오류가 발생했습니다.';
+//   if (error instanceof NotFoundError) return '존재하지 않는 리소스입니다.';
+//   return '알 수 없는 오류가 발생했습니다.';
+// };
+
 export class NotFoundError extends Error {
   constructor(
     public status: number,

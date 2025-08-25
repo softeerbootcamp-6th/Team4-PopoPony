@@ -1,3 +1,4 @@
+import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from '@tanstack/react-router';
 
 import { FormProvider, useForm } from 'react-hook-form';
@@ -24,6 +25,8 @@ const RecruitRegisterFormPage = () => {
   const router = useRouter();
   const { isOpen, openModal, closeModal } = useModal();
   const methods = useForm<RecruitFormValues>({ shouldUnregister: false });
+  const queryClient = useQueryClient();
+  queryClient.setQueryData(['recruitFormStarted'], true);
 
   const { Funnel, Step, nextStep, currentStep, handleBackStep } = useFunnel({
     defaultStep: 'profile',

@@ -1,4 +1,5 @@
-import { createFileRoute, useRouter } from '@tanstack/react-router';
+import { type QueryClient, useQueryClient } from '@tanstack/react-query';
+import { createFileRoute, redirect, useRouter } from '@tanstack/react-router';
 
 import { FormProvider, useForm } from 'react-hook-form';
 
@@ -12,12 +13,27 @@ import { type EscortReviewFormValues } from '@customer/types';
 
 export const Route = createFileRoute('/customer/escort/$escortId/$helperId/review/$step')({
   component: RouteComponent,
+  beforeLoad: async ({ params, context }) => {
+    const { step, escortId, helperId } = params;
+    const { queryClient } = context as { queryClient: QueryClient };
+    if (step !== 'summary') {
+      const started = queryClient.getQueryData<boolean>(['reviewFormStarted']);
+      if (!started) {
+        throw redirect({
+          to: '/customer/escort/$escortId/$helperId/review/$step',
+          params: { escortId, helperId, step: 'summary' },
+        });
+      }
+    }
+  },
 });
 
 const stepList = ['summary', 'detail', 'comment'];
 
 function RouteComponent() {
   const router = useRouter();
+  const queryClient = useQueryClient();
+  queryClient.setQueryData(['reviewFormStarted'], true);
   const { escortId } = Route.useParams();
   const methods = useForm<EscortReviewFormValues>({ shouldUnregister: false });
   const { isOpen, openModal, closeModal } = useModal();

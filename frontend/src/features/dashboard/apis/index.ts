@@ -3,6 +3,7 @@ import patchEscortMemo from './patchEscortMemo';
 import patchEscortStatusByEscortId from './patchEscortStatusByEscortId';
 import postCurrentPosition from './postCurrentPosition';
 import postLocation from './postLocation';
+import postTmapTransport from './postTmapTransport';
 
 export {
   getEscortDetail,
@@ -10,4 +11,5 @@ export {
   patchEscortMemo,
   postLocation,
   postCurrentPosition,
+  postTmapTransport,
 };

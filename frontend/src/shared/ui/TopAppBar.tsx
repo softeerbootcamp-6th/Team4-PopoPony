@@ -7,6 +7,7 @@ export interface TopAppBarProps {
   showClose?: boolean;
   background?: boolean;
   onClose?: () => void;
+  onBack?: () => void;
   className?: string;
 }
 
@@ -16,11 +17,16 @@ const TopAppBar = ({
   showClose = false,
   background = true,
   onClose,
-  className = '',
+  onBack,
+  className,
 }: TopAppBarProps) => {
   const router = useRouter();
   const handleBack = () => {
-    router.history.back();
+    if (onBack) {
+      onBack();
+    } else {
+      router.history.back();
+    }
   };
 
   const backgroundClass = background ? 'bg-background-default-white' : 'bg-transparent';

@@ -7,9 +7,12 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.todoc.server.common.enumeration.Role;
 import com.todoc.server.domain.realtime.repository.dto.LocationUpdateResult;
+import com.todoc.server.domain.realtime.service.NchanPublisher;
 import com.todoc.server.domain.realtime.web.dto.request.LocationUpdateRequest;
 import com.todoc.server.domain.realtime.web.dto.response.LocationResponse;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.stereotype.Repository;
@@ -24,6 +27,7 @@ import org.springframework.web.socket.WebSocketSession;
 @RequiredArgsConstructor
 public class LocationCacheRepository {
 
+    private static final Logger log = LoggerFactory.getLogger(LocationCacheRepository.class);
     private final StringRedisTemplate stringRedisTemplate;
     private final DefaultRedisScript<String> updateLocationLua;
     private final ObjectMapper objectMapper;
@@ -50,11 +54,11 @@ public class LocationCacheRepository {
 
         // Lua 인자 정의
         Object[] argv = new Object[] {
-                String.valueOf(request.getLatitude()),
-                String.valueOf(request.getLongitude()),
-                String.valueOf(request.getTimestamp().toEpochMilli()),
-                String.valueOf(request.getAccuracyMeters() == null ? 0.0 : request.getAccuracyMeters()),
-                String.valueOf(request.getSeq()),
+                numOrEmpty(request.getLatitude()),
+                numOrEmpty(request.getLongitude()),
+                epochOrNow(request.getTimestamp()),
+                numOrEmpty(request.getAccuracyMeters()),
+                strOrEmpty(request.getSeq()),
                 String.valueOf(ALPHA), String.valueOf(STOP_THRES), String.valueOf(BASE_MIN_DIST),
                 String.valueOf(TTL_SECONDS),
                 String.valueOf(escortId),
@@ -104,9 +108,19 @@ public class LocationCacheRepository {
         Map<Object, Object> entries = stringRedisTemplate.opsForHash().entries(k);
         if (entries.isEmpty()) return Optional.empty();
 
-        double lat = parseDouble(entries.get("lat"));
-        double lon = parseDouble(entries.get("lon"));
-        long ts = parseLong(entries.get("ts"));
+//        double lat = parseDouble(entries.get("lat"));
+//        double lon = parseDouble(entries.get("lon"));
+//        long ts = parseLong(entries.get("ts"));
+
+        Double lat = parseNullableDouble(entries.get("lat"));
+        Double lon = parseNullableDouble(entries.get("lon"));
+        Long ts = parseNullableLong(entries.get("ts"));
+
+        // 하나라도 비정상이면 스냅샷 없음으로 간주
+        if (lat == null || lon == null || ts == null) {
+            log.warn("Bad cache data for {}: lat={}, lon={}, ts={}", k, entries.get("lat"), entries.get("lon"), entries.get("ts"));
+            return Optional.empty();
+        }
 
         return Optional.of(
                 LocationResponse.builder()
@@ -134,11 +148,44 @@ public class LocationCacheRepository {
 //                        .build()
 //        );
 //    }
-
+  
     private static String key(long escortId, Role role) {
         return "escort:location:" + escortId + ":" + role.getLabel();
     }
 
+    //private static double parseDouble(Object v) { return Double.parseDouble(String.valueOf(v)); }
+    //private static long parseLong(Object v) { return Long.parseLong(String.valueOf(v)); }
+
+    private static Double parseNullableDouble(Object v) {
+        if (v == null) return null;
+        String s = v.toString().trim();
+        if (s.isEmpty() || s.equalsIgnoreCase("null")) return null;
+        try { return Double.parseDouble(s); } catch (NumberFormatException e) { return null; }
+    }
+
+
+    private static Long parseNullableLong(Object v) {
+        if (v == null) return null;
+        String s = v.toString().trim();
+        if (s.isEmpty() || s.equalsIgnoreCase("null")) return null;
+        if (!s.chars().allMatch(Character::isDigit)) return null;
+        try { return Long.parseLong(s); } catch (NumberFormatException e) { return null; }
+    }
+
+    private static String numOrEmpty(Double v) {
+        return v == null ? "" : v.toString();
+    }
+    private static String longOrEmpty(Long v) {
+        return v == null ? "" : v.toString();
+    }
+    private static String strOrEmpty(Object v) {
+        return v == null ? "" : v.toString();
+    }
+    private static String epochOrNow(Instant ts) {
+        return Long.toString(ts == null ? System.currentTimeMillis() : ts.toEpochMilli());
+    }
+
     private static double parseDouble(Object v) { return Double.parseDouble(String.valueOf(v)); }
     private static long parseLong(Object v) { return Long.parseLong(String.valueOf(v)); }
+
 }
