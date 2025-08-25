@@ -28,7 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.Assertions.*;
 
-@Sql("/sql/data.sql")
+@Transactional
 class EscortServiceIntegrationTest extends IntegrationTest {
 
     @Autowired private EscortFacadeService escortFacadeService;

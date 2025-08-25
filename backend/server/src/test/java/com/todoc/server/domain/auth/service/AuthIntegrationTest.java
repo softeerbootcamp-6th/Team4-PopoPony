@@ -6,10 +6,6 @@ import com.todoc.server.domain.auth.exception.AuthNotFoundException;
 import com.todoc.server.domain.auth.repository.AuthJpaRepository;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -17,7 +13,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mindrot.jbcrypt.BCrypt.gensalt;
 import static org.mindrot.jbcrypt.BCrypt.hashpw;
 
-@Sql("/sql/data.sql")
+@Transactional
 class AuthIntegrationTest extends IntegrationTest {
 
     @Autowired AuthService authService;

@@ -30,7 +30,7 @@ import java.util.List;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@Sql("/sql/data.sql")
+@Transactional
 public class HelperFacadeIntegrationTest extends IntegrationTest {
 
     @Autowired

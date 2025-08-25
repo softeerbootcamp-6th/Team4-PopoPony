@@ -25,11 +25,7 @@ import java.util.List;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
-@SpringBootTest
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE) // 실제 DB 사용 시
 @Transactional
-@ActiveProfiles("test")
-@Sql("/sql/data.sql")
 public class ReviewIntegrationTest extends IntegrationTest {
 
     @Autowired
@@ -96,7 +92,7 @@ public class ReviewIntegrationTest extends IntegrationTest {
     void createReview_정상() {
 
         // given
-        Long authId = 1L;
+        Long authId = 5L;
         int beforeCount = reviewService.getAllReviews().size();
         ReviewCreateRequest request = createSampleRequest();
         long beforePfCount = positiveFeedbackChoiceService.getAllPositiveFeedbackChoice().size();
@@ -120,8 +116,9 @@ public class ReviewIntegrationTest extends IntegrationTest {
     public static ReviewCreateRequest createSampleRequest() {
         ReviewCreateRequest request = new ReviewCreateRequest(); // 기본 생성자 필요
 
-        ReflectionTestUtils.setField(request, "helperId", 2L);
-        ReflectionTestUtils.setField(request, "recruitId", 11L);
+//        ReflectionTestUtils.setField(request, "customerId", 5L);
+        ReflectionTestUtils.setField(request, "helperId", 3L);
+        ReflectionTestUtils.setField(request, "recruitId", 10L);
         ReflectionTestUtils.setField(request, "satisfactionLevel", "좋았어요");
         ReflectionTestUtils.setField(request, "shortComment", "너무 감사드립니다!");
         ReflectionTestUtils.setField(request, "positiveFeedbackList", List.of("친절해요", "능숙해요"));

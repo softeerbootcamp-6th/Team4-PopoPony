@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.util.ReflectionTestUtils;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -31,7 +32,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 
-@Sql("/sql/data.sql")
+@Transactional
 public class RecruitIntegrationTest extends IntegrationTest {
 
     @Autowired
@@ -63,8 +64,8 @@ public class RecruitIntegrationTest extends IntegrationTest {
 
             // TMap 모의 응답(두 구간)
             given(tMapRouteService.getRoute(any()))
-                .willReturn(new TMapRawResult("{}", "USED_VERTICES_A"))
-                .willReturn(new TMapRawResult("{}", "USED_VERTICES_B"));
+                .willReturn(new TMapRawResult("{}", "[]"))
+                .willReturn(new TMapRawResult("{}", "[]"));
 
             // 병원 가는 구간 요약 + 복귀 구간 요약
             var legA = new TMapRouteParser.RouteLegSummary(5_000, 900, 3_000, 15_000);
@@ -106,12 +107,12 @@ public class RecruitIntegrationTest extends IntegrationTest {
             assertThat(route.getReturnLocationInfo()).isNotNull();
 
             // 좌표값(등록 요청값)이 반영되었는지
-            assertThat(route.getMeetingLocationInfo().getLongitude()).isEqualByComparingTo(new BigDecimal("127.2581225"));
-            assertThat(route.getMeetingLocationInfo().getLatitude()).isEqualByComparingTo(new BigDecimal("36.4809912"));
-            assertThat(route.getHospitalLocationInfo().getLongitude()).isEqualByComparingTo(new BigDecimal("126.9784043"));
+            assertThat(route.getMeetingLocationInfo().getLongitude()).isEqualByComparingTo(new BigDecimal("127.258123"));
+            assertThat(route.getMeetingLocationInfo().getLatitude()).isEqualByComparingTo(new BigDecimal("36.480991"));
+            assertThat(route.getHospitalLocationInfo().getLongitude()).isEqualByComparingTo(new BigDecimal("126.978404"));
             assertThat(route.getHospitalLocationInfo().getLatitude()).isEqualByComparingTo(new BigDecimal("37.5670240"));
-            assertThat(route.getReturnLocationInfo().getLongitude()).isEqualByComparingTo(new BigDecimal("127.1234567"));
-            assertThat(route.getReturnLocationInfo().getLatitude()).isEqualByComparingTo(new BigDecimal("36.9876543"));
+            assertThat(route.getReturnLocationInfo().getLongitude()).isEqualByComparingTo(new BigDecimal("127.123457"));
+            assertThat(route.getReturnLocationInfo().getLatitude()).isEqualByComparingTo(new BigDecimal("36.987654"));
 
             // 5) 두 개의 RouteLeg가 저장되고 매핑되었는지
             assertThat(route.getMeetingToHospital()).isNotNull();

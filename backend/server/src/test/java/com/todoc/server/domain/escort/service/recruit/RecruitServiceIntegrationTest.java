@@ -22,10 +22,11 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.jdbc.Sql;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.Assertions.*;
 
-@Sql("/sql/data.sql")
+@Transactional
 public class RecruitServiceIntegrationTest extends IntegrationTest {
 
     @Autowired private RecruitService recruitService;

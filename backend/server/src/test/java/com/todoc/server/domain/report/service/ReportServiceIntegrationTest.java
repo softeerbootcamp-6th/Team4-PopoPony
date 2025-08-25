@@ -36,11 +36,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
-@SpringBootTest
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE) // 실제 DB 사용 시
 @Transactional
-@ActiveProfiles("test")
-@Sql("/sql/data.sql")
 public class ReportServiceIntegrationTest extends IntegrationTest {
 
     @Autowired
