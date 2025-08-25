@@ -221,51 +221,66 @@ frontend
 ├── 📁 dist/
 ├── 📁 node_modules/
 ├── 📁 public/
+│   ├── 📁 fonts/
+│   ├── 📁 icons/
+│   ├── 📁 images/
+│   └── 📁 video/
+│
 ├── 📁 src/
-│   ├── 📁 assets/
-│   ├── 📁 features/
+│   ├── 📁 app/
+│   │   └── 📁 routes/
+│   │   └── routeTree.gen.ts
+│   │
+│   ├── 📁 pages/
 │   │   ├── 📁 auth/
-│   │   │   ├── 📁 apis/
-│   │   │   ├── 📁 components/
-│   │   │   ├── 📁 hooks/
-│   │   │   ├── 📁 types/
-│   │   │   └── 📁 utils/
 │   │   ├── 📁 customer/
 │   │   ├── 📁 dashboard/
 │   │   └── 📁 helper/
 │   │
-│   ├── 📁 routes/
+│   ├── 📁 widgets/
+│   │   └── 📁 ui/
+│   │
+│   ├── 📁 entities/
+│   │   ├── 📁 application/
 │   │   ├── 📁 customer/
-│   │   ├── 📁 dashboard/
+│   │   ├── 📁 escort/
 │   │   ├── 📁 helper/
-│   │   ├── 📁 login/
-│   │   ├── __root.tsx
-│   │   └── index.tsx
+│   │   ├── 📁 recruit/
+│   │   └── 📁 user/
 │   │
 │   ├── 📁 shared/
-│   │   ├── 📁 apis/
-│   │   ├── 📁 components/
+│   │   ├── 📁 api/
+│   │   ├── 📁 config/
 │   │   ├── 📁 hooks/
+│   │   ├── 📁 lib/
 │   │   ├── 📁 types/
-│   │   └── 📁 utils/
+│   │   └── 📁 ui/
+│   │       ├── 📁 button/
+│   │       ├── 📁 feedback/
+│   │       ├── 📁 form/
+│   │       ├── 📁 layout/
+│   │       ├── 📁 overlay/
+│   │       └── 📁 shadcn/
 │   │
-│   ├── main.tsx
-│   ├── routeTree.gen.ts
-│   ├── styles.css
-│   └── vite-env.d.ts
+│   ├── 📁 assets/
+│   ├── 📁 mocks/
+│   ├── 📁 main.tsx
+│   ├── 📁 styles.css
+│   └── 📁 vite-env.d.ts
 │
-├── .cta.json
-├── .gitignore
-├── .prettierignore
-├── .prettierrc
-├── eslint.config.mjs
-├── index.html
-├── package.json
-├── pnpm-lock.yaml
-├── README.md
-├── tsconfig.json
-├── vercel.json
-└── vite.config.ts
+├── 📁 .cta.json
+├── 📁 .gitignore
+├── 📁 .prettierignore
+├── 📁 .prettierrc
+├── 📁 components.json
+├── 📁 eslint.config.mjs
+├── 📁 index.html
+├── 📁 package.json
+├── 📁 pnpm-lock.yaml
+├── 📁 README.md
+├── 📁 tsconfig.json
+├── 📁 vercel.json
+└── 📁 vite.config.ts
 ```
 
 </details>
