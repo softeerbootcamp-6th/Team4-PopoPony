@@ -17,7 +17,7 @@ const Route = getRouteApi('/customer/escort/$escortId/$helperId/review/$step');
 const HelperReviewRegisterPage = () => {
   const router = useRouter();
   const { escortId } = Route.useParams();
-  const methods = useForm<EscortReviewFormValues>({ shouldUnregister: false });
+  const methods = useForm<EscortReviewFormValues>({ shouldUnregister: false, delayError: 400 });
   const { isOpen, openModal, closeModal } = useModal();
   const { Funnel, Step, nextStep, currentStep } = useFunnel({
     defaultStep: 'summary',

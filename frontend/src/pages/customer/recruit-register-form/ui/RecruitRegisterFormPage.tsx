@@ -24,7 +24,7 @@ const stepList = ['profile', 'condition', 'communication', 'time', 'route', 'req
 const RecruitRegisterFormPage = () => {
   const router = useRouter();
   const { isOpen, openModal, closeModal } = useModal();
-  const methods = useForm<RecruitFormValues>({ shouldUnregister: false });
+  const methods = useForm<RecruitFormValues>({ shouldUnregister: false, delayError: 400 });
   const queryClient = useQueryClient();
   queryClient.setQueryData(['recruitFormStarted'], true);
 

@@ -25,7 +25,7 @@ const HelperProfileRegisterPage = () => {
   );
 
   const { isOpen, openModal, closeModal } = useModal();
-  const methods = useForm<ProfileFormValues>({ shouldUnregister: false });
+  const methods = useForm<ProfileFormValues>({ shouldUnregister: false, delayError: 400 });
   const { reset } = methods;
 
   const { Funnel, Step, nextStep } = useFunnel({
