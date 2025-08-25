@@ -5,6 +5,8 @@ import { FormLayout } from '@shared/ui/layout';
 
 import { TaxiFeeSection } from '@helper/components';
 
+const MAX_TAXI_FEE_LENGTH = 8; // 원 단위 제외 9자리: 1,000,000원
+
 const Taxi = ({ handleNextStep }: FunnelStepProps) => {
   const { control, watch } = useFormContext();
 
@@ -20,7 +22,13 @@ const Taxi = ({ handleNextStep }: FunnelStepProps) => {
   const departureReceipt = watch('taxiFeeCreateRequest.departureReceipt');
   const returnReceipt = watch('taxiFeeCreateRequest.returnReceipt');
 
-  const isValid = departureFee && returnFee && departureReceipt.s3Key && returnReceipt.s3Key;
+  const isValid =
+    departureFee &&
+    returnFee &&
+    departureReceipt.s3Key &&
+    returnReceipt.s3Key &&
+    departureFee.length < MAX_TAXI_FEE_LENGTH &&
+    returnFee.length < MAX_TAXI_FEE_LENGTH;
 
   return (
     <FormLayout>

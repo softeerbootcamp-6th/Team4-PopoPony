@@ -1,5 +1,6 @@
 import { IcHeadphoneQuestionmark } from '@icons';
 import { getRouteApi, useRouter } from '@tanstack/react-router';
+import { toast } from 'sonner';
 
 import { type ReactNode, useEffect, useRef, useState } from 'react';
 
@@ -149,6 +150,17 @@ const HelperDashboardPage = () => {
   };
 
   const handleClickNextStep = () => {
+    if (escortStatus === '진료중') {
+      if (memo.length === 0) {
+        toast.error('진료 내용을 입력해주세요');
+        return;
+      } else {
+        patchEscortMemoCall({
+          params: { path: { escortId: escortId } },
+          body: { memo: memo },
+        });
+      }
+    }
     patchEscortStatusByEscortIdCall(
       {
         params: {
@@ -167,12 +179,6 @@ const HelperDashboardPage = () => {
         },
       }
     );
-    if (escortStatus === '진료중') {
-      patchEscortMemoCall({
-        params: { path: { escortId: escortId } },
-        body: { memo: memo },
-      });
-    }
   };
 
   useEffect(() => {

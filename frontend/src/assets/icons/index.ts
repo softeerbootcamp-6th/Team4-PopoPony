@@ -4,13 +4,14 @@ import IcHeadphoneQuestionmark from './Headphone-questionmark.svg?react';
 import IcPinFillEffect from './Pin-fill-effect.svg?react';
 import IcSpinner from './Spiner.svg?react';
 import IcAddCircle from './add-circle.svg?react';
+import IcAirplane from './airplane-sharp.svg?react';
 import IcAlertCircle from './alert-circle.svg?react';
 import IcAlertTriangle from './alert-triangle.svg?react';
+import IcArriveMarker from './arrive-marker.svg?react';
 import IcArrowLeft from './arrow-left.svg?react';
 import IcArrowRight from './arrow-right.svg?react';
 import IcArrowRotateRight01 from './arrow-rotate-right-01.svg?react';
 import IcArrowUp from './arrow-up.svg?react';
-// Transportation Icons
 import IcBusFill from './bus-fill.svg?react';
 import IcButtonClose from './button-close.svg?react';
 import IcCalendar from './calendar.svg?react';
@@ -36,6 +37,7 @@ import IcCoinFill from './coin-fill.svg?react';
 import IcCurrentLocation from './current-location.svg?react';
 import IcDownArrow from './down-arrow.svg?react';
 import IcEdit from './edit.svg?react';
+import IcFerry from './ferry.svg?react';
 import IcHomeFill from './home-fill.svg?react';
 import IcHospitalFill from './hospital-fill.svg?react';
 import IcMarkFill from './mark-fill.svg?react';
@@ -62,6 +64,7 @@ import IcShoesDisabled from './shoes(dis).svg?react';
 // Accessibility Icons
 import IcShoes from './shoes.svg?react';
 import IcStarBadge from './star-badge.svg?react';
+import IcStartMarker from './start-marker.svg?react';
 import IcSubwayFill from './subway-fill.svg?react';
 import IcTaxiBadge from './taxi-badge.svg?react';
 import IcTaxiCalled from './taxi-called.svg?react';
@@ -72,6 +75,8 @@ import IcTaxiWaiting from './taxi-waiting.svg?react';
 import IcTextGo from './text-go.svg?react';
 import IcVerified from './verified.svg?react';
 import IcVerifiedUser from './verified_user.svg?react';
+// Transportation Icons
+import IcWalk from './walk.svg?react';
 import IcWheelchairDisabled from './wheelchair(dis).svg?react';
 import IcWheelchair from './wheelchair.svg?react';
 
@@ -108,8 +113,12 @@ export {
   IcCoinFill,
   IcDownArrow,
   IcButtonClose,
-
+  IcStartMarker,
+  IcArriveMarker,
   // Transportation Icons
+  IcWalk,
+  IcAirplane,
+  IcFerry,
   IcBusFill,
   IcSubwayFill,
   IcTaxiBadge,

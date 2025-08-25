@@ -6,7 +6,7 @@ import { ShowMapButton } from '@shared/ui';
 import { type StatusTitleProps } from '@dashboard/types';
 
 const DashBoardCard = ({ children }: { children: React.ReactNode }) => {
-  return <div className='shadow-bottom-sheet relative z-10 flex-1'>{children}</div>;
+  return <div className='shadow-bottom-sheet flex-1'>{children}</div>;
 };
 
 const Home = (active: boolean) => {
@@ -51,7 +51,7 @@ const TitleWrapper = ({ children }: { children: React.ReactNode }) => {
 const Card = ({ children, className }: { children: React.ReactNode; className?: string }) => {
   return (
     <div
-      className={`bg-background-default-white shadow-card mt-[3.6rem] flex flex-col gap-[0.8rem] rounded-[1.2rem] p-[1.6rem] ${className}`}>
+      className={`bg-background-default-white shadow-card border-stroke-neutral-dark mt-[3.6rem] flex flex-col gap-[0.8rem] rounded-[1.2rem] border p-[1.6rem] ${className}`}>
       {children}
     </div>
   );

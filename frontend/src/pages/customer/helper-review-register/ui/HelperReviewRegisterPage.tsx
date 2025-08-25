@@ -1,3 +1,4 @@
+import { useQueryClient } from '@tanstack/react-query';
 import { getRouteApi, useRouter } from '@tanstack/react-router';
 
 import { FormProvider, useForm } from 'react-hook-form';
@@ -15,9 +16,10 @@ const stepList = ['summary', 'detail', 'comment'];
 const Route = getRouteApi('/customer/escort/$escortId/$helperId/review/$step');
 
 const HelperReviewRegisterPage = () => {
+  const queryClient = useQueryClient();
   const router = useRouter();
-  const { escortId } = Route.useParams();
-  const methods = useForm<EscortReviewFormValues>({ shouldUnregister: false });
+  const { escortId, helperId } = Route.useParams();
+  const methods = useForm<EscortReviewFormValues>({ shouldUnregister: false, delayError: 400 });
   const { isOpen, openModal, closeModal } = useModal();
   const { Funnel, Step, nextStep, currentStep } = useFunnel({
     defaultStep: 'summary',
@@ -27,6 +29,7 @@ const HelperReviewRegisterPage = () => {
   });
   const { data: applicationList } = getApplicationListById(Number(escortId));
   const helperName = applicationList?.data.applicationList[0].helper.name || '동행도우미';
+  queryClient.setQueryData(['reviewFormStarted'], true);
   const handleClose = () => {
     openModal();
   };
@@ -70,8 +73,8 @@ const HelperReviewRegisterPage = () => {
                     escortId={escortId}
                     handleNextStep={() => {
                       router.navigate({
-                        to: '/customer/escort/$escortId/completed',
-                        params: { escortId },
+                        to: '/customer/escort/$escortId/$helperId/review/completed',
+                        params: { escortId, helperId },
                       });
                     }}
                   />
