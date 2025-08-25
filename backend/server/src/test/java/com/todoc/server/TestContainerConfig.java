@@ -1,24 +1,27 @@
 package com.todoc.server;
 
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.MySQLContainer;
 
+@TestConfiguration
 public class TestContainerConfig {
-    public static final GenericContainer<?> redis =
-            new GenericContainer<>("redis:7.2-alpine")
-                    .withExposedPorts(6379);
-    // 싱글톤처럼 재사용
-    public static final MySQLContainer<?> MYSQL_CONTAINER =
-            new MySQLContainer<>("mysql:8.0") // 운영 DB 버전 맞추기
-                    .withDatabaseName("testdb")
-                    .withUsername("testuser")
-                    .withPassword("testpass");
-
+    static final MySQLContainer<?> mysql =
+        new MySQLContainer<>("mysql:8.0")
+            .withUsername("testuser")
+            .withPassword("testpass");
 
     static {
-        redis.start();
-        System.setProperty("spring.data.redis.host", redis.getHost());
-        System.setProperty("spring.data.redis.port", redis.getMappedPort(6379).toString());
-        MYSQL_CONTAINER.start();
+        mysql.start();
+    }
+
+    @DynamicPropertySource
+    static void registerProps(DynamicPropertyRegistry registry) {
+
+        registry.add("spring.datasource.url", mysql::getJdbcUrl);
+        registry.add("spring.datasource.username", mysql::getUsername);
+        registry.add("spring.datasource.password", mysql::getPassword);
     }
 }

@@ -15,7 +15,6 @@ import org.springframework.web.client.RestClient;
  * TMapRouteServiceTest는 TMap API를 통해 경로 조회 기능을 테스트하는 클래스입니다.
  * 주석을 풀 경우, 매 테스트 실행마다 TMap API를 호출합니다.
  */
-@Import(IntegrationMockConfig.class)
 @SpringBootTest
 @Transactional
 @ActiveProfiles("test")
