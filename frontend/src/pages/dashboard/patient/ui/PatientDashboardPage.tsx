@@ -1,4 +1,4 @@
-import { getRouteApi } from '@tanstack/react-router';
+import { getRouteApi, useNavigate } from '@tanstack/react-router';
 
 import { useEffect, useRef, useState } from 'react';
 
@@ -26,6 +26,7 @@ const Route = getRouteApi('/dashboard/map/$encryptedId');
 
 const PatientDashboardPage = () => {
   const { encryptedId } = Route.useParams();
+  const navigate = useNavigate();
   const decryptedId = decryptId(encryptedId);
   const { data: escortData } = getEscortDetail(Number(decryptedId));
 
@@ -33,7 +34,10 @@ const PatientDashboardPage = () => {
 
   const timerRef = useRef<number | null>(null);
   const [curLocation, setCurLocation] = useState<Position | null>(null);
-  const { helperLocations, sendLocation } = useWebSocket(String(escortId), 'patient');
+  const { helperLocations, sendLocation, escortStatuses } = useWebSocket(
+    String(escortId),
+    'patient'
+  );
 
   const mapRef = useRef<HTMLDivElement>(null);
   const { mapInstance, setCurrentLocation, fitBoundsToCoordinates, addMarker, addCustomMarker } =
@@ -45,6 +49,16 @@ const PatientDashboardPage = () => {
 
   const { meetingLocationInfo } = route.routeSimple;
   const { name: helperName, imageUrl: helperImageUrl } = helper;
+
+  useEffect(() => {
+    if (!escortStatuses) return;
+    if (escortStatuses.escortStatus !== '만남중') {
+      navigate({
+        to: '/dashboard/error/$encryptedId',
+        params: { encryptedId },
+      });
+    }
+  }, [escortStatuses]);
 
   useEffect(() => {
     if (!('geolocation' in navigator)) return;
