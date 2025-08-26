@@ -60,10 +60,8 @@ function RouteComponent() {
   } = useMap(mapRef as React.RefObject<HTMLDivElement>);
 
   const { route, patient, helper, estimatedMeetingTime, escortId } = data.data;
-  const { helperLocations, patientLocations, escortStatuses } = useWebSocket(
-    String(escortId),
-    'customer'
-  );
+  const { helperLocations, patientLocations, escortStatuses, connectionStatus, nchanStatus } =
+    useWebSocket(String(escortId), 'customer');
   const currentStatus = escortStatuses?.escortStatus ?? '만남중';
 
   const patientMarker = useRef<TMapMarker>(null);
@@ -317,6 +315,8 @@ function RouteComponent() {
             escortStatus={currentStatus as StatusTitleProps}
             time={estimatedMeetingTime}
             route={route.routeSimple}
+            socketStatus={connectionStatus}
+            nchanStatus={nchanStatus}
           />
         </div>
       </PageLayout.Content>
