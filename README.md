@@ -13,27 +13,24 @@
 
 <div align="center">
 <table>
-<th>팀원</th>
     <th> 이성훈 <a href="https://github.com/seonghooni"><br/><img src="https://img.shields.io/badge/Github-181717?style=flat-square&logo=Github&logoColor=white"/><a></th>
-	  <th> 최재현 <a href="https://github.com/jaehyeonchoi"><br/><img src="https://img.shields.io/badge/Github-181717?style=flat-square&logo=Github&logoColor=white"/></a></th>
+	<th> 최재현 <a href="https://github.com/jaehyeonchoi"><br/><img src="https://img.shields.io/badge/Github-181717?style=flat-square&logo=Github&logoColor=white"/></a></th>
     <th> 배연준 <a href="https://github.com/yjbae3974"><br/><img src="https://img.shields.io/badge/Github-181717?style=flat-square&logo=Github&logoColor=white"/></a></th>
     <th> 유태승 <a href="https://github.com/gudusol"><br/><img src="https://img.shields.io/badge/Github-181717?style=flat-square&logo=Github&logoColor=white"/></a></th>
     <tr>
-	  <td>팀원 소개</td>
 	  <td>
-	    <img width="200" height="267" alt="이성훈" src="https://github.com/user-attachments/assets/d168c5c3-6a03-45d3-a6ee-27aa249fa3ac" />
+	    <img width="225" alt="이성훈" src="https://github.com/user-attachments/assets/d168c5c3-6a03-45d3-a6ee-27aa249fa3ac" />
 	  </td>
 	  <td>
-	    <img width="200" height="267" alt="최재현" src="https://github.com/user-attachments/assets/2c296511-21b1-4ccd-a446-53433ac06e7e" />
+	    <img width="225" alt="최재현" src="https://github.com/user-attachments/assets/2c296511-21b1-4ccd-a446-53433ac06e7e" />
 	  </td>
 	  <td>
-		<img width="200" height="267" alt="배연준" src="https://github.com/user-attachments/assets/f82c8cde-d146-4027-9745-ad56550949d6" />
+		<img width="225" alt="배연준" src="https://github.com/user-attachments/assets/f82c8cde-d146-4027-9745-ad56550949d6" />
 	  </td>
 	  <td>
-   		<img width="200" height="267" alt="유태승" src="https://github.com/user-attachments/assets/11aa5d0f-fe8f-44ad-b483-e84793869dad" />
+   		<img width="225" alt="유태승" src="https://github.com/user-attachments/assets/11aa5d0f-fe8f-44ad-b483-e84793869dad" />
 	  </td>
 	</tr>
-	<td> 역할 </td>
 	<td>
 		<p align="center">Web Backend</p>
 	</td>
@@ -46,7 +43,6 @@
     <td>
 		<p align="center">Web Frontend (Lead)</p>
 	</td>
-    </tr>
   </table>
 </div>
 <br />
