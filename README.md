@@ -13,27 +13,24 @@
 
 <div align="center">
 <table>
-<th>팀원</th>
     <th> 이성훈 <a href="https://github.com/seonghooni"><br/><img src="https://img.shields.io/badge/Github-181717?style=flat-square&logo=Github&logoColor=white"/><a></th>
-	  <th> 최재현 <a href="https://github.com/jaehyeonchoi"><br/><img src="https://img.shields.io/badge/Github-181717?style=flat-square&logo=Github&logoColor=white"/></a></th>
+	<th> 최재현 <a href="https://github.com/jaehyeonchoi"><br/><img src="https://img.shields.io/badge/Github-181717?style=flat-square&logo=Github&logoColor=white"/></a></th>
     <th> 배연준 <a href="https://github.com/yjbae3974"><br/><img src="https://img.shields.io/badge/Github-181717?style=flat-square&logo=Github&logoColor=white"/></a></th>
     <th> 유태승 <a href="https://github.com/gudusol"><br/><img src="https://img.shields.io/badge/Github-181717?style=flat-square&logo=Github&logoColor=white"/></a></th>
     <tr>
-	  <td>팀원 소개</td>
 	  <td>
-	    <img width="200" height="267" alt="이성훈" src="https://github.com/user-attachments/assets/d168c5c3-6a03-45d3-a6ee-27aa249fa3ac" />
+	    <img width="225" alt="이성훈" src="https://github.com/user-attachments/assets/d168c5c3-6a03-45d3-a6ee-27aa249fa3ac" />
 	  </td>
 	  <td>
-	    <img width="200" height="267" alt="최재현" src="https://github.com/user-attachments/assets/2c296511-21b1-4ccd-a446-53433ac06e7e" />
+	    <img width="225" alt="최재현" src="https://github.com/user-attachments/assets/2c296511-21b1-4ccd-a446-53433ac06e7e" />
 	  </td>
 	  <td>
-		<img width="200" height="267" alt="배연준" src="https://github.com/user-attachments/assets/f82c8cde-d146-4027-9745-ad56550949d6" />
+		<img width="225" alt="배연준" src="https://github.com/user-attachments/assets/f82c8cde-d146-4027-9745-ad56550949d6" />
 	  </td>
 	  <td>
-   		<img width="200" height="267" alt="유태승" src="https://github.com/user-attachments/assets/11aa5d0f-fe8f-44ad-b483-e84793869dad" />
+   		<img width="225" alt="유태승" src="https://github.com/user-attachments/assets/11aa5d0f-fe8f-44ad-b483-e84793869dad" />
 	  </td>
 	</tr>
-	<td> 역할 </td>
 	<td>
 		<p align="center">Web Backend</p>
 	</td>
@@ -46,7 +43,6 @@
     <td>
 		<p align="center">Web Frontend (Lead)</p>
 	</td>
-    </tr>
   </table>
 </div>
 <br />
@@ -56,8 +52,8 @@
 > 모든 화면은 실제 구현된 서비스를 캡처한 것입니다.
 
 ### 보호자
-<details>
-  <summary>화면 보기</summary>
+<details open>
+  <summary><strong>🌇 화면 보기</strong></summary>
 
   <img width="100%" height="1080" alt="보호자 01" src="https://github.com/user-attachments/assets/5b7bed19-8b29-4184-8a20-439a8120c15c" />
   <img width="100%" height="1080" alt="보호자 02" src="https://github.com/user-attachments/assets/63ff95d5-952e-40e6-91cd-1dadbc6d8a0a" />
@@ -66,7 +62,7 @@
 
 ### 도우미
 <details>
-  <summary>화면 보기</summary>
+  <summary><strong>🌇 화면 보기</strong></summary>
 
   <img width="100%" height="1080" alt="도우미 01" src="https://github.com/user-attachments/assets/1a3b9332-f097-482d-9a8e-2dd5febc66a8" />
   <img width="100%" height="1080" alt="도우미 02" src="https://github.com/user-attachments/assets/51d22eb0-c21c-49dd-a57b-ed650c43e9a5" />
@@ -75,7 +71,7 @@
 
 ### 동행
 <details>
-  <summary>화면 보기</summary>
+  <summary><strong>🌇 화면 보기</strong></summary>
 
   <img width="100%" height="1080" alt="동행 01" src="https://github.com/user-attachments/assets/8390c549-3b0e-4df2-ace9-9cb6f38be758" />
   <img width="100%" height="1080" alt="동행 02" src="https://github.com/user-attachments/assets/c2734f40-8379-4b8a-a9cc-69929c8f6a22" />
@@ -225,8 +221,8 @@ com.todoc.server
 │  ├─ 📁 review (...)
 │  └─ 📁 route (...)
 └─ 📁 external/
-   ├ 📁 sms/
-   └ 📁 tmap/
+   ├─ 📁 sms/
+   └─ 📁 tmap/
 
 ```
 </details>

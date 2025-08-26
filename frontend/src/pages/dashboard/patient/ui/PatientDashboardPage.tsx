@@ -3,13 +3,14 @@ import { getRouteApi, useNavigate } from '@tanstack/react-router';
 import { useEffect, useRef, useState } from 'react';
 
 import { useMap } from '@shared/hooks';
-import { call } from '@shared/lib';
+import { call, clearPositionWatch, watchCurrentPosition } from '@shared/lib';
 import type { Position, TMapMarker } from '@shared/types';
 import { FloatingButton, TermsBottomSheet } from '@shared/ui';
 import { PageLayout } from '@shared/ui/layout';
 
 import { getEscortDetail } from '@dashboard/apis';
 import { DashBoardCard, Footer, Header } from '@dashboard/components';
+import { DEFAULT_ZOOM_LEVEL } from '@dashboard/constants';
 import { useWebSocket } from '@dashboard/hooks';
 
 import { updatedBefore } from '@helper/utils';
@@ -32,15 +33,14 @@ const PatientDashboardPage = () => {
 
   const { estimatedMeetingTime, helper, route, escortId } = escortData?.data ?? {};
 
-  const timerRef = useRef<number | null>(null);
+  const watchIdRef = useRef<number | null>(null);
+  // const timerRef = useRef<number | null>(null);
   const [curLocation, setCurLocation] = useState<Position | null>(null);
-  const { helperLocations, sendLocation, escortStatuses } = useWebSocket(
-    String(escortId),
-    'patient'
-  );
+  const { helperLocations, sendLocation, escortStatuses, connectionStatus, nchanStatus } =
+    useWebSocket(String(escortId), 'patient');
 
   const mapRef = useRef<HTMLDivElement>(null);
-  const { mapInstance, setCurrentLocation, fitBoundsToCoordinates, addMarker, addCustomMarker } =
+  const { mapInstance, setCenter, setZoom, fitBoundsToCoordinates, addMarker, addCustomMarker } =
     useMap(mapRef as React.RefObject<HTMLDivElement>);
 
   const patientMarker = useRef<TMapMarker>(null);
@@ -61,29 +61,28 @@ const PatientDashboardPage = () => {
   }, [escortStatuses]);
 
   useEffect(() => {
-    if (!('geolocation' in navigator)) return;
+    if (watchIdRef.current) {
+      clearPositionWatch(watchIdRef.current);
+      watchIdRef.current = null;
+    }
 
-    navigator.geolocation.getCurrentPosition((position) => {
-      const { latitude, longitude, accuracy } = position.coords;
-
-      if (timerRef.current) {
-        clearInterval(timerRef.current);
-        timerRef.current = null;
-      }
-
-      timerRef.current = window.setInterval(() => {
+    watchIdRef.current = watchCurrentPosition(
+      ({ latitude, longitude, accuracy }) => {
         setCurLocation({
           lat: latitude,
           lon: longitude,
         });
         sendLocation(latitude, longitude, accuracy);
-      }, 1000);
-    });
+      },
+      (error) => {
+        console.error('위치 정보를 가져올 수 없습니다:', error);
+      }
+    );
 
     return () => {
-      if (timerRef.current) {
-        clearInterval(timerRef.current);
-        timerRef.current = null;
+      if (watchIdRef.current) {
+        clearPositionWatch(watchIdRef.current);
+        watchIdRef.current = null;
       }
     };
   }, [escortId, sendLocation]);
@@ -155,11 +154,21 @@ const PatientDashboardPage = () => {
             <FloatingButton
               icon='current'
               position='bottom-left'
-              onClick={() => setCurrentLocation()}
+              onClick={() => {
+                if (curLocation?.lat && curLocation?.lon) {
+                  setCenter(curLocation.lat, curLocation.lon);
+                  setZoom(DEFAULT_ZOOM_LEVEL);
+                }
+              }}
             />
           </div>
           <DashBoardCard>
             <DashBoardCard.TitleWrapper>
+              <DashBoardCard.StatusTitle
+                escortStatus={'만남중'}
+                socketStatus={connectionStatus}
+                nchanStatus={nchanStatus}
+              />
               <DashBoardCard.Title
                 text={`${route.routeSimple.meetingLocationInfo.detailAddress}에서 도우미와 만나세요`}
               />

@@ -180,31 +180,32 @@ public class RedisLocationScriptsConfig {
                 end
               end
         
-              -- ============ EMA/moving ============
-              -- first: v≈0로 초기화, move: 실제 v 반영, resync/refresh: v≈0 근사
-              local v_for_ema = (reason == "move") and v or 0
-              local ema = emaPrev
-              if ema == 0 then ema = v_for_ema
-              else ema = alpha * v_for_ema + (1 - alpha) * ema
-              end
-              local moving = (ema >= stop) and 1 or 0
-        
-              -- ============ 저장 (숫자만 HSET, 없으면 HDEL) ============
-              hset_or_del(hashKey, 'lat', (lat and string.format('%.7f', lat)) or nil)
-              hset_or_del(hashKey, 'lon', (lon and string.format('%.7f', lon)) or nil)
-              hset_or_del(hashKey, 'ts',  (ts  and tostring(ts)) or nil)
-              hset_or_del(hashKey, 'acc', tostring(acc or 0))
-              hset_or_del(hashKey, 'seq', tostring(seq))
-              hset_or_del(hashKey, 'ema', tostring(ema))
-              hset_or_del(hashKey, 'moving', tostring(moving))
-              hset_or_del(hashKey, 'sid', sid)
-        
-              if ttl > 0 then
-                redis.call('EXPIRE', hashKey, ttl)
-              end
-        
               -- ============ PUBLISH ============
               if need_publish then
+                
+                -- ============ EMA/moving ============
+                -- first: v≈0로 초기화, move: 실제 v 반영, resync/refresh: v≈0 근사
+                local v_for_ema = (reason == "move") and v or 0
+                local ema = emaPrev
+                if ema == 0 then ema = v_for_ema
+                else ema = alpha * v_for_ema + (1 - alpha) * ema
+                end
+                local moving = (ema >= stop) and 1 or 0
+        
+                -- ============ 저장 (숫자만 HSET, 없으면 HDEL) ============
+                hset_or_del(hashKey, 'lat', (lat and string.format('%.7f', lat)) or nil)
+                hset_or_del(hashKey, 'lon', (lon and string.format('%.7f', lon)) or nil)
+                hset_or_del(hashKey, 'ts',  (ts  and tostring(ts)) or nil)
+                hset_or_del(hashKey, 'acc', tostring(acc or 0))
+                hset_or_del(hashKey, 'seq', tostring(seq))
+                hset_or_del(hashKey, 'ema', tostring(ema))
+                hset_or_del(hashKey, 'moving', tostring(moving))
+                hset_or_del(hashKey, 'sid', sid)
+        
+                if ttl > 0 then
+                  redis.call('EXPIRE', hashKey, ttl)
+                end
+                
                 if idStr == "" then idStr = tostring(string.match(hashKey, ":(%w+):") or "") end
                 if roleStr == "" then roleStr = tostring(string.match(hashKey, ":(%w+)$") or "") end
                 local ch = "escort:ch:" .. idStr .. ":" .. roleStr

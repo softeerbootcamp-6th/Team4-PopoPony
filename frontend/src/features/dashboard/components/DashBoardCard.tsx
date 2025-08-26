@@ -1,4 +1,11 @@
-import { IcClockFill, IcHomeFill, IcHospitalFill, IcMarkFill } from '@icons';
+import {
+  IcAlertCircle,
+  IcCheckCircle,
+  IcClockFill,
+  IcHomeFill,
+  IcHospitalFill,
+  IcMarkFill,
+} from '@icons';
 
 import { timeFormat } from '@shared/lib';
 import { ShowMapButton } from '@shared/ui';
@@ -57,9 +64,13 @@ const Card = ({ children, className }: { children: React.ReactNode; className?: 
   );
 };
 
-type StatusTitleComponentProps = { escortStatus: StatusTitleProps };
+type StatusTitleComponentProps = {
+  escortStatus: StatusTitleProps;
+  socketStatus: string;
+  nchanStatus: string;
+};
 
-const StatusTitle = ({ escortStatus }: StatusTitleComponentProps) => {
+const StatusTitle = ({ escortStatus, socketStatus, nchanStatus }: StatusTitleComponentProps) => {
   const statusMap: Record<StatusTitleProps, React.ReactElement[]> = {
     만남중: [Home(true), Line(false), Hospital(false), Line(false), Home(false)],
     병원행: [Home(true), Line(true), Hospital(true), Line(false), Home(false)],
@@ -67,10 +78,38 @@ const StatusTitle = ({ escortStatus }: StatusTitleComponentProps) => {
     복귀중: [Home(false), Line(false), Hospital(true), Line(true), Home(true)],
   };
   return (
-    <div className='flex-start gap-[0.4rem]'>
-      {statusMap[escortStatus].map((item: React.ReactElement, index: number) => (
-        <div key={index}>{item}</div>
-      ))}
+    <div className='flex-between'>
+      <div className='flex-start gap-[0.4rem]'>
+        {statusMap[escortStatus].map((item: React.ReactElement, index: number) => (
+          <div key={index}>{item}</div>
+        ))}
+      </div>
+      <div className='flex-start body2-14-medium text-text-neutral-primary gap-[0.4rem]'>
+        {socketStatus === 'connected' && (
+          <>
+            <IcCheckCircle className='[&_path]:fill-icon-mint-on-primary' />
+            <span className='text-text-mint-on-primary'>위치 공유 연결됨</span>
+          </>
+        )}
+        {socketStatus === 'disconnected' && (
+          <>
+            <IcAlertCircle className='[&_path]:fill-icon-red-on-primary' />
+            <span className='text-text-red-primary'>위치 공유 연결 끊김</span>
+          </>
+        )}
+        {nchanStatus === 'connected' && (
+          <>
+            <IcCheckCircle className='[&_path]:fill-icon-mint-on-primary' />
+            <span className='text-text-mint-on-primary'>nchan 연결됨</span>
+          </>
+        )}
+        {nchanStatus === 'disconnected' && (
+          <>
+            <IcAlertCircle className='[&_path]:fill-icon-red-on-primary' />
+            <span className='text-text-red-primary'>nchan 연결 끊김</span>
+          </>
+        )}
+      </div>
     </div>
   );
 };
