@@ -1,10 +1,7 @@
 <!-- src/test/resources/logback-test.xml -->
 <configuration>
-  <!-- 경로/패턴 공통 속성 -->
-  <property name="LOG_DIR" value="build/test-logs"/>
-  <property name="PATTERN" value="%d{HH:mm:ss.SSS} %-5level [%thread] %logger{36} - %msg%n"/>
+  <property name="PATTERN" value="%d{HH:mm:ss.SSS} %-5level %msg%n"/>
 
-  <!-- 콘솔 출력 -->
   <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
     <encoder>
       <pattern>${PATTERN}</pattern>
@@ -12,53 +9,14 @@
     </encoder>
   </appender>
 
-  <!-- 파일 출력 (롤링) : 테스트 로그를 파일로 남겨 분석하기 좋음 -->
-  <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-    <file>${LOG_DIR}/test.log</file>
-    <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-      <!-- 하루 단위 + 20MB 넘으면 롤링 -->
-      <fileNamePattern>${LOG_DIR}/test.%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
-      <maxFileSize>20MB</maxFileSize>
-      <maxHistory>7</maxHistory>
-      <totalSizeCap>200MB</totalSizeCap>
-    </rollingPolicy>
-    <encoder>
-      <pattern>${PATTERN}</pattern>
-      <charset>UTF-8</charset>
-    </encoder>
-  </appender>
-
-  <!-- ====== 여기부터 “무엇을 보기 위한” 로거 설정 ====== -->
-
-  <!-- 1) Spring TestContext 캐시 히트/미스/통계 보기 -->
-  <logger name="org.springframework.test.context.cache" level="TRACE"/>
-  <logger name="org.springframework.test.context" level="DEBUG"/>
-
-  <!-- 2) @Sql 스크립트 실행 로그 (시작/종료/경과시간) -->
-  <logger name="org.springframework.jdbc.datasource.init" level="DEBUG" additivity="false">
-    <appender-ref ref="CONSOLE"/>
-    <appender-ref ref="FILE"/>
-  </logger>
-
-  <!-- 3) HikariCP 풀 생성/커넥션/종료 로그 -->
-  <logger name="com.zaxxer.hikari" level="INFO" additivity="false">
-    <appender-ref ref="CONSOLE"/>
-    <appender-ref ref="FILE"/>
-  </logger>
-
-  <!-- (선택) Hibernate SQL은 지저분하니 기본 OFF -->
+  <logger name="org.springframework.test.context.cache" level="OFF"/>
+  <logger name="org.springframework.test.context" level="WARN"/>
+  <logger name="org.springframework.jdbc.datasource.init" level="WARN"/>
+  <logger name="com.zaxxer.hikari" level="WARN"/>
   <logger name="org.hibernate.SQL" level="OFF"/>
   <logger name="org.hibernate.type.descriptor.sql" level="OFF"/>
 
-  <!-- (선택) datasource-proxy 사용 시 JDBC 요약 로그 보고 싶으면 켜기 -->
-  <!-- <logger name="net.ttddyy.dsproxy" level="INFO" additivity="false">
-    <appender-ref ref="CONSOLE"/>
-    <appender-ref ref="FILE"/>
-  </logger> -->
-
-  <!-- 루트 로그: 너무 시끄럽지 않게 WARN 이상만 -->
   <root level="WARN">
     <appender-ref ref="CONSOLE"/>
-    <appender-ref ref="FILE"/>
   </root>
 </configuration>
