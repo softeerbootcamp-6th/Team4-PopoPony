@@ -10,6 +10,7 @@ import { PageLayout } from '@shared/ui/layout';
 
 import { getEscortDetail } from '@dashboard/apis';
 import { DashBoardCard, Footer, Header } from '@dashboard/components';
+import { DEFAULT_ZOOM_LEVEL } from '@dashboard/constants';
 import { useWebSocket } from '@dashboard/hooks';
 
 import { updatedBefore } from '@helper/utils';
@@ -41,7 +42,7 @@ const PatientDashboardPage = () => {
   );
 
   const mapRef = useRef<HTMLDivElement>(null);
-  const { mapInstance, setCurrentLocation, fitBoundsToCoordinates, addMarker, addCustomMarker } =
+  const { mapInstance, setCenter, setZoom, fitBoundsToCoordinates, addMarker, addCustomMarker } =
     useMap(mapRef as React.RefObject<HTMLDivElement>);
 
   const patientMarker = useRef<TMapMarker>(null);
@@ -155,7 +156,12 @@ const PatientDashboardPage = () => {
             <FloatingButton
               icon='current'
               position='bottom-left'
-              onClick={() => setCurrentLocation()}
+              onClick={() => {
+                if (curLocation?.lat && curLocation?.lon) {
+                  setCenter(curLocation.lat, curLocation.lon);
+                  setZoom(DEFAULT_ZOOM_LEVEL);
+                }
+              }}
             />
           </div>
           <DashBoardCard>
