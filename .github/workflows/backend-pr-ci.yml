@@ -2,13 +2,8 @@ name: Backend CI Test to develop
 
 on:
   pull_request:
-    branches:
-      - develop
-    paths:
-      - "backend/**"
-
-env:
-  SPRING_PROFILE: ci
+    branches: [ develop ]
+    paths: [ "backend/**" ]
 
 concurrency:
   group: ci-${{ github.ref }}-backend
@@ -17,23 +12,74 @@ concurrency:
 jobs:
   validate:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    services:
+      mysql:
+        image: mysql:8.0.33
+        ports:
+          - 3306:3306
+        env:
+          MYSQL_DATABASE: todoc_db
+          MYSQL_ROOT_PASSWORD: rootpass
+          MYSQL_USER: testuser
+          MYSQL_PASSWORD: testpass
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -prootpass || exit 1"
+          --health-interval=5s
+          --health-timeout=3s
+          --health-retries=30
+          --health-start-period=20s
+
+    defaults:
+      run:
+        working-directory: backend/server
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - name: Set up JDK 17 (Temurin) + Gradle cache
+      # ✅ Gradle 래퍼 배포판(~/ .gradle/wrapper/dists) 캐시를 명시적으로 복원
+      - name: Cache Gradle wrapper dist
+        uses: actions/cache@v4
+        with:
+          path: ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-wrapper-
+
+      # ✅ 프로젝트 전용 .gradle(컨피그 캐시 등) 캐시
+      - name: Cache project .gradle
+        uses: actions/cache@v4
+        with:
+          path: backend/server/.gradle
+          key: ${{ runner.os }}-project-gradle-${{ hashFiles('backend/server/**/build.gradle*', 'backend/server/**/settings.gradle*', 'backend/server/**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-project-gradle-
+
+      - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: '17'
-          cache: gradle
+          cache: gradle   # (유저 홈 ~/.gradle/caches 쪽 의존성 캐시)
 
-      - name: Run tests
-        working-directory: backend/server
+      - name: Run tests (PR fast path)
         env:
-          SPRING_PROFILES_ACTIVE: ci
-          # Gradle 빌드/테스트 가속 옵션
-          GRADLE_OPTS: -Dorg.gradle.caching=true -Dorg.gradle.parallel=true -Dorg.gradle.daemon=false
-        run: |
-          ./gradlew clean test --no-daemon --info --stacktrace
+          SPRING_PROFILES_ACTIVE: test
+          SPRING_DATASOURCE_URL: jdbc:mysql://127.0.0.1:3306/todoc_db?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+          SPRING_DATASOURCE_USERNAME: testuser
+          SPRING_DATASOURCE_PASSWORD: testpass
+          GRADLE_OPTS: >
+            -Dorg.gradle.caching=true
+            -Dorg.gradle.parallel=true
+            -Dorg.gradle.daemon=false
+            -Dorg.gradle.configuration-cache=true
+        run: ./gradlew test --no-daemon --console=plain --stacktrace
+
+      - name: Upload test reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-report
+          path: backend/server/build/reports/tests/test
