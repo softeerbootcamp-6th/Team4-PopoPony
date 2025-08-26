@@ -6,10 +6,11 @@ import { useFormContext } from 'react-hook-form';
 
 import { useFormValidation } from '@shared/hooks';
 import type { FunnelStepProps } from '@shared/types';
-import { FormInput, LabeledSection } from '@shared/ui/form';
+import { FormInput, LabeledSection, DatePickerInput } from '@shared/ui/form';
 import { FormLayout } from '@shared/ui/layout';
 
 import { dateSchema, timeSchema } from '@customer/types';
+import { isBeforeToday } from '@shared/lib';
 
 const Time = memo(({ handleNextStep }: FunnelStepProps) => {
   const { setValue } = useFormContext();
@@ -23,7 +24,6 @@ const Time = memo(({ handleNextStep }: FunnelStepProps) => {
     values: dateValues,
     fieldErrors: dateFieldErrors,
     isFormValid: dateIsFormValid,
-    markFieldAsTouched: dateMarkFieldAsTouched,
   } = useFormValidation(dateSchema);
   const [isTimeAndDateValid, setIsTimeAndDateValid] = useState(false);
   const [timeAndDateError, setTimeAndDateError] = useState<string>('');
@@ -78,12 +78,10 @@ const Time = memo(({ handleNextStep }: FunnelStepProps) => {
           label='동행일'
           isChecked={!dateFieldErrors.escortDate && !!dateValues.escortDate}
           message={dateFieldErrors.escortDate}>
-          <FormInput
-            type='date'
-            size='M'
+          <DatePickerInput
             name='escortDate'
             placeholder='날짜 선택'
-            validation={() => dateMarkFieldAsTouched('escortDate')}
+            disabledDate={(date) => isBeforeToday(date)}
           />
         </LabeledSection>
 
