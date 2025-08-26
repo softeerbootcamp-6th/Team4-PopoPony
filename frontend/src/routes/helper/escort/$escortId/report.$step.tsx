@@ -36,7 +36,7 @@ const stepList = ['time', 'reservation', 'taxi', 'detail'];
 function RouteComponent() {
   const router = useRouter();
   const { isOpen, openModal, closeModal } = useModal();
-  const methods = useForm<ReportFormValues>();
+  const methods = useForm<ReportFormValues>({ shouldUnregister: false, delayError: 400 });
   const { escortId } = Route.useParams();
   const queryClient = useQueryClient();
 

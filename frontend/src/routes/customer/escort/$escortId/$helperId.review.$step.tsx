@@ -35,7 +35,7 @@ function RouteComponent() {
   const queryClient = useQueryClient();
   queryClient.setQueryData(['reviewFormStarted'], true);
   const { escortId } = Route.useParams();
-  const methods = useForm<EscortReviewFormValues>({ shouldUnregister: false });
+  const methods = useForm<EscortReviewFormValues>({ shouldUnregister: false, delayError: 400 });
   const { isOpen, openModal, closeModal } = useModal();
   const { Funnel, Step, nextStep, currentStep } = useFunnel({
     defaultStep: 'summary',

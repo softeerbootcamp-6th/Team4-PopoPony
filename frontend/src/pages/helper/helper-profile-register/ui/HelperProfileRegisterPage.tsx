@@ -25,7 +25,7 @@ const HelperProfileRegisterPage = () => {
   );
 
   const { isOpen, openModal, closeModal } = useModal();
-  const methods = useForm<ProfileFormValues>({ shouldUnregister: false });
+  const methods = useForm<ProfileFormValues>({ shouldUnregister: false, delayError: 400 });
   const { reset } = methods;
 
   const { Funnel, Step, nextStep } = useFunnel({
@@ -58,7 +58,7 @@ const HelperProfileRegisterPage = () => {
   return (
     <>
       <PageLayout.Header
-        title='동행 신청하기'
+        title='프로필 등록'
         showBack={true}
         showClose={true}
         onClose={handleClose}

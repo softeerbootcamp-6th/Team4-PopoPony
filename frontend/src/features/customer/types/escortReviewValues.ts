@@ -12,10 +12,19 @@ export const summarySchema = z
       if (data.satisfactionLevel === '좋았어요') {
         return true;
       }
-      return !!data.satisfactionComment && data.satisfactionComment.length >= 10;
+      return !!data.satisfactionComment && data.satisfactionComment.length > 0;
     },
     {
       message: '10자 이상 입력해주세요',
+      path: ['satisfactionComment'],
+    }
+  )
+  .refine(
+    (data) => {
+      return !!data.satisfactionComment && data.satisfactionComment.length < 100;
+    },
+    {
+      message: '100자 이하로 입력해주세요',
       path: ['satisfactionComment'],
     }
   );
@@ -40,7 +49,9 @@ export const detailSchema = z.object({
 export type DetailFormValues = z.infer<typeof detailSchema>;
 
 export const reviewSchema = z.object({
-  reviewComment: z.string().min(5, { message: '자세한 후기를 작성해주세요' }),
+  reviewComment: z.string().min(1, { message: '자세한 후기를 작성해주세요' }).max(100, {
+    message: '100자 이하로 입력해주세요',
+  }),
 });
 
 export type ReviewFormValues = z.infer<typeof reviewSchema>;

@@ -52,6 +52,38 @@
 <br />
 <br />
 
+## 🖥️ 서비스 화면
+> 모든 화면은 실제 구현된 서비스를 캡처한 것입니다.
+
+### 보호자
+<details>
+  <summary>화면 보기</summary>
+
+  <img width="100%" height="1080" alt="보호자 01" src="https://github.com/user-attachments/assets/5b7bed19-8b29-4184-8a20-439a8120c15c" />
+  <img width="100%" height="1080" alt="보호자 02" src="https://github.com/user-attachments/assets/63ff95d5-952e-40e6-91cd-1dadbc6d8a0a" />
+
+</details>
+
+### 도우미
+<details>
+  <summary>화면 보기</summary>
+
+  <img width="100%" height="1080" alt="도우미 01" src="https://github.com/user-attachments/assets/1a3b9332-f097-482d-9a8e-2dd5febc66a8" />
+  <img width="100%" height="1080" alt="도우미 02" src="https://github.com/user-attachments/assets/51d22eb0-c21c-49dd-a57b-ed650c43e9a5" />
+
+</details>
+
+### 동행
+<details>
+  <summary>화면 보기</summary>
+
+  <img width="100%" height="1080" alt="동행 01" src="https://github.com/user-attachments/assets/8390c549-3b0e-4df2-ace9-9cb6f38be758" />
+  <img width="100%" height="1080" alt="동행 02" src="https://github.com/user-attachments/assets/c2734f40-8379-4b8a-a9cc-69929c8f6a22" />
+
+</details>
+
+<br />
+<br />
 
 ## 🧩 팀 포포포니 소개
 
@@ -61,8 +93,12 @@
 
 ---
 
+### 🔹 아키텍처 구조
+<img width="1547" height="1540" alt="시스템 아키텍처" src="https://github.com/user-attachments/assets/5ff75a72-1ec2-46b1-a711-13ebd7979e72" />
+
+
 ### 🔹 컨벤션
-- 개발 전, [📎 컨벤션 문서](./wiki/코드-컨벤션) 를 확인해주세요.
+- 개발 전, [📎 컨벤션 문서](https://github.com/softeerbootcamp-6th/Team4-PopoPony/wiki/%EC%BD%94%EB%93%9C-%EC%BB%A8%EB%B2%A4%EC%85%98) 를 확인해주세요.
 
 ---
 
@@ -91,11 +127,20 @@
 ---
 
 ### 🔹 서로 바라는 점
-- 말을 많이 하자!
-- 의견은 과감하게 제시!
-- 모르면 모른다고, 알면 아는 만큼 공유
-- 항상 긍정적으로 개발하기 😊
-- 🍚 밥 땐 일 얘기 금지!
+**말을 많이 하자!**  
+  사소한 부분까지 많이 공유가 되었으면 좋겠습니다.
+  
+**의견은 과감하게 제시!**  
+  예의는 지키되 의견을 가감없이 공유하면 좋겠어요.
+  
+**모르면 모른다고, 알면 아는 만큼 공유**    
+  서로의 부족한 점을 채워주기 위해 가장 중요한 점이라고 생각합니다.
+  
+**항상 긍정적으로 개발하기 😊**   
+  잘 될거라고 믿어야 잘 됩니다.
+  
+**🍚 밥 땐 일 얘기 금지!**    
+  12시간 붙어있으며 일을 하다보니, 쉴땐 확실히 쉬어야 합니다!
 
 <br />
 <br />
@@ -117,8 +162,9 @@
       <td align="start">
         <img src="https://img.shields.io/badge/Java-007396?style=for-the-badge&logo=openjdk&logoColor=white" alt="Java" />
         <img src="https://img.shields.io/badge/Spring%20Boot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white" alt="Spring Boot" />
+	    <img src="https://img.shields.io/badge/JPA-59666C?style=for-the-badge&logo=java&logoColor=white" alt="JPA" />
 	<img src="https://img.shields.io/badge/QueryDSL-1D3557?style=for-the-badge&logo=apache&logoColor=white" alt="QueryDSL" />
-	<img src="https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL" />
+	<img src="https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white" alt="MySQL" />
     	<img src="https://img.shields.io/badge/Redis-DC382D?style=for-the-badge&logo=redis&logoColor=white" alt="Redis" />
 	<img src="https://img.shields.io/badge/AWS-FF9900?style=for-the-badge&logo=amazonaws&logoColor=white" alt="AWS" />
       </td>
@@ -158,25 +204,30 @@ com.todoc.server
 │  ├─ 📁 response/
 │  └─ 📁 util/
 │
-└─ 📁 domain/
-   ├─ 📁 auth/
-   │  ├─ 📁 entity/
-   │  ├─ 📁 exception/
-   │  ├─ 📁 repository/
-   │  ├─ 📁 service/
-   │  └─ 📁 web/
-   │     ├─ 📁 controller/
-   │     └─ 📁 dto/
-   │        ├─ 📁 request/
-   │        └─ 📁 response/
-   │
-   ├─ 📁 customer (...)
-   ├─ 📁 escort (...)
-   ├─ 📁 helper (...)
-   ├─ 📁 latestlocation (...)
-   ├─ 📁 report (...)
-   ├─ 📁 review (...)
-   └─ 📁 route (...)
+├─ 📁 domain/
+│  ├─ 📁 auth/
+│  │  ├─ 📁 entity/
+│  │  ├─ 📁 exception/
+│  │  ├─ 📁 repository/
+│  │  ├─ 📁 service/
+│  │  └─ 📁 web/
+│  │     ├─ 📁 controller/
+│  │     └─ 📁 dto/
+│  │        ├─ 📁 request/
+│  │        └─ 📁 response/
+│  │
+│  ├─ 📁 customer (...)
+│  ├─ 📁 escort (...)
+│  ├─ 📁 helper (...)
+│  ├─ 📁 realtime (...)
+│  ├─ 📁 latestlocation (...)
+│  ├─ 📁 report (...)
+│  ├─ 📁 review (...)
+│  └─ 📁 route (...)
+└─ 📁 external/
+   ├ 📁 sms/
+   └ 📁 tmap/
+
 ```
 </details>
 
@@ -189,51 +240,66 @@ frontend
 ├── 📁 dist/
 ├── 📁 node_modules/
 ├── 📁 public/
+│   ├── 📁 fonts/
+│   ├── 📁 icons/
+│   ├── 📁 images/
+│   └── 📁 video/
+│
 ├── 📁 src/
-│   ├── 📁 assets/
-│   ├── 📁 features/
+│   ├── 📁 app/
+│   │   └── 📁 routes/
+│   │   └── routeTree.gen.ts
+│   │
+│   ├── 📁 pages/
 │   │   ├── 📁 auth/
-│   │   │   ├── 📁 apis/
-│   │   │   ├── 📁 components/
-│   │   │   ├── 📁 hooks/
-│   │   │   ├── 📁 types/
-│   │   │   └── 📁 utils/
 │   │   ├── 📁 customer/
 │   │   ├── 📁 dashboard/
 │   │   └── 📁 helper/
 │   │
-│   ├── 📁 routes/
+│   ├── 📁 widgets/
+│   │   └── 📁 ui/
+│   │
+│   ├── 📁 entities/
+│   │   ├── 📁 application/
 │   │   ├── 📁 customer/
-│   │   ├── 📁 dashboard/
+│   │   ├── 📁 escort/
 │   │   ├── 📁 helper/
-│   │   ├── 📁 login/
-│   │   ├── __root.tsx
-│   │   └── index.tsx
+│   │   ├── 📁 recruit/
+│   │   └── 📁 user/
 │   │
 │   ├── 📁 shared/
-│   │   ├── 📁 apis/
-│   │   ├── 📁 components/
+│   │   ├── 📁 api/
+│   │   ├── 📁 config/
 │   │   ├── 📁 hooks/
+│   │   ├── 📁 lib/
 │   │   ├── 📁 types/
-│   │   └── 📁 utils/
+│   │   └── 📁 ui/
+│   │       ├── 📁 button/
+│   │       ├── 📁 feedback/
+│   │       ├── 📁 form/
+│   │       ├── 📁 layout/
+│   │       ├── 📁 overlay/
+│   │       └── 📁 shadcn/
 │   │
-│   ├── main.tsx
-│   ├── routeTree.gen.ts
-│   ├── styles.css
-│   └── vite-env.d.ts
+│   ├── 📁 assets/
+│   ├── 📁 mocks/
+│   ├── 📁 main.tsx
+│   ├── 📁 styles.css
+│   └── 📁 vite-env.d.ts
 │
-├── .cta.json
-├── .gitignore
-├── .prettierignore
-├── .prettierrc
-├── eslint.config.mjs
-├── index.html
-├── package.json
-├── pnpm-lock.yaml
-├── README.md
-├── tsconfig.json
-├── vercel.json
-└── vite.config.ts
+├── 📁 .cta.json
+├── 📁 .gitignore
+├── 📁 .prettierignore
+├── 📁 .prettierrc
+├── 📁 components.json
+├── 📁 eslint.config.mjs
+├── 📁 index.html
+├── 📁 package.json
+├── 📁 pnpm-lock.yaml
+├── 📁 README.md
+├── 📁 tsconfig.json
+├── 📁 vercel.json
+└── 📁 vite.config.ts
 ```
 
 </details>
@@ -241,17 +307,10 @@ frontend
 <br/>
 <br/>
 
-## 😵‍💫 포포포니 트러블슈팅
+## 😵‍💫 팀 위키 문서
 
-
-| 제목            | 작성자 | 키워드 |
-| --------------- | ---- | ------ |
-| [트러블슈팅1]() |      |        |
-| [트러블슈팅2]() |      |        |
-| [트러블슈팅3]() |      |        |
-| [트러블슈팅4]() |      |        |
-
-> 더 많은 트러블은 [여기](./)에서 확인하세요! 🧯
+📚 더 자세한 내용은 [팀 위키 문서](https://github.com/softeerbootcamp-6th/Team4-PopoPony/wiki)를 참고해주세요.  
+컨벤션, 작업 전략, 도메인 정의, 온보딩 문서, 문서 템플릿 등이 정리되어 있습니다.
 
 <br/>
 <br/>
@@ -259,5 +318,4 @@ frontend
 
 ---
 
-📚 더 자세한 내용은 [팀 위키 문서](https://github.com/softeerbootcamp-6th/Team4-PopoPony/wiki)를 참고해주세요.  
-컨벤션, 작업 전략, 도메인 정의, 문서 템플릿 등이 정리되어 있습니다.
+
