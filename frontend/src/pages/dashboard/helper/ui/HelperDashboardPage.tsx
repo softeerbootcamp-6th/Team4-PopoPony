@@ -20,6 +20,7 @@ import {
   HelperDashboardSummary,
   HelperDashboardTaxiCard,
 } from '@dashboard/components';
+import { DEFAULT_ZOOM_LEVEL } from '@dashboard/constants';
 import { useWebSocket } from '@dashboard/hooks';
 import type { EscortStatus, StatusTitleProps } from '@dashboard/types';
 
@@ -80,7 +81,8 @@ const HelperDashboardPage = () => {
     mapInstance,
     isMapReady,
     addPolyline,
-    setCurrentLocation,
+    setCenter,
+    setZoom,
     fitBoundsToCoordinates,
     addMarker,
     addCustomMarker,
@@ -432,7 +434,12 @@ const HelperDashboardPage = () => {
           <FloatingButton
             icon='current'
             position='bottom-left'
-            onClick={() => setCurrentLocation()}
+            onClick={() => {
+              if (curLocation?.lat && curLocation?.lon) {
+                setCenter(curLocation.lat, curLocation.lon);
+                setZoom(DEFAULT_ZOOM_LEVEL);
+              }
+            }}
           />
         </div>
         <DashBoardCard>
