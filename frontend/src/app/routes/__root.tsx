@@ -12,6 +12,8 @@ import { PageLayout, RootLayout } from '@shared/ui/layout';
 
 import { authStorage } from '@auth/utils';
 
+const ALLOWED_ROUTES = ['/login', '/dashboard/map/', '/dashboard/error/'];
+
 interface MyRouterContext {
   queryClient: QueryClient;
 }
@@ -26,7 +28,7 @@ function NotFoundRedirect() {
 
 export const Route = createRootRouteWithContext<MyRouterContext>()({
   beforeLoad: async ({ location }) => {
-    if (location.pathname === '/login' || location.pathname.startsWith('/dashboard/map/')) {
+    if (ALLOWED_ROUTES.some((route) => location.pathname.includes(route))) {
       return;
     }
     if (!(await authStorage.getIsLoggedIn())) {
