@@ -7,35 +7,20 @@
 <br />
 <br />
 
-## 🖥️ 서비스 화면
+## 🖥️ 서비스 플로우
 > 모든 화면은 실제 구현된 서비스를 캡처한 것입니다.
 
-### 보호자
-<details open>
-  <summary><strong>🌇 화면 보기</strong></summary>
+### 보호자 화면
+<img width="100%" height="1080" alt="보호자 01" src="https://github.com/user-attachments/assets/5b7bed19-8b29-4184-8a20-439a8120c15c" />
+<img width="100%" height="1080" alt="보호자 02" src="https://github.com/user-attachments/assets/63ff95d5-952e-40e6-91cd-1dadbc6d8a0a" />
 
-  <img width="100%" height="1080" alt="보호자 01" src="https://github.com/user-attachments/assets/5b7bed19-8b29-4184-8a20-439a8120c15c" />
-  <img width="100%" height="1080" alt="보호자 02" src="https://github.com/user-attachments/assets/63ff95d5-952e-40e6-91cd-1dadbc6d8a0a" />
+### 도우미 화면
+<img width="100%" height="1080" alt="도우미 01" src="https://github.com/user-attachments/assets/1a3b9332-f097-482d-9a8e-2dd5febc66a8" />
+<img width="100%" height="1080" alt="도우미 02" src="https://github.com/user-attachments/assets/51d22eb0-c21c-49dd-a57b-ed650c43e9a5" />
 
-</details>
-
-### 도우미
-<details>
-  <summary><strong>🌇 화면 보기</strong></summary>
-
-  <img width="100%" height="1080" alt="도우미 01" src="https://github.com/user-attachments/assets/1a3b9332-f097-482d-9a8e-2dd5febc66a8" />
-  <img width="100%" height="1080" alt="도우미 02" src="https://github.com/user-attachments/assets/51d22eb0-c21c-49dd-a57b-ed650c43e9a5" />
-
-</details>
-
-### 동행
-<details>
-  <summary><strong>🌇 화면 보기</strong></summary>
-
-  <img width="100%" height="1080" alt="동행 01" src="https://github.com/user-attachments/assets/8390c549-3b0e-4df2-ace9-9cb6f38be758" />
-  <img width="100%" height="1080" alt="동행 02" src="https://github.com/user-attachments/assets/c2734f40-8379-4b8a-a9cc-69929c8f6a22" />
-
-</details>
+### 동행 화면
+<img width="100%" height="1080" alt="동행 01" src="https://github.com/user-attachments/assets/8390c549-3b0e-4df2-ace9-9cb6f38be758" />
+<img width="100%" height="1080" alt="동행 02" src="https://github.com/user-attachments/assets/c2734f40-8379-4b8a-a9cc-69929c8f6a22" />
 
 <br />
 <br />
