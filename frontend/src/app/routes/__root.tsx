@@ -1,6 +1,8 @@
 import { type QueryClient } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import { Outlet, createRootRouteWithContext, redirect } from '@tanstack/react-router';
+import { Outlet, createRootRouteWithContext, redirect, useRouter } from '@tanstack/react-router';
+import { useEffect } from 'react';
+import { toast } from 'sonner';
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
 
 import { Landing } from '@/widgets/ui';
@@ -13,6 +15,14 @@ import { authStorage } from '@auth/utils';
 interface MyRouterContext {
   queryClient: QueryClient;
 }
+function NotFoundRedirect() {
+  const router = useRouter();
+  useEffect(() => {
+    toast.error('존재하지 않는 경로예요. 홈으로 이동합니다.');
+    router.navigate({ to: '/', replace: true });
+  }, []);
+  return null;
+}
 
 export const Route = createRootRouteWithContext<MyRouterContext>()({
   beforeLoad: async ({ location }) => {
@@ -24,6 +34,9 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
         to: '/login',
       });
     }
+  },
+  notFoundComponent: () => {
+    return <NotFoundRedirect />;
   },
   errorComponent: ({ error }) => (
     <RootLayout>
