@@ -56,7 +56,7 @@
 > 모든 화면은 실제 구현된 서비스를 캡처한 것입니다.
 
 ### 보호자
-<details>
+<details open>
   <summary>화면 보기</summary>
 
   <img width="100%" height="1080" alt="보호자 01" src="https://github.com/user-attachments/assets/5b7bed19-8b29-4184-8a20-439a8120c15c" />
