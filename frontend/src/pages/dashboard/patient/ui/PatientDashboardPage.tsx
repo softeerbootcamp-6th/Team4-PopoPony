@@ -3,7 +3,7 @@ import { getRouteApi, useNavigate } from '@tanstack/react-router';
 import { useEffect, useRef, useState } from 'react';
 
 import { useMap } from '@shared/hooks';
-import { call } from '@shared/lib';
+import { call, clearPositionWatch, watchCurrentPosition } from '@shared/lib';
 import type { Position, TMapMarker } from '@shared/types';
 import { FloatingButton, TermsBottomSheet } from '@shared/ui';
 import { PageLayout } from '@shared/ui/layout';
@@ -32,7 +32,8 @@ const PatientDashboardPage = () => {
 
   const { estimatedMeetingTime, helper, route, escortId } = escortData?.data ?? {};
 
-  const timerRef = useRef<number | null>(null);
+  const watchIdRef = useRef<number | null>(null);
+  // const timerRef = useRef<number | null>(null);
   const [curLocation, setCurLocation] = useState<Position | null>(null);
   const { helperLocations, sendLocation, escortStatuses } = useWebSocket(
     String(escortId),
@@ -61,29 +62,28 @@ const PatientDashboardPage = () => {
   }, [escortStatuses]);
 
   useEffect(() => {
-    if (!('geolocation' in navigator)) return;
+    if (watchIdRef.current) {
+      clearPositionWatch(watchIdRef.current);
+      watchIdRef.current = null;
+    }
 
-    navigator.geolocation.getCurrentPosition((position) => {
-      const { latitude, longitude, accuracy } = position.coords;
-
-      if (timerRef.current) {
-        clearInterval(timerRef.current);
-        timerRef.current = null;
-      }
-
-      timerRef.current = window.setInterval(() => {
+    watchIdRef.current = watchCurrentPosition(
+      ({ latitude, longitude, accuracy }) => {
         setCurLocation({
           lat: latitude,
           lon: longitude,
         });
         sendLocation(latitude, longitude, accuracy);
-      }, 1000);
-    });
+      },
+      (error) => {
+        console.error('위치 정보를 가져올 수 없습니다:', error);
+      }
+    );
 
     return () => {
-      if (timerRef.current) {
-        clearInterval(timerRef.current);
-        timerRef.current = null;
+      if (watchIdRef.current) {
+        clearPositionWatch(watchIdRef.current);
+        watchIdRef.current = null;
       }
     };
   }, [escortId, sendLocation]);
