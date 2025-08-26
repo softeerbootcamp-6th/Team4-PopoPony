@@ -37,7 +37,7 @@ const ReportTab = () => {
   return (
     <>
       <Tabs.TabsContentSection>
-        {reviewData && reviewData.status === 200 && (
+        {reviewData && reviewData.status === 200 && reviewData.data.reviewId !== 0 && (
           <div>
             <div className='border-stroke-neutral-dark flex flex-col gap-[1.2rem] rounded-[0.8rem] border px-[1.6rem] py-[1.2rem]'>
               <div className='flex-start gap-[1.2rem]'>

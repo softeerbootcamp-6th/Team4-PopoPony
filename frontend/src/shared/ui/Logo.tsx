@@ -1,3 +1,5 @@
+import { Link } from '@tanstack/react-router';
+
 import { cn } from '@shared/lib';
 
 interface LogoProps {
@@ -6,13 +8,14 @@ interface LogoProps {
 
 const Logo = ({ className }: LogoProps) => {
   return (
-    <div
+    <Link
+      to='/'
       className={cn(
         'text-background-default-mint w-fit text-[3.6rem] leading-[100%] font-bold',
         className
       )}>
       토닥
-    </div>
+    </Link>
   );
 };
 

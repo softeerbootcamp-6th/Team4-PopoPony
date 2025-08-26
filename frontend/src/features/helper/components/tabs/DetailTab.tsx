@@ -9,7 +9,7 @@ import {
   timeDuration,
   timeFormatWithOptionalMinutes,
 } from '@shared/lib';
-import { Divider, Tabs } from '@shared/ui';
+import { Divider, ShowMapButton, Tabs } from '@shared/ui';
 
 import { GrayBox, InfoSection, RouteButton } from '@customer/components';
 import type { RecruitDetailResponse } from '@customer/types';
@@ -59,15 +59,14 @@ const DetailTab = ({ data }: { data: RecruitDetailResponse }) => {
           </div>
           <div className='flex-start body1-16-medium gap-[2rem]'>
             <span className='text-text-neutral-primary'>동행 병원</span>
-            <div className='flex-start gap-[0.8rem]'>
-              <span className='text-text-neutral-secondary'>
-                {data.route.hospitalLocationInfo.placeName}
-              </span>
-              {/* 이 지도보기 버튼의 onclick은 무엇을 해줘야 할까요 */}
-              <button className='caption2-10-medium text-text-neutral-secondary border-stroke-neutral-dark w-fit rounded-[0.4rem] border px-[0.5rem] py-[0.2rem]'>
-                지도 보기
-              </button>
-            </div>
+            <ShowMapButton
+              fontSize='medium'
+              businessAddress={data.route.hospitalLocationInfo.placeName}
+              pos={{
+                lat: data.route.hospitalLocationInfo.lat,
+                lng: data.route.hospitalLocationInfo.lon,
+              }}
+            />
           </div>
         </div>
         <RouteButton

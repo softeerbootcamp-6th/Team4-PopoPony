@@ -1,5 +1,6 @@
 import { IcHeadphoneQuestionmark } from '@icons';
 import { getRouteApi, useRouter } from '@tanstack/react-router';
+import { toast } from 'sonner';
 
 import { type ReactNode, useEffect, useRef, useState } from 'react';
 
@@ -81,6 +82,7 @@ const HelperDashboardPage = () => {
     setCurrentLocation,
     fitBoundsToCoordinates,
     addMarker,
+    addCustomMarker,
     resetPolyline,
   } = useMap(mapRef as React.RefObject<HTMLDivElement>);
 
@@ -148,6 +150,17 @@ const HelperDashboardPage = () => {
   };
 
   const handleClickNextStep = () => {
+    if (escortStatus === '진료중') {
+      if (memo.length === 0) {
+        toast.error('진료 내용을 입력해주세요');
+        return;
+      } else {
+        patchEscortMemoCall({
+          params: { path: { escortId: escortId } },
+          body: { memo: memo },
+        });
+      }
+    }
     patchEscortStatusByEscortIdCall(
       {
         params: {
@@ -166,12 +179,6 @@ const HelperDashboardPage = () => {
         },
       }
     );
-    if (escortStatus === '진료중') {
-      patchEscortMemoCall({
-        params: { path: { escortId: escortId } },
-        body: { memo: memo },
-      });
-    }
   };
 
   useEffect(() => {
@@ -296,7 +303,7 @@ const HelperDashboardPage = () => {
   useEffect(() => {
     if (!mapInstance || !curLocation) return;
 
-    // 환자 마커 생성 또는 업데이트
+    // 도우미 마커 생성 또는 업데이트 (내 위치)
     if (curLocation?.lat && curLocation?.lon) {
       if (!helperMarker.current) {
         helperMarker.current = addMarker(curLocation.lat, curLocation.lon, 'me');
@@ -305,6 +312,26 @@ const HelperDashboardPage = () => {
       }
     }
   }, [mapInstance, curLocation?.lat, curLocation?.lon]);
+
+  useEffect(() => {
+    if (!mapInstance || !patientLocations) return;
+
+    // 환자 마커 생성 또는 업데이트
+    if (patientLocations?.latitude && patientLocations?.longitude) {
+      if (!patientMarker.current) {
+        patientMarker.current = addCustomMarker(
+          patientLocations.latitude,
+          patientLocations.longitude,
+          patient.name,
+          patient.imageUrl
+        );
+      } else {
+        patientMarker.current?.setPosition(
+          new Tmapv3.LatLng(patientLocations.latitude, patientLocations.longitude)
+        );
+      }
+    }
+  }, [mapInstance, patientLocations?.latitude, patientLocations?.longitude]);
 
   const dashboardCardProps = (): DashboardCardProps => {
     if (escortStatus === '만남중') {
