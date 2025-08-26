@@ -1,11 +1,11 @@
+import { toast } from 'sonner';
+
 import { useFormContext, useWatch } from 'react-hook-form';
 
 import type { FunnelStepProps } from '@shared/types';
 import { FormLayout } from '@shared/ui/layout';
 
 import { TaxiFeeSection } from '@helper/components';
-
-const MAX_TAXI_FEE_LENGTH = 8; // 원 단위 제외 9자리: 1,000,000원
 
 const Taxi = ({ handleNextStep }: FunnelStepProps) => {
   const { control, watch } = useFormContext();
@@ -22,13 +22,26 @@ const Taxi = ({ handleNextStep }: FunnelStepProps) => {
   const departureReceipt = watch('taxiFeeCreateRequest.departureReceipt');
   const returnReceipt = watch('taxiFeeCreateRequest.returnReceipt');
 
-  const isValid =
-    departureFee &&
-    returnFee &&
-    departureReceipt.s3Key &&
-    returnReceipt.s3Key &&
-    departureFee.length < MAX_TAXI_FEE_LENGTH &&
-    returnFee.length < MAX_TAXI_FEE_LENGTH;
+  const handleClickNext = () => {
+    const departureFeeNumber = Number(departureFee.replace(/,/g, ''));
+    const returnFeeNumber = Number(returnFee.replace(/,/g, ''));
+    if (
+      departureFeeNumber > 0 &&
+      departureFeeNumber < 1000000 &&
+      returnFeeNumber > 0 &&
+      returnFeeNumber < 1000000
+    ) {
+      if (typeof handleNextStep === 'function') {
+        handleNextStep();
+      } else {
+        toast.error('다음 단계로 이동할 수 없습니다. 잠시 후 다시 시도해주세요.');
+      }
+    } else {
+      toast.error('요금은 1,000,000원 이하로 입력해주세요.');
+    }
+  };
+
+  const isValid = departureFee && returnFee && departureReceipt.s3Key && returnReceipt.s3Key;
 
   return (
     <FormLayout>
@@ -60,7 +73,7 @@ const Taxi = ({ handleNextStep }: FunnelStepProps) => {
         </div>
       </FormLayout.Content>
       <FormLayout.Footer>
-        <FormLayout.FooterPrevNext handleClickNext={handleNextStep} disabled={!isValid} />
+        <FormLayout.FooterPrevNext handleClickNext={handleClickNext} disabled={!isValid} />
       </FormLayout.Footer>
     </FormLayout>
   );

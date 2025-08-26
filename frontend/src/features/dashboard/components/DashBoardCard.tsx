@@ -71,6 +71,7 @@ type StatusTitleComponentProps = {
 };
 
 const StatusTitle = ({ escortStatus, socketStatus, nchanStatus }: StatusTitleComponentProps) => {
+  const connectionStatus = socketStatus === 'connected' && nchanStatus === 'connected';
   const statusMap: Record<StatusTitleProps, React.ReactElement[]> = {
     만남중: [Home(true), Line(false), Hospital(false), Line(false), Home(false)],
     병원행: [Home(true), Line(true), Hospital(true), Line(false), Home(false)],
@@ -85,28 +86,15 @@ const StatusTitle = ({ escortStatus, socketStatus, nchanStatus }: StatusTitleCom
         ))}
       </div>
       <div className='flex-start body2-14-medium text-text-neutral-primary gap-[0.4rem]'>
-        {socketStatus === 'connected' && (
+        {connectionStatus ? (
           <>
             <IcCheckCircle className='[&_path]:fill-icon-mint-on-primary' />
             <span className='text-text-mint-on-primary'>위치 공유 연결됨</span>
           </>
-        )}
-        {socketStatus === 'disconnected' && (
+        ) : (
           <>
             <IcAlertCircle className='[&_path]:fill-icon-red-on-primary' />
             <span className='text-text-red-primary'>위치 공유 연결 끊김</span>
-          </>
-        )}
-        {nchanStatus === 'connected' && (
-          <>
-            <IcCheckCircle className='[&_path]:fill-icon-mint-on-primary' />
-            <span className='text-text-mint-on-primary'>nchan 연결됨</span>
-          </>
-        )}
-        {nchanStatus === 'disconnected' && (
-          <>
-            <IcAlertCircle className='[&_path]:fill-icon-red-on-primary' />
-            <span className='text-text-red-primary'>nchan 연결 끊김</span>
           </>
         )}
       </div>
