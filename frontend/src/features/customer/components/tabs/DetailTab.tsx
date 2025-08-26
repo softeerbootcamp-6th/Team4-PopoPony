@@ -68,13 +68,13 @@ const DetailTab = ({ data }: { data: RecruitDetailResponse }) => {
           </div>
         </div>
         <div className='flex flex-col gap-[0.8rem]'>
-          <div className='flex justify-start items-start body1-16-medium gap-[2rem]'>
+          <div className='body1-16-medium flex items-start justify-start gap-[2rem]'>
             <span className='text-text-neutral-primary min-w-[6rem]'>동행 날짜</span>
             <span className='text-text-neutral-secondary'>
               {dateFormat(data.escortDate, 'M월 d일 (eee)')}
             </span>
           </div>
-          <div className='flex justify-start items-start body1-16-medium gap-[2rem]'>
+          <div className='body1-16-medium flex items-start justify-start gap-[2rem]'>
             <span className='text-text-neutral-primary min-w-[6rem]'>동행 시간</span>
             <span className='text-text-neutral-secondary'>
               {timeFormatWithOptionalMinutes(data.estimatedMeetingTime)} ~{' '}
@@ -82,7 +82,7 @@ const DetailTab = ({ data }: { data: RecruitDetailResponse }) => {
               {timeDuration(data.estimatedMeetingTime, data.estimatedReturnTime)})
             </span>
           </div>
-          <div className='flex justify-start items-start body1-16-medium gap-[2rem]'>
+          <div className='body1-16-medium flex items-start justify-start gap-[2rem]'>
             <span className='text-text-neutral-primary min-w-[6rem]'>동행 병원</span>
             <div className='flex-start gap-[0.8rem]'>
               <ShowMapButton
