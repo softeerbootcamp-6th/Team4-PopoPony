@@ -68,7 +68,10 @@ const HelperDashboardPage = () => {
     escortDetailOrigin.data;
   const [escortStatus, setEscortStatus] = useState(escortDetailOrigin.data.escortStatus);
   const [curLocation, setCurLocation] = useState<Position | null>(null);
-  const { patientLocations, sendLocation } = useWebSocket(String(escortId), 'helper');
+  const { patientLocations, sendLocation, connectionStatus, nchanStatus } = useWebSocket(
+    String(escortId),
+    'helper'
+  );
 
   const {
     meetingToHospital,
@@ -444,7 +447,11 @@ const HelperDashboardPage = () => {
         </div>
         <DashBoardCard>
           <DashBoardCard.TitleWrapper>
-            <DashBoardCard.StatusTitle escortStatus={dashboardCardProps().escortStatus} />
+            <DashBoardCard.StatusTitle
+              escortStatus={dashboardCardProps().escortStatus}
+              socketStatus={connectionStatus}
+              nchanStatus={nchanStatus}
+            />
             <DashBoardCard.Title text={dashboardCardProps().title} />
             <DashBoardCard.ButtonWrapper>
               <div className='flex-1'>

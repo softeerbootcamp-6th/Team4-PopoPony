@@ -62,6 +62,7 @@ const useWebSocket = (escortId: string, role: string) => {
   const nchanRef = useRef<EventSource | null>(null);
   const seqRef = useRef<number>(0);
   const reconnectTimeoutRef = useRef<number | null>(null);
+  const nchanReconnectTimeoutRef = useRef<number | null>(null);
 
   // 위치 정보 전송 함수
   const sendLocation = useCallback(
@@ -199,23 +200,40 @@ const useWebSocket = (escortId: string, role: string) => {
     };
 
     // Nchan 브로드캐스팅 채널 연결 (수신용)
-    const nchanUrl = `${import.meta.env.VITE_API_BASE_URL}/sub/escorts/${escortId}`;
-    const nchan = new EventSource(nchanUrl);
-    nchanRef.current = nchan;
+    const connectNchan = () => {
+      const nchanUrl = `${import.meta.env.VITE_API_BASE_URL}/sub/escorts/${escortId}`;
+      const nchan = new EventSource(nchanUrl);
+      nchanRef.current = nchan;
 
-    nchan.onopen = (event) => {
-      console.log('Nchan connected', event);
-      setNchanStatus('connected');
+      nchan.onopen = (event) => {
+        console.log('Nchan connected', event);
+        setNchanStatus('connected');
+        // 재연결 타이머 클리어
+        if (nchanReconnectTimeoutRef.current) {
+          clearTimeout(nchanReconnectTimeoutRef.current);
+          nchanReconnectTimeoutRef.current = null;
+        }
+      };
+
+      nchan.onmessage = (event) => {
+        handleMessage(event.data);
+      };
+
+      nchan.onerror = (error) => {
+        console.warn('Nchan error', error);
+        setNchanStatus('error');
+
+        // 자동 재연결
+        if (nchan.readyState === EventSource.CLOSED) {
+          console.log('Attempting to reconnect Nchan...');
+          nchanReconnectTimeoutRef.current = setTimeout(() => {
+            connectNchan();
+          }, 3000); // 3초 후 재연결
+        }
+      };
     };
 
-    nchan.onmessage = (event) => {
-      handleMessage(event.data);
-    };
-
-    nchan.onerror = (error) => {
-      console.warn('Nchan error', error);
-      setNchanStatus('error');
-    };
+    connectNchan();
 
     connectWebSocket();
 
@@ -228,12 +246,16 @@ const useWebSocket = (escortId: string, role: string) => {
         clearTimeout(reconnectTimeoutRef.current);
         reconnectTimeoutRef.current = null;
       }
+      if (nchanReconnectTimeoutRef.current) {
+        clearTimeout(nchanReconnectTimeoutRef.current);
+        nchanReconnectTimeoutRef.current = null;
+      }
 
       if (wsRef.current?.readyState === WebSocket.OPEN) {
         wsRef.current.close(1000, 'Component unmounting');
       }
-      if (nchan.readyState === EventSource.OPEN) {
-        nchan.close();
+      if (nchanRef.current?.readyState === EventSource.OPEN) {
+        nchanRef.current.close();
       }
     };
   }, [escortId, role, handleMessage]);

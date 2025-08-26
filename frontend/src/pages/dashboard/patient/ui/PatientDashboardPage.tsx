@@ -36,10 +36,8 @@ const PatientDashboardPage = () => {
   const watchIdRef = useRef<number | null>(null);
   // const timerRef = useRef<number | null>(null);
   const [curLocation, setCurLocation] = useState<Position | null>(null);
-  const { helperLocations, sendLocation, escortStatuses } = useWebSocket(
-    String(escortId),
-    'patient'
-  );
+  const { helperLocations, sendLocation, escortStatuses, connectionStatus, nchanStatus } =
+    useWebSocket(String(escortId), 'patient');
 
   const mapRef = useRef<HTMLDivElement>(null);
   const { mapInstance, setCenter, setZoom, fitBoundsToCoordinates, addMarker, addCustomMarker } =
@@ -166,6 +164,11 @@ const PatientDashboardPage = () => {
           </div>
           <DashBoardCard>
             <DashBoardCard.TitleWrapper>
+              <DashBoardCard.StatusTitle
+                escortStatus={'만남중'}
+                socketStatus={connectionStatus}
+                nchanStatus={nchanStatus}
+              />
               <DashBoardCard.Title
                 text={`${route.routeSimple.meetingLocationInfo.detailAddress}에서 도우미와 만나세요`}
               />

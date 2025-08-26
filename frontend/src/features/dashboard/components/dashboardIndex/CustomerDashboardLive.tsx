@@ -7,9 +7,11 @@ type Props = {
   escortStatus: StatusTitleProps;
   time?: string;
   route: RouteSimpleResponse;
+  socketStatus: string;
+  nchanStatus: string;
 };
 
-const CustomerDashboardLive = ({ escortStatus, time, route }: Props) => {
+const CustomerDashboardLive = ({ escortStatus, time, route, socketStatus, nchanStatus }: Props) => {
   const { meetingLocationInfo, hospitalLocationInfo, returnLocationInfo } = route;
 
   const placeInfo = (() => {
@@ -44,7 +46,11 @@ const CustomerDashboardLive = ({ escortStatus, time, route }: Props) => {
   return (
     <DashBoardCard>
       <DashBoardCard.TitleWrapper>
-        <DashBoardCard.StatusTitle escortStatus={escortStatus} />
+        <DashBoardCard.StatusTitle
+          escortStatus={escortStatus}
+          socketStatus={socketStatus}
+          nchanStatus={nchanStatus}
+        />
         <DashBoardCard.Title text={title} />
       </DashBoardCard.TitleWrapper>
       <DashBoardCard.Divider />
