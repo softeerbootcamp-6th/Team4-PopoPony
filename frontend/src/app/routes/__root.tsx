@@ -2,7 +2,6 @@ import { type QueryClient } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { Outlet, createRootRouteWithContext, redirect } from '@tanstack/react-router';
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
-import { Toaster } from 'sonner';
 
 import { Landing } from '@/widgets/ui';
 
@@ -44,12 +43,6 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
         <PageLayout>
           <ErrorSuspenseBoundary isRoot>
             <Outlet />
-            <Toaster
-              position='top-center'
-              style={{ position: 'absolute' }}
-              duration={1000}
-              richColors={true}
-            />
           </ErrorSuspenseBoundary>
         </PageLayout>
       </RootLayout>
