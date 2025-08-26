@@ -93,8 +93,12 @@
 
 ---
 
+### 🔹 아키텍처 구조
+<img width="1547" height="1540" alt="시스템 아키텍처" src="https://github.com/user-attachments/assets/5ff75a72-1ec2-46b1-a711-13ebd7979e72" />
+
+
 ### 🔹 컨벤션
-- 개발 전, [📎 컨벤션 문서](./wiki/코드-컨벤션) 를 확인해주세요.
+- 개발 전, [📎 컨벤션 문서](https://github.com/softeerbootcamp-6th/Team4-PopoPony/wiki/%EC%BD%94%EB%93%9C-%EC%BB%A8%EB%B2%A4%EC%85%98) 를 확인해주세요.
 
 ---
 
@@ -123,11 +127,20 @@
 ---
 
 ### 🔹 서로 바라는 점
-- 말을 많이 하자!
-- 의견은 과감하게 제시!
-- 모르면 모른다고, 알면 아는 만큼 공유
-- 항상 긍정적으로 개발하기 😊
-- 🍚 밥 땐 일 얘기 금지!
+**말을 많이 하자!**  
+  사소한 부분까지 많이 공유가 되었으면 좋겠습니다.
+  
+**의견은 과감하게 제시!**  
+  예의는 지키되 의견을 가감없이 공유하면 좋겠어요.
+  
+**모르면 모른다고, 알면 아는 만큼 공유**    
+  서로의 부족한 점을 채워주기 위해 가장 중요한 점이라고 생각합니다.
+  
+**항상 긍정적으로 개발하기 😊**   
+  잘 될거라고 믿어야 잘 됩니다.
+  
+**🍚 밥 땐 일 얘기 금지!**    
+  12시간 붙어있으며 일을 하다보니, 쉴땐 확실히 쉬어야 합니다!
 
 <br />
 <br />
@@ -190,25 +203,30 @@ com.todoc.server
 │  ├─ 📁 response/
 │  └─ 📁 util/
 │
-└─ 📁 domain/
-   ├─ 📁 auth/
-   │  ├─ 📁 entity/
-   │  ├─ 📁 exception/
-   │  ├─ 📁 repository/
-   │  ├─ 📁 service/
-   │  └─ 📁 web/
-   │     ├─ 📁 controller/
-   │     └─ 📁 dto/
-   │        ├─ 📁 request/
-   │        └─ 📁 response/
-   │
-   ├─ 📁 customer (...)
-   ├─ 📁 escort (...)
-   ├─ 📁 helper (...)
-   ├─ 📁 latestlocation (...)
-   ├─ 📁 report (...)
-   ├─ 📁 review (...)
-   └─ 📁 route (...)
+├─ 📁 domain/
+│  ├─ 📁 auth/
+│  │  ├─ 📁 entity/
+│  │  ├─ 📁 exception/
+│  │  ├─ 📁 repository/
+│  │  ├─ 📁 service/
+│  │  └─ 📁 web/
+│  │     ├─ 📁 controller/
+│  │     └─ 📁 dto/
+│  │        ├─ 📁 request/
+│  │        └─ 📁 response/
+│  │
+│  ├─ 📁 customer (...)
+│  ├─ 📁 escort (...)
+│  ├─ 📁 helper (...)
+│  ├─ 📁 realtime (...)
+│  ├─ 📁 latestlocation (...)
+│  ├─ 📁 report (...)
+│  ├─ 📁 review (...)
+│  └─ 📁 route (...)
+└─ 📁 external/
+   ├ 📁 sms/
+   └ 📁 tmap/
+
 ```
 </details>
 
@@ -288,17 +306,10 @@ frontend
 <br/>
 <br/>
 
-## 😵‍💫 포포포니 트러블슈팅
+## 😵‍💫 팀 위키 문서
 
-
-| 제목            | 작성자 | 키워드 |
-| --------------- | ---- | ------ |
-| [트러블슈팅1]() |      |        |
-| [트러블슈팅2]() |      |        |
-| [트러블슈팅3]() |      |        |
-| [트러블슈팅4]() |      |        |
-
-> 더 많은 트러블은 [여기](./)에서 확인하세요! 🧯
+📚 더 자세한 내용은 [팀 위키 문서](https://github.com/softeerbootcamp-6th/Team4-PopoPony/wiki)를 참고해주세요.  
+컨벤션, 작업 전략, 도메인 정의, 온보딩 문서, 문서 템플릿 등이 정리되어 있습니다.
 
 <br/>
 <br/>
@@ -306,5 +317,4 @@ frontend
 
 ---
 
-📚 더 자세한 내용은 [팀 위키 문서](https://github.com/softeerbootcamp-6th/Team4-PopoPony/wiki)를 참고해주세요.  
-컨벤션, 작업 전략, 도메인 정의, 문서 템플릿 등이 정리되어 있습니다.
+
