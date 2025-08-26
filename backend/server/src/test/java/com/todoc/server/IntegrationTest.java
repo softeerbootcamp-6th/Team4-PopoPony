@@ -15,8 +15,6 @@ import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
-import org.testcontainers.containers.MySQLContainer;
-
 import javax.sql.DataSource;
 import java.sql.Connection;
 
@@ -26,21 +24,21 @@ import java.sql.Connection;
 @Transactional
 public abstract class IntegrationTest {
 
-    static final MySQLContainer<?> mysql =
-        new MySQLContainer<>("mysql:8.0")
-            .withUsername("testuser")
-            .withPassword("testpass");
-
-    static {
-        mysql.start();
-    }
-
-    @DynamicPropertySource
-    static void registerProps(DynamicPropertyRegistry registry) {
-        registry.add("spring.datasource.url", mysql::getJdbcUrl);
-        registry.add("spring.datasource.username", mysql::getUsername);
-        registry.add("spring.datasource.password", mysql::getPassword);
-    }
+//    static final MySQLContainer<?> mysql =
+//        new MySQLContainer<>("mysql:8.0")
+//            .withUsername("testuser")
+//            .withPassword("testpass");
+//
+//    static {
+//        mysql.start();
+//    }
+//
+//    @DynamicPropertySource
+//    static void registerProps(DynamicPropertyRegistry registry) {
+//        registry.add("spring.datasource.url", mysql::getJdbcUrl);
+//        registry.add("spring.datasource.username", mysql::getUsername);
+//        registry.add("spring.datasource.password", mysql::getPassword);
+//    }
 
 //    public static class DatabaseInitializer
 //            implements ApplicationContextInitializer<ConfigurableApplicationContext> {

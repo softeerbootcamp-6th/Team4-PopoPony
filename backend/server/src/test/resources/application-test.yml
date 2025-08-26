@@ -1,8 +1,11 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    username: sa
-    password:
+    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://127.0.0.1:3306/todoc_db?serverTimezone=Asia/Seoul&characterEncoding=UTF-8&connectTimeout=5000&socketTimeout=60000&allowPublicKeyRetrieval=true&useSSL=false}
+    username: ${SPRING_DATASOURCE_USERNAME:root}
+    password: ${SPRING_DATASOURCE_PASSWORD:deokwon11@}
+    hikari:
+      initializationFailTimeout: 60000
   cache:
     type: NONE
   session:

@@ -35,7 +35,6 @@ dependencies {
 
 	// DB
 	implementation("mysql:mysql-connector-java:8.0.33")
-	testImplementation("com.h2database:h2")
 
 	// Lombok
 	compileOnly("org.projectlombok:lombok")
@@ -83,10 +82,6 @@ dependencies {
 
 	// SMS
 	implementation("net.nurigo:sdk:4.3.2")
-
-	// test-container
-	testImplementation("org.testcontainers:junit-jupiter:1.20.3") // 최신버전 확인
-	testImplementation("org.testcontainers:mysql:1.20.3")
 }
 
 val querydslDir = layout.buildDirectory.dir("generated/querydsl")
@@ -94,11 +89,7 @@ val querydslDir = layout.buildDirectory.dir("generated/querydsl")
 sourceSets["main"].java.srcDir(querydslDir)
 
 tasks.withType<JavaCompile>().configureEach {
-	options.compilerArgs.addAll(
-		listOf(
-			"-Aquerydsl.generatedSourcesDir=${querydslDir.get().asFile.absolutePath}"
-		)
-	)
+	options.generatedSourceOutputDirectory.set(file("$buildDir/generated/querydsl"))
 }
 
 tasks.withType<Test>().configureEach {
