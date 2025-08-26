@@ -7,6 +7,8 @@ spring:
     type: NONE
   session:
     store-type: none
+  main:
+    lazy-initialization: true
   task:
     scheduling:
       enabled: false
@@ -18,7 +20,9 @@ spring:
       mode: always
       schema-locations: classpath:sql/schema.sql
       data-locations: classpath:sql/data.sql
-
+logging:
+  level:
+    root: WARN
 #    properties:
 #      hibernate:
 #        format_sql: true
