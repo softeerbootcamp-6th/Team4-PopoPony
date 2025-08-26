@@ -9,61 +9,31 @@ on:
 
 env:
   SPRING_PROFILE: ci
-  DB_URL: jdbc:mysql://localhost:3306/todoc_db?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
-  DB_USERNAME: testuser
-  DB_PASSWORD: testpass
+
+concurrency:
+  group: ci-${{ github.ref }}-backend
+  cancel-in-progress: true
 
 jobs:
   validate:
     runs-on: ubuntu-latest
 
-    services:
-      mysql:
-        image: mysql:8.0.33
-        ports:
-          - 3306:3306
-        env:
-          MYSQL_DATABASE: todoc_db
-          MYSQL_ROOT_PASSWORD: rootpass
-          MYSQL_USER: testuser
-          MYSQL_PASSWORD: testpass
-        options: >-
-          --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -prootpass || exit 1"
-          --health-interval=5s
-          --health-timeout=3s
-          --health-retries=30
-          --health-start-period=20s
-      redis:
-        image: redis:7.2
-        ports:
-          - 6379:6379
-        options: >-
-          --health-cmd "redis-cli ping || exit 1"
-          --health-interval=5s
-          --health-timeout=3s
-          --health-retries=30
-
     steps:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Set up JDK
-        uses: actions/setup-java@v3
+      - name: Set up JDK 17 (Temurin) + Gradle cache
+        uses: actions/setup-java@v4
         with:
-          distribution: 'temurin'
-          java-version: '21'
+          distribution: temurin
+          java-version: '17'
+          cache: gradle
 
-      - name: Build with Gradle
+      - name: Run tests
+        working-directory: backend/server
+        env:
+          SPRING_PROFILES_ACTIVE: ci
+          # Gradle 빌드/테스트 가속 옵션
+          GRADLE_OPTS: -Dorg.gradle.caching=true -Dorg.gradle.parallel=true -Dorg.gradle.daemon=false
         run: |
-          cd backend/server
-          ./gradlew clean build
-
-      - name: Run application in background
-        run: |
-          nohup java -Dspring.profiles.active=${SPRING_PROFILE} -jar backend/server/build/libs/server-0.0.1-SNAPSHOT.jar &
-          echo $! > app.pid
-          sleep 15
-
-      - name: Stop application
-        run: |
-          kill -9 $(cat app.pid)
+          ./gradlew clean test --no-daemon --info --stacktrace
