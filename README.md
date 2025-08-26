@@ -40,7 +40,7 @@
 <br />
 <br />
 
-### 🔹 아키텍처 구조
+## 🏛️ 아키텍처 구조
 <img width="100%" alt="시스템 아키텍처" src="https://github.com/user-attachments/assets/5ff75a72-1ec2-46b1-a711-13ebd7979e72" />
 
 <br />
