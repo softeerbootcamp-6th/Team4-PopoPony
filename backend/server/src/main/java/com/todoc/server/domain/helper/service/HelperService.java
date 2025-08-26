@@ -60,7 +60,7 @@ public class HelperService {
     public HelperSimpleResponse buildHelperSimpleByHelperProfileId(List<HelperSimpleFlatDto> applicationFlatDtoList) {
 
         // 1. 필드 추출
-        HelperSimpleFlatDto first = applicationFlatDtoList.getFirst();
+        HelperSimpleFlatDto first = applicationFlatDtoList.get(0);
         Long helperProfileId = first.getHelperProfileId();
         String name = first.getName();
         LocalDate birthDate = first.getBirthDate();
@@ -130,7 +130,7 @@ public class HelperService {
             throw new HelperProfileNotFoundException();
         }
 
-        HelperUpdateDefaultFlatDto first = list.getFirst();
+        HelperUpdateDefaultFlatDto first = list.get(0);
         HelperProfile helperProfile = first.getHelperProfile();
         ImageFile profileImage = helperProfile.getHelperProfileImage();
         String strength = helperProfile.getStrength();

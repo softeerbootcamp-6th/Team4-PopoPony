@@ -105,7 +105,7 @@ public class ReviewIntegrationTest extends IntegrationTest {
         int afterCount = all.size();
         assertThat(afterCount - beforeCount).isEqualTo(1);
 
-        Review created = all.getLast();
+        Review created = all.get(all.size() - 1);
         assertThat(created.getShortComment()).isEqualTo("너무 감사드립니다!");
         assertThat(created.getSatisfactionLevel().getLabel()).isEqualTo("좋았어요");
 

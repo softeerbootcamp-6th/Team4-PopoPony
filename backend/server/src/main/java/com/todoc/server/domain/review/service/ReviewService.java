@@ -94,7 +94,7 @@ public class ReviewService {
             return new ReviewDetailResponse();
         }
 
-        ReviewDetailFlatDto first = rows.getFirst();
+        ReviewDetailFlatDto first = rows.get(0);
 
         List<String> feedbacks = rows.stream()
                 .map(ReviewDetailFlatDto::getPositiveFeedbackDesc)
