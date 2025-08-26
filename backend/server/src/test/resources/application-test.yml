@@ -12,14 +12,12 @@ spring:
       enabled: false
   jpa:
     hibernate:
-      ddl-auto: create-drop
-    show-sql: true
-    database-platform: org.hibernate.dialect.MySQL8Dialect
-    defer-datasource-initialization: true
+      ddl-auto: none
   sql:
     init:
       mode: always
-      data-locations: classpath:sql/data.sql  # 당신이 쓰는 경로 지정
+      schema-locations: classpath:sql/schema.sql
+      data-locations: classpath:sql/data.sql
 
 #    properties:
 #      hibernate:

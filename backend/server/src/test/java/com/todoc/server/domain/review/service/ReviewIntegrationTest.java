@@ -22,7 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
 @Transactional
@@ -55,7 +55,7 @@ public class ReviewIntegrationTest extends IntegrationTest {
         assertThat(response).isNotNull();
         assertThat(response.getShortComment()).isEqualTo("정말 친절하고 따뜻했어요.");
         assertThat(response.getSatisfactionLevel()).isEqualTo("좋았어요");
-        assertThat(response.getPositiveFeedbackList()).isEqualTo(List.of("친절해요", "소통이 잘돼요", "능숙해요"));
+        assertThat(response.getPositiveFeedbackList()).containsExactlyInAnyOrder("친절해요", "소통이 잘돼요", "능숙해요");
     }
 
     @Test

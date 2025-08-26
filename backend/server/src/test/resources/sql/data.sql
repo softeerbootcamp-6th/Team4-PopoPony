@@ -1,3 +1,26 @@
+
+SET FOREIGN_KEY_CHECKS = 0;
+
+TRUNCATE TABLE `auth`;
+TRUNCATE TABLE `image_file`;
+TRUNCATE TABLE `patient`;
+TRUNCATE TABLE `helper_profile`;
+TRUNCATE TABLE `certificate`;
+TRUNCATE TABLE `location_info`;
+TRUNCATE TABLE `route_leg`;
+TRUNCATE TABLE `route`;
+TRUNCATE TABLE `recruit`;
+TRUNCATE TABLE `application`;
+TRUNCATE TABLE `escort`;
+TRUNCATE TABLE `review`;
+TRUNCATE TABLE `positive_feedback`;
+TRUNCATE TABLE `positive_feedback_choice`;
+TRUNCATE TABLE `report`;
+TRUNCATE TABLE `taxi_fee`;
+TRUNCATE TABLE `image_attachment`;
+
+SET FOREIGN_KEY_CHECKS = 1;
+
 INSERT INTO auth (id, login_id, password, name, birth_date, gender, contact, created_at, updated_at, deleted_at)
 VALUES
     (1, 'user01', '$2a$12$Aq86sdOQfrFnzqPEW/eCteGwyxUL9Cl/Qya7w0.O7eYl9v0MnNvX2', '김민수', '1995-03-15', 'MALE', '010-1234-5678', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, null),
