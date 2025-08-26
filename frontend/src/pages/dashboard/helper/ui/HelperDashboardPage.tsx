@@ -7,6 +7,7 @@ import { type ReactNode, useEffect, useRef, useState } from 'react';
 import { SlideButton } from '@entities/escort/ui';
 
 import { useMap } from '@shared/hooks';
+import { clearPositionWatch, watchCurrentPosition } from '@shared/lib';
 import type { Position, TMapMarker } from '@shared/types';
 import { Button, FloatingButton } from '@shared/ui';
 import { PageLayout } from '@shared/ui/layout';
@@ -60,7 +61,7 @@ const HelperDashboardPage = () => {
   const { mutate: patchEscortMemoCall } = patchEscortMemo();
   const { mutate: patchEscortStatusByEscortIdCall } = patchEscortStatusByEscortId();
   // const { mutate: postCurrentPositionCall } = postCurrentPosition();
-  const timerRef = useRef<number | null>(null);
+  const watchIdRef = useRef<number | null>(null);
   const [memo, setMemo] = useState('');
   const { escortId, route, patient, customerContact, estimatedMeetingTime, purpose, extraRequest } =
     escortDetailOrigin.data;
@@ -110,32 +111,31 @@ const HelperDashboardPage = () => {
   };
 
   useEffect(() => {
-    if (!('geolocation' in navigator)) return;
+    if (watchIdRef.current) {
+      clearPositionWatch(watchIdRef.current);
+      watchIdRef.current = null;
+    }
 
-    navigator.geolocation.getCurrentPosition((position) => {
-      const { latitude, longitude, accuracy } = position.coords;
-
-      if (timerRef.current) {
-        clearInterval(timerRef.current);
-        timerRef.current = null;
-      }
-
-      timerRef.current = window.setInterval(() => {
+    watchIdRef.current = watchCurrentPosition(
+      ({ latitude, longitude, accuracy }) => {
         setCurLocation({
           lat: latitude,
           lon: longitude,
         });
         sendLocation(latitude, longitude, accuracy);
-      }, 1000);
-    });
+      },
+      (error) => {
+        console.error('위치 정보를 가져올 수 없습니다:', error);
+      }
+    );
 
     return () => {
-      if (timerRef.current) {
-        clearInterval(timerRef.current);
-        timerRef.current = null;
+      if (watchIdRef.current) {
+        clearPositionWatch(watchIdRef.current);
+        watchIdRef.current = null;
       }
     };
-  }, [escortId]);
+  }, [escortId, sendLocation]);
 
   const patientContact = patient.contact;
 
