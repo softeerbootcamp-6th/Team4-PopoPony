@@ -1,9 +1,10 @@
 import { type QueryClient } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { Outlet, createRootRouteWithContext, redirect, useRouter } from '@tanstack/react-router';
-import { useEffect } from 'react';
-import { toast } from 'sonner';
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
+import { toast } from 'sonner';
+
+import { useEffect } from 'react';
 
 import { Landing } from '@/widgets/ui';
 

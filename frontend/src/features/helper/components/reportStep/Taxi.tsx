@@ -1,6 +1,6 @@
-import { useFormContext, useWatch } from 'react-hook-form';
-
 import { toast } from 'sonner';
+
+import { useFormContext, useWatch } from 'react-hook-form';
 
 import type { FunnelStepProps } from '@shared/types';
 import { FormLayout } from '@shared/ui/layout';
@@ -31,17 +31,17 @@ const Taxi = ({ handleNextStep }: FunnelStepProps) => {
       returnFeeNumber > 0 &&
       returnFeeNumber < 1000000
     ) {
-      handleNextStep && handleNextStep();
+      if (typeof handleNextStep === 'function') {
+        handleNextStep();
+      } else {
+        toast.error('다음 단계로 이동할 수 없습니다. 잠시 후 다시 시도해주세요.');
+      }
     } else {
       toast.error('요금은 1,000,000원 이하로 입력해주세요.');
     }
   };
 
-  const isValid =
-    departureFee &&
-    returnFee &&
-    departureReceipt.s3Key &&
-    returnReceipt.s3Key
+  const isValid = departureFee && returnFee && departureReceipt.s3Key && returnReceipt.s3Key;
 
   return (
     <FormLayout>

@@ -1,10 +1,9 @@
+import type { QueryClient } from '@tanstack/react-query';
 import { createFileRoute, redirect } from '@tanstack/react-router';
 
 import { RecruitRegisterFormPage } from '@pages/customer/recruit-register-form';
 
 import { recruitStepSearchSchema } from '@customer/types';
-
-import type { QueryClient } from '@tanstack/react-query';
 
 export const Route = createFileRoute('/customer/recruit/$step')({
   validateSearch: recruitStepSearchSchema,
