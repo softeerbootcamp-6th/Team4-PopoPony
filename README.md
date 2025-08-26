@@ -225,8 +225,8 @@ com.todoc.server
 │  ├─ 📁 review (...)
 │  └─ 📁 route (...)
 └─ 📁 external/
-   ├ 📁 sms/
-   └ 📁 tmap/
+   ├─ 📁 sms/
+   └─ 📁 tmap/
 
 ```
 </details>
