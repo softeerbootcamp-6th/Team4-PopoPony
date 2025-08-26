@@ -7,7 +7,8 @@ import { recruitStepSearchSchema } from '@customer/types';
 
 export const Route = createFileRoute('/customer/recruit/$step')({
   validateSearch: recruitStepSearchSchema,
-  beforeLoad: async ({ search, context }) => {
+  beforeLoad: async ({ params, search, context }) => {
+    const { step } = params;
     const { place } = search;
     const { queryClient } = context as { queryClient: QueryClient };
 
@@ -17,6 +18,8 @@ export const Route = createFileRoute('/customer/recruit/$step')({
       });
     }
     const started = queryClient.getQueryData<boolean>(['recruitFormStarted']);
+    if (step === 'profile') return;
+
     if (!started) {
       throw redirect({
         to: '/customer/recruit/$step',
