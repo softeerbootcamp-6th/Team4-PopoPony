@@ -7,6 +7,7 @@ import ReactDOM from 'react-dom/client';
 
 import { AuthError } from '@shared/api';
 import { showToastError } from '@shared/lib';
+import { Toaster } from '@shared/ui';
 
 import { routeTree } from './app/routeTree.gen';
 import './styles.css';
@@ -58,6 +59,7 @@ if (rootElement && !rootElement.innerHTML) {
     <StrictMode>
       <QueryClientProvider client={queryClient}>
         <RouterProvider router={router} />
+        <Toaster />
       </QueryClientProvider>
     </StrictMode>
   );

@@ -179,9 +179,6 @@ const HelperDashboardPage = () => {
           const nextStatus = ESCORT_STATUS_ORDER[nextIndex];
           setEscortStatus(nextStatus);
         },
-        onError: (error) => {
-          console.error('Failed to update escort status:', error);
-        },
       }
     );
   };
@@ -327,7 +324,7 @@ const HelperDashboardPage = () => {
         patientMarker.current = addCustomMarker(
           patientLocations.latitude,
           patientLocations.longitude,
-          patient.name,
+          `${patient.name} 고객`,
           patient.imageUrl
         );
       } else {

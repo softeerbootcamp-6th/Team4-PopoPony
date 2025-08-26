@@ -3,6 +3,8 @@ package com.todoc.server.domain.realtime.service;
 import com.todoc.server.common.enumeration.Role;
 import com.todoc.server.common.util.JsonUtils;
 import com.todoc.server.domain.realtime.web.dto.response.Envelope;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
@@ -18,25 +20,32 @@ import java.util.concurrent.atomic.AtomicReference;
 @Component
 public class WebSocketSessionRegistry {
 
+    private static final Logger log = LoggerFactory.getLogger(WebSocketSessionRegistry.class);
     private final ConcurrentMap<Long, EnumMap<Role, AtomicReference<WebSocketSession>>> map = new ConcurrentHashMap<>();
 
     /** 새 연결 등록: 같은 역할의 기존 세션이 있으면 닫고 교체 */
     public void register(Long escortId, Role role, WebSocketSession session) {
         AtomicReference<WebSocketSession> ref = getRoleMap(escortId).get(role);
         WebSocketSession prev = ref.getAndSet(session);
-        if (prev != null && prev.isOpen()) {
-            try {
-                prev.close(CloseStatus.NORMAL);
-            } catch (Exception ignore) {}
+        if (prev != null) {
+            if (prev == session) { // 동일 세션이면 아무 것도 하지 않음
+                return;
+            }
+            safeClose(prev, CloseStatus.NORMAL);
         }
     }
 
     /** 기존 연결 제거 */
     public void remove(Long escortId, Role role) {
-        AtomicReference<WebSocketSession> ref = getRoleMap(escortId).get(role);
+        EnumMap<Role, AtomicReference<WebSocketSession>> roleMap = getRoleMap(escortId);
+        AtomicReference<WebSocketSession> ref = roleMap.get(role);
         WebSocketSession prev = ref.getAndSet(null);      // 현재 무엇이든 제거
         if (prev != null) {
-            try { prev.close(CloseStatus.NORMAL); } catch (Exception ignore) {}
+            safeClose(prev, CloseStatus.NORMAL);
+        }
+        if (roleMap.values().stream().allMatch(ar -> ar.get() == null)) {
+            map.remove(escortId);
+            log.debug("WS removed escortId entry: {}", escortId);
         }
     }
 
@@ -95,5 +104,13 @@ public class WebSocketSessionRegistry {
     @Async("wsExecutor")
     public void removeAsync(Long escortId, Role role) {
         remove(escortId, role);
+    }
+
+    private void safeClose(WebSocketSession session, CloseStatus status) {
+        try {
+            if (session.isOpen()) {
+                session.close(status);
+            }
+        } catch (Exception ex) {}
     }
 }

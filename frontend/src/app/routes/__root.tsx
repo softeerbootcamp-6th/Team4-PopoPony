@@ -1,8 +1,10 @@
 import { type QueryClient } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import { Outlet, createRootRouteWithContext, redirect } from '@tanstack/react-router';
+import { Outlet, createRootRouteWithContext, redirect, useRouter } from '@tanstack/react-router';
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
-import { Toaster } from 'sonner';
+import { toast } from 'sonner';
+
+import { useEffect } from 'react';
 
 import { Landing } from '@/widgets/ui';
 
@@ -11,13 +13,23 @@ import { PageLayout, RootLayout } from '@shared/ui/layout';
 
 import { authStorage } from '@auth/utils';
 
+const ALLOWED_ROUTES = ['/login', '/dashboard/map/', '/dashboard/error/'];
+
 interface MyRouterContext {
   queryClient: QueryClient;
+}
+function NotFoundRedirect() {
+  const router = useRouter();
+  useEffect(() => {
+    toast.error('존재하지 않는 경로예요. 홈으로 이동합니다.');
+    router.navigate({ to: '/', replace: true });
+  }, []);
+  return null;
 }
 
 export const Route = createRootRouteWithContext<MyRouterContext>()({
   beforeLoad: async ({ location }) => {
-    if (location.pathname === '/login' || location.pathname.startsWith('/dashboard/map/')) {
+    if (ALLOWED_ROUTES.some((route) => location.pathname.includes(route))) {
       return;
     }
     if (!(await authStorage.getIsLoggedIn())) {
@@ -25,6 +37,9 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
         to: '/login',
       });
     }
+  },
+  notFoundComponent: () => {
+    return <NotFoundRedirect />;
   },
   errorComponent: ({ error }) => (
     <RootLayout>
@@ -44,12 +59,6 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
         <PageLayout>
           <ErrorSuspenseBoundary isRoot>
             <Outlet />
-            <Toaster
-              position='top-center'
-              style={{ position: 'absolute' }}
-              duration={1000}
-              richColors={true}
-            />
           </ErrorSuspenseBoundary>
         </PageLayout>
       </RootLayout>
