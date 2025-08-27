@@ -1,0 +1,23 @@
+<!-- src/test/resources/logback-test.xml -->
+<configuration>
+  <property name="PATTERN" value="%d{HH:mm:ss.SSS} %-5level %msg%n"/>
+
+  <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <pattern>${PATTERN}</pattern>
+      <charset>UTF-8</charset>
+    </encoder>
+  </appender>
+
+  <logger name="org.springframework.test.context.cache" level="OFF"/>
+  <logger name="com.todoc.server.common.logging.LoggingAspect" level="WARN"/>
+  <logger name="org.springframework.test.context" level="WARN"/>
+  <logger name="org.springframework.jdbc.datasource.init" level="WARN"/>
+  <logger name="com.zaxxer.hikari" level="WARN"/>
+  <logger name="org.hibernate.SQL" level="OFF"/>
+  <logger name="org.hibernate.type.descriptor.sql" level="OFF"/>
+
+  <root level="WARN">
+    <appender-ref ref="CONSOLE"/>
+  </root>
+</configuration>

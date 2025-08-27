@@ -2,6 +2,7 @@ package com.todoc.server.domain.escort.service.recruit;
 
 
 import com.todoc.server.IntegrationTest;
+import com.todoc.server.MockitoBeanIntegrationTest;
 import com.todoc.server.common.dto.request.ImageCreateRequest;
 import com.todoc.server.common.util.FeeUtils;
 import com.todoc.server.domain.escort.entity.Recruit;
@@ -16,10 +17,14 @@ import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
+import org.junit.jupiter.api.parallel.Isolated;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.util.ReflectionTestUtils;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -31,8 +36,9 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 
-@Sql("/sql/data.sql")
-public class RecruitIntegrationTest extends IntegrationTest {
+@Transactional
+@Isolated
+public class RecruitIntegrationTest extends MockitoBeanIntegrationTest {
 
     @Autowired
     private RecruitFacadeService recruitFacadeService;
@@ -42,12 +48,6 @@ public class RecruitIntegrationTest extends IntegrationTest {
 
     @PersistenceContext
     private EntityManager em;
-
-    @MockitoBean
-    private TMapRouteService tMapRouteService;
-
-    @MockitoBean
-    private TMapRouteParser tMapRouteParser;
 
     @Nested
     @DisplayName("동행 신청 생성")
@@ -63,8 +63,8 @@ public class RecruitIntegrationTest extends IntegrationTest {
 
             // TMap 모의 응답(두 구간)
             given(tMapRouteService.getRoute(any()))
-                .willReturn(new TMapRawResult("{}", "USED_VERTICES_A"))
-                .willReturn(new TMapRawResult("{}", "USED_VERTICES_B"));
+                .willReturn(new TMapRawResult("{}", "[]"))
+                .willReturn(new TMapRawResult("{}", "[]"));
 
             // 병원 가는 구간 요약 + 복귀 구간 요약
             var legA = new TMapRouteParser.RouteLegSummary(5_000, 900, 3_000, 15_000);

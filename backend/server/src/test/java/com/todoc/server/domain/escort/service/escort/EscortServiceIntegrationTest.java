@@ -1,6 +1,7 @@
 package com.todoc.server.domain.escort.service.escort;
 
 import com.todoc.server.IntegrationTest;
+import com.todoc.server.MockitoBeanIntegrationTest;
 import com.todoc.server.common.enumeration.EscortStatus;
 import com.todoc.server.common.enumeration.RecruitStatus;
 import com.todoc.server.domain.escort.entity.Escort;
@@ -11,6 +12,8 @@ import com.todoc.server.domain.escort.service.EscortFacadeService;
 import com.todoc.server.domain.escort.service.EscortService;
 import com.todoc.server.domain.escort.service.RecruitService;
 import com.todoc.server.domain.escort.web.dto.request.EscortMemoUpdateRequest;
+import com.todoc.server.domain.realtime.service.NchanPublisher;
+import com.todoc.server.domain.realtime.service.WebSocketSessionRegistry;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import java.time.LocalDate;
@@ -20,16 +23,12 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.Assertions.*;
 
-@Sql("/sql/data.sql")
-class EscortServiceIntegrationTest extends IntegrationTest {
+@Transactional
+class EscortServiceIntegrationTest extends MockitoBeanIntegrationTest {
 
     @Autowired private EscortFacadeService escortFacadeService;
     @Autowired private EscortService escortService;

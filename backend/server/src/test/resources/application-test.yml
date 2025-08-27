@@ -1,16 +1,34 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    username: sa
-    password:
+    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://127.0.0.1:3306/todoc_db?serverTimezone=Asia/Seoul&characterEncoding=UTF-8&connectTimeout=5000&socketTimeout=60000&allowPublicKeyRetrieval=true&useSSL=false}
+    username: ${SPRING_DATASOURCE_USERNAME:root}
+    password: ${SPRING_DATASOURCE_PASSWORD:deokwon11@}
+    hikari:
+      initializationFailTimeout: 60000
+  cache:
+    type: NONE
+  session:
+    store-type: none
+  main:
+    lazy-initialization: true
+  task:
+    scheduling:
+      enabled: false
   jpa:
     hibernate:
-      ddl-auto: create
-    show-sql: true
-    database-platform: org.hibernate.dialect.MySQL8Dialect
-    properties:
-      hibernate:
-        format_sql: true
+      ddl-auto: none
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:sql/schema.sql
+      data-locations: classpath:sql/data.sql
+logging:
+  level:
+    root: WARN
+#    properties:
+#      hibernate:
+#        format_sql: true
 
 tmap:
   api-key: ${TMAP_API_KEY:}

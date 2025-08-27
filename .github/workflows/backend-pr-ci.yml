@@ -8,10 +8,10 @@ on:
       - "backend/**"
 
 env:
-  SPRING_PROFILE: ci
+  SPRING_PROFILE: test
   DB_URL: jdbc:mysql://localhost:3306/todoc_db?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
-  DB_USERNAME: testuser
-  DB_PASSWORD: testpass
+  DB_USERNAME: root
+  DB_PASSWORD: deokwon11@
 
 jobs:
   validate:
@@ -24,24 +24,13 @@ jobs:
           - 3306:3306
         env:
           MYSQL_DATABASE: todoc_db
-          MYSQL_ROOT_PASSWORD: rootpass
-          MYSQL_USER: testuser
-          MYSQL_PASSWORD: testpass
+          MYSQL_ROOT_PASSWORD: deokwon11@
         options: >-
-          --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -prootpass || exit 1"
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -pdeokwon11@ || exit 1"
           --health-interval=5s
           --health-timeout=3s
           --health-retries=30
           --health-start-period=20s
-      redis:
-        image: redis:7.2
-        ports:
-          - 6379:6379
-        options: >-
-          --health-cmd "redis-cli ping || exit 1"
-          --health-interval=5s
-          --health-timeout=3s
-          --health-retries=30
 
     steps:
       - name: Checkout
@@ -51,19 +40,9 @@ jobs:
         uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
-          java-version: '21'
+          java-version: '17'
 
-      - name: Build with Gradle
+      - name: Test with Gradle
         run: |
           cd backend/server
-          ./gradlew clean build
-
-      - name: Run application in background
-        run: |
-          nohup java -Dspring.profiles.active=${SPRING_PROFILE} -jar backend/server/build/libs/server-0.0.1-SNAPSHOT.jar &
-          echo $! > app.pid
-          sleep 15
-
-      - name: Stop application
-        run: |
-          kill -9 $(cat app.pid)
+          ./gradlew test

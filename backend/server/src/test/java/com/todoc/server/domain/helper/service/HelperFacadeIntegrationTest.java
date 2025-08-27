@@ -30,7 +30,7 @@ import java.util.List;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@Sql("/sql/data.sql")
+@Transactional
 public class HelperFacadeIntegrationTest extends IntegrationTest {
 
     @Autowired
@@ -97,7 +97,7 @@ public class HelperFacadeIntegrationTest extends IntegrationTest {
             int after = profiles.size();
             assertThat(after - before).isEqualTo(1);
 
-            var saved = profiles.getLast();
+            var saved = profiles.get(profiles.size() - 1);
             assertThat(saved.getShortBio()).isEqualTo("부모님처럼 모시겠습니다!");
             assertThat(saved.getArea()).isEqualTo(Area.SEOUL);
             assertThat(saved.getHelperProfileImage().getImageMeta().getContentType()).isEqualTo("image/png");

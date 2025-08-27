@@ -1,3 +1,26 @@
+
+SET FOREIGN_KEY_CHECKS = 0;
+
+TRUNCATE TABLE `auth`;
+TRUNCATE TABLE `image_file`;
+TRUNCATE TABLE `patient`;
+TRUNCATE TABLE `helper_profile`;
+TRUNCATE TABLE `certificate`;
+TRUNCATE TABLE `location_info`;
+TRUNCATE TABLE `route_leg`;
+TRUNCATE TABLE `route`;
+TRUNCATE TABLE `recruit`;
+TRUNCATE TABLE `application`;
+TRUNCATE TABLE `escort`;
+TRUNCATE TABLE `review`;
+TRUNCATE TABLE `positive_feedback`;
+TRUNCATE TABLE `positive_feedback_choice`;
+TRUNCATE TABLE `report`;
+TRUNCATE TABLE `taxi_fee`;
+TRUNCATE TABLE `image_attachment`;
+
+SET FOREIGN_KEY_CHECKS = 1;
+
 INSERT INTO auth (id, login_id, password, name, birth_date, gender, contact, created_at, updated_at, deleted_at)
 VALUES
     (1, 'user01', '$2a$12$Aq86sdOQfrFnzqPEW/eCteGwyxUL9Cl/Qya7w0.O7eYl9v0MnNvX2', '김민수', '1995-03-15', 'MALE', '010-1234-5678', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, null),
@@ -257,7 +280,19 @@ INSERT INTO recruit (
 
       (15, 3, 2, 2, '2025-08-13', '10:00:00', '12:30:00',
        '물리치료', '도착 시 연락 부탁드립니다.', 28000, 'IN_PROGRESS',
-       CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, null);
+       CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, null),
+
+      (16, 3, 1, 1, '2025-08-23', '18:30:00', '21:00:00',
+       '정기검진', '테스트 케이스 - 3시간 이내', 29000, 'COMPLETED',
+       CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+
+      (17, 3, 1, 1, '2025-08-23', '22:10:00', '23:50:00',
+       '정기검진', '테스트 케이스 - 자정 전', 29000, 'COMPLETED',
+       CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+
+      (18, 3, 1, 1, '2025-08-24', '00:30:00', '02:00:00',
+       '정기검진', '테스트 케이스 - 자정 후', 29000, 'COMPLETED',
+       CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL);
 
 
 INSERT INTO application (id, recruit_id, helper_id, status, created_at, updated_at, deleted_at)
@@ -295,7 +330,10 @@ INSERT INTO escort (
       (11, 12, 2, 2, NULL, 'PREPARING', null, null, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, null),
       (12, 13, 3, 2, NULL, 'MEETING', null, null, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, null),
       (13, 14, 1, 2, NULL, 'HEADING_TO_HOSPITAL', null, null, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, null),
-      (14, 15, 2, 3, NULL, 'IN_TREATMENT', null, null, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, null);
+      (14, 15, 2, 3, NULL, 'IN_TREATMENT', null, null, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, null),
+      (16, 16, 1, 1, NULL, 'PREPARING', NULL, NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+      (17, 17, 1, 1, NULL, 'PREPARING', NULL, NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+      (18, 18, 1, 1, NULL, 'PREPARING', NULL, NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL);
 
 
 

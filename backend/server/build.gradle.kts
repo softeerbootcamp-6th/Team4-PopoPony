@@ -9,7 +9,7 @@ version = "0.0.1-SNAPSHOT"
 
 java {
 	toolchain {
-		languageVersion = JavaLanguageVersion.of(21)
+		languageVersion = JavaLanguageVersion.of(17)
 	}
 }
 
@@ -35,7 +35,6 @@ dependencies {
 
 	// DB
 	implementation("mysql:mysql-connector-java:8.0.33")
-	testImplementation("com.h2database:h2")
 
 	// Lombok
 	compileOnly("org.projectlombok:lombok")
@@ -83,10 +82,6 @@ dependencies {
 
 	// SMS
 	implementation("net.nurigo:sdk:4.3.2")
-
-	// test-container
-	testImplementation("org.testcontainers:junit-jupiter:1.20.3") // 최신버전 확인
-	testImplementation("org.testcontainers:mysql:1.20.3")
 }
 
 val querydslDir = layout.buildDirectory.dir("generated/querydsl")
@@ -94,13 +89,17 @@ val querydslDir = layout.buildDirectory.dir("generated/querydsl")
 sourceSets["main"].java.srcDir(querydslDir)
 
 tasks.withType<JavaCompile>().configureEach {
-	options.compilerArgs.addAll(
-		listOf(
-			"-Aquerydsl.generatedSourcesDir=${querydslDir.get().asFile.absolutePath}"
-		)
-	)
+	options.generatedSourceOutputDirectory.set(file("$buildDir/generated/querydsl"))
 }
 
-tasks.withType<Test> {
+tasks.withType<Test>().configureEach {
 	useJUnitPlatform()
+
+	// 한글 깨짐 방지
+	systemProperty("file.encoding", "UTF-8")
+	jvmArgs = listOf("-Dfile.encoding=UTF-8")
+
+	testLogging {
+		events("failed")  // 실패한 테스트만 출력
+	}
 }
