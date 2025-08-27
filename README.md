@@ -128,12 +128,7 @@ com.todoc.server
 ```
 frontend
 ├── 📁 dist/
-├── 📁 node_modules/
 ├── 📁 public/
-│   ├── 📁 fonts/
-│   ├── 📁 icons/
-│   ├── 📁 images/
-│   └── 📁 video/
 │
 ├── 📁 src/
 │   ├── 📁 app/
@@ -158,38 +153,14 @@ frontend
 │   │   └── 📁 user/
 │   │
 │   ├── 📁 shared/
-│   │   ├── 📁 api/
-│   │   ├── 📁 config/
-│   │   ├── 📁 hooks/
-│   │   ├── 📁 lib/
-│   │   ├── 📁 types/
-│   │   └── 📁 ui/
-│   │       ├── 📁 button/
-│   │       ├── 📁 feedback/
-│   │       ├── 📁 form/
-│   │       ├── 📁 layout/
-│   │       ├── 📁 overlay/
-│   │       └── 📁 shadcn/
 │   │
 │   ├── 📁 assets/
 │   ├── 📁 mocks/
 │   ├── 📁 main.tsx
 │   ├── 📁 styles.css
-│   └── 📁 vite-env.d.ts
 │
-├── 📁 .cta.json
-├── 📁 .gitignore
-├── 📁 .prettierignore
-├── 📁 .prettierrc
-├── 📁 components.json
-├── 📁 eslint.config.mjs
 ├── 📁 index.html
 ├── 📁 package.json
-├── 📁 pnpm-lock.yaml
-├── 📁 README.md
-├── 📁 tsconfig.json
-├── 📁 vercel.json
-└── 📁 vite.config.ts
 ```
 
 </details>
