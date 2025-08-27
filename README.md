@@ -24,8 +24,7 @@
 
 ### 동행 대시보드 시연 영상
 
-https://github.com/user-attachments/assets/6addc266-0bfe-4021-b485-d3ada52e9a7c
-
+https://github.com/user-attachments/assets/11f2938b-a582-4cf4-8085-51c558f9eb8a
 
 
 <br />
