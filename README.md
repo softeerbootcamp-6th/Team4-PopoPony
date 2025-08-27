@@ -22,6 +22,12 @@
 <img width="100%" height="1080" alt="동행 01" src="https://github.com/user-attachments/assets/8390c549-3b0e-4df2-ace9-9cb6f38be758" />
 <img width="100%" height="1080" alt="동행 02" src="https://github.com/user-attachments/assets/c2734f40-8379-4b8a-a9cc-69929c8f6a22" />
 
+### 동행 대시보드 시연 영상
+
+https://github.com/user-attachments/assets/6addc266-0bfe-4021-b485-d3ada52e9a7c
+
+
+
 <br />
 <br />
 
