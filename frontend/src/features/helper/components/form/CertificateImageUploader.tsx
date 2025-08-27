@@ -70,7 +70,7 @@ const CertificateImageUploader = ({ selectedCertificates, prefix }: Props) => {
                 <input
                   id={`label-${certificate.type}`}
                   type='text'
-                  value={hasImage ? '업로드 완료' : ''}
+                  value={hasImage ? `${certificate.type} 자격증 업로드 완료` : ''}
                   placeholder={`${certificate.type} 자격 인증 파일 첨부`}
                   disabled
                   className='body1-16-medium text-text-neutral-assistive border-stroke-neutral-dark h-full flex-1 rounded-[0.4rem] border px-[1.2rem]'
