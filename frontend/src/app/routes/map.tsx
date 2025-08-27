@@ -32,7 +32,7 @@ function RouteComponent() {
   }, [mapInstance, lat, lng]);
 
   return (
-    <div className='bg-neutral-40 absolute inset-0 h-[100dvh] w-[100dvw]'>
+    <div className='bg-neutral-40 absolute inset-0 h-[100dvh]'>
       <div className='flex h-full flex-col'>
         <div ref={mapRef} className='h-full w-full'></div>
       </div>
