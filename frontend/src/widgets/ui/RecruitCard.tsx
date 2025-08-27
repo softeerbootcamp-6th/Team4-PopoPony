@@ -12,12 +12,13 @@ import { Button } from '@shared/ui';
 type Props = {
   children: React.ReactNode;
   onClick?: () => void;
+  className?: string;
 };
 
-const RecruitCard = ({ children, onClick }: Props) => {
+const RecruitCard = ({ children, onClick, className = 'cursor-pointer' }: Props) => {
   return (
     <div
-      className='bg-background-default-white border-stroke-neutral-dark shadow-card flex w-full cursor-pointer flex-col gap-[1.2rem] rounded-[0.8rem] border p-[1.6rem]'
+      className={`bg-background-default-white border-stroke-neutral-dark shadow-card flex w-full flex-col gap-[1.2rem] rounded-[0.8rem] border p-[1.6rem] ${className}`}
       onClick={() => {
         if (onClick) onClick();
       }}>
@@ -45,7 +46,7 @@ const CardStatusHeader = ({
         {status && <RecruitStatusTag status={status} />}
         <span className='label2-14-medium text-text-neutral-secondary'>{text}</span>
       </div>
-      <div className='flex-between mt-[0.6rem] cursor-pointer'>
+      <div className='flex-between mt-[0.6rem]'>
         <h3 className='subtitle-18-bold text-text-neutral-primary'>{title}</h3>
         {hasOnClickEvent && <IcChevronRightSecondary />}
       </div>

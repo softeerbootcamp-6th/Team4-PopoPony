@@ -122,19 +122,25 @@ const Final = ({ handleBackStep }: FunnelStepProps) => {
                 <CardWrapper.Title title='환자 상태 정보' />
                 <div className='flex flex-col gap-[0.8rem]'>
                   <div className='flex items-center gap-[4.1rem]'>
-                    <h5 className='body2-14-bold text-text-neutral-primary w-[5rem]'>부축</h5>
+                    <h5 className='body2-14-bold text-text-neutral-primary w-[5rem] min-w-[5rem]'>
+                      부축
+                    </h5>
                     <h6 className='body2-14-medium text-text-neutral-primary'>
                       {conditionData.needsHelping === 'true' ? '필요해요' : '필요 없어요'}
                     </h6>
                   </div>
                   <div className='flex items-center gap-[4.1rem]'>
-                    <h5 className='body2-14-bold text-text-neutral-primary w-[5rem]'>휠체어</h5>
+                    <h5 className='body2-14-bold text-text-neutral-primary w-[5rem] min-w-[5rem]'>
+                      휠체어
+                    </h5>
                     <h6 className='body2-14-medium text-text-neutral-primary'>
                       {conditionData.usesWheelchair === 'true' ? '이용해요' : '이용하지 않아요'}
                     </h6>
                   </div>
                   <div className='flex items-center gap-[4.1rem]'>
-                    <h5 className='body2-14-bold text-text-neutral-primary w-[5rem]'>인지능력</h5>
+                    <h5 className='body2-14-bold text-text-neutral-primary w-[5rem] min-w-[5rem]'>
+                      인지능력
+                    </h5>
                     <h6 className='body2-14-medium text-text-neutral-primary'>
                       {communicationData.hasCognitiveIssue === 'false'
                         ? '괜찮아요'
@@ -142,7 +148,9 @@ const Final = ({ handleBackStep }: FunnelStepProps) => {
                     </h6>
                   </div>
                   <div className='flex items-center gap-[4.1rem]'>
-                    <h5 className='body2-14-bold text-text-neutral-primary w-[5rem]'>의사소통</h5>
+                    <h5 className='body2-14-bold text-text-neutral-primary w-[5rem] min-w-[5rem]'>
+                      의사소통
+                    </h5>
                     <h6 className='body2-14-medium text-text-neutral-primary'>
                       {communicationData.hasCommunicationIssue === 'false'
                         ? '괜찮아요'
@@ -156,13 +164,17 @@ const Final = ({ handleBackStep }: FunnelStepProps) => {
                 <CardWrapper.Title title='동행 정보' />
                 <div className='flex flex-col gap-[1.2rem]'>
                   <div className='flex items-center gap-[4.1rem]'>
-                    <h5 className='body2-14-bold text-text-neutral-primary w-[5rem]'>동행일</h5>
+                    <h5 className='body2-14-bold text-text-neutral-primary w-[5rem] min-w-[5rem]'>
+                      동행일
+                    </h5>
                     <h6 className='body2-14-medium text-text-neutral-primary'>
                       {timeData.escortDate}
                     </h6>
                   </div>
                   <div className='flex items-center gap-[4.1rem]'>
-                    <h5 className='body2-14-bold text-text-neutral-primary w-[5rem]'>동행시간</h5>
+                    <h5 className='body2-14-bold text-text-neutral-primary w-[5rem] min-w-[5rem]'>
+                      동행시간
+                    </h5>
                     <h6 className='body2-14-medium text-text-neutral-primary'>
                       {timeData.estimatedMeetingTime} ~ {timeData.estimatedReturnTime}
                     </h6>
@@ -174,21 +186,27 @@ const Final = ({ handleBackStep }: FunnelStepProps) => {
                 <CardWrapper.Title title='동행 경로' />
                 <div className='flex flex-col gap-[1.2rem]'>
                   <div className='flex items-center gap-[4.1rem]'>
-                    <h5 className='body2-14-bold text-text-neutral-primary w-[5rem]'>만남</h5>
+                    <h5 className='body2-14-bold text-text-neutral-primary w-[5rem] min-w-[5rem]'>
+                      만남
+                    </h5>
                     <h6 className='body2-14-medium text-text-neutral-primary'>
                       {routeData.meetingLocationDetail?.placeName}{' '}
                       {routeData.meetingLocationDetail?.detailAddress}
                     </h6>
                   </div>
                   <div className='flex items-center gap-[4.1rem]'>
-                    <h5 className='body2-14-bold text-text-neutral-primary w-[5rem]'>병원</h5>
+                    <h5 className='body2-14-bold text-text-neutral-primary w-[5rem] min-w-[5rem]'>
+                      병원
+                    </h5>
                     <h6 className='body2-14-medium text-text-neutral-primary'>
                       {routeData.destinationDetail?.placeName}{' '}
                       {routeData.destinationDetail?.detailAddress}
                     </h6>
                   </div>
                   <div className='flex items-center gap-[4.1rem]'>
-                    <h5 className='body2-14-bold text-text-neutral-primary w-[5rem]'>복귀</h5>
+                    <h5 className='body2-14-bold text-text-neutral-primary w-[5rem] min-w-[5rem]'>
+                      복귀
+                    </h5>
                     <h6 className='body2-14-medium text-text-neutral-primary'>
                       {routeData.returnLocationDetail?.placeName}{' '}
                       {routeData.returnLocationDetail?.detailAddress}
