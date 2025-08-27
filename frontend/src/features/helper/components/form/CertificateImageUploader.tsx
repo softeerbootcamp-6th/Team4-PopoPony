@@ -83,7 +83,7 @@ const CertificateImageUploader = ({ selectedCertificates, prefix }: Props) => {
                   className='hidden'
                   disabled={uploadingType === certificate.type}
                 />
-                <div className='w-[8.1rem]'>
+                <div className='w-[8.1rem] min-w-[8.1rem]'>
                   <Button
                     variant='secondary'
                     size='md'

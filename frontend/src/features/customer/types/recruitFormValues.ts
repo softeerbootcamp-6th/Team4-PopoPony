@@ -160,7 +160,9 @@ export const locationDetailSchema = z.object({
   roadName: z.string(),
   firstBuildingNo: z.string(),
   secondBuildingNo: z.string().optional(),
-  detailAddress: z.string().min(1, { message: '필수 입력 항목입니다.' }),
+  detailAddress: z.string().min(1, { message: '필수 입력 항목입니다.' }).max(100, {
+    message: '100자 이하로 입력해주세요',
+  }),
   longitude: z.number(),
   latitude: z.number(),
 });

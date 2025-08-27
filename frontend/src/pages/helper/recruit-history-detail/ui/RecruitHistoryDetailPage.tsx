@@ -46,7 +46,7 @@ const RecruitHistoryDetailPage = () => {
       <PageLayout.Header title='내역 상세보기' showBack />
       <PageLayout.Content>
         <div className='bg-neutral-10 flex-col-start gap-[1.2rem] px-[2rem] py-[1.6rem]'>
-          <RecruitCard>
+          <RecruitCard className='cursor-default'>
             <RecruitCard.StatusHeader text={statusText} title={cardTitle} hasOnClickEvent={false} />
             <RecruitCard.Divider />
             <RecruitCard.InfoSection>
