@@ -52,10 +52,11 @@ const Time = memo(({ handleNextStep }: FunnelStepProps) => {
           `${dateValues.escortDate}T${timeValues.estimatedMeetingTime}`
         );
         const currentTime = new Date();
+        const minimumTime = new Date(currentTime.getTime() + 30 * 60 * 1000); // 현재시간 + 30분
 
-        if (meetingDateTime <= currentTime) {
+        if (meetingDateTime <= minimumTime) {
           setIsTimeAndDateValid(false);
-          setTimeAndDateError('현재보다 이후의 시간을 선택해주세요');
+          setTimeAndDateError('현재보다 최소 30분 이후의 시간을 선택해주세요');
           return;
         }
       }
