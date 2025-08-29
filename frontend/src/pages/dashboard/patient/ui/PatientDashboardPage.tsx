@@ -113,7 +113,7 @@ const PatientDashboardPage = () => {
           helperLocations.latitude,
           helperLocations.longitude,
           `${helperName} 도우미`,
-          helperImageUrl
+          'https://i.pinimg.com/236x/3f/d8/75/3fd875ef22f86fc2d2046a85e4f8b0b3.jpg'
         );
         fitBoundsToCoordinates([
           { lat: helperLocations?.latitude, lon: helperLocations?.longitude },
