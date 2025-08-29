@@ -18,15 +18,6 @@ export const summarySchema = z
       message: '10자 이상 입력해주세요',
       path: ['satisfactionComment'],
     }
-  )
-  .refine(
-    (data) => {
-      return !!data.satisfactionComment && data.satisfactionComment.length < 100;
-    },
-    {
-      message: '100자 이하로 입력해주세요',
-      path: ['satisfactionComment'],
-    }
   );
 
 export type SummaryFormValues = z.infer<typeof summarySchema>;
